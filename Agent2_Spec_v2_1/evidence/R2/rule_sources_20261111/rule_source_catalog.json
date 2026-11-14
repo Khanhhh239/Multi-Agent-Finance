@@ -1,0 +1,3164 @@
+{
+  "version": "rule-inputs/1.0.0",
+  "rules": [
+    {
+      "rule_id": "A1",
+      "name": "Chia nhỏ cùng người nhận trong 3 ngày",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "bank_account",
+            "bank_code",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "bank_account",
+            "bank_code",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "approvals",
+          "table": "approvals",
+          "fields": [
+            "limit_vnd",
+            "employee_ref",
+            "decision"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "approval_authorities",
+          "table": "approval_authorities",
+          "fields": [
+            "authority_id",
+            "company_id",
+            "subject_employee_id",
+            "subject_role",
+            "action",
+            "txn_type",
+            "department",
+            "project_id",
+            "min_amount_vnd",
+            "max_amount_vnd",
+            "self_approval_allowed",
+            "authority_level",
+            "authority_type",
+            "delegated_by_id",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "authority_id",
+            "company_id",
+            "subject_employee_id",
+            "subject_role",
+            "action",
+            "txn_type",
+            "department",
+            "project_id",
+            "min_amount_vnd",
+            "max_amount_vnd",
+            "self_approval_allowed",
+            "authority_level",
+            "authority_type",
+            "delegated_by_id",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "invoices",
+          "table": "invoices",
+          "fields": [
+            "amount_vnd",
+            "number",
+            "vendor_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "payment_allocations",
+          "table": "payment_allocations",
+          "fields": [
+            "transaction_ref",
+            "invoice_ref",
+            "amount_vnd"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "supporting_documents",
+          "table": "supporting_documents",
+          "fields": [
+            "subject_refs",
+            "document_kind",
+            "verification_status"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "payment_requests",
+          "table": "payment_requests",
+          "fields": [
+            "request_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "purchase_order_id",
+            "contract_id",
+            "invoice_number",
+            "txn_type",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "request_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "purchase_order_id",
+            "contract_id",
+            "invoice_number",
+            "txn_type",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "supplier_payment_agreements",
+          "table": "supplier_payment_agreements",
+          "fields": [
+            "agreement_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "contract_id",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "agreement_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "contract_id",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        }
+      ],
+      "applicable_kinds": [
+        "payment"
+      ],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "A2",
+      "name": "Chia nhỏ cùng người lập/người nhận trong 30 ngày",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "bank_account",
+            "bank_code",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "bank_account",
+            "bank_code",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "approvals",
+          "table": "approvals",
+          "fields": [
+            "limit_vnd",
+            "employee_ref",
+            "decision"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "approval_authorities",
+          "table": "approval_authorities",
+          "fields": [
+            "authority_id",
+            "company_id",
+            "subject_employee_id",
+            "subject_role",
+            "action",
+            "txn_type",
+            "department",
+            "project_id",
+            "min_amount_vnd",
+            "max_amount_vnd",
+            "self_approval_allowed",
+            "authority_level",
+            "authority_type",
+            "delegated_by_id",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "authority_id",
+            "company_id",
+            "subject_employee_id",
+            "subject_role",
+            "action",
+            "txn_type",
+            "department",
+            "project_id",
+            "min_amount_vnd",
+            "max_amount_vnd",
+            "self_approval_allowed",
+            "authority_level",
+            "authority_type",
+            "delegated_by_id",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "invoices",
+          "table": "invoices",
+          "fields": [
+            "amount_vnd",
+            "number",
+            "vendor_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "payment_allocations",
+          "table": "payment_allocations",
+          "fields": [
+            "transaction_ref",
+            "invoice_ref",
+            "amount_vnd"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "supporting_documents",
+          "table": "supporting_documents",
+          "fields": [
+            "subject_refs",
+            "document_kind",
+            "verification_status"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "payment_requests",
+          "table": "payment_requests",
+          "fields": [
+            "request_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "purchase_order_id",
+            "contract_id",
+            "invoice_number",
+            "txn_type",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "request_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "purchase_order_id",
+            "contract_id",
+            "invoice_number",
+            "txn_type",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "supplier_payment_agreements",
+          "table": "supplier_payment_agreements",
+          "fields": [
+            "agreement_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "contract_id",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "agreement_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "contract_id",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        }
+      ],
+      "applicable_kinds": [
+        "payment"
+      ],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "A3",
+      "name": "Chia nhỏ qua cụm người nhận liên kết",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "bank_account",
+            "bank_code",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "bank_account",
+            "bank_code",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "approvals",
+          "table": "approvals",
+          "fields": [
+            "limit_vnd",
+            "employee_ref",
+            "decision"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "approval_authorities",
+          "table": "approval_authorities",
+          "fields": [
+            "authority_id",
+            "company_id",
+            "subject_employee_id",
+            "subject_role",
+            "action",
+            "txn_type",
+            "department",
+            "project_id",
+            "min_amount_vnd",
+            "max_amount_vnd",
+            "self_approval_allowed",
+            "authority_level",
+            "authority_type",
+            "delegated_by_id",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "authority_id",
+            "company_id",
+            "subject_employee_id",
+            "subject_role",
+            "action",
+            "txn_type",
+            "department",
+            "project_id",
+            "min_amount_vnd",
+            "max_amount_vnd",
+            "self_approval_allowed",
+            "authority_level",
+            "authority_type",
+            "delegated_by_id",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "invoices",
+          "table": "invoices",
+          "fields": [
+            "amount_vnd",
+            "number",
+            "vendor_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "payment_allocations",
+          "table": "payment_allocations",
+          "fields": [
+            "transaction_ref",
+            "invoice_ref",
+            "amount_vnd"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "supporting_documents",
+          "table": "supporting_documents",
+          "fields": [
+            "subject_refs",
+            "document_kind",
+            "verification_status"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "payment_requests",
+          "table": "payment_requests",
+          "fields": [
+            "request_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "purchase_order_id",
+            "contract_id",
+            "invoice_number",
+            "txn_type",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "request_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "purchase_order_id",
+            "contract_id",
+            "invoice_number",
+            "txn_type",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "supplier_payment_agreements",
+          "table": "supplier_payment_agreements",
+          "fields": [
+            "agreement_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "contract_id",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "agreement_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "contract_id",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "entity_links",
+          "table": "entity_links",
+          "fields": [
+            "effective_at",
+            "observed_at",
+            "from_id",
+            "to_id",
+            "evidence_id"
+          ],
+          "contract_missing_fields": [
+            "effective_at",
+            "observed_at",
+            "from_id",
+            "to_id",
+            "evidence_id"
+          ]
+        },
+        {
+          "role": "vendors",
+          "table": "vendors",
+          "fields": [
+            "bank_account",
+            "bank_code",
+            "phone",
+            "address"
+          ],
+          "contract_missing_fields": [
+            "phone"
+          ]
+        },
+        {
+          "role": "employees",
+          "table": "employees",
+          "fields": [
+            "bank_account",
+            "bank_code",
+            "phone",
+            "address"
+          ],
+          "contract_missing_fields": [
+            "phone",
+            "address"
+          ]
+        }
+      ],
+      "applicable_kinds": [
+        "payment"
+      ],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "A4",
+      "name": "Người lập có nhiều khoản cận hạn mức",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "bank_account",
+            "bank_code",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "bank_account",
+            "bank_code",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "approvals",
+          "table": "approvals",
+          "fields": [
+            "limit_vnd",
+            "employee_ref",
+            "decision"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "approval_authorities",
+          "table": "approval_authorities",
+          "fields": [
+            "authority_id",
+            "company_id",
+            "subject_employee_id",
+            "subject_role",
+            "action",
+            "txn_type",
+            "department",
+            "project_id",
+            "min_amount_vnd",
+            "max_amount_vnd",
+            "self_approval_allowed",
+            "authority_level",
+            "authority_type",
+            "delegated_by_id",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "authority_id",
+            "company_id",
+            "subject_employee_id",
+            "subject_role",
+            "action",
+            "txn_type",
+            "department",
+            "project_id",
+            "min_amount_vnd",
+            "max_amount_vnd",
+            "self_approval_allowed",
+            "authority_level",
+            "authority_type",
+            "delegated_by_id",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "invoices",
+          "table": "invoices",
+          "fields": [
+            "amount_vnd",
+            "number",
+            "vendor_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "payment_allocations",
+          "table": "payment_allocations",
+          "fields": [
+            "transaction_ref",
+            "invoice_ref",
+            "amount_vnd"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "supporting_documents",
+          "table": "supporting_documents",
+          "fields": [
+            "subject_refs",
+            "document_kind",
+            "verification_status"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "payment_requests",
+          "table": "payment_requests",
+          "fields": [
+            "request_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "purchase_order_id",
+            "contract_id",
+            "invoice_number",
+            "txn_type",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "request_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "purchase_order_id",
+            "contract_id",
+            "invoice_number",
+            "txn_type",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "supplier_payment_agreements",
+          "table": "supplier_payment_agreements",
+          "fields": [
+            "agreement_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "contract_id",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "agreement_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "contract_id",
+            "total_vnd",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "recurring_payments",
+          "table": "recurring_payments",
+          "fields": [
+            "pattern_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "txn_type",
+            "frequency",
+            "expected_amount_vnd",
+            "tolerance_vnd",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "pattern_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "txn_type",
+            "frequency",
+            "expected_amount_vnd",
+            "tolerance_vnd",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "A5",
+      "name": "Số tiền tròn lệch baseline lịch sử",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "accounting_lines"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "accounting_lines"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "journal_documents",
+          "table": "journal_documents",
+          "fields": [
+            "document_id",
+            "posted_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "document_id",
+            "posted_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "journal_lines",
+          "table": "journal_lines",
+          "fields": [
+            "document_id",
+            "account_code",
+            "posted_at",
+            "debit_vnd",
+            "credit_vnd"
+          ],
+          "contract_missing_fields": [
+            "document_id",
+            "account_code",
+            "posted_at",
+            "debit_vnd",
+            "credit_vnd"
+          ]
+        },
+        {
+          "role": "operating_schedules",
+          "table": "operating_schedules",
+          "fields": [
+            "schedule_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "action",
+            "weekdays",
+            "start_time",
+            "end_time",
+            "effective_from",
+            "effective_to"
+          ],
+          "contract_missing_fields": [
+            "schedule_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "action",
+            "weekdays",
+            "start_time",
+            "end_time",
+            "effective_from",
+            "effective_to"
+          ]
+        },
+        {
+          "role": "recurring_payments",
+          "table": "recurring_payments",
+          "fields": [
+            "pattern_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "txn_type",
+            "frequency",
+            "expected_amount_vnd",
+            "tolerance_vnd",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "pattern_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "txn_type",
+            "frequency",
+            "expected_amount_vnd",
+            "tolerance_vnd",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "A6",
+      "name": "Thanh toán làm tròn vượt hóa đơn gốc",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "payment_channel"
+          ],
+          "contract_missing_fields": [
+            "payment_channel"
+          ]
+        },
+        {
+          "role": "invoices",
+          "table": "invoices",
+          "fields": [
+            "amount_vnd",
+            "number",
+            "net_vnd",
+            "vat_vnd"
+          ],
+          "contract_missing_fields": [
+            "net_vnd",
+            "vat_vnd"
+          ]
+        },
+        {
+          "role": "payment_allocations",
+          "table": "payment_allocations",
+          "fields": [
+            "transaction_ref",
+            "invoice_ref",
+            "amount_vnd"
+          ],
+          "contract_missing_fields": []
+        }
+      ],
+      "applicable_kinds": [
+        "payment"
+      ],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "B1",
+      "name": "Tài khoản hoặc căn cước NCC trùng nhân viên",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "kind",
+            "bank_account",
+            "bank_code",
+            "accounting_lines",
+            "payment_channel"
+          ],
+          "contract_missing_fields": [
+            "payment_channel"
+          ]
+        },
+        {
+          "role": "vendor",
+          "table": "vendors",
+          "fields": [
+            "bank_account",
+            "bank_code",
+            "national_id",
+            "related_party_disclosed_at"
+          ],
+          "contract_missing_fields": [
+            "national_id",
+            "related_party_disclosed_at"
+          ]
+        },
+        {
+          "role": "employees",
+          "table": "employees",
+          "fields": [
+            "bank_account",
+            "bank_code",
+            "national_id"
+          ],
+          "contract_missing_fields": []
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "B2",
+      "name": "Thông tin hoặc người đại diện NCC liên kết nhân viên",
+      "bindings": [
+        {
+          "role": "vendor",
+          "table": "vendors",
+          "fields": [
+            "address",
+            "phone",
+            "related_party_disclosed_at"
+          ],
+          "contract_missing_fields": [
+            "phone",
+            "related_party_disclosed_at"
+          ]
+        },
+        {
+          "role": "employees",
+          "table": "employees",
+          "fields": [
+            "address",
+            "phone"
+          ],
+          "contract_missing_fields": [
+            "address",
+            "phone"
+          ]
+        },
+        {
+          "role": "entity_links",
+          "table": "entity_links",
+          "fields": [
+            "effective_at",
+            "observed_at",
+            "from_id",
+            "to_id",
+            "evidence_id"
+          ],
+          "contract_missing_fields": [
+            "effective_at",
+            "observed_at",
+            "from_id",
+            "to_id",
+            "evidence_id"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "B3",
+      "name": "NCC mới thành lập nhận giao dịch lớn đầu tiên",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "payment_channel"
+          ],
+          "contract_missing_fields": [
+            "payment_channel"
+          ]
+        },
+        {
+          "role": "vendor",
+          "table": "vendors",
+          "fields": [
+            "registered_at"
+          ],
+          "contract_missing_fields": [
+            "registered_at"
+          ]
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "vendor_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "approvals",
+          "table": "approvals",
+          "fields": [
+            "limit_vnd"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "supporting_documents",
+          "table": "supporting_documents",
+          "fields": [
+            "document_kind",
+            "verification_status",
+            "subject_refs"
+          ],
+          "contract_missing_fields": []
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "B4",
+      "name": "Trạng thái người phát hành hóa đơn rủi ro",
+      "bindings": [
+        {
+          "role": "invoices",
+          "table": "invoices",
+          "fields": [
+            "number",
+            "effective_at",
+            "vendor_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "vendor",
+          "table": "vendors",
+          "fields": [
+            "tax_id"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "tax_risk_history",
+          "table": "tax_risk_history",
+          "fields": [
+            "record_id",
+            "company_id",
+            "tax_code",
+            "status",
+            "risk_reason",
+            "effective_from",
+            "effective_to",
+            "published_at",
+            "observed_at",
+            "source_url",
+            "source_document_id",
+            "source_sha256"
+          ],
+          "contract_missing_fields": [
+            "record_id",
+            "company_id",
+            "tax_code",
+            "status",
+            "risk_reason",
+            "effective_from",
+            "effective_to",
+            "published_at",
+            "observed_at",
+            "source_url",
+            "source_document_id",
+            "source_sha256"
+          ]
+        },
+        {
+          "role": "supporting_documents",
+          "table": "supporting_documents",
+          "fields": [
+            "document_kind",
+            "verification_status",
+            "subject_refs"
+          ],
+          "contract_missing_fields": []
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "B5",
+      "name": "Nhiều NCC chung thông tin định danh",
+      "bindings": [
+        {
+          "role": "vendor",
+          "table": "vendors",
+          "fields": [
+            "bank_account",
+            "phone",
+            "address",
+            "related_party_disclosed_at"
+          ],
+          "contract_missing_fields": [
+            "phone",
+            "related_party_disclosed_at"
+          ]
+        },
+        {
+          "role": "vendors",
+          "table": "vendors",
+          "fields": [
+            "bank_account",
+            "phone",
+            "address",
+            "related_party_disclosed_at"
+          ],
+          "contract_missing_fields": [
+            "phone",
+            "related_party_disclosed_at"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "B6",
+      "name": "NCC ngủ đông nhận khoản lớn",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "vendor",
+          "table": "vendors",
+          "fields": [
+            "name"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "vendor_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "vendor_payment_schedules",
+          "table": "vendor_payment_schedules",
+          "fields": [
+            "schedule_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "txn_type",
+            "schedule_type",
+            "window_start_mmdd",
+            "window_end_mmdd",
+            "expected_amount_vnd",
+            "tolerance_vnd",
+            "allow_partial",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "schedule_id",
+            "company_id",
+            "observed_at",
+            "company_id",
+            "vendor_id",
+            "txn_type",
+            "schedule_type",
+            "window_start_mmdd",
+            "window_end_mmdd",
+            "expected_amount_vnd",
+            "tolerance_vnd",
+            "allow_partial",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        }
+      ],
+      "applicable_kinds": [
+        "payment"
+      ],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "B7",
+      "name": "Đổi tài khoản gần ngày thanh toán chưa xác minh",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "kind",
+            "bank_account",
+            "bank_code"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "vendor",
+          "table": "vendors",
+          "fields": [
+            "bank_account",
+            "bank_code"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "vendor_bank_history",
+          "table": "vendor_bank_history",
+          "fields": [
+            "vendor_ref",
+            "bank_account",
+            "bank_code",
+            "verification_status",
+            "verification"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "bank_account_changes",
+          "table": "bank_account_changes",
+          "fields": [
+            "change_id",
+            "company_id",
+            "observed_at",
+            "vendor_id",
+            "old_account",
+            "new_account",
+            "effective_at",
+            "callback_verified",
+            "verified_at",
+            "approver_id"
+          ],
+          "contract_missing_fields": [
+            "change_id",
+            "company_id",
+            "observed_at",
+            "vendor_id",
+            "old_account",
+            "new_account",
+            "effective_at",
+            "callback_verified",
+            "verified_at",
+            "approver_id"
+          ]
+        },
+        {
+          "role": "employees",
+          "table": "employees",
+          "fields": [
+            "name"
+          ],
+          "contract_missing_fields": []
+        }
+      ],
+      "applicable_kinds": [
+        "payment"
+      ],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "C1",
+      "name": "Lập hoặc duyệt ngoài lịch vận hành",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "created_at"
+          ],
+          "contract_missing_fields": [
+            "created_at"
+          ]
+        },
+        {
+          "role": "approvals",
+          "table": "approvals",
+          "fields": [
+            "approved_at",
+            "employee_ref"
+          ],
+          "contract_missing_fields": [
+            "approved_at"
+          ]
+        },
+        {
+          "role": "creator",
+          "table": "employees",
+          "fields": [
+            "name"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "employees",
+          "table": "employees",
+          "fields": [
+            "name"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "companies",
+          "table": "companies",
+          "fields": [
+            "saturday_operations"
+          ],
+          "contract_missing_fields": [
+            "saturday_operations"
+          ]
+        },
+        {
+          "role": "operating_schedules",
+          "table": "operating_schedules",
+          "fields": [
+            "schedule_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "action",
+            "weekdays",
+            "start_time",
+            "end_time",
+            "effective_from",
+            "effective_to"
+          ],
+          "contract_missing_fields": [
+            "schedule_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "action",
+            "weekdays",
+            "start_time",
+            "end_time",
+            "effective_from",
+            "effective_to"
+          ]
+        },
+        {
+          "role": "calendar",
+          "table": "calendar",
+          "fields": [
+            "date",
+            "is_holiday"
+          ],
+          "contract_missing_fields": [
+            "date",
+            "is_holiday"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "C2",
+      "name": "Tự duyệt vượt quyền được cấp",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "creator",
+          "table": "employees",
+          "fields": [
+            "self_approval_limit_vnd"
+          ],
+          "contract_missing_fields": [
+            "self_approval_limit_vnd"
+          ]
+        },
+        {
+          "role": "approvals",
+          "table": "approvals",
+          "fields": [
+            "employee_ref",
+            "decision",
+            "limit_vnd",
+            "approved_at"
+          ],
+          "contract_missing_fields": [
+            "approved_at"
+          ]
+        },
+        {
+          "role": "approval_authorities",
+          "table": "approval_authorities",
+          "fields": [
+            "authority_id",
+            "company_id",
+            "subject_employee_id",
+            "subject_role",
+            "action",
+            "txn_type",
+            "department",
+            "project_id",
+            "min_amount_vnd",
+            "max_amount_vnd",
+            "self_approval_allowed",
+            "authority_level",
+            "authority_type",
+            "delegated_by_id",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "authority_id",
+            "company_id",
+            "subject_employee_id",
+            "subject_role",
+            "action",
+            "txn_type",
+            "department",
+            "project_id",
+            "min_amount_vnd",
+            "max_amount_vnd",
+            "self_approval_allowed",
+            "authority_level",
+            "authority_type",
+            "delegated_by_id",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "approval_authority_coverage",
+          "table": "approval_authority_coverage",
+          "fields": [
+            "coverage_id",
+            "company_id",
+            "covered_actions",
+            "covered_from",
+            "covered_through",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "coverage_id",
+            "company_id",
+            "covered_actions",
+            "covered_from",
+            "covered_through",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "C3",
+      "name": "Duyệt dưới 60 giây ở cấp thẩm quyền cao",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "created_at"
+          ],
+          "contract_missing_fields": [
+            "created_at"
+          ]
+        },
+        {
+          "role": "approvals",
+          "table": "approvals",
+          "fields": [
+            "approved_at",
+            "employee_ref"
+          ],
+          "contract_missing_fields": [
+            "approved_at"
+          ]
+        },
+        {
+          "role": "approval_authorities",
+          "table": "approval_authorities",
+          "fields": [
+            "authority_id",
+            "company_id",
+            "subject_employee_id",
+            "subject_role",
+            "action",
+            "txn_type",
+            "department",
+            "project_id",
+            "min_amount_vnd",
+            "max_amount_vnd",
+            "self_approval_allowed",
+            "authority_level",
+            "authority_type",
+            "delegated_by_id",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "authority_id",
+            "company_id",
+            "subject_employee_id",
+            "subject_role",
+            "action",
+            "txn_type",
+            "department",
+            "project_id",
+            "min_amount_vnd",
+            "max_amount_vnd",
+            "self_approval_allowed",
+            "authority_level",
+            "authority_type",
+            "delegated_by_id",
+            "effective_from",
+            "effective_to",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        },
+        {
+          "role": "approval_authority_coverage",
+          "table": "approval_authority_coverage",
+          "fields": [
+            "coverage_id",
+            "company_id",
+            "covered_actions",
+            "covered_from",
+            "covered_through",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ],
+          "contract_missing_fields": [
+            "coverage_id",
+            "company_id",
+            "covered_actions",
+            "covered_from",
+            "covered_through",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "observed_at"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "C4",
+      "name": "Thao tác trong kỳ nghỉ phép chính thức",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "created_at",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": [
+            "created_at"
+          ]
+        },
+        {
+          "role": "approvals",
+          "table": "approvals",
+          "fields": [
+            "approved_at",
+            "employee_ref"
+          ],
+          "contract_missing_fields": [
+            "approved_at"
+          ]
+        },
+        {
+          "role": "leave_periods",
+          "table": "leave_periods",
+          "fields": [
+            "leave_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "employee_id",
+            "starts_at",
+            "ends_at"
+          ],
+          "contract_missing_fields": [
+            "leave_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "employee_id",
+            "starts_at",
+            "ends_at"
+          ]
+        },
+        {
+          "role": "system_actions",
+          "table": "system_actions",
+          "fields": [
+            "action_id",
+            "company_id",
+            "observed_at",
+            "employee_id",
+            "transaction_id",
+            "action",
+            "action_at",
+            "evidence_id"
+          ],
+          "contract_missing_fields": [
+            "action_id",
+            "company_id",
+            "observed_at",
+            "employee_id",
+            "transaction_id",
+            "action",
+            "action_at",
+            "evidence_id"
+          ]
+        },
+        {
+          "role": "leave_activity_authorizations",
+          "table": "leave_activity_authorizations",
+          "fields": [
+            "authorization_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "employee_id",
+            "leave_id",
+            "action",
+            "starts_at",
+            "ends_at"
+          ],
+          "contract_missing_fields": [
+            "authorization_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "employee_id",
+            "leave_id",
+            "action",
+            "starts_at",
+            "ends_at"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "D1",
+      "name": "Benford chữ số đầu",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ],
+          "contract_missing_fields": [
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ]
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": [
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "D2",
+      "name": "Benford chữ số thứ hai",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ],
+          "contract_missing_fields": [
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ]
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": [
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "D3",
+      "name": "Hai chữ số đầu sát hạn mức",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ],
+          "contract_missing_fields": [
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ]
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": [
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ]
+        },
+        {
+          "role": "approvals",
+          "table": "approvals",
+          "fields": [
+            "limit_vnd"
+          ],
+          "contract_missing_fields": []
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "D4",
+      "name": "Đuôi số đặc biệt vượt baseline",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ],
+          "contract_missing_fields": [
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ]
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": [
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "D5",
+      "name": "MAD chữ số đầu",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ],
+          "contract_missing_fields": [
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ]
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": [
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "D6",
+      "name": "Benford theo phân đoạn",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ],
+          "contract_missing_fields": [
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry"
+          ]
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry",
+            "created_by_ref",
+            "department",
+            "project_id"
+          ],
+          "contract_missing_fields": [
+            "posted_at",
+            "payment_channel",
+            "is_financial_entry",
+            "department",
+            "project_id"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "E1",
+      "name": "Lương không có chấm công hoặc bằng chứng thay thế",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "employee_ref",
+            "payroll_period"
+          ],
+          "contract_missing_fields": [
+            "payroll_period"
+          ]
+        },
+        {
+          "role": "employee",
+          "table": "employees",
+          "fields": [
+            "hired_at",
+            "terminated_at"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "supporting_documents",
+          "table": "supporting_documents",
+          "fields": [
+            "subject_refs",
+            "document_kind",
+            "verification_status"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "payroll_entitlements",
+          "table": "payroll_entitlements",
+          "fields": [
+            "entitlement_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "employee_id",
+            "payroll_period",
+            "leave_type",
+            "entitled_amount_vnd"
+          ],
+          "contract_missing_fields": [
+            "entitlement_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "employee_id",
+            "payroll_period",
+            "leave_type",
+            "entitled_amount_vnd"
+          ]
+        },
+        {
+          "role": "attendance",
+          "table": "attendance",
+          "fields": [
+            "employee_id",
+            "company_id",
+            "observed_at",
+            "payroll_period",
+            "days_worked_observed",
+            "approved_leave_days",
+            "alternative_work_evidence"
+          ],
+          "contract_missing_fields": [
+            "employee_id",
+            "company_id",
+            "observed_at",
+            "payroll_period",
+            "days_worked_observed",
+            "approved_leave_days",
+            "alternative_work_evidence"
+          ]
+        }
+      ],
+      "applicable_kinds": [
+        "payroll"
+      ],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "E2",
+      "name": "Lương sau chấm dứt hợp đồng",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "employee_ref",
+            "payroll_period"
+          ],
+          "contract_missing_fields": [
+            "payroll_period"
+          ]
+        },
+        {
+          "role": "employee",
+          "table": "employees",
+          "fields": [
+            "hired_at",
+            "terminated_at"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "supporting_documents",
+          "table": "supporting_documents",
+          "fields": [
+            "subject_refs",
+            "document_kind",
+            "verification_status"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "payroll_entitlements",
+          "table": "payroll_entitlements",
+          "fields": [
+            "entitlement_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "employee_id",
+            "payroll_period",
+            "leave_type",
+            "entitled_amount_vnd"
+          ],
+          "contract_missing_fields": [
+            "entitlement_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "employee_id",
+            "payroll_period",
+            "leave_type",
+            "entitled_amount_vnd"
+          ]
+        },
+        {
+          "role": "employment_events",
+          "table": "employment_events",
+          "fields": [
+            "employment_event_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "employee_id",
+            "event_type",
+            "effective_date"
+          ],
+          "contract_missing_fields": [
+            "employment_event_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "employee_id",
+            "event_type",
+            "effective_date"
+          ]
+        },
+        {
+          "role": "payroll_settlements",
+          "table": "payroll_settlements",
+          "fields": [
+            "settlement_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "employee_id",
+            "transaction_id",
+            "payroll_period",
+            "payment_kind",
+            "service_period_start",
+            "service_period_end",
+            "authorized_amount_vnd"
+          ],
+          "contract_missing_fields": [
+            "settlement_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "employee_id",
+            "transaction_id",
+            "payroll_period",
+            "payment_kind",
+            "service_period_start",
+            "service_period_end",
+            "authorized_amount_vnd"
+          ]
+        }
+      ],
+      "applicable_kinds": [
+        "payroll"
+      ],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "E3",
+      "name": "Tên NCC tương tự",
+      "bindings": [
+        {
+          "role": "vendor",
+          "table": "vendors",
+          "fields": [
+            "name"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "vendors",
+          "table": "vendors",
+          "fields": [
+            "name"
+          ],
+          "contract_missing_fields": []
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "E4",
+      "name": "NCC trùng định danh",
+      "bindings": [
+        {
+          "role": "vendor",
+          "table": "vendors",
+          "fields": [
+            "bank_account",
+            "phone",
+            "address",
+            "related_party_disclosed_at"
+          ],
+          "contract_missing_fields": [
+            "phone",
+            "related_party_disclosed_at"
+          ]
+        },
+        {
+          "role": "vendors",
+          "table": "vendors",
+          "fields": [
+            "bank_account",
+            "phone",
+            "address",
+            "related_party_disclosed_at"
+          ],
+          "contract_missing_fields": [
+            "phone",
+            "related_party_disclosed_at"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "F1",
+      "name": "Điều chỉnh thủ công sát khóa sổ và trọng yếu",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "accounting_lines",
+            "created_by_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "journal_audit_log",
+          "table": "journal_audit_log",
+          "fields": [
+            "audit_id",
+            "company_id",
+            "observed_at",
+            "employee_id",
+            "transaction_id",
+            "entry_origin",
+            "entered_at",
+            "evidence_id"
+          ],
+          "contract_missing_fields": [
+            "audit_id",
+            "company_id",
+            "observed_at",
+            "employee_id",
+            "transaction_id",
+            "entry_origin",
+            "entered_at",
+            "evidence_id"
+          ]
+        },
+        {
+          "role": "closing_periods",
+          "table": "closing_periods",
+          "fields": [
+            "closing_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "period_start",
+            "period_end",
+            "closing_at"
+          ],
+          "contract_missing_fields": [
+            "closing_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "period_start",
+            "period_end",
+            "closing_at"
+          ]
+        },
+        {
+          "role": "materiality_policies",
+          "table": "materiality_policies",
+          "fields": [
+            "policy_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "effective_from",
+            "effective_to",
+            "materiality_vnd"
+          ],
+          "contract_missing_fields": [
+            "policy_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "effective_from",
+            "effective_to",
+            "materiality_vnd"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "F2",
+      "name": "Quản lý ghi đè quy trình",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "created_by_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "approvals",
+          "table": "approvals",
+          "fields": [
+            "employee_ref",
+            "approved_at"
+          ],
+          "contract_missing_fields": [
+            "approved_at"
+          ]
+        },
+        {
+          "role": "workflow_policies",
+          "table": "workflow_policies",
+          "fields": [
+            "workflow_policy_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "control_id",
+            "txn_type",
+            "required",
+            "allow_override",
+            "authorized_override_roles",
+            "override_max_vnd",
+            "effective_from",
+            "effective_to"
+          ],
+          "contract_missing_fields": [
+            "workflow_policy_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "control_id",
+            "txn_type",
+            "required",
+            "allow_override",
+            "authorized_override_roles",
+            "override_max_vnd",
+            "effective_from",
+            "effective_to"
+          ]
+        },
+        {
+          "role": "override_events",
+          "table": "override_events",
+          "fields": [
+            "override_id",
+            "company_id",
+            "observed_at",
+            "transaction_id",
+            "actor_id",
+            "operation_at",
+            "control_id",
+            "status",
+            "normal_workflow_completed",
+            "evidence_id"
+          ],
+          "contract_missing_fields": [
+            "override_id",
+            "company_id",
+            "observed_at",
+            "transaction_id",
+            "actor_id",
+            "operation_at",
+            "control_id",
+            "status",
+            "normal_workflow_completed",
+            "evidence_id"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "F3",
+      "name": "Khoảng trống/trùng số chứng từ",
+      "bindings": [
+        {
+          "role": "document_series",
+          "table": "document_series",
+          "fields": [
+            "series_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "fiscal_year",
+            "document_type",
+            "start_number",
+            "closed_through_number",
+            "closed_at",
+            "cancellation_log_complete"
+          ],
+          "contract_missing_fields": [
+            "series_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "fiscal_year",
+            "document_type",
+            "start_number",
+            "closed_through_number",
+            "closed_at",
+            "cancellation_log_complete"
+          ]
+        },
+        {
+          "role": "document_register",
+          "table": "document_register",
+          "fields": [
+            "register_id",
+            "company_id",
+            "observed_at",
+            "series_id",
+            "document_id",
+            "document_number",
+            "transaction_id",
+            "issued_at",
+            "state",
+            "evidence_id"
+          ],
+          "contract_missing_fields": [
+            "register_id",
+            "company_id",
+            "observed_at",
+            "series_id",
+            "document_id",
+            "document_number",
+            "transaction_id",
+            "issued_at",
+            "state",
+            "evidence_id"
+          ]
+        },
+        {
+          "role": "document_cancellations",
+          "table": "document_cancellations",
+          "fields": [
+            "cancellation_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "series_id",
+            "document_id",
+            "document_number"
+          ],
+          "contract_missing_fields": [
+            "cancellation_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "series_id",
+            "document_id",
+            "document_number"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "F4",
+      "name": "Doanh thu/công nợ kéo dài chưa đối chiếu tiền",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "accounting_lines"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "receivable_invoices",
+          "table": "receivable_invoices",
+          "fields": [
+            "invoice_id",
+            "company_id",
+            "observed_at",
+            "customer_id",
+            "gross_vnd",
+            "issued_at",
+            "due_at",
+            "status",
+            "evidence_id"
+          ],
+          "contract_missing_fields": [
+            "invoice_id",
+            "company_id",
+            "observed_at",
+            "customer_id",
+            "gross_vnd",
+            "issued_at",
+            "due_at",
+            "status",
+            "evidence_id"
+          ]
+        },
+        {
+          "role": "receipt_allocations",
+          "table": "receipt_allocations",
+          "fields": [
+            "allocation_id",
+            "company_id",
+            "observed_at",
+            "invoice_id",
+            "customer_id",
+            "receipt_transaction_id",
+            "amount_vnd",
+            "status",
+            "verifier_id",
+            "verified_at",
+            "evidence_id"
+          ],
+          "contract_missing_fields": [
+            "allocation_id",
+            "company_id",
+            "observed_at",
+            "invoice_id",
+            "customer_id",
+            "receipt_transaction_id",
+            "amount_vnd",
+            "status",
+            "verifier_id",
+            "verified_at",
+            "evidence_id"
+          ]
+        },
+        {
+          "role": "receipt_coverage",
+          "table": "receipt_coverage",
+          "fields": [
+            "coverage_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "covered_from",
+            "covered_through"
+          ],
+          "contract_missing_fields": [
+            "coverage_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "covered_from",
+            "covered_through"
+          ]
+        },
+        {
+          "role": "receivable_explanations",
+          "table": "receivable_explanations",
+          "fields": [
+            "explanation_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "invoice_id",
+            "reason",
+            "effective_from",
+            "expires_at"
+          ],
+          "contract_missing_fields": [
+            "explanation_id",
+            "company_id",
+            "observed_at",
+            "status",
+            "evidence_on_file",
+            "evidence_id",
+            "approver_id",
+            "approved_at",
+            "invoice_id",
+            "reason",
+            "effective_from",
+            "expires_at"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "P1",
+      "name": "Thanh toán vượt tổng giá trị cùng hóa đơn",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind",
+            "payment_channel"
+          ],
+          "contract_missing_fields": [
+            "payment_channel"
+          ]
+        },
+        {
+          "role": "invoices",
+          "table": "invoices",
+          "fields": [
+            "amount_vnd",
+            "number",
+            "vendor_ref"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "payment_allocations",
+          "table": "payment_allocations",
+          "fields": [
+            "transaction_ref",
+            "invoice_ref",
+            "amount_vnd"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "transaction_history",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "kind"
+          ],
+          "contract_missing_fields": []
+        }
+      ],
+      "applicable_kinds": [
+        "payment"
+      ],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "P2",
+      "name": "Chi tiền mặt cần rà soát hạn mức và chứng từ VAT",
+      "bindings": [
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "payment_channel",
+            "vat_treatment"
+          ],
+          "contract_missing_fields": [
+            "payment_channel",
+            "vat_treatment"
+          ]
+        },
+        {
+          "role": "invoices",
+          "table": "invoices",
+          "fields": [
+            "amount_vnd",
+            "vat_vnd"
+          ],
+          "contract_missing_fields": [
+            "vat_vnd"
+          ]
+        },
+        {
+          "role": "supporting_documents",
+          "table": "supporting_documents",
+          "fields": [
+            "document_kind",
+            "verification_status",
+            "subject_refs"
+          ],
+          "contract_missing_fields": []
+        },
+        {
+          "role": "cash_limit_policies",
+          "table": "cash_limit_policies",
+          "fields": [
+            "limit_vnd",
+            "effective_from",
+            "approved_at"
+          ],
+          "contract_missing_fields": [
+            "limit_vnd",
+            "effective_from",
+            "approved_at"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "T1",
+      "name": "Tạm ứng còn dư nợ quá hạn",
+      "bindings": [
+        {
+          "role": "advances",
+          "table": "advances",
+          "fields": [
+            "advance_id",
+            "company_id",
+            "recorded_at"
+          ],
+          "contract_missing_fields": [
+            "advance_id",
+            "company_id",
+            "recorded_at"
+          ]
+        },
+        {
+          "role": "advance_events",
+          "table": "advance_events",
+          "fields": [
+            "event_id",
+            "company_id",
+            "observed_at",
+            "advance_id",
+            "event_type",
+            "amount_vnd",
+            "evidence_on_file"
+          ],
+          "contract_missing_fields": [
+            "event_id",
+            "company_id",
+            "observed_at",
+            "advance_id",
+            "event_type",
+            "amount_vnd",
+            "evidence_on_file"
+          ]
+        },
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "advance_id"
+          ],
+          "contract_missing_fields": [
+            "advance_id"
+          ]
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    },
+    {
+      "rule_id": "T2",
+      "name": "Xóa nợ tạm ứng thiếu hồ sơ",
+      "bindings": [
+        {
+          "role": "advances",
+          "table": "advances",
+          "fields": [
+            "advance_id",
+            "company_id",
+            "recorded_at"
+          ],
+          "contract_missing_fields": [
+            "advance_id",
+            "company_id",
+            "recorded_at"
+          ]
+        },
+        {
+          "role": "advance_events",
+          "table": "advance_events",
+          "fields": [
+            "event_id",
+            "company_id",
+            "observed_at",
+            "advance_id",
+            "event_type",
+            "amount_vnd",
+            "evidence_on_file"
+          ],
+          "contract_missing_fields": [
+            "event_id",
+            "company_id",
+            "observed_at",
+            "advance_id",
+            "event_type",
+            "amount_vnd",
+            "evidence_on_file"
+          ]
+        },
+        {
+          "role": "transactions",
+          "table": "transactions",
+          "fields": [
+            "amount_vnd",
+            "advance_id"
+          ],
+          "contract_missing_fields": [
+            "advance_id"
+          ]
+        },
+        {
+          "role": "supporting_documents",
+          "table": "supporting_documents",
+          "fields": [
+            "document_kind",
+            "verification_status",
+            "subject_refs"
+          ],
+          "contract_missing_fields": []
+        }
+      ],
+      "applicable_kinds": [],
+      "evaluation_status": "not_evaluated"
+    }
+  ]
+}

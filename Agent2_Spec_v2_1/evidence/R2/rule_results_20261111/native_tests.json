@@ -1,0 +1,2928 @@
+{
+  "tests": [
+    {
+      "id": "test_accounting.AccountingTest.test_every_document_balances_and_every_flow_matches_its_scenario",
+      "status": "pass",
+      "testcase": "test_accounting.AccountingTest.test_every_document_balances_and_every_flow_matches_its_scenario"
+    },
+    {
+      "id": "test_accounting.AccountingTest.test_features_include_current_writeoff_evidence_and_vat_lines",
+      "status": "pass",
+      "testcase": "test_accounting.AccountingTest.test_features_include_current_writeoff_evidence_and_vat_lines"
+    },
+    {
+      "id": "test_accounting.AccountingTest.test_manufacturing_salary_and_material_flow_reaches_154",
+      "status": "pass",
+      "testcase": "test_accounting.AccountingTest.test_manufacturing_salary_and_material_flow_reaches_154"
+    },
+    {
+      "id": "test_accounting.AccountingTest.test_payments_do_not_book_input_vat_twice",
+      "status": "pass",
+      "testcase": "test_accounting.AccountingTest.test_payments_do_not_book_input_vat_twice"
+    },
+    {
+      "id": "test_accounting.AccountingTest.test_real_writeoff_is_not_receivable_reclassification",
+      "status": "pass",
+      "testcase": "test_accounting.AccountingTest.test_real_writeoff_is_not_receivable_reclassification"
+    },
+    {
+      "id": "test_accounting.AccountingTest.test_standalone_low_value_equipment_is_not_fixed_asset",
+      "status": "pass",
+      "testcase": "test_accounting.AccountingTest.test_standalone_low_value_equipment_is_not_fixed_asset"
+    },
+    {
+      "id": "test_accounting.AccountingTest.test_tt133_has_no_tt200_selling_or_cost_accounts",
+      "status": "pass",
+      "testcase": "test_accounting.AccountingTest.test_tt133_has_no_tt200_selling_or_cost_accounts"
+    },
+    {
+      "id": "test_accounting.AccountingTest.test_untimed_writeoff_proof_is_missing_for_ml",
+      "status": "pass",
+      "testcase": "test_accounting.AccountingTest.test_untimed_writeoff_proof_is_missing_for_ml"
+    },
+    {
+      "id": "test_accounting.AccountingTest.test_unusual_examples_are_not_supported_as_routine_expense_accrual",
+      "status": "pass",
+      "testcase": "test_accounting.AccountingTest.test_unusual_examples_are_not_supported_as_routine_expense_accrual"
+    },
+    {
+      "id": "test_accounting.AccountingTest.test_vat_purchase_is_a_balanced_compound_entry",
+      "status": "pass",
+      "testcase": "test_accounting.AccountingTest.test_vat_purchase_is_a_balanced_compound_entry"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_approver_company_is_checked_at_the_evidence_approval_time",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_approver_company_is_checked_at_the_evidence_approval_time"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_approved_seasonal_or_annual_schedule_suppresses",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_approved_seasonal_or_annual_schedule_suppresses"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_equal_time_payments_share_the_season_cap",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_equal_time_payments_share_the_season_cap"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_existing_yearly_recurring_authority_is_supported",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_existing_yearly_recurring_authority_is_supported"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_wrong_window_future_or_excess_schedule_does_not_suppress",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_wrong_window_future_or_excess_schedule_does_not_suppress"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_approved_delegation_is_scoped_and_independent",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_approved_delegation_is_scoped_and_independent"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_cannot_grant_authority_to_an_actor_first_seen_after_action",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_cannot_grant_authority_to_an_actor_first_seen_after_action"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_complete_matrix_denies_missing_or_disallowed_authority",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_complete_matrix_denies_missing_or_disallowed_authority"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_explicit_self_authority_overrides_lower_master_limit",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_explicit_self_authority_overrides_lower_master_limit"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_fallback_uses_self_approval_limit_at_approval",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_fallback_uses_self_approval_limit_at_approval"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_future_matrix_does_not_rewrite_legacy_exception",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_future_matrix_does_not_rewrite_legacy_exception"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_overlapping_complete_coverage_cannot_grant_an_exception",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_overlapping_complete_coverage_cannot_grant_an_exception"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_profile_updates_do_not_erase_coverage_or_authority_approval",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_profile_updates_do_not_erase_coverage_or_authority_approval"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_role_authority_uses_role_at_approval_not_posting",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_role_authority_uses_role_at_approval_not_posting"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_actor_company_is_checked_at_action_not_posting",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_actor_company_is_checked_at_action_not_posting"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_missing_matrix_keeps_amount_proxy",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_missing_matrix_keeps_amount_proxy"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_profile_updates_do_not_erase_high_authority",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_profile_updates_do_not_erase_high_authority"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_role_authority_uses_role_at_approval_not_posting",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_role_authority_uses_role_at_approval_not_posting"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_standard_authority_is_not_promoted_by_large_amount",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_standard_authority_is_not_promoted_by_large_amount"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_uses_explicit_high_authority_even_below_amount_proxy",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_uses_explicit_high_authority_even_below_amount_proxy"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_future_employee_revisions_do_not_rewrite_c2_or_c3",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_future_employee_revisions_do_not_rewrite_c2_or_c3"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_matrix_approval_cannot_use_an_approver_first_seen_later",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_matrix_approval_cannot_use_an_approver_first_seen_later"
+    },
+    {
+      "id": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_revocations_only_affect_actions_after_their_observation",
+      "status": "pass",
+      "testcase": "test_authority_and_dormancy.AuthorityAndDormancyTest.test_revocations_only_affect_actions_after_their_observation"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_amounts_are_nonnegative_whole_vnd",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_amounts_are_nonnegative_whole_vnd"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_authority_enums_are_checked",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_authority_enums_are_checked"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_boolean_domain_is_strict",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_boolean_domain_is_strict"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_coverage_actions_require_known_unique_tokens",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_coverage_actions_require_known_unique_tokens"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_coverage_status_is_checked",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_coverage_status_is_checked"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_csv_amount_boundaries_are_inclusive",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_csv_amount_boundaries_are_inclusive"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_dates_must_be_real_calendar_dates",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_dates_must_be_real_calendar_dates"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_equivalent_csv_revisions_do_not_conflict_or_mutate_input",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_equivalent_csv_revisions_do_not_conflict_or_mutate_input"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_evidence_flags_are_checked_in_both_tables",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_evidence_flags_are_checked_in_both_tables"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_future_and_revoked_records_do_not_grant_permission",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_future_and_revoked_records_do_not_grant_permission"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_identifier_and_scope_fields_are_strings",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_identifier_and_scope_fields_are_strings"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_invalid_boolean_cannot_grant_self_approval",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_invalid_boolean_cannot_grant_self_approval"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_malformed_future_or_revoked_records_are_still_rejected",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_malformed_future_or_revoked_records_are_still_rejected"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_missing_proof_does_not_grant_authority",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_missing_proof_does_not_grant_authority"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_observation_cannot_precede_approval",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_observation_cannot_precede_approval"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_reversed_amount_range_is_rejected",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_reversed_amount_range_is_rejected"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_reversed_effective_and_coverage_ranges_are_rejected",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_reversed_effective_and_coverage_ranges_are_rejected"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_same_revision_conflict_and_changed_bindings_still_fail",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_same_revision_conflict_and_changed_bindings_still_fail"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_times_must_be_real_local_timestamps_with_seconds",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_times_must_be_real_local_timestamps_with_seconds"
+    },
+    {
+      "id": "test_authority_validation.AuthorityValidationTest.test_valid_native_and_csv_boolean_values_preserve_permission",
+      "status": "pass",
+      "testcase": "test_authority_validation.AuthorityValidationTest.test_valid_native_and_csv_boolean_values_preserve_permission"
+    },
+    {
+      "id": "test_b2_company_transfer.B2CompanyTransferTest.test_departing_employee_does_not_remove_another_current_employee",
+      "status": "pass",
+      "testcase": "test_b2_company_transfer.B2CompanyTransferTest.test_departing_employee_does_not_remove_another_current_employee"
+    },
+    {
+      "id": "test_b2_company_transfer.B2CompanyTransferTest.test_future_transfer_does_not_rewrite_historical_scores_or_hits",
+      "status": "pass",
+      "testcase": "test_b2_company_transfer.B2CompanyTransferTest.test_future_transfer_does_not_rewrite_historical_scores_or_hits"
+    },
+    {
+      "id": "test_b2_company_transfer.B2CompanyTransferTest.test_new_company_gets_current_employee_while_old_company_loses_them",
+      "status": "pass",
+      "testcase": "test_b2_company_transfer.B2CompanyTransferTest.test_new_company_gets_current_employee_while_old_company_loses_them"
+    },
+    {
+      "id": "test_b2_company_transfer.B2CompanyTransferTest.test_old_company_mirror_at_transfer_time_cannot_restore_departed_staff_edges",
+      "status": "pass",
+      "testcase": "test_b2_company_transfer.B2CompanyTransferTest.test_old_company_mirror_at_transfer_time_cannot_restore_departed_staff_edges"
+    },
+    {
+      "id": "test_b2_company_transfer.B2CompanyTransferTest.test_same_company_replacement_or_clear_still_removes_old_contacts",
+      "status": "pass",
+      "testcase": "test_b2_company_transfer.B2CompanyTransferTest.test_same_company_replacement_or_clear_still_removes_old_contacts"
+    },
+    {
+      "id": "test_b2_company_transfer.B2CompanyTransferTest.test_shared_index_also_retires_legacy_bank_and_national_id_on_transfer",
+      "status": "pass",
+      "testcase": "test_b2_company_transfer.B2CompanyTransferTest.test_shared_index_also_retires_legacy_bank_and_national_id_on_transfer"
+    },
+    {
+      "id": "test_b2_company_transfer.B2CompanyTransferTest.test_transfer_applies_at_cutoff_to_every_payment_in_the_batch",
+      "status": "pass",
+      "testcase": "test_b2_company_transfer.B2CompanyTransferTest.test_transfer_applies_at_cutoff_to_every_payment_in_the_batch"
+    },
+    {
+      "id": "test_b2_company_transfer.B2CompanyTransferTest.test_transfer_back_restores_only_the_current_company_match",
+      "status": "pass",
+      "testcase": "test_b2_company_transfer.B2CompanyTransferTest.test_transfer_back_restores_only_the_current_company_match"
+    },
+    {
+      "id": "test_b2_company_transfer.B2CompanyTransferTest.test_transfer_keeps_independent_graph_match_to_remaining_employee",
+      "status": "pass",
+      "testcase": "test_b2_company_transfer.B2CompanyTransferTest.test_transfer_keeps_independent_graph_match_to_remaining_employee"
+    },
+    {
+      "id": "test_b2_company_transfer.B2CompanyTransferTest.test_transfer_removes_old_company_phone_and_address_in_both_modes",
+      "status": "pass",
+      "testcase": "test_b2_company_transfer.B2CompanyTransferTest.test_transfer_removes_old_company_phone_and_address_in_both_modes"
+    },
+    {
+      "id": "test_b2_company_transfer.B2CompanyTransferTest.test_transfer_with_changed_contacts_leaves_no_old_company_match",
+      "status": "pass",
+      "testcase": "test_b2_company_transfer.B2CompanyTransferTest.test_transfer_with_changed_contacts_leaves_no_old_company_match"
+    },
+    {
+      "id": "test_b2_company_transfer.B2CompanyTransferTest.test_transferred_employee_cannot_bridge_old_company_graph_to_current_staff",
+      "status": "pass",
+      "testcase": "test_b2_company_transfer.B2CompanyTransferTest.test_transferred_employee_cannot_bridge_old_company_graph_to_current_staff"
+    },
+    {
+      "id": "test_b4_evidence_timing.B4EvidenceTimingTest.test_explicit_invalid_timestamp_is_rejected_instead_of_assumed_known",
+      "status": "pass",
+      "testcase": "test_b4_evidence_timing.B4EvidenceTimingTest.test_explicit_invalid_timestamp_is_rejected_instead_of_assumed_known"
+    },
+    {
+      "id": "test_b4_evidence_timing.B4EvidenceTimingTest.test_future_receipt_flag_change_cannot_change_historical_b4_hit",
+      "status": "pass",
+      "testcase": "test_b4_evidence_timing.B4EvidenceTimingTest.test_future_receipt_flag_change_cannot_change_historical_b4_hit"
+    },
+    {
+      "id": "test_b4_evidence_timing.B4EvidenceTimingTest.test_late_receipt_keeps_three_points_in_both_policy_modes",
+      "status": "pass",
+      "testcase": "test_b4_evidence_timing.B4EvidenceTimingTest.test_late_receipt_keeps_three_points_in_both_policy_modes"
+    },
+    {
+      "id": "test_b4_evidence_timing.B4EvidenceTimingTest.test_later_payment_can_use_receipt_without_rewriting_earlier_payment",
+      "status": "pass",
+      "testcase": "test_b4_evidence_timing.B4EvidenceTimingTest.test_later_payment_can_use_receipt_without_rewriting_earlier_payment"
+    },
+    {
+      "id": "test_b4_evidence_timing.B4EvidenceTimingTest.test_missing_optional_timestamp_preserves_legacy_posting_assumption",
+      "status": "pass",
+      "testcase": "test_b4_evidence_timing.B4EvidenceTimingTest.test_missing_optional_timestamp_preserves_legacy_posting_assumption"
+    },
+    {
+      "id": "test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_cannot_suppress_registry_risk_already_present_at_invoice",
+      "status": "pass",
+      "testcase": "test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_cannot_suppress_registry_risk_already_present_at_invoice"
+    },
+    {
+      "id": "test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_cannot_suppress_tax_authority_listing",
+      "status": "pass",
+      "testcase": "test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_cannot_suppress_tax_authority_listing"
+    },
+    {
+      "id": "test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_is_available_only_at_or_before_payment_cutoff",
+      "status": "pass",
+      "testcase": "test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_is_available_only_at_or_before_payment_cutoff"
+    },
+    {
+      "id": "test_b4_evidence_timing.B4EvidenceTimingTest.test_unverified_receipt_cannot_suppress_even_when_documents_are_known",
+      "status": "pass",
+      "testcase": "test_b4_evidence_timing.B4EvidenceTimingTest.test_unverified_receipt_cannot_suppress_even_when_documents_are_known"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_a2_uses_bank_and_account_in_long_history",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_a2_uses_bank_and_account_in_long_history"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_bank_change_for_other_bank_is_not_a_payment_match",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_bank_change_for_other_bank_is_not_a_payment_match"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_callback_for_another_bank_cannot_verify_payment",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_callback_for_another_bank_cannot_verify_payment"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_callback_revision_cannot_rebind_account_bank_vendor_or_effective_date",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_callback_revision_cannot_rebind_account_bank_vendor_or_effective_date"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_creator_recipient_counts_distinguish_banks",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_creator_recipient_counts_distinguish_banks"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_cross_company_or_vendor_source_cannot_match",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_cross_company_or_vendor_source_cannot_match"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_different_account_has_no_bank_change_signal",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_different_account_has_no_bank_change_signal"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_different_banks_do_not_share_a_recipient",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_different_banks_do_not_share_a_recipient"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_employee_bank_features_require_same_institution",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_employee_bank_features_require_same_institution"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_employee_revision_removes_old_bank_identity_from_features",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_employee_revision_removes_old_bank_identity_from_features"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_equivalent_bank_formatting_is_not_a_binding_change",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_equivalent_bank_formatting_is_not_a_binding_change"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_future_bank_source_does_not_change_past_rules_or_features",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_future_bank_source_does_not_change_past_rules_or_features"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_graph_bank_features_do_not_merge_different_or_unknown_banks",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_graph_bank_features_do_not_merge_different_or_unknown_banks"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_leading_zero_is_part_of_the_account",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_leading_zero_is_part_of_the_account"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_missing_change_or_payment_bank_is_an_explicit_gap",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_missing_change_or_payment_bank_is_an_explicit_gap"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_same_bank_change_requires_valid_independent_callback",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_same_bank_change_requires_valid_independent_callback"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_same_bank_identity_matches_formatting_and_keeps_alert_without_payment_proof",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_same_bank_identity_matches_formatting_and_keeps_alert_without_payment_proof"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_unconfirmed_history_does_not_contaminate_confirmed_recipient",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_unconfirmed_history_does_not_contaminate_confirmed_recipient"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_unique_synthetic_accounts_remain_usable_without_bank_codes",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_unique_synthetic_accounts_remain_usable_without_bank_codes"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_unknown_bank_is_a_gap_without_recipient_matching_or_master_inference",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_unknown_bank_is_a_gap_without_recipient_matching_or_master_inference"
+    },
+    {
+      "id": "test_bank_identity_controls.BankIdentityControlsTest.test_unknown_recipient_does_not_disable_strong_graph_a3",
+      "status": "pass",
+      "testcase": "test_bank_identity_controls.BankIdentityControlsTest.test_unknown_recipient_does_not_disable_strong_graph_a3"
+    },
+    {
+      "id": "test_causality.CausalFeaturesTest.test_fraud_and_hard_negative_coverage",
+      "status": "pass",
+      "testcase": "test_causality.CausalFeaturesTest.test_fraud_and_hard_negative_coverage"
+    },
+    {
+      "id": "test_causality.CausalFeaturesTest.test_future_master_and_event_records_do_not_change_past_features",
+      "status": "pass",
+      "testcase": "test_causality.CausalFeaturesTest.test_future_master_and_event_records_do_not_change_past_features"
+    },
+    {
+      "id": "test_causality.CausalFeaturesTest.test_future_transactions_do_not_change_past_features",
+      "status": "pass",
+      "testcase": "test_causality.CausalFeaturesTest.test_future_transactions_do_not_change_past_features"
+    },
+    {
+      "id": "test_causality.CausalFeaturesTest.test_same_seed_is_reproducible",
+      "status": "pass",
+      "testcase": "test_causality.CausalFeaturesTest.test_same_seed_is_reproducible"
+    },
+    {
+      "id": "test_causality.CausalFeaturesTest.test_simultaneous_payments_cannot_see_each_other",
+      "status": "pass",
+      "testcase": "test_causality.CausalFeaturesTest.test_simultaneous_payments_cannot_see_each_other"
+    },
+    {
+      "id": "test_causality.CausalFeaturesTest.test_truth_and_split_are_not_feature_inputs",
+      "status": "pass",
+      "testcase": "test_causality.CausalFeaturesTest.test_truth_and_split_are_not_feature_inputs"
+    },
+    {
+      "id": "test_core_rule_requirements.CoreRuleRequirementsTest.test_after_hours_weekend_and_holiday_each_produce_c1_evidence",
+      "status": "pass",
+      "testcase": "test_core_rule_requirements.CoreRuleRequirementsTest.test_after_hours_weekend_and_holiday_each_produce_c1_evidence"
+    },
+    {
+      "id": "test_core_rule_requirements.CoreRuleRequirementsTest.test_approved_self_approval_keeps_auditable_exception",
+      "status": "pass",
+      "testcase": "test_core_rule_requirements.CoreRuleRequirementsTest.test_approved_self_approval_keeps_auditable_exception"
+    },
+    {
+      "id": "test_core_rule_requirements.CoreRuleRequirementsTest.test_custom_calendar_marks_a_2026_holiday_without_code_changes",
+      "status": "pass",
+      "testcase": "test_core_rule_requirements.CoreRuleRequirementsTest.test_custom_calendar_marks_a_2026_holiday_without_code_changes"
+    },
+    {
+      "id": "test_core_rule_requirements.CoreRuleRequirementsTest.test_near_authority_chain_across_vendors_is_reviewed_without_ml",
+      "status": "pass",
+      "testcase": "test_core_rule_requirements.CoreRuleRequirementsTest.test_near_authority_chain_across_vendors_is_reviewed_without_ml"
+    },
+    {
+      "id": "test_core_rule_requirements.CoreRuleRequirementsTest.test_unauthorized_self_approval_triggers_c2_independently",
+      "status": "pass",
+      "testcase": "test_core_rule_requirements.CoreRuleRequirementsTest.test_unauthorized_self_approval_triggers_c2_independently"
+    },
+    {
+      "id": "test_core_rule_requirements.CoreRuleRequirementsTest.test_working_hours_and_authorized_saturday_do_not_produce_c1",
+      "status": "pass",
+      "testcase": "test_core_rule_requirements.CoreRuleRequirementsTest.test_working_hours_and_authorized_saturday_do_not_produce_c1"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_bank_code_replacement_also_splits_old_graph_component",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_bank_code_replacement_also_splits_old_graph_component"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_changes_at_cutoff_apply_to_entire_simultaneous_batch",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_changes_at_cutoff_apply_to_entire_simultaneous_batch"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_conflicting_employee_or_vendor_snapshots_are_rejected",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_conflicting_employee_or_vendor_snapshots_are_rejected"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_disconnected_vendors_split_linked_vendor_count",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_disconnected_vendors_split_linked_vendor_count"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_employee_clear_retires_old_tokens",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_employee_clear_retires_old_tokens"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_employee_replacement_retires_phone_address_and_graph",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_employee_replacement_retires_phone_address_and_graph"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_explicit_current_schema_has_no_ambiguous_or_unbounded_history_aliases",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_explicit_current_schema_has_no_ambiguous_or_unbounded_history_aliases"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_external_link_replacement_and_revocation_are_current",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_external_link_replacement_and_revocation_are_current"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_future_master_and_link_updates_preserve_all_historical_features",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_future_master_and_link_updates_preserve_all_historical_features"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_master_snapshot_relationships_work_without_link_mirrors",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_master_snapshot_relationships_work_without_link_mirrors"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_old_or_equal_time_mirrors_do_not_resurrect_cleared_master",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_old_or_equal_time_mirrors_do_not_resurrect_cleared_master"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_representative_replacement_removes_old_two_hop_path",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_representative_replacement_removes_old_two_hop_path"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_revoking_old_target_does_not_cancel_current_replacement",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_revoking_old_target_does_not_cancel_current_replacement"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_shared_contact_survives_for_remaining_current_employee",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_shared_contact_survives_for_remaining_current_employee"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_source_order_and_identical_revisions_do_not_change_counts",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_source_order_and_identical_revisions_do_not_change_counts"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_transfer_back_restores_membership_without_double_counting",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_transfer_back_restores_membership_without_double_counting"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_transfer_removes_old_company_membership_and_matches_new_company",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_transfer_removes_old_company_membership_and_matches_new_company"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_vendor_replacement_or_clear_splits_graph",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_vendor_replacement_or_clear_splits_graph"
+    },
+    {
+      "id": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_vendor_transfer_removes_old_company_vendor_membership",
+      "status": "pass",
+      "testcase": "test_current_relationship_features.CurrentRelationshipFeaturesTest.test_vendor_transfer_removes_old_company_vendor_membership"
+    },
+    {
+      "id": "test_dynamic_threshold_sources.ThresholdSourcesTest.test_ambiguous_duplicate_cross_company_and_mismatched_dates_fail",
+      "status": "pass",
+      "testcase": "test_dynamic_threshold_sources.ThresholdSourcesTest.test_ambiguous_duplicate_cross_company_and_mismatched_dates_fail"
+    },
+    {
+      "id": "test_dynamic_threshold_sources.ThresholdSourcesTest.test_default_engine_uses_rolling_account_and_emits_replayable_a5_evidence",
+      "status": "pass",
+      "testcase": "test_dynamic_threshold_sources.ThresholdSourcesTest.test_default_engine_uses_rolling_account_and_emits_replayable_a5_evidence"
+    },
+    {
+      "id": "test_dynamic_threshold_sources.ThresholdSourcesTest.test_document_account_debits_aggregate_without_vat_assets_or_credit_netting",
+      "status": "pass",
+      "testcase": "test_dynamic_threshold_sources.ThresholdSourcesTest.test_document_account_debits_aggregate_without_vat_assets_or_credit_netting"
+    },
+    {
+      "id": "test_dynamic_threshold_sources.ThresholdSourcesTest.test_knowledge_time_is_latest_header_line_or_bound_transaction",
+      "status": "pass",
+      "testcase": "test_dynamic_threshold_sources.ThresholdSourcesTest.test_knowledge_time_is_latest_header_line_or_bound_transaction"
+    },
+    {
+      "id": "test_dynamic_threshold_sources.ThresholdSourcesTest.test_payroll_and_payable_settlements_do_not_create_another_expense",
+      "status": "pass",
+      "testcase": "test_dynamic_threshold_sources.ThresholdSourcesTest.test_payroll_and_payable_settlements_do_not_create_another_expense"
+    },
+    {
+      "id": "test_dynamic_threshold_sources.ThresholdSourcesTest.test_without_ledger_fallback_is_separately_named_and_nonfinancial_events_are_excluded",
+      "status": "pass",
+      "testcase": "test_dynamic_threshold_sources.ThresholdSourcesTest.test_without_ledger_fallback_is_separately_named_and_nonfinancial_events_are_excluded"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_30_60_90_day_boundaries_and_expiry_are_exact",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_30_60_90_day_boundaries_and_expiry_are_exact"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_bad_configuration_and_conflicting_source_ids_are_rejected",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_bad_configuration_and_conflicting_source_ids_are_rejected"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_cold_start_exports_null_effective_thresholds_not_global_defaults",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_cold_start_exports_null_effective_thresholds_not_global_defaults"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_company_exact_subaccount_measurement_and_family_never_pool",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_company_exact_subaccount_measurement_and_family_never_pool"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_current_and_simultaneous_transactions_never_enter_their_own_baseline",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_current_and_simultaneous_transactions_never_enter_their_own_baseline"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_future_values_and_late_observations_cannot_change_past_evidence",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_future_values_and_late_observations_cannot_change_past_evidence"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_insufficient_phase_history_falls_back_without_inventing_a_cycle",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_insufficient_phase_history_falls_back_without_inventing_a_cycle"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_linear_p95_p99_and_strict_upper_tail",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_linear_p95_p99_and_strict_upper_tail"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_mean_plus_k_sample_standard_deviation",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_mean_plus_k_sample_standard_deviation"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_month_end_context_handles_short_months_and_leap_february",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_month_end_context_handles_short_months_and_leap_february"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_monthly_payday_lifts_threshold_and_off_cycle_keeps_a_lower_threshold",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_monthly_payday_lifts_threshold_and_off_cycle_keeps_a_lower_threshold"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_parameter_selection_never_uses_current_amount_or_truth",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_parameter_selection_never_uses_current_amount_or_truth"
+    },
+    {
+      "id": "test_dynamic_thresholds.DynamicThresholdsTest.test_zero_variance_and_lower_tail_are_not_undefined_or_two_sided",
+      "status": "pass",
+      "testcase": "test_dynamic_thresholds.DynamicThresholdsTest.test_zero_variance_and_lower_tail_are_not_undefined_or_two_sided"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_bank_institution_and_missing_bank_codes_do_not_merge_accounts",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_bank_institution_and_missing_bank_codes_do_not_merge_accounts"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_blank_identities_do_not_create_shared_attribute_nodes",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_blank_identities_do_not_create_shared_attribute_nodes"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_bounded_visualization_is_explicit_and_does_not_emit_incomplete_findings",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_bounded_visualization_is_explicit_and_does_not_emit_incomplete_findings"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_connected_component_and_bounded_shortest_path",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_connected_component_and_bounded_shortest_path"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_future_revisions_and_links_cannot_change_past_graph",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_future_revisions_and_links_cannot_change_past_graph"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_malformed_conflicting_versions_and_invalid_queries_are_rejected",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_malformed_conflicting_versions_and_invalid_queries_are_rejected"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_master_tombstone_wins_over_same_time_link_independent_of_order",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_master_tombstone_wins_over_same_time_link_independent_of_order"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_parent_and_branch_tax_ids_remain_distinct",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_parent_and_branch_tax_ids_remain_distinct"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_phone_country_formatting_address_normalization_and_leading_zeros",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_phone_country_formatting_address_normalization_and_leading_zeros"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_replacement_and_clearing_rebuild_components_and_retire_mirrors",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_replacement_and_clearing_rebuild_components_and_retire_mirrors"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_requested_shared_identity_findings_are_grouped_with_evidence",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_requested_shared_identity_findings_are_grouped_with_evidence"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_revoke_old_link_does_not_cancel_its_replacement",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_revoke_old_link_does_not_cancel_its_replacement"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_same_raw_id_and_identity_in_two_companies_never_cross_boundaries",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_same_raw_id_and_identity_in_two_companies_never_cross_boundaries"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_source_order_and_duplicate_rows_do_not_change_json_or_component_ids",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_source_order_and_duplicate_rows_do_not_change_json_or_component_ids"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_typed_multigraph_and_json_round_trip_cover_all_six_types",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_typed_multigraph_and_json_round_trip_cover_all_six_types"
+    },
+    {
+      "id": "test_entity_graph.EntityGraphTest.test_weak_address_connection_is_queryable_but_not_a_bank_path",
+      "status": "pass",
+      "testcase": "test_entity_graph.EntityGraphTest.test_weak_address_connection_is_queryable_but_not_a_bank_path"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_address_case_accents_and_separators_match_like_b2",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_address_case_accents_and_separators_match_like_b2"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_address_links_do_not_create_a_strong_graph_relationship",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_address_links_do_not_create_a_strong_graph_relationship"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_all_empty_employee_and_vendor_contacts_do_not_overlap",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_all_empty_employee_and_vendor_contacts_do_not_overlap"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_contact_tokens_cannot_collide_with_entity_ids_in_graph",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_contact_tokens_cannot_collide_with_entity_ids_in_graph"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_distinct_contacts_and_other_company_do_not_match",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_distinct_contacts_and_other_company_do_not_match"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_empty_whitespace_punctuation_and_null_values_never_match",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_empty_whitespace_punctuation_and_null_values_never_match"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_feature_build_does_not_mutate_raw_master_or_links",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_feature_build_does_not_mutate_raw_master_or_links"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_missing_contact_columns_are_unavailable",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_missing_contact_columns_are_unavailable"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_non_string_contacts_are_unusable_without_implicit_conversion",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_non_string_contacts_are_unusable_without_implicit_conversion"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_normalized_phone_edges_find_the_real_employee",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_normalized_phone_edges_find_the_real_employee"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_phone_country_code_and_formatting_match_like_b2",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_phone_country_code_and_formatting_match_like_b2"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_placeholder_contacts_never_become_direct_or_graph_evidence",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_placeholder_contacts_never_become_direct_or_graph_evidence"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_same_width_v2_model_cannot_score_v3_contact_semantics",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_same_width_v2_model_cannot_score_v3_contact_semantics"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_synthetic_tokens_and_non_contact_normalization_remain_supported",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_synthetic_tokens_and_non_contact_normalization_remain_supported"
+    },
+    {
+      "id": "test_feature_contact_identity.FeatureContactIdentityTest.test_valid_same_contact_survives_while_the_other_field_is_empty",
+      "status": "pass",
+      "testcase": "test_feature_contact_identity.FeatureContactIdentityTest.test_valid_same_contact_survives_while_the_other_field_is_empty"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_blank_new_observation_fields_remain_unknown",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_blank_new_observation_fields_remain_unknown"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_conflicting_invoice_identifier_cannot_supply_values",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_conflicting_invoice_identifier_cannot_supply_values"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_conflicting_or_rebound_revisions_are_rejected_including_future",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_conflicting_or_rebound_revisions_are_rejected_including_future"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_document_cutoff_is_inclusive_and_one_second_late_is_excluded",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_document_cutoff_is_inclusive_and_one_second_late_is_excluded"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_document_revisions_are_selected_before_status_and_order_does_not_matter",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_document_revisions_are_selected_before_status_and_order_does_not_matter"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_future_document_values_cannot_change_historical_feature_vector",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_future_document_values_cannot_change_historical_feature_vector"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_future_invoice_masks_all_dependent_monetary_features",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_future_invoice_masks_all_dependent_monetary_features"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_future_issue_date_is_excluded_even_if_observation_claims_known",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_future_issue_date_is_excluded_even_if_observation_claims_known"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_future_receipt_verification_is_not_available_with_known_documents",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_future_receipt_verification_is_not_available_with_known_documents"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invalid_new_timestamps_are_rejected",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invalid_new_timestamps_are_rejected"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invoice_at_cutoff_is_available_and_observed_zero_is_not_missing",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invoice_at_cutoff_is_available_and_observed_zero_is_not_missing"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invoice_id_binding_is_exact_even_when_punctuation_differs",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invoice_id_binding_is_exact_even_when_punctuation_differs"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invoice_id_can_bind_amounts_without_a_document_number",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_invoice_id_can_bind_amounts_without_a_document_number"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_known_invoice_revision_wins_over_later_raw_and_document_values",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_known_invoice_revision_wins_over_later_raw_and_document_values"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_known_revocation_cannot_fall_back_to_positive_final_scalar",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_known_revocation_cannot_fall_back_to_positive_final_scalar"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_late_verification_does_not_set_receipt_flag",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_late_verification_does_not_set_receipt_flag"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_missing_invoice_components_do_not_create_arithmetic_anomaly",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_missing_invoice_components_do_not_create_arithmetic_anomaly"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_new_columns_are_finite_and_source_is_not_mutated",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_new_columns_are_finite_and_source_is_not_mutated"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_old_feature_artifact_is_rejected_by_fresh_cache_contract",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_old_feature_artifact_is_rejected_by_fresh_cache_contract"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_old_issue_date_does_not_make_late_observation_available",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_old_issue_date_does_not_make_late_observation_available"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_untimed_document_values_are_missing_and_distinct_from_observed_zero",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_untimed_document_values_are_missing_and_distinct_from_observed_zero"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_untimed_invoice_amount_is_missing",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_untimed_invoice_amount_is_missing"
+    },
+    {
+      "id": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_wrong_company_or_vendor_document_cannot_supply_feature_values",
+      "status": "pass",
+      "testcase": "test_feature_evidence_timing.FeatureEvidenceTimingTest.test_wrong_company_or_vendor_document_cannot_supply_feature_values"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_a3_long_window_excludes_payments_of_disconnected_vendor",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_a3_long_window_excludes_payments_of_disconnected_vendor"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_a3_short_component_splits_after_master_change",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_a3_short_component_splits_after_master_change"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_ambiguous_bank_revocation_cannot_cancel_verified_institution",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_ambiguous_bank_revocation_cannot_cancel_verified_institution"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_bank_code_change_splits_identical_account_numbers",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_bank_code_change_splits_identical_account_numbers"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_clear_at_transaction_timestamp_applies_to_entire_batch",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_clear_at_transaction_timestamp_applies_to_entire_batch"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_company_scope_prevents_shared_tokens_and_revocations_crossing_companies",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_company_scope_prevents_shared_tokens_and_revocations_crossing_companies"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_conflicting_equal_time_sources_do_not_depend_on_input_order",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_conflicting_equal_time_sources_do_not_depend_on_input_order"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_employee_changes_retire_old_bank_and_phone",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_employee_changes_retire_old_bank_and_phone"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_future_master_and_link_versions_preserve_past_scores_hits_and_paths",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_future_master_and_link_versions_preserve_past_scores_hits_and_paths"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_later_reactivation_is_valid_without_rewriting_revoked_period",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_later_reactivation_is_valid_without_rewriting_revoked_period"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_master_tombstone_wins_equal_time_mirror_in_either_order",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_master_tombstone_wins_equal_time_mirror_in_either_order"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_non_master_contact_replacement_and_revocation_are_as_of",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_non_master_contact_replacement_and_revocation_are_as_of"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_removing_phone_does_not_remove_independent_bank_evidence",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_removing_phone_does_not_remove_independent_bank_evidence"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_representative_replacement_and_clear_remove_old_two_hop_path",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_representative_replacement_and_clear_remove_old_two_hop_path"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_revocation_of_old_target_does_not_cancel_replacement",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_revocation_of_old_target_does_not_cancel_replacement"
+    },
+    {
+      "id": "test_graph_history.GraphHistoryTest.test_vendor_phone_replacement_and_clear_retire_mirrored_links",
+      "status": "pass",
+      "testcase": "test_graph_history.GraphHistoryTest.test_vendor_phone_replacement_and_clear_retire_mirrored_links"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_as_of_is_order_independent_and_copied",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_as_of_is_order_independent_and_copied"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_canonical_money_rejects_float_string_bool_fraction_and_overflow",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_canonical_money_rejects_float_string_bool_fraction_and_overflow"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_company_master_required",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_company_master_required"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_cyclic_adjustments_rejected",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_cyclic_adjustments_rejected"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_errors_have_row_field_and_next_action",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_errors_have_row_field_and_next_action"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_fixture_retains_every_row_and_negative_amount",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_fixture_retains_every_row_and_negative_amount"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_foreign_currency_requires_separate_contract",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_foreign_currency_requires_separate_contract"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_future_effective_record_not_visible_yet",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_future_effective_record_not_visible_yet"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_identical_id_same_company_revision_rejected",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_identical_id_same_company_revision_rejected"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_late_document_not_visible_in_old_knowledge",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_late_document_not_visible_in_old_knowledge"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_late_revision_cannot_replace_past_value",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_late_revision_cannot_replace_past_value"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_leading_zero_identifiers_preserved",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_leading_zero_identifiers_preserved"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_malformed_company_id_does_not_crash",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_malformed_company_id_does_not_crash"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_many_to_many_allocation_is_supported",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_many_to_many_allocation_is_supported"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_missing_known_time_never_defaults_to_event_time",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_missing_known_time_never_defaults_to_event_time"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_missing_vs_unknown_explicit_without_inventing_value",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_missing_vs_unknown_explicit_without_inventing_value"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_money_exact_and_signed_without_rounding",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_money_exact_and_signed_without_rounding"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_negative_invoice_and_allocation_adjustments_are_accepted",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_negative_invoice_and_allocation_adjustments_are_accepted"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_negative_requires_adjustment_kind_reason_original",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_negative_requires_adjustment_kind_reason_original"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_other_company_does_not_satisfy_missing_reference",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_other_company_does_not_satisfy_missing_reference"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_overpayment_and_distinct_payments_same_invoice_not_import_errors",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_overpayment_and_distinct_payments_same_invoice_not_import_errors"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_partial_auxiliary_sources_warn_without_dropping_rows",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_partial_auxiliary_sources_warn_without_dropping_rows"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_pinned_money_reuse_exact_bytes",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_pinned_money_reuse_exact_bytes"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_revision_time_cannot_move_back",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_revision_time_cannot_move_back"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_same_ids_in_two_companies_are_separate",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_same_ids_in_two_companies_are_separate"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_schema_is_valid",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_schema_is_valid"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_scope_denial_does_not_expose_foreign_rows",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_scope_denial_does_not_expose_foreign_rows"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_self_adjustment_rejected",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_self_adjustment_rejected"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_source_and_original_document_not_automatically_verified",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_source_and_original_document_not_automatically_verified"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_timestamps_missing_naive_ambiguous_invalid_rejected",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_timestamps_missing_naive_ambiguous_invalid_rejected"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_unknown_columns_and_label_truth_not_accepted",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_unknown_columns_and_label_truth_not_accepted"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_verification_cannot_use_future_knowledge",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_verification_cannot_use_future_knowledge"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_all_native_rule_scores_hits_and_exceptions_are_preserved",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_all_native_rule_scores_hits_and_exceptions_are_preserved"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_demo_scores_new_snapshot_rows_and_retains_unavailable_old_rows",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_demo_scores_new_snapshot_rows_and_retains_unavailable_old_rows"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_every_requested_adapter_returns_five_rows_without_top_k",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_every_requested_adapter_returns_five_rows_without_top_k"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_extreme_batch_does_not_change_reference_or_prior_scores",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_extreme_batch_does_not_change_reference_or_prior_scores"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_fit_rejects_overlap_and_silent_imputation",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_fit_rejects_overlap_and_silent_imputation"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_float_parity_all_retained_ml_and_statistics",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_float_parity_all_retained_ml_and_statistics"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_future_or_incompatible_artifact_is_unavailable",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_future_or_incompatible_artifact_is_unavailable"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_missing_artifact_is_null_and_inference_never_fits",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_missing_artifact_is_null_and_inference_never_fits"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_missing_selected_feature_keeps_every_row",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_missing_selected_feature_keeps_every_row"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_no_hit_native_rows_still_receive_available_ml_scores",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_no_hit_native_rows_still_receive_available_ml_scores"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_snapshot_graph_is_source_backed_and_unsupported_rules_are_explicit",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_snapshot_graph_is_source_backed_and_unsupported_rules_are_explicit"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_snapshot_revocation_before_return_blocks_all_scores",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_snapshot_revocation_before_return_blocks_all_scores"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_wrong_scope_and_corrupt_artifact_do_not_return_scores",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_wrong_scope_and_corrupt_artifact_do_not_return_scores"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_cli_fits_and_scores_in_separate_processes_and_checks_permission_first",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_cli_fits_and_scores_in_separate_processes_and_checks_permission_first"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_completed_retry_survives_restart_without_refit",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_completed_retry_survives_restart_without_refit"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_concurrent_receipts_claim_one_job",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_concurrent_receipts_claim_one_job"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_fit_cannot_cross_reference_or_evaluation_windows",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_fit_cannot_cross_reference_or_evaluation_windows"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_fit_persists_33_contract_and_fresh_reader_scores_without_fit",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_fit_persists_33_contract_and_fresh_reader_scores_without_fit"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_five_transaction_snapshot_returns_five_results_with_or_without_model",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_five_transaction_snapshot_returns_five_results_with_or_without_model"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_full_contract_preprocess_and_runtime_mismatches_are_rejected_before_load",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_full_contract_preprocess_and_runtime_mismatches_are_rejected_before_load"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_late_transaction_revision_does_not_replace_train_version",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_late_transaction_revision_does_not_replace_train_version"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_legacy_or_same_width_reordered_contract_never_reaches_model_load",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_legacy_or_same_width_reordered_contract_never_reaches_model_load"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_legacy_storage_is_not_migrated_or_unpickled",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_legacy_storage_is_not_migrated_or_unpickled"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_missing_model_and_corrupt_model_are_unavailable_without_loading",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_missing_model_and_corrupt_model_are_unavailable_without_loading"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_prospective_fit_and_publication_must_finish_before_period",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_prospective_fit_and_publication_must_finish_before_period"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_publication_rolls_back_artifact_and_success_audit_together",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_publication_rolls_back_artifact_and_success_audit_together"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_read_permission_cannot_create_fit_job",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_read_permission_cannot_create_fit_job"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_revoked_fit_cannot_publish_even_after_training_completes",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_revoked_fit_cannot_publish_even_after_training_completes"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_same_transaction_ids_in_two_companies_have_separate_models",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_same_transaction_ids_in_two_companies_have_separate_models"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_score_store_is_read_only_and_missing_store_is_not_created",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_score_store_is_read_only_and_missing_store_is_not_created"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_strict_missing_policy_fails_without_silent_drop_or_model",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_strict_missing_policy_fails_without_silent_drop_or_model"
+    },
+    {
+      "id": "test_method_jobs.MissingPolicyTests.test_median_uses_only_train_all_null_columns_are_frozen_out",
+      "status": "pass",
+      "testcase": "test_method_jobs.MissingPolicyTests.test_median_uses_only_train_all_null_columns_are_frozen_out"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_a1_mixed_invoices_keep_current_documented_installment_exempt",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_a1_mixed_invoices_keep_current_documented_installment_exempt"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_b5_e4_are_one_evidence_with_address_and_disclosure_context",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_b5_e4_are_one_evidence_with_address_and_disclosure_context"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_clock_context_cannot_make_weak_rounding_patterns_operational",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_clock_context_cannot_make_weak_rounding_patterns_operational"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_clock_context_supports_independent_sod_trigger",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_clock_context_supports_independent_sod_trigger"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_future_schedule_cannot_authorize_past_events",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_future_schedule_cannot_authorize_past_events"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_future_transactions_do_not_change_causal_robust_baseline",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_future_transactions_do_not_change_causal_robust_baseline"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_generic_names_are_quality_gaps_not_fuzzy_matches",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_generic_names_are_quality_gaps_not_fuzzy_matches"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_informative_alias_names_remain_master_findings_without_risk_points",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_informative_alias_names_remain_master_findings_without_risk_points"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_new_shell_relationship_and_payroll_fraud_are_not_suppressed_by_new_vendor_context",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_new_shell_relationship_and_payroll_fraud_are_not_suppressed_by_new_vendor_context"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_robust_baseline_preserves_large_control_and_does_not_pool_different_vendors",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_robust_baseline_preserves_large_control_and_does_not_pool_different_vendors"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_schedule_authorizes_weekend_operations_without_inventing_exemptions",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_schedule_authorizes_weekend_operations_without_inventing_exemptions"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_schedule_is_checked_separately_for_maker_and_checker",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_schedule_is_checked_separately_for_maker_and_checker"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_schedule_revision_between_creation_and_approval_does_not_revoke_past_work",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_schedule_revision_between_creation_and_approval_does_not_revoke_past_work"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_shared_purchase_request_or_unverified_links_cannot_hide_splitting",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_shared_purchase_request_or_unverified_links_cannot_hide_splitting"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_vendor_age_and_document_count_alone_are_not_hard_evidence",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_vendor_age_and_document_count_alone_are_not_hard_evidence"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_verified_independent_purchase_requests_are_not_a_split_packet",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_verified_independent_purchase_requests_are_not_a_split_packet"
+    },
+    {
+      "id": "test_noise_policy.NoisePolicyTest.test_verified_typed_fulfilment_exempts_new_vendor",
+      "status": "pass",
+      "testcase": "test_noise_policy.NoisePolicyTest.test_verified_typed_fulfilment_exempts_new_vendor"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_blank_invoice_numbers_are_information_gaps_not_shared_invoices",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_blank_invoice_numbers_are_information_gaps_not_shared_invoices"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_cash_and_bank_payments_consume_the_same_invoice_cap",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_cash_and_bank_payments_consume_the_same_invoice_cap"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_cash_installments_up_to_invoice_total_are_not_overpayments",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_cash_installments_up_to_invoice_total_are_not_overpayments"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_cash_overpayment_without_recipient_account_uses_all_history",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_cash_overpayment_without_recipient_account_uses_all_history"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_different_erp_ids_cannot_hide_the_same_invoice",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_different_erp_ids_cannot_hide_the_same_invoice"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_different_vendors_do_not_share_an_invoice_cap",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_different_vendors_do_not_share_an_invoice_cap"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_future_cash_payment_does_not_rewrite_an_earlier_result",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_future_cash_payment_does_not_rewrite_an_earlier_result"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_a4_approved_contract_payments_do_not_count_as_near_limit_pattern",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_a4_approved_contract_payments_do_not_count_as_near_limit_pattern"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_a4_excludes_distinct_approved_requests_but_not_relabelled_same_po",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_a4_excludes_distinct_approved_requests_but_not_relabelled_same_po"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_a4_recurring_cap_cannot_be_reused_by_extra_or_equal_time_payment",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_a4_recurring_cap_cannot_be_reused_by_extra_or_equal_time_payment"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_a4_uses_exact_recurring_contract_and_period_total",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_a4_uses_exact_recurring_contract_and_period_total"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_approved_contract_with_typed_invoices_suppresses_but_excess_does_not",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_approved_contract_with_typed_invoices_suppresses_but_excess_does_not"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_distinct_verified_requests_are_removed_from_current_split_scope",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_distinct_verified_requests_are_removed_from_current_split_scope"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_future_revoked_wrong_vendor_or_wrong_recipient_request_does_not_suppress",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_future_revoked_wrong_vendor_or_wrong_recipient_request_does_not_suppress"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_future_sources_do_not_rewrite_past_results",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_future_sources_do_not_rewrite_past_results"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_missing_bound_sources_keeps_existing_alert_behavior",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_missing_bound_sources_keeps_existing_alert_behavior"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_multiple_agreements_for_one_contract_do_not_grant_ambiguous_exception",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_multiple_agreements_for_one_contract_do_not_grant_ambiguous_exception"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_non_invoice_document_does_not_disable_legacy_installment_exception",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_non_invoice_document_does_not_disable_legacy_installment_exception"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_payment_outside_rule_window_still_consumes_request_cap",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_payment_outside_rule_window_still_consumes_request_cap"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_quarterly_partial_schedule_excludes_only_authorized_period_total",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_quarterly_partial_schedule_excludes_only_authorized_period_total"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_recurring_period_total_resets_at_calendar_boundary",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_recurring_period_total_resets_at_calendar_boundary"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_request_cap_and_invoice_cap_are_checked_across_full_history",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_request_cap_and_invoice_cap_are_checked_across_full_history"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_request_revocation_applies_only_after_observation",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_request_revocation_applies_only_after_observation"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_same_approved_request_installments_under_caps_suppress_a1_and_a2",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_same_approved_request_installments_under_caps_suppress_a1_and_a2"
+    },
+    {
+      "id": "test_payment_evidence.PaymentEvidenceTest.test_same_po_with_changed_request_ids_cannot_hide_splitting",
+      "status": "pass",
+      "testcase": "test_payment_evidence.PaymentEvidenceTest.test_same_po_with_changed_request_ids_cannot_hide_splitting"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_allocation_not_yet_known_cannot_change_old_features_or_limits",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_allocation_not_yet_known_cannot_change_old_features_or_limits"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_known_but_not_yet_effective_invoice_revision_is_missing",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_known_but_not_yet_effective_invoice_revision_is_missing"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_known_empty_history_stays_zero_not_missing",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_known_empty_history_stays_zero_not_missing"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_later_global_run_does_not_backfill_old_rows",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_later_global_run_does_not_backfill_old_rows"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_missing_history_in_one_company_does_not_affect_the_other",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_missing_history_in_one_company_does_not_affect_the_other"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_multiple_missing_references_are_deterministic_under_reordering",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_multiple_missing_references_are_deterministic_under_reordering"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_new_later_row_can_use_source_that_has_become_known",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_new_later_row_can_use_source_that_has_become_known"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_partial_known_history_is_not_presented_as_complete_total",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_partial_known_history_is_not_presented_as_complete_total"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_signed_allocations_cancelling_to_zero_remain_available",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_signed_allocations_cancelling_to_zero_remain_available"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_snapshot_export_keeps_null_missing_and_provenance_separate",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_snapshot_export_keeps_null_missing_and_provenance_separate"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_unknown_invoice_revision_marks_features_and_exact_total_missing",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_unknown_invoice_revision_marks_features_and_exact_total_missing"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_unknown_revision_of_a_known_prior_transaction_is_also_missing",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_unknown_revision_of_a_known_prior_transaction_is_also_missing"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_unknown_unrelated_invoice_does_not_poison_current_invoice",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_unknown_unrelated_invoice_does_not_poison_current_invoice"
+    },
+    {
+      "id": "R1-01",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_01"
+    },
+    {
+      "id": "R1-02",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_02"
+    },
+    {
+      "id": "R1-03",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_03"
+    },
+    {
+      "id": "R1-04",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_04"
+    },
+    {
+      "id": "R1-05",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_05"
+    },
+    {
+      "id": "R1-06",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_06"
+    },
+    {
+      "id": "R1-07",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_07"
+    },
+    {
+      "id": "test_retained_core.RetainedCoreTest.test_catalog_and_fit_do_not_accept_supervised_labels",
+      "status": "pass",
+      "testcase": "test_retained_core.RetainedCoreTest.test_catalog_and_fit_do_not_accept_supervised_labels"
+    },
+    {
+      "id": "test_retained_core.RetainedCoreTest.test_extracted_statistics_are_numerically_unchanged",
+      "status": "pass",
+      "testcase": "test_retained_core.RetainedCoreTest.test_extracted_statistics_are_numerically_unchanged"
+    },
+    {
+      "id": "test_retained_core.RetainedCoreTest.test_ml_parity_and_scoring_does_not_refit_or_top_k",
+      "status": "pass",
+      "testcase": "test_retained_core.RetainedCoreTest.test_ml_parity_and_scoring_does_not_refit_or_top_k"
+    },
+    {
+      "id": "test_retained_core.RetainedCoreTest.test_reference_rank_ties_and_batch_extremes_preserve_reference",
+      "status": "pass",
+      "testcase": "test_retained_core.RetainedCoreTest.test_reference_rank_ties_and_batch_extremes_preserve_reference"
+    },
+    {
+      "id": "test_retained_core.RetainedCoreTest.test_rules_features_and_contract_are_exactly_preserved",
+      "status": "pass",
+      "testcase": "test_retained_core.RetainedCoreTest.test_rules_features_and_contract_are_exactly_preserved"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_e3_matches_native_engine_hit_evidence_and_scoring_policy",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_e3_matches_native_engine_hit_evidence_and_scoring_policy"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_future_vendor_and_revisions_never_change_past_result",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_future_vendor_and_revisions_never_change_past_result"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_hit_has_evidence_and_intrinsic_points_without_inflating_master_risk",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_hit_has_evidence_and_intrinsic_points_without_inflating_master_risk"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_missing_sources_are_null_not_no_hit_and_have_specific_gaps",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_missing_sources_are_null_not_no_hit_and_have_specific_gaps"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_no_hit_is_explicit_and_is_not_a_claim_of_validity",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_no_hit_is_explicit_and_is_not_a_claim_of_validity"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_not_applicable_is_not_a_no_hit",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_not_applicable_is_not_a_no_hit"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_schema_rejects_zero_and_false_on_unavailable_result",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_schema_rejects_zero_and_false_on_unavailable_result"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_scope_cutoff_checksum_and_evidence_tampering_are_rejected",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_scope_cutoff_checksum_and_evidence_tampering_are_rejected"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_snapshot_integration_preserves_every_result_and_never_fits",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_snapshot_integration_preserves_every_result_and_never_fits"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_threshold_is_strict_on_raw_similarity_before_rounding",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_threshold_is_strict_on_raw_similarity_before_rounding"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_uninformative_name_is_unavailable_even_if_field_exists",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_uninformative_name_is_unavailable_even_if_field_exists"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_unrelated_invoice_gap_does_not_disable_vendor_name_rule",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_unrelated_invoice_gap_does_not_disable_vendor_name_rule"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_a2_all_time_payments_outside_window_still_constrain_gross",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_a2_all_time_payments_outside_window_still_constrain_gross"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_a2_contract_cannot_override_invoice_overpayment",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_a2_contract_cannot_override_invoice_overpayment"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_a2_documented_contract_covers_distinct_invoices",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_a2_documented_contract_covers_distinct_invoices"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_a2_duplicate_full_invoice_payment_still_triggers_p1",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_a2_duplicate_full_invoice_payment_still_triggers_p1"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_a2_independent_invoices_or_contract_id_alone_do_not_grant_exception",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_a2_independent_invoices_or_contract_id_alone_do_not_grant_exception"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_a2_interleaved_independent_invoice_does_not_break_valid_installments",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_a2_interleaved_independent_invoice_does_not_break_valid_installments"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_a2_interleaved_other_invoice_is_not_itself_called_an_installment",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_a2_interleaved_other_invoice_is_not_itself_called_an_installment"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_a2_missing_documents_blank_invoice_and_inflated_gross_not_exempt",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_a2_missing_documents_blank_invoice_and_inflated_gross_not_exempt"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_a2_seven_day_installments_are_exempt",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_a2_seven_day_installments_are_exempt"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_a2_unobserved_agreement_or_all_time_contract_excess_is_not_exempt",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_a2_unobserved_agreement_or_all_time_contract_excess_is_not_exempt"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_b7_callback_by_maker_is_not_an_exception",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_b7_callback_by_maker_is_not_an_exception"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_b7_callback_revision_is_applied_only_when_observed",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_b7_callback_revision_is_applied_only_when_observed"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_b7_exact_14_day_boundary",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_b7_exact_14_day_boundary"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_b7_future_record_does_not_change_past_features_or_alerts",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_b7_future_record_does_not_change_past_features_or_alerts"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_b7_late_observation_of_older_change_cannot_replace_newer_effective_change",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_b7_late_observation_of_older_change_cannot_replace_newer_effective_change"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_b7_pending_change_activates_without_seeing_future_effective_date",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_b7_pending_change_activates_without_seeing_future_effective_date"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_b7_pending_new_change_does_not_hide_active_previous_change",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_b7_pending_new_change_does_not_hide_active_previous_change"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_e1_documented_full_period_paid_leave_is_suppressed",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_e1_documented_full_period_paid_leave_is_suppressed"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_e1_future_leave_approval_does_not_change_past_result",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_e1_future_leave_approval_does_not_change_past_result"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_e1_invalid_entitlement_cannot_hide_zero_attendance_payroll",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_e1_invalid_entitlement_cannot_hide_zero_attendance_payroll"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_e1_missing_or_future_attendance_is_unknown_not_zero_days",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_e1_missing_or_future_attendance_is_unknown_not_zero_days"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_e1_monthly_leave_count_and_type_alone_do_not_grant_pay",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_e1_monthly_leave_count_and_type_alone_do_not_grant_pay"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_e1_remote_exception_and_ghost_signal_remain_distinct",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_e1_remote_exception_and_ghost_signal_remain_distinct"
+    },
+    {
+      "id": "test_rule_repairs.RuleRepairsTest.test_e1_revocation_revision_does_not_revoke_past_valid_exception",
+      "status": "pass",
+      "testcase": "test_rule_repairs.RuleRepairsTest.test_e1_revocation_revision_does_not_revoke_past_valid_exception"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_bad_cutoff_or_foreign_frame_is_rejected",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_bad_cutoff_or_foreign_frame_is_rejected"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_catalog_covers_every_retained_rule_and_explicit_contract_gaps",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_catalog_covers_every_retained_rule_and_explicit_contract_gaps"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_company_isolation_and_permission_guards",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_company_isolation_and_permission_guards"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_current_master_revision_can_change_only_when_both_clocks_allow_it",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_current_master_revision_can_change_only_when_both_clocks_allow_it"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_documents_preserve_simulation_and_verification_provenance",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_documents_preserve_simulation_and_verification_provenance"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_history_excludes_self_and_simultaneous_rows_on_both_clocks",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_history_excludes_self_and_simultaneous_rows_on_both_clocks"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_immutable_source_and_payload_separation",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_immutable_source_and_payload_separation"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_late_document_and_future_source_values_cannot_change_past_bindings",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_late_document_and_future_source_values_cannot_change_past_bindings"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_late_revision_is_filtered_before_choosing_latest_master",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_late_revision_is_filtered_before_choosing_latest_master"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_missing_invoice_revision_is_gap_not_zero_or_future_invoice",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_missing_invoice_revision_is_gap_not_zero_or_future_invoice"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_real_sources_ready_is_distinct_from_evaluated_or_missing",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_real_sources_ready_is_distinct_from_evaluated_or_missing"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_signed_adjustments_are_retained_without_legacy_placeholders",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_signed_adjustments_are_retained_without_legacy_placeholders"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_snapshot_pipeline_has_one_diagnostic_per_rule_and_never_scores_from_readiness",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_snapshot_pipeline_has_one_diagnostic_per_rule_and_never_scores_from_readiness"
+    },
+    {
+      "id": "test_rules.RulesTest.test_actual_duplicate_and_missing_writeoff_have_evidence",
+      "status": "pass",
+      "testcase": "test_rules.RulesTest.test_actual_duplicate_and_missing_writeoff_have_evidence"
+    },
+    {
+      "id": "test_rules.RulesTest.test_benford_inapplicable_population_is_explicit_not_zero",
+      "status": "pass",
+      "testcase": "test_rules.RulesTest.test_benford_inapplicable_population_is_explicit_not_zero"
+    },
+    {
+      "id": "test_rules.RulesTest.test_equal_timestamp_payment_does_not_retroactively_trigger_duplicate",
+      "status": "pass",
+      "testcase": "test_rules.RulesTest.test_equal_timestamp_payment_does_not_retroactively_trigger_duplicate"
+    },
+    {
+      "id": "test_rules.RulesTest.test_evidence_graph_never_uses_future_links",
+      "status": "pass",
+      "testcase": "test_rules.RulesTest.test_evidence_graph_never_uses_future_links"
+    },
+    {
+      "id": "test_rules.RulesTest.test_future_transactions_and_masters_cannot_change_past_alerts",
+      "status": "pass",
+      "testcase": "test_rules.RulesTest.test_future_transactions_and_masters_cannot_change_past_alerts"
+    },
+    {
+      "id": "test_rules.RulesTest.test_graph_ablation_removes_network_only_signals",
+      "status": "pass",
+      "testcase": "test_rules.RulesTest.test_graph_ablation_removes_network_only_signals"
+    },
+    {
+      "id": "test_rules.RulesTest.test_lawful_self_approval_and_remote_payroll_are_exempt",
+      "status": "pass",
+      "testcase": "test_rules.RulesTest.test_lawful_self_approval_and_remote_payroll_are_exempt"
+    },
+    {
+      "id": "test_rules.RulesTest.test_missing_operational_sources_are_reported",
+      "status": "pass",
+      "testcase": "test_rules.RulesTest.test_missing_operational_sources_are_reported"
+    },
+    {
+      "id": "test_rules.RulesTest.test_no_truth_or_partition_input",
+      "status": "pass",
+      "testcase": "test_rules.RulesTest.test_no_truth_or_partition_input"
+    },
+    {
+      "id": "test_rules.RulesTest.test_normalisation_preserves_ids_and_does_not_match_blanks",
+      "status": "pass",
+      "testcase": "test_rules.RulesTest.test_normalisation_preserves_ids_and_does_not_match_blanks"
+    },
+    {
+      "id": "test_rules.RulesTest.test_risky_status_cannot_be_read_before_publication",
+      "status": "pass",
+      "testcase": "test_rules.RulesTest.test_risky_status_cannot_be_read_before_publication"
+    },
+    {
+      "id": "test_rules.RulesTest.test_verified_bank_change_and_installments_are_not_hard_triggers",
+      "status": "pass",
+      "testcase": "test_rules.RulesTest.test_verified_bank_change_and_installments_are_not_hard_triggers"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_b7_name_revision_preserves_callback_and_bank_features",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_b7_name_revision_preserves_callback_and_bank_features"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_b7_verifier_company_is_selected_at_callback",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_b7_verifier_company_is_selected_at_callback"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_callback_revocation_does_not_retroactively_change_verified_payment",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_callback_revocation_does_not_retroactively_change_verified_payment"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_close_and_materiality_approvals_survive_signer_revision",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_close_and_materiality_approvals_survive_signer_revision"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_company_filter_cannot_resurrect_a_stale_employee_version",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_company_filter_cannot_resurrect_a_stale_employee_version"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_conflicting_same_time_employee_revisions_are_rejected",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_conflicting_same_time_employee_revisions_are_rejected"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_duplicate_equivalent_employee_revisions_are_idempotent",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_duplicate_equivalent_employee_revisions_are_idempotent"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_e1_name_revision_does_not_invalidate_signed_entitlement",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_e1_name_revision_does_not_invalidate_signed_entitlement"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_e1_revocation_still_wins_after_signer_profile_update",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_e1_revocation_still_wins_after_signer_profile_update"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_e1_signer_company_is_selected_at_approval",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_e1_signer_company_is_selected_at_approval"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_employee_added_after_signing_cannot_backfill_missing_signer",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_employee_added_after_signing_cannot_backfill_missing_signer"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_employee_history_selects_by_time_independently_of_input_order",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_employee_history_selects_by_time_independently_of_input_order"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_future_employee_revision_cannot_change_past_results",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_future_employee_revision_cannot_change_past_results"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_future_proof_cannot_become_valid_through_employee_history",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_future_proof_cannot_become_valid_through_employee_history"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_independent_purchase_proofs_survive_verifier_revision",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_independent_purchase_proofs_survive_verifier_revision"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_journal_actor_is_selected_at_entry_not_posting",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_journal_actor_is_selected_at_entry_not_posting"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_payroll_period_cap_survives_approver_revision",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_payroll_period_cap_survives_approver_revision"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_recurring_round_amount_proof_survives_approver_revision",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_recurring_round_amount_proof_survives_approver_revision"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_self_approval_is_not_made_independent_by_a_later_profile",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_self_approval_is_not_made_independent_by_a_later_profile"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_shift_actor_role_is_selected_at_action_time",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_shift_actor_role_is_selected_at_action_time"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_shift_approval_survives_signer_name_revision",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_shift_approval_survives_signer_name_revision"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_signer_must_already_be_known_at_signature_time",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_signer_must_already_be_known_at_signature_time"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_typed_fulfilment_survives_verifier_revision",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_typed_fulfilment_survives_verifier_revision"
+    },
+    {
+      "id": "test_signer_history.SignerHistoryTest.test_unknown_checker_cannot_borrow_maker_shift",
+      "status": "pass",
+      "testcase": "test_signer_history.SignerHistoryTest.test_unknown_checker_cannot_borrow_maker_shift"
+    },
+    {
+      "id": "test_snapshot_features.FeaturePipelineAuthTests.test_authorized_cli_exports_a_verified_artifact_without_printing_token",
+      "status": "pass",
+      "testcase": "test_snapshot_features.FeaturePipelineAuthTests.test_authorized_cli_exports_a_verified_artifact_without_printing_token"
+    },
+    {
+      "id": "test_snapshot_features.FeaturePipelineAuthTests.test_scope_revocation_after_build_prevents_export",
+      "status": "pass",
+      "testcase": "test_snapshot_features.FeaturePipelineAuthTests.test_scope_revocation_after_build_prevents_export"
+    },
+    {
+      "id": "test_snapshot_features.FeaturePipelineAuthTests.test_unauthorized_cli_does_not_open_business_database",
+      "status": "pass",
+      "testcase": "test_snapshot_features.FeaturePipelineAuthTests.test_unauthorized_cli_does_not_open_business_database"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureArtifactTests.test_artifact_corruption_is_rejected_not_overwritten",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureArtifactTests.test_artifact_corruption_is_rejected_not_overwritten"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureArtifactTests.test_artifact_retry_is_immutable_and_idempotent",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureArtifactTests.test_artifact_retry_is_immutable_and_idempotent"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureArtifactTests.test_committed_snapshot_pipeline_binds_checksums_and_separate_channels",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureArtifactTests.test_committed_snapshot_pipeline_binds_checksums_and_separate_channels"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureArtifactTests.test_revoked_scope_before_publish_leaves_no_complete_artifact",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureArtifactTests.test_revoked_scope_before_publish_leaves_no_complete_artifact"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureArtifactTests.test_wrong_company_cannot_read_snapshot_for_feature_job",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureArtifactTests.test_wrong_company_cannot_read_snapshot_for_feature_job"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_all_feature_evidence_is_within_the_row_knowledge_and_valid_time",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_all_feature_evidence_is_within_the_row_knowledge_and_valid_time"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_eligible_master_clear_replaces_old_graph_slot",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_eligible_master_clear_replaces_old_graph_slot"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_equal_event_timestamp_not_history_even_when_known_earlier",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_equal_event_timestamp_not_history_even_when_known_earlier"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_equal_knowledge_timestamp_does_not_enter_same_arrival_group",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_equal_knowledge_timestamp_does_not_enter_same_arrival_group"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_equivalent_offsets_produce_identical_vectors_and_rows",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_equivalent_offsets_produce_identical_vectors_and_rows"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_future_effective_master_not_applied_even_if_already_known",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_future_effective_master_not_applied_even_if_already_known"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_identifiers_labels_and_evidence_are_not_numeric_predictors",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_identifiers_labels_and_evidence_are_not_numeric_predictors"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_input_is_never_mutated",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_input_is_never_mutated"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_input_reordering_is_invariant",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_input_reordering_is_invariant"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_late_document_cannot_change_past_features",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_late_document_cannot_change_past_features"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_late_historical_transaction_not_used_before_known",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_late_historical_transaction_not_used_before_known"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_late_invoice_document_can_affect_a_later_transaction_only",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_late_invoice_document_can_affect_a_later_transaction_only"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_late_revision_never_replaces_known_past_before_cutoff",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_late_revision_never_replaces_known_past_before_cutoff"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_late_transaction_revision_does_not_rewrite_earlier_revision_features",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_late_transaction_revision_does_not_rewrite_earlier_revision_features"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_later_global_run_does_not_rewrite_first_availability_features",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_later_global_run_does_not_rewrite_first_availability_features"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_microsecond_order_is_not_truncated_to_legacy_seconds",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_microsecond_order_is_not_truncated_to_legacy_seconds"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_negative_and_zero_rows_survive_with_sign_and_missing_reasons",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_negative_and_zero_rows_survive_with_sign_and_missing_reasons"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_no_history_z_is_missing_instead_of_false_normal_zero",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_no_history_z_is_missing_instead_of_false_normal_zero"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_prior_signed_allocation_adjustment_is_not_turned_positive",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_prior_signed_allocation_adjustment_is_not_turned_positive"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_real_retained_feature_engine_is_called",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_real_retained_feature_engine_is_called"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_renaming_ids_with_references_preserves_numeric_predictors",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_renaming_ids_with_references_preserves_numeric_predictors"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_same_id_in_two_companies_never_shares_history_or_graph_members",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_same_id_in_two_companies_never_shares_history_or_graph_members"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_simultaneous_transactions_use_history_before_group",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_simultaneous_transactions_use_history_before_group"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_source_system_names_and_document_hashes_do_not_change_predictors",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_source_system_names_and_document_hashes_do_not_change_predictors"
+    },
+    {
+      "id": "test_snapshot_features.SnapshotFeatureTests.test_unprovided_policy_fields_are_not_imputed_into_predictors",
+      "status": "pass",
+      "testcase": "test_snapshot_features.SnapshotFeatureTests.test_unprovided_policy_fields_are_not_imputed_into_predictors"
+    },
+    {
+      "id": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_committed_read_does_not_suppress_other_validation_errors",
+      "status": "pass",
+      "testcase": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_committed_read_does_not_suppress_other_validation_errors"
+    },
+    {
+      "id": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_raw_builder_still_requires_permission_to_assert_verification",
+      "status": "pass",
+      "testcase": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_raw_builder_still_requires_permission_to_assert_verification"
+    },
+    {
+      "id": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_reader_cannot_commit_a_new_verified_import",
+      "status": "pass",
+      "testcase": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_reader_cannot_commit_a_new_verified_import"
+    },
+    {
+      "id": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_reader_job_uses_committed_verification_without_mutating_data_or_permissions",
+      "status": "pass",
+      "testcase": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_reader_job_uses_committed_verification_without_mutating_data_or_permissions"
+    },
+    {
+      "id": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_reader_revocation_after_build_still_prevents_export",
+      "status": "pass",
+      "testcase": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_reader_revocation_after_build_still_prevents_export"
+    },
+    {
+      "id": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_verified_snapshot_still_rejects_wrong_company_or_missing_read_permission",
+      "status": "pass",
+      "testcase": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_verified_snapshot_still_rejects_wrong_company_or_missing_read_permission"
+    },
+    {
+      "id": "test_snapshots.SnapshotApiTests.test_all_routes_deny_company_b_before_body_or_storage_access",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotApiTests.test_all_routes_deny_company_b_before_body_or_storage_access"
+    },
+    {
+      "id": "test_snapshots.SnapshotApiTests.test_foreign_bundle_is_rejected_without_foreign_data_in_report",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotApiTests.test_foreign_bundle_is_rejected_without_foreign_data_in_report"
+    },
+    {
+      "id": "test_snapshots.SnapshotApiTests.test_foreign_resource_ids_on_authorized_company_route_return_no_records",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotApiTests.test_foreign_resource_ids_on_authorized_company_route_return_no_records"
+    },
+    {
+      "id": "test_snapshots.SnapshotApiTests.test_full_http_upload_preview_confirm_snapshot_and_download",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotApiTests.test_full_http_upload_preview_confirm_snapshot_and_download"
+    },
+    {
+      "id": "test_snapshots.SnapshotApiTests.test_invalid_file_preview_persists_errors_and_no_snapshot",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotApiTests.test_invalid_file_preview_persists_errors_and_no_snapshot"
+    },
+    {
+      "id": "test_snapshots.SnapshotApiTests.test_mapping_and_source_revision_routes_require_new_preview",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotApiTests.test_mapping_and_source_revision_routes_require_new_preview"
+    },
+    {
+      "id": "test_snapshots.SnapshotApiTests.test_permission_revoked_after_body_read_blocks_commit",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotApiTests.test_permission_revoked_after_body_read_blocks_commit"
+    },
+    {
+      "id": "test_snapshots.SnapshotApiTests.test_permission_revoked_after_body_read_blocks_upload_write",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotApiTests.test_permission_revoked_after_body_read_blocks_upload_write"
+    },
+    {
+      "id": "test_snapshots.SnapshotApiTests.test_revoked_credentials_cannot_commit_or_read_saved_data",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotApiTests.test_revoked_credentials_cannot_commit_or_read_saved_data"
+    },
+    {
+      "id": "test_snapshots.SnapshotApiTests.test_tampered_or_unacknowledged_client_commit_never_saves",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotApiTests.test_tampered_or_unacknowledged_client_commit_never_saves"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_R1_03_new_mapping_invalidates_old_preview",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_R1_03_new_mapping_invalidates_old_preview"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_R1_03_new_source_invalidates_old_preview",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_R1_03_new_source_invalidates_old_preview"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_R1_04_ten_identical_commit_retries_create_one_snapshot_and_event",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_R1_04_ten_identical_commit_retries_create_one_snapshot_and_event"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_actual_column_mapping_applies_before_validation",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_actual_column_mapping_applies_before_validation"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_atomic_failure_rolls_back_snapshot_audit_receipt_and_status",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_atomic_failure_rolls_back_snapshot_audit_receipt_and_status"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_commit_receipt_key_cannot_be_reused_for_altered_confirmation",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_commit_receipt_key_cannot_be_reused_for_altered_confirmation"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_concurrent_ten_commit_retries_are_atomic",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_concurrent_ten_commit_retries_are_atomic"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_different_retry_keys_same_confirmed_import_do_not_duplicate",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_different_retry_keys_same_confirmed_import_do_not_duplicate"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_each_hash_is_checked_not_trusted_from_client",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_each_hash_is_checked_not_trusted_from_client"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_expired_preview_cannot_commit",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_expired_preview_cannot_commit"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_expiry_during_commit_revalidation_does_not_create_snapshot",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_expiry_during_commit_revalidation_does_not_create_snapshot"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_explicit_confirmation_required",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_explicit_confirmation_required"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_idempotency_key_reused_with_different_content_is_conflict",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_idempotency_key_reused_with_different_content_is_conflict"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_identical_upload_retry_returns_same_draft",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_identical_upload_retry_returns_same_draft"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_invalid_stored_manifest_json_is_a_controlled_integrity_error",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_invalid_stored_manifest_json_is_a_controlled_integrity_error"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_legacy_database_is_refused_without_migration",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_legacy_database_is_refused_without_migration"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_mapping_collision_never_silently_overwrites_a_column",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_mapping_collision_never_silently_overwrites_a_column"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_mapping_does_not_allow_code_or_two_columns_to_one_target",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_mapping_does_not_allow_code_or_two_columns_to_one_target"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_old_snapshots_survive_new_import_of_changed_data",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_old_snapshots_survive_new_import_of_changed_data"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_permission_change_at_transaction_exit_rolls_back_all_writes",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_permission_change_at_transaction_exit_rolls_back_all_writes"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_policy_recheck_occurs_inside_transaction_before_any_write",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_policy_recheck_occurs_inside_transaction_before_any_write"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_preview_is_cached_until_expiry_then_rechecked",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_preview_is_cached_until_expiry_then_rechecked"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_restarted_process_recovers_same_receipt_after_response_loss",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_restarted_process_recovers_same_receipt_after_response_loss"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_roundtrip_keeps_exact_signed_data_and_versioned_checksums",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_roundtrip_keeps_exact_signed_data_and_versioned_checksums"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_same_data_in_a_new_import_reuses_immutable_snapshot",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_same_data_in_a_new_import_reuses_immutable_snapshot"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_scope_isolation_for_draft_report_commit_and_snapshot",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_scope_isolation_for_draft_report_commit_and_snapshot"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_snapshot_and_committed_import_cannot_be_modified",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_snapshot_and_committed_import_cannot_be_modified"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_source_and_mapping_mutation_receipts_do_not_repeat_revisions",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_source_and_mapping_mutation_receipts_do_not_repeat_revisions"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_source_change_racing_commit_has_only_one_winner",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_source_change_racing_commit_has_only_one_winner"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_tampered_original_source_cannot_commit",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_tampered_original_source_cannot_commit"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_tampered_snapshot_data_is_not_returned_even_on_receipt_replay",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_tampered_snapshot_data_is_not_returned_even_on_receipt_replay"
+    },
+    {
+      "id": "test_snapshots.SnapshotStoreTests.test_validator_or_permission_context_change_forces_new_preview",
+      "status": "pass",
+      "testcase": "test_snapshots.SnapshotStoreTests.test_validator_or_permission_context_change_forces_new_preview"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a3_below_total_limit_and_address_only_do_not_group",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a3_below_total_limit_and_address_only_do_not_group"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a3_long_branch_remains",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a3_long_branch_remains"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a3_short_branch_and_exact_three_day_boundary",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a3_short_branch_and_exact_three_day_boundary"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a4_calendar_month_and_explicit_rolling_option",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a4_calendar_month_and_explicit_rolling_option"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a4_known_payroll_entitlement_excludes_only_budgeted_payment",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a4_known_payroll_entitlement_excludes_only_budgeted_payment"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a4_last_day_of_31_day_month_keeps_first_day",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a4_last_day_of_31_day_month_keeps_first_day"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a4_recurring_exception_is_specific_and_does_not_cover_extra_payments",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a4_recurring_exception_is_specific_and_does_not_cover_extra_payments"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a4_repeated_payroll_cannot_reuse_one_entitlement",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a4_repeated_payroll_cannot_reuse_one_entitlement"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a4_simultaneous_payments_cannot_each_reuse_same_monthly_budget",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a4_simultaneous_payments_cannot_each_reuse_same_monthly_budget"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a5_lower_tail_is_out_of_scope",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a5_lower_tail_is_out_of_scope"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a5_upper_tail_retained_and_two_sided_rejected",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a5_upper_tail_retained_and_two_sided_rejected"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b1_bank_institution_distinguishes_identical_account_numbers",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b1_bank_institution_distinguishes_identical_account_numbers"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b1_cccd_with_leading_zero_is_supported_only_on_outflow",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b1_cccd_with_leading_zero_is_supported_only_on_outflow"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b1_existing_vendor_is_rechecked_when_employee_becomes_observed",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b1_existing_vendor_is_rechecked_when_employee_becomes_observed"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b1_master_overlap_is_reported_without_cash_payment",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b1_master_overlap_is_reported_without_cash_payment"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b1_rent_and_selling_expenses_are_vendor_outflows",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b1_rent_and_selling_expenses_are_vendor_outflows"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b3_first_large_purchase_is_candidate",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b3_first_large_purchase_is_candidate"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b3_purchase_precedes_payment_so_payment_is_not_first_economic_entry",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b3_purchase_precedes_payment_so_payment_is_not_first_economic_entry"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b3_same_time_entries_are_co_first_without_id_order_leakage",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b3_same_time_entries_are_co_first_without_id_order_leakage"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_f1_authoritative_sources_override_creator_limit_and_calendar_proxy",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_f1_authoritative_sources_override_creator_limit_and_calendar_proxy"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_f1_manual_non_adjustment_entry_is_supported",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_f1_manual_non_adjustment_entry_is_supported"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_f1_materiality_equality_and_outside_close_window",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_f1_materiality_equality_and_outside_close_window"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_f1_missing_unapproved_late_or_automatic_sources_do_not_confirm",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_f1_missing_unapproved_late_or_automatic_sources_do_not_confirm"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_f1_revocation_revision_supersedes_prior_approval",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_f1_revocation_revision_supersedes_prior_approval"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_f1_unconfirmed_month_end_proxy_never_contributes",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_f1_unconfirmed_month_end_proxy_never_contributes"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_future_evidence_does_not_rewrite_past_scores",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_future_evidence_does_not_rewrite_past_scores"
+    },
+    {
+      "id": "test_tax_risk.TaxRiskTest.test_effective_interval_applies_to_invoice_date_not_payment_date",
+      "status": "pass",
+      "testcase": "test_tax_risk.TaxRiskTest.test_effective_interval_applies_to_invoice_date_not_payment_date"
+    },
+    {
+      "id": "test_tax_risk.TaxRiskTest.test_exact_tax_code_list_match_opens_review_with_source_evidence",
+      "status": "pass",
+      "testcase": "test_tax_risk.TaxRiskTest.test_exact_tax_code_list_match_opens_review_with_source_evidence"
+    },
+    {
+      "id": "test_tax_risk.TaxRiskTest.test_explicit_invoice_issuer_takes_precedence_over_vendor_master",
+      "status": "pass",
+      "testcase": "test_tax_risk.TaxRiskTest.test_explicit_invoice_issuer_takes_precedence_over_vendor_master"
+    },
+    {
+      "id": "test_tax_risk.TaxRiskTest.test_extra_labels_in_source_cannot_enter_detections_or_evidence",
+      "status": "pass",
+      "testcase": "test_tax_risk.TaxRiskTest.test_extra_labels_in_source_cannot_enter_detections_or_evidence"
+    },
+    {
+      "id": "test_tax_risk.TaxRiskTest.test_importer_binds_to_archived_document_and_does_not_overwrite",
+      "status": "pass",
+      "testcase": "test_tax_risk.TaxRiskTest.test_importer_binds_to_archived_document_and_does_not_overwrite"
+    },
+    {
+      "id": "test_tax_risk.TaxRiskTest.test_invalid_and_ambiguous_source_rows_fail_closed",
+      "status": "pass",
+      "testcase": "test_tax_risk.TaxRiskTest.test_invalid_and_ambiguous_source_rows_fail_closed"
+    },
+    {
+      "id": "test_tax_risk.TaxRiskTest.test_legacy_registry_and_tax_listing_do_not_duplicate_b4_hits",
+      "status": "pass",
+      "testcase": "test_tax_risk.TaxRiskTest.test_legacy_registry_and_tax_listing_do_not_duplicate_b4_hits"
+    },
+    {
+      "id": "test_tax_risk.TaxRiskTest.test_normal_loader_binds_tax_source_to_manifest_and_cache",
+      "status": "pass",
+      "testcase": "test_tax_risk.TaxRiskTest.test_normal_loader_binds_tax_source_to_manifest_and_cache"
+    },
+    {
+      "id": "test_tax_risk.TaxRiskTest.test_other_company_missing_invoice_and_unknown_mst_do_not_match",
+      "status": "pass",
+      "testcase": "test_tax_risk.TaxRiskTest.test_other_company_missing_invoice_and_unknown_mst_do_not_match"
+    },
+    {
+      "id": "test_tax_risk.TaxRiskTest.test_publication_and_observation_after_cutoff_never_change_past_hits",
+      "status": "pass",
+      "testcase": "test_tax_risk.TaxRiskTest.test_publication_and_observation_after_cutoff_never_change_past_hits"
+    },
+    {
+      "id": "test_tax_risk.TaxRiskTest.test_removal_is_revisioned_and_order_independent",
+      "status": "pass",
+      "testcase": "test_tax_risk.TaxRiskTest.test_removal_is_revisioned_and_order_independent"
+    },
+    {
+      "id": "test_tax_risk.TaxRiskTest.test_tax_code_formatting_preserves_zeros_and_exact_branch_identity",
+      "status": "pass",
+      "testcase": "test_tax_risk.TaxRiskTest.test_tax_code_formatting_preserves_zeros_and_exact_branch_identity"
+    },
+    {
+      "id": "test_transition_server.TransitionServerTest.test_health_reports_core_only_not_a_ready_pipeline",
+      "status": "pass",
+      "testcase": "test_transition_server.TransitionServerTest.test_health_reports_core_only_not_a_ready_pipeline"
+    },
+    {
+      "id": "test_transition_server.TransitionServerTest.test_legacy_reads_and_writes_are_retired",
+      "status": "pass",
+      "testcase": "test_transition_server.TransitionServerTest.test_legacy_reads_and_writes_are_retired"
+    },
+    {
+      "id": "test_transition_server.TransitionServerTest.test_root_is_a_clear_transition_page",
+      "status": "pass",
+      "testcase": "test_transition_server.TransitionServerTest.test_root_is_a_clear_transition_page"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_bank_history_for_one_vendor_does_not_cover_another_vendor",
+      "status": "pass",
+      "testcase": "test_validation_backend.SourceLimitTests.test_bank_history_for_one_vendor_does_not_cover_another_vendor"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_document_linked_to_invoice_is_traced_through_allocations",
+      "status": "pass",
+      "testcase": "test_validation_backend.SourceLimitTests.test_document_linked_to_invoice_is_traced_through_allocations"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_missing_approval_coverage_is_per_transaction",
+      "status": "pass",
+      "testcase": "test_validation_backend.SourceLimitTests.test_missing_approval_coverage_is_per_transaction"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_missing_history_does_not_remove_transactions_or_claim_ml_readiness",
+      "status": "pass",
+      "testcase": "test_validation_backend.SourceLimitTests.test_missing_history_does_not_remove_transactions_or_claim_ml_readiness"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_new_unverified_revision_cannot_use_older_verified_status",
+      "status": "pass",
+      "testcase": "test_validation_backend.SourceLimitTests.test_new_unverified_revision_cannot_use_older_verified_status"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_one_simulated_document_does_not_clear_other_transactions",
+      "status": "pass",
+      "testcase": "test_validation_backend.SourceLimitTests.test_one_simulated_document_does_not_clear_other_transactions"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_strict_shared_parser_never_accepts_duplicate_keys",
+      "status": "pass",
+      "testcase": "test_validation_backend.SourceLimitTests.test_strict_shared_parser_never_accepts_duplicate_keys"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_verified_original_covers_only_linked_transaction",
+      "status": "pass",
+      "testcase": "test_validation_backend.SourceLimitTests.test_verified_original_covers_only_linked_transaction"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_authorized_validation_keeps_signed_rows_and_uses_backend_scope",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_authorized_validation_keeps_signed_rows_and_uses_backend_scope"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_bad_transport_headers_rejected_before_read",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_bad_transport_headers_rejected_before_read"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_broken_json_duplicate_keys_and_nonfinite_values_rejected",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_broken_json_duplicate_keys_and_nonfinite_values_rejected"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_client_cannot_grant_itself_another_company_or_tenant",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_client_cannot_grant_itself_another_company_or_tenant"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_client_scope_role_extra_fields_are_not_accepted",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_client_scope_role_extra_fields_are_not_accepted"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_company_b_denied_before_reading_or_parsing_body",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_company_b_denied_before_reading_or_parsing_body"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_director_without_company_permission_is_still_denied",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_director_without_company_permission_is_still_denied"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_duplicate_authorization_headers_do_not_choose_one",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_duplicate_authorization_headers_do_not_choose_one"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_even_multi_company_credential_must_validate_one_company_per_route",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_even_multi_company_credential_must_validate_one_company_per_route"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_foreign_row_cannot_be_hidden_in_valid_company_bundle",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_foreign_row_cannot_be_hidden_in_valid_company_bundle"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_global_credential_revocation",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_global_credential_revocation"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_input_size_rows_and_media_limits",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_input_size_rows_and_media_limits"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_missing_company_column_is_diagnostic_not_fake_authorization_error",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_missing_company_column_is_diagnostic_not_fake_authorization_error"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_missing_or_invalid_policy_fails_closed_without_data_echo",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_missing_or_invalid_policy_fails_closed_without_data_echo"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_missing_required_table_names_the_table",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_missing_required_table_names_the_table"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_missing_transaction_id_reports_row_field_and_fix",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_missing_transaction_id_reports_row_field_and_fix"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_missing_wrong_or_expired_credential_is_401",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_missing_wrong_or_expired_credential_is_401"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_nested_reference_required_key_identified",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_nested_reference_required_key_identified"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_revocation_read_on_every_request",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_revocation_read_on_every_request"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_security_errors_do_not_echo_raw_transaction_or_token",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_security_errors_do_not_echo_raw_transaction_or_token"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_unauthenticated_body_is_never_read",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_unauthenticated_body_is_never_read"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_untrusted_origin_denied",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_untrusted_origin_denied"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_wrong_type_duplicate_and_reference_show_actual_field",
+      "status": "pass",
+      "testcase": "test_validation_backend.ValidationApiTests.test_wrong_type_duplicate_and_reference_show_actual_field"
+    }
+  ],
+  "count": 584,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0
+}

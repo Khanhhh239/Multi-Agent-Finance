@@ -1,0 +1,17 @@
+{
+  "profile": "graph",
+  "actual_fhe": true,
+  "simulation": false,
+  "separate_worker_process": true,
+  "cloud_deployment": false,
+  "checks": [
+    {
+      "trial": 0,
+      "parity": true,
+      "seconds": 253.06631439099988
+    }
+  ],
+  "keygen_seconds": 23.1359316060001,
+  "evaluation_key_bytes": 1359461912,
+  "seconds": 309.86923449200003
+}

@@ -1,0 +1,76 @@
+{
+  "count": 17,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "tests": [
+    {
+      "id": "test_he4_rule_snapshot_p1.RuleSnapshotP1Tests.test_c001_c002_company_isolation_and_shared_audit_0000_id",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_rule_snapshot_p1.RuleSnapshotP1Tests.test_exceeding_four_prior_or_batch_rows_is_unavailable_not_sliced",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_rule_snapshot_p1.RuleSnapshotP1Tests.test_missing_sources_clock_and_not_applicable_conditions",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_rule_snapshot_p1.RuleSnapshotP1Tests.test_p1_positive_negative_and_tolerance_boundaries_match_engine",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_rule_snapshot_p1.RuleSnapshotP1Tests.test_simultaneous_batch_p1_group_and_conflicting_gross_gap",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_rule_snapshot_c3.RuleSnapshotC3Tests.test_c3_encrypted_authority_specificity_and_band_ambiguity",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_rule_snapshot_c3.RuleSnapshotC3Tests.test_c3_exceeding_four_authorities_is_unavailable_not_sliced",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_rule_snapshot_c3.RuleSnapshotC3Tests.test_c3_legacy_fallback_threshold_inside_circuit_and_missing_coverage_guard",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_rule_snapshot_c3.RuleSnapshotC3Tests.test_c3_time_and_explicit_authority_boundaries_match_engine",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_rule_snapshot_identity.RuleSnapshotIdentityTests.test_b1_strong_disclosed_ambiguous_and_node_overflow",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_rule_snapshot_identity.RuleSnapshotIdentityTests.test_b5_e4_weak_address_strong_bank_phone_and_node_overflow",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_snapshot_adapter.Sources.test_foreign_company_snapshot_denied_and_revocation_rechecked",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_snapshot_adapter.Sources.test_late_source_does_not_change_past_plan_inputs",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_snapshot_adapter.Sources.test_missing_history_is_unavailable_not_zero",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_snapshot_adapter.Sources.test_p1_raw_plan_matches_retained_engine_and_keeps_all_rows",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_snapshot_adapter.StatisticsModel.test_other_company_model_is_not_deserialized",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_snapshot_adapter.StatisticsModel.test_two_company_models_are_separate_and_scoring_never_fits_or_scores_clear",
+      "status": "pass"
+    }
+  ]
+}

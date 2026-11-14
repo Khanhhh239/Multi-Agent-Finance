@@ -1,0 +1,11 @@
+{
+  "kind": "R2 latest evidence index; OPEN native finding; whole R2 PARTIAL",
+  "latest": "p1_recheck_20261111/artifact_manifest.json",
+  "files": [
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/artifact_manifest.json",
+      "sha256": "7dc47fee0df7c8c4bbca367ad716e1814e3cbbbf6dd8d88626263dc7cbe1be5a"
+    }
+  ],
+  "previous_manifest": "p1_evaluation_20261111/artifact_manifest.json"
+}

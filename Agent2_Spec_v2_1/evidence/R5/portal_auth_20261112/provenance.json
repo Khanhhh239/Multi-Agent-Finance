@@ -1,0 +1,96 @@
+{
+  "change_request": "CR-025",
+  "status": "PORTAL_WORKSPACE_AUTH_READY_FOR_REVIEW_R5_PARTIAL",
+  "client_date": "2026-11-12",
+  "collected_at": "2026-11-12T01:23:47.471937+07:00",
+  "head": "f203b39828f567171916b5b4744728ed4b63d17f",
+  "workspace": "D:/agent22",
+  "source_hashes": {
+    "portal/server.py": "5dd8c1b56f0c3fa354721fd254a1e33a76254c49ceb06db203c01f663cd5fe4d",
+    "portal/agent2_bridge.py": "dbdd2cbba7d78f40d5cd278b6a385f8617605af7b7caca5a483b9a9d74be7cac",
+    "portal/agent2-access.example.json": "2752d686703ed3ca5758fc6978c5887d2af0e70d72cc8ae2fe75e592d3a2a20b",
+    "portal/config.example.json": "a5795151661b92b436a88b138a54eecef89588b50a29dfc68016178649467a09",
+    "portal/static/app.js": "d460d23375c80d32f35e933af7c324a4650421f19230004297ff4f6c39979d1b",
+    "portal/static/index.html": "8d2c30e6e65ccdbab1cee9dfe4cc5272d5da044b6f2358587398d8b66ba59de3",
+    "README.md": "ef66d1da0c58ff4850e295dda8d43beb791c47674dfd8ab6d3fe81cd6a298a23",
+    "agent2/README.md": "a2f0e47e40c483462dcc93561aaa5fc7e406fa9154dcbddf75dbf114377827dc",
+    "agent2/sme_fraud/auth.py": "d576547b76d341984866a68ddbdf50e20de1c0cca1965bc1657fd2609f3560ba",
+    "agent2/sme_fraud/portal_auth.py": "64ef3d39d2cf674f5d36250d16e0ad3d8d29ac39026009cfb91290f37c6718c5",
+    "agent2/sme_fraud/workbench.py": "e22c826a3b03331d073c425361d7c9c93af0af7a7c402f3240394a8870511b5e",
+    "agent2/sme_fraud/review_server.py": "9fd368adeedaa71ddb63e73f246cd449a0954b0ad3100dd2fd2d807dcdf2c4e0",
+    "agent2/sme_fraud/core_manifest.py": "7203c8c930348953f0061d245846830b2705fef82f635c46484aaab49b90cb93",
+    "agent2/sme_fraud/web/index.html": "ff1218d32fa5249cbbd31216ce7b45c7e5ddcc1cd6ec5960b4f12649bf3ee162",
+    "agent2/sme_fraud/web/workbench.js": "c46c3a74cc0063a876d9e387dba299dc9a07bb226fed7f7f93e6495444691459",
+    "agent2/tests/test_portal_auth.py": "be0c363ddfc371067b56ee33c47c7c1b465a19b57d5f6b1579e2a2ec15155822",
+    "agent2/tests/test_transition_server.py": "6b3082b3778b12e785a62cb235503eab1a2643941c699ae812d993b182ed80fb",
+    "agent2/scripts/test_portal_sso_ui.py": "2a131d95c9437ffa63bdb5e986b81cb98b15c653f46494123935307fa61955fe",
+    "agent2/scripts/test_portal_lifecycle.py": "36240ce2af012b0b897dc7c8b760ea5c9e724ca1375461f7eef072afb6d693d5",
+    "agent2/docs/PORTAL_AUTH.md": "d5bfea8348ea12a8d223b22d726c55b026843f511add378f4a7cb44e6b6c5753",
+    "agent2/docs/IMPORT_WORKBENCH.md": "349a398a51fa392de9f9e6d24d84ced17c9dd98c37508bc5b7ef31be2bfa124c"
+  },
+  "native_summary": {
+    "count": 714,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "native_execution": {
+    "command": [
+      "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-u",
+      "-B",
+      "agent2/scripts/run_r1_tests.py",
+      "--report",
+      "Agent2_Spec_v2_1\\evidence\\R5\\portal_auth_20261112\\native_tests.json"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 337.703
+  },
+  "portal_regression_count": 11,
+  "portal_regression_execution": {
+    "command": [
+      "D:\\agent22\\agent1\\.venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "portal",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.891
+  },
+  "portal_browser_count": 16,
+  "local_mode_browser_count": 19,
+  "lifecycle": "isolated_lifecycle.json",
+  "live_summary": "live_summary.json",
+  "shared_workspace_identity_only": true,
+  "named_users_implemented": false,
+  "full_R5_gate_run": false,
+  "production_approved": false,
+  "real_password_created": false,
+  "live_auth_active": true,
+  "live_snapshot_count": 1,
+  "automatic_review": {
+    "action": "combined restart of live Portal and Agent2 after Windows stop-tree fix",
+    "rejected": true,
+    "stated_reason": "blocked by policy; no further reason returned",
+    "safe_alternative": "isolated real OS subprocess lifecycle passed",
+    "live_services_kept_running": true,
+    "latest_windows_stop_helper_needs_next_normal_portal_restart": true
+  },
+  "diagnostic_history": [
+    "Initial focused 29 tests passed; final full suite adds director HTTP scope and Windows stop-tree checks, 714 pass.",
+    "First browser run exposed a hoisted helper named location; renamed issueLocation. Second exposed a stale snapshot restore during membership revocation; context refresh and stale-reference handling fixed. Final 16 SSO checks pass.",
+    "Portal regression initially used Agent2 venv missing Agent1/cryptography dependencies; preserved initial diagnostic, rerun with the existing Agent1/Portal environment: 11 pass.",
+    "First live probe omitted X-Platform and received expected CSRF 403; corrected client-shaped probe receives 401 without a session.",
+    "Retest full suite after Windows lifecycle fix: native process exit 0, UTF-8 captured directly without PowerShell stderr ambiguity."
+  ]
+}

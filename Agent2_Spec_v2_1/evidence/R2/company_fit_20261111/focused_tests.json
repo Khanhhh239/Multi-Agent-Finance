@@ -1,0 +1,158 @@
+{
+  "tests": [
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_cli_fits_and_scores_in_separate_processes_and_checks_permission_first",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_cli_fits_and_scores_in_separate_processes_and_checks_permission_first"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_completed_retry_survives_restart_without_refit",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_completed_retry_survives_restart_without_refit"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_concurrent_receipts_claim_one_job",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_concurrent_receipts_claim_one_job"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_fit_cannot_cross_reference_or_evaluation_windows",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_fit_cannot_cross_reference_or_evaluation_windows"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_fit_persists_33_contract_and_fresh_reader_scores_without_fit",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_fit_persists_33_contract_and_fresh_reader_scores_without_fit"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_late_transaction_revision_does_not_replace_train_version",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_late_transaction_revision_does_not_replace_train_version"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_legacy_or_same_width_reordered_contract_never_reaches_model_load",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_legacy_or_same_width_reordered_contract_never_reaches_model_load"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_legacy_storage_is_not_migrated_or_unpickled",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_legacy_storage_is_not_migrated_or_unpickled"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_missing_model_and_corrupt_model_are_unavailable_without_loading",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_missing_model_and_corrupt_model_are_unavailable_without_loading"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_prospective_fit_and_publication_must_finish_before_period",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_prospective_fit_and_publication_must_finish_before_period"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_publication_rolls_back_artifact_and_success_audit_together",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_publication_rolls_back_artifact_and_success_audit_together"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_read_permission_cannot_create_fit_job",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_read_permission_cannot_create_fit_job"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_revoked_fit_cannot_publish_even_after_training_completes",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_revoked_fit_cannot_publish_even_after_training_completes"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_same_transaction_ids_in_two_companies_have_separate_models",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_same_transaction_ids_in_two_companies_have_separate_models"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_score_store_is_read_only_and_missing_store_is_not_created",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_score_store_is_read_only_and_missing_store_is_not_created"
+    },
+    {
+      "id": "test_method_jobs.CompanyMethodJobTests.test_strict_missing_policy_fails_without_silent_drop_or_model",
+      "status": "pass",
+      "testcase": "test_method_jobs.CompanyMethodJobTests.test_strict_missing_policy_fails_without_silent_drop_or_model"
+    },
+    {
+      "id": "test_method_jobs.MissingPolicyTests.test_median_uses_only_train_all_null_columns_are_frozen_out",
+      "status": "pass",
+      "testcase": "test_method_jobs.MissingPolicyTests.test_median_uses_only_train_all_null_columns_are_frozen_out"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_all_native_rule_scores_hits_and_exceptions_are_preserved",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_all_native_rule_scores_hits_and_exceptions_are_preserved"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_demo_scores_new_snapshot_rows_and_retains_unavailable_old_rows",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_demo_scores_new_snapshot_rows_and_retains_unavailable_old_rows"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_every_requested_adapter_returns_five_rows_without_top_k",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_every_requested_adapter_returns_five_rows_without_top_k"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_extreme_batch_does_not_change_reference_or_prior_scores",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_extreme_batch_does_not_change_reference_or_prior_scores"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_fit_rejects_overlap_and_silent_imputation",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_fit_rejects_overlap_and_silent_imputation"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_float_parity_all_retained_ml_and_statistics",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_float_parity_all_retained_ml_and_statistics"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_future_or_incompatible_artifact_is_unavailable",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_future_or_incompatible_artifact_is_unavailable"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_missing_artifact_is_null_and_inference_never_fits",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_missing_artifact_is_null_and_inference_never_fits"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_missing_selected_feature_keeps_every_row",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_missing_selected_feature_keeps_every_row"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_no_hit_native_rows_still_receive_available_ml_scores",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_no_hit_native_rows_still_receive_available_ml_scores"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_snapshot_graph_is_source_backed_and_unsupported_rules_are_explicit",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_snapshot_graph_is_source_backed_and_unsupported_rules_are_explicit"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_snapshot_revocation_before_return_blocks_all_scores",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_snapshot_revocation_before_return_blocks_all_scores"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_wrong_scope_and_corrupt_artifact_do_not_return_scores",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_wrong_scope_and_corrupt_artifact_do_not_return_scores"
+    }
+  ],
+  "count": 30,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0
+}

@@ -1,0 +1,84 @@
+{
+  "count": 19,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "tests": [
+    {
+      "id": "test_he4_coordinator.Coordinator.test_every_branch_and_unavailable_reason_kept_without_ensemble",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_coordinator.Coordinator.test_lost_reply_restart_keeps_envelope_and_does_not_encrypt_again",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_coordinator.Coordinator.test_missing_ml_model_does_not_hide_other_branch_or_fit",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_coordinator.Coordinator.test_model_build_or_policy_change_cannot_resume_with_new_config",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_coordinator.Coordinator.test_response_tamper_is_rejected_before_native_open",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_attempt_setup_io_failure_does_not_leave_permanent_running_claim",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_blob_download_does_not_cross_node_scope",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_fresh_resume_can_only_continue_exact_previously_admitted_request",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_plaintext_extra_fields_signature_and_expiry_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_resume_does_not_bypass_current_grant_or_owner",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_signed_upload_scope_replay_and_revocation",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_unknown_circuit_is_rejected_before_native_loading",
+      "status": "pass"
+    },
+    {
+      "id": "test_saved_runs.SavedRuns.test_hides_child_even_if_parent_died_before_link_checkpoint",
+      "status": "pass"
+    },
+    {
+      "id": "test_saved_runs.SavedRuns.test_scope_and_actor_separate_history",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_config_api.ConfigurationAPI.test_01_permissions_fit_and_atomic_activation",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_config_api.ConfigurationAPI.test_02_reader_cannot_claim_manager_or_fit_permissions",
+      "status": "pass"
+    },
+    {
+      "id": "test_config_journal.ConfigJournal.test_foreign_company_and_wrong_key",
+      "status": "pass"
+    },
+    {
+      "id": "test_config_journal.ConfigJournal.test_receipt_binds_original_intent",
+      "status": "pass"
+    },
+    {
+      "id": "test_config_journal.ConfigJournal.test_revisions_idempotency_persistence_and_no_clear_configuration",
+      "status": "pass"
+    }
+  ]
+}

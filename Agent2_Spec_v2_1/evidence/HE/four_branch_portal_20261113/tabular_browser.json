@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "checks": [
+    "download synthetic Excel template through Portal",
+    "XLSX upload preview explicit acknowledgement commit creates one immutable snapshot",
+    "missing transaction ID shows actual Excel sheet and row and cannot save",
+    "CSV upload normalizes to validated contract without losing source snapshot separation"
+  ],
+  "count": 4,
+  "browser_errors": [],
+  "synthetic_only": true,
+  "live_services_changed": false
+}

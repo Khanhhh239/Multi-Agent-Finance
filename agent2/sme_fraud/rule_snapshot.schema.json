@@ -1,0 +1,2481 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:agent2:rule-snapshot:1.0.0",
+  "title": "Agent2 retained source snapshot; structural schema plus native scalar validators",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "tenant_id",
+    "company_id",
+    "source",
+    "candidate_transaction_ids"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "agent2-rule-snapshot/1.0.0"
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "company_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "tenant_id",
+        "company_id",
+        "as_of",
+        "source_id",
+        "is_simulated",
+        "tables",
+        "coverage"
+      ],
+      "properties": {
+        "version": {
+          "const": "native-rule-source/1.0.0"
+        },
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "company_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "as_of": {
+          "type": "string",
+          "format": "source-timestamp"
+        },
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "is_simulated": {
+          "type": "boolean"
+        },
+        "tables": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "companies": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "employees": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "vendors": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "customers": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "calendar": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "entity_links": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "attendance": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "vendor_status_history": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "bank_account_changes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "advances": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "advance_events": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "transactions": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "payroll_entitlements": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "supplier_payment_agreements": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "procurement_links": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "transaction_documents": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "payment_requests": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "operating_schedules": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "recurring_payments": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "vendor_payment_schedules": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "approval_authorities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "authority_id",
+                  "company_id",
+                  "subject_employee_id",
+                  "subject_role",
+                  "action",
+                  "txn_type",
+                  "department",
+                  "project_id",
+                  "min_amount_vnd",
+                  "max_amount_vnd",
+                  "self_approval_allowed",
+                  "authority_level",
+                  "authority_type",
+                  "delegated_by_id",
+                  "effective_from",
+                  "effective_to",
+                  "status",
+                  "evidence_on_file",
+                  "evidence_id",
+                  "approver_id",
+                  "approved_at",
+                  "observed_at"
+                ],
+                "properties": {
+                  "authority_id": {},
+                  "company_id": {},
+                  "subject_employee_id": {},
+                  "subject_role": {},
+                  "action": {},
+                  "txn_type": {},
+                  "department": {},
+                  "project_id": {},
+                  "min_amount_vnd": {},
+                  "max_amount_vnd": {},
+                  "self_approval_allowed": {},
+                  "authority_level": {},
+                  "authority_type": {},
+                  "delegated_by_id": {},
+                  "effective_from": {},
+                  "effective_to": {},
+                  "status": {},
+                  "evidence_on_file": {},
+                  "evidence_id": {},
+                  "approver_id": {},
+                  "approved_at": {},
+                  "observed_at": {},
+                  "tenant_id": {}
+                }
+              }
+            },
+            "approval_authority_coverage": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "coverage_id",
+                  "company_id",
+                  "covered_actions",
+                  "covered_from",
+                  "covered_through",
+                  "status",
+                  "evidence_on_file",
+                  "evidence_id",
+                  "approver_id",
+                  "approved_at",
+                  "observed_at"
+                ],
+                "properties": {
+                  "coverage_id": {},
+                  "company_id": {},
+                  "covered_actions": {},
+                  "covered_from": {},
+                  "covered_through": {},
+                  "status": {},
+                  "evidence_on_file": {},
+                  "evidence_id": {},
+                  "approver_id": {},
+                  "approved_at": {},
+                  "observed_at": {},
+                  "tenant_id": {}
+                }
+              }
+            },
+            "journal_audit_log": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "closing_periods": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "materiality_policies": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "leave_periods": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "system_actions": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "leave_activity_authorizations": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "employment_events": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "payroll_settlements": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "workflow_policies": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "override_events": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "document_series": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "document_register": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "document_cancellations": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "receivable_invoices": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "receipt_allocations": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "receipt_coverage": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "receivable_explanations": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "tax_risk_history": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "journal_documents": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "journal_lines": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "coverage": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "companies": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "employees": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "vendors": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "customers": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "calendar": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "entity_links": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "attendance": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "vendor_status_history": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "bank_account_changes": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "advances": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "advance_events": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "transactions": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "payroll_entitlements": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "supplier_payment_agreements": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "procurement_links": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "transaction_documents": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "payment_requests": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "operating_schedules": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "recurring_payments": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "vendor_payment_schedules": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "approval_authorities": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "approval_authority_coverage": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "journal_audit_log": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "closing_periods": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "materiality_policies": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "leave_periods": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "system_actions": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "leave_activity_authorizations": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "employment_events": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "payroll_settlements": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "workflow_policies": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "override_events": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "document_series": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "document_register": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "document_cancellations": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "receivable_invoices": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "receipt_allocations": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "receipt_coverage": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "receivable_explanations": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "tax_risk_history": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "journal_documents": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            },
+            "journal_lines": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "observed_at",
+                "covered_from",
+                "covered_through",
+                "history_basis",
+                "record_count",
+                "records_sha256"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "partial",
+                    "unknown"
+                  ]
+                },
+                "observed_at": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_from": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "covered_through": {
+                  "type": "string",
+                  "format": "source-timestamp"
+                },
+                "history_basis": {
+                  "enum": [
+                    "since_inception",
+                    "bounded_period",
+                    "unknown"
+                  ]
+                },
+                "record_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "records_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "candidate_transaction_ids": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 200,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128
+      }
+    }
+  }
+}

@@ -1,0 +1,297 @@
+{
+  "kind": "CR-019 P1 evaluation evidence; whole R2 PARTIAL; no queue or release",
+  "files": [
+    {
+      "path": "Agent2_Spec_v2_1/04_contracts_states_modules.md",
+      "sha256": "eaa9a917c33c9dff6d4c6e957595dcd177284ec35e3464c9c8c14a5465493784"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/98_PROGRESS.md",
+      "sha256": "dbdbc8a33eb09cfd911a57995c7fa57492b3136b56c23a5a669ecf55958c8369"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/99_decision_log.md",
+      "sha256": "521e02ca57a30734361452b75f810773894fef48e6bdbadb40bae2b1c152c490"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/CHANGE_REQUESTS.md",
+      "sha256": "dc5fa50d6d6332a91fbda07d9ef9fca9bf37079175145a1cdec1205034e82b28"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/SHA256SUMS",
+      "sha256": "f79f90b93d097834a60d73f604d60a80f7f7b84eb46368df7f42c56991227584"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/REPORT.md",
+      "sha256": "a2f02fb4a51a083d45ed8747f66048c58a67a64fad6e82d4c8ab22dbeb507500"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/adapter_map.csv",
+      "sha256": "1c7447522e65528f8465efc5c63608af8840b2045284336ee6126e0d83c3bd08"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/fit_manifest.json",
+      "sha256": "c6534f37a90b6c97e1e658568e43e36417ac1fd68adbd2909f706e471f794e67"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/REPORT.md",
+      "sha256": "0ee09dae958f1a660f002c0c2d14b304e3f1c34f061bc3543ce07df6ab737de2"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/late_reduction-results.json",
+      "sha256": "ac8083c915d032c28888f6a4d03dca21249b7acc5680a9ac5a19f7a232b5c375"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/late_reduction-snapshot.json",
+      "sha256": "da86d02f41b1de6184e9c8f1a7efee759e6d0d2265b7673ccb7d20c311ca1cee"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/late_reduction-source.json",
+      "sha256": "4e6d3597587b18c6c34c7b0dcf2601dc42a9b8e161d4d22c86509f75e2f5c530"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/late_reduction-validation.json",
+      "sha256": "828cd468426e693a87277c7c613275a1a9057434881f2cceccdb9fb909e8c901"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/missing_history-results.json",
+      "sha256": "567b1da8f00d1f9c9007aa9aa4af5a22ffced7fafadd31505d4ab5a684270c80"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/missing_history-snapshot.json",
+      "sha256": "e4640860199b08d0cfeb292486dbc93ffdf7d7cb12c43be5e8482f7b3f102a49"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/missing_history-source.json",
+      "sha256": "83ba5484e01bdda47df7d1e2118f5de8ff61f2f4209204d6d4a310c6d11a66ba"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/missing_history-validation.json",
+      "sha256": "1eb36b367d5eb50ff437ec678a378eb35af6d6b911375cb2172941b88358cbd5"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/prior_overpayment-results.json",
+      "sha256": "3eb04c6a12cde04f4546038267f55462bf51ca01ae2adfb9d0fd0a109fd59d9f"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/prior_overpayment-snapshot.json",
+      "sha256": "468f0f942bde889d760463b6417c4af23bbede0f3737fce557b9577fe3eff480"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/prior_overpayment-source.json",
+      "sha256": "a7580b195bfe5aceac1fccb5f4d6c49fca39a220a062d5ac7422477f14da1fa8"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/prior_overpayment-validation.json",
+      "sha256": "7bae37f1004e302f2fda7d30f5602b4036ed01254901be20f0bd0dfe535d364e"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/signed_reduction-results.json",
+      "sha256": "efa8a59beef5572dacce31f9ea2001d0736d6ac473880d3c1fdcf0fe12ee268e"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/signed_reduction-snapshot.json",
+      "sha256": "711bda910c8038bbc6362c057e148802c5be13a4c5a125aa0feb8c01391ff3b3"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/signed_reduction-source.json",
+      "sha256": "768e3c857a5ebc0e31c45a6251f51fd31b25aac2eb5a48e87c312e424cd81f8b"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/signed_reduction-validation.json",
+      "sha256": "4545bd0a66f33bd94d1c2c635af8854d96e5f2164ea1a56adea584a199443e87"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/simultaneous-results.json",
+      "sha256": "f0c996e0498049d96a5037db4f74c6bde44b5e00f606c1843adfb56a23cb52e2"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/simultaneous-snapshot.json",
+      "sha256": "ac1655e290adc663ea6f4d7e5d53fd0eef1bdd1842a7b9b3b21d01f0755e3915"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/simultaneous-source.json",
+      "sha256": "e882a0cd4eb6c6c904e4d8047a02b4d3c72edb14b52d5d5d5278f47843e0ffa7"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/simultaneous-validation.json",
+      "sha256": "b0f3897f69abb1dd919b6ab93f3e9ae48ced89117f5cb5247c491471d2362908"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo/summary.json",
+      "sha256": "5abe17e3373d7b1a9e9a7568ecaabc543669596f26fb6f6ab3c693483f4abf1a"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo_validation.json",
+      "sha256": "04f1c0b7924721544eecb04898a1ae5611dcf8da89fb1cd51d7ac7182685826c"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/focused_tests.json",
+      "sha256": "9b741d8919a088602867630948e1d750e3cc22038394e47ab28f3de78b7697e1"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/focused_tests.log",
+      "sha256": "03f2350f051a79a3f9d89e619bfc6a9bac2368143e0c2b24c9daecced7c5211f"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/initial_focused_tests.json",
+      "sha256": "a63c4ce95c8fdb162b35c0385ea11d1fd7e1f79b501e65ac7f0c14825ada596c"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/initial_focused_tests.log",
+      "sha256": "190a21198e80b48aaf336e41eb24a0ce9a8ca46bcae13fa5765302782a225a51"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/input_demo/declared_complete-validation.json",
+      "sha256": "1ff5569a82c603247c94e440c08fcaa2fd1d0f62cdbc3a5b556de9203811186b"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/input_demo/declared_complete.json",
+      "sha256": "23e21472abbbc8d329d68821977918042d212ab9f8c92329b57ed5f4b47eabdd"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/input_demo/missing_channel-validation.json",
+      "sha256": "49ce9f87418f6cee890094dedba9c3fe3702a0e3e945e471d6d7c500b39ada3d"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/input_demo/missing_channel.json",
+      "sha256": "37250e64803c680431f3a5248069056e8c996157f213b3cf8d56b6727e137ebc"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/input_demo/partial_history-validation.json",
+      "sha256": "709e487c5730ac80c5983fb9962a3cb874d502a87c3d4086613aa8bd4f51d614"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/input_demo/partial_history.json",
+      "sha256": "d6c60936e0d36e7fd4b2dd6872e87a4f382cb09df914b3ad6cfd56c8328bf960"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/input_demo/results.json",
+      "sha256": "2d96291049d4858d3e22fbfaf63897d65934fb67a370c46b9c06bd85889c8536"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/input_demo/snapshot.json",
+      "sha256": "afff2804b6d8d160b01e14920694fb96f84a168b04a0e83dd344b653f35aa486"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/input_demo/summary.json",
+      "sha256": "2ef6843d2f65f3e065098a53c0a28dfdc1ce838a5be978cd60500df61f6dbc5b"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/input_demo/tampered_manifest-validation.json",
+      "sha256": "cde7770cff1d30ee666a2a85cdbf4269512cc70e80bcda623e7ad3a1efc73f33"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/input_demo/tampered_manifest.json",
+      "sha256": "3332b59cffaf35380f14e946d0f646fad7fd4ad74f3f8f93b4fb313ce7160c0f"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/interrupted_native_tests.log",
+      "sha256": "ef5eaffd09c45865706a140d3ca88a9242cffefcc2e0e48d2fefc13552a0a374"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/native_parity.json",
+      "sha256": "db83c9d1979dac2c76c43aeb37a41f113938604ad829722aab880f0f6c59ae25"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/native_tests.json",
+      "sha256": "66c04a35a73168017820f5008b199b2f507dba33ffa72c3bef51e3ba10f14923"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/native_tests.log",
+      "sha256": "e911c96eaf068fa537932892cacff30708acd5b241f3af3dc829ca9144c3df56"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/preservation.json",
+      "sha256": "b08e94ea3d37ff8e9b4a90dea033f4ecdf317b7e85aea446b35a8b4f507c6630"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/prior_R2_REPORT.md",
+      "sha256": "9f4315bbcbf1fb9657f645e6073cb2dad291b3ba666f1edc18bfb3dc9b2a43f5"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/prior_R2_adapter_map.csv",
+      "sha256": "d004fbaf53d8d3ef57d9937bc40303adf91d6607f3d89747ba46616710b7c550"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/prior_R2_artifact_manifest.json",
+      "sha256": "90fa198466028ac5d4e42392ed7ab61d74fa5eb93023f63f5666aef178590f84"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/provenance.json",
+      "sha256": "359a6ddadc1562d19d8c586d9263c5cdfbfb863f59135abb2e5944087ecf7378"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/rule_source_catalog.json",
+      "sha256": "4a07647d68d60fa67d3c355545bfd62be3f8d9114fd4ec70edd64d82e3049f5d"
+    },
+    {
+      "path": "agent2/README.md",
+      "sha256": "0d192f63f7a4eeda58aa7c71b611607356cd71a720ff5b65557b66056a2a3a22"
+    },
+    {
+      "path": "agent2/docs/METHOD_OUTPUTS.md",
+      "sha256": "af401b4c432d7e6a775d2820c6f9f0a71e15e79ff61f4421db82837c8531a0b3"
+    },
+    {
+      "path": "agent2/docs/P1_EVALUATION.md",
+      "sha256": "ef1b04ddd0e43a4cc56d2f57d43a4dedb82c10a7707e5a244c7c0907eff6aeb8"
+    },
+    {
+      "path": "agent2/docs/P1_INPUTS.md",
+      "sha256": "5dbe261c27d4955b688142d8647c79ca614759075e22e619c94f35fefa27db83"
+    },
+    {
+      "path": "agent2/docs/RULE_RESULTS.md",
+      "sha256": "3d8e31882a28687d6eea267c5d33afead4bd4fdd73ff57f7acd0b55828e0b137"
+    },
+    {
+      "path": "agent2/docs/RULE_SOURCE_MAP.md",
+      "sha256": "1623f42ade2e8cff8bd42a0c014eeca2f07aa29764932d1ed8f40eee02d40b9c"
+    },
+    {
+      "path": "agent2/scripts/check_p1_evaluation.py",
+      "sha256": "7eb6391c5fe65dacd10ee06dff28e19f5af5727e5ff060bcec738cd6785d4f78"
+    },
+    {
+      "path": "agent2/scripts/demo_p1_evaluation.py",
+      "sha256": "2c694ecf5aa2269477246d6d6419788dec839a86e9fa2d82ba0dccf5c5259f8e"
+    },
+    {
+      "path": "agent2/scripts/demo_p1_inputs.py",
+      "sha256": "ac87aff308ad9ca8e94070af3e4668fd2ca606029d4016c4f4ff08aae320ce18"
+    },
+    {
+      "path": "agent2/sme_fraud/method_scores.schema.json",
+      "sha256": "01569da66fd85908572de1b97c3eb96a67be85a84c4af17d5d076b6dab21288c"
+    },
+    {
+      "path": "agent2/sme_fraud/p1_evaluation.py",
+      "sha256": "f7f95b2874755b18131b61bd2b4f2ecfe367500967ab291856d527c7e2f91075"
+    },
+    {
+      "path": "agent2/sme_fraud/p1_inputs.py",
+      "sha256": "5a0262e7d4648387a76a918a9de192800d37ef65f4f34b73d87c146ab20952b2"
+    },
+    {
+      "path": "agent2/sme_fraud/rule_evaluation.py",
+      "sha256": "07b5b33ed4c8295824cf35ee2be27ed70e5d2db36fa80935e3542258d57087ef"
+    },
+    {
+      "path": "agent2/sme_fraud/rule_results.schema.json",
+      "sha256": "2a711f55ea7567a332ee8654da7ba2d132f980f595bed54a1d52a4aa751e4197"
+    },
+    {
+      "path": "agent2/sme_fraud/rule_sources.py",
+      "sha256": "264999fddb81d87f6b591b8b8fcf4bca84a5e808caeb79bdc12277fb57ace0b7"
+    },
+    {
+      "path": "agent2/tests/test_p1_evaluation.py",
+      "sha256": "be9b050ab43da87c1b9fada8361e201cc72e6a72142e6d0b13e7a49078f6fd1d"
+    },
+    {
+      "path": "agent2/tests/test_p1_inputs.py",
+      "sha256": "94095a9054c98b02f686b53aba957516399a14d6d4f2711dccb3738b4499ae71"
+    }
+  ]
+}

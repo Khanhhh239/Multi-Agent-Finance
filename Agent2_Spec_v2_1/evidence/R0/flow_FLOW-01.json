@@ -1,0 +1,9 @@
+{
+  "id": "FLOW-01",
+  "status": "not_present",
+  "observed": "Core estimators score all 5 rows without rule flags; old CompanyML.score does not accept rule hits.",
+  "blocker": null,
+  "baseline": "before_tests.log",
+  "candidate": "after_tests.log",
+  "scope": "R0 inventory; not R1-R6 acceptance"
+}

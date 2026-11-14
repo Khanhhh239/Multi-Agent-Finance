@@ -1,0 +1,398 @@
+{
+  "base": "198d2905ed41de8c4d7f6668244934422ca71000",
+  "backend": {
+    "tests": [
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_actor_change_cannot_read_previous_actor_import",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_actor_change_cannot_read_previous_actor_import"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_bad_bridge_secret_and_unreachable_portal_fail_closed",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_bad_bridge_secret_and_unreachable_portal_fail_closed"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_context_has_only_own_companies_and_no_backend_secret",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_context_has_only_own_companies_and_no_backend_secret"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_direct_backend_still_validates_portal_and_no_local_fallback",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_direct_backend_still_validates_portal_and_no_local_fallback"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_director_requires_own_company_and_backend_role",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_director_requires_own_company_and_backend_role"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_director_technical_http_only_in_granted_company",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_director_technical_http_only_in_granted_company"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_expired_session_fails_and_get_poll_does_not_extend_ttl",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_expired_session_fails_and_get_poll_does_not_extend_ttl"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_internal_identity_requires_bridge_secret_and_no_browser_origin",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_internal_identity_requires_bridge_secret_and_no_browser_origin"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_launcher_uses_portal_bridge_and_dedicated_snapshot_db",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_launcher_uses_portal_bridge_and_dedicated_snapshot_db"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_logout_during_analysis_returns_no_private_rows",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_logout_during_analysis_returns_no_private_rows"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_membership_and_permission_rechecked_without_restart",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_membership_and_permission_rechecked_without_restart"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_missing_invalid_or_revoked_policy_fails_closed",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_missing_invalid_or_revoked_policy_fails_closed"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_no_session_no_access_and_browser_assertions_ignored",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_no_session_no_access_and_browser_assertions_ignored"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_only_loopback_origin_and_strong_backend_secret_are_accepted",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_only_loopback_origin_and_strong_backend_secret_are_accepted"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_profile_edit_does_not_grant_company_membership",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_profile_edit_does_not_grant_company_membership"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_proxy_rejects_queries_and_non_allowlisted_routes",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_proxy_rejects_queries_and_non_allowlisted_routes"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_proxy_requires_same_origin_host_and_platform_header",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_proxy_requires_same_origin_host_and_platform_header"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_revoked_session_blocks_preview_commit_and_snapshot_reads",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_revoked_session_blocks_preview_commit_and_snapshot_reads"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_role_revocation_rechecked_and_context_changes",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_role_revocation_rechecked_and_context_changes"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_stop_only_targets_the_agent2_process_tree_owned_by_portal",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_stop_only_targets_the_agent2_process_tree_owned_by_portal"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_tenant_change_cannot_read_previous_tenant_snapshot",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_tenant_change_cannot_read_previous_tenant_snapshot"
+      },
+      {
+        "id": "test_portal_auth.PortalAuthTests.test_upload_preview_commit_analyze_using_only_portal_session",
+        "status": "pass",
+        "testcase": "test_portal_auth.PortalAuthTests.test_upload_preview_commit_analyze_using_only_portal_session"
+      },
+      {
+        "id": "test_rule_snapshot_cutoff.RuleSnapshotCutoffTests.test_cutoff_equality_is_visible_and_fictitious_ids_still_rejected",
+        "status": "pass",
+        "testcase": "test_rule_snapshot_cutoff.RuleSnapshotCutoffTests.test_cutoff_equality_is_visible_and_fictitious_ids_still_rejected"
+      },
+      {
+        "id": "test_rule_snapshot_cutoff.RuleSnapshotCutoffTests.test_future_only_candidates_do_not_invoke_predictor_or_replay_history",
+        "status": "pass",
+        "testcase": "test_rule_snapshot_cutoff.RuleSnapshotCutoffTests.test_future_only_candidates_do_not_invoke_predictor_or_replay_history"
+      },
+      {
+        "id": "test_rule_snapshot_cutoff.RuleSnapshotCutoffTests.test_known_observation_but_future_event_is_not_scored",
+        "status": "pass",
+        "testcase": "test_rule_snapshot_cutoff.RuleSnapshotCutoffTests.test_known_observation_but_future_event_is_not_scored"
+      },
+      {
+        "id": "test_rule_snapshot_cutoff.RuleSnapshotCutoffTests.test_mixed_batch_keeps_order_and_both_companies",
+        "status": "pass",
+        "testcase": "test_rule_snapshot_cutoff.RuleSnapshotCutoffTests.test_mixed_batch_keeps_order_and_both_companies"
+      },
+      {
+        "id": "test_rule_snapshot_cutoff.RuleSnapshotCutoffTests.test_real_model_scores_only_visible_candidates_and_preserves_scores",
+        "status": "pass",
+        "testcase": "test_rule_snapshot_cutoff.RuleSnapshotCutoffTests.test_real_model_scores_only_visible_candidates_and_preserves_scores"
+      },
+      {
+        "id": "test_rule_snapshot_cutoff.RuleSnapshotCutoffTests.test_review_future_row_is_not_a_no_signal_or_not_applicable_result",
+        "status": "pass",
+        "testcase": "test_rule_snapshot_cutoff.RuleSnapshotCutoffTests.test_review_future_row_is_not_a_no_signal_or_not_applicable_result"
+      },
+      {
+        "id": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_activation_preserves_foreign_binding_and_permissions_without_refit",
+        "status": "pass",
+        "testcase": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_activation_preserves_foreign_binding_and_permissions_without_refit"
+      },
+      {
+        "id": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_binding_or_access_change_cannot_be_silently_overwritten",
+        "status": "pass",
+        "testcase": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_binding_or_access_change_cannot_be_silently_overwritten"
+      },
+      {
+        "id": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_held_out_data_and_unmapped_features_are_explicit",
+        "status": "pass",
+        "testcase": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_held_out_data_and_unmapped_features_are_explicit"
+      },
+      {
+        "id": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_tampered_candidate_and_missing_grants_are_rejected",
+        "status": "pass",
+        "testcase": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_tampered_candidate_and_missing_grants_are_rejected"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_accountant_cannot_request_technical_view",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_accountant_cannot_request_technical_view"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_authorization_happens_before_body_and_snapshot_read",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_authorization_happens_before_body_and_snapshot_read"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_client_role_and_scores_are_rejected",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_client_role_and_scores_are_rejected"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_committed_verified_document_does_not_require_new_verification_permission",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_committed_verified_document_does_not_require_new_verification_permission"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_director_technical_view_contains_only_P1_E3_and_null_aggregate",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_director_technical_view_contains_only_P1_E3_and_null_aggregate"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_empty_asof_and_late_invoice_never_rewrite_past",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_empty_asof_and_late_invoice_never_rewrite_past"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_equivalent_times_retry_and_views_have_same_analysis_binding",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_equivalent_times_retry_and_views_have_same_analysis_binding"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_foreign_company_denied_and_director_has_no_implicit_access",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_foreign_company_denied_and_director_has_no_implicit_access"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_full_rule_catalogue_is_read_only_company_scoped_and_director_only",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_full_rule_catalogue_is_read_only_company_scoped_and_director_only"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_full_rule_source_snapshot_runs_all_35_through_authenticated_HTTP",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_full_rule_source_snapshot_runs_all_35_through_authenticated_HTTP"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_host_origin_query_and_unsupported_methods",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_host_origin_query_and_unsupported_methods"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_internal_error_is_sanitized_and_does_not_return_partial_rows",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_internal_error_is_sanitized_and_does_not_return_partial_rows"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_invalid_body_view_time_and_snapshot_id",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_invalid_body_view_time_and_snapshot_id"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_large_signed_VND_values_are_preserved_as_integers",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_large_signed_VND_values_are_preserved_as_integers"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_limits_reject_without_truncation_or_invoking_scorer",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_limits_reject_without_truncation_or_invoking_scorer"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_mismatched_analysis_snapshot_binding_is_rejected",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_mismatched_analysis_snapshot_binding_is_rejected"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_missing_or_revoked_credentials_are_denied",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_missing_or_revoked_credentials_are_denied"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_negative_adjustment_is_returned_and_not_mislabeled_as_no_hit",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_negative_adjustment_is_returned_and_not_mislabeled_as_no_hit"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_no_fit_and_all_available_method_adapters_are_requested",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_no_fit_and_all_available_method_adapters_are_requested"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_opt_in_vendor_identity_snapshot_runs_through_authenticated_HTTP",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_opt_in_vendor_identity_snapshot_runs_through_authenticated_HTTP"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_other_tenant_same_company_cannot_read_snapshot",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_other_tenant_same_company_cannot_read_snapshot"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_partial_source_does_not_disable_E3_or_become_zero",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_partial_source_does_not_disable_E3_or_become_zero"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_permission_revocation_during_compute_denies_review_result",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_permission_revocation_during_compute_denies_review_result"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_review_allowlist_excludes_new_internal_fields_recursively",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_review_allowlist_excludes_new_internal_fields_recursively"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_review_business_DTO_and_zero_point_E3_signal",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_review_business_DTO_and_zero_point_E3_signal"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_role_downgrade_during_compute_denies_entire_result",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_role_downgrade_during_compute_denies_entire_result"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_roles_and_same_transaction_ids_are_separate_per_company",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_roles_and_same_transaction_ids_are_separate_per_company"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_simultaneous_group_is_unique_with_refs_on_every_member",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_simultaneous_group_is_unique_with_refs_on_every_member"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_storage_tamper_returns_integrity_error",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_storage_tamper_returns_integrity_error"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_storage_unconfigured_is_503",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_storage_unconfigured_is_503"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_unknown_role_or_permission_from_policy_cannot_bypass",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_unknown_role_or_permission_from_policy_cannot_bypass"
+      },
+      {
+        "id": "test_analysis_api.AnalysisApiTests.test_unknown_snapshot_is_scoped_404",
+        "status": "pass",
+        "testcase": "test_analysis_api.AnalysisApiTests.test_unknown_snapshot_is_scoped_404"
+      }
+    ],
+    "count": 64,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0
+  },
+  "routing": {
+    "status": "passed",
+    "count": 17,
+    "checks": [
+      "Outer Portal reload retains workspace C002 instead of default C001",
+      "Open separate tab retains authorized C002 with a fresh context check",
+      "Real import/commit/analyze of five C002 rows: outer reload restores same screen, snapshot, as_of and analysis ID",
+      "Legacy C002 import preference migrates ahead of stale workspace C001",
+      "Import-to-workspace navigation carries C002",
+      "Switching to C001 clears C002 snapshot/results and carries company into import",
+      "Company selection persists even before saving another file",
+      "Explicit authorized company deep link overrides stored C002 and survives outer reload",
+      "Encrypted-analysis screen and C002 dataset survive outer reload without changing/submitting jobs",
+      "Settings inherits C002 and reloads that page; routing does not grant fit permission",
+      "Revoked C002 grant: fresh context falls back to authorized C001, no C002 data request, server still rejects snapshot read",
+      "Revoked deep link drops foreign run and cannot retain private review state",
+      "No company grants shows no company or private content instead of silently defaulting to C001",
+      "Changed actor ignores previous actor company and snapshot preferences",
+      "Stored arbitrary page cannot navigate iframe outside allowlisted Agent2 pages",
+      "Malformed stored route is ignored without JavaScript error",
+      "Late context response after leaving Agent2 cannot reopen the old iframe"
+    ],
+    "browser_errors": [],
+    "servers": "real isolated Portal + enterprise backend",
+    "synthetic_data": true,
+    "live_services_changed": false,
+    "he_jobs_submitted": false,
+    "he4_landing_metadata_fixture": true,
+    "limits": [
+      "Settings lifecycle service is not configured in this fixture; only routing and disabled controls checked.",
+      "No live Portal login or human business validation claimed."
+    ]
+  },
+  "workspace": {
+    "status": "passed",
+    "checks": [
+      "Portal login opens real company-scoped work area without local access code",
+      "C001: actual csv validation, acknowledgement and immutable snapshot commit",
+      "C001: selected snapshot continues to real encrypted run and five business review cases",
+      "scoped supplementary PDF upload, evidence selection and authenticated download",
+      "lost save response retries the same request and creates one feedback revision",
+      "C001: server feedback, filtering, reload same run and authenticated CSV download",
+      "C002: actual xlsx validation, acknowledgement and immutable snapshot commit",
+      "C002: selected snapshot continues to real encrypted run and five business review cases",
+      "C002: server feedback, filtering, reload same run and authenticated CSV download",
+      "company switch clears prior private review state and manager navigation",
+      "explicit new request after seeded terminal failure retains old failed job and completes real CKKS on same snapshot",
+      "mobile overview keeps run actions within screen width"
+    ],
+    "count": 12,
+    "browser_errors": [],
+    "servers": "isolated Portal and enterprise node",
+    "real_ckks": true,
+    "analysis_mode_metadata_mocked": true,
+    "native_he4_claim": false,
+    "live_services_changed": false,
+    "human_business_labels": false
+  },
+  "source_sha256": {
+    "portal/server.py": "15b1f5c96fc96888abc7120780c060fe0ae0480ba4125cc1076bff09beb370e4",
+    "portal/static/app.js": "3a0ac3720c1abc47d465c543feda2dda2d643ea695fcc6e9e2ef5edd0d071d2b",
+    "portal/static/index.html": "0152218fcc928245fbd20a19baddfaeed3d32e9d81a4687942f60c5086adecbf",
+    "portal/config.example.json": "6be5ae6891fbfcea2ca3d366c6931067c16ee30d220a837c0031e05450c789a2",
+    "agent2/scripts/check_portal_company_routing.py": "5e7878215b075b02dc126cd1f155a2fc3c2714ced87de818fb4129aa44879fe5"
+  },
+  "agent1_agent3_agent4_source_changes": false,
+  "live_state_changed": false
+}

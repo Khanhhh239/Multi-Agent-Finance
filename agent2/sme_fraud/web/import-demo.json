@@ -1,0 +1,604 @@
+{
+  "contract_version": "1.1.0",
+  "tenant_id": "demo",
+  "companies": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "C001",
+      "revision": 1,
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-09-01T00:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "C001",
+        "is_simulated": true
+      },
+      "name": "Doanh nghiệp mô phỏng C001"
+    }
+  ],
+  "transactions": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "OLD",
+      "revision": 1,
+      "effective_at": "2026-10-01T09:00:00+07:00",
+      "observed_at": "2026-10-01T09:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "OLD",
+        "is_simulated": true
+      },
+      "amount_vnd": 4000000,
+      "currency": "VND",
+      "kind": "payment",
+      "description": "Dòng mô phỏng H0",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      },
+      "created_by_ref": {
+        "record_id": "E001",
+        "revision": 1
+      },
+      "bank_account": "00123456",
+      "bank_code": "BANK01",
+      "payment_channel": "bank"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "A",
+      "revision": 1,
+      "effective_at": "2026-10-02T09:00:00+07:00",
+      "observed_at": "2026-10-02T09:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "A",
+        "is_simulated": true
+      },
+      "amount_vnd": 4000000,
+      "currency": "VND",
+      "kind": "payment",
+      "description": "Dòng mô phỏng H0",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      },
+      "created_by_ref": {
+        "record_id": "E001",
+        "revision": 1
+      },
+      "bank_account": "00123456",
+      "bank_code": "BANK01",
+      "payment_channel": "bank"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "B",
+      "revision": 1,
+      "effective_at": "2026-10-02T09:00:00+07:00",
+      "observed_at": "2026-10-02T09:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "B",
+        "is_simulated": true
+      },
+      "amount_vnd": 4000000,
+      "currency": "VND",
+      "kind": "payment",
+      "description": "Dòng mô phỏng H0",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      },
+      "created_by_ref": {
+        "record_id": "E001",
+        "revision": 1
+      },
+      "bank_account": "00123456",
+      "bank_code": "BANK01",
+      "payment_channel": "bank"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "OVER",
+      "revision": 1,
+      "effective_at": "2026-10-03T09:00:00+07:00",
+      "observed_at": "2026-10-03T09:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "OVER",
+        "is_simulated": true
+      },
+      "amount_vnd": 1000000,
+      "currency": "VND",
+      "kind": "payment",
+      "description": "Dòng mô phỏng H0",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      },
+      "created_by_ref": {
+        "record_id": "E001",
+        "revision": 1
+      },
+      "bank_account": "00123456",
+      "bank_code": "BANK01",
+      "payment_channel": "bank"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "MISSING",
+      "revision": 1,
+      "effective_at": "2026-10-04T09:00:00+07:00",
+      "observed_at": "2026-10-04T09:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "MISSING",
+        "is_simulated": true
+      },
+      "amount_vnd": 2000000,
+      "currency": "VND",
+      "kind": "payment",
+      "description": "Dòng mô phỏng H0",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      },
+      "created_by_ref": {
+        "record_id": "E001",
+        "revision": 1
+      },
+      "bank_account": "00123456",
+      "bank_code": "BANK01"
+    }
+  ],
+  "vendors": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "V001",
+      "revision": 1,
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-09-01T00:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "V001",
+        "is_simulated": true
+      },
+      "name": "North Harbor Equipment",
+      "bank_account": "00123456",
+      "bank_code": "BANK01"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "V_PEER",
+      "revision": 1,
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-09-01T00:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "V_PEER",
+        "is_simulated": true
+      },
+      "name": "North Harbour Equipment",
+      "bank_account": "00123456",
+      "bank_code": "BANK01"
+    }
+  ],
+  "invoices": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "I001",
+      "revision": 1,
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-09-01T00:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "I001",
+        "is_simulated": true
+      },
+      "number": "0000123",
+      "amount_vnd": 10000000,
+      "currency": "VND",
+      "kind": "invoice",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      }
+    }
+  ],
+  "payment_allocations": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "A_OLD",
+      "revision": 1,
+      "effective_at": "2026-10-01T09:00:00+07:00",
+      "observed_at": "2026-10-01T09:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "A_OLD",
+        "is_simulated": true
+      },
+      "transaction_ref": {
+        "record_id": "OLD",
+        "revision": 1
+      },
+      "invoice_ref": {
+        "record_id": "I001",
+        "revision": 1
+      },
+      "amount_vnd": 4000000,
+      "currency": "VND",
+      "kind": "allocation"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "A_A",
+      "revision": 1,
+      "effective_at": "2026-10-02T09:00:00+07:00",
+      "observed_at": "2026-10-02T09:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "A_A",
+        "is_simulated": true
+      },
+      "transaction_ref": {
+        "record_id": "A",
+        "revision": 1
+      },
+      "invoice_ref": {
+        "record_id": "I001",
+        "revision": 1
+      },
+      "amount_vnd": 4000000,
+      "currency": "VND",
+      "kind": "allocation"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "A_B",
+      "revision": 1,
+      "effective_at": "2026-10-02T09:00:00+07:00",
+      "observed_at": "2026-10-02T09:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "A_B",
+        "is_simulated": true
+      },
+      "transaction_ref": {
+        "record_id": "B",
+        "revision": 1
+      },
+      "invoice_ref": {
+        "record_id": "I001",
+        "revision": 1
+      },
+      "amount_vnd": 4000000,
+      "currency": "VND",
+      "kind": "allocation"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "A_OVER",
+      "revision": 1,
+      "effective_at": "2026-10-03T09:00:00+07:00",
+      "observed_at": "2026-10-03T09:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "A_OVER",
+        "is_simulated": true
+      },
+      "transaction_ref": {
+        "record_id": "OVER",
+        "revision": 1
+      },
+      "invoice_ref": {
+        "record_id": "I001",
+        "revision": 1
+      },
+      "amount_vnd": 1000000,
+      "currency": "VND",
+      "kind": "allocation"
+    }
+  ],
+  "employees": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "E001",
+      "revision": 1,
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-09-01T00:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "E001",
+        "is_simulated": true
+      },
+      "name": "Nhân viên mô phỏng",
+      "role": "accountant",
+      "bank_account": "00123456",
+      "bank_code": "BANK01"
+    }
+  ],
+  "approvals": [],
+  "supporting_documents": [],
+  "vendor_bank_history": [],
+  "payment_history_coverage": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "revision": 1,
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "COV_0",
+        "is_simulated": true
+      },
+      "record_id": "COV_0",
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-10-01T09:00:00+07:00",
+      "invoice_refs": [
+        {
+          "record_id": "I001",
+          "revision": 1
+        }
+      ],
+      "covered_from": "2026-09-01T00:00:00+07:00",
+      "covered_through": "2026-10-01T09:00:00+07:00",
+      "history_basis": "since_inception",
+      "coverage_status": "complete",
+      "export_id": "EXPORT_COV_0",
+      "manifest": {
+        "invoice_refs": [
+          {
+            "record_id": "I001",
+            "revision": 1
+          }
+        ],
+        "transaction_refs": [
+          {
+            "record_id": "OLD",
+            "revision": 1
+          }
+        ],
+        "allocation_refs": [
+          {
+            "record_id": "A_OLD",
+            "revision": 1
+          }
+        ],
+        "record_counts": {
+          "invoices": 1,
+          "transactions": 1,
+          "payment_allocations": 1
+        },
+        "records_sha256": "6d6c596cdf32de9af6f50fbcbbbf6073c9c6762bb60c12fbc7ab02e071ac39cb"
+      }
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "revision": 1,
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "COV_1",
+        "is_simulated": true
+      },
+      "record_id": "COV_1",
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-10-02T09:00:00+07:00",
+      "invoice_refs": [
+        {
+          "record_id": "I001",
+          "revision": 1
+        }
+      ],
+      "covered_from": "2026-09-01T00:00:00+07:00",
+      "covered_through": "2026-10-02T09:00:00+07:00",
+      "history_basis": "since_inception",
+      "coverage_status": "complete",
+      "export_id": "EXPORT_COV_1",
+      "manifest": {
+        "invoice_refs": [
+          {
+            "record_id": "I001",
+            "revision": 1
+          }
+        ],
+        "transaction_refs": [
+          {
+            "record_id": "A",
+            "revision": 1
+          },
+          {
+            "record_id": "B",
+            "revision": 1
+          },
+          {
+            "record_id": "OLD",
+            "revision": 1
+          }
+        ],
+        "allocation_refs": [
+          {
+            "record_id": "A_A",
+            "revision": 1
+          },
+          {
+            "record_id": "A_B",
+            "revision": 1
+          },
+          {
+            "record_id": "A_OLD",
+            "revision": 1
+          }
+        ],
+        "record_counts": {
+          "invoices": 1,
+          "transactions": 3,
+          "payment_allocations": 3
+        },
+        "records_sha256": "5b847396d79be8af6c74cae71671da7c2249f73f7b5dc1a92cba67ea14de0bce"
+      }
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "revision": 1,
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "COV_2",
+        "is_simulated": true
+      },
+      "record_id": "COV_2",
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-10-03T09:00:00+07:00",
+      "invoice_refs": [
+        {
+          "record_id": "I001",
+          "revision": 1
+        }
+      ],
+      "covered_from": "2026-09-01T00:00:00+07:00",
+      "covered_through": "2026-10-03T09:00:00+07:00",
+      "history_basis": "since_inception",
+      "coverage_status": "complete",
+      "export_id": "EXPORT_COV_2",
+      "manifest": {
+        "invoice_refs": [
+          {
+            "record_id": "I001",
+            "revision": 1
+          }
+        ],
+        "transaction_refs": [
+          {
+            "record_id": "A",
+            "revision": 1
+          },
+          {
+            "record_id": "B",
+            "revision": 1
+          },
+          {
+            "record_id": "OLD",
+            "revision": 1
+          },
+          {
+            "record_id": "OVER",
+            "revision": 1
+          }
+        ],
+        "allocation_refs": [
+          {
+            "record_id": "A_A",
+            "revision": 1
+          },
+          {
+            "record_id": "A_B",
+            "revision": 1
+          },
+          {
+            "record_id": "A_OLD",
+            "revision": 1
+          },
+          {
+            "record_id": "A_OVER",
+            "revision": 1
+          }
+        ],
+        "record_counts": {
+          "invoices": 1,
+          "transactions": 4,
+          "payment_allocations": 4
+        },
+        "records_sha256": "82ee83d7044fb1fc77d50d9bbae0a8ff52d79efaa7c4495a56d0989f48403297"
+      }
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "revision": 1,
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "COV_3",
+        "is_simulated": true
+      },
+      "record_id": "COV_3",
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-10-04T09:00:00+07:00",
+      "invoice_refs": [
+        {
+          "record_id": "I001",
+          "revision": 1
+        }
+      ],
+      "covered_from": "2026-09-01T00:00:00+07:00",
+      "covered_through": "2026-10-04T09:00:00+07:00",
+      "history_basis": "since_inception",
+      "coverage_status": "complete",
+      "export_id": "EXPORT_COV_3",
+      "manifest": {
+        "invoice_refs": [
+          {
+            "record_id": "I001",
+            "revision": 1
+          }
+        ],
+        "transaction_refs": [
+          {
+            "record_id": "A",
+            "revision": 1
+          },
+          {
+            "record_id": "B",
+            "revision": 1
+          },
+          {
+            "record_id": "OLD",
+            "revision": 1
+          },
+          {
+            "record_id": "OVER",
+            "revision": 1
+          }
+        ],
+        "allocation_refs": [
+          {
+            "record_id": "A_A",
+            "revision": 1
+          },
+          {
+            "record_id": "A_B",
+            "revision": 1
+          },
+          {
+            "record_id": "A_OLD",
+            "revision": 1
+          },
+          {
+            "record_id": "A_OVER",
+            "revision": 1
+          }
+        ],
+        "record_counts": {
+          "invoices": 1,
+          "transactions": 4,
+          "payment_allocations": 4
+        },
+        "records_sha256": "82ee83d7044fb1fc77d50d9bbae0a8ff52d79efaa7c4495a56d0989f48403297"
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "status": "passed",
+  "existing_password_login_form_visible": true,
+  "setup_confirmation_hidden": true,
+  "browser_errors": []
+}

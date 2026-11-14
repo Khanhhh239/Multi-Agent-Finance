@@ -1,0 +1,475 @@
+{
+  "status": "technical_pass_with_partial_he_coverage",
+  "companies": [
+    {
+      "company_id": "C001",
+      "baseline": [
+        "P1_T03",
+        "P1_T06",
+        "P1_T07"
+      ],
+      "combined": [
+        "P1_T03",
+        "P1_T06",
+        "P1_T07",
+        "P1_T04",
+        "P1_T02"
+      ],
+      "added": [
+        "P1_T04",
+        "P1_T02"
+      ],
+      "coverage": {
+        "P1": {
+          "evaluated_hit": 1,
+          "evaluated_no_hit": 5,
+          "unavailable": 1,
+          "not_applicable": 1
+        },
+        "E3": {
+          "evaluated_hit": 0,
+          "evaluated_no_hit": 8,
+          "unavailable": 0,
+          "not_applicable": 0
+        },
+        "B5": {
+          "evaluated_hit": 0,
+          "evaluated_no_hit": 8,
+          "unavailable": 0,
+          "not_applicable": 0
+        },
+        "E4": {
+          "evaluated_hit": 0,
+          "evaluated_no_hit": 8,
+          "unavailable": 0,
+          "not_applicable": 0
+        }
+      },
+      "ml_available": 7,
+      "ml_unavailable": 1,
+      "ml_parity": {
+        "row_count": 7,
+        "absolute_tolerance": 0.001,
+        "relative_tolerance": 1e-05,
+        "all_scores_within_tolerance": true,
+        "maximum_absolute_error": 5.083814993156466e-05,
+        "mean_absolute_error": 3.291972202098695e-05,
+        "maximum_relative_error": 8.059108736779717e-07,
+        "relative_error_undefined_rows": 0,
+        "spearman": 0.9543135154205278,
+        "exact_order_equal": false,
+        "material_pair_inversions": 0,
+        "comparable_pairs": 17,
+        "top_k": 5,
+        "top_k_overlap": 5,
+        "top_k_overlap_fraction": 1.0,
+        "top_k_covers_entire_dataset": false,
+        "plaintext_order": [
+          [
+            "P1_T04",
+            1
+          ],
+          [
+            "P1_T06",
+            1
+          ],
+          [
+            "P1_T07",
+            1
+          ],
+          [
+            "P1_T02",
+            1
+          ],
+          [
+            "P1_T03",
+            1
+          ],
+          [
+            "P1_T08",
+            1
+          ],
+          [
+            "P1_T05",
+            1
+          ]
+        ],
+        "encrypted_order": [
+          [
+            "P1_T07",
+            1
+          ],
+          [
+            "P1_T04",
+            1
+          ],
+          [
+            "P1_T06",
+            1
+          ],
+          [
+            "P1_T03",
+            1
+          ],
+          [
+            "P1_T02",
+            1
+          ],
+          [
+            "P1_T08",
+            1
+          ],
+          [
+            "P1_T05",
+            1
+          ]
+        ],
+        "rows": [
+          {
+            "record_id": "P1_T02",
+            "revision": 1,
+            "plaintext_score": 39.63081737080032,
+            "encrypted_score": 39.63084926763837,
+            "absolute_error": 3.189683804549759e-05,
+            "allowed_error": 0.0013963081737080032,
+            "within_tolerance": true,
+            "plaintext_rank": 4,
+            "encrypted_rank": 5
+          },
+          {
+            "record_id": "P1_T03",
+            "revision": 1,
+            "plaintext_score": 39.63081737080032,
+            "encrypted_score": 39.630849309706974,
+            "absolute_error": 3.193890665187382e-05,
+            "allowed_error": 0.0013963081737080032,
+            "within_tolerance": true,
+            "plaintext_rank": 5,
+            "encrypted_rank": 4
+          },
+          {
+            "record_id": "P1_T04",
+            "revision": 1,
+            "plaintext_score": 63.1948264673726,
+            "encrypted_score": 63.194877302356,
+            "absolute_error": 5.083498339786274e-05,
+            "allowed_error": 0.0016319482646737261,
+            "within_tolerance": true,
+            "plaintext_rank": 1,
+            "encrypted_rank": 2
+          },
+          {
+            "record_id": "P1_T05",
+            "revision": 1,
+            "plaintext_score": 1.5571545072149684,
+            "encrypted_score": 1.5571557594482002,
+            "absolute_error": 1.252233231774369e-06,
+            "allowed_error": 0.0010155715450721498,
+            "within_tolerance": true,
+            "plaintext_rank": 7,
+            "encrypted_rank": 7
+          },
+          {
+            "record_id": "P1_T06",
+            "revision": 1,
+            "plaintext_score": 63.1948264673726,
+            "encrypted_score": 63.19487726051702,
+            "absolute_error": 5.0793144417582425e-05,
+            "allowed_error": 0.0016319482646737261,
+            "within_tolerance": true,
+            "plaintext_rank": 2,
+            "encrypted_rank": 3
+          },
+          {
+            "record_id": "P1_T07",
+            "revision": 1,
+            "plaintext_score": 63.1948264673726,
+            "encrypted_score": 63.19487730552253,
+            "absolute_error": 5.083814993156466e-05,
+            "allowed_error": 0.0016319482646737261,
+            "within_tolerance": true,
+            "plaintext_rank": 3,
+            "encrypted_rank": 1
+          },
+          {
+            "record_id": "P1_T08",
+            "revision": 1,
+            "plaintext_score": 15.999089049601908,
+            "encrypted_score": 15.999101933400379,
+            "absolute_error": 1.288379847075305e-05,
+            "allowed_error": 0.001159990890496019,
+            "within_tolerance": true,
+            "plaintext_rank": 6,
+            "encrypted_rank": 6
+          }
+        ],
+        "total_rows_retained": 8,
+        "unavailable_rows": 1
+      },
+      "he_seconds": 0.485000000015134
+    },
+    {
+      "company_id": "C002",
+      "baseline": [
+        "P1_T03",
+        "P1_T06",
+        "P1_T07"
+      ],
+      "combined": [
+        "P1_T03",
+        "P1_T06",
+        "P1_T07",
+        "P1_T04",
+        "P1_T02"
+      ],
+      "added": [
+        "P1_T04",
+        "P1_T02"
+      ],
+      "coverage": {
+        "P1": {
+          "evaluated_hit": 1,
+          "evaluated_no_hit": 5,
+          "unavailable": 1,
+          "not_applicable": 1
+        },
+        "E3": {
+          "evaluated_hit": 0,
+          "evaluated_no_hit": 8,
+          "unavailable": 0,
+          "not_applicable": 0
+        },
+        "B5": {
+          "evaluated_hit": 0,
+          "evaluated_no_hit": 8,
+          "unavailable": 0,
+          "not_applicable": 0
+        },
+        "E4": {
+          "evaluated_hit": 0,
+          "evaluated_no_hit": 8,
+          "unavailable": 0,
+          "not_applicable": 0
+        }
+      },
+      "ml_available": 7,
+      "ml_unavailable": 1,
+      "ml_parity": {
+        "row_count": 7,
+        "absolute_tolerance": 0.001,
+        "relative_tolerance": 1e-05,
+        "all_scores_within_tolerance": true,
+        "maximum_absolute_error": 5.091664951351049e-05,
+        "mean_absolute_error": 3.293905128882406e-05,
+        "maximum_relative_error": 8.074189267683817e-07,
+        "relative_error_undefined_rows": 0,
+        "spearman": 0.9543135154205278,
+        "exact_order_equal": false,
+        "material_pair_inversions": 0,
+        "comparable_pairs": 17,
+        "top_k": 5,
+        "top_k_overlap": 5,
+        "top_k_overlap_fraction": 1.0,
+        "top_k_covers_entire_dataset": false,
+        "plaintext_order": [
+          [
+            "P1_T04",
+            1
+          ],
+          [
+            "P1_T06",
+            1
+          ],
+          [
+            "P1_T07",
+            1
+          ],
+          [
+            "P1_T02",
+            1
+          ],
+          [
+            "P1_T03",
+            1
+          ],
+          [
+            "P1_T08",
+            1
+          ],
+          [
+            "P1_T05",
+            1
+          ]
+        ],
+        "encrypted_order": [
+          [
+            "P1_T04",
+            1
+          ],
+          [
+            "P1_T07",
+            1
+          ],
+          [
+            "P1_T06",
+            1
+          ],
+          [
+            "P1_T02",
+            1
+          ],
+          [
+            "P1_T03",
+            1
+          ],
+          [
+            "P1_T08",
+            1
+          ],
+          [
+            "P1_T05",
+            1
+          ]
+        ],
+        "rows": [
+          {
+            "record_id": "P1_T02",
+            "revision": 1,
+            "plaintext_score": 39.630796962568034,
+            "encrypted_score": 39.63082894436517,
+            "absolute_error": 3.198179713592708e-05,
+            "allowed_error": 0.0013963079696256804,
+            "within_tolerance": true,
+            "plaintext_rank": 4,
+            "encrypted_rank": 4
+          },
+          {
+            "record_id": "P1_T03",
+            "revision": 1,
+            "plaintext_score": 39.630796962568034,
+            "encrypted_score": 39.63082883670187,
+            "absolute_error": 3.187413383898274e-05,
+            "allowed_error": 0.0013963079696256804,
+            "within_tolerance": true,
+            "plaintext_rank": 5,
+            "encrypted_rank": 5
+          },
+          {
+            "record_id": "P1_T04",
+            "revision": 1,
+            "plaintext_score": 63.19478727491402,
+            "encrypted_score": 63.194838191563534,
+            "absolute_error": 5.091664951351049e-05,
+            "allowed_error": 0.0016319478727491402,
+            "within_tolerance": true,
+            "plaintext_rank": 1,
+            "encrypted_rank": 1
+          },
+          {
+            "record_id": "P1_T05",
+            "revision": 1,
+            "plaintext_score": 1.5571544823583716,
+            "encrypted_score": 1.5571557355415315,
+            "absolute_error": 1.2531831599105203e-06,
+            "allowed_error": 0.0010155715448235837,
+            "within_tolerance": true,
+            "plaintext_rank": 7,
+            "encrypted_rank": 7
+          },
+          {
+            "record_id": "P1_T06",
+            "revision": 1,
+            "plaintext_score": 63.19478727491402,
+            "encrypted_score": 63.1948380507802,
+            "absolute_error": 5.0775866178298656e-05,
+            "allowed_error": 0.0016319478727491402,
+            "within_tolerance": true,
+            "plaintext_rank": 2,
+            "encrypted_rank": 3
+          },
+          {
+            "record_id": "P1_T07",
+            "revision": 1,
+            "plaintext_score": 63.19478727491402,
+            "encrypted_score": 63.194838128680544,
+            "absolute_error": 5.085376652402829e-05,
+            "allowed_error": 0.0016319478727491402,
+            "within_tolerance": true,
+            "plaintext_rank": 3,
+            "encrypted_rank": 2
+          },
+          {
+            "record_id": "P1_T08",
+            "revision": 1,
+            "plaintext_score": 15.999083304640383,
+            "encrypted_score": 15.999096222603054,
+            "absolute_error": 1.2917962671110672e-05,
+            "allowed_error": 0.0011599908330464038,
+            "within_tolerance": true,
+            "plaintext_rank": 6,
+            "encrypted_rank": 6
+          }
+        ],
+        "total_rows_retained": 8,
+        "unavailable_rows": 1
+      },
+      "he_seconds": 0.5
+    }
+  ],
+  "p1_native_he": [
+    {
+      "company_id": "C001",
+      "record_id": "P1_T03",
+      "actual_fhe": true,
+      "engine_parity": true,
+      "exact_integer_parity": true,
+      "same_committed_ciphertext": true,
+      "seconds": 267.2190000000119,
+      "actual": {
+        "matched": true,
+        "previous_payment": true,
+        "prior_paid_vnd": 9000000,
+        "current_allocated_vnd": 3000000,
+        "invoice_gross_vnd": 10000000,
+        "cumulative_paid_vnd": 12000000,
+        "excess_vnd": 2000000
+      }
+    },
+    {
+      "company_id": "C002",
+      "record_id": "P1_T05",
+      "actual_fhe": true,
+      "engine_parity": true,
+      "exact_integer_parity": true,
+      "same_committed_ciphertext": true,
+      "seconds": 229.06299999999464,
+      "actual": {
+        "matched": false,
+        "previous_payment": true,
+        "prior_paid_vnd": 24000000,
+        "current_allocated_vnd": 3000000,
+        "invoice_gross_vnd": 30000000,
+        "cumulative_paid_vnd": 27000000,
+        "excess_vnd": 0
+      }
+    }
+  ],
+  "baseline_rule_ids": [
+    "P1",
+    "E3",
+    "B5",
+    "E4"
+  ],
+  "rules_without_he": [
+    "E3",
+    "B5",
+    "E4"
+  ],
+  "all_rule_evaluations_he": false,
+  "full_he_baseline_available": false,
+  "new_model_fit": false,
+  "live_services_changed": false,
+  "supervisor_preflight_mocked": true,
+  "accuracy": null,
+  "seconds": 504.06200000000536
+}

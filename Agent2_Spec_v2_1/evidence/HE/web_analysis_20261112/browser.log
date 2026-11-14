@@ -1,0 +1,42 @@
+Traceback (most recent call last):
+  File "D:\agent22\agent2\scripts\test_he_analysis_ui.py", line 69, in <module>
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--output-dir',type=Path,required=True);args=parser.parse_args();run(args.output_dir.resolve())
+                                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agent22\agent2\scripts\test_he_analysis_ui.py", line 35, in run
+    page.locator('#run').click();expect(page.locator('#rows .transaction')).to_have_count(5);expect(page.locator('#result-meta')).to_have_text(first);passed('repeated click reads the same result and run ID')
+                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agent22\agent2\.venv\Lib\site-packages\playwright\sync_api\_generated.py", line 15561, in to_have_text
+    self._sync(
+  File "D:\agent22\agent2\.venv\Lib\site-packages\playwright\_impl\_sync_base.py", line 124, in _sync
+    return task.result()
+           ^^^^^^^^^^^^^
+  File "D:\agent22\agent2\.venv\Lib\site-packages\playwright\_impl\assertions.py", line 660, in to_have_text
+    await self._expect_impl(
+  File "D:\agent22\agent2\.venv\Lib\site-packages\playwright\_impl\assertions.py", line 122, in _expect_impl
+    _record_soft_or_raise(
+  File "D:\agent22\agent2\.venv\Lib\site-packages\playwright\_impl\_assertions.py", line 50, in _record_soft_or_raise
+    raise error
+AssertionError: Locator expected to have text 'Doanh nghiệp
+C001
+Bản dữ liệu
+snp_d2dfde22ddbb4e9f910e3c6c73f94225
+Dùng nguồn đã biết đến
+13:05:11 12/11/2026 (UTC+07)
+Lần chạy
+herun_44d918fda7a242faad41b62e300088fc'
+Actual value: Doanh nghiệpC001Bản dữ liệusnp_d2dfde22ddbb4e9f910e3c6c73f94225Dùng nguồn đã biết đến13:05:11 12/11/2026 (UTC+07)Lần chạyherun_44d918fda7a242faad41b62e300088fc 
+Call log:
+  - Expect "to_have_text" locator("#result-meta") with timeout 5000ms
+  - waiting for locator("#result-meta")
+    14 × locator resolved to <dl id="result-meta">…</dl>
+       - unexpected value "Doanh nghiệpC001Bản dữ liệusnp_d2dfde22ddbb4e9f910e3c6c73f94225Dùng nguồn đã biết đến13:05:11 12/11/2026 (UTC+07)Lần chạyherun_44d918fda7a242faad41b62e300088fc"
+
+Aria snapshot:
+- term: Doanh nghiệp
+- definition: C001
+- term: Bản dữ liệu
+- definition: snp_d2dfde22ddbb4e9f910e3c6c73f94225
+- term: Dùng nguồn đã biết đến
+- definition: 13:05:11 12/11/2026 (UTC+07)
+- term: Lần chạy
+- definition: herun_44d918fda7a242faad41b62e300088fc

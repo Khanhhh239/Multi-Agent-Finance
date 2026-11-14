@@ -1,0 +1,162 @@
+agent2/.venv/Scripts/python.exe : test_bank_history_for_one_vendor_does_not_cover_another_vendor 
+(test_validation_backend.SourceLimitTests.test_bank_history_for_one_vendor_does_not_cover_another_vendor) ... ok
+At line:3 char:1
++ agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/run_r1_t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_bank_histo..._vendor) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_document_linked_to_invoice_is_traced_through_allocations 
+(test_validation_backend.SourceLimitTests.test_document_linked_to_invoice_is_traced_through_allocations) ... ok
+test_missing_approval_coverage_is_per_transaction 
+(test_validation_backend.SourceLimitTests.test_missing_approval_coverage_is_per_transaction) ... ok
+test_missing_history_does_not_remove_transactions_or_claim_ml_readiness 
+(test_validation_backend.SourceLimitTests.test_missing_history_does_not_remove_transactions_or_claim_ml_readiness) ... 
+ok
+test_new_unverified_revision_cannot_use_older_verified_status 
+(test_validation_backend.SourceLimitTests.test_new_unverified_revision_cannot_use_older_verified_status) ... ok
+test_one_simulated_document_does_not_clear_other_transactions 
+(test_validation_backend.SourceLimitTests.test_one_simulated_document_does_not_clear_other_transactions) ... ok
+test_strict_shared_parser_never_accepts_duplicate_keys 
+(test_validation_backend.SourceLimitTests.test_strict_shared_parser_never_accepts_duplicate_keys) ... ok
+test_verified_original_covers_only_linked_transaction 
+(test_validation_backend.SourceLimitTests.test_verified_original_covers_only_linked_transaction) ... ok
+test_authorized_validation_keeps_signed_rows_and_uses_backend_scope 
+(test_validation_backend.ValidationApiTests.test_authorized_validation_keeps_signed_rows_and_uses_backend_scope) ... ok
+test_bad_transport_headers_rejected_before_read 
+(test_validation_backend.ValidationApiTests.test_bad_transport_headers_rejected_before_read) ... ok
+test_broken_json_duplicate_keys_and_nonfinite_values_rejected 
+(test_validation_backend.ValidationApiTests.test_broken_json_duplicate_keys_and_nonfinite_values_rejected) ... ok
+test_client_cannot_grant_itself_another_company_or_tenant 
+(test_validation_backend.ValidationApiTests.test_client_cannot_grant_itself_another_company_or_tenant) ... ok
+test_client_scope_role_extra_fields_are_not_accepted 
+(test_validation_backend.ValidationApiTests.test_client_scope_role_extra_fields_are_not_accepted) ... ok
+test_company_b_denied_before_reading_or_parsing_body 
+(test_validation_backend.ValidationApiTests.test_company_b_denied_before_reading_or_parsing_body) ... ok
+test_director_without_company_permission_is_still_denied 
+(test_validation_backend.ValidationApiTests.test_director_without_company_permission_is_still_denied) ... ok
+test_duplicate_authorization_headers_do_not_choose_one 
+(test_validation_backend.ValidationApiTests.test_duplicate_authorization_headers_do_not_choose_one) ... ok
+test_even_multi_company_credential_must_validate_one_company_per_route 
+(test_validation_backend.ValidationApiTests.test_even_multi_company_credential_must_validate_one_company_per_route) 
+... ok
+test_foreign_row_cannot_be_hidden_in_valid_company_bundle 
+(test_validation_backend.ValidationApiTests.test_foreign_row_cannot_be_hidden_in_valid_company_bundle) ... ok
+test_global_credential_revocation (test_validation_backend.ValidationApiTests.test_global_credential_revocation) ... ok
+test_input_size_rows_and_media_limits 
+(test_validation_backend.ValidationApiTests.test_input_size_rows_and_media_limits) ... ok
+test_missing_company_column_is_diagnostic_not_fake_authorization_error 
+(test_validation_backend.ValidationApiTests.test_missing_company_column_is_diagnostic_not_fake_authorization_error) 
+... ok
+test_missing_or_invalid_policy_fails_closed_without_data_echo 
+(test_validation_backend.ValidationApiTests.test_missing_or_invalid_policy_fails_closed_without_data_echo) ... ok
+test_missing_required_table_names_the_table 
+(test_validation_backend.ValidationApiTests.test_missing_required_table_names_the_table) ... ok
+test_missing_transaction_id_reports_row_field_and_fix 
+(test_validation_backend.ValidationApiTests.test_missing_transaction_id_reports_row_field_and_fix) ... ok
+test_missing_wrong_or_expired_credential_is_401 
+(test_validation_backend.ValidationApiTests.test_missing_wrong_or_expired_credential_is_401) ... ok
+test_nested_reference_required_key_identified 
+(test_validation_backend.ValidationApiTests.test_nested_reference_required_key_identified) ... ok
+test_revocation_read_on_every_request 
+(test_validation_backend.ValidationApiTests.test_revocation_read_on_every_request) ... ok
+test_security_errors_do_not_echo_raw_transaction_or_token 
+(test_validation_backend.ValidationApiTests.test_security_errors_do_not_echo_raw_transaction_or_token) ... ok
+test_unauthenticated_body_is_never_read 
+(test_validation_backend.ValidationApiTests.test_unauthenticated_body_is_never_read) ... ok
+test_untrusted_origin_denied (test_validation_backend.ValidationApiTests.test_untrusted_origin_denied) ... ok
+test_wrong_type_duplicate_and_reference_show_actual_field 
+(test_validation_backend.ValidationApiTests.test_wrong_type_duplicate_and_reference_show_actual_field) ... ok
+test_all_routes_deny_company_b_before_body_or_storage_access 
+(test_snapshots.SnapshotApiTests.test_all_routes_deny_company_b_before_body_or_storage_access) ... ok
+test_foreign_bundle_is_rejected_without_foreign_data_in_report 
+(test_snapshots.SnapshotApiTests.test_foreign_bundle_is_rejected_without_foreign_data_in_report) ... ok
+test_foreign_resource_ids_on_authorized_company_route_return_no_records 
+(test_snapshots.SnapshotApiTests.test_foreign_resource_ids_on_authorized_company_route_return_no_records) ... ok
+test_full_http_upload_preview_confirm_snapshot_and_download 
+(test_snapshots.SnapshotApiTests.test_full_http_upload_preview_confirm_snapshot_and_download) ... ok
+test_invalid_file_preview_persists_errors_and_no_snapshot 
+(test_snapshots.SnapshotApiTests.test_invalid_file_preview_persists_errors_and_no_snapshot) ... ok
+test_mapping_and_source_revision_routes_require_new_preview 
+(test_snapshots.SnapshotApiTests.test_mapping_and_source_revision_routes_require_new_preview) ... ok
+test_permission_revoked_after_body_read_blocks_commit 
+(test_snapshots.SnapshotApiTests.test_permission_revoked_after_body_read_blocks_commit) ... ok
+test_permission_revoked_after_body_read_blocks_upload_write 
+(test_snapshots.SnapshotApiTests.test_permission_revoked_after_body_read_blocks_upload_write) ... ok
+test_revoked_credentials_cannot_commit_or_read_saved_data 
+(test_snapshots.SnapshotApiTests.test_revoked_credentials_cannot_commit_or_read_saved_data) ... ok
+test_tampered_or_unacknowledged_client_commit_never_saves 
+(test_snapshots.SnapshotApiTests.test_tampered_or_unacknowledged_client_commit_never_saves) ... ok
+test_R1_03_new_mapping_invalidates_old_preview 
+(test_snapshots.SnapshotStoreTests.test_R1_03_new_mapping_invalidates_old_preview) ... ok
+test_R1_03_new_source_invalidates_old_preview 
+(test_snapshots.SnapshotStoreTests.test_R1_03_new_source_invalidates_old_preview) ... ok
+test_R1_04_ten_identical_commit_retries_create_one_snapshot_and_event 
+(test_snapshots.SnapshotStoreTests.test_R1_04_ten_identical_commit_retries_create_one_snapshot_and_event) ... ok
+test_actual_column_mapping_applies_before_validation 
+(test_snapshots.SnapshotStoreTests.test_actual_column_mapping_applies_before_validation) ... ok
+test_atomic_failure_rolls_back_snapshot_audit_receipt_and_status 
+(test_snapshots.SnapshotStoreTests.test_atomic_failure_rolls_back_snapshot_audit_receipt_and_status) ... ok
+test_commit_receipt_key_cannot_be_reused_for_altered_confirmation 
+(test_snapshots.SnapshotStoreTests.test_commit_receipt_key_cannot_be_reused_for_altered_confirmation) ... ok
+test_concurrent_ten_commit_retries_are_atomic 
+(test_snapshots.SnapshotStoreTests.test_concurrent_ten_commit_retries_are_atomic) ... ok
+test_different_retry_keys_same_confirmed_import_do_not_duplicate 
+(test_snapshots.SnapshotStoreTests.test_different_retry_keys_same_confirmed_import_do_not_duplicate) ... ok
+test_each_hash_is_checked_not_trusted_from_client 
+(test_snapshots.SnapshotStoreTests.test_each_hash_is_checked_not_trusted_from_client) ... ok
+test_expired_preview_cannot_commit (test_snapshots.SnapshotStoreTests.test_expired_preview_cannot_commit) ... ok
+test_expiry_during_commit_revalidation_does_not_create_snapshot 
+(test_snapshots.SnapshotStoreTests.test_expiry_during_commit_revalidation_does_not_create_snapshot) ... ok
+test_explicit_confirmation_required (test_snapshots.SnapshotStoreTests.test_explicit_confirmation_required) ... ok
+test_idempotency_key_reused_with_different_content_is_conflict 
+(test_snapshots.SnapshotStoreTests.test_idempotency_key_reused_with_different_content_is_conflict) ... ok
+test_identical_upload_retry_returns_same_draft 
+(test_snapshots.SnapshotStoreTests.test_identical_upload_retry_returns_same_draft) ... ok
+test_invalid_stored_manifest_json_is_a_controlled_integrity_error 
+(test_snapshots.SnapshotStoreTests.test_invalid_stored_manifest_json_is_a_controlled_integrity_error) ... ok
+test_legacy_database_is_refused_without_migration 
+(test_snapshots.SnapshotStoreTests.test_legacy_database_is_refused_without_migration) ... ok
+test_mapping_collision_never_silently_overwrites_a_column 
+(test_snapshots.SnapshotStoreTests.test_mapping_collision_never_silently_overwrites_a_column) ... ok
+test_mapping_does_not_allow_code_or_two_columns_to_one_target 
+(test_snapshots.SnapshotStoreTests.test_mapping_does_not_allow_code_or_two_columns_to_one_target) ... ok
+test_old_snapshots_survive_new_import_of_changed_data 
+(test_snapshots.SnapshotStoreTests.test_old_snapshots_survive_new_import_of_changed_data) ... ok
+test_permission_change_at_transaction_exit_rolls_back_all_writes 
+(test_snapshots.SnapshotStoreTests.test_permission_change_at_transaction_exit_rolls_back_all_writes) ... ok
+test_policy_recheck_occurs_inside_transaction_before_any_write 
+(test_snapshots.SnapshotStoreTests.test_policy_recheck_occurs_inside_transaction_before_any_write) ... ok
+test_preview_is_cached_until_expiry_then_rechecked 
+(test_snapshots.SnapshotStoreTests.test_preview_is_cached_until_expiry_then_rechecked) ... ok
+test_restarted_process_recovers_same_receipt_after_response_loss 
+(test_snapshots.SnapshotStoreTests.test_restarted_process_recovers_same_receipt_after_response_loss) ... ok
+test_roundtrip_keeps_exact_signed_data_and_versioned_checksums 
+(test_snapshots.SnapshotStoreTests.test_roundtrip_keeps_exact_signed_data_and_versioned_checksums) ... ok
+test_same_data_in_a_new_import_reuses_immutable_snapshot 
+(test_snapshots.SnapshotStoreTests.test_same_data_in_a_new_import_reuses_immutable_snapshot) ... ok
+test_scope_isolation_for_draft_report_commit_and_snapshot 
+(test_snapshots.SnapshotStoreTests.test_scope_isolation_for_draft_report_commit_and_snapshot) ... ok
+test_snapshot_and_committed_import_cannot_be_modified 
+(test_snapshots.SnapshotStoreTests.test_snapshot_and_committed_import_cannot_be_modified) ... ok
+test_source_and_mapping_mutation_receipts_do_not_repeat_revisions 
+(test_snapshots.SnapshotStoreTests.test_source_and_mapping_mutation_receipts_do_not_repeat_revisions) ... ok
+test_source_change_racing_commit_has_only_one_winner 
+(test_snapshots.SnapshotStoreTests.test_source_change_racing_commit_has_only_one_winner) ... ok
+test_tampered_original_source_cannot_commit 
+(test_snapshots.SnapshotStoreTests.test_tampered_original_source_cannot_commit) ... ok
+test_tampered_snapshot_data_is_not_returned_even_on_receipt_replay 
+(test_snapshots.SnapshotStoreTests.test_tampered_snapshot_data_is_not_returned_even_on_receipt_replay) ... ok
+test_validator_or_permission_context_change_forces_new_preview 
+(test_snapshots.SnapshotStoreTests.test_validator_or_permission_context_change_forces_new_preview) ... ok
+test_health_reports_core_only_not_a_ready_pipeline 
+(test_transition_server.TransitionServerTest.test_health_reports_core_only_not_a_ready_pipeline) ... ok
+test_legacy_reads_and_writes_are_retired 
+(test_transition_server.TransitionServerTest.test_legacy_reads_and_writes_are_retired) ... ok
+test_root_is_a_clear_transition_page 
+(test_transition_server.TransitionServerTest.test_root_is_a_clear_transition_page) ... ok
+
+----------------------------------------------------------------------
+Ran 76 tests in 27.751s
+
+OK

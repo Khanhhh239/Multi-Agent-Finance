@@ -1,0 +1,15 @@
+{
+  "actual_fhe": true,
+  "authenticated_http": true,
+  "sigkill_during_native_compute": true,
+  "admission_ttl_elapsed": true,
+  "fresh_resume_same_envelope": true,
+  "same_dpapi_private_context": true,
+  "score": 579,
+  "logical_jobs": 1,
+  "attempts": 2,
+  "committed_result_reused": true,
+  "supervisor_start_stop": true,
+  "supervisor_preflight_mocked": true,
+  "seconds": 81.40600000000268
+}

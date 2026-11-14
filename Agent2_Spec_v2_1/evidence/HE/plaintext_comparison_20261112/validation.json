@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "unit_tests": 9,
+  "native_he_runs": 18,
+  "ranking_trials": 10,
+  "recovery_cases": 6,
+  "all_faults_confirmed": true,
+  "source_ast": "passed",
+  "report_links": "passed",
+  "operational_sources_unchanged": true,
+  "spec_hashes": 34,
+  "full_recovery_passed": false
+}

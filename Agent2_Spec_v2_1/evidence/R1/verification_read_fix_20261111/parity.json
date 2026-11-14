@@ -1,0 +1,15 @@
+{
+  "same_snapshot": true,
+  "channels_equal": [
+    "features",
+    "missing",
+    "rows",
+    "evidence"
+  ],
+  "columns_equal": true,
+  "old_artifact_id": "ftr_96ce1665f0b1b592cb1398899899a66d666362b58afeb632e79c86676535d555",
+  "new_artifact_id": "ftr_f94d88518f65c1d21b14d4b17e90d112eb071b0c1cf5ebfb738b14c8c176ba35",
+  "old_contract_version": "snapshot-point-in-time/1.0.0",
+  "new_contract_version": "snapshot-point-in-time/1.0.1",
+  "numeric_changes": false
+}

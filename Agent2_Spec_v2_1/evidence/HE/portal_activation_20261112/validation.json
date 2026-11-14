@@ -1,0 +1,112 @@
+{
+  "ast_parsed_files": [
+    "agent2/experiments/he_inference/prepared_demo.py",
+    "agent2/tests_he/test_prepared_demo.py"
+  ],
+  "trailing_whitespace": false,
+  "focused_passed": 7,
+  "packet_check_passed": 40,
+  "source_and_evidence_links_checked": [
+    {
+      "source": "agent2/docs/HE_PORTAL_ACTIVATION.md",
+      "target": "PORTAL_AUTH.md"
+    },
+    {
+      "source": "agent2/docs/HE_PORTAL_ACTIVATION.md",
+      "target": "../../Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md"
+    },
+    {
+      "source": "agent2/docs/HE_COMPANY_DEMO.md",
+      "target": "HE_PORTAL_ACTIVATION.md"
+    },
+    {
+      "source": "agent2/docs/HE_COMPANY_DEMO.md",
+      "target": "../.runtime/he-company-demo/data/C001_5_giao_dich.json"
+    },
+    {
+      "source": "agent2/docs/HE_COMPANY_DEMO.md",
+      "target": "../.runtime/he-company-demo/data/C002_5_giao_dich.json"
+    },
+    {
+      "source": "agent2/docs/HE_COMPANY_DEMO.md",
+      "target": "../../Agent2_Spec_v2_1/evidence/HE/company_preparation_20261112/REPORT.md"
+    },
+    {
+      "source": "agent2/docs/HE_COMPANY_DEMO.md",
+      "target": "HE_WEB_ANALYSIS.md"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "../../../../agent2/docs/HE_PORTAL_ACTIVATION.md"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "live_ui_check.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "C001-completed.png"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "live-completed.png"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "activation_status.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "login_page_check.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "live_ui_check.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "C001-completed.png"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "C002-completed.png"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "packet_check.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "focused_final.log"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "focused_final_execution.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "preservation.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "../web_analysis_20261112/REPORT.md"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "source_provenance.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "validation.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md",
+      "target": "artifact_manifest.json"
+    }
+  ],
+  "spec_hashes_verified": 34,
+  "core_sources_preserved": 17,
+  "authenticated_live_ui": "complete",
+  "live_ui_passed": 7,
+  "live_jobs_metadata_verified": 2
+}

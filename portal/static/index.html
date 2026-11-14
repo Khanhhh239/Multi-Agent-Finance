@@ -569,7 +569,7 @@
             <tbody>
               <tr><td>Sao kê dùng chung (CSV hoặc XLSX) · <a href="/samples/sao-ke-chung.csv" download>Tải mẫu CSV</a></td><td>Agent 1 và Agent 3</td><td>Mỗi tệp nạp một lần. Cần mã giao dịch duy nhất, tài khoản của doanh nghiệp, ngày và số tiền. Nên có nội dung và đối tác để ghép hóa đơn.</td></tr>
               <tr><td>Sổ hóa đơn bán, tiền khách trả, khoản chi, kỳ sao kê, hứa trả (CSV hoặc XLSX theo mẫu Agent 1)</td><td>Agent 1</td><td>Gộp theo mã dòng, không xóa dữ liệu cũ.</td></tr>
-              <tr><td>Sổ giao dịch theo mẫu Agent 2</td><td>Agent 2</td><td>Thay toàn bộ giao dịch của doanh nghiệp.</td></tr>
+              <tr><td>Gói JSON theo hợp đồng Agent 2</td><td><a href="#agent2">Mở Agent 2</a></td><td>Nhập trong Agent 2 để kiểm tra và tạo snapshot. Luồng nạp chung tại đây chưa nối API v2.</td></tr>
               <tr><td>Hóa đơn XML, ZIP hóa đơn, bảng kê cổng thuế và sao kê theo mẫu thuế cũ</td><td>Agent 3</td><td>Dùng mẫu sao kê chung ở trên nếu cần cả Agent 1.</td></tr>
               <tr><td>Kho dữ liệu truy vấn CFO</td><td>Agent 4</td><td>Đang dùng kho dữ liệu DuckDB độc lập.</td></tr>
             </tbody>
@@ -629,6 +629,7 @@
             </svg>
             <span class="btn-text"></span>
           </button>
+          <button type="button" class="btn" id="agent2-recover" hidden>Kết nối lại phân tích</button>
           <a class="btn btn-popout" id="agent-newtab" target="_blank" rel="noopener" title="Mở rộng sang tab mới">
             <svg class="btn-icon" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 9v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h4M10 2h4v4M6.5 9.5L14 2"/>
@@ -638,6 +639,7 @@
         </div>
       </div>
       <div class="agent-body">
+        <p id="agent2-dependency" class="banner" role="status" hidden></p>
         <iframe id="agent-frame-agent1" class="agent-frame" title="Giao diện Agent 1" hidden></iframe>
         <iframe id="agent-frame-agent2" class="agent-frame" title="Giao diện Agent 2" hidden></iframe>
         <iframe id="agent-frame-agent3" class="agent-frame" title="Giao diện Agent 3" hidden></iframe>

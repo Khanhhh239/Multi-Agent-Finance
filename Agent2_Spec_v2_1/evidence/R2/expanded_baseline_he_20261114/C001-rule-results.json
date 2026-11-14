@@ -1,0 +1,1961 @@
+{
+  "snapshot": {
+    "checksum": "55ed5e1c71c89a33617694e701d21f362abcf9f86c2bc64401d3ef91dcf2c4f9",
+    "company_id": "C001",
+    "contract_version": "1.2.0",
+    "data_checksum": "c728aec374521a2c054cf52cf25e2c11c8c0edc953885efdad003cb65fb515f7",
+    "snapshot_id": "snp_e56d50156a6948ab89f834e75a7bed6c",
+    "tenant_id": "demo"
+  },
+  "feature_contract_fingerprint": "750e47dac572ad4a07bd308526ca382acda0c90d62b5440236ed9b34c1423d6c",
+  "original_full_result_sha256": "3b587b9b3a98e432a81a6d87667b9a4fd0ef4e57e671ded2bb80cfb4468fe698",
+  "rows": [
+    {
+      "record_id": "P1_T01",
+      "revision": 1,
+      "event_at": "2026-10-02T01:00:00+00:00",
+      "as_of": "2026-10-02T01:00:00+00:00",
+      "rules": [
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Nhiều NCC chung thông tin định danh",
+          "reason": null,
+          "rule_id": "B5",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "evidence": {
+              "algorithm": "difflib.SequenceMatcher",
+              "matched_vendor_count": 0,
+              "threshold": 0.85,
+              "top_matches": []
+            },
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy cặp tên đủ ngưỡng trong các NCC nhìn thấy; không xác nhận đầy đủ master hoặc giao dịch hợp lệ.",
+            "scoring_role": "master_quality"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Tên NCC tương tự",
+          "reason": null,
+          "rule_id": "E3",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "NCC trùng định danh",
+          "reason": null,
+          "rule_id": "E4",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "history_basis": "source_declared_complete_scope_not_independent_verification_of_external_books",
+            "invoice_checks": [
+              {
+                "cumulative_paid_vnd": 6000000,
+                "current_allocated_vnd": 6000000,
+                "current_allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T01",
+                    "revision": 1
+                  }
+                ],
+                "excess_vnd": 0,
+                "invoice_gross_vnd": 10000000,
+                "invoice_refs": [
+                  {
+                    "record_id": "P1_I_BASE",
+                    "revision": 1
+                  }
+                ],
+                "matched": false,
+                "normalized_invoice_number": "P1BASE",
+                "previous_payment": false,
+                "prior_allocation_refs": [],
+                "prior_paid_vnd": 0,
+                "related_transaction_refs": [],
+                "simultaneous_allocation_refs": [],
+                "vendor_id": "V001"
+              }
+            ],
+            "row_policy": "strict_prior_plus_current; previous_payment_required; simultaneous_checks_do_not_contribute_to_row",
+            "simultaneous_checks": [],
+            "tolerance_vnd": 1,
+            "version": "p1-evaluation/1.0.0"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "P1_I_BASE",
+              "revision": 1,
+              "table": "invoices"
+            },
+            {
+              "effective_at": "2026-10-02T08:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_A_P1_T01",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_COV_1",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-10-02T08:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_T01",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Thanh toán vượt tổng giá trị cùng hóa đơn",
+          "reason": null,
+          "rule_id": "P1",
+          "score": 0,
+          "source_checksum": "048a58dda1c9f460861ffaf06a473f41fb8b89ead8cbdfaf7eb3f24d1579f1f9",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        }
+      ]
+    },
+    {
+      "record_id": "P1_T02",
+      "revision": 1,
+      "event_at": "2026-10-03T01:00:00+00:00",
+      "as_of": "2026-10-03T01:00:00+00:00",
+      "rules": [
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Nhiều NCC chung thông tin định danh",
+          "reason": null,
+          "rule_id": "B5",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "evidence": {
+              "algorithm": "difflib.SequenceMatcher",
+              "matched_vendor_count": 0,
+              "threshold": 0.85,
+              "top_matches": []
+            },
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy cặp tên đủ ngưỡng trong các NCC nhìn thấy; không xác nhận đầy đủ master hoặc giao dịch hợp lệ.",
+            "scoring_role": "master_quality"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Tên NCC tương tự",
+          "reason": null,
+          "rule_id": "E3",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "NCC trùng định danh",
+          "reason": null,
+          "rule_id": "E4",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "history_basis": "source_declared_complete_scope_not_independent_verification_of_external_books",
+            "invoice_checks": [
+              {
+                "cumulative_paid_vnd": 9000000,
+                "current_allocated_vnd": 3000000,
+                "current_allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T02",
+                    "revision": 1
+                  }
+                ],
+                "excess_vnd": 0,
+                "invoice_gross_vnd": 10000000,
+                "invoice_refs": [
+                  {
+                    "record_id": "P1_I_BASE",
+                    "revision": 1
+                  }
+                ],
+                "matched": false,
+                "normalized_invoice_number": "P1BASE",
+                "previous_payment": true,
+                "prior_allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T01",
+                    "revision": 1
+                  }
+                ],
+                "prior_paid_vnd": 6000000,
+                "related_transaction_refs": [
+                  {
+                    "record_id": "P1_T01",
+                    "revision": 1
+                  }
+                ],
+                "simultaneous_allocation_refs": [],
+                "vendor_id": "V001"
+              }
+            ],
+            "row_policy": "strict_prior_plus_current; previous_payment_required; simultaneous_checks_do_not_contribute_to_row",
+            "simultaneous_checks": [],
+            "tolerance_vnd": 1,
+            "version": "p1-evaluation/1.0.0"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "P1_I_BASE",
+              "revision": 1,
+              "table": "invoices"
+            },
+            {
+              "effective_at": "2026-10-02T08:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_A_P1_T01",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-10-03T08:00:00+07:00",
+              "observed_at": "2026-10-03T08:00:00+07:00",
+              "record_id": "P1_A_P1_T02",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_COV_1",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-03T08:00:00+07:00",
+              "record_id": "P1_COV_2",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-10-02T08:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_T01",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-10-03T08:00:00+07:00",
+              "observed_at": "2026-10-03T08:00:00+07:00",
+              "record_id": "P1_T02",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Thanh toán vượt tổng giá trị cùng hóa đơn",
+          "reason": null,
+          "rule_id": "P1",
+          "score": 0,
+          "source_checksum": "6906c8550b35381701108f11c6cfe9711c23d2a637f21171805e697939800916",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        }
+      ]
+    },
+    {
+      "record_id": "P1_T03",
+      "revision": 1,
+      "event_at": "2026-10-04T01:00:00+00:00",
+      "as_of": "2026-10-04T01:00:00+00:00",
+      "rules": [
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Nhiều NCC chung thông tin định danh",
+          "reason": null,
+          "rule_id": "B5",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "evidence": {
+              "algorithm": "difflib.SequenceMatcher",
+              "matched_vendor_count": 0,
+              "threshold": 0.85,
+              "top_matches": []
+            },
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy cặp tên đủ ngưỡng trong các NCC nhìn thấy; không xác nhận đầy đủ master hoặc giao dịch hợp lệ.",
+            "scoring_role": "master_quality"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Tên NCC tương tự",
+          "reason": null,
+          "rule_id": "E3",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "NCC trùng định danh",
+          "reason": null,
+          "rule_id": "E4",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "history_basis": "source_declared_complete_scope_not_independent_verification_of_external_books",
+            "invoice_checks": [
+              {
+                "cumulative_paid_vnd": 12000000,
+                "current_allocated_vnd": 3000000,
+                "current_allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T03",
+                    "revision": 1
+                  }
+                ],
+                "excess_vnd": 2000000,
+                "invoice_gross_vnd": 10000000,
+                "invoice_refs": [
+                  {
+                    "record_id": "P1_I_BASE",
+                    "revision": 1
+                  }
+                ],
+                "matched": true,
+                "normalized_invoice_number": "P1BASE",
+                "previous_payment": true,
+                "prior_allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T01",
+                    "revision": 1
+                  },
+                  {
+                    "record_id": "P1_A_P1_T02",
+                    "revision": 1
+                  }
+                ],
+                "prior_paid_vnd": 9000000,
+                "related_transaction_refs": [
+                  {
+                    "record_id": "P1_T01",
+                    "revision": 1
+                  },
+                  {
+                    "record_id": "P1_T02",
+                    "revision": 1
+                  }
+                ],
+                "simultaneous_allocation_refs": [],
+                "vendor_id": "V001"
+              }
+            ],
+            "row_policy": "strict_prior_plus_current; previous_payment_required; simultaneous_checks_do_not_contribute_to_row",
+            "simultaneous_checks": [],
+            "tolerance_vnd": 1,
+            "version": "p1-evaluation/1.0.0"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "P1_I_BASE",
+              "revision": 1,
+              "table": "invoices"
+            },
+            {
+              "effective_at": "2026-10-02T08:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_A_P1_T01",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-10-03T08:00:00+07:00",
+              "observed_at": "2026-10-03T08:00:00+07:00",
+              "record_id": "P1_A_P1_T02",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-10-04T08:00:00+07:00",
+              "observed_at": "2026-10-04T08:00:00+07:00",
+              "record_id": "P1_A_P1_T03",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_COV_1",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-03T08:00:00+07:00",
+              "record_id": "P1_COV_2",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-04T08:00:00+07:00",
+              "record_id": "P1_COV_3",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-10-02T08:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_T01",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-10-03T08:00:00+07:00",
+              "observed_at": "2026-10-03T08:00:00+07:00",
+              "record_id": "P1_T02",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-10-04T08:00:00+07:00",
+              "observed_at": "2026-10-04T08:00:00+07:00",
+              "record_id": "P1_T03",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 20,
+          "matched": true,
+          "name": "Thanh toán vượt tổng giá trị cùng hóa đơn",
+          "reason": null,
+          "rule_id": "P1",
+          "score": 20,
+          "source_checksum": "7e54c07e291f15808c63ad11d3b1a64dc2a4a5f9c9269c1b0d95e8a5658164d6",
+          "source_status": "ready",
+          "status": "evaluated_hit"
+        }
+      ]
+    },
+    {
+      "record_id": "P1_T04",
+      "revision": 1,
+      "event_at": "2026-10-05T01:00:00+00:00",
+      "as_of": "2026-10-05T01:00:00+00:00",
+      "rules": [
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Nhiều NCC chung thông tin định danh",
+          "reason": null,
+          "rule_id": "B5",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "evidence": {
+              "algorithm": "difflib.SequenceMatcher",
+              "matched_vendor_count": 0,
+              "threshold": 0.85,
+              "top_matches": []
+            },
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy cặp tên đủ ngưỡng trong các NCC nhìn thấy; không xác nhận đầy đủ master hoặc giao dịch hợp lệ.",
+            "scoring_role": "master_quality"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Tên NCC tương tự",
+          "reason": null,
+          "rule_id": "E3",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "NCC trùng định danh",
+          "reason": null,
+          "rule_id": "E4",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": false,
+          "details": {},
+          "evidence_refs": [],
+          "gaps": [],
+          "intrinsic_points": null,
+          "matched": null,
+          "name": "Thanh toán vượt tổng giá trị cùng hóa đơn",
+          "reason": {
+            "code": "rule_not_applicable",
+            "message": "Loại giao dịch ngoài phạm vi luật; không phải kết quả không trúng luật."
+          },
+          "rule_id": "P1",
+          "score": null,
+          "source_checksum": null,
+          "source_status": "not_applicable",
+          "status": "not_applicable"
+        }
+      ]
+    },
+    {
+      "record_id": "P1_T05",
+      "revision": 1,
+      "event_at": "2026-10-06T01:00:00+00:00",
+      "as_of": "2026-10-06T01:00:00+00:00",
+      "rules": [
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Nhiều NCC chung thông tin định danh",
+          "reason": null,
+          "rule_id": "B5",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "evidence": {
+              "algorithm": "difflib.SequenceMatcher",
+              "matched_vendor_count": 0,
+              "threshold": 0.85,
+              "top_matches": []
+            },
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy cặp tên đủ ngưỡng trong các NCC nhìn thấy; không xác nhận đầy đủ master hoặc giao dịch hợp lệ.",
+            "scoring_role": "master_quality"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Tên NCC tương tự",
+          "reason": null,
+          "rule_id": "E3",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "NCC trùng định danh",
+          "reason": null,
+          "rule_id": "E4",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "history_basis": "source_declared_complete_scope_not_independent_verification_of_external_books",
+            "invoice_checks": [
+              {
+                "cumulative_paid_vnd": 9000000,
+                "current_allocated_vnd": 1000000,
+                "current_allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T05",
+                    "revision": 1
+                  }
+                ],
+                "excess_vnd": 0,
+                "invoice_gross_vnd": 10000000,
+                "invoice_refs": [
+                  {
+                    "record_id": "P1_I_BASE",
+                    "revision": 1
+                  }
+                ],
+                "matched": false,
+                "normalized_invoice_number": "P1BASE",
+                "previous_payment": true,
+                "prior_allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T01",
+                    "revision": 1
+                  },
+                  {
+                    "record_id": "P1_A_P1_T02",
+                    "revision": 1
+                  },
+                  {
+                    "record_id": "P1_A_P1_T03",
+                    "revision": 1
+                  },
+                  {
+                    "record_id": "P1_A_P1_T04",
+                    "revision": 1
+                  }
+                ],
+                "prior_paid_vnd": 8000000,
+                "related_transaction_refs": [
+                  {
+                    "record_id": "P1_T01",
+                    "revision": 1
+                  },
+                  {
+                    "record_id": "P1_T02",
+                    "revision": 1
+                  },
+                  {
+                    "record_id": "P1_T03",
+                    "revision": 1
+                  },
+                  {
+                    "record_id": "P1_T04",
+                    "revision": 1
+                  }
+                ],
+                "simultaneous_allocation_refs": [],
+                "vendor_id": "V001"
+              }
+            ],
+            "row_policy": "strict_prior_plus_current; previous_payment_required; simultaneous_checks_do_not_contribute_to_row",
+            "simultaneous_checks": [],
+            "tolerance_vnd": 1,
+            "version": "p1-evaluation/1.0.0"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "P1_I_BASE",
+              "revision": 1,
+              "table": "invoices"
+            },
+            {
+              "effective_at": "2026-10-02T08:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_A_P1_T01",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-10-03T08:00:00+07:00",
+              "observed_at": "2026-10-03T08:00:00+07:00",
+              "record_id": "P1_A_P1_T02",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-10-04T08:00:00+07:00",
+              "observed_at": "2026-10-04T08:00:00+07:00",
+              "record_id": "P1_A_P1_T03",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-10-05T08:00:00+07:00",
+              "observed_at": "2026-10-05T08:00:00+07:00",
+              "record_id": "P1_A_P1_T04",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-10-06T08:00:00+07:00",
+              "observed_at": "2026-10-06T08:00:00+07:00",
+              "record_id": "P1_A_P1_T05",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_COV_1",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-03T08:00:00+07:00",
+              "record_id": "P1_COV_2",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-04T08:00:00+07:00",
+              "record_id": "P1_COV_3",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-05T08:00:00+07:00",
+              "record_id": "P1_COV_4",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-06T08:00:00+07:00",
+              "record_id": "P1_COV_5",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-10-02T08:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_T01",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-10-03T08:00:00+07:00",
+              "observed_at": "2026-10-03T08:00:00+07:00",
+              "record_id": "P1_T02",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-10-04T08:00:00+07:00",
+              "observed_at": "2026-10-04T08:00:00+07:00",
+              "record_id": "P1_T03",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-10-05T08:00:00+07:00",
+              "observed_at": "2026-10-05T08:00:00+07:00",
+              "record_id": "P1_T04",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-10-06T08:00:00+07:00",
+              "observed_at": "2026-10-06T08:00:00+07:00",
+              "record_id": "P1_T05",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Thanh toán vượt tổng giá trị cùng hóa đơn",
+          "reason": null,
+          "rule_id": "P1",
+          "score": 0,
+          "source_checksum": "1cc820b7c8664c3b9acf67a0313ebd173681a1aa2914e92d010a0dadf4394aa1",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        }
+      ]
+    },
+    {
+      "record_id": "P1_T06",
+      "revision": 1,
+      "event_at": "2026-10-07T01:00:00+00:00",
+      "as_of": "2026-10-07T01:00:00+00:00",
+      "rules": [
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Nhiều NCC chung thông tin định danh",
+          "reason": null,
+          "rule_id": "B5",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "evidence": {
+              "algorithm": "difflib.SequenceMatcher",
+              "matched_vendor_count": 0,
+              "threshold": 0.85,
+              "top_matches": []
+            },
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy cặp tên đủ ngưỡng trong các NCC nhìn thấy; không xác nhận đầy đủ master hoặc giao dịch hợp lệ.",
+            "scoring_role": "master_quality"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Tên NCC tương tự",
+          "reason": null,
+          "rule_id": "E3",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "NCC trùng định danh",
+          "reason": null,
+          "rule_id": "E4",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "history_basis": "source_declared_complete_scope_not_independent_verification_of_external_books",
+            "invoice_checks": [
+              {
+                "cumulative_paid_vnd": 4000000,
+                "current_allocated_vnd": 4000000,
+                "current_allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T06",
+                    "revision": 1
+                  }
+                ],
+                "excess_vnd": 0,
+                "invoice_gross_vnd": 6000000,
+                "invoice_refs": [
+                  {
+                    "record_id": "P1_I_GROUP",
+                    "revision": 1
+                  }
+                ],
+                "matched": false,
+                "normalized_invoice_number": "P1GROUP",
+                "previous_payment": false,
+                "prior_allocation_refs": [],
+                "prior_paid_vnd": 0,
+                "related_transaction_refs": [],
+                "simultaneous_allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T07",
+                    "revision": 1
+                  }
+                ],
+                "vendor_id": "V001"
+              }
+            ],
+            "row_policy": "strict_prior_plus_current; previous_payment_required; simultaneous_checks_do_not_contribute_to_row",
+            "simultaneous_checks": [
+              {
+                "allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T06",
+                    "revision": 1
+                  },
+                  {
+                    "record_id": "P1_A_P1_T07",
+                    "revision": 1
+                  }
+                ],
+                "as_of": "2026-10-07T01:00:00+00:00",
+                "company_id": "C001",
+                "cumulative_paid_vnd": 8000000,
+                "event_at": "2026-10-07T01:00:00+00:00",
+                "excess_vnd": 2000000,
+                "group_allocated_vnd": 8000000,
+                "group_id": "P1G_c09791015fb97b2ecb79885d",
+                "hard_trigger": 1,
+                "invoice_gross_vnd": 6000000,
+                "matched": true,
+                "normalized_invoice_number": "P1GROUP",
+                "points": 20,
+                "prior_allocation_refs": [],
+                "prior_paid_vnd": 0,
+                "rule_id": "P1",
+                "score_role": "group_only_not_row_contribution",
+                "tenant_id": "demo",
+                "transaction_refs": [
+                  {
+                    "record_id": "P1_T06",
+                    "revision": 1
+                  },
+                  {
+                    "record_id": "P1_T07",
+                    "revision": 1
+                  }
+                ],
+                "vendor_id": "V001"
+              }
+            ],
+            "tolerance_vnd": 1,
+            "version": "p1-evaluation/1.0.0"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "P1_I_GROUP",
+              "revision": 1,
+              "table": "invoices"
+            },
+            {
+              "effective_at": "2026-10-07T08:00:00+07:00",
+              "observed_at": "2026-10-07T08:00:00+07:00",
+              "record_id": "P1_A_P1_T06",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-10-07T08:00:00+07:00",
+              "observed_at": "2026-10-07T08:00:00+07:00",
+              "record_id": "P1_A_P1_T07",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_COV_1",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-03T08:00:00+07:00",
+              "record_id": "P1_COV_2",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-04T08:00:00+07:00",
+              "record_id": "P1_COV_3",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-05T08:00:00+07:00",
+              "record_id": "P1_COV_4",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-06T08:00:00+07:00",
+              "record_id": "P1_COV_5",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-07T08:00:00+07:00",
+              "record_id": "P1_COV_6",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-10-07T08:00:00+07:00",
+              "observed_at": "2026-10-07T08:00:00+07:00",
+              "record_id": "P1_T06",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-10-07T08:00:00+07:00",
+              "observed_at": "2026-10-07T08:00:00+07:00",
+              "record_id": "P1_T07",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Thanh toán vượt tổng giá trị cùng hóa đơn",
+          "reason": null,
+          "rule_id": "P1",
+          "score": 0,
+          "source_checksum": "5235ba478092225c01c58cc8fcdc84890cb91e732def7516d06eda1144bc1883",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        }
+      ]
+    },
+    {
+      "record_id": "P1_T07",
+      "revision": 1,
+      "event_at": "2026-10-07T01:00:00+00:00",
+      "as_of": "2026-10-07T01:00:00+00:00",
+      "rules": [
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Nhiều NCC chung thông tin định danh",
+          "reason": null,
+          "rule_id": "B5",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "evidence": {
+              "algorithm": "difflib.SequenceMatcher",
+              "matched_vendor_count": 0,
+              "threshold": 0.85,
+              "top_matches": []
+            },
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy cặp tên đủ ngưỡng trong các NCC nhìn thấy; không xác nhận đầy đủ master hoặc giao dịch hợp lệ.",
+            "scoring_role": "master_quality"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Tên NCC tương tự",
+          "reason": null,
+          "rule_id": "E3",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "NCC trùng định danh",
+          "reason": null,
+          "rule_id": "E4",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "history_basis": "source_declared_complete_scope_not_independent_verification_of_external_books",
+            "invoice_checks": [
+              {
+                "cumulative_paid_vnd": 4000000,
+                "current_allocated_vnd": 4000000,
+                "current_allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T07",
+                    "revision": 1
+                  }
+                ],
+                "excess_vnd": 0,
+                "invoice_gross_vnd": 6000000,
+                "invoice_refs": [
+                  {
+                    "record_id": "P1_I_GROUP",
+                    "revision": 1
+                  }
+                ],
+                "matched": false,
+                "normalized_invoice_number": "P1GROUP",
+                "previous_payment": false,
+                "prior_allocation_refs": [],
+                "prior_paid_vnd": 0,
+                "related_transaction_refs": [],
+                "simultaneous_allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T06",
+                    "revision": 1
+                  }
+                ],
+                "vendor_id": "V001"
+              }
+            ],
+            "row_policy": "strict_prior_plus_current; previous_payment_required; simultaneous_checks_do_not_contribute_to_row",
+            "simultaneous_checks": [
+              {
+                "allocation_refs": [
+                  {
+                    "record_id": "P1_A_P1_T06",
+                    "revision": 1
+                  },
+                  {
+                    "record_id": "P1_A_P1_T07",
+                    "revision": 1
+                  }
+                ],
+                "as_of": "2026-10-07T01:00:00+00:00",
+                "company_id": "C001",
+                "cumulative_paid_vnd": 8000000,
+                "event_at": "2026-10-07T01:00:00+00:00",
+                "excess_vnd": 2000000,
+                "group_allocated_vnd": 8000000,
+                "group_id": "P1G_c09791015fb97b2ecb79885d",
+                "hard_trigger": 1,
+                "invoice_gross_vnd": 6000000,
+                "matched": true,
+                "normalized_invoice_number": "P1GROUP",
+                "points": 20,
+                "prior_allocation_refs": [],
+                "prior_paid_vnd": 0,
+                "rule_id": "P1",
+                "score_role": "group_only_not_row_contribution",
+                "tenant_id": "demo",
+                "transaction_refs": [
+                  {
+                    "record_id": "P1_T06",
+                    "revision": 1
+                  },
+                  {
+                    "record_id": "P1_T07",
+                    "revision": 1
+                  }
+                ],
+                "vendor_id": "V001"
+              }
+            ],
+            "tolerance_vnd": 1,
+            "version": "p1-evaluation/1.0.0"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "P1_I_GROUP",
+              "revision": 1,
+              "table": "invoices"
+            },
+            {
+              "effective_at": "2026-10-07T08:00:00+07:00",
+              "observed_at": "2026-10-07T08:00:00+07:00",
+              "record_id": "P1_A_P1_T06",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-10-07T08:00:00+07:00",
+              "observed_at": "2026-10-07T08:00:00+07:00",
+              "record_id": "P1_A_P1_T07",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-02T08:00:00+07:00",
+              "record_id": "P1_COV_1",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-03T08:00:00+07:00",
+              "record_id": "P1_COV_2",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-04T08:00:00+07:00",
+              "record_id": "P1_COV_3",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-05T08:00:00+07:00",
+              "record_id": "P1_COV_4",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-06T08:00:00+07:00",
+              "record_id": "P1_COV_5",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-07T08:00:00+07:00",
+              "record_id": "P1_COV_6",
+              "revision": 1,
+              "table": "payment_history_coverage"
+            },
+            {
+              "effective_at": "2026-10-07T08:00:00+07:00",
+              "observed_at": "2026-10-07T08:00:00+07:00",
+              "record_id": "P1_T06",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-10-07T08:00:00+07:00",
+              "observed_at": "2026-10-07T08:00:00+07:00",
+              "record_id": "P1_T07",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Thanh toán vượt tổng giá trị cùng hóa đơn",
+          "reason": null,
+          "rule_id": "P1",
+          "score": 0,
+          "source_checksum": "d8ae44566039a2a140cca4242b4514094e9621cd1923d95af95c70f1167d19a6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        }
+      ]
+    },
+    {
+      "record_id": "P1_T08",
+      "revision": 1,
+      "event_at": "2026-10-08T01:00:00+00:00",
+      "as_of": "2026-10-08T01:00:00+00:00",
+      "rules": [
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Nhiều NCC chung thông tin định danh",
+          "reason": null,
+          "rule_id": "B5",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "evidence": {
+              "algorithm": "difflib.SequenceMatcher",
+              "matched_vendor_count": 0,
+              "threshold": 0.85,
+              "top_matches": []
+            },
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy cặp tên đủ ngưỡng trong các NCC nhìn thấy; không xác nhận đầy đủ master hoặc giao dịch hợp lệ.",
+            "scoring_role": "master_quality"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "Tên NCC tương tự",
+          "reason": null,
+          "rule_id": "E3",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": true,
+          "details": {
+            "aliases": [
+              "E4"
+            ],
+            "bank_comparison": "retained_untyped_account_token_not_verified_bank_identity",
+            "comparison_fields": [
+              "bank_account",
+              "phone",
+              "address"
+            ],
+            "evidence": {},
+            "hits": [],
+            "observed_other_vendor_count": 0,
+            "score_reason": "Không thấy thông tin trùng trong các NCC đã cung cấp; chưa xác nhận đầy đủ master ngoài snapshot.",
+            "scoring_role": "master_quality",
+            "source_rule_id": "B5"
+          },
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [],
+          "intrinsic_points": 0,
+          "matched": false,
+          "name": "NCC trùng định danh",
+          "reason": null,
+          "rule_id": "E4",
+          "score": 0,
+          "source_checksum": "a4144447936e5acfdc4c6c43e046d9cb59a505e86a28a986c9a4eb2c9734ece6",
+          "source_status": "ready",
+          "status": "evaluated_no_hit"
+        },
+        {
+          "available": false,
+          "details": {},
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "P1_I_GAP",
+              "revision": 1,
+              "table": "invoices"
+            },
+            {
+              "effective_at": "2026-10-08T08:00:00+07:00",
+              "observed_at": "2026-10-08T08:00:00+07:00",
+              "record_id": "P1_A_P1_T08",
+              "revision": 1,
+              "table": "payment_allocations"
+            },
+            {
+              "effective_at": "2026-10-08T08:00:00+07:00",
+              "observed_at": "2026-10-08T08:00:00+07:00",
+              "record_id": "P1_T08",
+              "revision": 1,
+              "table": "transactions"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "revision": 1,
+              "table": "vendors"
+            }
+          ],
+          "gaps": [
+            {
+              "action": "Bổ sung nguồn có định danh, phiên bản và thời điểm thực sự được biết; kiểm tra lại và tạo snapshot mới, không lùi observed_at.",
+              "code": "no_visible_source",
+              "field": "*",
+              "table": "payment_history_coverage"
+            },
+            {
+              "action": "Bổ sung nguồn hoặc khai báo phạm vi thực, xuất lại manifest và tạo snapshot mới; không tự suy kênh hoặc điền lịch sử thiếu bằng 0.",
+              "code": "p1_history_scope_missing",
+              "field": "invoice_refs",
+              "table": "payment_history_coverage"
+            }
+          ],
+          "intrinsic_points": null,
+          "matched": null,
+          "name": "Thanh toán vượt tổng giá trị cùng hóa đơn",
+          "reason": {
+            "code": "rule_sources_unavailable",
+            "message": "Chưa đủ nguồn để đánh giá luật; xem bảng/trường hoặc phiên bản tham chiếu cần bổ sung trong gaps."
+          },
+          "rule_id": "P1",
+          "score": null,
+          "source_checksum": "4ed817ed3beef75b6aec3dcdb7bdd72b4f1f2c3746c29d9ad9956ed2ed6d9b52",
+          "source_status": "unavailable",
+          "status": "unavailable"
+        }
+      ]
+    }
+  ]
+}

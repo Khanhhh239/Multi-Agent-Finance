@@ -1,0 +1,320 @@
+{
+  "spec_version": "2.1",
+  "tests": [
+    {
+      "id": "R0-01",
+      "stage": "R0",
+      "expected": "inventory đủ 6 nhóm luật/score/graph/ML/orchestrator/web",
+      "rules": [
+        "RULE-REUSE-01"
+      ]
+    },
+    {
+      "id": "R0-02",
+      "stage": "R0",
+      "expected": "100% module định giữ có path/hash/input/output/fit/side effects",
+      "rules": []
+    },
+    {
+      "id": "R0-03",
+      "stage": "R0",
+      "expected": "ghi command/version/exit code của baseline hoặc blocker tái hiện được",
+      "rules": []
+    },
+    {
+      "id": "R0-04",
+      "stage": "R0",
+      "expected": "map tất cả state cũ và xác nhận nguồn DOCX",
+      "rules": [
+        "RULE-TASK-01"
+      ]
+    },
+    {
+      "id": "R1-01",
+      "stage": "R1",
+      "expected": "cùng ID ở 2 DN không trộn",
+      "rules": []
+    },
+    {
+      "id": "R1-02",
+      "stage": "R1",
+      "expected": "chứng từ đến muộn không đổi feature as_of cũ",
+      "rules": [
+        "RULE-TIME-01"
+      ]
+    },
+    {
+      "id": "R1-03",
+      "stage": "R1",
+      "expected": "preview đổi file/mapping không commit bằng report cũ",
+      "rules": [
+        "RULE-IMPORT-01"
+      ]
+    },
+    {
+      "id": "R1-04",
+      "stage": "R1",
+      "expected": "retry import 10 lần vẫn một snapshot đã commit",
+      "rules": [
+        "RULE-IMPORT-01"
+      ]
+    },
+    {
+      "id": "R1-05",
+      "stage": "R1",
+      "expected": "âm điều chỉnh/thiếu history phân loại đúng; không âm thầm bỏ dòng",
+      "rules": []
+    },
+    {
+      "id": "R2-01",
+      "stage": "R2",
+      "expected": "luật/evidence discrete khớp baseline 100% với fixture giữ đúng",
+      "rules": [
+        "RULE-REUSE-01"
+      ]
+    },
+    {
+      "id": "R2-02",
+      "stage": "R2",
+      "expected": "float parity theo D-13 và artifact/seed cố định",
+      "rules": []
+    },
+    {
+      "id": "R2-03",
+      "stage": "R2",
+      "expected": "no-hit luật vẫn có score ML khả dụng",
+      "rules": [
+        "RULE-SCORE-01"
+      ]
+    },
+    {
+      "id": "R2-04",
+      "stage": "R2",
+      "expected": "thiếu artifact trả unavailable; spy xác nhận fit_calls=0 trong inference",
+      "rules": [
+        "RULE-FIT-01"
+      ]
+    },
+    {
+      "id": "R2-05",
+      "stage": "R2",
+      "expected": "fit job dùng lịch sử trước kỳ chấm, version/preprocess được lưu",
+      "rules": [
+        "RULE-FIT-01",
+        "RULE-TIME-01"
+      ]
+    },
+    {
+      "id": "R3-01",
+      "stage": "R3",
+      "expected": "3 giao dịch cùng nghĩa vụ thành 1 case, 2 nghĩa vụ độc lập vẫn 2 case",
+      "rules": [
+        "RULE-CASE-01"
+      ]
+    },
+    {
+      "id": "R3-02",
+      "stage": "R3",
+      "expected": "evidence không bị tính như candidate",
+      "rules": []
+    },
+    {
+      "id": "R3-03",
+      "stage": "R3",
+      "expected": "B=3 fixture với 5 vụ đạt chỉ chọn 3; 0 đạt gửi 0",
+      "rules": []
+    },
+    {
+      "id": "R3-04",
+      "stage": "R3",
+      "expected": "10 retry và ít nhất 2 worker đồng thời không trùng/vượt budget",
+      "rules": [
+        "RULE-CASE-01"
+      ]
+    },
+    {
+      "id": "R3-05",
+      "stage": "R3",
+      "expected": "shadow active_delivery=0 và không tiêu budget active",
+      "rules": []
+    },
+    {
+      "id": "R4-01",
+      "stage": "R4",
+      "expected": "50+70 cho nghĩa vụ 120 matched; 120+120 cho 120 excess=120",
+      "rules": [
+        "RULE-MONEY-01"
+      ]
+    },
+    {
+      "id": "R4-02",
+      "stage": "R4",
+      "expected": "hoàn/hủy/allocation nhiều-nhiều tính đúng và không cộng trùng",
+      "rules": [
+        "RULE-MONEY-01"
+      ]
+    },
+    {
+      "id": "R4-03",
+      "stage": "R4",
+      "expected": "missing/unknown hồ sơ phân biệt; không tự tạo y",
+      "rules": [
+        "RULE-LABEL-01"
+      ]
+    },
+    {
+      "id": "R4-04",
+      "stage": "R4",
+      "expected": "đóng case không tự đóng task; complete thiếu evidence bị chặn",
+      "rules": []
+    },
+    {
+      "id": "R4-05",
+      "stage": "R4",
+      "expected": "report tách related/discrepancy/loss/recovered, unknown=null",
+      "rules": [
+        "RULE-MONEY-01"
+      ]
+    },
+    {
+      "id": "R5-01",
+      "stage": "R5",
+      "expected": "accountant gọi API config trực tiếp bị từ chối",
+      "rules": []
+    },
+    {
+      "id": "R5-02",
+      "stage": "R5",
+      "expected": "đổi company/case/import/file ID không vượt tenant",
+      "rules": [
+        "RULE-TENANT-01"
+      ]
+    },
+    {
+      "id": "R5-03",
+      "stage": "R5",
+      "expected": "DTO/export kế toán không chứa algorithm/weights/hyperparameters",
+      "rules": [
+        "RULE-UI-01"
+      ]
+    },
+    {
+      "id": "R5-04",
+      "stage": "R5",
+      "expected": "hai UI cùng snapshot cho cùng số liệu nghiệp vụ",
+      "rules": [
+        "RULE-UI-01"
+      ]
+    },
+    {
+      "id": "R5-05",
+      "stage": "R5",
+      "expected": "config draft không đổi active; label approval độc lập case resolution",
+      "rules": []
+    },
+    {
+      "id": "R6-01",
+      "stage": "R6",
+      "expected": "toàn bộ R1–R5 mandatory cases pass, skip=0",
+      "rules": []
+    },
+    {
+      "id": "R6-02",
+      "stage": "R6",
+      "expected": "báo cáo baseline/candidate cùng snapshot, budget và kết luận",
+      "rules": []
+    },
+    {
+      "id": "R6-03",
+      "stage": "R6",
+      "expected": "rollback giữ toàn bộ review/task/audit và không double-send",
+      "rules": [
+        "RULE-RELEASE-01"
+      ]
+    },
+    {
+      "id": "R6-04",
+      "stage": "R6",
+      "expected": "drift/fallback/backlog có metric và trigger kiểm chứng",
+      "rules": []
+    },
+    {
+      "id": "R6-05",
+      "stage": "R6",
+      "expected": "D-09 đóng trước test; thiếu nhãn/gate thì active BLOCKED",
+      "rules": []
+    },
+    {
+      "id": "R1-06",
+      "stage": "R1",
+      "expected": "Cùng timestamp: 2 khoản đồng thời đều dùng lịch sử trước nhóm, replay đảo thứ tự không đổi feature",
+      "rules": [
+        "RULE-TIME-01"
+      ]
+    },
+    {
+      "id": "R1-07",
+      "stage": "R1",
+      "expected": "User DN A gọi import/preview/commit/snapshot của B bị từ chối ở API; 0 record B trả về",
+      "rules": [
+        "RULE-TENANT-01"
+      ]
+    },
+    {
+      "id": "R2-06",
+      "stage": "R2",
+      "expected": "Thêm batch test cực trị không đổi reference_version/hash; score thiếu là null và available=false",
+      "rules": [
+        "RULE-SCORE-01"
+      ]
+    },
+    {
+      "id": "R2-07",
+      "stage": "R2",
+      "expected": "5 giao dịch đầu vào, mọi adapter trả 5 kết quả kể cả unavailable; không top-K nội bộ",
+      "rules": [
+        "RULE-SCORE-01"
+      ]
+    },
+    {
+      "id": "R4-06",
+      "stage": "R4",
+      "expected": "User DN A không đọc/sửa task/report/export của B; 0 dữ liệu B trong response",
+      "rules": [
+        "RULE-TENANT-01"
+      ]
+    },
+    {
+      "id": "R5-06",
+      "stage": "R5",
+      "expected": "Director không gọi được admin nền tảng hoặc đọc secret key nhờ role DN",
+      "rules": [
+        "RULE-TENANT-01"
+      ]
+    },
+    {
+      "id": "R5-07",
+      "stage": "R5",
+      "expected": "Phản hồi kế toán pending chưa eligible train; approved revision mới đủ điều kiện",
+      "rules": [
+        "RULE-LABEL-01"
+      ]
+    },
+    {
+      "id": "R5-08",
+      "stage": "R5",
+      "expected": "Config edit/approve/activate lưu actor, reason, timestamp và old/new revision; thiếu reason bị chặn",
+      "rules": [
+        "RULE-RELEASE-01"
+      ]
+    },
+    {
+      "id": "R6-06",
+      "stage": "R6",
+      "expected": "Backend HE mock/plaintext không được khai báo production HE và không upload raw khi cấu hình ciphertext-only",
+      "rules": [
+        "RULE-HE-01"
+      ]
+    }
+  ]
+}

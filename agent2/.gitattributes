@@ -1,3 +1,0 @@
-# Preserve the exact bytes pinned by the vendor and fixture manifests.
-review_ui/vendor/* -text
-tests/fixtures/*.json -text

@@ -1,0 +1,9 @@
+{
+  "id": "FLOW-02",
+  "status": "not_present",
+  "observed": "Frozen 5-row probes and retained-core tests return 5 outputs for every model; old benchmark top-k is not inside the detector.",
+  "blocker": null,
+  "baseline": "before_tests.log",
+  "candidate": "after_tests.log",
+  "scope": "R0 inventory; not R1-R6 acceptance"
+}

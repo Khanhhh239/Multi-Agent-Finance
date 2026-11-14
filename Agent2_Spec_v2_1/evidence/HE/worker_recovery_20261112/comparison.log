@@ -1,0 +1,9 @@
+{"company": "C001", "phase": "scores", "max_abs_error": 1.4408997899284515e-06, "plaintext_ms": 119.65140000393149, "he_ms": 2175.8944999892265}
+{"company": "C002", "phase": "scores", "max_abs_error": 1.44443308092157e-06, "plaintext_ms": 109.82290000538342, "he_ms": 2024.7800000070129}
+{"company_id": "C001", "mode": "disconnect_before_claim", "injection_confirmed": true, "recovered": true, "phase": "completed", "reason": null}
+{"company_id": "C001", "mode": "controlled_restart_during_compute", "injection_confirmed": true, "recovered": true, "phase": "completed", "reason": null}
+{"company_id": "C001", "mode": "hard_crash_during_compute", "injection_confirmed": true, "recovered": true, "phase": "completed", "reason": null}
+{"company_id": "C002", "mode": "disconnect_before_claim", "injection_confirmed": true, "recovered": true, "phase": "completed", "reason": null}
+{"company_id": "C002", "mode": "controlled_restart_during_compute", "injection_confirmed": true, "recovered": true, "phase": "completed", "reason": null}
+{"company_id": "C002", "mode": "hard_crash_during_compute", "injection_confirmed": true, "recovered": true, "phase": "completed", "reason": null}
+{"status": "passed", "score_parity": true, "full_recovery": true, "output": "D:\\agent22\\Agent2_Spec_v2_1\\evidence\\HE\\worker_recovery_20261112\\comparison"}

@@ -51,8 +51,12 @@ from xml.etree import ElementTree
 
 if __package__:
     from . import bank_intake
+    from . import agent2_bridge
+    from .agent2_runtime import Runtime as Agent2Runtime, stop_owned
 else:
     import bank_intake
+    import agent2_bridge
+    from agent2_runtime import Runtime as Agent2Runtime, stop_owned
 
 ROOT = Path(__file__).resolve().parent.parent
 PORTAL = ROOT / 'portal'
@@ -84,6 +88,9 @@ for folder in (PENDING, LOGS):
 LOCK = threading.RLock()
 AGENT4_TOKEN = secrets.token_urlsafe(24)          # lives only as long as this shell; the chat never sees it
 AGENT3_TOKEN = secrets.token_urlsafe(32)          # backend bridge only; never returned in portal state
+AGENT2_TOKEN = secrets.token_urlsafe(32)          # introspection channel only, never a user credential
+HE_RUNTIME = None
+HE_RUNTIME_SETTINGS = None
 
 
 def path_of(value, default):
@@ -238,12 +245,13 @@ def launch_spec(aid):
     elif aid == 'agent2':
         a = agent_cfg(aid)
         run = root / '.runtime' / 'platform'
-        cmd = ['-B', '-m', 'sme_fraud.review_server',
-               '--data-root', str(path_of(a.get('data_root'), run / 'data')),
-               '--reports-root', str(path_of(a.get('reports_root'), run / 'reports')),
-               '--database', str(path_of(a.get('database'), run / 'review.sqlite3')),
-               '--port', str(port), '--qa', '--demo-ml-manager']
-        env.update(SOSOAT_FRAME_ANCESTORS=' '.join(ORIGINS), PYTHONDONTWRITEBYTECODE='1')
+        cmd = ['-B', '-m', 'sme_fraud.review_server', '--port', str(port),
+               '--snapshot-db', str(path_of(a.get('snapshot_db'), run / 'snapshots-v2.sqlite3')),
+               '--model-db', str(path_of(a.get('model_db'), run / 'models-v2.sqlite3')),
+               '--analysis-bindings', str(path_of(a.get('analysis_bindings'), run / 'analysis-bindings.json')),
+               '--portal-url', ORIGIN]
+        env.update(SOSOAT_FRAME_ANCESTORS=' '.join(ORIGINS), PYTHONDONTWRITEBYTECODE='1',
+                   AGENT2_PORTAL_BRIDGE_SECRET=AGENT2_TOKEN)
     elif aid == 'agent3':
         cmd = ['-m', 'src.assistant.web']
         env.update(AGENT3_PORT=str(port))
@@ -252,6 +260,9 @@ def launch_spec(aid):
         env.update(AGENT4_DEMO_TOKEN=AGENT4_TOKEN)
     env.update({k: str(path_of(v, v)) if k.endswith(('_DIR', '_STORE', 'WORKSPACES')) else str(v)
                 for k, v in agent_cfg(aid).get('env', {}).items()})
+    if aid == 'agent2':
+        # Operator env cannot accidentally overwrite the live bridge binding.
+        env.update(AGENT2_PORTAL_BRIDGE_SECRET=AGENT2_TOKEN, AGENT2_PORTAL_URL=ORIGIN)
     if aid == 'agent3':
         env.update(AGENT3_COMPANY_PROFILE_FILE=str(COMPANY_FILE), AGENT3_PORTAL_URL=ORIGIN,
                    AGENT3_PLATFORM_TOKEN=AGENT3_TOKEN,
@@ -273,6 +284,41 @@ def health(aid):
         return False
 
 
+def _he_runtime(env=None):
+    global HE_RUNTIME, HE_RUNTIME_SETTINGS
+    env=env or launch_spec('agent2')[2]
+    node,bindings=env.get('AGENT2_HE_NODE_CONFIG'),env.get('AGENT2_HE_BINDINGS')
+    if not node and not bindings:return None
+    worker=agent_cfg('agent2').get('he_worker')
+    if not node or not bindings or not isinstance(worker,dict):
+        raise ValueError('Chưa cấu hình bộ xử lý đi cùng Agent2. Người quản lý cần kiểm tra he_worker.')
+    worker=dict(worker)
+    for name in ('bundle','config'):
+        if name in worker:worker[name]=str(path_of(worker[name],worker[name]).resolve())
+    he4=env.get('AGENT2_HE4_CONFIG');he4_worker=agent_cfg('agent2').get('he4_worker')
+    if bool(he4)!=bool(he4_worker):raise ValueError('Cần cấu hình đồng thời node và worker bốn nhánh.')
+    if he4_worker:
+        he4_worker=dict(he4_worker)
+        for name in ('bundle','config'):
+            if name in he4_worker:he4_worker[name]=str(path_of(he4_worker[name],he4_worker[name]).resolve())
+        he4=str(path_of(he4,he4).resolve())
+    settings=(agent_python('agent2'),str(agent_root('agent2')),str(path_of(node,node).resolve()),str(path_of(bindings,bindings).resolve()),json.dumps(worker,sort_keys=True),str(LOGS),he4,json.dumps(he4_worker,sort_keys=True))
+    if HE_RUNTIME is None or HE_RUNTIME_SETTINGS!=settings:
+        if HE_RUNTIME is not None and HE_RUNTIME.state()['owned']:
+            raise ValueError('Cấu hình phân tích đã đổi. Tắt Agent2 trước khi áp dụng cấu hình mới.')
+        HE_RUNTIME=Agent2Runtime(settings[0],settings[1],settings[2],settings[3],worker,LOGS)
+        if he4_worker:
+            try:from .agent2_he4_runtime import LinuxRuntime,CombinedRuntime
+            except ImportError:from agent2_he4_runtime import LinuxRuntime,CombinedRuntime
+            HE_RUNTIME=CombinedRuntime(HE_RUNTIME,LinuxRuntime(he4_worker,settings[1],settings[2],he4,settings[0],LOGS))
+        HE_RUNTIME_SETTINGS=settings
+    return HE_RUNTIME
+
+
+def he_runtime(env=None):
+    with LOCK:return _he_runtime(env)
+
+
 def agent_state(aid):
     proc = PROCS.get(aid)
     owned = proc is not None and proc.poll() is None
@@ -287,16 +333,31 @@ def agent_state(aid):
         state = 'stopped'
     info = AGENTS[aid]
     url = agent_url(aid, info['page']) if info['page'] else '/agent4/'
+    if aid == 'agent2':url = '/agent2/'
     if aid == 'agent3' and (workspace := agent3_workspace()):
         url += '#/?dn=' + quote(workspace)
-    return dict(id=aid, number=int(aid[-1]), name=info['name'], summary=info['summary'], state=state, owned=owned,
+    value = dict(id=aid, number=int(aid[-1]), name=info['name'], summary=info['summary'], state=state, owned=owned,
                 port=agent_port(aid), url=url,
                 root=str(agent_root(aid)), log=f'/api/agents/{aid}/log',
                 exit_code=(proc.returncode if proc is not None and proc.poll() is not None else None))
+    if aid=='agent2':
+        try:
+            runtime=he_runtime()
+            if runtime:value['dependency']=runtime.state()
+        except ValueError as error:value['dependency']=dict(status='unavailable',owned=False,can_recover=False,message=str(error))
+    return value
 
 
 def start_agent(aid):
     with LOCK:
+        runtime=None
+        if aid=='agent2':
+            runtime=he_runtime()
+            if runtime:
+                existing=PROCS.get(aid)
+                if port_open(agent_port(aid)) and (existing is None or existing.poll() is not None):
+                    raise ValueError('Agent2 đang chạy ngoài phiên Portal này. Người quản lý cần kiểm tra trước khi bật.')
+                runtime.start()
         if agent_state(aid)['state'] in ('running', 'starting'):
             return agent_state(aid)
         if port_open(agent_port(aid)):
@@ -305,18 +366,35 @@ def start_agent(aid):
         if not Path(cmd[0]).exists():
             raise ValueError(f'Không thấy Python cho {aid}: {cmd[0]}. Khai báo "python" trong portal/config.local.json.')
         LOGS.mkdir(parents=True, exist_ok=True)
-        log = open(LOGS / f'{aid}.log', 'ab')
-        log.write(f'\n--- {time.strftime("%Y-%m-%d %H:%M:%S")} {" ".join(cmd)}\n'.encode())
-        log.flush()
-        flags = subprocess.CREATE_NEW_PROCESS_GROUP if os.name == 'nt' else 0
-        PROCS[aid] = subprocess.Popen(cmd, cwd=cwd, env=env, stdout=log, stderr=subprocess.STDOUT,
-                                      stdin=subprocess.DEVNULL, creationflags=flags)
+        try:
+            with open(LOGS / f'{aid}.log', 'ab') as log:
+                log.write(f'\n--- {time.strftime("%Y-%m-%d %H:%M:%S")} {" ".join(cmd)}\n'.encode());log.flush()
+                flags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
+                PROCS[aid] = subprocess.Popen(cmd, cwd=cwd, env=env, stdout=log, stderr=subprocess.STDOUT,
+                                              stdin=subprocess.DEVNULL, creationflags=flags)
+            if runtime:
+                deadline=time.monotonic()+30
+                while time.monotonic()<deadline:
+                    if PROCS[aid].poll() is not None:
+                        raise ValueError('Agent2 chưa mở được khóa hoặc kho phiên. Người quản lý cần kiểm tra nhật ký; dữ liệu cũ được giữ nguyên.')
+                    if health(aid):break
+                    time.sleep(.1)
+                else:raise ValueError('Agent2 chưa sẵn sàng. Thử bật lại sau khi kiểm tra kết nối.')
+        except Exception:
+            if runtime:
+                stop_owned(PROCS.pop(aid,None));runtime.stop()
+            raise
         return agent_state(aid)
 
 
 def stop_agent(aid):
     with LOCK:
         proc = PROCS.pop(aid, None)
+        runtime=HE_RUNTIME if aid=='agent2' else None
+        if aid=='agent2' and (proc is not None or runtime is not None and runtime.process is not None):
+            stop_owned(proc)
+            if runtime:runtime.stop()
+            return agent_state(aid)
         if proc is None or proc.poll() is not None:
             raise ValueError('Portal không khởi động agent này nên không dừng nó.')
         if os.name == 'nt':
@@ -336,6 +414,7 @@ def stop_all():
             stop_agent(aid)
         except ValueError:
             pass
+    if HE_RUNTIME is not None:HE_RUNTIME.stop()
 
 
 def agent1_key():
@@ -1300,7 +1379,10 @@ class Handler(BaseHTTPRequestHandler):
         for k, v in (extra or {}).items():
             self.send_header(k, v)
         self.end_headers()
-        self.wfile.write(body)
+        try:
+            self.wfile.write(body)
+        except (BrokenPipeError,ConnectionResetError,ConnectionAbortedError):
+            pass  # The client may leave while an authorization reply is sent.
 
     def static(self, folder, rel):
         target = (folder / (rel or 'index.html')).resolve()
@@ -1337,9 +1419,73 @@ class Handler(BaseHTTPRequestHandler):
         if not session_left(self.token()):
             raise AuthError('Cần mở khóa nạp dữ liệu bằng mật khẩu.')
 
+    def agent2_host(self):
+        port = self.server.server_port
+        if self.headers.get_all('Host',[]) not in ([f'127.0.0.1:{port}'],[f'localhost:{port}']):
+            raise PermissionError('Địa chỉ Portal không hợp lệ.')
+
+    def agent2_identity(self):
+        self.agent2_host()
+        values = self.headers.get_all('Authorization',[])
+        if self.headers.get_all('Origin',[]) or len(values)!=1 or not hmac.compare_digest(values[0],'Bearer '+AGENT2_TOKEN):
+            raise PermissionError('Kênh xác minh Agent2 không được phép.')
+        if self.headers.get('Content-Type') != 'application/json':raise ValueError('Cần JSON.')
+        body = json.loads(self.body(4096))
+        if not isinstance(body,dict) or set(body)!={'session'} or not isinstance(body['session'],str) or not re.fullmatch(r'[A-Za-z0-9_-]{32,128}',body['session']):
+            raise AuthError('Phiên Portal không hợp lệ.')
+        token = body['session']
+        with LOCK:
+            if not session_left(token,touch=False):raise AuthError('Phiên Portal đã khóa hoặc hết hạn.')
+            expires_at = SESSIONS[token]
+        access = path_of(agent_cfg('agent2').get('access_file'),WORK/'agent2_access.json')
+        return self.send(200,agent2_bridge.identity(access,expires_at))
+
+    def agent2_proxy(self, method, path, query):
+        self.agent2_host()
+        if query or not agent2_bridge.allowed_path(path):return self.send(404,{'error':'Đường dẫn Agent2 không được hỗ trợ.'})
+        public = method=='GET' and path in agent2_bridge.PUBLIC
+        headers = {}
+        if not public:
+            self.guard()
+            if len(self.headers.get_all('X-Session',[]))!=1:raise AuthError('Cần đăng nhập Portal để mở Agent2.')
+            if not session_left(self.token(),touch=method!='GET'):raise AuthError('Cần đăng nhập Portal để mở Agent2.')
+            # Strip browser Authorization/role/tenant assertions. Only the validated Portal session is forwarded.
+            headers['Authorization'] = 'Bearer '+self.token()
+        raw = None
+        if method in ('POST','PUT'):
+            if self.headers.get_all('Transfer-Encoding',[]):raise ValueError('Không nhận body truyền từng phần.')
+            sizes = self.headers.get_all('Content-Length',[])
+            if len(sizes)!=1 or not re.fullmatch(r'[0-9]{1,12}',sizes[0]):raise ValueError('Thiếu kích thước dữ liệu hợp lệ.')
+            self.connection.settimeout(10)
+            raw = self.body(10*1024*1024)
+            if len(raw)!=int(sizes[0]):raise ValueError('Tệp truyền chưa đầy đủ.')
+            for name in ('Content-Type','Idempotency-Key','X-File-Name','X-Expected-Revision','Content-Encoding'):
+                values = self.headers.get_all(name,[])
+                if len(values)>1:raise ValueError('Tiêu đề yêu cầu bị lặp.')
+                if values:headers[name]=values[0]
+        request = Request(agent_url('agent2',path),data=raw,headers=headers,method=method)
+        try:
+            try:response = agent2_bridge.open_backend(request)
+            except HTTPError as error:response = error
+            with response:
+                content = response.read(6*1024*1024+1)
+                status,mime = response.code,response.headers.get('Content-Type','application/json; charset=utf-8')
+            if len(content)>6*1024*1024:raise ValueError('Phản hồi Agent2 vượt giới hạn.')
+        except (URLError,OSError):
+            return self.send(503,{'error':'Chưa kết nối được Agent2. Bật Agent2 từ Portal rồi thử lại.'})
+        # Recheck after downstream work; no partial response after logout/revocation.
+        if not public:
+            if not session_left(self.token(),touch=False):raise AuthError('Phiên Portal đã khóa hoặc hết hạn.')
+        return self.send(status,content,mime)
+
     def route(self, method):
         url = urlsplit(self.path)
         path, query = url.path, {k: v[-1] for k, v in parse_qs(url.query).items()}
+        if path == '/api/internal/agent2/identity':
+            if method!='POST' or url.query:return self.send(405,{'error':'Phương thức không được hỗ trợ.'})
+            return self.agent2_identity()
+        if path.startswith('/agent2/'):
+            return self.agent2_proxy(method,path[len('/agent2'):],url.query)
         if method == 'GET':
             if path == '/api/state':
                 left = session_left(self.token(), touch=False)
@@ -1422,6 +1568,9 @@ class Handler(BaseHTTPRequestHandler):
             if not password:
                 raise ValueError('Nhập mật khẩu quản trị Agent 3.')
             return self.send(200, ensure_agent3_workspace(password))
+        if method=='POST' and path=='/api/agents/agent2/recover':
+            self.need_session()
+            return self.send(200,start_agent('agent2'))
         m = re.fullmatch(r'/api/agents/(agent[1-4])/(start|stop)', path)
         if method == 'POST' and m:
             aid, action = m.groups()
@@ -1469,6 +1618,8 @@ class Handler(BaseHTTPRequestHandler):
                 self.route(method)
         except AuthError as e:
             self.send(401, {'error': str(e), 'locked': True})
+        except agent2_bridge.BridgeError as e:
+            self.send(e.status, {'error': str(e)})
         except PermissionError as e:
             self.send(403, {'error': str(e)})
         except (ValueError, KeyError) as e:
@@ -1490,10 +1641,11 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     autostart = '--start-all' in sys.argv
+    start_agent2 = '--start-agent2' in sys.argv
     server = ThreadingHTTPServer((HOST, CFG['port']), Handler)
     print(f'Portal: {ORIGIN} (Ctrl+C to stop the portal and its agents)', flush=True)
-    if autostart:
-        for aid in AGENTS:
+    if autostart or start_agent2:
+        for aid in (AGENTS if autostart else ('agent2',)):
             try:
                 start_agent(aid)
             except ValueError as e:

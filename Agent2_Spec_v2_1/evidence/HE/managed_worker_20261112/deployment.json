@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "portal_url": "http://127.0.0.1:8800",
+  "node_url": "http://127.0.0.1:8766",
+  "worker_url": "http://127.0.0.1:8868",
+  "start_verified": true,
+  "stop_closes_both_owned_ports": true,
+  "restart_verified": true,
+  "worker_owned_by_portal": true,
+  "worker_ready": "ready",
+  "models_keys_password_old_data_unchanged": true,
+  "agent1_restarted": false,
+  "elapsed_seconds": 23.109,
+  "requires_user_relogin_after_portal_restart": true
+}

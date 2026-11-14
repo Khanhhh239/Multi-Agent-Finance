@@ -1,0 +1,35 @@
+{
+  "spec_version": "2.1",
+  "stage": "R0",
+  "run_id": "38b09cea-e99d-4348-ae4e-5312e6e4ad4c",
+  "tests": [
+    {
+      "id": "R0-01",
+      "status": "pass",
+      "expected": "inventory đủ 6 nhóm luật/score/graph/ML/orchestrator/web",
+      "observed": "122 module inventory rows cover six required groups and additional dependencies.",
+      "evidence_path": "inventory.csv"
+    },
+    {
+      "id": "R0-02",
+      "status": "pass",
+      "expected": "100% module định giữ có path/hash/input/output/fit/side effects",
+      "observed": "35 retained/replaced core rows have actual path/hash/input/output/fit/side effects. Archive verified for 3173 files; parity tests passed.",
+      "evidence_path": "archive_verification.json"
+    },
+    {
+      "id": "R0-03",
+      "status": "pass",
+      "expected": "ghi command/version/exit code của baseline hoặc blocker tái hiện được",
+      "observed": "Before 357 tests; candidate 363 tests; both exit 0, skip 0, versions and commands recorded.",
+      "evidence_path": "baseline.json"
+    },
+    {
+      "id": "R0-04",
+      "status": "pass",
+      "expected": "map tất cả state cũ và xác nhận nguồn DOCX",
+      "observed": "58 migration mappings preserve legacy states without implicit labels; DOCX hash/text checked; named human owner/approval still pending.",
+      "evidence_path": "source_audit.json"
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "tests": [
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_exact_cutoff_is_inclusive_and_one_second_late_is_not",
+      "status": "pass",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_exact_cutoff_is_inclusive_and_one_second_late_is_not"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_future_invoice_values_do_not_change_prior_P1_outputs",
+      "status": "pass",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_future_invoice_values_do_not_change_prior_P1_outputs"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_future_issue_date_blocks_even_when_observation_is_known",
+      "status": "pass",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_future_issue_date_blocks_even_when_observation_is_known"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_known_batch_still_has_twenty_group_points_and_zero_row_points",
+      "status": "pass",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_known_batch_still_has_twenty_group_points_and_zero_row_points"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_late_invoice_observation_is_a_gap_not_twenty_points",
+      "status": "pass",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_late_invoice_observation_is_a_gap_not_twenty_points"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_later_transaction_does_not_rewrite_old_gap",
+      "status": "pass",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_later_transaction_does_not_rewrite_old_gap"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_timestamp_offsets_are_compared_as_instants",
+      "status": "fail",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_timestamp_offsets_are_compared_as_instants"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_two_unknown_current_invoices_cannot_create_batch_risk",
+      "status": "pass",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_two_unknown_current_invoices_cannot_create_batch_risk"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_unavailable_historical_invoice_does_not_enter_current_total",
+      "status": "pass",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_unavailable_historical_invoice_does_not_enter_current_total"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_unavailable_history_makes_batch_gap_without_partial_risk_total",
+      "status": "pass",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_unavailable_history_makes_batch_gap_without_partial_risk_total"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_blank_invoice_numbers_are_information_gaps_not_shared_invoices",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_blank_invoice_numbers_are_information_gaps_not_shared_invoices"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_cash_and_bank_payments_consume_the_same_invoice_cap",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_cash_and_bank_payments_consume_the_same_invoice_cap"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_cash_installments_up_to_invoice_total_are_not_overpayments",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_cash_installments_up_to_invoice_total_are_not_overpayments"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_cash_overpayment_without_recipient_account_uses_all_history",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_cash_overpayment_without_recipient_account_uses_all_history"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_different_erp_ids_cannot_hide_the_same_invoice",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_different_erp_ids_cannot_hide_the_same_invoice"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_different_vendors_do_not_share_an_invoice_cap",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_different_vendors_do_not_share_an_invoice_cap"
+    },
+    {
+      "id": "test_p1_payments.InvoicePaymentTest.test_future_cash_payment_does_not_rewrite_an_earlier_result",
+      "status": "pass",
+      "testcase": "test_p1_payments.InvoicePaymentTest.test_future_cash_payment_does_not_rewrite_an_earlier_result"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_batch_installment_exception_is_retained_once_in_diagnostics",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_batch_installment_exception_is_retained_once_in_diagnostics"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_bound_installment_exceptions_are_not_filtered_out",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_bound_installment_exceptions_are_not_filtered_out"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_callback_known_later_preserves_before_and_after_results",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_callback_known_later_preserves_before_and_after_results"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_explicit_authority_matrix_keeps_permitted_exception",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_explicit_authority_matrix_keeps_permitted_exception"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_five_default_rows_include_zero_scores",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_five_default_rows_include_zero_scores"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_foreign_diagnostics_and_out_of_input_batch_participants_are_rejected",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_foreign_diagnostics_and_out_of_input_batch_participants_are_rejected"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_input_permutation_and_duplicate_ids_are_not_silent_row_filters",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_input_permutation_and_duplicate_ids_are_not_silent_row_filters"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_missing_one_engine_row_returns_five_results_and_one_unavailable",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_missing_one_engine_row_returns_five_results_and_one_unavailable"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_paid_leave_keeps_hr_exception_evidence",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_paid_leave_keeps_hr_exception_evidence"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_pinned_legacy_profile_is_compared_without_switching_to_defaults",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_pinned_legacy_profile_is_compared_without_switching_to_defaults"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_returned_objects_do_not_alias_input_engine_output",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_returned_objects_do_not_alias_input_engine_output"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_self_approval_alert_and_lawful_exception_both_survive",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_self_approval_alert_and_lawful_exception_both_survive"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_simultaneous_invoice_warning_is_retained_as_batch_evidence",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_simultaneous_invoice_warning_is_retained_as_batch_evidence"
+    }
+  ],
+  "count": 30,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 1
+}

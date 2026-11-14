@@ -1,0 +1,200 @@
+{
+  "version": "vendor-identity-snapshot-evidence/1.0.0",
+  "status": "READY_FOR_REVIEW",
+  "date": "2026-11-14",
+  "technical_only": true,
+  "source_contract": "1.2.0",
+  "default_source_contract": "1.1.0",
+  "canonical_supported": [
+    "P1",
+    "E3",
+    "B5",
+    "E4"
+  ],
+  "he_rules_supported": [
+    "P1"
+  ],
+  "unchanged_from_cr047": [
+    {
+      "path": "agent2/sme_fraud/rules.py",
+      "sha256": "a975e11bf31a67ba2b0a0a5cb548cab6bbe932084befce49f2d83abe53b3f9e1"
+    },
+    {
+      "path": "agent2/sme_fraud/snapshot_features.py",
+      "sha256": "a0c0b1f67e134ffcd398770658a4cd81bc207914969dd2a5a054b7c5a0b45cad"
+    },
+    {
+      "path": "agent2/sme_fraud/p1_inputs.py",
+      "sha256": "5a0262e7d4648387a76a918a9de192800d37ef65f4f34b73d87c146ab20952b2"
+    },
+    {
+      "path": "agent2/sme_fraud/p1_evaluation.py",
+      "sha256": "3ff366959d15bd32a78ce7717c372e43ca094688dc8e6b428b97a6bb872d92d0"
+    },
+    {
+      "path": "agent2/sme_fraud/authority_policy.py",
+      "sha256": "e2471d7606b7536b6008879cacb0264a7c417aa0b792de1aa0a1b0afaa0d9202"
+    },
+    {
+      "path": "agent2/sme_fraud/evidence_policy.py",
+      "sha256": "e857775c1ae770ead1549f31e76471c5b6ae97e4a06b3c8f50c9f5740906a9dd"
+    },
+    {
+      "path": "agent2/sme_fraud/exception_validation.py",
+      "sha256": "9c61efc9ec35746f00cad5c09e9abe083f8ee1cbee63a88fb55c88403d65dcdc"
+    },
+    {
+      "path": "agent2/sme_fraud/tax_risk.py",
+      "sha256": "787bd479c4915e42e9e6b0a7d5dc15953543b872c60a3bf2754f12fd2641bd3b"
+    },
+    {
+      "path": "agent2/experiments/he4/snapshot_adapter.py",
+      "sha256": "e83b9e9e29de72f49f20305f43fc176c55ebfd3b32dbb11ebcc44af67db9f3d5"
+    },
+    {
+      "path": "agent2/experiments/he4/inputs.py",
+      "sha256": "08faa628c367c4691d5e49700a720b062d78b8b2f8fcb394cc01e2ee9393707f"
+    },
+    {
+      "path": "shared/finance_input/src/finance_input/input.schema.json",
+      "sha256": "9077df2c78f29e3e4ee0659888fdc6a9cefdd3e43bc3638c76b18ea084779085"
+    },
+    {
+      "path": "agent2/scripts/audit_rule_coverage.py",
+      "sha256": "febf58591567aa85c72d71460d140198432bb40cc53e091d236b1104f68eac92"
+    }
+  ],
+  "intentionally_changed_since_cr047": [
+    "agent2/sme_fraud/rule_sources.py",
+    "agent2/sme_fraud/rule_evaluation.py",
+    "agent2/sme_fraud/imports.py",
+    "shared/finance_input/src/finance_input/validation.py"
+  ],
+  "files": [
+    {
+      "path": "shared/finance_input/src/finance_input/validation.py",
+      "sha256": "a4f09bb9472f2e4cf86d03e298ae727c2d9036f77377c561235b55cfedbd647d"
+    },
+    {
+      "path": "shared/finance_input/src/finance_input/input.v1_2.schema.json",
+      "sha256": "9f1da3c8ae7e7c075df60d56918c0088b91c419cd1e7dc857fb36d4cfda8d4c2"
+    },
+    {
+      "path": "shared/finance_input/src/finance_input/input.schema.json",
+      "sha256": "9077df2c78f29e3e4ee0659888fdc6a9cefdd3e43bc3638c76b18ea084779085"
+    },
+    {
+      "path": "shared/finance_input/src/finance_input/input.v1_0.schema.json",
+      "sha256": "a641ba6a919c6309561810ab0171801fef3c5ec2253ca7a459ef6b5b88ea87fe"
+    },
+    {
+      "path": "shared/finance_input/README.md",
+      "sha256": "e0cb3623c71b35b70d5a47a5eebee6f3c25fdb7f70156e2c6256568fe444fc2a"
+    },
+    {
+      "path": "agent2/sme_fraud/imports.py",
+      "sha256": "d1f25faed3e595feeaa595452c5a1623f1a8e4515db3310e3cc7a277e05d0772"
+    },
+    {
+      "path": "agent2/sme_fraud/rule_sources.py",
+      "sha256": "bd3cfc65a846fdfa3f91ac3b3fc0d6e7d40ddc55dd375f73e18f8e901a46961d"
+    },
+    {
+      "path": "agent2/sme_fraud/rule_evaluation.py",
+      "sha256": "4e7667b657bee4bda5164a1a6b218d88d1dafabdd7938932384ee11deb64501b"
+    },
+    {
+      "path": "agent2/sme_fraud/vendor_identity_rules.py",
+      "sha256": "8c80516cfc2834f7f666e430658e299a51443ad16a7ee0d2955aa875ed716343"
+    },
+    {
+      "path": "agent2/sme_fraud/vendor_identity_demo.py",
+      "sha256": "042374dab88d2e5f551dc1258d70f507e3d72987fb4b72e9f03c23b05858baa1"
+    },
+    {
+      "path": "agent2/sme_fraud/snapshot_analysis.py",
+      "sha256": "f74b98ebfe6bd0f1b25c7e2e9b6dbd9e503fc09e7c01c4de4c552e1fc3064f13"
+    },
+    {
+      "path": "agent2/tests/test_vendor_identity_snapshot.py",
+      "sha256": "d5bd97cf9b431b3f7fa368dba6e437c29388f3677ace63c05d98b8527de988d6"
+    },
+    {
+      "path": "agent2/tests/test_analysis_api.py",
+      "sha256": "62ee3cf8feb330d3dbca0ebfbce05657bdef17c39a9c305f11333911fd44f6e2"
+    },
+    {
+      "path": "agent2/tests/test_validation_backend.py",
+      "sha256": "404ad958b40f82f7b411f1d19822cd50ead09e13f6ff0ddb26014f69863fba47"
+    },
+    {
+      "path": "agent2/scripts/check_vendor_identity_snapshot.py",
+      "sha256": "92b3d68e47a5cbb0ba4730e013a85cac0452d07678767cb7a2bdbccdc2aa26d6"
+    },
+    {
+      "path": "agent2/docs/VENDOR_IDENTITY_SNAPSHOT.md",
+      "sha256": "99461a2a42d0ffd4fd528310e0828d66ffded6a348cddecce9bf53ab5e66e32d"
+    },
+    {
+      "path": "agent2/examples/vendor_identity_snapshots/README.md",
+      "sha256": "175744059bedb14499c0f2776f2b10220e28bb0be375c26f92d6ed04fa51ae7a"
+    },
+    {
+      "path": "agent2/examples/vendor_identity_snapshots/C001_address_only.json",
+      "sha256": "4a4befacf5972c3ca3f41ea3b84594a4d58ee2ebf3f4a03c48267df7bca9e25d"
+    },
+    {
+      "path": "agent2/examples/vendor_identity_snapshots/C001_control.json",
+      "sha256": "c6b36f6e56a22a0925c5c246bd46ea7e32a43e27197446c886fc8f8cc1045614"
+    },
+    {
+      "path": "agent2/examples/vendor_identity_snapshots/C001_declared.json",
+      "sha256": "57477d37149c05c76de04ec98b04a594b8ab999497c0417cd0fecf7b767d7ec3"
+    },
+    {
+      "path": "agent2/examples/vendor_identity_snapshots/C001_phone_only.json",
+      "sha256": "dc43a1283dc438c0b73098afca0b500e03b91cac64a9bd4cf42af35fba2280ce"
+    },
+    {
+      "path": "agent2/examples/vendor_identity_snapshots/C001_signal.json",
+      "sha256": "2c2127121c8b3d134cf8edae07f272f9abeb724d099b55597ccdfb2c4cd85c3a"
+    },
+    {
+      "path": "agent2/examples/vendor_identity_snapshots/C002_address_only.json",
+      "sha256": "da54e4a790448f55af22c145ffab6898bb0450c76b4201d8933ce0a7be97bdb6"
+    },
+    {
+      "path": "agent2/examples/vendor_identity_snapshots/C002_control.json",
+      "sha256": "5a944211666b6d18e4c58e0537aab6d8d9c9c2514de301c1ab7b695a15135cfd"
+    },
+    {
+      "path": "agent2/examples/vendor_identity_snapshots/C002_declared.json",
+      "sha256": "e54ec2dd78a2d002701b3fe376c451b1d36cd1f21f3c5c79c013b3d454fff3f5"
+    },
+    {
+      "path": "agent2/examples/vendor_identity_snapshots/C002_phone_only.json",
+      "sha256": "ff296b735e8eafb3ee49868f4337cd3aea1f81fd88d70462285832489b478bf1"
+    },
+    {
+      "path": "agent2/examples/vendor_identity_snapshots/C002_signal.json",
+      "sha256": "bc01c02959e33d8c30fb88f9698819e276f26daf8868aa71026afd92f407507e"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/vendor_identity_snapshot_20261114/REPORT.md",
+      "sha256": "cc8f36340d35a4c3b3f6aca07218dfd62c8e2826e4788ef193752106e6a15c81"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/vendor_identity_snapshot_20261114/checks.json",
+      "sha256": "ee75dca31913444c07f8f54ac52d31df978d371b68e7a15847d7bcb6919d5b3b"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/vendor_identity_snapshot_20261114/regression.json",
+      "sha256": "f252b50e24b010e0ea293be46c5c8e7c22a0003bb0ca8fa9cbed93611e5118a1"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/vendor_identity_snapshot_20261114/regression.log",
+      "sha256": "5cbe7f88322ba5f9181579992d573a336ddd13d5317e458817763e7331c0d7ca"
+    }
+  ],
+  "private_state_included": false
+}

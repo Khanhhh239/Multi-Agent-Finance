@@ -1,0 +1,11 @@
+{
+  "kind": "R2 latest evidence; live backend only, P1 native finding OPEN; R2 PARTIAL",
+  "latest": "live_run_20261111/artifact_manifest.json",
+  "files": [
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/live_run_20261111/artifact_manifest.json",
+      "sha256": "7eb1d60a389b62454a37c50a8aaa40eeaa57314e08cff817a9699d02873cfaeb"
+    }
+  ],
+  "previous_manifest": "p1_recheck_20261111/artifact_manifest.json"
+}

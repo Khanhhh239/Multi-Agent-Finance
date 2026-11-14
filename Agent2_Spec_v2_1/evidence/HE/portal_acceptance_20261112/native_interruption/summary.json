@@ -1,0 +1,47 @@
+{
+  "status": "partial",
+  "checks": [
+    {
+      "check": "controlled Portal stop during native compute resumes same job with 5 rows",
+      "passed": true
+    },
+    {
+      "check": "hard native crash fails explicitly on same job; no duplicate computation",
+      "passed": true
+    },
+    {
+      "check": "source models, snapshots and protected keys unchanged",
+      "passed": true
+    }
+  ],
+  "cases": [
+    {
+      "company": "C001",
+      "worker_state": "running",
+      "mode": "controlled_stop",
+      "job_id": "herun_61d277f8d2c345fa93580b551ca423e6",
+      "phase_after_recovery": "completed",
+      "reason": null,
+      "same_job": true,
+      "worker_rows": 1,
+      "resumable": true
+    },
+    {
+      "company": "C002",
+      "worker_state": "running",
+      "mode": "hard_crash",
+      "job_id": "herun_92101149165f4e1caa8e804d875a8507",
+      "phase_after_recovery": "failed",
+      "reason": "WORKER_INTERRUPTED",
+      "same_job": true,
+      "worker_rows": 1,
+      "resumable": false
+    }
+  ],
+  "acceptance": "partial: hard worker crash before result commit cannot be resumed",
+  "live_services_changed": false,
+  "data": "isolated synthetic fixtures",
+  "real_native_he": true,
+  "harness_checks_passed": true,
+  "acceptance_passed": false
+}

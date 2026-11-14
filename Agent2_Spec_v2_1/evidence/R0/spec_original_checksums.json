@@ -1,0 +1,206 @@
+[
+  {
+    "path": "00_INDEX_va_quy_tac.md",
+    "expected": "3a3ab5df14d78bbf58d2a3cc1aed02cf4cd294d1b5971f15736a904ce3618d26",
+    "actual": "3a3ab5df14d78bbf58d2a3cc1aed02cf4cd294d1b5971f15736a904ce3618d26",
+    "matches": true
+  },
+  {
+    "path": "01_runtime.md",
+    "expected": "eb1a539d9d476c123ed02bf69655d36d77c85ff9c40ccb72fa9119287039bad8",
+    "actual": "eb1a539d9d476c123ed02bf69655d36d77c85ff9c40ccb72fa9119287039bad8",
+    "matches": true
+  },
+  {
+    "path": "02_business.md",
+    "expected": "c826318e4bb4a85b4c418816b5d177eb58ab743b051a200e21179791bb070af9",
+    "actual": "c826318e4bb4a85b4c418816b5d177eb58ab743b051a200e21179791bb070af9",
+    "matches": true
+  },
+  {
+    "path": "03_auth_ui_import.md",
+    "expected": "325200fc19c0f160d2f03233bb2238c235686f4e76e492f6ffda4f011ffb9931",
+    "actual": "325200fc19c0f160d2f03233bb2238c235686f4e76e492f6ffda4f011ffb9931",
+    "matches": true
+  },
+  {
+    "path": "04_contracts_states_modules.md",
+    "expected": "5b7536d115aa3ea27eec66558ed4dd8c587587152d6822cccba59ab5da2cfbac",
+    "actual": "5b7536d115aa3ea27eec66558ed4dd8c587587152d6822cccba59ab5da2cfbac",
+    "matches": true
+  },
+  {
+    "path": "05_evaluation.md",
+    "expected": "c1cf123ed91bdf7236d661cc6c9d55441d66f96bcc0bb4cdd4f75e819d7d4914",
+    "actual": "c1cf123ed91bdf7236d661cc6c9d55441d66f96bcc0bb4cdd4f75e819d7d4914",
+    "matches": true
+  },
+  {
+    "path": "06_TRACEABILITY.md",
+    "expected": "f2e98847444ca95783e22fb353aa8f7d0c8802e508763cb5c4443beb3d986e6b",
+    "actual": "f2e98847444ca95783e22fb353aa8f7d0c8802e508763cb5c4443beb3d986e6b",
+    "matches": true
+  },
+  {
+    "path": "90_future_TH1_TH2.md",
+    "expected": "0e3bba441b645cdd1242c3d155477354af178267448399d7f4b64f2d5ec0fe57",
+    "actual": "0e3bba441b645cdd1242c3d155477354af178267448399d7f4b64f2d5ec0fe57",
+    "matches": true
+  },
+  {
+    "path": "98_PROGRESS.md",
+    "expected": "7c54e71b3fd7835653c086433ca3b94544609c9d199d86069b0c739d4f151087",
+    "actual": "7c54e71b3fd7835653c086433ca3b94544609c9d199d86069b0c739d4f151087",
+    "matches": true
+  },
+  {
+    "path": "99_decision_log.md",
+    "expected": "6dc6ea34ef6814e1c63ca3f20a88e8b15bff70f41184407ca718a686d8cbcd2a",
+    "actual": "6dc6ea34ef6814e1c63ca3f20a88e8b15bff70f41184407ca718a686d8cbcd2a",
+    "matches": true
+  },
+  {
+    "path": "CHANGE_REQUESTS.md",
+    "expected": "a7f41194aa354378f675cd403eb385d1cdbe07826c4e8621a1b0769e9d563769",
+    "actual": "a7f41194aa354378f675cd403eb385d1cdbe07826c4e8621a1b0769e9d563769",
+    "matches": true
+  },
+  {
+    "path": "PROMPT_TEMPLATE.md",
+    "expected": "7523cb61d0e390956a353b39211959d97dba41f3a43978f59863386da740cc3b",
+    "actual": "7523cb61d0e390956a353b39211959d97dba41f3a43978f59863386da740cc3b",
+    "matches": true
+  },
+  {
+    "path": "archive/Agent2_Master_Pipeline_v1_3.md",
+    "expected": "f3f92b9be4d8a81fbe28a5e4fa59b8a7ed53416d6d5b9c5872456968e1303cdc",
+    "actual": "f3f92b9be4d8a81fbe28a5e4fa59b8a7ed53416d6d5b9c5872456968e1303cdc",
+    "matches": true
+  },
+  {
+    "path": "archive/README.md",
+    "expected": "3784d0287969dd952c7016acfbad732b21e23f8ff233cddf53fd39fcfcd50d98",
+    "actual": "3784d0287969dd952c7016acfbad732b21e23f8ff233cddf53fd39fcfcd50d98",
+    "matches": true
+  },
+  {
+    "path": "fixtures/README.md",
+    "expected": "bbccd4350d749d2ded3b89ac5282235b830c8d602b737ae3eb66f3f96e4f653e",
+    "actual": "bbccd4350d749d2ded3b89ac5282235b830c8d602b737ae3eb66f3f96e4f653e",
+    "matches": true
+  },
+  {
+    "path": "fixtures/ledger_examples.json",
+    "expected": "0759a9c72033a539b81c5b9fc905ff3f0e6d85918f6c4734c5b71fad535f3c16",
+    "actual": "0759a9c72033a539b81c5b9fc905ff3f0e6d85918f6c4734c5b71fad535f3c16",
+    "matches": true
+  },
+  {
+    "path": "scripts/README.md",
+    "expected": "8d318ba2d4a8155092c107f02916ab3c780063e63c35a25aa8da50139b9f3c75",
+    "actual": "8d318ba2d4a8155092c107f02916ab3c780063e63c35a25aa8da50139b9f3c75",
+    "matches": true
+  },
+  {
+    "path": "scripts/check_evidence.py",
+    "expected": "6bf96ec5bcb7d8e0fa4951763a0a95779fba331cdd5e19f28568ca728eecb90c",
+    "actual": "6bf96ec5bcb7d8e0fa4951763a0a95779fba331cdd5e19f28568ca728eecb90c",
+    "matches": true
+  },
+  {
+    "path": "scripts/requirements.txt",
+    "expected": "4046ca1e3a64f4ea791fb4fb3d8566242086ff1c8e2431e2c349e1052ffc6ba0",
+    "actual": "4046ca1e3a64f4ea791fb4fb3d8566242086ff1c8e2431e2c349e1052ffc6ba0",
+    "matches": true
+  },
+  {
+    "path": "scripts/run_stage.py",
+    "expected": "9713a24bf9fdacfde0b9c43112ce625bf88dc34d62daeebc36613a338de6c18e",
+    "actual": "9713a24bf9fdacfde0b9c43112ce625bf88dc34d62daeebc36613a338de6c18e",
+    "matches": true
+  },
+  {
+    "path": "sources/Agent2_Huong_dan_cai_dat_tung_buoc.docx",
+    "expected": "2f9120a6d44c463d38a5117c8ad93e13ead9a8a4816d551690b7e6a9791d3a8b",
+    "actual": "2f9120a6d44c463d38a5117c8ad93e13ead9a8a4816d551690b7e6a9791d3a8b",
+    "matches": true
+  },
+  {
+    "path": "sources/manifest.json",
+    "expected": "452f3f5e6e5b69aeb03d9d77cf88e033a3f1fd1a4b37bab9b8c8752f4d3a351c",
+    "actual": "452f3f5e6e5b69aeb03d9d77cf88e033a3f1fd1a4b37bab9b8c8752f4d3a351c",
+    "matches": true
+  },
+  {
+    "path": "stage_commands.json",
+    "expected": "00604c618eaaed83cb9b68a3104e058e64007731ad0d8ada51b3af843f208da4",
+    "actual": "00604c618eaaed83cb9b68a3104e058e64007731ad0d8ada51b3af843f208da4",
+    "matches": true
+  },
+  {
+    "path": "tasks/R0.md",
+    "expected": "ee3a283a88b7379c39fa9a703b702d5cb7f5d7180dd0f51193edeaeb50a33b29",
+    "actual": "ee3a283a88b7379c39fa9a703b702d5cb7f5d7180dd0f51193edeaeb50a33b29",
+    "matches": true
+  },
+  {
+    "path": "tasks/R1.md",
+    "expected": "aa5f1d0f09e2cdee81fbd12c0b1fc1059b6db6d5f55d1ff2ed13a04d411536d1",
+    "actual": "aa5f1d0f09e2cdee81fbd12c0b1fc1059b6db6d5f55d1ff2ed13a04d411536d1",
+    "matches": true
+  },
+  {
+    "path": "tasks/R2.md",
+    "expected": "b52d49e014b6d8083687270a5567ba35ce1c987589054caecca5116e7c60ec4c",
+    "actual": "b52d49e014b6d8083687270a5567ba35ce1c987589054caecca5116e7c60ec4c",
+    "matches": true
+  },
+  {
+    "path": "tasks/R3.md",
+    "expected": "bd7b426eb96f67ba4c01e48adfec500ee11ac92b9ca6f5a53fbb50e5080e0d23",
+    "actual": "bd7b426eb96f67ba4c01e48adfec500ee11ac92b9ca6f5a53fbb50e5080e0d23",
+    "matches": true
+  },
+  {
+    "path": "tasks/R4.md",
+    "expected": "7b9f4f2f4d5f62ba2bb1ec140d7fbebcae8436d70fad2f4fcdcefb34f16933ae",
+    "actual": "7b9f4f2f4d5f62ba2bb1ec140d7fbebcae8436d70fad2f4fcdcefb34f16933ae",
+    "matches": true
+  },
+  {
+    "path": "tasks/R5.md",
+    "expected": "7643bb69ea71e3dd86643e0f3c054b53621ecb2f21e9e0ecb3866a236759e3ab",
+    "actual": "7643bb69ea71e3dd86643e0f3c054b53621ecb2f21e9e0ecb3866a236759e3ab",
+    "matches": true
+  },
+  {
+    "path": "tasks/R6.md",
+    "expected": "ba668b97d6ae06d15fc18f923004893851950330b78ffcb531a8c2f26523d69b",
+    "actual": "ba668b97d6ae06d15fc18f923004893851950330b78ffcb531a8c2f26523d69b",
+    "matches": true
+  },
+  {
+    "path": "templates/REPORT_TEMPLATE.md",
+    "expected": "8efa5ca87f6a3ca81f63b9fba8b6e3cfb47bd8854ff655dda44100276a38e0b3",
+    "actual": "8efa5ca87f6a3ca81f63b9fba8b6e3cfb47bd8854ff655dda44100276a38e0b3",
+    "matches": true
+  },
+  {
+    "path": "templates/acceptance.schema.json",
+    "expected": "dbf249bc6e86097cb444125d644ac1e001353eef4e04829b3e37f47396a2cdfc",
+    "actual": "dbf249bc6e86097cb444125d644ac1e001353eef4e04829b3e37f47396a2cdfc",
+    "matches": true
+  },
+  {
+    "path": "test_catalog.json",
+    "expected": "5161005bb7a596177706cbc95fdeeb7ed9a0b6bfbabcf3a70781bb921d7a331b",
+    "actual": "5161005bb7a596177706cbc95fdeeb7ed9a0b6bfbabcf3a70781bb921d7a331b",
+    "matches": true
+  },
+  {
+    "path": "tests/test_evidence_tooling.py",
+    "expected": "84150e4945071e74f83b1e5a6eaa82fc308a8a88e741014d9523244ca591e8c4",
+    "actual": "84150e4945071e74f83b1e5a6eaa82fc308a8a88e741014d9523244ca591e8c4",
+    "matches": true
+  }
+]

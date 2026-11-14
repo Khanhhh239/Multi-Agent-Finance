@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object", "additionalProperties": false,
+  "required": ["version", "coverage_status", "rules", "summary", "implementation", "configuration", "coverage_basis", "aggregate"],
+  "properties": {
+    "version": {"const": "rule-results/1.0.0"},
+    "coverage_status": {"enum": ["partial", "unavailable"]},
+    "rules": {"type": "array", "minItems": 35, "maxItems": 35, "items": {"$ref": "#/$defs/rule"}},
+    "summary": {"type": "object", "additionalProperties": false,
+      "required": ["evaluated_hit", "evaluated_no_hit", "unavailable", "not_applicable"],
+      "properties": {
+        "evaluated_hit": {"type": "integer", "minimum": 0, "maximum": 35},
+        "evaluated_no_hit": {"type": "integer", "minimum": 0, "maximum": 35},
+        "unavailable": {"type": "integer", "minimum": 0, "maximum": 35},
+        "not_applicable": {"type": "integer", "minimum": 0, "maximum": 35}
+      }},
+    "implementation": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "configuration": {"type": "object"}, "coverage_basis": {"type": "string", "minLength": 1},
+    "aggregate": {"type": "object", "additionalProperties": false,
+      "required": ["available", "score", "reason"],
+      "properties": {"available": {"const": false}, "score": {"type": "null"}, "reason": {"$ref": "#/$defs/reason"}}}
+  },
+  "$defs": {
+    "reason": {"type": "object", "additionalProperties": false, "required": ["code", "message"],
+      "properties": {"code": {"type": "string", "minLength": 1}, "message": {"type": "string", "minLength": 1}}},
+    "rule": {
+      "type": "object", "additionalProperties": false,
+      "required": ["rule_id", "name", "status", "available", "matched", "intrinsic_points", "score", "reason", "gaps", "evidence_refs", "source_status", "source_checksum", "details"],
+      "properties": {
+        "rule_id": {"type": "string", "pattern": "^[A-FPT][1-7]$"}, "name": {"type": "string"},
+        "status": {"enum": ["evaluated_hit", "evaluated_no_hit", "unavailable", "not_applicable"]},
+        "available": {"type": "boolean"}, "matched": {"type": ["boolean", "null"]},
+        "intrinsic_points": {"type": ["number", "null"], "minimum": 0},
+        "score": {"type": ["number", "null"], "minimum": 0},
+        "reason": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/reason"}]},
+        "gaps": {"type": "array", "items": {"type": "object"}},
+        "evidence_refs": {"type": "array", "items": {"type": "object"}},
+        "source_status": {"enum": ["ready", "unavailable", "not_applicable"]},
+        "source_checksum": {"type": ["string", "null"]}, "details": {"type": "object"}
+      },
+      "allOf": [
+        {"if": {"properties": {"status": {"enum": ["evaluated_hit", "evaluated_no_hit"]}}},
+         "then": {"properties": {"available": {"const": true}, "matched": {"type": "boolean"}, "intrinsic_points": {"type": "number"}, "score": {"type": "number"}, "reason": {"type": "null"}, "gaps": {"maxItems": 0}, "source_status": {"const": "ready"}}},
+         "else": {"properties": {"available": {"const": false}, "matched": {"type": "null"}, "intrinsic_points": {"type": "null"}, "score": {"type": "null"}, "reason": {"$ref": "#/$defs/reason"}}}},
+        {"if": {"properties": {"status": {"const": "evaluated_hit"}}}, "then": {"properties": {"matched": {"const": true}}}},
+        {"if": {"properties": {"status": {"const": "evaluated_no_hit"}}}, "then": {"properties": {"matched": {"const": false}, "intrinsic_points": {"const": 0}, "score": {"const": 0}}}}
+      ]
+    }
+  }
+}

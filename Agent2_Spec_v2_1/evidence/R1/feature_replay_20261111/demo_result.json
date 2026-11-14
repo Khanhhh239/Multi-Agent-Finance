@@ -1,0 +1,12 @@
+{
+  "command": [
+    "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-u",
+    "-B",
+    "scripts/demo_snapshot_features.py"
+  ],
+  "exit_code": 0,
+  "log_sha256": "7381a5a47fa59bd1371fcfdf57c5319115105b03b9425da1fc4bdd56de255dca"
+}

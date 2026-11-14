@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "stale_prelogin_poll_preserves_login": true,
+  "stale_authenticated_poll_does_not_reopen_after_logout": true,
+  "context_status": 200,
+  "servers": "isolated fixture",
+  "credentials_exported": false,
+  "live_services_changed": false
+}

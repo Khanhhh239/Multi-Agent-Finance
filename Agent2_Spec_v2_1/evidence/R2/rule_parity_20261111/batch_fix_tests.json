@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_simultaneous_invoice_warning_is_retained_as_batch_evidence",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_simultaneous_invoice_warning_is_retained_as_batch_evidence"
+    }
+  ],
+  "count": 1,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0
+}

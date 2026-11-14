@@ -1,0 +1,20 @@
+{
+  "only_mutable_logs_changed": true,
+  "changes": [
+    {
+      "path": "98_PROGRESS.md",
+      "before": "ebdc48aaac77d505c7d9406179297aa3ab500041a6b037684c174a9a4c22dce1",
+      "after": "8ca9af870835820812e06ae268927c66fb0895a3a70b4031a00884fa849f3f82"
+    },
+    {
+      "path": "99_decision_log.md",
+      "before": "b44602f1026abec1c014f164857e9c67bd8955125add8b22dc1326975a943439",
+      "after": "a30216b129f115e487446ed3decd49de1d1f9555534ba3efd0918c2efd8fa95e"
+    },
+    {
+      "path": "CHANGE_REQUESTS.md",
+      "before": "2b6ec47b86179ddf64288bacd57e2a0cc37a98f0b6ceecd8cf862cd582fb39e7",
+      "after": "70f357e2a7699c8d8c29ee632d5118e76a41858746a85b220f6e2e89a7b2a49f"
+    }
+  ]
+}

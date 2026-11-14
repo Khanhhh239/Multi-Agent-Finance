@@ -3,7 +3,6 @@
 ECOD uses training-only empirical CDFs (a frozen-reference inference variant).
 The autoencoder is a deterministic sklearn MLP reconstruction bottleneck.
 """
-from importlib.util import find_spec
 import warnings
 
 import numpy as np
@@ -16,15 +15,12 @@ from sklearn.preprocessing import StandardScaler
 
 ALGORITHMS = {
     'isolation_forest': 'Isolation Forest', 'autoencoder': 'Autoencoder',
-    'ecod': 'ECOD', 'lof': 'Local Outlier Factor (LOF)', 'catboost': 'CatBoost',
-    'bag_injection': 'Túi phương pháp (chọn theo tiêm gian lận)',
+    'ecod': 'ECOD', 'lof': 'Local Outlier Factor (LOF)',
 }
 
 
 def catalog():
-    return [dict(id=key, label=label, installed=key != 'catboost' or find_spec('catboost') is not None,
-                 requires_labels=key == 'catboost') for key, label in ALGORITHMS.items()]
-
+    return [dict(id=key, label=label, installed=True, requires_labels=False) for key, label in ALGORITHMS.items()]
 
 def matrix(value):
     x = np.asarray(value, dtype=np.float64)
@@ -65,14 +61,8 @@ class CompanyEstimator:
             raise ValueError('Thuật toán ML không được hỗ trợ.')
         self.algorithm = algorithm
 
-    def fit(self, x, y=None, columns=None):
+    def fit(self, x):
         x = matrix(x)
-        if self.algorithm == 'bag_injection':      # chooses among label-free methods by injecting patterns into this company's rows
-            from .bag_of_methods import BagOfMethods
-            self.width_ = x.shape[1]
-            self.model_ = BagOfMethods().fit(x, columns)
-            self.diagnostics_ = self.model_.diagnostics_
-            return self
         if len(x) < 5:
             raise ValueError('Cần ít nhất 5 dòng train trước khi huấn luyện.')
         self.width_ = x.shape[1]
@@ -93,23 +83,12 @@ class CompanyEstimator:
             self.converged_ = not any(issubclass(w.category, ConvergenceWarning) for w in caught)
         elif self.algorithm == 'ecod':
             self.model_ = FrozenECOD().fit(z)
-        else:
-            if y is None or set(np.asarray(y).tolist()) != {0, 1} or len(y) != len(x):
-                raise ValueError('CatBoost cần nhãn 0 và 1 đã được rà cho mọi dòng train.')
-            try:
-                from catboost import CatBoostClassifier
-            except ImportError as exc:
-                raise ValueError('Chưa cài CatBoost; cài requirements-company-ml.txt trong môi trường máy chủ.') from exc
-            self.model_ = CatBoostClassifier(iterations=100, depth=5, random_seed=42, thread_count=1,
-                verbose=False, allow_writing_files=False, loss_function='Logloss').fit(z, y)
         return self
 
     def score(self, x):
         x = matrix(x)
         if x.shape[1] != self.width_:
             raise ValueError('Số feature không khớp phiên bản ML.')
-        if self.algorithm == 'bag_injection':
-            return np.asarray(self.model_.score(x), dtype=float)
         z = self.scaler_.transform(x) if self.scaler_ is not None else x
         if self.algorithm in {'isolation_forest', 'lof'}:
             scores = -self.model_.score_samples(z)
@@ -119,7 +98,7 @@ class CompanyEstimator:
         elif self.algorithm == 'ecod':
             scores = self.model_.score(z)
         else:
-            scores = self.model_.predict_proba(z)[:, 1]
+            raise ValueError('Thuật toán không thuộc bộ ML không nhãn được giữ lại.')
         scores = np.asarray(scores, dtype=float)
         if scores.shape != (len(x),) or not np.isfinite(scores).all():
             raise ValueError('Model trả về điểm không hợp lệ.')

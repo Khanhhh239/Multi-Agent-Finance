@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "checks": [
+    "C001: JSON preview and explicit acknowledgement commit all source tables, including signed adjustment and declared coverage",
+    "C002: JSON preview and explicit acknowledgement commit all source tables, including signed adjustment and declared coverage"
+  ],
+  "count": 2,
+  "browser_errors": [],
+  "synthetic_data": true,
+  "scope": "import flow only; native HE tested separately",
+  "live_services_changed": false
+}

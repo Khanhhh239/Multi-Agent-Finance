@@ -1,0 +1,52 @@
+{
+  "change_request": "CR-023",
+  "status": "API_READY_FOR_REVIEW_R2_PARTIAL",
+  "collected_at": "2026-11-11T22:43:55.843864+07:00",
+  "head": "f203b39828f567171916b5b4744728ed4b63d17f",
+  "cwd": "D:\\agent22",
+  "endpoint": "POST /api/v1/companies/{company_id}/snapshots/{snapshot_id}/analyze",
+  "protocol": "snapshot-analysis/1.0.0",
+  "native_command": "agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/run_r1_tests.py --report Agent2_Spec_v2_1/evidence/R2/analysis_api_20261111/native_tests.json",
+  "native_exit_code": 0,
+  "native_summary": {
+    "count": 686,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "native_elapsed_seconds": 352.792,
+  "new_api_tests": 29,
+  "api_exit_code": 0,
+  "focused_earlier_count": 109,
+  "demo_command": "agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/demo_snapshot_analysis.py --output-dir Agent2_Spec_v2_1/evidence/R2/analysis_api_20261111/http_demo",
+  "demo_exit_code": 0,
+  "demo_http_checks": 7,
+  "demo_rows_per_view": 2,
+  "live": "live_summary.json",
+  "preservation": "preservation.json",
+  "source_changes": {
+    "analysis_api.py": "4f35faea11507b3fc26bd2f5d009b8933a4e722445e10f6b0c1a3c92eec05314",
+    "snapshot_analysis.py": "76099343c75a981ed987026ec647a7560af9375d7529e9aa8f7ea087a26fef95",
+    "snapshot_analysis.schema.json": "4e0bd3b1e678aefb1dccc7025b5e1630359bfedb2c09682ce17910eb6222922e",
+    "auth.py": "30351114f6109aa6b9ab9d5cfab2b5aa27c7562fd7824e4de9f05097f7c86da3",
+    "review_server.py": "060c502db10c97b6a8107ff2a548b46f2a22734d851bdeb2b2d30d279b245cea",
+    "core_manifest.py": "7a262ea72b0fedb7bf5dc33e25bca4e7cb0e86ac86e561281b9a5bc1c09a9eaf"
+  },
+  "technical_guard": "Backend director + data.import per company; rechecked through reads and after serialization",
+  "review_allowlist": true,
+  "groups_deduplicated": true,
+  "technical_limits": {
+    "transaction_records": 200,
+    "source_records": 1000,
+    "response_bytes": 5242880
+  },
+  "job_or_analysis_record_persisted": false,
+  "model_fit_performed": false,
+  "active_model_changed": false,
+  "queue_written": false,
+  "full_R2_gate_run": false,
+  "production_approved": false,
+  "UI_built": false,
+  "diagnostic_history": "One added two-company fixture initially used C001 company record_id for C002; backend correctly rejected it. Fixture corrected; final API 29 and full 686 pass.",
+  "browser_acceptance": "Not applicable: HTTP API task; no new workflow UI"
+}

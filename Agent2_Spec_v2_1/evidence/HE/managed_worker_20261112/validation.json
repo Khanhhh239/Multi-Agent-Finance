@@ -1,0 +1,134 @@
+{
+  "ast_parsed_files": [
+    "portal/agent2_runtime.py",
+    "portal/server.py",
+    "agent2/experiments/he_inference/readiness.py",
+    "agent2/experiments/he_inference/worker_server.py",
+    "agent2/experiments/he_inference/enterprise_server.py",
+    "agent2/experiments/he_inference/node_jobs.py",
+    "agent2/sme_fraud/he_workbench.py",
+    "agent2/tests_he/test_managed_worker.py",
+    "agent2/scripts/test_managed_worker_ui.py"
+  ],
+  "trailing_whitespace": false,
+  "node_js_syntax_check_exit_code": 0,
+  "source_and_evidence_links_checked": [
+    {
+      "source": "agent2/docs/HE_MANAGED_WORKER.md",
+      "target": "HE_COMPANY_DEMO.md"
+    },
+    {
+      "source": "agent2/docs/HE_MANAGED_WORKER.md",
+      "target": "../../Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md"
+    },
+    {
+      "source": "agent2/docs/HE_PORTAL_ACTIVATION.md",
+      "target": "HE_MANAGED_WORKER.md"
+    },
+    {
+      "source": "agent2/docs/HE_PORTAL_ACTIVATION.md",
+      "target": "PORTAL_AUTH.md"
+    },
+    {
+      "source": "agent2/docs/HE_PORTAL_ACTIVATION.md",
+      "target": "../../Agent2_Spec_v2_1/evidence/HE/portal_activation_20261112/REPORT.md"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "../../../../agent2/docs/HE_MANAGED_WORKER.md"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "he_tests.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "he_tests.log"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "he_execution.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "native_tests.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "native_tests.log"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "native_execution.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "focused.log"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "focused_execution.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "jobs.log"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "jobs_execution.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "browser_acceptance/summary.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "browser_acceptance_execution.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "deployment.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "packet_check.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "browser_acceptance/01-ready.png"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "browser_acceptance/02-worker-offline.png"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "browser_acceptance/03-recovered.png"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "preservation.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "source_provenance.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "validation.json"
+    },
+    {
+      "source": "Agent2_Spec_v2_1/evidence/HE/managed_worker_20261112/REPORT.md",
+      "target": "artifact_manifest.json"
+    }
+  ],
+  "spec_hashes_verified": 34,
+  "core_sources_preserved": 17,
+  "he_passed": 159,
+  "native_passed": 742,
+  "browser_passed": 11,
+  "manager_subset_passed": 7,
+  "durable_subset_passed": 23,
+  "packet_check_passed": 40,
+  "desktop_start_stop_start_passed": true
+}

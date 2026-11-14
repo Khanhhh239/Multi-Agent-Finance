@@ -1,0 +1,58 @@
+{
+  "tests": [
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_exact_cutoff_is_inclusive_and_one_second_late_is_not",
+      "status": "fail",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_exact_cutoff_is_inclusive_and_one_second_late_is_not"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_future_invoice_values_do_not_change_prior_P1_outputs",
+      "status": "fail",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_future_invoice_values_do_not_change_prior_P1_outputs"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_future_issue_date_blocks_even_when_observation_is_known",
+      "status": "fail",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_future_issue_date_blocks_even_when_observation_is_known"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_known_batch_still_has_twenty_group_points_and_zero_row_points",
+      "status": "pass",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_known_batch_still_has_twenty_group_points_and_zero_row_points"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_late_invoice_observation_is_a_gap_not_twenty_points",
+      "status": "fail",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_late_invoice_observation_is_a_gap_not_twenty_points"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_later_transaction_does_not_rewrite_old_gap",
+      "status": "fail",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_later_transaction_does_not_rewrite_old_gap"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_timestamp_offsets_are_compared_as_instants",
+      "status": "fail",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_timestamp_offsets_are_compared_as_instants"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_two_unknown_current_invoices_cannot_create_batch_risk",
+      "status": "fail",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_two_unknown_current_invoices_cannot_create_batch_risk"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_unavailable_historical_invoice_does_not_enter_current_total",
+      "status": "fail",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_unavailable_historical_invoice_does_not_enter_current_total"
+    },
+    {
+      "id": "test_p1_native_timing.P1NativeTimingTests.test_unavailable_history_makes_batch_gap_without_partial_risk_total",
+      "status": "fail",
+      "testcase": "test_p1_native_timing.P1NativeTimingTests.test_unavailable_history_makes_batch_gap_without_partial_risk_total"
+    }
+  ],
+  "count": 10,
+  "skipped": 0,
+  "failures": 7,
+  "errors": 2
+}

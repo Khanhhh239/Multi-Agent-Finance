@@ -1,0 +1,78 @@
+{
+  "date": "2026-11-12",
+  "source": "current working tree; no commit/push performed",
+  "python": "3.12.7 (tags/v3.12.7:0b05ead, Oct  1 2024, 03:06:41) [MSC v.1941 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "dependencies": {
+    "tenseal": "0.3.18",
+    "cryptography": "50.0.2",
+    "numpy": "1.26.4",
+    "scipy": "1.15.1",
+    "scikit-learn": "1.8.0"
+  },
+  "source_sha256": {
+    "agent2/experiments/he_inference/checkpoint.py": "5122e931e8b28a54c88041fbf81469daa59d30440af4d12e7c6e32a9718bbc7e",
+    "agent2/experiments/he_inference/cloud_worker.py": "b31f3029aee3f5c38ddfa2d6313c2d9c18c28d599ea705446b50ade0d53cd9d6",
+    "agent2/experiments/he_inference/demo.py": "7028fea0bf63884240e138067abfe55443c8635b1764450dc6ddbbc320e5f015",
+    "agent2/experiments/he_inference/enterprise.py": "b67bf1f071fba064bcf8b7e7fcf3c0f6ecec6bd584226ab72cbad1dda6e1e88a",
+    "agent2/experiments/he_inference/enterprise_server.py": "d3fee0f4fdf32fd2fbf31abf756b87de8ffd74d598c45409bc1ae4607ea80106",
+    "agent2/experiments/he_inference/http_common.py": "f78553519d5a3a2899540739b4aaa359911085036377307d8d63c88faa3ebd75",
+    "agent2/experiments/he_inference/jobs_demo.py": "24e54ef0772e24ed172bc762d67b0958f00b5b8043a74d31176b45ff2c9e1a44",
+    "agent2/experiments/he_inference/job_client.py": "86a8fb7e9ca7ce0786d82741b1544780ff8cdc0443734a11f5e0ee7c72c0c34a",
+    "agent2/experiments/he_inference/node_jobs.py": "7a246fdf67ec1d99dc19fb34a30aac2c375bb8e5c48ce51d4a726ccdd3864f3d",
+    "agent2/experiments/he_inference/node_job_store.py": "2642c1d62079d1c725d662aac3b8bbb23e7c634da382524218c01b7d8d238212",
+    "agent2/experiments/he_inference/protocol.py": "fc9291058fb7b66a8333c3c23d24a463b7bccfc5897cc9d946224757abb531b1",
+    "agent2/experiments/he_inference/registry_cli.py": "c72b226726112778fc3635d867f54df10d651ef01a8ffaf08a412caef3f60d96",
+    "agent2/experiments/he_inference/registry_demo.py": "59d0eed1bc531496d24039f4ea092789c89ce41617f166b510bc616fd452c462",
+    "agent2/experiments/he_inference/registry_export.py": "015633d8d42dc4e486be23fa2ad4b807ab2a4bc87ad2c31b85d92ab0fec37fee",
+    "agent2/experiments/he_inference/registry_fit.py": "53d5d74fdbf3119dd182cad88221bcd05cd90a7b23d2dd5b56474aadffcd80ac",
+    "agent2/experiments/he_inference/services_demo.py": "1039686d127ded058e2523d21344a3036a3b3c379b7bbb91d7186d438894f76e",
+    "agent2/experiments/he_inference/worker_bundle.py": "ef34b9c733671764ca9400c9662a149df8bbf1e6cc1de27aaebd1f366e1abe81",
+    "agent2/experiments/he_inference/worker_server.py": "635d047866e6cc97903ecda79c4c8c2e89129b02c234054e77b93545dc7c5326",
+    "agent2/experiments/he_inference/worker_store.py": "ef9007a2f212a9ca37f877f9652e45cbf7abd394e718caf35ddafc2970f8bfab",
+    "agent2/experiments/he_inference/__init__.py": "d207b62a7a10cdbff395ceaad71f8da45937063355fc6b9ea12ee33f6f724fa6",
+    "agent2/tests_he/test_encrypted_inference.py": "7292e24689d0b6f42f9fb878b2a3facd1ffd4591a69d9f343232dd62462b4ed6",
+    "agent2/tests_he/test_node_jobs.py": "bf9f849a5bdf8ca06c6c983f7a5c40987dc9f1572adbf978e1d97c8a3db73fba",
+    "agent2/tests_he/test_registry_export.py": "a399c774001fa99c18375e4a6e478b6a7084a387c0e91553991ce6438ea1adb5",
+    "agent2/tests_he/test_services.py": "049e1af5afb96a3c292c05901277a96010c100a91917266c13b3f1004388a808",
+    "agent2/docs/HE_JOB_LIFECYCLE.md": "50469979ff0f27806992d05384c8794e00dc08d5c5a70bd6b4ba5688e2ba6812",
+    "agent2/requirements-he.txt": "0381c2c1966ead00ef74cde73a70b906766c649ee9dedb649c8b2d1ad8ae5c0e"
+  },
+  "authoritative_tests": "he_tests_final.json",
+  "authoritative_demo": "lifecycle_demo_final",
+  "data": "synthetic_only",
+  "secret_keys_or_credentials_in_evidence": false,
+  "actual_remote_cloud_deployment": false,
+  "diagnostics": [
+    "Initial compatibility demo failed because its new test key generation helper was missing the secrets import; fixed and compatibility demo rerun 16 checks passed.",
+    "Initial focused run had a missing public_hex test import; fixed, final focused 23 tests passed.",
+    "Intermediate full 115-case run had a negative test expecting ServiceError for a mismatched signature (actual HEUnavailable SIGNATURE_INVALID); corrected the ungranted-key fixture and added received-before-decrypt recovery case. Final full 116 tests passed."
+  ],
+  "native_execution": {
+    "command": [
+      "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-u",
+      "-B",
+      "agent2/scripts/run_r1_tests.py",
+      "--report",
+      "Agent2_Spec_v2_1\\evidence\\HE\\job_lifecycle_20261112\\native_tests.json"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 510.385
+  },
+  "he_execution": {
+    "command": [
+      "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "agent2/scripts/run_he_tests.py",
+      "--report",
+      "Agent2_Spec_v2_1\\evidence\\HE\\job_lifecycle_20261112\\he_tests_final.json"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 397.029
+  }
+}

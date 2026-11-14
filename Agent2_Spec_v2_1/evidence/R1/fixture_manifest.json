@@ -1,0 +1,28 @@
+{
+  "contract_version": "1.0.0",
+  "fixtures": [
+    {
+      "path": "agent2/tests/fixtures/input_contract_v1.json",
+      "sha256": "f3f461d12bf06a7003438d448fd7b04dc03d0553ad8ed74fb3ca8701b2c629ea",
+      "kind": "synthetic",
+      "companies": [
+        "C001",
+        "C002"
+      ],
+      "purpose": "same IDs, signed adjustments, many-to-many allocations, overpayment, unverified simulated documents"
+    },
+    {
+      "path": "agent2/tests/fixtures/r1_feature_replay_v1.json",
+      "sha256": "d16609827b50bde204807eb86762594cabb3bec938bf92e5e121ecbecebeb9cc",
+      "version": "r1-feature-replay/1.0.0",
+      "kind": "synthetic",
+      "companies": [
+        "C001",
+        "C002"
+      ],
+      "purpose": "same IDs, prior/simultaneous/late/revised sources, signed/zero values; no ground-truth labels",
+      "technical_preparer": "Codex",
+      "business_reviewer": "not assigned"
+    }
+  ]
+}

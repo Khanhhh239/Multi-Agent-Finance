@@ -1,5 +1,6 @@
 portal/config.local.json
 portal/workspace/
+/.runtime/
 /.state/
 /.state-keys/
 __pycache__/

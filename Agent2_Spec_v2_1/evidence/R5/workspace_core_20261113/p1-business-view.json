@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "checks": [
+    "C001: eight archived native results, P1 money, adjustment, peer evidence, bank graph link and missing-history explanation",
+    "C002: eight archived native results, P1 money, adjustment, peer evidence, bank graph link and missing-history explanation"
+  ],
+  "browser_errors": [],
+  "archived_native_results": true,
+  "new_native_computation": false,
+  "servers": "isolated Portal/node",
+  "live_services_changed": false,
+  "human_feedback_written": false
+}

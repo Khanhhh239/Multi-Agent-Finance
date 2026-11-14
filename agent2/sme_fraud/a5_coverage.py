@@ -92,6 +92,24 @@ def coverage(records):
             for key, rows in sorted(accounts.items())])
 
 
+def scoped_coverage(report, company_ids):
+    """Project complete company summaries; never reuse cross-company month totals."""
+    if company_ids is None or not report.get('available'):return report
+    companies=[row for row in report.get('groups',[]) if row['dimension']=='company' and row['value'] in company_ids]
+    totals={key:sum(row.get(key,0) for row in companies) for key,value in report.get('totals',{}).items() if type(value) is int}
+    statuses=Counter()
+    for row in companies:statuses.update(row.get('status_counts',{}))
+    totals['status_counts']=dict(statuses)
+    for key,numerator,denominator in (
+            ('ready_over_all','ready_transactions','transactions'),
+            ('ready_over_eligible','ready_transactions','eligible_transactions'),
+            ('a5_gate_ready_over_all','a5_gate_ready_transactions','a5_gate_transactions'),
+            ('a5_gate_ready_over_eligible','a5_gate_ready_transactions','a5_gate_eligible_transactions')):
+        totals[key]=totals.get(numerator,0)/totals[denominator] if totals.get(denominator) else None
+    return {k:v for k,v in report.items() if k in ('version','available','reference_time','definition')} | dict(
+        totals=totals,groups=companies,account_scopes=[row for row in report.get('account_scopes',[]) if row['company_id'] in company_ids])
+
+
 def write_coverage(output, result):
     if result.get('a5_evaluations') is None:
         return

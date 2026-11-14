@@ -1,0 +1,50 @@
+{
+  "change_request": "CR-022",
+  "status": "P1_native_time_fix_READY_FOR_REVIEW_R2_PARTIAL",
+  "collected_at": "2026-11-11T20:52:01.070677+07:00",
+  "head": "f203b39828f567171916b5b4744728ed4b63d17f",
+  "cwd": "D:\\agent22",
+  "native_command": "agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/run_r1_tests.py --report Agent2_Spec_v2_1/evidence/R2/p1_native_fix_20261111/native_tests.json",
+  "native_exit_code": 0,
+  "native_summary": {
+    "count": 657,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "native_elapsed_seconds": 548.448,
+  "focused_count": 97,
+  "compatibility_count": 15,
+  "new_regression_tests": 10,
+  "audit_command": "agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/check_p1_acceptance.py --output-dir Agent2_Spec_v2_1/evidence/R2/p1_native_fix_20261111/audit_final",
+  "audit_exit_code": 0,
+  "audit_scope": "P1_header_time_guard_and_shared_domain_only_not_full_pipeline",
+  "finding_status": "FIXED_IN_TESTED_SCOPE",
+  "legacy_representation_limits": [
+    "missing_history",
+    "late_allocation"
+  ],
+  "preservation": "preservation_final.json",
+  "native_adapter_gap_cases": 2,
+  "live": "live_final.json",
+  "source_changes": {
+    "rules.py": "a975e11bf31a67ba2b0a0a5cb548cab6bbe932084befce49f2d83abe53b3f9e1",
+    "batch_controls.py": "036c9909354aa26ed8d8ff88bfbe0e8f138651ac069dc155706ddde7d1c0ddaf",
+    "p1_timing.py": "9a40170c8604d0f71db6fa45983f75365737966dc0a99254e786ae3c5e1bdc04"
+  },
+  "retained_fixture_changed": false,
+  "input_schema_changed": false,
+  "feature_or_model_changed": false,
+  "weights_changed": false,
+  "model_fit_performed": false,
+  "active_model_changed": false,
+  "full_R2_gate_run": false,
+  "whole_engine_approved": false,
+  "release_approved": false,
+  "diagnostic_history": [
+    "before_tests: seven failures/two errors including a test offset rejected by native +07 wire; helper test corrected",
+    "initial_focused: only invalid-offset fixture error; corrected before 97 pass",
+    "first_regression_interrupted: optional coverage metadata broke frozen whole-output hash; removed metadata, kept fix, 15 compatibility and final 657 pass"
+  ],
+  "log_encoding": "PowerShell logs normalized from UTF-16 to UTF-8 without content edits"
+}

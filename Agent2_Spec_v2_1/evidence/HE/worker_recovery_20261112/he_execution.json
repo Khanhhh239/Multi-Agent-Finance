@@ -1,0 +1,14 @@
+{
+  "command": [
+    "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-u",
+    "-B",
+    "scripts/run_he_tests.py",
+    "--report",
+    "D:\\agent22\\Agent2_Spec_v2_1\\evidence\\HE\\worker_recovery_20261112\\he_tests.json"
+  ],
+  "exit_code": 1,
+  "elapsed_seconds": 498.9773162000056
+}

@@ -1,0 +1,63 @@
+{
+  "tests": [
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_allocation_not_yet_known_cannot_change_old_features_or_limits",
+      "status": "pass",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_allocation_not_yet_known_cannot_change_old_features_or_limits"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_known_empty_history_stays_zero_not_missing",
+      "status": "fail",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_known_empty_history_stays_zero_not_missing"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_later_global_run_does_not_backfill_old_rows",
+      "status": "fail",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_later_global_run_does_not_backfill_old_rows"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_multiple_missing_references_are_deterministic_under_reordering",
+      "status": "fail",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_multiple_missing_references_are_deterministic_under_reordering"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_new_later_row_can_use_source_that_has_become_known",
+      "status": "fail",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_new_later_row_can_use_source_that_has_become_known"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_partial_known_history_is_not_presented_as_complete_total",
+      "status": "fail",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_partial_known_history_is_not_presented_as_complete_total"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_signed_allocations_cancelling_to_zero_remain_available",
+      "status": "fail",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_signed_allocations_cancelling_to_zero_remain_available"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_snapshot_export_keeps_null_missing_and_provenance_separate",
+      "status": "fail",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_snapshot_export_keeps_null_missing_and_provenance_separate"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_unknown_invoice_revision_marks_features_and_exact_total_missing",
+      "status": "fail",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_unknown_invoice_revision_marks_features_and_exact_total_missing"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_unknown_revision_of_a_known_prior_transaction_is_also_missing",
+      "status": "fail",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_unknown_revision_of_a_known_prior_transaction_is_also_missing"
+    },
+    {
+      "id": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_unknown_unrelated_invoice_does_not_poison_current_invoice",
+      "status": "fail",
+      "testcase": "test_prior_invoice_history.PriorInvoiceHistoryTests.test_unknown_unrelated_invoice_does_not_poison_current_invoice"
+    }
+  ],
+  "count": 11,
+  "skipped": 0,
+  "failures": 6,
+  "errors": 4
+}

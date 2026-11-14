@@ -1,0 +1,52 @@
+{
+  "repo_path": "D:\\agent22",
+  "agent2_path": "D:\\agent22\\agent2",
+  "legacy_path": "D:\\agent22_legacy_20261110\\agent2",
+  "commit": "3cae5a3bba535694235179651b2e5daee8237656",
+  "branch": "platform-Khanh",
+  "original_dirty_diff_sha256": "5e2f1a1206fc0a6c99c3522a8b023d504adc91df9fc811488a5cc33b31498d40",
+  "languages": [
+    "Python",
+    "JavaScript/HTML/CSS in archived UI"
+  ],
+  "framework": "Python stdlib http.server (legacy app and current status-only compatibility page); no framework replacement",
+  "database": "Legacy SQLite: 41 tables, archived; no active business database in core-only R0",
+  "native_test_commands": [
+    [
+      "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\agent22_setup_20261108\\core_reset_20261110\\run_baseline.py",
+      "before"
+    ],
+    [
+      "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\agent22_setup_20261108\\core_reset_20261110\\run_baseline.py",
+      "after",
+      "D:/agent22_core_candidate_20261110"
+    ],
+    [
+      "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests"
+    ]
+  ],
+  "tool_versions": {
+    "python": "3.12.7",
+    "numpy": "1.26.4",
+    "scikit-learn": "1.8.0",
+    "scipy": "1.15.1",
+    "networkx": "3.6.1",
+    "joblib": "1.5.1"
+  },
+  "status": "R0 core reset only; R1-R6 not implemented",
+  "spec_tool_dependency": "jsonschema isolated at D:/agent22_setup_20261108/spec_tools_20261110"
+}

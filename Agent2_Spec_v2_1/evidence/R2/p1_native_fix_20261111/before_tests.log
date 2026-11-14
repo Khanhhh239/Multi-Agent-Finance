@@ -1,0 +1,221 @@
+agent2/.venv/Scripts/python.exe : test_exact_cutoff_is_inclusive_and_one_second_late_is_not 
+(test_p1_native_timing.P1NativeTimingTests.test_exact_cutoff_is_inclusive_and_one_second_late_is_not) ... FAIL
+At line:3 char:1
++ agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/run_r1_t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_exact_cuto...s_not) ... FAIL:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_future_invoice_values_do_not_change_prior_P1_outputs 
+(test_p1_native_timing.P1NativeTimingTests.test_future_invoice_values_do_not_change_prior_P1_outputs) ... FAIL
+test_future_issue_date_blocks_even_when_observation_is_known 
+(test_p1_native_timing.P1NativeTimingTests.test_future_issue_date_blocks_even_when_observation_is_known) ... FAIL
+test_known_batch_still_has_twenty_group_points_and_zero_row_points 
+(test_p1_native_timing.P1NativeTimingTests.test_known_batch_still_has_twenty_group_points_and_zero_row_points) ... ok
+test_late_invoice_observation_is_a_gap_not_twenty_points 
+(test_p1_native_timing.P1NativeTimingTests.test_late_invoice_observation_is_a_gap_not_twenty_points) ... FAIL
+test_later_transaction_does_not_rewrite_old_gap 
+(test_p1_native_timing.P1NativeTimingTests.test_later_transaction_does_not_rewrite_old_gap) ... FAIL
+test_timestamp_offsets_are_compared_as_instants 
+(test_p1_native_timing.P1NativeTimingTests.test_timestamp_offsets_are_compared_as_instants) ... ERROR
+test_two_unknown_current_invoices_cannot_create_batch_risk 
+(test_p1_native_timing.P1NativeTimingTests.test_two_unknown_current_invoices_cannot_create_batch_risk) ... ERROR
+test_unavailable_historical_invoice_does_not_enter_current_total 
+(test_p1_native_timing.P1NativeTimingTests.test_unavailable_historical_invoice_does_not_enter_current_total) ... FAIL
+test_unavailable_history_makes_batch_gap_without_partial_risk_total 
+(test_p1_native_timing.P1NativeTimingTests.test_unavailable_history_makes_batch_gap_without_partial_risk_total) ... 
+FAIL
+
+======================================================================
+ERROR: test_timestamp_offsets_are_compared_as_instants 
+(test_p1_native_timing.P1NativeTimingTests.test_timestamp_offsets_are_compared_as_instants)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\agent22\agent2\sme_fraud\exception_validation.py", line 204, in validated_record
+    row[field] = _value(row[field], kind)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agent22\agent2\sme_fraud\exception_validation.py", line 180, in _value
+    _temporal(value, kind)
+  File "D:\agent22\agent2\sme_fraud\exception_validation.py", line 141, in _temporal
+    raise ValueError(f'expected canonical {kind}; timestamps use seconds and +07:00')
+ValueError: expected canonical timestamp; timestamps use seconds and +07:00
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 55, in test_timestamp_offsets_are_compared_as_instants
+    self.assertEqual(sum(h['points'] for h in p1(score(case),current['transaction_id'])),20)
+                                                 ^^^^^^^^^^^
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 21, in score
+    def score(case):return score_rules(case.tables,features=case.features)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agent22\agent2\sme_fraud\rules.py", line 239, in score_rules
+    tables = validated_tables(tables)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agent22\agent2\sme_fraud\exception_validation.py", line 247, in validated_tables
+    result[name] = validated_rows(name, tables[name])
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agent22\agent2\sme_fraud\exception_validation.py", line 240, in validated_rows
+    return [validated_record(name, row) for row in rows]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agent22\agent2\sme_fraud\exception_validation.py", line 206, in validated_record
+    fail(field, str(error))
+  File "D:\agent22\agent2\sme_fraud\exception_validation.py", line 192, in fail
+    raise ValueError(f'Invalid {name}/{row.get(identity, "<missing ID>")}.{field}: {reason}')
+ValueError: Invalid transactions/AUDIT_0001.invoice_observed_at: expected canonical timestamp; timestamps use seconds 
+and +07:00
+
+======================================================================
+ERROR: test_two_unknown_current_invoices_cannot_create_batch_risk 
+(test_p1_native_timing.P1NativeTimingTests.test_two_unknown_current_invoices_cannot_create_batch_risk)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 71, in 
+test_two_unknown_current_invoices_cannot_create_batch_risk
+    for row in rows:self.assert_gap(result,row)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 27, in assert_gap
+    hit,=p1(result,row['transaction_id'])
+    ^^^^
+ValueError: not enough values to unpack (expected 1, got 0)
+
+======================================================================
+FAIL: test_exact_cutoff_is_inclusive_and_one_second_late_is_not 
+(test_p1_native_timing.P1NativeTimingTests.test_exact_cutoff_is_inclusive_and_one_second_late_is_not)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 48, in 
+test_exact_cutoff_is_inclusive_and_one_second_late_is_not
+    result=score(case);self.assertEqual(sum(h['points'] for h in p1(result,current['transaction_id'])),expected)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 20 != 0
+
+======================================================================
+FAIL: test_future_invoice_values_do_not_change_prior_P1_outputs 
+(test_p1_native_timing.P1NativeTimingTests.test_future_invoice_values_do_not_change_prior_P1_outputs)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 95, in 
+test_future_invoice_values_do_not_change_prior_P1_outputs
+    self.assertEqual(events(before),events(after))
+AssertionError: Lists differ: [{'ev[490 chars]d': 10000000, 'cumulative_paid_vnd': 12000000,[38 chars] []}] != 
+[{'ev[490 chars]d': 1, 'cumulative_paid_vnd': 12000000, 'exces[32 chars] []}]
+
+First differing element 0:
+{'eve[489 chars]d': 10000000, 'cumulative_paid_vnd': 12000000,[37 chars]: []}
+{'eve[489 chars]d': 1, 'cumulative_paid_vnd': 12000000, 'exces[31 chars]: []}
+
+Diff is 909 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_future_issue_date_blocks_even_when_observation_is_known 
+(test_p1_native_timing.P1NativeTimingTests.test_future_issue_date_blocks_even_when_observation_is_known)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 42, in 
+test_future_issue_date_blocks_even_when_observation_is_known
+    self.assert_gap(score(case),rows[-1])
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 28, in assert_gap
+    self.assertEqual((hit['points'],hit['hard_trigger']),(0,0))
+AssertionError: Tuples differ: (20, 1) != (0, 0)
+
+First differing element 0:
+20
+0
+
+- (20, 1)
+?  -   ^
+
++ (0, 0)
+?     ^
+
+
+======================================================================
+FAIL: test_late_invoice_observation_is_a_gap_not_twenty_points 
+(test_p1_native_timing.P1NativeTimingTests.test_late_invoice_observation_is_a_gap_not_twenty_points)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 37, in 
+test_late_invoice_observation_is_a_gap_not_twenty_points
+    self.assert_gap(score(case),rows[-1])
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 28, in assert_gap
+    self.assertEqual((hit['points'],hit['hard_trigger']),(0,0))
+AssertionError: Tuples differ: (20, 1) != (0, 0)
+
+First differing element 0:
+20
+0
+
+- (20, 1)
+?  -   ^
+
++ (0, 0)
+?     ^
+
+
+======================================================================
+FAIL: test_later_transaction_does_not_rewrite_old_gap 
+(test_p1_native_timing.P1NativeTimingTests.test_later_transaction_does_not_rewrite_old_gap)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 100, in test_later_transaction_does_not_rewrite_old_gap
+    before=copy.deepcopy(score(case));self.assert_gap(before,rows[-1])
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 28, in assert_gap
+    self.assertEqual((hit['points'],hit['hard_trigger']),(0,0))
+AssertionError: Tuples differ: (20, 1) != (0, 0)
+
+First differing element 0:
+20
+0
+
+- (20, 1)
+?  -   ^
+
++ (0, 0)
+?     ^
+
+
+======================================================================
+FAIL: test_unavailable_historical_invoice_does_not_enter_current_total 
+(test_p1_native_timing.P1NativeTimingTests.test_unavailable_historical_invoice_does_not_enter_current_total)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 62, in 
+test_unavailable_historical_invoice_does_not_enter_current_total
+    result=score(case);self.assert_gap(result,rows[1])
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 28, in assert_gap
+    self.assertEqual((hit['points'],hit['hard_trigger']),(0,0))
+AssertionError: Tuples differ: (20, 1) != (0, 0)
+
+First differing element 0:
+20
+0
+
+- (20, 1)
+?  -   ^
+
++ (0, 0)
+?     ^
+
+
+======================================================================
+FAIL: test_unavailable_history_makes_batch_gap_without_partial_risk_total 
+(test_p1_native_timing.P1NativeTimingTests.test_unavailable_history_makes_batch_gap_without_partial_risk_total)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\agent22\agent2\tests\test_p1_native_timing.py", line 78, in 
+test_unavailable_history_makes_batch_gap_without_partial_risk_total
+    self.assertEqual(event['status'],'information_gap');self.assertIsNone(event['signal']);self.assertEqual(event['poin
+ts'],0)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'evaluated' != 'information_gap'
+- evaluated
++ information_gap
+
+
+----------------------------------------------------------------------
+Ran 10 tests in 6.943s
+
+FAILED (failures=7, errors=2)

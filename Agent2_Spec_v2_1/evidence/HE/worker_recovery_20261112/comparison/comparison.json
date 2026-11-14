@@ -1,0 +1,2303 @@
+{
+  "version": "he-plaintext-comparison/1.0.0",
+  "status": "passed",
+  "measured_at": "2026-11-12T16:01:46.071107+00:00",
+  "data": "synthetic_only",
+  "model": "saved per-company Mahalanobis; 2 selected features / 33-feature contract",
+  "score_parity_passed": true,
+  "full_recovery_passed": true,
+  "companies": [
+    {
+      "company_id": "C001",
+      "artifact_id": "mth_edd87b751e5a56d18e535633650b6026f36ceccd8446c649e0898c594631018b",
+      "model_version": "mdl_533d93a27e862644eaf1c439715b1b6b075f08615e04c0892bf1aabcccb62d3b",
+      "snapshot_id": "snp_de7dabce8b1d42378e38b4f3a001107a",
+      "snapshot_checksum": "71aa66ffa9d5b7934f552b2237ed27475dd5bc511c51a1b42b44e05eac7f3873",
+      "as_of": "2026-11-12T09:18:57.070816+00:00",
+      "selected_columns": [
+        "log_abs_amount",
+        "event_hour_sin"
+      ],
+      "feature_contract_fingerprint": "750e47dac572ad4a07bd308526ca382acda0c90d62b5440236ed9b34c1423d6c",
+      "row_count": 5,
+      "repetitions": 5,
+      "warmup_runs": 1,
+      "review_budget": 5,
+      "plaintext_pipeline": {
+        "count": 5,
+        "median_ms": 119.65140000393149,
+        "p95_ms": 132.0683999976609,
+        "minimum_ms": 99.87140000157524,
+        "maximum_ms": 134.77879999845754,
+        "samples_ms": [
+          121.22679999447428,
+          134.77879999845754,
+          113.19600000570063,
+          99.87140000157524,
+          119.65140000393149
+        ]
+      },
+      "plaintext_core": {
+        "count": 5,
+        "median_ms": 0.570099990000017,
+        "p95_ms": 0.6276000087382272,
+        "minimum_ms": 0.49330000183545053,
+        "maximum_ms": 0.6338000093819574,
+        "samples_ms": [
+          0.5559999990509823,
+          0.6338000093819574,
+          0.49330000183545053,
+          0.6028000061633065,
+          0.570099990000017
+        ]
+      },
+      "he_pipeline": {
+        "count": 5,
+        "median_ms": 2175.8944999892265,
+        "p95_ms": 2610.8764600008726,
+        "minimum_ms": 1808.1775999889942,
+        "maximum_ms": 2696.869899999001,
+        "samples_ms": [
+          1808.1775999889942,
+          2266.902700008359,
+          2696.869899999001,
+          2175.8944999892265,
+          1892.44109998981
+        ]
+      },
+      "maximum_absolute_error": 1.4408997899284515e-06,
+      "all_scores_within_tolerance": true,
+      "exact_order_equal_all_trials": true,
+      "material_pair_inversions": 0,
+      "trials": [
+        {
+          "trial": 1,
+          "job_id": "herun_ecc3163470174019a442bba327654bb8",
+          "plaintext_pipeline_ms": 121.22679999447428,
+          "plaintext_core_ms": 0.5559999990509823,
+          "he_pipeline_ms": 1808.1775999889942,
+          "metrics": {
+            "row_count": 5,
+            "absolute_tolerance": 0.001,
+            "relative_tolerance": 1e-05,
+            "all_scores_within_tolerance": true,
+            "maximum_absolute_error": 1.4400304135797626e-06,
+            "mean_absolute_error": 9.619337150157392e-07,
+            "maximum_relative_error": 8.107534475028783e-07,
+            "relative_error_undefined_rows": 0,
+            "spearman": 0.9999999999999999,
+            "exact_order_equal": true,
+            "material_pair_inversions": 0,
+            "comparable_pairs": 10,
+            "top_k": 5,
+            "top_k_overlap": 5,
+            "top_k_overlap_fraction": 1.0,
+            "top_k_covers_entire_dataset": true,
+            "plaintext_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "encrypted_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "rows": [
+              {
+                "record_id": "T0",
+                "revision": 1,
+                "plaintext_score": 1.7900036758919144,
+                "encrypted_score": 1.790005115922328,
+                "absolute_error": 1.4400304135797626e-06,
+                "allowed_error": 0.0010179000367589192,
+                "within_tolerance": true,
+                "plaintext_rank": 1,
+                "encrypted_rank": 1
+              },
+              {
+                "record_id": "T1",
+                "revision": 1,
+                "plaintext_score": 0.6315735478067986,
+                "encrypted_score": 0.6315740559363316,
+                "absolute_error": 5.081295330056079e-07,
+                "allowed_error": 0.001006315735478068,
+                "within_tolerance": true,
+                "plaintext_rank": 4,
+                "encrypted_rank": 4
+              },
+              {
+                "record_id": "T2",
+                "revision": 1,
+                "plaintext_score": 1.5368947343496748,
+                "encrypted_score": 1.5368959719825217,
+                "absolute_error": 1.2376328468732822e-06,
+                "allowed_error": 0.0010153689473434968,
+                "within_tolerance": true,
+                "plaintext_rank": 2,
+                "encrypted_rank": 2
+              },
+              {
+                "record_id": "T3",
+                "revision": 1,
+                "plaintext_score": 0.5006904332174503,
+                "encrypted_score": 0.5006908391539452,
+                "absolute_error": 4.059364948627575e-07,
+                "allowed_error": 0.0010050069043321746,
+                "within_tolerance": true,
+                "plaintext_rank": 5,
+                "encrypted_rank": 5
+              },
+              {
+                "record_id": "T4",
+                "revision": 1,
+                "plaintext_score": 1.5182112445181684,
+                "encrypted_score": 1.5182124624574551,
+                "absolute_error": 1.2179392867572858e-06,
+                "allowed_error": 0.0010151821124451817,
+                "within_tolerance": true,
+                "plaintext_rank": 3,
+                "encrypted_rank": 3
+              }
+            ]
+          }
+        },
+        {
+          "trial": 2,
+          "job_id": "herun_98d83a540e954fcba8f869c9814576e5",
+          "plaintext_pipeline_ms": 134.77879999845754,
+          "plaintext_core_ms": 0.6338000093819574,
+          "he_pipeline_ms": 2266.902700008359,
+          "metrics": {
+            "row_count": 5,
+            "absolute_tolerance": 0.001,
+            "relative_tolerance": 1e-05,
+            "all_scores_within_tolerance": true,
+            "maximum_absolute_error": 1.4373251411292642e-06,
+            "mean_absolute_error": 9.626472738943903e-07,
+            "maximum_relative_error": 8.083280640386382e-07,
+            "relative_error_undefined_rows": 0,
+            "spearman": 0.9999999999999999,
+            "exact_order_equal": true,
+            "material_pair_inversions": 0,
+            "comparable_pairs": 10,
+            "top_k": 5,
+            "top_k_overlap": 5,
+            "top_k_overlap_fraction": 1.0,
+            "top_k_covers_entire_dataset": true,
+            "plaintext_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "encrypted_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "rows": [
+              {
+                "record_id": "T0",
+                "revision": 1,
+                "plaintext_score": 1.7900036758919144,
+                "encrypted_score": 1.7900051132170556,
+                "absolute_error": 1.4373251411292642e-06,
+                "allowed_error": 0.0010179000367589192,
+                "within_tolerance": true,
+                "plaintext_rank": 1,
+                "encrypted_rank": 1
+              },
+              {
+                "record_id": "T1",
+                "revision": 1,
+                "plaintext_score": 0.6315735478067986,
+                "encrypted_score": 0.6315740552266427,
+                "absolute_error": 5.074198440313538e-07,
+                "allowed_error": 0.001006315735478068,
+                "within_tolerance": true,
+                "plaintext_rank": 4,
+                "encrypted_rank": 4
+              },
+              {
+                "record_id": "T2",
+                "revision": 1,
+                "plaintext_score": 1.5368947343496748,
+                "encrypted_score": 1.5368959718564887,
+                "absolute_error": 1.2375068139114376e-06,
+                "allowed_error": 0.0010153689473434968,
+                "within_tolerance": true,
+                "plaintext_rank": 2,
+                "encrypted_rank": 2
+              },
+              {
+                "record_id": "T3",
+                "revision": 1,
+                "plaintext_score": 0.5006904332174503,
+                "encrypted_score": 0.5006908369892646,
+                "absolute_error": 4.037718143168334e-07,
+                "allowed_error": 0.0010050069043321746,
+                "within_tolerance": true,
+                "plaintext_rank": 5,
+                "encrypted_rank": 5
+              },
+              {
+                "record_id": "T4",
+                "revision": 1,
+                "plaintext_score": 1.5182112445181684,
+                "encrypted_score": 1.5182124717309244,
+                "absolute_error": 1.2272127560830626e-06,
+                "allowed_error": 0.0010151821124451817,
+                "within_tolerance": true,
+                "plaintext_rank": 3,
+                "encrypted_rank": 3
+              }
+            ]
+          }
+        },
+        {
+          "trial": 3,
+          "job_id": "herun_d805bf6bd0774ec3b9e0e49f287eb45c",
+          "plaintext_pipeline_ms": 113.19600000570063,
+          "plaintext_core_ms": 0.49330000183545053,
+          "he_pipeline_ms": 2696.869899999001,
+          "metrics": {
+            "row_count": 5,
+            "absolute_tolerance": 0.001,
+            "relative_tolerance": 1e-05,
+            "all_scores_within_tolerance": true,
+            "maximum_absolute_error": 1.4399454204561124e-06,
+            "mean_absolute_error": 9.598873446314827e-07,
+            "maximum_relative_error": 8.056740836624971e-07,
+            "relative_error_undefined_rows": 0,
+            "spearman": 0.9999999999999999,
+            "exact_order_equal": true,
+            "material_pair_inversions": 0,
+            "comparable_pairs": 10,
+            "top_k": 5,
+            "top_k_overlap": 5,
+            "top_k_overlap_fraction": 1.0,
+            "top_k_covers_entire_dataset": true,
+            "plaintext_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "encrypted_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "rows": [
+              {
+                "record_id": "T0",
+                "revision": 1,
+                "plaintext_score": 1.7900036758919144,
+                "encrypted_score": 1.790005115837335,
+                "absolute_error": 1.4399454204561124e-06,
+                "allowed_error": 0.0010179000367589192,
+                "within_tolerance": true,
+                "plaintext_rank": 1,
+                "encrypted_rank": 1
+              },
+              {
+                "record_id": "T1",
+                "revision": 1,
+                "plaintext_score": 0.6315735478067986,
+                "encrypted_score": 0.6315740562810668,
+                "absolute_error": 5.084742681349397e-07,
+                "allowed_error": 0.001006315735478068,
+                "within_tolerance": true,
+                "plaintext_rank": 4,
+                "encrypted_rank": 4
+              },
+              {
+                "record_id": "T2",
+                "revision": 1,
+                "plaintext_score": 1.5368947343496748,
+                "encrypted_score": 1.5368959637004127,
+                "absolute_error": 1.2293507378746682e-06,
+                "allowed_error": 0.0010153689473434968,
+                "within_tolerance": true,
+                "plaintext_rank": 2,
+                "encrypted_rank": 2
+              },
+              {
+                "record_id": "T3",
+                "revision": 1,
+                "plaintext_score": 0.5006904332174503,
+                "encrypted_score": 0.5006908366107563,
+                "absolute_error": 4.0339330598104794e-07,
+                "allowed_error": 0.0010050069043321746,
+                "within_tolerance": true,
+                "plaintext_rank": 5,
+                "encrypted_rank": 5
+              },
+              {
+                "record_id": "T4",
+                "revision": 1,
+                "plaintext_score": 1.5182112445181684,
+                "encrypted_score": 1.518212462791159,
+                "absolute_error": 1.2182729907106449e-06,
+                "allowed_error": 0.0010151821124451817,
+                "within_tolerance": true,
+                "plaintext_rank": 3,
+                "encrypted_rank": 3
+              }
+            ]
+          }
+        },
+        {
+          "trial": 4,
+          "job_id": "herun_47cf87343ac744f7aa09beb4e63e1a30",
+          "plaintext_pipeline_ms": 99.87140000157524,
+          "plaintext_core_ms": 0.6028000061633065,
+          "he_pipeline_ms": 2175.8944999892265,
+          "metrics": {
+            "row_count": 5,
+            "absolute_tolerance": 0.001,
+            "relative_tolerance": 1e-05,
+            "all_scores_within_tolerance": true,
+            "maximum_absolute_error": 1.4408997899284515e-06,
+            "mean_absolute_error": 9.642036278290078e-07,
+            "maximum_relative_error": 8.082256608732516e-07,
+            "relative_error_undefined_rows": 0,
+            "spearman": 0.9999999999999999,
+            "exact_order_equal": true,
+            "material_pair_inversions": 0,
+            "comparable_pairs": 10,
+            "top_k": 5,
+            "top_k_overlap": 5,
+            "top_k_overlap_fraction": 1.0,
+            "top_k_covers_entire_dataset": true,
+            "plaintext_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "encrypted_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "rows": [
+              {
+                "record_id": "T0",
+                "revision": 1,
+                "plaintext_score": 1.7900036758919144,
+                "encrypted_score": 1.7900051167917044,
+                "absolute_error": 1.4408997899284515e-06,
+                "allowed_error": 0.0010179000367589192,
+                "within_tolerance": true,
+                "plaintext_rank": 1,
+                "encrypted_rank": 1
+              },
+              {
+                "record_id": "T1",
+                "revision": 1,
+                "plaintext_score": 0.6315735478067986,
+                "encrypted_score": 0.6315740579561717,
+                "absolute_error": 5.101493730785833e-07,
+                "allowed_error": 0.001006315735478068,
+                "within_tolerance": true,
+                "plaintext_rank": 4,
+                "encrypted_rank": 4
+              },
+              {
+                "record_id": "T2",
+                "revision": 1,
+                "plaintext_score": 1.5368947343496748,
+                "encrypted_score": 1.5368959731075487,
+                "absolute_error": 1.2387578738337623e-06,
+                "allowed_error": 0.0010153689473434968,
+                "within_tolerance": true,
+                "plaintext_rank": 2,
+                "encrypted_rank": 2
+              },
+              {
+                "record_id": "T3",
+                "revision": 1,
+                "plaintext_score": 0.5006904332174503,
+                "encrypted_score": 0.5006908373712662,
+                "absolute_error": 4.0415381585834353e-07,
+                "allowed_error": 0.0010050069043321746,
+                "within_tolerance": true,
+                "plaintext_rank": 5,
+                "encrypted_rank": 5
+              },
+              {
+                "record_id": "T4",
+                "revision": 1,
+                "plaintext_score": 1.5182112445181684,
+                "encrypted_score": 1.5182124715754548,
+                "absolute_error": 1.2270572864458984e-06,
+                "allowed_error": 0.0010151821124451817,
+                "within_tolerance": true,
+                "plaintext_rank": 3,
+                "encrypted_rank": 3
+              }
+            ]
+          }
+        },
+        {
+          "trial": 5,
+          "job_id": "herun_d22f2a6d6fb444aba31c9d02ad18a863",
+          "plaintext_pipeline_ms": 119.65140000393149,
+          "plaintext_core_ms": 0.570099990000017,
+          "he_pipeline_ms": 1892.44109998981,
+          "metrics": {
+            "row_count": 5,
+            "absolute_tolerance": 0.001,
+            "relative_tolerance": 1e-05,
+            "all_scores_within_tolerance": true,
+            "maximum_absolute_error": 1.434856174764576e-06,
+            "mean_absolute_error": 9.635050483902673e-07,
+            "maximum_relative_error": 8.118345086399062e-07,
+            "relative_error_undefined_rows": 0,
+            "spearman": 0.9999999999999999,
+            "exact_order_equal": true,
+            "material_pair_inversions": 0,
+            "comparable_pairs": 10,
+            "top_k": 5,
+            "top_k_overlap": 5,
+            "top_k_overlap_fraction": 1.0,
+            "top_k_covers_entire_dataset": true,
+            "plaintext_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "encrypted_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "rows": [
+              {
+                "record_id": "T0",
+                "revision": 1,
+                "plaintext_score": 1.7900036758919144,
+                "encrypted_score": 1.7900051107480892,
+                "absolute_error": 1.434856174764576e-06,
+                "allowed_error": 0.0010179000367589192,
+                "within_tolerance": true,
+                "plaintext_rank": 1,
+                "encrypted_rank": 1
+              },
+              {
+                "record_id": "T1",
+                "revision": 1,
+                "plaintext_score": 0.6315735478067986,
+                "encrypted_score": 0.631574057515573,
+                "absolute_error": 5.097087744099227e-07,
+                "allowed_error": 0.001006315735478068,
+                "within_tolerance": true,
+                "plaintext_rank": 4,
+                "encrypted_rank": 4
+              },
+              {
+                "record_id": "T2",
+                "revision": 1,
+                "plaintext_score": 1.5368947343496748,
+                "encrypted_score": 1.5368959693574378,
+                "absolute_error": 1.2350077629452727e-06,
+                "allowed_error": 0.0010153689473434968,
+                "within_tolerance": true,
+                "plaintext_rank": 2,
+                "encrypted_rank": 2
+              },
+              {
+                "record_id": "T3",
+                "revision": 1,
+                "plaintext_score": 0.5006904332174503,
+                "encrypted_score": 0.5006908386337005,
+                "absolute_error": 4.054162501265779e-07,
+                "allowed_error": 0.0010050069043321746,
+                "within_tolerance": true,
+                "plaintext_rank": 5,
+                "encrypted_rank": 5
+              },
+              {
+                "record_id": "T4",
+                "revision": 1,
+                "plaintext_score": 1.5182112445181684,
+                "encrypted_score": 1.518212477054448,
+                "absolute_error": 1.2325362797049877e-06,
+                "allowed_error": 0.0010151821124451817,
+                "within_tolerance": true,
+                "plaintext_rank": 3,
+                "encrypted_rank": 3
+              }
+            ]
+          }
+        }
+      ],
+      "he_to_plaintext_median_ratio": 18.185282411386172
+    },
+    {
+      "company_id": "C002",
+      "artifact_id": "mth_8295f280b1cdf994dcd20765954083db9dd93de7e9e012cc26e939459131d983",
+      "model_version": "mdl_01e6da04e51f329f7736c253d6050007b3fa8a5c59850a4f737c158c11a38dcd",
+      "snapshot_id": "snp_29122f87a21b4829a2c92f145c28e00d",
+      "snapshot_checksum": "46b41a2ffcb5e887b308d30cae44dcfeb6fd647f83efee264c7125aeeee4656e",
+      "as_of": "2026-11-12T09:18:58.549025+00:00",
+      "selected_columns": [
+        "log_abs_amount",
+        "event_hour_sin"
+      ],
+      "feature_contract_fingerprint": "750e47dac572ad4a07bd308526ca382acda0c90d62b5440236ed9b34c1423d6c",
+      "row_count": 5,
+      "repetitions": 5,
+      "warmup_runs": 1,
+      "review_budget": 5,
+      "plaintext_pipeline": {
+        "count": 5,
+        "median_ms": 109.82290000538342,
+        "p95_ms": 122.65470000565983,
+        "minimum_ms": 106.97670000081416,
+        "maximum_ms": 125.71950000710785,
+        "samples_ms": [
+          107.1974000078626,
+          110.39549999986775,
+          125.71950000710785,
+          106.97670000081416,
+          109.82290000538342
+        ]
+      },
+      "plaintext_core": {
+        "count": 5,
+        "median_ms": 0.5572999943979084,
+        "p95_ms": 0.6203400058439001,
+        "minimum_ms": 0.4864999937126413,
+        "maximum_ms": 0.6240000075194985,
+        "samples_ms": [
+          0.4864999937126413,
+          0.6240000075194985,
+          0.5105000018374994,
+          0.5572999943979084,
+          0.6056999991415069
+        ]
+      },
+      "he_pipeline": {
+        "count": 5,
+        "median_ms": 2024.7800000070129,
+        "p95_ms": 2337.8523399907863,
+        "minimum_ms": 1924.960899996222,
+        "maximum_ms": 2396.3834999885876,
+        "samples_ms": [
+          1964.8318999970797,
+          1924.960899996222,
+          2024.7800000070129,
+          2396.3834999885876,
+          2103.727699999581
+        ]
+      },
+      "maximum_absolute_error": 1.44443308092157e-06,
+      "all_scores_within_tolerance": true,
+      "exact_order_equal_all_trials": true,
+      "material_pair_inversions": 0,
+      "trials": [
+        {
+          "trial": 1,
+          "job_id": "herun_95f6fba29bab4330b6166fd42aabc247",
+          "plaintext_pipeline_ms": 107.1974000078626,
+          "plaintext_core_ms": 0.4864999937126413,
+          "he_pipeline_ms": 1964.8318999970797,
+          "metrics": {
+            "row_count": 5,
+            "absolute_tolerance": 0.001,
+            "relative_tolerance": 1e-05,
+            "all_scores_within_tolerance": true,
+            "maximum_absolute_error": 1.431996742518038e-06,
+            "mean_absolute_error": 9.595808611928546e-07,
+            "maximum_relative_error": 8.064471899402082e-07,
+            "relative_error_undefined_rows": 0,
+            "spearman": 0.9999999999999999,
+            "exact_order_equal": true,
+            "material_pair_inversions": 0,
+            "comparable_pairs": 10,
+            "top_k": 5,
+            "top_k_overlap": 5,
+            "top_k_overlap_fraction": 1.0,
+            "top_k_covers_entire_dataset": true,
+            "plaintext_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "encrypted_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "rows": [
+              {
+                "record_id": "T0",
+                "revision": 1,
+                "plaintext_score": 1.7900035907328162,
+                "encrypted_score": 1.7900050227295587,
+                "absolute_error": 1.431996742518038e-06,
+                "allowed_error": 0.0010179000359073283,
+                "within_tolerance": true,
+                "plaintext_rank": 1,
+                "encrypted_rank": 1
+              },
+              {
+                "record_id": "T1",
+                "revision": 1,
+                "plaintext_score": 0.631573491861991,
+                "encrypted_score": 0.6315740011926587,
+                "absolute_error": 5.093306677528275e-07,
+                "allowed_error": 0.00100631573491862,
+                "within_tolerance": true,
+                "plaintext_rank": 4,
+                "encrypted_rank": 4
+              },
+              {
+                "record_id": "T2",
+                "revision": 1,
+                "plaintext_score": 1.5368947041412722,
+                "encrypted_score": 1.5368959366809658,
+                "absolute_error": 1.2325396936407884e-06,
+                "allowed_error": 0.0010153689470414127,
+                "within_tolerance": true,
+                "plaintext_rank": 2,
+                "encrypted_rank": 2
+              },
+              {
+                "record_id": "T3",
+                "revision": 1,
+                "plaintext_score": 0.5006904288332021,
+                "encrypted_score": 0.5006908319126597,
+                "absolute_error": 4.0307945758932817e-07,
+                "allowed_error": 0.001005006904288332,
+                "within_tolerance": true,
+                "plaintext_rank": 5,
+                "encrypted_rank": 5
+              },
+              {
+                "record_id": "T4",
+                "revision": 1,
+                "plaintext_score": 1.5182112534052785,
+                "encrypted_score": 1.518212474363023,
+                "absolute_error": 1.2209577444632913e-06,
+                "allowed_error": 0.0010151821125340527,
+                "within_tolerance": true,
+                "plaintext_rank": 3,
+                "encrypted_rank": 3
+              }
+            ]
+          }
+        },
+        {
+          "trial": 2,
+          "job_id": "herun_059b1127277041759bff01745cd5c923",
+          "plaintext_pipeline_ms": 110.39549999986775,
+          "plaintext_core_ms": 0.6240000075194985,
+          "he_pipeline_ms": 1924.960899996222,
+          "metrics": {
+            "row_count": 5,
+            "absolute_tolerance": 0.001,
+            "relative_tolerance": 1e-05,
+            "all_scores_within_tolerance": true,
+            "maximum_absolute_error": 1.4374113201931493e-06,
+            "mean_absolute_error": 9.609420343892339e-07,
+            "maximum_relative_error": 8.05720636034912e-07,
+            "relative_error_undefined_rows": 0,
+            "spearman": 0.9999999999999999,
+            "exact_order_equal": true,
+            "material_pair_inversions": 0,
+            "comparable_pairs": 10,
+            "top_k": 5,
+            "top_k_overlap": 5,
+            "top_k_overlap_fraction": 1.0,
+            "top_k_covers_entire_dataset": true,
+            "plaintext_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "encrypted_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "rows": [
+              {
+                "record_id": "T0",
+                "revision": 1,
+                "plaintext_score": 1.7900035907328162,
+                "encrypted_score": 1.7900050281441364,
+                "absolute_error": 1.4374113201931493e-06,
+                "allowed_error": 0.0010179000359073283,
+                "within_tolerance": true,
+                "plaintext_rank": 1,
+                "encrypted_rank": 1
+              },
+              {
+                "record_id": "T1",
+                "revision": 1,
+                "plaintext_score": 0.631573491861991,
+                "encrypted_score": 0.6315740001015774,
+                "absolute_error": 5.082395864164369e-07,
+                "allowed_error": 0.00100631573491862,
+                "within_tolerance": true,
+                "plaintext_rank": 4,
+                "encrypted_rank": 4
+              },
+              {
+                "record_id": "T2",
+                "revision": 1,
+                "plaintext_score": 1.5368947041412722,
+                "encrypted_score": 1.5368959424490507,
+                "absolute_error": 1.2383077785393937e-06,
+                "allowed_error": 0.0010153689470414127,
+                "within_tolerance": true,
+                "plaintext_rank": 2,
+                "encrypted_rank": 2
+              },
+              {
+                "record_id": "T3",
+                "revision": 1,
+                "plaintext_score": 0.5006904288332021,
+                "encrypted_score": 0.5006908298133355,
+                "absolute_error": 4.009801333193508e-07,
+                "allowed_error": 0.001005006904288332,
+                "within_tolerance": true,
+                "plaintext_rank": 5,
+                "encrypted_rank": 5
+              },
+              {
+                "record_id": "T4",
+                "revision": 1,
+                "plaintext_score": 1.5182112534052785,
+                "encrypted_score": 1.518212473176632,
+                "absolute_error": 1.2197713534778387e-06,
+                "allowed_error": 0.0010151821125340527,
+                "within_tolerance": true,
+                "plaintext_rank": 3,
+                "encrypted_rank": 3
+              }
+            ]
+          }
+        },
+        {
+          "trial": 3,
+          "job_id": "herun_811a20723b684086b168c03db8dc31ba",
+          "plaintext_pipeline_ms": 125.71950000710785,
+          "plaintext_core_ms": 0.5105000018374994,
+          "he_pipeline_ms": 2024.7800000070129,
+          "metrics": {
+            "row_count": 5,
+            "absolute_tolerance": 0.001,
+            "relative_tolerance": 1e-05,
+            "all_scores_within_tolerance": true,
+            "maximum_absolute_error": 1.4387416757966065e-06,
+            "mean_absolute_error": 9.60439098895982e-07,
+            "maximum_relative_error": 8.054765184628107e-07,
+            "relative_error_undefined_rows": 0,
+            "spearman": 0.9999999999999999,
+            "exact_order_equal": true,
+            "material_pair_inversions": 0,
+            "comparable_pairs": 10,
+            "top_k": 5,
+            "top_k_overlap": 5,
+            "top_k_overlap_fraction": 1.0,
+            "top_k_covers_entire_dataset": true,
+            "plaintext_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "encrypted_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "rows": [
+              {
+                "record_id": "T0",
+                "revision": 1,
+                "plaintext_score": 1.7900035907328162,
+                "encrypted_score": 1.790005029474492,
+                "absolute_error": 1.4387416757966065e-06,
+                "allowed_error": 0.0010179000359073283,
+                "within_tolerance": true,
+                "plaintext_rank": 1,
+                "encrypted_rank": 1
+              },
+              {
+                "record_id": "T1",
+                "revision": 1,
+                "plaintext_score": 0.631573491861991,
+                "encrypted_score": 0.6315739992792158,
+                "absolute_error": 5.074172247931941e-07,
+                "allowed_error": 0.00100631573491862,
+                "within_tolerance": true,
+                "plaintext_rank": 4,
+                "encrypted_rank": 4
+              },
+              {
+                "record_id": "T2",
+                "revision": 1,
+                "plaintext_score": 1.5368947041412722,
+                "encrypted_score": 1.5368959409747933,
+                "absolute_error": 1.236833521156555e-06,
+                "allowed_error": 0.0010153689470414127,
+                "within_tolerance": true,
+                "plaintext_rank": 2,
+                "encrypted_rank": 2
+              },
+              {
+                "record_id": "T3",
+                "revision": 1,
+                "plaintext_score": 0.5006904288332021,
+                "encrypted_score": 0.5006908321275856,
+                "absolute_error": 4.032943834442193e-07,
+                "allowed_error": 0.001005006904288332,
+                "within_tolerance": true,
+                "plaintext_rank": 5,
+                "encrypted_rank": 5
+              },
+              {
+                "record_id": "T4",
+                "revision": 1,
+                "plaintext_score": 1.5182112534052785,
+                "encrypted_score": 1.5182124693139678,
+                "absolute_error": 1.2159086892893356e-06,
+                "allowed_error": 0.0010151821125340527,
+                "within_tolerance": true,
+                "plaintext_rank": 3,
+                "encrypted_rank": 3
+              }
+            ]
+          }
+        },
+        {
+          "trial": 4,
+          "job_id": "herun_ef221328aa51446b81c2717db09b3080",
+          "plaintext_pipeline_ms": 106.97670000081416,
+          "plaintext_core_ms": 0.5572999943979084,
+          "he_pipeline_ms": 2396.3834999885876,
+          "metrics": {
+            "row_count": 5,
+            "absolute_tolerance": 0.001,
+            "relative_tolerance": 1e-05,
+            "all_scores_within_tolerance": true,
+            "maximum_absolute_error": 1.44118053113651e-06,
+            "mean_absolute_error": 9.629732498961373e-07,
+            "maximum_relative_error": 8.100341660031635e-07,
+            "relative_error_undefined_rows": 0,
+            "spearman": 0.9999999999999999,
+            "exact_order_equal": true,
+            "material_pair_inversions": 0,
+            "comparable_pairs": 10,
+            "top_k": 5,
+            "top_k_overlap": 5,
+            "top_k_overlap_fraction": 1.0,
+            "top_k_covers_entire_dataset": true,
+            "plaintext_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "encrypted_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "rows": [
+              {
+                "record_id": "T0",
+                "revision": 1,
+                "plaintext_score": 1.7900035907328162,
+                "encrypted_score": 1.7900050319133474,
+                "absolute_error": 1.44118053113651e-06,
+                "allowed_error": 0.0010179000359073283,
+                "within_tolerance": true,
+                "plaintext_rank": 1,
+                "encrypted_rank": 1
+              },
+              {
+                "record_id": "T1",
+                "revision": 1,
+                "plaintext_score": 0.631573491861991,
+                "encrypted_score": 0.6315739978299153,
+                "absolute_error": 5.059679243357706e-07,
+                "allowed_error": 0.00100631573491862,
+                "within_tolerance": true,
+                "plaintext_rank": 4,
+                "encrypted_rank": 4
+              },
+              {
+                "record_id": "T2",
+                "revision": 1,
+                "plaintext_score": 1.5368947041412722,
+                "encrypted_score": 1.5368959421422117,
+                "absolute_error": 1.2380009395407399e-06,
+                "allowed_error": 0.0010153689470414127,
+                "within_tolerance": true,
+                "plaintext_rank": 2,
+                "encrypted_rank": 2
+              },
+              {
+                "record_id": "T3",
+                "revision": 1,
+                "plaintext_score": 0.5006904288332021,
+                "encrypted_score": 0.5006908344095561,
+                "absolute_error": 4.0557635394566915e-07,
+                "allowed_error": 0.001005006904288332,
+                "within_tolerance": true,
+                "plaintext_rank": 5,
+                "encrypted_rank": 5
+              },
+              {
+                "record_id": "T4",
+                "revision": 1,
+                "plaintext_score": 1.5182112534052785,
+                "encrypted_score": 1.518212477545779,
+                "absolute_error": 1.2241405005219974e-06,
+                "allowed_error": 0.0010151821125340527,
+                "within_tolerance": true,
+                "plaintext_rank": 3,
+                "encrypted_rank": 3
+              }
+            ]
+          }
+        },
+        {
+          "trial": 5,
+          "job_id": "herun_38cc507b09474be9b955084c2d2ec65c",
+          "plaintext_pipeline_ms": 109.82290000538342,
+          "plaintext_core_ms": 0.6056999991415069,
+          "he_pipeline_ms": 2103.727699999581,
+          "metrics": {
+            "row_count": 5,
+            "absolute_tolerance": 0.001,
+            "relative_tolerance": 1e-05,
+            "all_scores_within_tolerance": true,
+            "maximum_absolute_error": 1.44443308092157e-06,
+            "mean_absolute_error": 9.638614485218965e-07,
+            "maximum_relative_error": 8.106278889333026e-07,
+            "relative_error_undefined_rows": 0,
+            "spearman": 0.9999999999999999,
+            "exact_order_equal": true,
+            "material_pair_inversions": 0,
+            "comparable_pairs": 10,
+            "top_k": 5,
+            "top_k_overlap": 5,
+            "top_k_overlap_fraction": 1.0,
+            "top_k_covers_entire_dataset": true,
+            "plaintext_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "encrypted_order": [
+              [
+                "T0",
+                1
+              ],
+              [
+                "T2",
+                1
+              ],
+              [
+                "T4",
+                1
+              ],
+              [
+                "T1",
+                1
+              ],
+              [
+                "T3",
+                1
+              ]
+            ],
+            "rows": [
+              {
+                "record_id": "T0",
+                "revision": 1,
+                "plaintext_score": 1.7900035907328162,
+                "encrypted_score": 1.7900050351658972,
+                "absolute_error": 1.44443308092157e-06,
+                "allowed_error": 0.0010179000359073283,
+                "within_tolerance": true,
+                "plaintext_rank": 1,
+                "encrypted_rank": 1
+              },
+              {
+                "record_id": "T1",
+                "revision": 1,
+                "plaintext_score": 0.631573491861991,
+                "encrypted_score": 0.6315740038330774,
+                "absolute_error": 5.119710864143201e-07,
+                "allowed_error": 0.00100631573491862,
+                "within_tolerance": true,
+                "plaintext_rank": 4,
+                "encrypted_rank": 4
+              },
+              {
+                "record_id": "T2",
+                "revision": 1,
+                "plaintext_score": 1.5368947041412722,
+                "encrypted_score": 1.5368959451954702,
+                "absolute_error": 1.2410541980756307e-06,
+                "allowed_error": 0.0010153689470414127,
+                "within_tolerance": true,
+                "plaintext_rank": 2,
+                "encrypted_rank": 2
+              },
+              {
+                "record_id": "T3",
+                "revision": 1,
+                "plaintext_score": 0.5006904288332021,
+                "encrypted_score": 0.5006908305289388,
+                "absolute_error": 4.0169573667370173e-07,
+                "allowed_error": 0.001005006904288332,
+                "within_tolerance": true,
+                "plaintext_rank": 5,
+                "encrypted_rank": 5
+              },
+              {
+                "record_id": "T4",
+                "revision": 1,
+                "plaintext_score": 1.5182112534052785,
+                "encrypted_score": 1.518212473558419,
+                "absolute_error": 1.2201531405242605e-06,
+                "allowed_error": 0.0010151821125340527,
+                "within_tolerance": true,
+                "plaintext_rank": 3,
+                "encrypted_rank": 3
+              }
+            ]
+          }
+        }
+      ],
+      "he_to_plaintext_median_ratio": 18.43677411457683
+    }
+  ],
+  "recovery_cases": [
+    {
+      "company_id": "C001",
+      "mode": "disconnect_before_claim",
+      "trial": 1,
+      "job_id": "herun_e9b831f1c7a149e9a202e673607d5a25",
+      "observed": "preparing_no_worker_claim",
+      "injection_confirmed": true,
+      "recovered": true,
+      "same_job": true,
+      "new_worker_jobs": 1,
+      "phase": "completed",
+      "reason": null,
+      "recovery_ms": 1789.2817999963881,
+      "observed_terminal_ms": 1789.2817999963881,
+      "total_case_ms": 5098.2786000095075,
+      "parity": {
+        "row_count": 5,
+        "absolute_tolerance": 0.001,
+        "relative_tolerance": 1e-05,
+        "all_scores_within_tolerance": true,
+        "maximum_absolute_error": 1.4441774442985889e-06,
+        "mean_absolute_error": 9.637531015238564e-07,
+        "maximum_relative_error": 8.181160338292654e-07,
+        "relative_error_undefined_rows": 0,
+        "spearman": 0.9999999999999999,
+        "exact_order_equal": true,
+        "material_pair_inversions": 0,
+        "comparable_pairs": 10,
+        "top_k": 5,
+        "top_k_overlap": 5,
+        "top_k_overlap_fraction": 1.0,
+        "top_k_covers_entire_dataset": true,
+        "plaintext_order": [
+          [
+            "T0",
+            1
+          ],
+          [
+            "T2",
+            1
+          ],
+          [
+            "T4",
+            1
+          ],
+          [
+            "T1",
+            1
+          ],
+          [
+            "T3",
+            1
+          ]
+        ],
+        "encrypted_order": [
+          [
+            "T0",
+            1
+          ],
+          [
+            "T2",
+            1
+          ],
+          [
+            "T4",
+            1
+          ],
+          [
+            "T1",
+            1
+          ],
+          [
+            "T3",
+            1
+          ]
+        ],
+        "rows": [
+          {
+            "record_id": "T0",
+            "revision": 1,
+            "plaintext_score": 1.7900036758919144,
+            "encrypted_score": 1.7900051200693587,
+            "absolute_error": 1.4441774442985889e-06,
+            "allowed_error": 0.0010179000367589192,
+            "within_tolerance": true,
+            "plaintext_rank": 1,
+            "encrypted_rank": 1
+          },
+          {
+            "record_id": "T1",
+            "revision": 1,
+            "plaintext_score": 0.6315735478067986,
+            "encrypted_score": 0.6315740644703578,
+            "absolute_error": 5.16663559158026e-07,
+            "allowed_error": 0.001006315735478068,
+            "within_tolerance": true,
+            "plaintext_rank": 4,
+            "encrypted_rank": 4
+          },
+          {
+            "record_id": "T2",
+            "revision": 1,
+            "plaintext_score": 1.5368947343496748,
+            "encrypted_score": 1.53689596241653,
+            "absolute_error": 1.2280668550967988e-06,
+            "allowed_error": 0.0010153689473434968,
+            "within_tolerance": true,
+            "plaintext_rank": 2,
+            "encrypted_rank": 2
+          },
+          {
+            "record_id": "T3",
+            "revision": 1,
+            "plaintext_score": 0.5006904332174503,
+            "encrypted_score": 0.5006908428403217,
+            "absolute_error": 4.096228714001171e-07,
+            "allowed_error": 0.0010050069043321746,
+            "within_tolerance": true,
+            "plaintext_rank": 5,
+            "encrypted_rank": 5
+          },
+          {
+            "record_id": "T4",
+            "revision": 1,
+            "plaintext_score": 1.5182112445181684,
+            "encrypted_score": 1.518212464752946,
+            "absolute_error": 1.2202347776657518e-06,
+            "allowed_error": 0.0010151821124451817,
+            "within_tolerance": true,
+            "plaintext_rank": 3,
+            "encrypted_rank": 3
+          }
+        ]
+      }
+    },
+    {
+      "company_id": "C001",
+      "mode": "controlled_restart_during_compute",
+      "trial": 1,
+      "job_id": "herun_7ebbee4143aa4422af19a3a5d79d821b",
+      "observed": "worker_running",
+      "injection_confirmed": true,
+      "recovered": true,
+      "same_job": true,
+      "new_worker_jobs": 1,
+      "phase": "completed",
+      "reason": null,
+      "recovery_ms": 608.1847000023117,
+      "observed_terminal_ms": 608.1847000023117,
+      "total_case_ms": 2495.4939000017475,
+      "parity": {
+        "row_count": 5,
+        "absolute_tolerance": 0.001,
+        "relative_tolerance": 1e-05,
+        "all_scores_within_tolerance": true,
+        "maximum_absolute_error": 1.450994379093018e-06,
+        "mean_absolute_error": 9.62884213984161e-07,
+        "maximum_relative_error": 8.10609720323632e-07,
+        "relative_error_undefined_rows": 0,
+        "spearman": 0.9999999999999999,
+        "exact_order_equal": true,
+        "material_pair_inversions": 0,
+        "comparable_pairs": 10,
+        "top_k": 5,
+        "top_k_overlap": 5,
+        "top_k_overlap_fraction": 1.0,
+        "top_k_covers_entire_dataset": true,
+        "plaintext_order": [
+          [
+            "T0",
+            1
+          ],
+          [
+            "T2",
+            1
+          ],
+          [
+            "T4",
+            1
+          ],
+          [
+            "T1",
+            1
+          ],
+          [
+            "T3",
+            1
+          ]
+        ],
+        "encrypted_order": [
+          [
+            "T0",
+            1
+          ],
+          [
+            "T2",
+            1
+          ],
+          [
+            "T4",
+            1
+          ],
+          [
+            "T1",
+            1
+          ],
+          [
+            "T3",
+            1
+          ]
+        ],
+        "rows": [
+          {
+            "record_id": "T0",
+            "revision": 1,
+            "plaintext_score": 1.7900036758919144,
+            "encrypted_score": 1.7900051268862935,
+            "absolute_error": 1.450994379093018e-06,
+            "allowed_error": 0.0010179000367589192,
+            "within_tolerance": true,
+            "plaintext_rank": 1,
+            "encrypted_rank": 1
+          },
+          {
+            "record_id": "T1",
+            "revision": 1,
+            "plaintext_score": 0.6315735478067986,
+            "encrypted_score": 0.6315740566601569,
+            "absolute_error": 5.0885335822759e-07,
+            "allowed_error": 0.001006315735478068,
+            "within_tolerance": true,
+            "plaintext_rank": 4,
+            "encrypted_rank": 4
+          },
+          {
+            "record_id": "T2",
+            "revision": 1,
+            "plaintext_score": 1.5368947343496748,
+            "encrypted_score": 1.5368959667481306,
+            "absolute_error": 1.2323984557305323e-06,
+            "allowed_error": 0.0010153689473434968,
+            "within_tolerance": true,
+            "plaintext_rank": 2,
+            "encrypted_rank": 2
+          },
+          {
+            "record_id": "T3",
+            "revision": 1,
+            "plaintext_score": 0.5006904332174503,
+            "encrypted_score": 0.5006908348054974,
+            "absolute_error": 4.0158804703871454e-07,
+            "allowed_error": 0.0010050069043321746,
+            "within_tolerance": true,
+            "plaintext_rank": 5,
+            "encrypted_rank": 5
+          },
+          {
+            "record_id": "T4",
+            "revision": 1,
+            "plaintext_score": 1.5182112445181684,
+            "encrypted_score": 1.5182124651049982,
+            "absolute_error": 1.2205868298309497e-06,
+            "allowed_error": 0.0010151821124451817,
+            "within_tolerance": true,
+            "plaintext_rank": 3,
+            "encrypted_rank": 3
+          }
+        ]
+      }
+    },
+    {
+      "company_id": "C001",
+      "mode": "hard_crash_during_compute",
+      "trial": 1,
+      "job_id": "herun_73c52ad868ec47c0b24a1afce17362d0",
+      "observed": "worker_running",
+      "injection_confirmed": true,
+      "recovered": true,
+      "same_job": true,
+      "new_worker_jobs": 1,
+      "phase": "completed",
+      "reason": null,
+      "recovery_ms": 2156.5530999941984,
+      "observed_terminal_ms": 2156.5530999941984,
+      "total_case_ms": 3544.085100002121,
+      "parity": {
+        "row_count": 5,
+        "absolute_tolerance": 0.001,
+        "relative_tolerance": 1e-05,
+        "all_scores_within_tolerance": true,
+        "maximum_absolute_error": 1.4397280885258823e-06,
+        "mean_absolute_error": 9.60567234598031e-07,
+        "maximum_relative_error": 8.043157161722036e-07,
+        "relative_error_undefined_rows": 0,
+        "spearman": 0.9999999999999999,
+        "exact_order_equal": true,
+        "material_pair_inversions": 0,
+        "comparable_pairs": 10,
+        "top_k": 5,
+        "top_k_overlap": 5,
+        "top_k_overlap_fraction": 1.0,
+        "top_k_covers_entire_dataset": true,
+        "plaintext_order": [
+          [
+            "T0",
+            1
+          ],
+          [
+            "T2",
+            1
+          ],
+          [
+            "T4",
+            1
+          ],
+          [
+            "T1",
+            1
+          ],
+          [
+            "T3",
+            1
+          ]
+        ],
+        "encrypted_order": [
+          [
+            "T0",
+            1
+          ],
+          [
+            "T2",
+            1
+          ],
+          [
+            "T4",
+            1
+          ],
+          [
+            "T1",
+            1
+          ],
+          [
+            "T3",
+            1
+          ]
+        ],
+        "rows": [
+          {
+            "record_id": "T0",
+            "revision": 1,
+            "plaintext_score": 1.7900036758919144,
+            "encrypted_score": 1.790005115620003,
+            "absolute_error": 1.4397280885258823e-06,
+            "allowed_error": 0.0010179000367589192,
+            "within_tolerance": true,
+            "plaintext_rank": 1,
+            "encrypted_rank": 1
+          },
+          {
+            "record_id": "T1",
+            "revision": 1,
+            "plaintext_score": 0.6315735478067986,
+            "encrypted_score": 0.6315740528303248,
+            "absolute_error": 5.050235261094826e-07,
+            "allowed_error": 0.001006315735478068,
+            "within_tolerance": true,
+            "plaintext_rank": 4,
+            "encrypted_rank": 4
+          },
+          {
+            "record_id": "T2",
+            "revision": 1,
+            "plaintext_score": 1.5368947343496748,
+            "encrypted_score": 1.5368959704651952,
+            "absolute_error": 1.2361155203866048e-06,
+            "allowed_error": 0.0010153689473434968,
+            "within_tolerance": true,
+            "plaintext_rank": 2,
+            "encrypted_rank": 2
+          },
+          {
+            "record_id": "T3",
+            "revision": 1,
+            "plaintext_score": 0.5006904332174503,
+            "encrypted_score": 0.500690835657,
+            "absolute_error": 4.024395496848854e-07,
+            "allowed_error": 0.0010050069043321746,
+            "within_tolerance": true,
+            "plaintext_rank": 5,
+            "encrypted_rank": 5
+          },
+          {
+            "record_id": "T4",
+            "revision": 1,
+            "plaintext_score": 1.5182112445181684,
+            "encrypted_score": 1.5182124640476566,
+            "absolute_error": 1.2195294882832997e-06,
+            "allowed_error": 0.0010151821124451817,
+            "within_tolerance": true,
+            "plaintext_rank": 3,
+            "encrypted_rank": 3
+          }
+        ]
+      }
+    },
+    {
+      "company_id": "C002",
+      "mode": "disconnect_before_claim",
+      "trial": 1,
+      "job_id": "herun_6bccb42f61324f6a92ddda9c5e9395bd",
+      "observed": "preparing_no_worker_claim",
+      "injection_confirmed": true,
+      "recovered": true,
+      "same_job": true,
+      "new_worker_jobs": 1,
+      "phase": "completed",
+      "reason": null,
+      "recovery_ms": 1906.646700008423,
+      "observed_terminal_ms": 1906.646700008423,
+      "total_case_ms": 5291.9569999939995,
+      "parity": {
+        "row_count": 5,
+        "absolute_tolerance": 0.001,
+        "relative_tolerance": 1e-05,
+        "all_scores_within_tolerance": true,
+        "maximum_absolute_error": 1.4371912142596699e-06,
+        "mean_absolute_error": 9.603343939401654e-07,
+        "maximum_relative_error": 8.038018071889575e-07,
+        "relative_error_undefined_rows": 0,
+        "spearman": 0.9999999999999999,
+        "exact_order_equal": true,
+        "material_pair_inversions": 0,
+        "comparable_pairs": 10,
+        "top_k": 5,
+        "top_k_overlap": 5,
+        "top_k_overlap_fraction": 1.0,
+        "top_k_covers_entire_dataset": true,
+        "plaintext_order": [
+          [
+            "T0",
+            1
+          ],
+          [
+            "T2",
+            1
+          ],
+          [
+            "T4",
+            1
+          ],
+          [
+            "T1",
+            1
+          ],
+          [
+            "T3",
+            1
+          ]
+        ],
+        "encrypted_order": [
+          [
+            "T0",
+            1
+          ],
+          [
+            "T2",
+            1
+          ],
+          [
+            "T4",
+            1
+          ],
+          [
+            "T1",
+            1
+          ],
+          [
+            "T3",
+            1
+          ]
+        ],
+        "rows": [
+          {
+            "record_id": "T0",
+            "revision": 1,
+            "plaintext_score": 1.7900035907328162,
+            "encrypted_score": 1.7900050279240305,
+            "absolute_error": 1.4371912142596699e-06,
+            "allowed_error": 0.0010179000359073283,
+            "within_tolerance": true,
+            "plaintext_rank": 1,
+            "encrypted_rank": 1
+          },
+          {
+            "record_id": "T1",
+            "revision": 1,
+            "plaintext_score": 0.631573491861991,
+            "encrypted_score": 0.6315739995075522,
+            "absolute_error": 5.076455612540443e-07,
+            "allowed_error": 0.00100631573491862,
+            "within_tolerance": true,
+            "plaintext_rank": 4,
+            "encrypted_rank": 4
+          },
+          {
+            "record_id": "T2",
+            "revision": 1,
+            "plaintext_score": 1.5368947041412722,
+            "encrypted_score": 1.5368959382409464,
+            "absolute_error": 1.2340996742299382e-06,
+            "allowed_error": 0.0010153689470414127,
+            "within_tolerance": true,
+            "plaintext_rank": 2,
+            "encrypted_rank": 2
+          },
+          {
+            "record_id": "T3",
+            "revision": 1,
+            "plaintext_score": 0.5006904288332021,
+            "encrypted_score": 0.5006908312277729,
+            "absolute_error": 4.0239457077539953e-07,
+            "allowed_error": 0.001005006904288332,
+            "within_tolerance": true,
+            "plaintext_rank": 5,
+            "encrypted_rank": 5
+          },
+          {
+            "record_id": "T4",
+            "revision": 1,
+            "plaintext_score": 1.5182112534052785,
+            "encrypted_score": 1.5182124737462277,
+            "absolute_error": 1.2203409491817752e-06,
+            "allowed_error": 0.0010151821125340527,
+            "within_tolerance": true,
+            "plaintext_rank": 3,
+            "encrypted_rank": 3
+          }
+        ]
+      }
+    },
+    {
+      "company_id": "C002",
+      "mode": "controlled_restart_during_compute",
+      "trial": 1,
+      "job_id": "herun_160aa1ccb73b442498ad1a7b60ad1fa3",
+      "observed": "worker_running",
+      "injection_confirmed": true,
+      "recovered": true,
+      "same_job": true,
+      "new_worker_jobs": 1,
+      "phase": "completed",
+      "reason": null,
+      "recovery_ms": 769.1163000126835,
+      "observed_terminal_ms": 769.1163000126835,
+      "total_case_ms": 2995.0894999929005,
+      "parity": {
+        "row_count": 5,
+        "absolute_tolerance": 0.001,
+        "relative_tolerance": 1e-05,
+        "all_scores_within_tolerance": true,
+        "maximum_absolute_error": 1.4420916520929694e-06,
+        "mean_absolute_error": 9.626672414775328e-07,
+        "maximum_relative_error": 8.077360664016381e-07,
+        "relative_error_undefined_rows": 0,
+        "spearman": 0.9999999999999999,
+        "exact_order_equal": true,
+        "material_pair_inversions": 0,
+        "comparable_pairs": 10,
+        "top_k": 5,
+        "top_k_overlap": 5,
+        "top_k_overlap_fraction": 1.0,
+        "top_k_covers_entire_dataset": true,
+        "plaintext_order": [
+          [
+            "T0",
+            1
+          ],
+          [
+            "T2",
+            1
+          ],
+          [
+            "T4",
+            1
+          ],
+          [
+            "T1",
+            1
+          ],
+          [
+            "T3",
+            1
+          ]
+        ],
+        "encrypted_order": [
+          [
+            "T0",
+            1
+          ],
+          [
+            "T2",
+            1
+          ],
+          [
+            "T4",
+            1
+          ],
+          [
+            "T1",
+            1
+          ],
+          [
+            "T3",
+            1
+          ]
+        ],
+        "rows": [
+          {
+            "record_id": "T0",
+            "revision": 1,
+            "plaintext_score": 1.7900035907328162,
+            "encrypted_score": 1.7900050328244683,
+            "absolute_error": 1.4420916520929694e-06,
+            "allowed_error": 0.0010179000359073283,
+            "within_tolerance": true,
+            "plaintext_rank": 1,
+            "encrypted_rank": 1
+          },
+          {
+            "record_id": "T1",
+            "revision": 1,
+            "plaintext_score": 0.631573491861991,
+            "encrypted_score": 0.6315739994006637,
+            "absolute_error": 5.075386727559916e-07,
+            "allowed_error": 0.00100631573491862,
+            "within_tolerance": true,
+            "plaintext_rank": 4,
+            "encrypted_rank": 4
+          },
+          {
+            "record_id": "T2",
+            "revision": 1,
+            "plaintext_score": 1.5368947041412722,
+            "encrypted_score": 1.5368959388506127,
+            "absolute_error": 1.2347093405473686e-06,
+            "allowed_error": 0.0010153689470414127,
+            "within_tolerance": true,
+            "plaintext_rank": 2,
+            "encrypted_rank": 2
+          },
+          {
+            "record_id": "T3",
+            "revision": 1,
+            "plaintext_score": 0.5006904288332021,
+            "encrypted_score": 0.5006908332589196,
+            "absolute_error": 4.0442571747068e-07,
+            "allowed_error": 0.001005006904288332,
+            "within_tolerance": true,
+            "plaintext_rank": 5,
+            "encrypted_rank": 5
+          },
+          {
+            "record_id": "T4",
+            "revision": 1,
+            "plaintext_score": 1.5182112534052785,
+            "encrypted_score": 1.518212477976103,
+            "absolute_error": 1.2245708245206544e-06,
+            "allowed_error": 0.0010151821125340527,
+            "within_tolerance": true,
+            "plaintext_rank": 3,
+            "encrypted_rank": 3
+          }
+        ]
+      }
+    },
+    {
+      "company_id": "C002",
+      "mode": "hard_crash_during_compute",
+      "trial": 1,
+      "job_id": "herun_4b73de1f236e4380a5f96a50fb664ca4",
+      "observed": "worker_running",
+      "injection_confirmed": true,
+      "recovered": true,
+      "same_job": true,
+      "new_worker_jobs": 1,
+      "phase": "completed",
+      "reason": null,
+      "recovery_ms": 2028.2771000056528,
+      "observed_terminal_ms": 2028.2771000056528,
+      "total_case_ms": 3491.138099998352,
+      "parity": {
+        "row_count": 5,
+        "absolute_tolerance": 0.001,
+        "relative_tolerance": 1e-05,
+        "all_scores_within_tolerance": true,
+        "maximum_absolute_error": 1.4374163475050494e-06,
+        "mean_absolute_error": 9.596060488226143e-07,
+        "maximum_relative_error": 8.054858332093286e-07,
+        "relative_error_undefined_rows": 0,
+        "spearman": 0.9999999999999999,
+        "exact_order_equal": true,
+        "material_pair_inversions": 0,
+        "comparable_pairs": 10,
+        "top_k": 5,
+        "top_k_overlap": 5,
+        "top_k_overlap_fraction": 1.0,
+        "top_k_covers_entire_dataset": true,
+        "plaintext_order": [
+          [
+            "T0",
+            1
+          ],
+          [
+            "T2",
+            1
+          ],
+          [
+            "T4",
+            1
+          ],
+          [
+            "T1",
+            1
+          ],
+          [
+            "T3",
+            1
+          ]
+        ],
+        "encrypted_order": [
+          [
+            "T0",
+            1
+          ],
+          [
+            "T2",
+            1
+          ],
+          [
+            "T4",
+            1
+          ],
+          [
+            "T1",
+            1
+          ],
+          [
+            "T3",
+            1
+          ]
+        ],
+        "rows": [
+          {
+            "record_id": "T0",
+            "revision": 1,
+            "plaintext_score": 1.7900035907328162,
+            "encrypted_score": 1.7900050281491637,
+            "absolute_error": 1.4374163475050494e-06,
+            "allowed_error": 0.0010179000359073283,
+            "within_tolerance": true,
+            "plaintext_rank": 1,
+            "encrypted_rank": 1
+          },
+          {
+            "record_id": "T1",
+            "revision": 1,
+            "plaintext_score": 0.631573491861991,
+            "encrypted_score": 0.6315740005854913,
+            "absolute_error": 5.087235003253809e-07,
+            "allowed_error": 0.00100631573491862,
+            "within_tolerance": true,
+            "plaintext_rank": 4,
+            "encrypted_rank": 4
+          },
+          {
+            "record_id": "T2",
+            "revision": 1,
+            "plaintext_score": 1.5368947041412722,
+            "encrypted_score": 1.5368959338219996,
+            "absolute_error": 1.229680727465876e-06,
+            "allowed_error": 0.0010153689470414127,
+            "within_tolerance": true,
+            "plaintext_rank": 2,
+            "encrypted_rank": 2
+          },
+          {
+            "record_id": "T3",
+            "revision": 1,
+            "plaintext_score": 0.5006904288332021,
+            "encrypted_score": 0.5006908304944149,
+            "absolute_error": 4.016612127344388e-07,
+            "allowed_error": 0.001005006904288332,
+            "within_tolerance": true,
+            "plaintext_rank": 5,
+            "encrypted_rank": 5
+          },
+          {
+            "record_id": "T4",
+            "revision": 1,
+            "plaintext_score": 1.5182112534052785,
+            "encrypted_score": 1.5182124739537346,
+            "absolute_error": 1.2205484560823265e-06,
+            "allowed_error": 0.0010151821125340527,
+            "within_tolerance": true,
+            "plaintext_rank": 3,
+            "encrypted_rank": 3
+          }
+        ]
+      }
+    }
+  ],
+  "recovery_summary": [
+    {
+      "mode": "controlled_restart_during_compute",
+      "attempted": 2,
+      "confirmed": 2,
+      "inconclusive": 0,
+      "successful": 2,
+      "success_fraction": 1.0,
+      "successful_recovery_time": {
+        "count": 2,
+        "median_ms": 688.6505000074976,
+        "p95_ms": 761.0697200121649,
+        "minimum_ms": 608.1847000023117,
+        "maximum_ms": 769.1163000126835,
+        "samples_ms": [
+          608.1847000023117,
+          769.1163000126835
+        ]
+      }
+    },
+    {
+      "mode": "disconnect_before_claim",
+      "attempted": 2,
+      "confirmed": 2,
+      "inconclusive": 0,
+      "successful": 2,
+      "success_fraction": 1.0,
+      "successful_recovery_time": {
+        "count": 2,
+        "median_ms": 1847.9642500024056,
+        "p95_ms": 1900.7784550078213,
+        "minimum_ms": 1789.2817999963881,
+        "maximum_ms": 1906.646700008423,
+        "samples_ms": [
+          1789.2817999963881,
+          1906.646700008423
+        ]
+      }
+    },
+    {
+      "mode": "hard_crash_during_compute",
+      "attempted": 2,
+      "confirmed": 2,
+      "inconclusive": 0,
+      "successful": 2,
+      "success_fraction": 1.0,
+      "successful_recovery_time": {
+        "count": 2,
+        "median_ms": 2092.4150999999256,
+        "p95_ms": 2150.139299994771,
+        "minimum_ms": 2028.2771000056528,
+        "maximum_ms": 2156.5530999941984,
+        "samples_ms": [
+          2156.5530999941984,
+          2028.2771000056528
+        ]
+      }
+    }
+  ],
+  "worker_jobs": {
+    "C001": 9,
+    "C002": 9
+  },
+  "source_models_snapshots_keys_unchanged": true,
+  "live_services_changed": false,
+  "measurement": {
+    "repetitions": 5,
+    "recovery_repetitions_per_company_mode": 1,
+    "clock": "time.perf_counter",
+    "warmup": "one plaintext + one fresh HE run per company, excluded",
+    "plaintext_pipeline": "scope check, read/validate saved model, snapshot features, preprocessing, score",
+    "he_pipeline": "HEWorkbench.submit to decrypted durable result; includes signed readiness, model/features, encryption, checkpoints, worker HTTP and polling",
+    "excluded": "worker/node startup for normal timing, offline fit, Portal/browser and public-cloud network",
+    "timing_order": "alternating plaintext first and HE first; each HE run uses a fresh request, never cache",
+    "recovery_start": "restart of worker/node begins; includes worker process startup; reports observed time to terminal separately",
+    "controlled_restart": "Jobs.close drains native compute before restarting node/worker; prior Portal acceptance separately exercises actual UI stop"
+  },
+  "limitations": [
+    "Five synthetic transactions per company; not fraud detection accuracy.",
+    "Top-5 covers all five rows and cannot demonstrate candidate-selection benefit.",
+    "Small sample recovery fractions are observations, not an SLA or a population reliability estimate.",
+    "Local loopback timings do not predict public-cloud latency; p95 is descriptive with only five default trials.",
+    "Recovery only covers the identical managed request within its original TTL and intact state; legacy burned nonces and terminal failures are not reopened."
+  ],
+  "environment": {
+    "python": "3.12.7",
+    "platform": "Windows-11-10.0.26200-SP0"
+  }
+}

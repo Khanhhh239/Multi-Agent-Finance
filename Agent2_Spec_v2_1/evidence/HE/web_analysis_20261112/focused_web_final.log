@@ -1,0 +1,19 @@
+test_backend_not_enabled_returns_explicit_unavailable (test_web_analysis.HEWebTests.test_backend_not_enabled_returns_explicit_unavailable) ... ok
+test_catalog_preflight_does_not_deserialize_or_fit_models (test_web_analysis.HEWebTests.test_catalog_preflight_does_not_deserialize_or_fit_models) ... ok
+test_client_cannot_choose_model_key_or_asof (test_web_analysis.HEWebTests.test_client_cannot_choose_model_key_or_asof) ... ok
+test_dataset_catalog_scoped_checksums_and_no_model_metadata (test_web_analysis.HEWebTests.test_dataset_catalog_scoped_checksums_and_no_model_metadata) ... ok
+test_duplicate_pins_are_not_silently_chosen (test_web_analysis.HEWebTests.test_duplicate_pins_are_not_silently_chosen) ... ok
+test_foreign_snapshot_cannot_be_submitted (test_web_analysis.HEWebTests.test_foreign_snapshot_cannot_be_submitted) ... ok
+test_missing_artifact_disables_analysis_in_catalog (test_web_analysis.HEWebTests.test_missing_artifact_disables_analysis_in_catalog) ... ok
+test_missing_company_pin_disables_analysis (test_web_analysis.HEWebTests.test_missing_company_pin_disables_analysis) ... ok
+test_no_session_and_cross_company_requests_are_denied (test_web_analysis.HEWebTests.test_no_session_and_cross_company_requests_are_denied) ... ok
+test_portal_rejects_unknown_he_routes_and_queries (test_web_analysis.HEWebTests.test_portal_rejects_unknown_he_routes_and_queries) ... ok
+test_portal_serves_page_and_script_without_exposing_keys (test_web_analysis.HEWebTests.test_portal_serves_page_and_script_without_exposing_keys) ... ok
+test_real_he_result_reuses_same_job_and_five_rows (test_web_analysis.HEWebTests.test_real_he_result_reuses_same_job_and_five_rows) ... ok
+test_request_requires_idempotency_before_creating_job (test_web_analysis.HEWebTests.test_request_requires_idempotency_before_creating_job) ... ok
+test_resume_requires_empty_body_and_owned_job (test_web_analysis.HEWebTests.test_resume_requires_empty_body_and_owned_job) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 16.130s
+
+OK

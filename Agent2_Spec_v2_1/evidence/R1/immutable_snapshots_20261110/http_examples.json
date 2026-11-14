@@ -1,0 +1,235 @@
+{
+  "upload": {
+    "protocol_version": "1.0.0",
+    "import_id": "imp_3f6e7e8c6a5e4fdf9cfc694850cc0216",
+    "company_id": "C001",
+    "revision": 1,
+    "status": "uploaded",
+    "source_hash": "3ce4ef81dc62f4da130e23bbf124cb0fe666245fc3e3083a13fc8ea681eb012b",
+    "mapping_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "filename": "data.json",
+    "mapping": {},
+    "active_preview_id": null,
+    "snapshot_id": null
+  },
+  "preview": {
+    "contract_version": "1.0.0",
+    "validator_version": "1.1.0",
+    "profile_version": "agent2-posted-vnd/1.0.0",
+    "status": "accepted_with_warnings",
+    "errors": [],
+    "report_version": "1.1.0",
+    "warnings": [
+      {
+        "code": "CAPABILITY_UNAVAILABLE",
+        "path": "/vendor_bank_history",
+        "table": "vendor_bank_history",
+        "row": null,
+        "field": null,
+        "message": "C001: chưa có dữ liệu cho bank_change_input.",
+        "action": "Bổ sung nguồn khi cần phân tích này; các phần có dữ liệu vẫn được giữ."
+      },
+      {
+        "code": "DOCUMENT_BASIS_MISSING",
+        "path": "/transactions",
+        "table": "transactions",
+        "row": null,
+        "field": null,
+        "message": "Có giao dịch chưa có chứng từ gốc đã xác minh gắn với giao dịch hoặc hóa đơn liên quan; chưa đủ căn cứ kết luận nghiệp vụ.",
+        "action": "Bổ sung và đối chiếu chứng từ đúng giao dịch/nghĩa vụ. Bản mô phỏng hoặc bản xuất không tự là chứng từ gốc đã xác minh.",
+        "company_id": "C001",
+        "affected_count": 3
+      },
+      {
+        "code": "BANK_HISTORY_MISSING",
+        "path": "/transactions",
+        "table": "transactions",
+        "row": null,
+        "field": null,
+        "message": "Chưa có lịch sử tài khoản tương ứng của NCC cho một số giao dịch; chưa đánh giá được thay đổi tài khoản từ nguồn hiện có.",
+        "action": "Bổ sung bank history có thời điểm hiệu lực và thời điểm được biết; không giả lịch sử từ tài khoản hiện tại.",
+        "company_id": "C001",
+        "affected_count": 2
+      },
+      {
+        "code": "APPROVAL_BASIS_MISSING",
+        "path": "/transactions",
+        "table": "transactions",
+        "row": null,
+        "field": null,
+        "message": "Chưa có bản ghi phê duyệt approved gắn với một số khoản chi/lương; chưa xác nhận được dấu vết phê duyệt.",
+        "action": "Bổ sung nguồn phê duyệt phù hợp chính sách. Thiếu bản ghi không tự chứng minh khoản chi chưa được duyệt.",
+        "company_id": "C001",
+        "affected_count": 1
+      }
+    ],
+    "counts": {
+      "approvals": 1,
+      "companies": 1,
+      "employees": 1,
+      "invoices": 1,
+      "payment_allocations": 2,
+      "supporting_documents": 1,
+      "transactions": 3,
+      "vendor_bank_history": 0,
+      "vendors": 1
+    },
+    "capabilities": {
+      "C001": {
+        "transaction_input": {
+          "available": true,
+          "reason": "records_present"
+        },
+        "bank_change_input": {
+          "available": false,
+          "reason": "not_provided"
+        },
+        "invoice_payment_links": {
+          "available": true,
+          "reason": "records_present"
+        },
+        "document_input": {
+          "available": true,
+          "reason": "records_present"
+        }
+      }
+    },
+    "analysis_limits": {
+      "C001": [
+        {
+          "code": "DOCUMENT_BASIS_MISSING",
+          "analysis": "document_verification",
+          "message": "Có giao dịch chưa có chứng từ gốc đã xác minh gắn với giao dịch hoặc hóa đơn liên quan; chưa đủ căn cứ kết luận nghiệp vụ.",
+          "action": "Bổ sung và đối chiếu chứng từ đúng giao dịch/nghĩa vụ. Bản mô phỏng hoặc bản xuất không tự là chứng từ gốc đã xác minh.",
+          "affected_count": 3,
+          "affected_rows": [
+            {
+              "table": "transactions",
+              "row": 1,
+              "record_id": "T001",
+              "revision": 1
+            },
+            {
+              "table": "transactions",
+              "row": 2,
+              "record_id": "T002",
+              "revision": 1
+            },
+            {
+              "table": "transactions",
+              "row": 3,
+              "record_id": "ADJ001",
+              "revision": 1
+            }
+          ],
+          "affected_rows_truncated": false,
+          "coverage_basis": "submitted_bundle_current_revisions"
+        },
+        {
+          "code": "BANK_HISTORY_MISSING",
+          "analysis": "bank_change_analysis",
+          "message": "Chưa có lịch sử tài khoản tương ứng của NCC cho một số giao dịch; chưa đánh giá được thay đổi tài khoản từ nguồn hiện có.",
+          "action": "Bổ sung bank history có thời điểm hiệu lực và thời điểm được biết; không giả lịch sử từ tài khoản hiện tại.",
+          "affected_count": 2,
+          "affected_rows": [
+            {
+              "table": "transactions",
+              "row": 1,
+              "record_id": "T001",
+              "revision": 1
+            },
+            {
+              "table": "transactions",
+              "row": 2,
+              "record_id": "T002",
+              "revision": 1
+            }
+          ],
+          "affected_rows_truncated": false,
+          "coverage_basis": "submitted_bundle_current_revisions"
+        },
+        {
+          "code": "APPROVAL_BASIS_MISSING",
+          "analysis": "approval_trace",
+          "message": "Chưa có bản ghi phê duyệt approved gắn với một số khoản chi/lương; chưa xác nhận được dấu vết phê duyệt.",
+          "action": "Bổ sung nguồn phê duyệt phù hợp chính sách. Thiếu bản ghi không tự chứng minh khoản chi chưa được duyệt.",
+          "affected_count": 1,
+          "affected_rows": [
+            {
+              "table": "transactions",
+              "row": 2,
+              "record_id": "T002",
+              "revision": 1
+            }
+          ],
+          "affected_rows_truncated": false,
+          "coverage_basis": "submitted_bundle_current_revisions"
+        }
+      ]
+    },
+    "protocol_version": "1.0.0",
+    "import_id": "imp_3f6e7e8c6a5e4fdf9cfc694850cc0216",
+    "preview_id": "prv_e753eec0bdf044d880ec3659af4f0207",
+    "company_id": "C001",
+    "revision": 1,
+    "source_hash": "3ce4ef81dc62f4da130e23bbf124cb0fe666245fc3e3083a13fc8ea681eb012b",
+    "mapping_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "context_hash": "88143d5b2109fdf5f97a0e8ed0a71029c005eeefe873e576f5333021868a152d",
+    "versions": {
+      "protocol_version": "1.0.0",
+      "parser_version": "json-record-columns/1.0.0",
+      "contract_version": "1.0.0",
+      "schema_sha256": "049997d76a1ab977d83f0230388605486f4eddd077fa1ad5045406aa9009a453",
+      "validator_version": "1.1.0",
+      "profile_version": "agent2-posted-vnd/1.0.0",
+      "report_version": "1.1.0",
+      "parser_fingerprint": "34e382cb7647e14c42b855f34bb0f3afa5671d89b5504647795e59828b2099fe",
+      "jsonschema_version": "4.26.0",
+      "validator_fingerprint": "2b57df5276651434e41055bf8349eff51d70ad5804f89a4bdef63fc042f0e4f2"
+    },
+    "data_checksum": "3ce4ef81dc62f4da130e23bbf124cb0fe666245fc3e3083a13fc8ea681eb012b",
+    "created_at": "2026-11-10T17:06:10.146555+00:00",
+    "expires_at": "2026-11-10T17:21:10.146555+00:00",
+    "report_hash": "88f79291b2942252092cdf44b77343a104e384e6cb5ce05d26ee76e1c3143aa9"
+  },
+  "commit_http_status": 200,
+  "committed": {
+    "status": "committed",
+    "import_id": "imp_3f6e7e8c6a5e4fdf9cfc694850cc0216",
+    "snapshot": {
+      "snapshot_version": "1.0.0",
+      "snapshot_id": "snp_58f49137a6a3430ba3d3f36957068b3f",
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "contract_version": "1.0.0",
+      "data_checksum": "3ce4ef81dc62f4da130e23bbf124cb0fe666245fc3e3083a13fc8ea681eb012b",
+      "source_hash": "3ce4ef81dc62f4da130e23bbf124cb0fe666245fc3e3083a13fc8ea681eb012b",
+      "mapping_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "versions": {
+        "protocol_version": "1.0.0",
+        "parser_version": "json-record-columns/1.0.0",
+        "contract_version": "1.0.0",
+        "schema_sha256": "049997d76a1ab977d83f0230388605486f4eddd077fa1ad5045406aa9009a453",
+        "validator_version": "1.1.0",
+        "profile_version": "agent2-posted-vnd/1.0.0",
+        "report_version": "1.1.0",
+        "parser_fingerprint": "34e382cb7647e14c42b855f34bb0f3afa5671d89b5504647795e59828b2099fe",
+        "jsonschema_version": "4.26.0",
+        "validator_fingerprint": "2b57df5276651434e41055bf8349eff51d70ad5804f89a4bdef63fc042f0e4f2"
+      },
+      "origin_import_id": "imp_3f6e7e8c6a5e4fdf9cfc694850cc0216",
+      "origin_revision": 1,
+      "origin_preview_id": "prv_e753eec0bdf044d880ec3659af4f0207",
+      "origin_report_hash": "88f79291b2942252092cdf44b77343a104e384e6cb5ce05d26ee76e1c3143aa9",
+      "created_at": "2026-11-10T17:06:10.168071+00:00",
+      "created_by": "synthetic-reviewer",
+      "checksum": "66c2f0dd2d81df43e8828e5954ce2d38990456ca07024e272f777edc4fb3e7e1"
+    }
+  },
+  "identical_retry_requests": 10,
+  "unique_snapshot_ids": [
+    "snp_58f49137a6a3430ba3d3f36957068b3f"
+  ],
+  "snapshot_count": 1,
+  "download_checksum": "3ce4ef81dc62f4da130e23bbf124cb0fe666245fc3e3083a13fc8ea681eb012b"
+}

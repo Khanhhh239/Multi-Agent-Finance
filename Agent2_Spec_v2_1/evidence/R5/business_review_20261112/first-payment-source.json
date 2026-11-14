@@ -1,0 +1,191 @@
+{
+  "contract_version": "1.1.0",
+  "tenant_id": "demo",
+  "companies": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "C001",
+      "revision": 1,
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-09-01T00:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "C001",
+        "is_simulated": true
+      },
+      "name": "Doanh nghiệp mô phỏng C001"
+    }
+  ],
+  "transactions": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "FIRST_OVER",
+      "revision": 1,
+      "effective_at": "2026-10-01T09:00:00+07:00",
+      "observed_at": "2026-10-01T09:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "FIRST_OVER",
+        "is_simulated": true
+      },
+      "amount_vnd": 11000000,
+      "currency": "VND",
+      "kind": "payment",
+      "description": "Mô phỏng: khoản đầu 11 triệu trên hóa đơn 10 triệu",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      },
+      "created_by_ref": {
+        "record_id": "E001",
+        "revision": 1
+      },
+      "bank_account": "00123456",
+      "bank_code": "BANK01",
+      "payment_channel": "bank"
+    }
+  ],
+  "vendors": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "V001",
+      "revision": 1,
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-09-01T00:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "V001",
+        "is_simulated": true
+      },
+      "name": "North Harbor Equipment",
+      "bank_account": "00123456",
+      "bank_code": "BANK01"
+    }
+  ],
+  "invoices": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "I001",
+      "revision": 1,
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-09-01T00:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "I001",
+        "is_simulated": true
+      },
+      "number": "0000123",
+      "amount_vnd": 10000000,
+      "currency": "VND",
+      "kind": "invoice",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      }
+    }
+  ],
+  "payment_allocations": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "A_FIRST_OVER",
+      "revision": 1,
+      "effective_at": "2026-10-01T09:00:00+07:00",
+      "observed_at": "2026-10-01T09:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "A_FIRST_OVER",
+        "is_simulated": true
+      },
+      "transaction_ref": {
+        "record_id": "FIRST_OVER",
+        "revision": 1
+      },
+      "invoice_ref": {
+        "record_id": "I001",
+        "revision": 1
+      },
+      "amount_vnd": 11000000,
+      "currency": "VND",
+      "kind": "allocation"
+    }
+  ],
+  "employees": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "E001",
+      "revision": 1,
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-09-01T00:00:00+07:00",
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "E001",
+        "is_simulated": true
+      },
+      "name": "Nhân viên mô phỏng",
+      "role": "accountant",
+      "bank_account": "00123456",
+      "bank_code": "BANK01"
+    }
+  ],
+  "approvals": [],
+  "supporting_documents": [],
+  "vendor_bank_history": [],
+  "payment_history_coverage": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "revision": 1,
+      "source": {
+        "system": "r1-frozen-fixture",
+        "record_id": "COV_0",
+        "is_simulated": true
+      },
+      "record_id": "COV_0",
+      "effective_at": "2026-09-01T00:00:00+07:00",
+      "observed_at": "2026-10-01T09:00:00+07:00",
+      "invoice_refs": [
+        {
+          "record_id": "I001",
+          "revision": 1
+        }
+      ],
+      "covered_from": "2026-09-01T00:00:00+07:00",
+      "covered_through": "2026-10-01T09:00:00+07:00",
+      "history_basis": "since_inception",
+      "coverage_status": "complete",
+      "export_id": "EXPORT_COV_0",
+      "manifest": {
+        "invoice_refs": [
+          {
+            "record_id": "I001",
+            "revision": 1
+          }
+        ],
+        "transaction_refs": [
+          {
+            "record_id": "FIRST_OVER",
+            "revision": 1
+          }
+        ],
+        "allocation_refs": [
+          {
+            "record_id": "A_FIRST_OVER",
+            "revision": 1
+          }
+        ],
+        "record_counts": {
+          "invoices": 1,
+          "transactions": 1,
+          "payment_allocations": 1
+        },
+        "records_sha256": "b3bd48caf40ab3ee37e8783660ea425dfa0efb76dbf5ecbafcc3646602965737"
+      }
+    }
+  ]
+}

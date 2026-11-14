@@ -1,0 +1,38 @@
+{
+  "status": "local_deployed_ready",
+  "at": "2026-11-13T01:27:39.998231+00:00",
+  "ports": {
+    "portal": 8800,
+    "agent2": 8766,
+    "old_worker": 8868,
+    "he4_worker": 8869
+  },
+  "checks": {
+    "model_db_old_records_preserved": true,
+    "snapshot_db_old_records_preserved": true,
+    "state-wrapping.dpapi.json_unchanged": true,
+    "node-signing.dpapi.json_unchanged": true,
+    "old_worker___init___unchanged": true,
+    "old_worker_protocol_unchanged": true,
+    "old_worker_cloud_worker_unchanged": true,
+    "old_worker_http_common_unchanged": true,
+    "old_worker_worker_store_unchanged": true,
+    "old_worker_worker_server_unchanged": true,
+    "original_policy_unchanged": true,
+    "four_branch_mode_active": true,
+    "worker_8868_healthy": true,
+    "worker_8869_healthy": true,
+    "old_committed_worker_records_preserved": true
+  },
+  "backup_directory": ".runtime/backups/he4-local-20261113",
+  "real_concrete_contexts": 6,
+  "portal_session_invalidated_by_restart": true,
+  "password_unchanged": true,
+  "permissions_unchanged": true,
+  "authenticated_live_acceptance": "passed: user signed in; C001/C002 each 5 encrypted results, 5 review cases, same run after reload, no JS errors",
+  "cloud_public_deployed": false,
+  "password_file_last_modified_before_restart": true,
+  "password_backup_timing": "Copied after restart; startup did not modify the existing password file.",
+  "authenticated_live_evidence": "live_portal_authenticated.json",
+  "human_reviews_created": false
+}

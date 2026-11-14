@@ -1,0 +1,918 @@
+{
+  "version": "snapshot-analysis/1.1.0",
+  "analysis_id": "ana_3dde718b1473cc8a2a36ca94012e81fb92118babce55b600323ee7276f2283cc",
+  "view": "review",
+  "as_of": "2026-10-30T02:00:00+00:00",
+  "analysis_context_id": "actx_72a683bf2ba85174526ea61a6934ba37aa14ecea2d42f8ee8e3cb8e2b6837a88",
+  "snapshot": {
+    "snapshot_id": "snp_b72c916c582c47d78dd0d44aad647eb7",
+    "company_id": "C001",
+    "checksum": "5d7bff908e70e9dd12e509b6c643702b2a10885d56d05e41cea5c62448dc0512",
+    "data_checksum": "cde011fd22db0ac1fc3c57ce795af6d964ba1a90903c3e361ab5c6f01f2ec04c",
+    "contract_version": "1.1.0"
+  },
+  "supported_checks": [
+    "payment_invoice",
+    "vendor_names"
+  ],
+  "row_count": 3,
+  "rows": [
+    {
+      "transaction_id": "OLD",
+      "revision": 1,
+      "event_at": "2026-10-01T02:00:00+00:00",
+      "knowledge_at": "2026-10-01T02:00:00+00:00",
+      "amount_vnd": 4000000,
+      "kind": "payment",
+      "description": "Dòng mô phỏng H0",
+      "source_kind": "simulated",
+      "branches": {
+        "rules": {
+          "name": "Luật nghiệp vụ",
+          "status": "partial",
+          "available": false,
+          "evaluated_count": 2,
+          "unavailable_count": 31,
+          "not_applicable_count": 2,
+          "total_count": 35,
+          "message": "Đã chạy các đối chiếu đủ nguồn. Những luật thiếu nguồn hoặc chưa có bộ đánh giá vẫn chưa khả dụng; chưa tính điểm tổng toàn bộ luật."
+        },
+        "statistics": {
+          "name": "So sánh thống kê",
+          "status": "unavailable",
+          "available": false,
+          "message": "Chưa chỉ định phiên bản đã fit cho doanh nghiệp này.",
+          "results": [
+            {
+              "label": "Đối chiếu lịch sử",
+              "status": "unavailable",
+              "available": false,
+              "relative_position": null,
+              "reason": "Chưa chỉ định phiên bản đã fit cho doanh nghiệp này.",
+              "missing_sources": [],
+              "inputs_adjusted": false,
+              "retrospective": null
+            }
+          ]
+        },
+        "graph": {
+          "name": "Quan hệ đối tượng",
+          "status": "available",
+          "available": true,
+          "message": "Liên kết từ các bản ghi đã biết; không xác nhận sai phạm, không cộng thành điểm rủi ro.",
+          "nodes": [
+            {
+              "id": "bank_account:abb4c9fd1013687c37afb1bc",
+              "kind": "Tài khoản ngân hàng",
+              "label": "BANK01 · 00123456"
+            },
+            {
+              "id": "employee:c8435065a9a3cb3b9268ab3a",
+              "kind": "Nhân viên",
+              "label": "Nhân viên mô phỏng",
+              "record_id": "E001"
+            },
+            {
+              "id": "vendor:806d74326bcb30f1e7b0dd8f",
+              "kind": "Nhà cung cấp",
+              "label": "NCC mô phỏng",
+              "record_id": "V001"
+            }
+          ],
+          "links": [
+            {
+              "id": "25a49aff4d5834ec15674e45",
+              "source": "bank_account:abb4c9fd1013687c37afb1bc",
+              "target": "vendor:806d74326bcb30f1e7b0dd8f",
+              "relation": "Tài khoản ngân hàng",
+              "context_only": false,
+              "evidence": {
+                "record_type": "vendor",
+                "source": "Nhà cung cấp",
+                "record_id": "V001",
+                "revision": 1,
+                "effective_at": "2026-09-01T00:00:00+07:00",
+                "observed_at": "2026-09-01T00:00:00+07:00",
+                "source_kind": "simulated",
+                "display_name": "NCC mô phỏng"
+              }
+            },
+            {
+              "id": "4bae4d0963dcf326a9d4e781",
+              "source": "bank_account:abb4c9fd1013687c37afb1bc",
+              "target": "employee:c8435065a9a3cb3b9268ab3a",
+              "relation": "Tài khoản ngân hàng",
+              "context_only": false,
+              "evidence": {
+                "record_type": "employee",
+                "source": "Nhân viên",
+                "record_id": "E001",
+                "revision": 1,
+                "effective_at": "2026-09-01T00:00:00+07:00",
+                "observed_at": "2026-09-01T00:00:00+07:00",
+                "source_kind": "simulated",
+                "display_name": "Nhân viên mô phỏng"
+              }
+            }
+          ],
+          "findings": [
+            {
+              "id": "relation:4d5fe64d7ea48a3c78e33027",
+              "description": "Nhà cung cấp và nhân viên cùng tài khoản ngân hàng",
+              "entity_nodes": [
+                "employee:c8435065a9a3cb3b9268ab3a",
+                "vendor:806d74326bcb30f1e7b0dd8f"
+              ],
+              "attribute_node": "bank_account:abb4c9fd1013687c37afb1bc",
+              "evidence_link_ids": [
+                "25a49aff4d5834ec15674e45",
+                "4bae4d0963dcf326a9d4e781"
+              ],
+              "context_only": true
+            }
+          ],
+          "missing_sources": []
+        },
+        "ml": {
+          "name": "Phân tích bất thường",
+          "status": "unavailable",
+          "available": false,
+          "message": "Chưa chỉ định phiên bản đã fit cho doanh nghiệp này.",
+          "results": []
+        }
+      },
+      "checks": {
+        "payment_invoice": {
+          "name": "Đối chiếu thanh toán hóa đơn",
+          "status": "no_signal",
+          "available": true,
+          "needs_review": false,
+          "reason": null,
+          "missing_sources": [],
+          "evidence_refs": [
+            {
+              "record_type": "invoice",
+              "source": "Hóa đơn",
+              "record_id": "I001",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "source_kind": "simulated",
+              "document_number": "0000123"
+            },
+            {
+              "record_type": "payment_allocation",
+              "source": "Phân bổ thanh toán",
+              "record_id": "A_OLD",
+              "revision": 1,
+              "effective_at": "2026-10-01T09:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "history_export",
+              "source": "Phạm vi lịch sử thanh toán",
+              "record_id": "COV_0",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "transaction",
+              "source": "Giao dịch",
+              "record_id": "OLD",
+              "revision": 1,
+              "effective_at": "2026-10-01T09:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "vendor",
+              "source": "Nhà cung cấp",
+              "record_id": "V001",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "source_kind": "simulated",
+              "display_name": "NCC mô phỏng"
+            }
+          ],
+          "facts": [
+            {
+              "invoice_gross_vnd": 10000000,
+              "prior_paid_vnd": 0,
+              "current_allocated_vnd": 4000000,
+              "cumulative_paid_vnd": 4000000,
+              "excess_vnd": 0,
+              "invoice_refs": [
+                {
+                  "record_type": "invoice",
+                  "source": "Hóa đơn",
+                  "record_id": "I001",
+                  "revision": 1,
+                  "effective_at": "2026-09-01T00:00:00+07:00",
+                  "observed_at": "2026-09-01T00:00:00+07:00",
+                  "source_kind": "simulated",
+                  "document_number": "0000123"
+                }
+              ]
+            }
+          ],
+          "group_refs": []
+        },
+        "vendor_names": {
+          "name": "Đối chiếu danh mục nhà cung cấp",
+          "status": "no_signal",
+          "available": true,
+          "needs_review": false,
+          "reason": null,
+          "missing_sources": [],
+          "evidence_refs": [
+            {
+              "record_type": "vendor",
+              "source": "Nhà cung cấp",
+              "record_id": "V001",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "source_kind": "simulated",
+              "display_name": "NCC mô phỏng"
+            }
+          ],
+          "facts": [],
+          "group_refs": []
+        }
+      }
+    },
+    {
+      "transaction_id": "A",
+      "revision": 1,
+      "event_at": "2026-10-02T02:00:00+00:00",
+      "knowledge_at": "2026-10-02T02:00:00+00:00",
+      "amount_vnd": 4000000,
+      "kind": "payment",
+      "description": "Dòng mô phỏng H0",
+      "source_kind": "simulated",
+      "branches": {
+        "rules": {
+          "name": "Luật nghiệp vụ",
+          "status": "partial",
+          "available": false,
+          "evaluated_count": 2,
+          "unavailable_count": 31,
+          "not_applicable_count": 2,
+          "total_count": 35,
+          "message": "Đã chạy các đối chiếu đủ nguồn. Những luật thiếu nguồn hoặc chưa có bộ đánh giá vẫn chưa khả dụng; chưa tính điểm tổng toàn bộ luật."
+        },
+        "statistics": {
+          "name": "So sánh thống kê",
+          "status": "unavailable",
+          "available": false,
+          "message": "Chưa chỉ định phiên bản đã fit cho doanh nghiệp này.",
+          "results": [
+            {
+              "label": "Đối chiếu lịch sử",
+              "status": "unavailable",
+              "available": false,
+              "relative_position": null,
+              "reason": "Chưa chỉ định phiên bản đã fit cho doanh nghiệp này.",
+              "missing_sources": [],
+              "inputs_adjusted": false,
+              "retrospective": null
+            }
+          ]
+        },
+        "graph": {
+          "name": "Quan hệ đối tượng",
+          "status": "available",
+          "available": true,
+          "message": "Liên kết từ các bản ghi đã biết; không xác nhận sai phạm, không cộng thành điểm rủi ro.",
+          "nodes": [
+            {
+              "id": "bank_account:abb4c9fd1013687c37afb1bc",
+              "kind": "Tài khoản ngân hàng",
+              "label": "BANK01 · 00123456"
+            },
+            {
+              "id": "employee:c8435065a9a3cb3b9268ab3a",
+              "kind": "Nhân viên",
+              "label": "Nhân viên mô phỏng",
+              "record_id": "E001"
+            },
+            {
+              "id": "vendor:806d74326bcb30f1e7b0dd8f",
+              "kind": "Nhà cung cấp",
+              "label": "NCC mô phỏng",
+              "record_id": "V001"
+            }
+          ],
+          "links": [
+            {
+              "id": "25a49aff4d5834ec15674e45",
+              "source": "bank_account:abb4c9fd1013687c37afb1bc",
+              "target": "vendor:806d74326bcb30f1e7b0dd8f",
+              "relation": "Tài khoản ngân hàng",
+              "context_only": false,
+              "evidence": {
+                "record_type": "vendor",
+                "source": "Nhà cung cấp",
+                "record_id": "V001",
+                "revision": 1,
+                "effective_at": "2026-09-01T00:00:00+07:00",
+                "observed_at": "2026-09-01T00:00:00+07:00",
+                "source_kind": "simulated",
+                "display_name": "NCC mô phỏng"
+              }
+            },
+            {
+              "id": "4bae4d0963dcf326a9d4e781",
+              "source": "bank_account:abb4c9fd1013687c37afb1bc",
+              "target": "employee:c8435065a9a3cb3b9268ab3a",
+              "relation": "Tài khoản ngân hàng",
+              "context_only": false,
+              "evidence": {
+                "record_type": "employee",
+                "source": "Nhân viên",
+                "record_id": "E001",
+                "revision": 1,
+                "effective_at": "2026-09-01T00:00:00+07:00",
+                "observed_at": "2026-09-01T00:00:00+07:00",
+                "source_kind": "simulated",
+                "display_name": "Nhân viên mô phỏng"
+              }
+            }
+          ],
+          "findings": [
+            {
+              "id": "relation:4d5fe64d7ea48a3c78e33027",
+              "description": "Nhà cung cấp và nhân viên cùng tài khoản ngân hàng",
+              "entity_nodes": [
+                "employee:c8435065a9a3cb3b9268ab3a",
+                "vendor:806d74326bcb30f1e7b0dd8f"
+              ],
+              "attribute_node": "bank_account:abb4c9fd1013687c37afb1bc",
+              "evidence_link_ids": [
+                "25a49aff4d5834ec15674e45",
+                "4bae4d0963dcf326a9d4e781"
+              ],
+              "context_only": true
+            }
+          ],
+          "missing_sources": []
+        },
+        "ml": {
+          "name": "Phân tích bất thường",
+          "status": "unavailable",
+          "available": false,
+          "message": "Chưa chỉ định phiên bản đã fit cho doanh nghiệp này.",
+          "results": []
+        }
+      },
+      "checks": {
+        "payment_invoice": {
+          "name": "Đối chiếu thanh toán hóa đơn",
+          "status": "needs_review",
+          "available": true,
+          "needs_review": true,
+          "reason": null,
+          "missing_sources": [],
+          "evidence_refs": [
+            {
+              "record_type": "invoice",
+              "source": "Hóa đơn",
+              "record_id": "I001",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "source_kind": "simulated",
+              "document_number": "0000123"
+            },
+            {
+              "record_type": "payment_allocation",
+              "source": "Phân bổ thanh toán",
+              "record_id": "A_A",
+              "revision": 1,
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "payment_allocation",
+              "source": "Phân bổ thanh toán",
+              "record_id": "A_B",
+              "revision": 1,
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "payment_allocation",
+              "source": "Phân bổ thanh toán",
+              "record_id": "A_OLD",
+              "revision": 1,
+              "effective_at": "2026-10-01T09:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "history_export",
+              "source": "Phạm vi lịch sử thanh toán",
+              "record_id": "COV_0",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "history_export",
+              "source": "Phạm vi lịch sử thanh toán",
+              "record_id": "COV_1",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "transaction",
+              "source": "Giao dịch",
+              "record_id": "A",
+              "revision": 1,
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "transaction",
+              "source": "Giao dịch",
+              "record_id": "B",
+              "revision": 1,
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "transaction",
+              "source": "Giao dịch",
+              "record_id": "OLD",
+              "revision": 1,
+              "effective_at": "2026-10-01T09:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "vendor",
+              "source": "Nhà cung cấp",
+              "record_id": "V001",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "source_kind": "simulated",
+              "display_name": "NCC mô phỏng"
+            }
+          ],
+          "facts": [
+            {
+              "invoice_gross_vnd": 10000000,
+              "prior_paid_vnd": 4000000,
+              "current_allocated_vnd": 4000000,
+              "cumulative_paid_vnd": 8000000,
+              "excess_vnd": 0,
+              "invoice_refs": [
+                {
+                  "record_type": "invoice",
+                  "source": "Hóa đơn",
+                  "record_id": "I001",
+                  "revision": 1,
+                  "effective_at": "2026-09-01T00:00:00+07:00",
+                  "observed_at": "2026-09-01T00:00:00+07:00",
+                  "source_kind": "simulated",
+                  "document_number": "0000123"
+                }
+              ]
+            }
+          ],
+          "group_refs": [
+            "grp_c597d3c2b7d01bce9682143c"
+          ]
+        },
+        "vendor_names": {
+          "name": "Đối chiếu danh mục nhà cung cấp",
+          "status": "no_signal",
+          "available": true,
+          "needs_review": false,
+          "reason": null,
+          "missing_sources": [],
+          "evidence_refs": [
+            {
+              "record_type": "vendor",
+              "source": "Nhà cung cấp",
+              "record_id": "V001",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "source_kind": "simulated",
+              "display_name": "NCC mô phỏng"
+            }
+          ],
+          "facts": [],
+          "group_refs": []
+        }
+      }
+    },
+    {
+      "transaction_id": "B",
+      "revision": 1,
+      "event_at": "2026-10-02T02:00:00+00:00",
+      "knowledge_at": "2026-10-02T02:00:00+00:00",
+      "amount_vnd": 4000000,
+      "kind": "payment",
+      "description": "Dòng mô phỏng H0",
+      "source_kind": "simulated",
+      "branches": {
+        "rules": {
+          "name": "Luật nghiệp vụ",
+          "status": "partial",
+          "available": false,
+          "evaluated_count": 2,
+          "unavailable_count": 31,
+          "not_applicable_count": 2,
+          "total_count": 35,
+          "message": "Đã chạy các đối chiếu đủ nguồn. Những luật thiếu nguồn hoặc chưa có bộ đánh giá vẫn chưa khả dụng; chưa tính điểm tổng toàn bộ luật."
+        },
+        "statistics": {
+          "name": "So sánh thống kê",
+          "status": "unavailable",
+          "available": false,
+          "message": "Chưa chỉ định phiên bản đã fit cho doanh nghiệp này.",
+          "results": [
+            {
+              "label": "Đối chiếu lịch sử",
+              "status": "unavailable",
+              "available": false,
+              "relative_position": null,
+              "reason": "Chưa chỉ định phiên bản đã fit cho doanh nghiệp này.",
+              "missing_sources": [],
+              "inputs_adjusted": false,
+              "retrospective": null
+            }
+          ]
+        },
+        "graph": {
+          "name": "Quan hệ đối tượng",
+          "status": "available",
+          "available": true,
+          "message": "Liên kết từ các bản ghi đã biết; không xác nhận sai phạm, không cộng thành điểm rủi ro.",
+          "nodes": [
+            {
+              "id": "bank_account:abb4c9fd1013687c37afb1bc",
+              "kind": "Tài khoản ngân hàng",
+              "label": "BANK01 · 00123456"
+            },
+            {
+              "id": "employee:c8435065a9a3cb3b9268ab3a",
+              "kind": "Nhân viên",
+              "label": "Nhân viên mô phỏng",
+              "record_id": "E001"
+            },
+            {
+              "id": "vendor:806d74326bcb30f1e7b0dd8f",
+              "kind": "Nhà cung cấp",
+              "label": "NCC mô phỏng",
+              "record_id": "V001"
+            }
+          ],
+          "links": [
+            {
+              "id": "25a49aff4d5834ec15674e45",
+              "source": "bank_account:abb4c9fd1013687c37afb1bc",
+              "target": "vendor:806d74326bcb30f1e7b0dd8f",
+              "relation": "Tài khoản ngân hàng",
+              "context_only": false,
+              "evidence": {
+                "record_type": "vendor",
+                "source": "Nhà cung cấp",
+                "record_id": "V001",
+                "revision": 1,
+                "effective_at": "2026-09-01T00:00:00+07:00",
+                "observed_at": "2026-09-01T00:00:00+07:00",
+                "source_kind": "simulated",
+                "display_name": "NCC mô phỏng"
+              }
+            },
+            {
+              "id": "4bae4d0963dcf326a9d4e781",
+              "source": "bank_account:abb4c9fd1013687c37afb1bc",
+              "target": "employee:c8435065a9a3cb3b9268ab3a",
+              "relation": "Tài khoản ngân hàng",
+              "context_only": false,
+              "evidence": {
+                "record_type": "employee",
+                "source": "Nhân viên",
+                "record_id": "E001",
+                "revision": 1,
+                "effective_at": "2026-09-01T00:00:00+07:00",
+                "observed_at": "2026-09-01T00:00:00+07:00",
+                "source_kind": "simulated",
+                "display_name": "Nhân viên mô phỏng"
+              }
+            }
+          ],
+          "findings": [
+            {
+              "id": "relation:4d5fe64d7ea48a3c78e33027",
+              "description": "Nhà cung cấp và nhân viên cùng tài khoản ngân hàng",
+              "entity_nodes": [
+                "employee:c8435065a9a3cb3b9268ab3a",
+                "vendor:806d74326bcb30f1e7b0dd8f"
+              ],
+              "attribute_node": "bank_account:abb4c9fd1013687c37afb1bc",
+              "evidence_link_ids": [
+                "25a49aff4d5834ec15674e45",
+                "4bae4d0963dcf326a9d4e781"
+              ],
+              "context_only": true
+            }
+          ],
+          "missing_sources": []
+        },
+        "ml": {
+          "name": "Phân tích bất thường",
+          "status": "unavailable",
+          "available": false,
+          "message": "Chưa chỉ định phiên bản đã fit cho doanh nghiệp này.",
+          "results": []
+        }
+      },
+      "checks": {
+        "payment_invoice": {
+          "name": "Đối chiếu thanh toán hóa đơn",
+          "status": "needs_review",
+          "available": true,
+          "needs_review": true,
+          "reason": null,
+          "missing_sources": [],
+          "evidence_refs": [
+            {
+              "record_type": "invoice",
+              "source": "Hóa đơn",
+              "record_id": "I001",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "source_kind": "simulated",
+              "document_number": "0000123"
+            },
+            {
+              "record_type": "payment_allocation",
+              "source": "Phân bổ thanh toán",
+              "record_id": "A_A",
+              "revision": 1,
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "payment_allocation",
+              "source": "Phân bổ thanh toán",
+              "record_id": "A_B",
+              "revision": 1,
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "payment_allocation",
+              "source": "Phân bổ thanh toán",
+              "record_id": "A_OLD",
+              "revision": 1,
+              "effective_at": "2026-10-01T09:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "history_export",
+              "source": "Phạm vi lịch sử thanh toán",
+              "record_id": "COV_0",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "history_export",
+              "source": "Phạm vi lịch sử thanh toán",
+              "record_id": "COV_1",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "transaction",
+              "source": "Giao dịch",
+              "record_id": "A",
+              "revision": 1,
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "transaction",
+              "source": "Giao dịch",
+              "record_id": "B",
+              "revision": 1,
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "transaction",
+              "source": "Giao dịch",
+              "record_id": "OLD",
+              "revision": 1,
+              "effective_at": "2026-10-01T09:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "source_kind": "simulated"
+            },
+            {
+              "record_type": "vendor",
+              "source": "Nhà cung cấp",
+              "record_id": "V001",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "source_kind": "simulated",
+              "display_name": "NCC mô phỏng"
+            }
+          ],
+          "facts": [
+            {
+              "invoice_gross_vnd": 10000000,
+              "prior_paid_vnd": 4000000,
+              "current_allocated_vnd": 4000000,
+              "cumulative_paid_vnd": 8000000,
+              "excess_vnd": 0,
+              "invoice_refs": [
+                {
+                  "record_type": "invoice",
+                  "source": "Hóa đơn",
+                  "record_id": "I001",
+                  "revision": 1,
+                  "effective_at": "2026-09-01T00:00:00+07:00",
+                  "observed_at": "2026-09-01T00:00:00+07:00",
+                  "source_kind": "simulated",
+                  "document_number": "0000123"
+                }
+              ]
+            }
+          ],
+          "group_refs": [
+            "grp_c597d3c2b7d01bce9682143c"
+          ]
+        },
+        "vendor_names": {
+          "name": "Đối chiếu danh mục nhà cung cấp",
+          "status": "no_signal",
+          "available": true,
+          "needs_review": false,
+          "reason": null,
+          "missing_sources": [],
+          "evidence_refs": [
+            {
+              "record_type": "vendor",
+              "source": "Nhà cung cấp",
+              "record_id": "V001",
+              "revision": 1,
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "source_kind": "simulated",
+              "display_name": "NCC mô phỏng"
+            }
+          ],
+          "facts": [],
+          "group_refs": []
+        }
+      }
+    }
+  ],
+  "groups": [
+    {
+      "group_id": "grp_c597d3c2b7d01bce9682143c",
+      "status": "needs_review",
+      "needs_review": true,
+      "event_at": "2026-10-02T02:00:00+00:00",
+      "knowledge_at": "2026-10-02T02:00:00+00:00",
+      "prior_paid_vnd": 4000000,
+      "group_allocated_vnd": 8000000,
+      "cumulative_paid_vnd": 12000000,
+      "invoice_gross_vnd": 10000000,
+      "excess_vnd": 2000000,
+      "transaction_refs": [
+        {
+          "record_type": "transaction",
+          "source": "Giao dịch",
+          "record_id": "A",
+          "revision": 1,
+          "effective_at": "2026-10-02T09:00:00+07:00",
+          "observed_at": "2026-10-02T09:00:00+07:00",
+          "source_kind": "simulated"
+        },
+        {
+          "record_type": "transaction",
+          "source": "Giao dịch",
+          "record_id": "B",
+          "revision": 1,
+          "effective_at": "2026-10-02T09:00:00+07:00",
+          "observed_at": "2026-10-02T09:00:00+07:00",
+          "source_kind": "simulated"
+        }
+      ],
+      "allocation_refs": [
+        {
+          "record_type": "payment_allocation",
+          "source": "Phân bổ thanh toán",
+          "record_id": "A_A",
+          "revision": 1,
+          "effective_at": "2026-10-02T09:00:00+07:00",
+          "observed_at": "2026-10-02T09:00:00+07:00",
+          "source_kind": "simulated"
+        },
+        {
+          "record_type": "payment_allocation",
+          "source": "Phân bổ thanh toán",
+          "record_id": "A_B",
+          "revision": 1,
+          "effective_at": "2026-10-02T09:00:00+07:00",
+          "observed_at": "2026-10-02T09:00:00+07:00",
+          "source_kind": "simulated"
+        }
+      ],
+      "prior_allocation_refs": [
+        {
+          "record_type": "payment_allocation",
+          "source": "Phân bổ thanh toán",
+          "record_id": "A_OLD",
+          "revision": 1,
+          "effective_at": "2026-10-01T09:00:00+07:00",
+          "observed_at": "2026-10-01T09:00:00+07:00",
+          "source_kind": "simulated"
+        }
+      ]
+    }
+  ],
+  "branch_summary": {
+    "rules": {
+      "name": "Luật nghiệp vụ",
+      "available": 0,
+      "partial": 3,
+      "unavailable": 0
+    },
+    "statistics": {
+      "name": "So sánh thống kê",
+      "available": 0,
+      "partial": 0,
+      "unavailable": 3
+    },
+    "graph": {
+      "name": "Quan hệ đối tượng",
+      "available": 3,
+      "partial": 0,
+      "unavailable": 0
+    },
+    "ml": {
+      "name": "Phân tích bất thường",
+      "available": 0,
+      "partial": 0,
+      "unavailable": 3
+    }
+  },
+  "source_limits": [
+    {
+      "name": "Chứng từ gốc",
+      "message": "Có giao dịch chưa có chứng từ gốc đã xác minh gắn với giao dịch hoặc hóa đơn liên quan; chưa đủ căn cứ kết luận nghiệp vụ.",
+      "action": "Bổ sung và đối chiếu chứng từ đúng giao dịch/nghĩa vụ. Bản mô phỏng hoặc bản xuất không tự là chứng từ gốc đã xác minh.",
+      "affected_count": 3
+    },
+    {
+      "name": "Lịch sử tài khoản nhà cung cấp",
+      "message": "Chưa có lịch sử tài khoản tương ứng của NCC cho một số giao dịch; chưa đánh giá được thay đổi tài khoản từ nguồn hiện có.",
+      "action": "Bổ sung bank history có thời điểm hiệu lực và thời điểm được biết; không giả lịch sử từ tài khoản hiện tại.",
+      "affected_count": 3
+    },
+    {
+      "name": "Phê duyệt khoản chi",
+      "message": "Chưa có bản ghi phê duyệt approved gắn với một số khoản chi/lương; chưa xác nhận được dấu vết phê duyệt.",
+      "action": "Bổ sung nguồn phê duyệt phù hợp chính sách. Thiếu bản ghi không tự chứng minh khoản chi chưa được duyệt.",
+      "affected_count": 3
+    }
+  ],
+  "summary": {
+    "transaction_count": 3,
+    "transactions_to_review": 2,
+    "unavailable_checks": 0,
+    "groups_to_review": 1,
+    "analysis_complete": false
+  },
+  "coverage_message": "Đã gọi bốn nhánh luật, thống kê, quan hệ và bất thường. Luật canonical mới đánh giá được thanh toán hóa đơn/tên nhà cung cấp; chưa đánh giá toàn bộ bộ quy tắc. Nhánh thiếu nguồn hoặc phiên bản đã fit vẫn chưa khả dụng. Thứ hạng tương đối không phải xác suất sai phạm; chưa cộng thành điểm tổng hoặc tự tạo cảnh báo."
+}

@@ -1,0 +1,67 @@
+{
+  "status": "passed",
+  "count": 14,
+  "checks": [
+    {
+      "check": "login uses isolated test Portal; no live account changed",
+      "passed": true
+    },
+    {
+      "check": "Bật Agent2 starts owned worker, verifies keys and opens DN UI",
+      "passed": true
+    },
+    {
+      "check": "verified worker produces all five C001 decrypted results",
+      "passed": true
+    },
+    {
+      "check": "Tắt Agent2 stops exactly the owned DN and worker trees",
+      "passed": true
+    },
+    {
+      "check": "start again restores same saved result/job under the Portal session",
+      "passed": true
+    },
+    {
+      "check": "outage shows a short recoverable message and keeps the original request",
+      "passed": true
+    },
+    {
+      "check": "Kết nối lại restarts only worker and resumes same C002 job",
+      "passed": true
+    },
+    {
+      "check": "reload after recovery retains the same result and run ID",
+      "passed": true
+    },
+    {
+      "check": "reload and lifecycle preserve every score and row, not only job IDs",
+      "passed": true
+    },
+    {
+      "check": "cross-company result, status and resume reads rejected in both directions",
+      "passed": true
+    },
+    {
+      "check": "catalogs isolate company snapshots; another company snapshot cannot be submitted",
+      "passed": true
+    },
+    {
+      "check": "only two worker computations for two companies across lifecycle/reloads",
+      "passed": true
+    },
+    {
+      "check": "no browser JavaScript errors",
+      "passed": true
+    },
+    {
+      "check": "snapshots, model registry and protected key files unchanged",
+      "passed": true
+    }
+  ],
+  "browser_errors": [],
+  "data": "synthetic_only",
+  "real_he": true,
+  "servers": "isolated Portal and managed DN/worker",
+  "live_services_changed": false
+}

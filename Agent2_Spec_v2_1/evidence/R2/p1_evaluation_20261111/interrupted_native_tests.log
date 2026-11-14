@@ -1,0 +1,227 @@
+agent2/.venv/Scripts/python.exe : test_every_document_balances_and_every_flow_matches_its_scenario 
+(test_accounting.AccountingTest.test_every_document_balances_and_every_flow_matches_its_scenario) ... ok
+At line:2 char:1
++ agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/run_r1_t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_every_docu...cenario) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_features_include_current_writeoff_evidence_and_vat_lines 
+(test_accounting.AccountingTest.test_features_include_current_writeoff_evidence_and_vat_lines) ... ok
+test_manufacturing_salary_and_material_flow_reaches_154 
+(test_accounting.AccountingTest.test_manufacturing_salary_and_material_flow_reaches_154) ... ok
+test_payments_do_not_book_input_vat_twice (test_accounting.AccountingTest.test_payments_do_not_book_input_vat_twice) 
+... ok
+test_real_writeoff_is_not_receivable_reclassification 
+(test_accounting.AccountingTest.test_real_writeoff_is_not_receivable_reclassification) ... ok
+test_standalone_low_value_equipment_is_not_fixed_asset 
+(test_accounting.AccountingTest.test_standalone_low_value_equipment_is_not_fixed_asset) ... ok
+test_tt133_has_no_tt200_selling_or_cost_accounts 
+(test_accounting.AccountingTest.test_tt133_has_no_tt200_selling_or_cost_accounts) ... ok
+test_untimed_writeoff_proof_is_missing_for_ml 
+(test_accounting.AccountingTest.test_untimed_writeoff_proof_is_missing_for_ml) ... ok
+test_unusual_examples_are_not_supported_as_routine_expense_accrual 
+(test_accounting.AccountingTest.test_unusual_examples_are_not_supported_as_routine_expense_accrual) ... ok
+test_vat_purchase_is_a_balanced_compound_entry 
+(test_accounting.AccountingTest.test_vat_purchase_is_a_balanced_compound_entry) ... ok
+test_approver_company_is_checked_at_the_evidence_approval_time 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_approver_company_is_checked_at_the_evidence_approval_time) 
+... ok
+test_b6_approved_seasonal_or_annual_schedule_suppresses 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_approved_seasonal_or_annual_schedule_suppresses) ... ok
+test_b6_equal_time_payments_share_the_season_cap 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_equal_time_payments_share_the_season_cap) ... ok
+test_b6_existing_yearly_recurring_authority_is_supported 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_b6_existing_yearly_recurring_authority_is_supported) ... ok
+test_b6_wrong_window_future_or_excess_schedule_does_not_suppress (test_authority_and_dormancy.AuthorityAndDormancyTest.
+test_b6_wrong_window_future_or_excess_schedule_does_not_suppress) ... ok
+test_c2_approved_delegation_is_scoped_and_independent 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_approved_delegation_is_scoped_and_independent) ... ok
+test_c2_cannot_grant_authority_to_an_actor_first_seen_after_action (test_authority_and_dormancy.AuthorityAndDormancyTes
+t.test_c2_cannot_grant_authority_to_an_actor_first_seen_after_action) ... ok
+test_c2_complete_matrix_denies_missing_or_disallowed_authority 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_complete_matrix_denies_missing_or_disallowed_authority) 
+... ok
+test_c2_explicit_self_authority_overrides_lower_master_limit 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_explicit_self_authority_overrides_lower_master_limit) 
+... ok
+test_c2_fallback_uses_self_approval_limit_at_approval 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_fallback_uses_self_approval_limit_at_approval) ... ok
+test_c2_future_matrix_does_not_rewrite_legacy_exception 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_future_matrix_does_not_rewrite_legacy_exception) ... ok
+test_c2_overlapping_complete_coverage_cannot_grant_an_exception 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_overlapping_complete_coverage_cannot_grant_an_exception) 
+... ok
+test_c2_profile_updates_do_not_erase_coverage_or_authority_approval (test_authority_and_dormancy.AuthorityAndDormancyTe
+st.test_c2_profile_updates_do_not_erase_coverage_or_authority_approval) ... ok
+test_c2_role_authority_uses_role_at_approval_not_posting 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c2_role_authority_uses_role_at_approval_not_posting) ... ok
+test_c3_actor_company_is_checked_at_action_not_posting 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_actor_company_is_checked_at_action_not_posting) ... ok
+test_c3_missing_matrix_keeps_amount_proxy 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_missing_matrix_keeps_amount_proxy) ... ok
+test_c3_profile_updates_do_not_erase_high_authority 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_profile_updates_do_not_erase_high_authority) ... ok
+test_c3_role_authority_uses_role_at_approval_not_posting 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_role_authority_uses_role_at_approval_not_posting) ... ok
+test_c3_standard_authority_is_not_promoted_by_large_amount 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_standard_authority_is_not_promoted_by_large_amount) ... 
+ok
+test_c3_uses_explicit_high_authority_even_below_amount_proxy 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_c3_uses_explicit_high_authority_even_below_amount_proxy) 
+... ok
+test_future_employee_revisions_do_not_rewrite_c2_or_c3 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_future_employee_revisions_do_not_rewrite_c2_or_c3) ... ok
+test_matrix_approval_cannot_use_an_approver_first_seen_later 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_matrix_approval_cannot_use_an_approver_first_seen_later) 
+... ok
+test_revocations_only_affect_actions_after_their_observation 
+(test_authority_and_dormancy.AuthorityAndDormancyTest.test_revocations_only_affect_actions_after_their_observation) 
+... ok
+test_amounts_are_nonnegative_whole_vnd 
+(test_authority_validation.AuthorityValidationTest.test_amounts_are_nonnegative_whole_vnd) ... ok
+test_authority_enums_are_checked (test_authority_validation.AuthorityValidationTest.test_authority_enums_are_checked) 
+... ok
+test_boolean_domain_is_strict (test_authority_validation.AuthorityValidationTest.test_boolean_domain_is_strict) ... ok
+test_coverage_actions_require_known_unique_tokens 
+(test_authority_validation.AuthorityValidationTest.test_coverage_actions_require_known_unique_tokens) ... ok
+test_coverage_status_is_checked (test_authority_validation.AuthorityValidationTest.test_coverage_status_is_checked) 
+... ok
+test_csv_amount_boundaries_are_inclusive 
+(test_authority_validation.AuthorityValidationTest.test_csv_amount_boundaries_are_inclusive) ... ok
+test_dates_must_be_real_calendar_dates 
+(test_authority_validation.AuthorityValidationTest.test_dates_must_be_real_calendar_dates) ... ok
+test_equivalent_csv_revisions_do_not_conflict_or_mutate_input 
+(test_authority_validation.AuthorityValidationTest.test_equivalent_csv_revisions_do_not_conflict_or_mutate_input) ... 
+ok
+test_evidence_flags_are_checked_in_both_tables 
+(test_authority_validation.AuthorityValidationTest.test_evidence_flags_are_checked_in_both_tables) ... ok
+test_future_and_revoked_records_do_not_grant_permission 
+(test_authority_validation.AuthorityValidationTest.test_future_and_revoked_records_do_not_grant_permission) ... ok
+test_identifier_and_scope_fields_are_strings 
+(test_authority_validation.AuthorityValidationTest.test_identifier_and_scope_fields_are_strings) ... ok
+test_invalid_boolean_cannot_grant_self_approval 
+(test_authority_validation.AuthorityValidationTest.test_invalid_boolean_cannot_grant_self_approval) ... ok
+test_malformed_future_or_revoked_records_are_still_rejected 
+(test_authority_validation.AuthorityValidationTest.test_malformed_future_or_revoked_records_are_still_rejected) ... ok
+test_missing_proof_does_not_grant_authority 
+(test_authority_validation.AuthorityValidationTest.test_missing_proof_does_not_grant_authority) ... ok
+test_observation_cannot_precede_approval 
+(test_authority_validation.AuthorityValidationTest.test_observation_cannot_precede_approval) ... ok
+test_reversed_amount_range_is_rejected 
+(test_authority_validation.AuthorityValidationTest.test_reversed_amount_range_is_rejected) ... ok
+test_reversed_effective_and_coverage_ranges_are_rejected 
+(test_authority_validation.AuthorityValidationTest.test_reversed_effective_and_coverage_ranges_are_rejected) ... ok
+test_same_revision_conflict_and_changed_bindings_still_fail 
+(test_authority_validation.AuthorityValidationTest.test_same_revision_conflict_and_changed_bindings_still_fail) ... ok
+test_times_must_be_real_local_timestamps_with_seconds 
+(test_authority_validation.AuthorityValidationTest.test_times_must_be_real_local_timestamps_with_seconds) ... ok
+test_valid_native_and_csv_boolean_values_preserve_permission 
+(test_authority_validation.AuthorityValidationTest.test_valid_native_and_csv_boolean_values_preserve_permission) ... ok
+test_departing_employee_does_not_remove_another_current_employee 
+(test_b2_company_transfer.B2CompanyTransferTest.test_departing_employee_does_not_remove_another_current_employee) ... 
+ok
+test_future_transfer_does_not_rewrite_historical_scores_or_hits 
+(test_b2_company_transfer.B2CompanyTransferTest.test_future_transfer_does_not_rewrite_historical_scores_or_hits) ... ok
+test_new_company_gets_current_employee_while_old_company_loses_them 
+(test_b2_company_transfer.B2CompanyTransferTest.test_new_company_gets_current_employee_while_old_company_loses_them) 
+... ok
+test_old_company_mirror_at_transfer_time_cannot_restore_departed_staff_edges (test_b2_company_transfer.B2CompanyTransfe
+rTest.test_old_company_mirror_at_transfer_time_cannot_restore_departed_staff_edges) ... ok
+test_same_company_replacement_or_clear_still_removes_old_contacts 
+(test_b2_company_transfer.B2CompanyTransferTest.test_same_company_replacement_or_clear_still_removes_old_contacts) ... 
+ok
+test_shared_index_also_retires_legacy_bank_and_national_id_on_transfer (test_b2_company_transfer.B2CompanyTransferTest.
+test_shared_index_also_retires_legacy_bank_and_national_id_on_transfer) ... ok
+test_transfer_applies_at_cutoff_to_every_payment_in_the_batch 
+(test_b2_company_transfer.B2CompanyTransferTest.test_transfer_applies_at_cutoff_to_every_payment_in_the_batch) ... ok
+test_transfer_back_restores_only_the_current_company_match 
+(test_b2_company_transfer.B2CompanyTransferTest.test_transfer_back_restores_only_the_current_company_match) ... ok
+test_transfer_keeps_independent_graph_match_to_remaining_employee 
+(test_b2_company_transfer.B2CompanyTransferTest.test_transfer_keeps_independent_graph_match_to_remaining_employee) ... 
+ok
+test_transfer_removes_old_company_phone_and_address_in_both_modes 
+(test_b2_company_transfer.B2CompanyTransferTest.test_transfer_removes_old_company_phone_and_address_in_both_modes) ... 
+ok
+test_transfer_with_changed_contacts_leaves_no_old_company_match 
+(test_b2_company_transfer.B2CompanyTransferTest.test_transfer_with_changed_contacts_leaves_no_old_company_match) ... ok
+test_transferred_employee_cannot_bridge_old_company_graph_to_current_staff (test_b2_company_transfer.B2CompanyTransferT
+est.test_transferred_employee_cannot_bridge_old_company_graph_to_current_staff) ... ok
+test_explicit_invalid_timestamp_is_rejected_instead_of_assumed_known 
+(test_b4_evidence_timing.B4EvidenceTimingTest.test_explicit_invalid_timestamp_is_rejected_instead_of_assumed_known) 
+... ok
+test_future_receipt_flag_change_cannot_change_historical_b4_hit 
+(test_b4_evidence_timing.B4EvidenceTimingTest.test_future_receipt_flag_change_cannot_change_historical_b4_hit) ... ok
+test_late_receipt_keeps_three_points_in_both_policy_modes 
+(test_b4_evidence_timing.B4EvidenceTimingTest.test_late_receipt_keeps_three_points_in_both_policy_modes) ... ok
+test_later_payment_can_use_receipt_without_rewriting_earlier_payment 
+(test_b4_evidence_timing.B4EvidenceTimingTest.test_later_payment_can_use_receipt_without_rewriting_earlier_payment) 
+... ok
+test_missing_optional_timestamp_preserves_legacy_posting_assumption 
+(test_b4_evidence_timing.B4EvidenceTimingTest.test_missing_optional_timestamp_preserves_legacy_posting_assumption) ... 
+ok
+test_receipt_cannot_suppress_registry_risk_already_present_at_invoice 
+(test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_cannot_suppress_registry_risk_already_present_at_invoice) 
+... ok
+test_receipt_cannot_suppress_tax_authority_listing 
+(test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_cannot_suppress_tax_authority_listing) ... ok
+test_receipt_is_available_only_at_or_before_payment_cutoff 
+(test_b4_evidence_timing.B4EvidenceTimingTest.test_receipt_is_available_only_at_or_before_payment_cutoff) ... ok
+test_unverified_receipt_cannot_suppress_even_when_documents_are_known 
+(test_b4_evidence_timing.B4EvidenceTimingTest.test_unverified_receipt_cannot_suppress_even_when_documents_are_known) 
+... ok
+test_a2_uses_bank_and_account_in_long_history 
+(test_bank_identity_controls.BankIdentityControlsTest.test_a2_uses_bank_and_account_in_long_history) ... ok
+test_bank_change_for_other_bank_is_not_a_payment_match 
+(test_bank_identity_controls.BankIdentityControlsTest.test_bank_change_for_other_bank_is_not_a_payment_match) ... ok
+test_callback_for_another_bank_cannot_verify_payment 
+(test_bank_identity_controls.BankIdentityControlsTest.test_callback_for_another_bank_cannot_verify_payment) ... ok
+test_callback_revision_cannot_rebind_account_bank_vendor_or_effective_date (test_bank_identity_controls.BankIdentityCon
+trolsTest.test_callback_revision_cannot_rebind_account_bank_vendor_or_effective_date) ... ok
+test_creator_recipient_counts_distinguish_banks 
+(test_bank_identity_controls.BankIdentityControlsTest.test_creator_recipient_counts_distinguish_banks) ... ok
+test_cross_company_or_vendor_source_cannot_match 
+(test_bank_identity_controls.BankIdentityControlsTest.test_cross_company_or_vendor_source_cannot_match) ... ok
+test_different_account_has_no_bank_change_signal 
+(test_bank_identity_controls.BankIdentityControlsTest.test_different_account_has_no_bank_change_signal) ... ok
+test_different_banks_do_not_share_a_recipient 
+(test_bank_identity_controls.BankIdentityControlsTest.test_different_banks_do_not_share_a_recipient) ... ok
+test_employee_bank_features_require_same_institution 
+(test_bank_identity_controls.BankIdentityControlsTest.test_employee_bank_features_require_same_institution) ... ok
+test_employee_revision_removes_old_bank_identity_from_features 
+(test_bank_identity_controls.BankIdentityControlsTest.test_employee_revision_removes_old_bank_identity_from_features) 
+... ok
+test_equivalent_bank_formatting_is_not_a_binding_change 
+(test_bank_identity_controls.BankIdentityControlsTest.test_equivalent_bank_formatting_is_not_a_binding_change) ... ok
+test_future_bank_source_does_not_change_past_rules_or_features 
+(test_bank_identity_controls.BankIdentityControlsTest.test_future_bank_source_does_not_change_past_rules_or_features) 
+... ok
+test_graph_bank_features_do_not_merge_different_or_unknown_banks (test_bank_identity_controls.BankIdentityControlsTest.
+test_graph_bank_features_do_not_merge_different_or_unknown_banks) ... ok
+test_leading_zero_is_part_of_the_account 
+(test_bank_identity_controls.BankIdentityControlsTest.test_leading_zero_is_part_of_the_account) ... ok
+test_missing_change_or_payment_bank_is_an_explicit_gap 
+(test_bank_identity_controls.BankIdentityControlsTest.test_missing_change_or_payment_bank_is_an_explicit_gap) ... ok
+test_same_bank_change_requires_valid_independent_callback 
+(test_bank_identity_controls.BankIdentityControlsTest.test_same_bank_change_requires_valid_independent_callback) ... ok
+test_same_bank_identity_matches_formatting_and_keeps_alert_without_payment_proof (test_bank_identity_controls.BankIdent
+ityControlsTest.test_same_bank_identity_matches_formatting_and_keeps_alert_without_payment_proof) ... ok
+test_unconfirmed_history_does_not_contaminate_confirmed_recipient (test_bank_identity_controls.BankIdentityControlsTest
+.test_unconfirmed_history_does_not_contaminate_confirmed_recipient) ... ok
+test_unique_synthetic_accounts_remain_usable_without_bank_codes 
+(test_bank_identity_controls.BankIdentityControlsTest.test_unique_synthetic_accounts_remain_usable_without_bank_codes) 
+... ok
+test_unknown_bank_is_a_gap_without_recipient_matching_or_master_inference (test_bank_identity_controls.BankIdentityCont
+rolsTest.test_unknown_bank_is_a_gap_without_recipient_matching_or_master_inference) ... ok
+test_unknown_recipient_does_not_disable_strong_graph_a3 
+(test_bank_identity_controls.BankIdentityControlsTest.test_unknown_recipient_does_not_disable_strong_graph_a3) ... ok
+test_fraud_and_hard_negative_coverage (test_causality.CausalFeaturesTest.test_fraud_and_hard_negative_coverage) ... ok
+test_future_master_and_event_records_do_not_change_past_features 
+(test_causality.CausalFeaturesTest.test_future_master_and_event_records_do_not_change_past_features) ... ok
+test_future_transactions_do_not_change_past_features 
+(test_causality.CausalFeaturesTest.test_future_transactions_do_not_change_past_features) ... ok
+test_same_seed_is_reproducible (test_causality.CausalFeaturesTest.test_same_seed_is_reproducible) ... ok
+test_simultaneous_payments_cannot_see_each_other 
+(test_causality.CausalFeaturesTest.test_simultaneous_payments_cannot_see_each_other) ... ok
+test_truth_and_split_are_not_feature_inputs 
+(test_causality.CausalFeaturesTest.test_truth_and_split_are_not_feature_inputs) ... 

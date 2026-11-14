@@ -1,0 +1,9 @@
+{
+  "id": "FLOW-04",
+  "status": "not_present",
+  "observed": "Retained causality, graph-history, signer-history and evidence-timing tests passed before and after cleanup.",
+  "blocker": null,
+  "baseline": "before_tests.log",
+  "candidate": "after_tests.log",
+  "scope": "R0 inventory; not R1-R6 acceptance"
+}

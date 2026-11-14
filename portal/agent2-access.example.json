@@ -1,0 +1,7 @@
+{
+  "version": "portal-agent2-access/1.0.0",
+  "actor_id": "portal-workspace",
+  "tenant_id": "your-tenant",
+  "status": "active",
+  "memberships": []
+}

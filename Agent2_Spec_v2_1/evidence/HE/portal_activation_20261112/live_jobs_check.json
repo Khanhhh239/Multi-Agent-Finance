@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "owned_completed_jobs": [
+    {
+      "run_id": "herun_9f6a31d7c8604d10b6f5a376c6799131",
+      "tenant": "demo",
+      "company_id": "C001",
+      "actor_id": "he-demo-reviewer",
+      "phase": "completed"
+    },
+    {
+      "run_id": "herun_148ff1bd31b04b879fbfc3630ce57423",
+      "tenant": "demo",
+      "company_id": "C002",
+      "actor_id": "he-demo-reviewer",
+      "phase": "completed"
+    }
+  ],
+  "worker_counts": [
+    {
+      "company_id": "C001",
+      "state": "done",
+      "count": 2
+    },
+    {
+      "company_id": "C002",
+      "state": "done",
+      "count": 2
+    }
+  ],
+  "note": "worker totals include two earlier preparation runs; UI evidence asserts unchanged run IDs across reloads",
+  "private_payloads_read": false
+}

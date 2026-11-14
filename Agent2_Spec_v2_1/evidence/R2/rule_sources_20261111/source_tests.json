@@ -1,0 +1,73 @@
+{
+  "tests": [
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_bad_cutoff_or_foreign_frame_is_rejected",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_bad_cutoff_or_foreign_frame_is_rejected"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_catalog_covers_every_retained_rule_and_explicit_contract_gaps",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_catalog_covers_every_retained_rule_and_explicit_contract_gaps"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_company_isolation_and_permission_guards",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_company_isolation_and_permission_guards"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_current_master_revision_can_change_only_when_both_clocks_allow_it",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_current_master_revision_can_change_only_when_both_clocks_allow_it"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_documents_preserve_simulation_and_verification_provenance",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_documents_preserve_simulation_and_verification_provenance"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_history_excludes_self_and_simultaneous_rows_on_both_clocks",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_history_excludes_self_and_simultaneous_rows_on_both_clocks"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_immutable_source_and_payload_separation",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_immutable_source_and_payload_separation"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_late_document_and_future_source_values_cannot_change_past_bindings",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_late_document_and_future_source_values_cannot_change_past_bindings"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_late_revision_is_filtered_before_choosing_latest_master",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_late_revision_is_filtered_before_choosing_latest_master"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_missing_invoice_revision_is_gap_not_zero_or_future_invoice",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_missing_invoice_revision_is_gap_not_zero_or_future_invoice"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_real_sources_ready_is_distinct_from_evaluated_or_missing",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_real_sources_ready_is_distinct_from_evaluated_or_missing"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_signed_adjustments_are_retained_without_legacy_placeholders",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_signed_adjustments_are_retained_without_legacy_placeholders"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_snapshot_pipeline_has_one_diagnostic_per_rule_and_never_scores_from_readiness",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_snapshot_pipeline_has_one_diagnostic_per_rule_and_never_scores_from_readiness"
+    }
+  ],
+  "count": 13,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0
+}

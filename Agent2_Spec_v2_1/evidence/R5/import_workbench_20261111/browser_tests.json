@@ -1,0 +1,86 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "check": "no default bypass; invalid credential rejected",
+      "passed": true
+    },
+    {
+      "check": "authorized company selection; password cleared",
+      "passed": true
+    },
+    {
+      "check": "row-specific invalid input cannot save",
+      "passed": true
+    },
+    {
+      "check": "malformed JSON explained",
+      "passed": true
+    },
+    {
+      "check": "source limits visible before explicit acknowledgment",
+      "passed": true
+    },
+    {
+      "check": "lost commit response retried without duplicate snapshot",
+      "passed": true
+    },
+    {
+      "check": "five inputs five results; one simultaneous group; explicit Vietnam cutoff",
+      "passed": true
+    },
+    {
+      "check": "missing sources distinct from no-signal",
+      "passed": true
+    },
+    {
+      "check": "no-signal filter excludes rows with other warnings or missing checks",
+      "passed": true
+    },
+    {
+      "check": "cutoff change hides stale results; no future rows",
+      "passed": true
+    },
+    {
+      "check": "reload restores only saved context after reauthentication; no stored credential",
+      "passed": true
+    },
+    {
+      "check": "18-digit money exact; untrusted text never HTML",
+      "passed": true
+    },
+    {
+      "check": "company change invalidates file and previous preview",
+      "passed": true
+    },
+    {
+      "check": "cross-company source rejected by backend",
+      "passed": true
+    },
+    {
+      "check": "permission revoked between preview and commit denied",
+      "passed": true
+    },
+    {
+      "check": "edited disk file cannot commit using old preview",
+      "passed": true
+    },
+    {
+      "check": "expired preview requires accessible revalidation action",
+      "passed": true
+    },
+    {
+      "check": "mobile width 390 without horizontal overflow",
+      "passed": true
+    },
+    {
+      "check": "no browser JavaScript errors",
+      "passed": true
+    }
+  ],
+  "count": 19,
+  "browser": "installed Chrome via Playwright; isolated context",
+  "data": "synthetic_only",
+  "snapshot_database": "temporary_isolated",
+  "browser_errors": []
+}

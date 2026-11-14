@@ -1,0 +1,1428 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": "snapshot-analysis/1.1.0"
+    },
+    "analysis_id": {
+      "type": "string",
+      "pattern": "^ana_[a-f0-9]{64}$"
+    },
+    "view": {
+      "enum": [
+        "review",
+        "technical"
+      ]
+    },
+    "as_of": {
+      "type": "string"
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_id": {
+          "type": "string"
+        },
+        "company_id": {
+          "type": "string"
+        },
+        "checksum": {
+          "type": "string"
+        },
+        "data_checksum": {
+          "type": "string"
+        },
+        "contract_version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "company_id",
+        "checksum",
+        "data_checksum",
+        "contract_version"
+      ]
+    },
+    "supported_checks": {
+      "const": [
+        "payment_invoice",
+        "vendor_names"
+      ]
+    },
+    "row_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/row"
+      }
+    },
+    "groups": {
+      "type": "array"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "transaction_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "transactions_to_review": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unavailable_checks": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "groups_to_review": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "analysis_complete": {
+          "const": false
+        }
+      },
+      "required": [
+        "transaction_count",
+        "transactions_to_review",
+        "unavailable_checks",
+        "groups_to_review",
+        "analysis_complete"
+      ]
+    },
+    "coverage_message": {
+      "type": "string"
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      }
+    },
+    "feature_contract_fingerprint": {
+      "type": "string"
+    },
+    "aggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "available",
+        "score",
+        "reason"
+      ],
+      "properties": {
+        "available": {
+          "const": false
+        },
+        "score": {
+          "type": "null"
+        },
+        "reason": {
+          "$ref": "#/$defs/reason"
+        }
+      }
+    },
+    "analysis_context_id": {
+      "type": "string",
+      "pattern": "^actx_[a-f0-9]{64}$"
+    },
+    "branch_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rules": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "available": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "partial": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unavailable": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "name",
+            "available",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "statistics": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "available": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "partial": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unavailable": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "name",
+            "available",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "graph": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "available": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "partial": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unavailable": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "name",
+            "available",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "ml": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "available": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "partial": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unavailable": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "name",
+            "available",
+            "partial",
+            "unavailable"
+          ]
+        }
+      },
+      "required": [
+        "rules",
+        "statistics",
+        "graph",
+        "ml"
+      ]
+    },
+    "source_limits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "affected_count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "name",
+          "message",
+          "action",
+          "affected_count"
+        ]
+      }
+    },
+    "inference_binding": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "version",
+    "analysis_id",
+    "view",
+    "as_of",
+    "snapshot",
+    "supported_checks",
+    "row_count",
+    "rows",
+    "groups",
+    "summary",
+    "coverage_message",
+    "analysis_context_id",
+    "branch_summary",
+    "source_limits"
+  ],
+  "$defs": {
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "record_id": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "record_id",
+        "revision"
+      ]
+    },
+    "public_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "record_type": {
+          "enum": [
+            "transaction",
+            "invoice",
+            "payment_allocation",
+            "vendor",
+            "history_export",
+            "employee",
+            "approval",
+            "document",
+            "bank_history"
+          ]
+        },
+        "source": {
+          "type": "string"
+        },
+        "record_id": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "effective_at": {
+          "type": "string"
+        },
+        "observed_at": {
+          "type": "string"
+        },
+        "source_kind": {
+          "enum": [
+            "simulated",
+            "source_export"
+          ]
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "document_number": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "record_type",
+        "source",
+        "record_id",
+        "revision",
+        "effective_at",
+        "observed_at",
+        "source_kind"
+      ]
+    },
+    "missing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "record_id": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "source",
+        "action"
+      ]
+    },
+    "invoice_fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "invoice_gross_vnd": {
+          "type": "integer"
+        },
+        "prior_paid_vnd": {
+          "type": "integer"
+        },
+        "current_allocated_vnd": {
+          "type": "integer"
+        },
+        "cumulative_paid_vnd": {
+          "type": "integer"
+        },
+        "excess_vnd": {
+          "type": "integer"
+        },
+        "invoice_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/public_ref"
+          }
+        }
+      },
+      "required": [
+        "invoice_gross_vnd",
+        "prior_paid_vnd",
+        "current_allocated_vnd",
+        "cumulative_paid_vnd",
+        "excess_vnd",
+        "invoice_refs"
+      ]
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "needs_review",
+            "no_signal",
+            "unavailable",
+            "not_applicable"
+          ]
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "needs_review": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "missing_sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/missing"
+          }
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/public_ref"
+          }
+        },
+        "facts": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/invoice_fact"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "vendor_ref": {
+                    "$ref": "#/$defs/public_ref"
+                  }
+                },
+                "required": [
+                  "vendor_ref"
+                ]
+              }
+            ]
+          }
+        },
+        "group_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "available",
+        "needs_review",
+        "reason",
+        "missing_sources",
+        "evidence_refs",
+        "facts",
+        "group_refs"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "available": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "needs_review": {
+                "type": "null"
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "needs_review": {
+                "type": "boolean"
+              },
+              "reason": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "technical_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule_id",
+        "name",
+        "status",
+        "available",
+        "matched",
+        "intrinsic_points",
+        "score",
+        "reason",
+        "gaps",
+        "evidence_refs",
+        "source_status",
+        "source_checksum",
+        "details"
+      ],
+      "properties": {
+        "rule_id": {
+          "enum": [
+            "P1",
+            "E3"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "evaluated_hit",
+            "evaluated_no_hit",
+            "unavailable",
+            "not_applicable"
+          ]
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "matched": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "intrinsic_points": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "score": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "reason": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/reason"
+            }
+          ]
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "source_status": {
+          "enum": [
+            "ready",
+            "unavailable",
+            "not_applicable"
+          ]
+        },
+        "source_checksum": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "details": {
+          "type": "object"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "evaluated_hit",
+                  "evaluated_no_hit"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "available": {
+                "const": true
+              },
+              "matched": {
+                "type": "boolean"
+              },
+              "intrinsic_points": {
+                "type": "number"
+              },
+              "score": {
+                "type": "number"
+              },
+              "reason": {
+                "type": "null"
+              },
+              "gaps": {
+                "maxItems": 0
+              },
+              "source_status": {
+                "const": "ready"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "available": {
+                "const": false
+              },
+              "matched": {
+                "type": "null"
+              },
+              "intrinsic_points": {
+                "type": "null"
+              },
+              "score": {
+                "type": "null"
+              },
+              "reason": {
+                "$ref": "#/$defs/reason"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "evaluated_hit"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "matched": {
+                "const": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "evaluated_no_hit"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "matched": {
+                "const": false
+              },
+              "intrinsic_points": {
+                "const": 0
+              },
+              "score": {
+                "const": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "reason": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "row": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "transaction_id": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "event_at": {
+          "type": "string"
+        },
+        "knowledge_at": {
+          "type": "string"
+        },
+        "amount_vnd": {
+          "type": "integer"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "source_kind": {
+          "enum": [
+            "simulated",
+            "source_export"
+          ]
+        },
+        "checks": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "payment_invoice": {
+              "$ref": "#/$defs/check"
+            },
+            "vendor_names": {
+              "$ref": "#/$defs/check"
+            }
+          },
+          "required": [
+            "payment_invoice",
+            "vendor_names"
+          ]
+        },
+        "rules": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "P1": {
+              "$ref": "#/$defs/technical_rule"
+            },
+            "E3": {
+              "$ref": "#/$defs/technical_rule"
+            }
+          },
+          "required": [
+            "P1",
+            "E3"
+          ]
+        },
+        "branches": {
+          "$ref": "#/$defs/branches"
+        },
+        "methods": {
+          "type": "object"
+        },
+        "graph_evidence": {
+          "type": "object"
+        },
+        "rule_coverage": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "transaction_id",
+        "revision",
+        "event_at",
+        "knowledge_at",
+        "amount_vnd",
+        "kind",
+        "description",
+        "source_kind",
+        "branches"
+      ]
+    },
+    "review_group": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "group_id": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "needs_review",
+            "no_signal"
+          ]
+        },
+        "needs_review": {
+          "type": "boolean"
+        },
+        "event_at": {
+          "type": "string"
+        },
+        "knowledge_at": {
+          "type": "string"
+        },
+        "prior_paid_vnd": {
+          "type": "integer"
+        },
+        "group_allocated_vnd": {
+          "type": "integer"
+        },
+        "cumulative_paid_vnd": {
+          "type": "integer"
+        },
+        "invoice_gross_vnd": {
+          "type": "integer"
+        },
+        "excess_vnd": {
+          "type": "integer"
+        },
+        "transaction_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/public_ref"
+          }
+        },
+        "allocation_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/public_ref"
+          }
+        },
+        "prior_allocation_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/public_ref"
+          }
+        }
+      },
+      "required": [
+        "group_id",
+        "status",
+        "needs_review",
+        "event_at",
+        "knowledge_at",
+        "prior_paid_vnd",
+        "group_allocated_vnd",
+        "cumulative_paid_vnd",
+        "invoice_gross_vnd",
+        "excess_vnd",
+        "transaction_refs",
+        "allocation_refs",
+        "prior_allocation_refs"
+      ]
+    },
+    "technical_group": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "group_id": {
+          "type": "string"
+        },
+        "tenant_id": {
+          "type": "string"
+        },
+        "company_id": {
+          "type": "string"
+        },
+        "rule_id": {
+          "type": "string"
+        },
+        "event_at": {
+          "type": "string"
+        },
+        "as_of": {
+          "type": "string"
+        },
+        "vendor_id": {
+          "type": "string"
+        },
+        "normalized_invoice_number": {
+          "type": "string"
+        },
+        "score_role": {
+          "type": "string"
+        },
+        "matched": {
+          "type": "boolean"
+        },
+        "points": {
+          "type": "integer"
+        },
+        "hard_trigger": {
+          "type": "integer"
+        },
+        "prior_paid_vnd": {
+          "type": "integer"
+        },
+        "group_allocated_vnd": {
+          "type": "integer"
+        },
+        "cumulative_paid_vnd": {
+          "type": "integer"
+        },
+        "invoice_gross_vnd": {
+          "type": "integer"
+        },
+        "excess_vnd": {
+          "type": "integer"
+        },
+        "allocation_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          }
+        },
+        "prior_allocation_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          }
+        },
+        "transaction_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reference"
+          }
+        }
+      },
+      "required": [
+        "group_id",
+        "tenant_id",
+        "company_id",
+        "rule_id",
+        "event_at",
+        "as_of",
+        "vendor_id",
+        "normalized_invoice_number",
+        "score_role",
+        "matched",
+        "points",
+        "hard_trigger",
+        "prior_paid_vnd",
+        "group_allocated_vnd",
+        "cumulative_paid_vnd",
+        "invoice_gross_vnd",
+        "excess_vnd",
+        "allocation_refs",
+        "prior_allocation_refs",
+        "transaction_refs"
+      ]
+    },
+    "quant_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "unavailable"
+          ]
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "relative_position": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "missing_sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "inputs_adjusted": {
+          "type": "boolean"
+        },
+        "retrospective": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "label",
+        "status",
+        "available",
+        "relative_position",
+        "reason",
+        "missing_sources",
+        "inputs_adjusted",
+        "retrospective"
+      ]
+    },
+    "quant_branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/quant_result"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "available",
+        "message",
+        "results"
+      ]
+    },
+    "rules_branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "evaluated_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unavailable_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "not_applicable_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "available",
+        "message",
+        "evaluated_count",
+        "unavailable_count",
+        "not_applicable_count",
+        "total_count"
+      ]
+    },
+    "graph_node": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "record_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "label"
+      ]
+    },
+    "graph_link": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "relation": {
+          "type": "string"
+        },
+        "context_only": {
+          "type": "boolean"
+        },
+        "evidence": {
+          "$ref": "#/$defs/public_ref"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "target",
+        "relation",
+        "context_only",
+        "evidence"
+      ]
+    },
+    "graph_finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "entity_nodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "attribute_node": {
+          "type": "string"
+        },
+        "evidence_link_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "context_only": {
+          "const": true
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "entity_nodes",
+        "attribute_node",
+        "evidence_link_ids",
+        "context_only"
+      ]
+    },
+    "graph_branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/graph_node"
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/graph_link"
+          }
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/graph_finding"
+          }
+        },
+        "missing_sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/missing"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "available",
+        "message",
+        "nodes",
+        "links",
+        "findings",
+        "missing_sources"
+      ]
+    },
+    "branches": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rules": {
+          "$ref": "#/$defs/rules_branch"
+        },
+        "statistics": {
+          "$ref": "#/$defs/quant_branch"
+        },
+        "graph": {
+          "$ref": "#/$defs/graph_branch"
+        },
+        "ml": {
+          "$ref": "#/$defs/quant_branch"
+        }
+      },
+      "required": [
+        "rules",
+        "statistics",
+        "graph",
+        "ml"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "view": {
+            "const": "technical"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "implementation",
+          "feature_contract_fingerprint",
+          "aggregate",
+          "inference_binding"
+        ],
+        "properties": {
+          "rows": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/row"
+                },
+                {
+                  "required": [
+                    "rules",
+                    "methods",
+                    "graph_evidence",
+                    "rule_coverage"
+                  ],
+                  "properties": {
+                    "checks": false
+                  }
+                }
+              ]
+            }
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/technical_group"
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "implementation": false,
+          "feature_contract_fingerprint": false,
+          "aggregate": false,
+          "rows": {
+            "type": "array",
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/row"
+                },
+                {
+                  "required": [
+                    "checks"
+                  ],
+                  "properties": {
+                    "rules": false,
+                    "methods": false,
+                    "graph_evidence": false,
+                    "rule_coverage": false
+                  }
+                }
+              ]
+            }
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/review_group"
+            }
+          },
+          "inference_binding": false
+        }
+      }
+    }
+  ]
+}

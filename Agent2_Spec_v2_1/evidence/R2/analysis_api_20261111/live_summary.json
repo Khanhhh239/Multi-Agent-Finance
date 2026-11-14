@@ -1,0 +1,22 @@
+{
+  "base_url": "http://127.0.0.1:8766",
+  "health": {
+    "status": "ok",
+    "mode": "import_snapshots",
+    "milestone": "R1",
+    "pipeline_ready": false,
+    "active_delivery": false,
+    "validation_auth_configured": true,
+    "snapshot_storage_configured": true
+  },
+  "snapshot_id": "snp_b72c916c582c47d78dd0d44aad647eb7",
+  "review_http": 200,
+  "repeat_identical": true,
+  "technical_accountant_http": 403,
+  "rows": 3,
+  "unique_groups": 1,
+  "snapshot_count_unchanged": 1,
+  "credentials_in_evidence": false,
+  "model_fit_performed": false,
+  "server_kept_running": true
+}

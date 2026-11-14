@@ -1,1 +1,0 @@
-review_id,company_id,rule_id,unit_type,unit_id,event_at,source_record_ids,condition_present,information_gap,primary_reviewer_id,adjudicator_id,reviewed_at,adjudicated_at,rationale,blind_to_prediction,sample_weight,evidence_id,source_manifest_sha256

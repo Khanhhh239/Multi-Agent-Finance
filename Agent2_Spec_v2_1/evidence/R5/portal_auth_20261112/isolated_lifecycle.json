@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "scope": "isolated OS Portal/Agent2 subprocesses only",
+  "start_stop_restart": true,
+  "agent_port_closed_after_stop": true,
+  "restart_auth_mode": "portal",
+  "live_services_touched": false
+}

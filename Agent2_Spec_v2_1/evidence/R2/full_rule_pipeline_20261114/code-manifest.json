@@ -1,0 +1,30 @@
+{
+  "version": "cr050-code-manifest/1.0.0",
+  "files": {
+    "agent2/sme_fraud/rule_snapshot.py": "bcf83a025c046b8469d219df22a33890f8b340b77d8049afa850cb30222f93ea",
+    "agent2/sme_fraud/rule_snapshot.schema.json": "4ace382407368bcd37cc3791c6225435d59c73119ee3862d3eb121175a13a55f",
+    "agent2/sme_fraud/native_rule_node.py": "06e3a27c4f88f0859bbf8a2897b47288f3313830468d68617b0db26309a865b2",
+    "agent2/sme_fraud/rules.py": "a975e11bf31a67ba2b0a0a5cb548cab6bbe932084befce49f2d83abe53b3f9e1",
+    "agent2/sme_fraud/benford.py": "af330a8fadcfa5532642784df9013b0f1aadf3462a5c6eaa89152d7204e14227",
+    "agent2/sme_fraud/imports.py": "ad0b214c19525e5ee3fbb4010e2f0294ad00b30b9a443cb638a30ec2a10d7b28",
+    "agent2/sme_fraud/import_files.py": "f43d1888a56bc5be8ed79f979bc2fee52c869f5d5e38acb303aa9674937c2f78",
+    "agent2/sme_fraud/snapshot_analysis.py": "002392b8191812e3af6ecb7b2b5584b7a5c146ddabaa841573f7242acb7727f5",
+    "agent2/sme_fraud/analysis_api.py": "0951a1054c726a036475ce7bc50ac2560803f4b6a8a747ab9d09f18c7846cd2d",
+    "agent2/sme_fraud/rule_evaluation.py": "fa85db930b00cd7530726845e295d6982584a76eb58351e002dd32d040e48765",
+    "agent2/sme_fraud/web/workbench.js": "6ef5a43823bfc1d41ff0c7734af3a48d9842a5d1e08a948c4413f79fedabe0a6",
+    "portal/agent2_bridge.py": "7fdcc5bc948fcbaf7ae0934d871ffc2a57bebf9df4bf70986904200f0964fbf0",
+    "agent2/scripts/check_full_rule_pipeline.py": "c1ba5a8d665eee841142df10b96615326ab7beeff116320a629a1f8cc5a28592",
+    "agent2/scripts/check_rule_snapshot_ui.py": "a3fe9e7ed75dd6e34871f3d3da8bbec0b5e1364be0f702af7a5dd5ca0f67c127",
+    "agent2/scripts/prepare_full_rule_inputs.py": "abdcff188c6f6b73cf37b3c671c8f162805aa2a0b0a3a7d27cc7235251ec61f0",
+    "agent2/tests/test_rule_snapshot.py": "0679a160ac8c7dc21a527a1c16b0ad9819357dcb0177d7969e1c871ff09dcc95",
+    "agent2/tests/test_analysis_api.py": "bbef2ed68c33e466d22473c39594d9028b9d98422e33d7277b744c65442a72f7",
+    "agent2/examples/full_rules/C001_B1_signal.json": "5bbdbf5885b23ba96f110bcf49fbd01b07b7719f47c1b69ad0b311213f9577cd",
+    "agent2/examples/full_rules/C001_C2_signal.json": "d7cabe3ea8a6c7295a4ea68a35609d40c4e8d3d5ab1ce4024f2d81f3637eb5d8",
+    "agent2/examples/full_rules/C001_coverage_unknown.json": "f56e5aff8a16eb05030f66c23466d83e1d2a21f6ed3bfc3fcf057290c5e4e256",
+    "agent2/examples/full_rules/C001_E2_signal.json": "ed3dd6892ce8cfb187c4b7ecb16dd58904c14625945767474fd57c1ed67c0dc4",
+    "agent2/examples/full_rules/C001_F4_signal.json": "8b29ac021d3dddcbbe4bacc0096180e63e554e82907e2cbfdf23300d7a0bb7d9",
+    "agent2/examples/full_rules/C002_B1_signal.json": "8ba37d9f919dc4b9659bc5fea7c576baac05aa917a13f1942ccd22539afc9ab9",
+    "agent2/examples/full_rules/validation-report.json": "2ed6834f08e44c8298e6b46516ea0dd2ac3d20e8f8e08fae4ce34ec74aa3aebb",
+    "agent2/examples/full_rules/full_rule_inputs_C001_C002.zip": "25ff6c1388b0ce0ec7342c324032e0c585c475f7fc67802db4ec357362261ba6"
+  }
+}

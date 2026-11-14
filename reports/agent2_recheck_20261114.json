@@ -1,0 +1,75 @@
+{
+  "status": "needs_fixes",
+  "date": "2026-11-14",
+  "test_suites": {
+    "backend": {
+      "count": 55,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    "he_expansion": {
+      "count": 33,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "he_lifecycle": {
+      "count": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "total_focused_tests": 109,
+  "ui_checks": 8,
+  "ui_status": "passed",
+  "runtime": {
+    "status": "passed",
+    "checks": {
+      "8800": {
+        "http_status": 200,
+        "agent2_state": "running",
+        "dependency_status": "ready"
+      },
+      "8766": {
+        "http_status": 200,
+        "auth_mode": "portal",
+        "analysis_mode": "four_encrypted_branches"
+      },
+      "8868": {
+        "http_status": 200
+      },
+      "8869": {
+        "http_status": 200
+      },
+      "current_workbench_asset_served": true
+    },
+    "model_artifacts_unchanged": 4,
+    "dpapi_key_files_unchanged": true,
+    "old_bundle_preserved": true,
+    "configuration_change": "agents.agent2.he4_worker.bundle",
+    "login_acceptance_performed": false
+  },
+  "open_regression": {
+    "case": "known_and_future_candidates",
+    "expected_rows": 2,
+    "source_as_of": "2025-08-12T11:00:00+07:00",
+    "future_event_at": "2025-08-13T11:00:00+07:00",
+    "live_state_touched": false,
+    "preview_status": "accepted_with_warnings",
+    "status": "failed",
+    "error_code": "RULE_CANDIDATE_MISSING",
+    "actual_rows": null
+  },
+  "new_profile_live_model_binding": false,
+  "native_he_expansion_acceptance_claimed": false,
+  "live_login_acceptance_performed": false,
+  "code_sha256": {
+    "agent2/sme_fraud/web/workbench.js": "f3774bbe6a893da573d460b3beddf843289952ddaf71f14b7ce44a53226ef3fe",
+    "agent2/scripts/check_rule_snapshot_ui.py": "e827d1cf33f00a7c211da6ed3a58732c89bea0ea78168615b7f4803814f6890b",
+    "agent2/scripts/check_rule_cutoff_regression.py": "ff48c8af36c0258821b6dc524daa67253c21ce98e6ccaa2aa27b2ec6835ca3d6",
+    "agent2/sme_fraud/rule_snapshot.py": "6c40591cb88aefee1fd861946aeaedc30c7a318e5abdaf3cb53573cdfb2af7c4",
+    "agent2/sme_fraud/rule_snapshot_features.py": "76601ab700740872e56b9a70df3d9acca62fc51c7dc4db20222341562cd626d4"
+  }
+}

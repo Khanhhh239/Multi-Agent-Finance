@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "company_id": "C001",
+      "run_id": "herun_a41f1c89c0b04bb9bd85021731bdaf7f",
+      "primitive_requests": 12,
+      "committed": 12,
+      "profiles": {
+        "rules": 6,
+        "graph": 1,
+        "statistics": 5
+      },
+      "generation_one": true
+    },
+    {
+      "company_id": "C002",
+      "run_id": "herun_83f30523ede5495a97a9957a07a000dc",
+      "primitive_requests": 12,
+      "committed": 12,
+      "profiles": {
+        "rules": 6,
+        "graph": 1,
+        "statistics": 5
+      },
+      "generation_one": true
+    }
+  ],
+  "scope": "read-only live HE4 worker state; no ciphertext, keys or user credentials exported"
+}

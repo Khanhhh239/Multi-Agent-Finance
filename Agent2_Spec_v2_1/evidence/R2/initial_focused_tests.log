@@ -1,0 +1,24 @@
+test_all_native_rule_scores_hits_and_exceptions_are_preserved (test_method_adapters.MethodAdapterTests.test_all_native_rule_scores_hits_and_exceptions_are_preserved) ... ok
+test_every_requested_adapter_returns_five_rows_without_top_k (test_method_adapters.MethodAdapterTests.test_every_requested_adapter_returns_five_rows_without_top_k) ... ok
+test_extreme_batch_does_not_change_reference_or_prior_scores (test_method_adapters.MethodAdapterTests.test_extreme_batch_does_not_change_reference_or_prior_scores) ... ok
+test_fit_rejects_overlap_and_silent_imputation (test_method_adapters.MethodAdapterTests.test_fit_rejects_overlap_and_silent_imputation) ... ok
+test_float_parity_all_retained_ml_and_statistics (test_method_adapters.MethodAdapterTests.test_float_parity_all_retained_ml_and_statistics) ... ok
+test_future_or_incompatible_artifact_is_unavailable (test_method_adapters.MethodAdapterTests.test_future_or_incompatible_artifact_is_unavailable) ... ok
+test_missing_artifact_is_null_and_inference_never_fits (test_method_adapters.MethodAdapterTests.test_missing_artifact_is_null_and_inference_never_fits) ... ok
+test_missing_selected_feature_keeps_row_and_preserves_valid_zero_score (test_method_adapters.MethodAdapterTests.test_missing_selected_feature_keeps_row_and_preserves_valid_zero_score) ... ok
+test_no_hit_native_rows_still_receive_available_ml_scores (test_method_adapters.MethodAdapterTests.test_no_hit_native_rows_still_receive_available_ml_scores) ... FAIL
+test_snapshot_graph_is_source_backed_and_unsupported_rules_are_explicit (test_method_adapters.MethodAdapterTests.test_snapshot_graph_is_source_backed_and_unsupported_rules_are_explicit) ... ok
+test_wrong_scope_and_corrupt_artifact_do_not_return_scores (test_method_adapters.MethodAdapterTests.test_wrong_scope_and_corrupt_artifact_do_not_return_scores) ... ok
+
+======================================================================
+FAIL: test_no_hit_native_rows_still_receive_available_ml_scores (test_method_adapters.MethodAdapterTests.test_no_hit_native_rows_still_receive_available_ml_scores)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\agent22\agent2\tests\test_method_adapters.py", line 95, in test_no_hit_native_rows_still_receive_available_ml_scores
+    self.assertTrue(no_hit, 'Need an actual zero-point native rule result, not a mocked flag')
+AssertionError: [] is not true : Need an actual zero-point native rule result, not a mocked flag
+
+----------------------------------------------------------------------
+Ran 11 tests in 3.002s
+
+FAILED (failures=1)

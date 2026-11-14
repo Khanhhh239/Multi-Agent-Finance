@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "D:\agent22\agent2\scripts\test_managed_worker_ui.py", line 77, in <module>
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--output-dir',type=Path,required=True);args=parser.parse_args();run(args.output_dir.resolve())
+                                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agent22\agent2\scripts\test_managed_worker_ui.py", line 53, in run
+    job=frame.locator('#job-meta dd').first.inner_text();assert job.startswith('herun_')
+                                                                ^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

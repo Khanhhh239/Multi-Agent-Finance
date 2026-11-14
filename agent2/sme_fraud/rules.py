@@ -27,6 +27,7 @@ from .spec_policy import bank_identity, identity_matches, PeriodPayments, manual
 from .payment_evidence import PaymentEvidence
 from .authority_policy import ApprovalAuthority
 from .batch_controls import BatchControls
+from .p1_timing import unavailable_fields as p1_unavailable_fields
 from .evidence_policy import EvidencePolicy, SOURCES as EVIDENCE_SOURCES, REQUIRED as EVIDENCE_REQUIRED, required_columns
 from .cash_controls import CASH_POLICY, cash_payment_check, REVIEW_POLICY, validate_review_config
 from .cash_limit_priority import POLICY as LIMIT_PRIORITY_POLICY
@@ -539,14 +540,21 @@ def score_rules(tables, config=None, features=None):
                     emit('A6', dict(payment_vnd=amount, invoice_gross_vnd=gross, difference_vnd=amount - gross))
             # Invoice obligations apply to both cash and bank disbursements,
             # independently of whether a recipient bank account was supplied.
-            if payment and financial and row['payment_channel'] in {'bank', 'cash'} and gross > 0:
-                if invoice_key is None:
+            if payment and financial and row['payment_channel'] in {'bank', 'cash'}:
+                unavailable=p1_unavailable_fields(row,now)
+                blocked_prior=[r for r in previous_invoice if p1_unavailable_fields(r,now)]
+                if unavailable or (gross>0 and blocked_prior):
+                    emit('P1',dict(evidence_status='information_gap',
+                        reason='invoice_not_available_at_cutoff' if unavailable else 'invoice_history_not_available_at_cutoff',
+                        unavailable_fields=unavailable or sorted({f for r in blocked_prior for f in p1_unavailable_fields(r,now)})),weight=0)
+                    current_hits[-1].update(hard_trigger=0,scoring_role='information_request',status='information_gap',signal=None)
+                elif gross>0 and invoice_key is None:
                     emit('P1', dict(invoice_number=row['invoice_number'], invoice_gross_vnd=gross,
                                     payment_vnd=amount, evidence_status='information_gap',
                                     missing_fields=[field for field in ('company_id', 'vendor_id', 'invoice_number')
                                                     if not normalize(row[field])]), weight=0)
                     current_hits[-1].update(hard_trigger=0, scoring_role='context')
-                elif previous_invoice and total_invoice > gross + 1:
+                elif gross>0 and previous_invoice and total_invoice > gross + 1:
                     emit('P1', dict(invoice_number=row['invoice_number'], invoice_gross_vnd=gross,
                                     cumulative_paid_vnd=total_invoice, excess_vnd=total_invoice - gross),
                          [r['transaction_id'] for r in previous_invoice])

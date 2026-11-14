@@ -1,0 +1,169 @@
+{
+  "spec_version": "2.1",
+  "change_request": "CR-011",
+  "collected_at": "2026-11-11T09:46:26.129976+07:00",
+  "cwd": "D:\\agent22",
+  "python": "3.12.7 (tags/v3.12.7:0b05ead, Oct  1 2024, 03:06:41) [MSC v.1941 64 bit (AMD64)]",
+  "commands": [
+    {
+      "name": "before",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/run_r1_tests.py",
+        "--suite",
+        "test_prior_invoice_history",
+        "--report",
+        "Agent2_Spec_v2_1\\evidence\\R1\\prior_history_fix_20261111\\before_tests.json"
+      ],
+      "exit_code": 1,
+      "result": "before_tests.json",
+      "note": "11 original new cases; two additional time/tenant guards added after this reproduction."
+    },
+    {
+      "name": "focused",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/run_r1_tests.py",
+        "--suite",
+        "test_prior_invoice_history",
+        "--suite",
+        "test_snapshot_features",
+        "--suite",
+        "test_snapshot_verification_access",
+        "--report",
+        "Agent2_Spec_v2_1\\evidence\\R1\\prior_history_fix_20261111\\focused_tests.json"
+      ],
+      "exit_code": 0,
+      "result": "focused_tests.json"
+    },
+    {
+      "name": "formal",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "Agent2_Spec_v2_1/scripts/run_stage.py",
+        "R1"
+      ],
+      "exit_code": 0,
+      "result": "commands_result.json",
+      "run_id": "5759a8dd-9b06-4143-aaca-640fa1e876c2"
+    },
+    {
+      "name": "checker",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "Agent2_Spec_v2_1/scripts/check_evidence.py",
+        "R1"
+      ],
+      "exit_code": 0,
+      "result": "checker_result.json"
+    },
+    {
+      "name": "business_review",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/review_r1_business.py",
+        "--output",
+        "Agent2_Spec_v2_1\\evidence\\R1\\prior_history_fix_20261111\\business_review"
+      ],
+      "exit_code": 0,
+      "result": "business_review/review_checks.json"
+    },
+    {
+      "name": "demo",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/demo_snapshot_features.py"
+      ],
+      "exit_code": 0,
+      "log": "demo.log"
+    }
+  ],
+  "formal_run_id": "5759a8dd-9b06-4143-aaca-640fa1e876c2",
+  "formal_source_tree_at_start": "b91ad8d4e397d497a929abe27093b84a5e7531ddd691c80dfeb513076e13cdc6",
+  "source_comparison": {
+    "agent2/sme_fraud/snapshot_features.py": {
+      "before": "ea4a05938a403f04791b01c0e476649f581bc6666a2a7ebe1292115130ec096b",
+      "after": "a0c0b1f67e134ffcd398770658a4cd81bc207914969dd2a5a054b7c5a0b45cad"
+    },
+    "agent2/sme_fraud/imports.py": {
+      "before": "7c2d09544a7a0c56c23ff7e1c8b395e5ae3ca9c561f0019e4ce4db7a6c486627",
+      "after": "7c2d09544a7a0c56c23ff7e1c8b395e5ae3ca9c561f0019e4ce4db7a6c486627"
+    },
+    "agent2/sme_fraud/feature_pipeline.py": {
+      "before": "9c8808ad90a7d333fbd1f606cf2ca9769e37ce6d030838be0df76e00d305686f",
+      "after": "9c8808ad90a7d333fbd1f606cf2ca9769e37ce6d030838be0df76e00d305686f"
+    },
+    "agent2/sme_fraud/features.py": {
+      "before": "c4ea12d5c7552014472c5874896a3e5f67df803d711d0f1685f0b759c682ca68",
+      "after": "c4ea12d5c7552014472c5874896a3e5f67df803d711d0f1685f0b759c682ca68"
+    },
+    "agent2/tests/fixtures/r1_feature_replay_v1.json": {
+      "before": "d16609827b50bde204807eb86762594cabb3bec938bf92e5e121ecbecebeb9cc",
+      "after": "d16609827b50bde204807eb86762594cabb3bec938bf92e5e121ecbecebeb9cc"
+    }
+  },
+  "feature_contract": {
+    "version": "snapshot-point-in-time/1.1.0",
+    "fingerprint": "750e47dac572ad4a07bd308526ca382acda0c90d62b5440236ed9b34c1423d6c",
+    "columns": 33
+  },
+  "parity": {
+    "same_snapshot": true,
+    "channels_equal": [
+      "features",
+      "missing",
+      "rows"
+    ],
+    "columns_equal": true,
+    "baseline_evidence_change": "Added prior_invoice_history coverage. Existing early-demo evidence fields equal. Unlinked/incomplete prior totals are nullable in contract 1.1.0.",
+    "old_artifact_id": "ftr_f94d88518f65c1d21b14d4b17e90d112eb071b0c1cf5ebfb738b14c8c176ba35",
+    "new_artifact_id": "ftr_81c6f798d08e3fff9cd896a3b1ef0da8f594df256d4e5ca4dd5ef0f96bfb6a5f",
+    "old_contract": "snapshot-point-in-time/1.0.1",
+    "new_contract": "snapshot-point-in-time/1.1.0",
+    "numeric_baseline_changes": false
+  },
+  "native_summary": {
+    "count": 527,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0
+  },
+  "review_passed": 8,
+  "review_failed": 0,
+  "independent_cells_reconciled": 528,
+  "remaining_BR07_BR08_defects": [],
+  "status": "READY_FOR_REVIEW",
+  "release_approved": false,
+  "real_business_approval": false,
+  "spec_checksum_entries_updated": [
+    "04_contracts_states_modules.md",
+    "98_PROGRESS.md",
+    "99_decision_log.md",
+    "CHANGE_REQUESTS.md"
+  ],
+  "note": "Formal runner records the tree at run start. Final reports/generated evidence are separately hashed below. No fabricated subprocess timestamps."
+}

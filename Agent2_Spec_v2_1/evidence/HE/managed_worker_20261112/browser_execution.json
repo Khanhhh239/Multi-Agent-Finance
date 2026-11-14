@@ -1,0 +1,13 @@
+{
+  "command": [
+    "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "agent2/scripts/test_managed_worker_ui.py",
+    "--output-dir",
+    "Agent2_Spec_v2_1\\evidence\\HE\\managed_worker_20261112\\browser"
+  ],
+  "exit_code": 1,
+  "elapsed_seconds": 48.453
+}

@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-12",
+  "source": "current working tree; no commit or push",
+  "python": "3.12.7 (tags/v3.12.7:0b05ead, Oct  1 2024, 03:06:41) [MSC v.1941 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "dependencies": {
+    "tenseal": "0.3.18",
+    "cryptography": "50.0.2",
+    "numpy": "1.26.4",
+    "scipy": "1.15.1",
+    "scikit-learn": "1.8.0",
+    "playwright": "1.65.0"
+  },
+  "source_sha256": {
+    "portal/agent2_runtime.py": "bb3ced4a97ce229b4b582ba4996ea699937bbdfefebad3d9d1651bf377a01f5e",
+    "portal/server.py": "260a738d2c66048e63eb0a38624753d799a9ee2ff0583b2de2c6e7f1d7b04ea5",
+    "portal/static/index.html": "d6e413cfd184c0b527e9cb9982865ed6650928c08771e346a3fbbf1a3d7df76a",
+    "portal/static/app.js": "7cf8471f039930eb581fc3c676ee9bc4974a3f45e03389c9b3bacc8a19387ba5",
+    "agent2/experiments/he_inference/readiness.py": "e173bbeebb42107934d5d641b1e253051e9875edf341c58415acbdd54cb662c1",
+    "agent2/experiments/he_inference/worker_server.py": "1904d49853d0629a2234d38a65c8f63a278917ec527947818fc65d3e1e313b94",
+    "agent2/experiments/he_inference/enterprise_server.py": "4b66d631e4b56bb3efffe2f7bed5c510fc4032a21fbcbbc3d3bb5c6972ba75cd",
+    "agent2/experiments/he_inference/node_jobs.py": "562dd7a0f1c5ba5e9bf9bf2b23abdad80c4efd61eac2b809e837696f3d7960ea",
+    "agent2/sme_fraud/he_workbench.py": "08fa13e8326a42b926d0224ebf3682a9ff23d04273f4ca7becddd22c6cf07895",
+    "agent2/sme_fraud/web/he-analysis.html": "85a221795a19c9a40a80a7d8fe74d8d11e51f5d392f7dd76471dfcff69f3eebc",
+    "agent2/sme_fraud/web/he-analysis.js": "a3c43bf9cb7d26b62dc0eea4619c9d4082ff16405150560c72d8bb3023ac31af",
+    "agent2/tests_he/test_managed_worker.py": "ea0434340f0dfa921b4bfa3ddd5ef7f9526be63f463e1c06c2448593cd45213e",
+    "agent2/scripts/test_managed_worker_ui.py": "d54ebdbffd4d32f1ac2291c4a1785d1461db20944c45fd6b5fb7febad76044b0",
+    "agent2/docs/HE_MANAGED_WORKER.md": "982c170b9daa1d22671157227ff321deea7cb62d20eaed94b87fae9f3f85395c",
+    "agent2/docs/HE_PORTAL_ACTIVATION.md": "a884568c30f40db9434f0378e008979813632bdb9b26603b96437b36b72fbc1b",
+    "agent2/README.md": "970d6e49932d358ac60c324ec78a496a27c2e0083e570ffe4be7cababf14f712"
+  },
+  "authoritative_he": "he_tests.json",
+  "authoritative_native": "native_tests.json",
+  "authoritative_browser": "browser_acceptance",
+  "actual_desktop_lifecycle": "deployment.json",
+  "desktop_user_relogin_required_after_restart": true,
+  "keys_or_credentials_in_evidence": false,
+  "actual_remote_cloud_deployment": false,
+  "images_visually_reviewed": [
+    "browser_final2/02-worker-offline.png"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "contract_version": "1.0.0",
+  "fixtures": [
+    {
+      "path": "agent2/tests/fixtures/input_contract_v1.json",
+      "sha256": "f3f461d12bf06a7003438d448fd7b04dc03d0553ad8ed74fb3ca8701b2c629ea",
+      "kind": "synthetic",
+      "companies": [
+        "C001",
+        "C002"
+      ],
+      "purpose": "same IDs, signed adjustments, many-to-many allocations, overpayment, unverified simulated documents"
+    }
+  ]
+}
