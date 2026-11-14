@@ -1,0 +1,11 @@
+{
+  "case": "known_and_future_candidates",
+  "expected_rows": 2,
+  "source_as_of": "2025-08-12T11:00:00+07:00",
+  "future_event_at": "2025-08-13T11:00:00+07:00",
+  "live_state_touched": false,
+  "preview_status": "accepted_with_warnings",
+  "actual_rows": 2,
+  "future_unavailable": true,
+  "status": "passed"
+}

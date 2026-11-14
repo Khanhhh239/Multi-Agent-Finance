@@ -1,0 +1,152 @@
+{
+  "spec_version": "2.1",
+  "change_request": "CR-013",
+  "status": "R2_PARTIAL_subtask_complete",
+  "collected_at": "2026-11-11T12:00:04.420219+07:00",
+  "head": "f203b39828f567171916b5b4744728ed4b63d17f",
+  "cwd": "D:\\agent22",
+  "python": "3.12.7 (tags/v3.12.7:0b05ead, Oct  1 2024, 03:06:41) [MSC v.1941 64 bit (AMD64)]",
+  "commands": [
+    {
+      "name": "focused",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/run_r1_tests.py",
+        "--suite",
+        "test_method_jobs",
+        "--suite",
+        "test_method_adapters",
+        "--report",
+        "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/focused_tests.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "native",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/run_r1_tests.py",
+        "--report",
+        "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/native_tests.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "company_demo",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/demo_company_models.py",
+        "--output-dir",
+        "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "parity",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/check_method_outputs.py",
+        "--output",
+        "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/parity_report.json"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "native_summary": {
+    "count": 557,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0
+  },
+  "native_elapsed_seconds": 235.979,
+  "focused_count": 30,
+  "new_job_case_count": 17,
+  "companies": [
+    {
+      "company_id": "C001",
+      "method_id": "isolation_forest",
+      "job_id": "fit_1e91d51203a144c3a9f728dc8da41fce",
+      "artifact_id": "mth_073861b5774f70ef637eea8f558e788b9c35d05e189008d05854fed95e9944d7",
+      "model_version": "mdl_9669b3b427d585dd8a5a59d05ab7d49e00d3002ac0fab090531fdcf757633d59",
+      "history_rows": 10,
+      "reference_rows": 5,
+      "new_rows_scored": 5,
+      "input_features": 33,
+      "prepared_width": 62,
+      "missing_policy": "median_flags",
+      "payload_bytes": 203874,
+      "payload_checksum_verified": true,
+      "full_contract_verified": true,
+      "process_restart_verified": true
+    },
+    {
+      "company_id": "C002",
+      "method_id": "ecod",
+      "job_id": "fit_1048e9bfaf3543cf9bdd6559ffdd69a9",
+      "artifact_id": "mth_d4fd0c1b7c55780061b20c563d8371a06521498322fb4993082cbfb73a3b817b",
+      "model_version": "mdl_eb938865db61fe32737c3494de2f93e210268fdfe2cfddb9b3262841a425244e",
+      "history_rows": 10,
+      "reference_rows": 5,
+      "new_rows_scored": 5,
+      "input_features": 33,
+      "prepared_width": 62,
+      "missing_policy": "median_flags",
+      "payload_bytes": 5953,
+      "payload_checksum_verified": true,
+      "full_contract_verified": true,
+      "process_restart_verified": true
+    }
+  ],
+  "artifact_format": "company-method-artifact/1.0.0",
+  "preprocess_version": "frozen-feature-preprocess/1.0.0",
+  "model_runtime_versions": {
+    "runtime": {
+      "python": "3.12.7",
+      "platform": "win32",
+      "numpy": "1.26.4",
+      "scipy": "1.15.1",
+      "scikit-learn": "1.8.0",
+      "joblib": "1.5.1"
+    },
+    "implementation": {
+      "ml_estimators.py": "4cda15cd47c2f7080f6416210642406fadb5fbdff98690fb8ca14eddfb1a7c5b",
+      "unsupervised_statistics.py": "c80cdd213e8e877cc163cd5b36094771f219b66cece2428de27416192406ce2d",
+      "score_statistics.py": "396c0aab5f9fea7fac245deb0b4d116cf7d78d660bdd16247ea23d8a341f741d",
+      "method_adapters.py": "c4b9b54eb3e503ef13e095d218934cb2fc61b6b3501ea533c6bf6044bda7c18a",
+      "method_preprocess.py": "1d2244c3e0bae3ba6c82f557db52a4c5e6831cdff53851671809a8897c02e7ba"
+    }
+  },
+  "numerical_kernel_changes": false,
+  "parity_max_abs_error": 0.0,
+  "R1_feature_fingerprint_unchanged": true,
+  "source_core_unchanged": true,
+  "spec_checksum_entries_updated": [
+    "04_contracts_states_modules.md",
+    "98_PROGRESS.md",
+    "99_decision_log.md",
+    "CHANGE_REQUESTS.md"
+  ],
+  "full_R2_gate_run": false,
+  "canonical_rule_bridge": false,
+  "benchmark_E1_E2_complete": false,
+  "active_model_changed": false,
+  "release_approved": false,
+  "real_business_approval": false,
+  "note": "Actual test/demo/DB checks. Initial validation regression and initial working job source preserved. No invented process start timestamps or accuracy."
+}

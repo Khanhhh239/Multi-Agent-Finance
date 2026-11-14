@@ -1,123 +1,46 @@
-# 4. T4 doanh thu mới · T5 lịch chi tất định
+# T5 và dòng tiền hoạt động
 
-> **Phạm vi sau gộp 06/11/2026:** Phần quy tắc và số đo gốc là hồ sơ thiết kế/thử nghiệm, không xác nhận pháp luật hiện hành hoặc việc đã tích hợp nghĩa vụ mở rộng. Kết quả chấm code không thay xác minh quy tắc bởi chuyên gia.
+Mã phục vụ: [obligations.py](../../agent1/adaptive/obligations.py), [obligation_imports.py](../../agent1/adaptive/obligation_imports.py), [operating.py](../../agent1/adaptive/operating.py) và [methods.py](../../agent1/adaptive/methods.py). Hợp đồng nạp chi tiết ở [dịch vụ/T5](../../agent1_service/README.md#t5-ledger).
 
-> **Runtime cập nhật 11/11/2026:** nghĩa vụ mở rộng đã nối vào Workspace qua bảng T5, kèm thanh toán sao kê, số còn lại, tiền hoàn riêng và xác nhận độ phủ lịch. Đọc [hợp đồng T5 đang chạy](../../agent1_service/README.md#t5-ledger). Các kết quả nghiên cứu và nhận định “chưa tích hợp” ở phần hồ sơ bên dưới giữ nguyên phạm vi 06/11; không phải trạng thái runtime mới. Bộ sinh lịch đã thêm quyết toán TNDN theo số còn phải nộp được cung cấp, sửa biên ngày và lịch sử sửa đổi; không thay registry pháp lý.
+## Nghĩa vụ và phần đã thanh toán
 
-## 4.1 T4 — Doanh thu mới chưa lập hoá đơn
+`outflows` là **mỗi lần đến hạn** T5; không phải mẫu tự lặp hoặc bảng chi dự kiến tổng quát. Mỗi khoản có `expense_id`, ngày, số tiền, loại và `known_at`. `expense_payments` nối phần thực trả/nhận với nghĩa vụ và dòng bank.
 
-Vì sao cần: dự báo 13 tuần không thể chỉ nhìn công nợ đang có — hoá đơn lập trong 13 tuần tới (đặc biệt COD/kỳ hạn ngắn) đóng góp
-phần lớn dòng thu các tuần xa; bỏ qua sẽ đánh giá thiếu hụt quá cao.
+Định danh nghiệp vụ gồm `obligation_ref` + loại nghĩa vụ + `payment_period` + `installment_no`; ba trường bổ sung phải đi cùng nhau. Dời tiền thuê tháng 11 sang tháng 12 vẫn giữ kỳ tháng 11. Nạp bổ sung phân loại mới/sửa/trùng/xung đột, không xóa dòng vắng mặt và không tạo mã mới cho cùng lần đến hạn. Nội dung không đổi giữ ngày biết; sửa cần ngày biết mới, giữ snapshot cũ. Khoản cũ thiếu định danh tiếp tục dùng ID và được báo cần bổ sung.
 
-### Mô hình chính — `GlobalQuantileLGBM` (`agent1/models/t4_revenue.py`)
-- **Toàn cục** (một mô hình cho mọi chuỗi), **trực tiếp đa chân trời** (`h` là đặc trưng), 3 mô hình alpha 0,1/0,5/0,9.
-- **Chuẩn hoá quy mô:** mọi đặc trưng và mục tiêu chia cho `s = mean(13 tuần gần nhất) + 1e-9` → bất biến đơn vị VND/GBP, học chung nhiều công ty.
-- Đặc trưng (27): 13 lag chuẩn hoá, `r4`, `r26` (xu hướng ngắn/dài), `zero_share`, `h`, giá trị cùng kỳ năm trước (lag 52, 53),
-  tuần-trong-năm, tháng, cờ nghỉ Tết, `days_to_tet` (kẹp ±60), Giáng sinh, `log(s)`.
-- Tham số: lr 0,04; leaves 31; min_data 50; ff 0,85; bagging 0,8; λ₂=1; 500 vòng.
-- **CQR** trên cửa sổ hiệu chỉnh rời train/test (CAL_LO = 26 + 2H + 13 tuần): q̂ ở đơn vị chuẩn hoá.
-- **Chronos-Bolt-small** zero-shot (ngữ cảnh ≤512 tuần, 13 bước, 3 phân vị) làm đối chứng và ensemble (trung bình phân vị).
-- Mốc: naive mùa vụ 52 tuần + phần dư thực nghiệm; trung bình 13 tuần + phần dư thực nghiệm.
+```text
+Phần còn lại = nghĩa vụ có hiệu lực − thanh toán hợp lệ đã biết
+```
 
-### Kết quả (SPL thấp tốt) — chi tiết 03_Evaluation/04
-| Bối cảnh | LGBM | LGBM+CQR | Naive mùa vụ | TB 13 tuần | Chronos | Ensemble |
-|---|---|---|---|---|---|---|
-| `src` (trong miền) | 0,2596 | 0,2608 | 0,3271 | 0,2701 | 0,2628 | **0,2563** |
-| `tgt` (zero-shot từ src) | 0,3483 | **0,3474** | 0,4249 | 0,3861 | 0,3667 | 0,3524 |
-| Online Retail II — chỉ dữ liệu riêng | 0,2928 | 0,2875 | 0,3638 | 0,2823 | **0,2641** | 0,2685 |
-| Online Retail II — tiền huấn luyện tổng hợp + riêng | 0,2818 | 0,2794 | — | — | — | 0,2684 |
+Ngày/chiều bank phải khớp, tổng phân bổ bank và tổng trả cho nghĩa vụ không vượt nguồn. Trả từng phần giảm dư còn phải trả; tiền đã xảy ra thuộc số dư đầu, không trừ lại. Chi cố định không gắn vào bank `variable_cost` để tránh fit rồi cộng lại.
 
-cov80: LGBM không CQR 0,79 / 0,75 / 0,67; có CQR 0,84 / 0,80 / 0,83 → **CQR sửa đúng độ phủ thiếu**.
+Khoản chi đến/quá hạn còn dư được đưa tới ngày làm việc kế tiếp hoặc `forecast_date` hợp lệ do doanh nghiệp nhập. Hủy phần còn lại dùng `status=cancelled`, giữ thanh toán và lịch sử. `replaces_expense_id` thay lịch cũ chưa có thanh toán, không dùng để làm mất liên kết tiền đã trả.
 
-**Đọc:** (i) trên chuỗi tổng hợp LGBM + CQR thắng mọi mốc (−10% so với TB13 ở `tgt`); (ii) trên dữ liệu thật Online Retail II (nhà bán lẻ Anh)
-LGBM chỉ thắng TB13 khi **tiền huấn luyện bằng chuỗi tổng hợp** (0,2794 vs 0,2823 — chênh nhỏ) và **Chronos zero-shot tốt nhất**;
-(iii) ensemble LGBM+Chronos luôn nằm gần tốt nhất → là mặc định an toàn. Bài học: chuỗi thật có đặc tính (bán lẻ, Giáng sinh,
-73 chuỗi) khác máy phát — cần thêm dữ liệu thật doanh thu SME VN (T13).
+## Hồ sơ mở rộng và khoản thu hoàn
 
-### Cải tiến đề xuất
-1. Ràng buộc: tổng doanh thu mới phải nhất quán với công nợ mới → dùng đặc trưng "hoá đơn đã lập tuần này".
-2. Kênh COD vs bán chịu tách riêng (COD → thu ngay).
-3. Chronos tinh chỉnh nhẹ (LoRA) trên chuỗi tổng hợp nếu giấy phép cho phép (cần đọc điều khoản trước khi đưa vào sản phẩm).
-4. Dự báo phân cấp (công ty → khách lớn) với hoà hợp (reconciliation).
+TNCN khấu trừ, thuế nhà thầu, thưởng, thuê hợp đồng, gốc/lãi vay và quyết toán TNDN còn phải nộp dùng hồ sơ có `source` và `verified=true`. Số tiền/hạn do hồ sơ cung cấp; hệ thống không tự suy thuế, gross-up, quyền hưởng thưởng hay số quyết toán đã trừ tạm nộp.
 
-## 4.2 T5 — Bộ máy quy tắc nghĩa vụ (tất định)
+`vat_refund` là dòng **thu nghĩa vụ** riêng (`obligation_in`), cần quyết định hoàn biết trước cutoff. Tiền hoàn thực nhận nối bank chiều thu, không coi là chi âm hoặc AR. Chưa có quyết định thì không dự thu; quá ngày dự kiến nhận cần ngày mới, không tự lùi sang ngày mai. Quy ước ngày làm việc theo trường hồ sơ. `verified` của hồ sơ chưa phải xác nhận registry luật bởi chuyên gia.
 
-Mã: `agent1/calendar_vn.py`; kiểm thử: `tests/test_t0_t5.py` (15 ca, đạt).
+Các helper [rules/obligations.py](../../agent1/rules/obligations.py) và [calendar_vn.py](../../agent1/calendar_vn.py) còn phục vụ sinh lịch/kiểm tra lịch sử. Tài liệu này không xác nhận hiệu lực pháp lý của các tỷ lệ/ngưỡng cũ; triển khai thật cần đối chiếu hồ sơ và quy tắc tại kỳ tương ứng.
 
-**Thiết kế:** quy tắc có **ngày hiệu lực** (effective-dated) để chạy cả lịch sử 2019–2026; ngày nghỉ = python-holidays(VN) ∪ kỳ nghỉ Tết
-chính thức (2018–2027); luôn "dịch về ngày làm việc kế tiếp" (VAT, TNDN, môn bài); BHXH lùi về ngày làm việc *trước* (giả định thận trọng).
+## Phạm vi lịch chi
 
-| Nghĩa vụ | Quy tắc cài đặt | Căn cứ (thứ cấp) |
-|---|---|---|
-| VAT tháng | ngày 20 tháng sau | Luật QLT 38/2019 Đ.44 |
-| VAT quý | ngày cuối tháng đầu quý sau | như trên |
-| Ngưỡng kê khai tháng | doanh thu năm trước >50 tỷ | NĐ 126/2020 |
-| TNDN tạm nộp quý | ngày 30 tháng đầu quý sau | NĐ 126/2020 |
-| TNDN quyết toán | ngày cuối tháng thứ 3 sau năm tài chính | |
-| BHXH | 32% (DN 21,5% + NLĐ 10,5%), hạn cuối tháng | QĐ 595 (cần đối chiếu) |
-| Lương tối thiểu vùng I–IV | 5 mốc 2019→2026 | NĐ 90/2019 → 293/2025 |
-| Môn bài | 30/01; bỏ từ 2026 | NQ 198/2025/QH15 |
-| VAT 8% | các kỳ giảm 2022–2026; loại trừ ngành kim loại (đơn giản hoá) | NQ 43/2022 … 204/2025 |
+| Trạng thái tuần | Cách hiểu |
+|---|---|
+| `scheduled` | Có khoản và người dùng xác nhận đã rà đủ |
+| `scheduled_unconfirmed` | Có khoản, chưa xác nhận đủ lịch |
+| `confirmed_zero` | Người dùng đã rà và xác nhận không có khoản |
+| `unknown` | Chưa đủ cơ sở kết luận về chi tuần đó |
 
-**Ví dụ kiểm thử (đã đạt):** VAT tháng 9/2024 → 21/10/2024 (20/10 là Chủ nhật); VAT Q1/2025 sau nghỉ 30/4–1/5; TNDN tạm nộp quý 4/2024 → 03/02/2025
-(30/01 trong nghỉ Tết Ất Tỵ); môn bài 2025 → 03/02/2025, 2026 → không còn; lương tối thiểu vùng I 01/2026 = 5.310.000đ.
+Có vài khoản trong tuần không chứng minh đã nạp đủ chi. T6 lưu phạm vi cùng kế hoạch và nêu phần chưa xác nhận.
 
-**Mở rộng cần làm:** thuế TNCN (khấu trừ tại nguồn), thuế nhà thầu, tiền thuế GTGT hoàn lại, lệnh chi lương thưởng, thanh toán lãi vay theo lịch
-hợp đồng thật, quy trình cập nhật khi có văn bản mới (WP-5.x).
+## Ước lượng hoạt động tùy chọn
 
+Khi bật và có learner hợp lệ, hoạt động thêm bán thu ngay và **phần chi biến đổi bổ sung** từ lịch sử sao kê đã đối chiếu. Phải cùng tập tài khoản, đủ lịch sử và fit/ready không sau cutoff. API/worker/job mặc định không bật nhánh thu hóa đơn mới; các mô hình T4/Chronos nghiên cứu không tự trở thành nhánh production.
 
-<a id="nghia-vu-bo-sung"></a>
+Learner hoạt động hiện dự báo tối đa **13 tuần** dù kỳ kế hoạch có thể dài tới 52; tuần xa phải đọc đúng phạm vi. Chỉ dự báo AR/T5 khi tắt hoạt động. Bật nhưng không đủ learner/history/scope thì báo lỗi, không tạo số ước lượng giả.
 
-## 4.3 Nghĩa vụ bổ sung từ hồ sơ và giới hạn xác minh
+Kỳ vọng hoạt động lấy từ chính hỗn hợp residual hữu hạn dùng trong Monte Carlo, sau chặn âm và trừ lịch chi biến đổi đã biết. Không lấy point estimate thay kỳ vọng. Dời một khoản chi vẫn dùng lịch gốc để tính phần top-up, chỉ chuyển khoản được chọn; không bù lại ở tuần cũ hoặc xóa phần chi khác ở tuần nhận.
 
-Gộp đặc tả lịch nghĩa vụ ngày 06/11/2026. Phần đối chiếu nguồn pháp lý
-bên dưới giữ nguyên phạm vi/ngày khảo sát ban đầu; đợt dọn tài liệu này
-không xác minh hiệu lực pháp lý hiện tại hoặc xác nhận quy tắc vận hành.
-
-`agent1/rules/obligations.py` nhận bảy nhóm: TNCN khấu trừ, thuế nhà thầu,
-hoàn VAT, thưởng lương/tháng 13, thuê nhiều bậc, lãi vay và gốc vay. Số tiền,
-hạn thanh toán và nguồn phải có trong hồ sơ đầu vào; mô-đun không tự suy mức
-thuế, gross-up, điều kiện hoàn VAT hay quyền hưởng thưởng tháng 13.
-
-Mỗi khoản có `obligation_id`, `known_at`, `due_date`, `amount`, `source` và
-`verified`. Lịch tại T bỏ hồ sơ chưa biết tại T; hoàn VAT còn cần ngày quyết
-định `refund_approved_at <= T`. Không dự đoán ngày nhận tiền bằng cách cộng
-một thời hạn xử lý pháp lý vào ngày nộp hồ sơ. Hồ sơ sửa đổi phải giữ phiên
-bản lịch sử; không gán lại ngày biết của bản sửa cho bản cũ.
-
-`rent_events` chọn giá theo đầu kỳ tháng, chặn bậc thiếu/chồng lấn, cắt ngày
-31 theo cuối tháng. Đợt thay đổi giá giữa tháng cần các sự kiện phân bổ cụ
-thể từ hợp đồng. `loan_events` giữ gốc/lãi riêng. Quy ước dời ngày làm việc
-do hợp đồng cung cấp. `weekly_extended_cash` trả hai mảng thu/chi trong
-(T+7k,T+7(k+1)], không cộng hoàn VAT vào chi âm.
-
-Đây là lịch độc lập và bộ chuyển thành dòng tiền tuần; chưa thay đổi các
-dự báo nghiên cứu đã công bố hoặc tự cộng vào dự báo dịch vụ. Khi tích hợp
-phải loại trùng với khoản thuê, `loan_service`, thuế và thưởng đã có trong
-bảng chi; tiền hoàn đã có trong số dư không được cộng lần nữa.
-
-Chạy `.venv/Scripts/python.exe scripts/run_obligation_cases.py`; bằng chứng
-ở `outputs/rules/extended_obligation_cases.csv`. Kiểm thử kiểm tra phép tính,
-chống dữ liệu tương lai và bảo toàn thu/chi; không thay xác minh chuyên gia.
-
-Bộ hồi quy lịch sử riêng: `.venv/Scripts/python.exe scripts/run_rules_business_cases.py`.
-Có 54 tình huống với kết quả kỳ vọng cố định, hai tình huống cho mỗi trong
-27 phiên bản quy tắc. Kiểm các vùng lương, biên kỳ VAT, ngành loại trừ,
-lương ròng/BHXH, ngưỡng doanh thu 50 tỷ, hạn thuế trùng ngày nghỉ, mức và
-ngày bỏ môn bài, Tết và dự phòng theo tháng. Giá trị kỳ vọng không lấy từ
-registry đang kiểm. CSV `outputs/rules/business_cases.csv` và độ phủ đi kèm
-chỉ xác nhận hồi quy quy ước lịch sử; mọi quy tắc vẫn `verified=false`.
-
-Đối chiếu nguồn ngày 20/10/2026:
-
-- [Luật 38/2019/QH14](https://vanban.chinhphu.vn/?pageid=27160&docid=197312),
-  [NĐ126/2020](https://chinhphu.vn/default.aspx?docid=201402&pageid=27160),
-  [TT111/2013](https://vanban.chinhphu.vn/?pageid=27160&docid=169566) và
-  [TT103/2014](https://vbpl.vn/botuphap/Pages/vbpq-toanvan.aspx?ItemID=46348&Keyword=)
-  là các đầu mối lịch sử để chuyên gia kiểm hồ sơ TNCN/nhà thầu.
-- [Quan hệ sửa đổi TT80/2021 trên CSDL Bộ Tài chính](https://vbpl.moj.gov.vn/botaichinh/Pages/vbpq-luocdo.aspx?ItemID=151086)
-  liệt kê TT94/2025; không coi TT80 bản gốc là đủ cho mọi kỳ sau này.
-- [Luật 108/2025/QH15](https://vanban.chinhphu.vn/?docid=216541&orggroupid=1&pageid=27160)
-  có hiệu lực chính từ 01/07/2026. [Hướng dẫn thời hạn theo NĐ252/2026 của Chính phủ](https://xaydungchinhsach.chinhphu.vn/quy-dinh-thoi-han-nop-ho-so-khai-thue-119260703120801722.htm)
-  nêu hạn tháng/quý. Bộ mới này chưa được chuyên gia xác nhận trong registry;
-  mô-đun nhận hạn trên hồ sơ thay vì tự mở rộng quy tắc lịch sử sang năm 2026.
+`operating.version` băm model, residual, scope và credit nếu có; forecast/T10 lưu cùng identity. Không gộp sai số hiệu chỉnh của các operating khác nhau. Xem [T6](T6_PARTIAL_PATHS_PERIODIC_2026-11-13.md) cho tổng hợp và [Evaluation](../03_Evaluation/01_metric_ky_thuat.md) cho cách chấm.

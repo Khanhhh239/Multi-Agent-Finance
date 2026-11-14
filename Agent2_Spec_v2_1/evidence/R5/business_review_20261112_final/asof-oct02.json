@@ -1,0 +1,577 @@
+{
+  "analysis_id": "ana_c60f4c13186a21c1ccf355b2183a9ca23b9a7697d785b069e071086c2caeda83",
+  "as_of": "2026-10-02T02:00:00+00:00",
+  "coverage_message": "Mới đối chiếu thanh toán hóa đơn và danh mục nhà cung cấp; chưa đánh giá toàn bộ bộ quy tắc. Kết quả không phải kết luận gian lận.",
+  "groups": [
+    {
+      "allocation_refs": [
+        {
+          "effective_at": "2026-10-02T09:00:00+07:00",
+          "observed_at": "2026-10-02T09:00:00+07:00",
+          "record_id": "A_A",
+          "record_type": "payment_allocation",
+          "revision": 1,
+          "source": "Phân bổ thanh toán",
+          "source_kind": "simulated"
+        },
+        {
+          "effective_at": "2026-10-02T09:00:00+07:00",
+          "observed_at": "2026-10-02T09:00:00+07:00",
+          "record_id": "A_B",
+          "record_type": "payment_allocation",
+          "revision": 1,
+          "source": "Phân bổ thanh toán",
+          "source_kind": "simulated"
+        }
+      ],
+      "cumulative_paid_vnd": 12000000,
+      "event_at": "2026-10-02T02:00:00+00:00",
+      "excess_vnd": 2000000,
+      "group_allocated_vnd": 8000000,
+      "group_id": "grp_c597d3c2b7d01bce9682143c",
+      "invoice_gross_vnd": 10000000,
+      "knowledge_at": "2026-10-02T02:00:00+00:00",
+      "needs_review": true,
+      "prior_allocation_refs": [
+        {
+          "effective_at": "2026-10-01T09:00:00+07:00",
+          "observed_at": "2026-10-01T09:00:00+07:00",
+          "record_id": "A_OLD",
+          "record_type": "payment_allocation",
+          "revision": 1,
+          "source": "Phân bổ thanh toán",
+          "source_kind": "simulated"
+        }
+      ],
+      "prior_paid_vnd": 4000000,
+      "status": "needs_review",
+      "transaction_refs": [
+        {
+          "effective_at": "2026-10-02T09:00:00+07:00",
+          "observed_at": "2026-10-02T09:00:00+07:00",
+          "record_id": "A",
+          "record_type": "transaction",
+          "revision": 1,
+          "source": "Giao dịch",
+          "source_kind": "simulated"
+        },
+        {
+          "effective_at": "2026-10-02T09:00:00+07:00",
+          "observed_at": "2026-10-02T09:00:00+07:00",
+          "record_id": "B",
+          "record_type": "transaction",
+          "revision": 1,
+          "source": "Giao dịch",
+          "source_kind": "simulated"
+        }
+      ]
+    }
+  ],
+  "row_count": 3,
+  "rows": [
+    {
+      "amount_vnd": 4000000,
+      "checks": {
+        "payment_invoice": {
+          "available": true,
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "I001",
+              "record_type": "invoice",
+              "revision": 1,
+              "source": "Hóa đơn",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-01T09:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "record_id": "A_OLD",
+              "record_type": "payment_allocation",
+              "revision": 1,
+              "source": "Phân bổ thanh toán",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "record_id": "COV_0",
+              "record_type": "history_export",
+              "revision": 1,
+              "source": "Phạm vi lịch sử thanh toán",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-01T09:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "record_id": "OLD",
+              "record_type": "transaction",
+              "revision": 1,
+              "source": "Giao dịch",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "record_type": "vendor",
+              "revision": 1,
+              "source": "Nhà cung cấp",
+              "source_kind": "simulated"
+            }
+          ],
+          "facts": [
+            {
+              "cumulative_paid_vnd": 4000000,
+              "current_allocated_vnd": 4000000,
+              "excess_vnd": 0,
+              "invoice_gross_vnd": 10000000,
+              "invoice_refs": [
+                {
+                  "effective_at": "2026-09-01T00:00:00+07:00",
+                  "observed_at": "2026-09-01T00:00:00+07:00",
+                  "record_id": "I001",
+                  "record_type": "invoice",
+                  "revision": 1,
+                  "source": "Hóa đơn",
+                  "source_kind": "simulated"
+                }
+              ],
+              "prior_paid_vnd": 0
+            }
+          ],
+          "group_refs": [],
+          "missing_sources": [],
+          "name": "Đối chiếu thanh toán hóa đơn",
+          "needs_review": false,
+          "reason": null,
+          "status": "no_signal"
+        },
+        "vendor_names": {
+          "available": true,
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "record_type": "vendor",
+              "revision": 1,
+              "source": "Nhà cung cấp",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V_PEER",
+              "record_type": "vendor",
+              "revision": 1,
+              "source": "Nhà cung cấp",
+              "source_kind": "simulated"
+            }
+          ],
+          "facts": [
+            {
+              "vendor_ref": {
+                "effective_at": "2026-09-01T00:00:00+07:00",
+                "observed_at": "2026-09-01T00:00:00+07:00",
+                "record_id": "V_PEER",
+                "record_type": "vendor",
+                "revision": 1,
+                "source": "Nhà cung cấp",
+                "source_kind": "simulated"
+              }
+            }
+          ],
+          "group_refs": [],
+          "missing_sources": [],
+          "name": "Đối chiếu danh mục nhà cung cấp",
+          "needs_review": true,
+          "reason": null,
+          "status": "needs_review"
+        }
+      },
+      "description": "Dòng mô phỏng H0",
+      "event_at": "2026-10-01T02:00:00+00:00",
+      "kind": "payment",
+      "knowledge_at": "2026-10-01T02:00:00+00:00",
+      "revision": 1,
+      "source_kind": "simulated",
+      "transaction_id": "OLD"
+    },
+    {
+      "amount_vnd": 4000000,
+      "checks": {
+        "payment_invoice": {
+          "available": true,
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "I001",
+              "record_type": "invoice",
+              "revision": 1,
+              "source": "Hóa đơn",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "record_id": "A_A",
+              "record_type": "payment_allocation",
+              "revision": 1,
+              "source": "Phân bổ thanh toán",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "record_id": "A_B",
+              "record_type": "payment_allocation",
+              "revision": 1,
+              "source": "Phân bổ thanh toán",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-01T09:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "record_id": "A_OLD",
+              "record_type": "payment_allocation",
+              "revision": 1,
+              "source": "Phân bổ thanh toán",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "record_id": "COV_0",
+              "record_type": "history_export",
+              "revision": 1,
+              "source": "Phạm vi lịch sử thanh toán",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "record_id": "COV_1",
+              "record_type": "history_export",
+              "revision": 1,
+              "source": "Phạm vi lịch sử thanh toán",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "record_id": "A",
+              "record_type": "transaction",
+              "revision": 1,
+              "source": "Giao dịch",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "record_id": "B",
+              "record_type": "transaction",
+              "revision": 1,
+              "source": "Giao dịch",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-01T09:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "record_id": "OLD",
+              "record_type": "transaction",
+              "revision": 1,
+              "source": "Giao dịch",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "record_type": "vendor",
+              "revision": 1,
+              "source": "Nhà cung cấp",
+              "source_kind": "simulated"
+            }
+          ],
+          "facts": [
+            {
+              "cumulative_paid_vnd": 8000000,
+              "current_allocated_vnd": 4000000,
+              "excess_vnd": 0,
+              "invoice_gross_vnd": 10000000,
+              "invoice_refs": [
+                {
+                  "effective_at": "2026-09-01T00:00:00+07:00",
+                  "observed_at": "2026-09-01T00:00:00+07:00",
+                  "record_id": "I001",
+                  "record_type": "invoice",
+                  "revision": 1,
+                  "source": "Hóa đơn",
+                  "source_kind": "simulated"
+                }
+              ],
+              "prior_paid_vnd": 4000000
+            }
+          ],
+          "group_refs": [
+            "grp_c597d3c2b7d01bce9682143c"
+          ],
+          "missing_sources": [],
+          "name": "Đối chiếu thanh toán hóa đơn",
+          "needs_review": true,
+          "reason": null,
+          "status": "needs_review"
+        },
+        "vendor_names": {
+          "available": true,
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "record_type": "vendor",
+              "revision": 1,
+              "source": "Nhà cung cấp",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V_PEER",
+              "record_type": "vendor",
+              "revision": 1,
+              "source": "Nhà cung cấp",
+              "source_kind": "simulated"
+            }
+          ],
+          "facts": [
+            {
+              "vendor_ref": {
+                "effective_at": "2026-09-01T00:00:00+07:00",
+                "observed_at": "2026-09-01T00:00:00+07:00",
+                "record_id": "V_PEER",
+                "record_type": "vendor",
+                "revision": 1,
+                "source": "Nhà cung cấp",
+                "source_kind": "simulated"
+              }
+            }
+          ],
+          "group_refs": [],
+          "missing_sources": [],
+          "name": "Đối chiếu danh mục nhà cung cấp",
+          "needs_review": true,
+          "reason": null,
+          "status": "needs_review"
+        }
+      },
+      "description": "Dòng mô phỏng H0",
+      "event_at": "2026-10-02T02:00:00+00:00",
+      "kind": "payment",
+      "knowledge_at": "2026-10-02T02:00:00+00:00",
+      "revision": 1,
+      "source_kind": "simulated",
+      "transaction_id": "A"
+    },
+    {
+      "amount_vnd": 4000000,
+      "checks": {
+        "payment_invoice": {
+          "available": true,
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "I001",
+              "record_type": "invoice",
+              "revision": 1,
+              "source": "Hóa đơn",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "record_id": "A_A",
+              "record_type": "payment_allocation",
+              "revision": 1,
+              "source": "Phân bổ thanh toán",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "record_id": "A_B",
+              "record_type": "payment_allocation",
+              "revision": 1,
+              "source": "Phân bổ thanh toán",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-01T09:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "record_id": "A_OLD",
+              "record_type": "payment_allocation",
+              "revision": 1,
+              "source": "Phân bổ thanh toán",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "record_id": "COV_0",
+              "record_type": "history_export",
+              "revision": 1,
+              "source": "Phạm vi lịch sử thanh toán",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "record_id": "COV_1",
+              "record_type": "history_export",
+              "revision": 1,
+              "source": "Phạm vi lịch sử thanh toán",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "record_id": "A",
+              "record_type": "transaction",
+              "revision": 1,
+              "source": "Giao dịch",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-02T09:00:00+07:00",
+              "observed_at": "2026-10-02T09:00:00+07:00",
+              "record_id": "B",
+              "record_type": "transaction",
+              "revision": 1,
+              "source": "Giao dịch",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-10-01T09:00:00+07:00",
+              "observed_at": "2026-10-01T09:00:00+07:00",
+              "record_id": "OLD",
+              "record_type": "transaction",
+              "revision": 1,
+              "source": "Giao dịch",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "record_type": "vendor",
+              "revision": 1,
+              "source": "Nhà cung cấp",
+              "source_kind": "simulated"
+            }
+          ],
+          "facts": [
+            {
+              "cumulative_paid_vnd": 8000000,
+              "current_allocated_vnd": 4000000,
+              "excess_vnd": 0,
+              "invoice_gross_vnd": 10000000,
+              "invoice_refs": [
+                {
+                  "effective_at": "2026-09-01T00:00:00+07:00",
+                  "observed_at": "2026-09-01T00:00:00+07:00",
+                  "record_id": "I001",
+                  "record_type": "invoice",
+                  "revision": 1,
+                  "source": "Hóa đơn",
+                  "source_kind": "simulated"
+                }
+              ],
+              "prior_paid_vnd": 4000000
+            }
+          ],
+          "group_refs": [
+            "grp_c597d3c2b7d01bce9682143c"
+          ],
+          "missing_sources": [],
+          "name": "Đối chiếu thanh toán hóa đơn",
+          "needs_review": true,
+          "reason": null,
+          "status": "needs_review"
+        },
+        "vendor_names": {
+          "available": true,
+          "evidence_refs": [
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V001",
+              "record_type": "vendor",
+              "revision": 1,
+              "source": "Nhà cung cấp",
+              "source_kind": "simulated"
+            },
+            {
+              "effective_at": "2026-09-01T00:00:00+07:00",
+              "observed_at": "2026-09-01T00:00:00+07:00",
+              "record_id": "V_PEER",
+              "record_type": "vendor",
+              "revision": 1,
+              "source": "Nhà cung cấp",
+              "source_kind": "simulated"
+            }
+          ],
+          "facts": [
+            {
+              "vendor_ref": {
+                "effective_at": "2026-09-01T00:00:00+07:00",
+                "observed_at": "2026-09-01T00:00:00+07:00",
+                "record_id": "V_PEER",
+                "record_type": "vendor",
+                "revision": 1,
+                "source": "Nhà cung cấp",
+                "source_kind": "simulated"
+              }
+            }
+          ],
+          "group_refs": [],
+          "missing_sources": [],
+          "name": "Đối chiếu danh mục nhà cung cấp",
+          "needs_review": true,
+          "reason": null,
+          "status": "needs_review"
+        }
+      },
+      "description": "Dòng mô phỏng H0",
+      "event_at": "2026-10-02T02:00:00+00:00",
+      "kind": "payment",
+      "knowledge_at": "2026-10-02T02:00:00+00:00",
+      "revision": 1,
+      "source_kind": "simulated",
+      "transaction_id": "B"
+    }
+  ],
+  "snapshot": {
+    "checksum": "46100a860ef08ee93e949abc8913a6201f8fff488b9be32572b521973c9e1c3f",
+    "company_id": "C001",
+    "contract_version": "1.1.0",
+    "data_checksum": "eb3dc0965c4e670c8f040e8787691f07903c9c26fb7a3c64e97c5c6a6e8184f9",
+    "snapshot_id": "snp_60b31ae7a00b456fa845113e22e03197"
+  },
+  "summary": {
+    "analysis_complete": false,
+    "groups_to_review": 1,
+    "transaction_count": 3,
+    "transactions_to_review": 3,
+    "unavailable_checks": 0
+  },
+  "supported_checks": [
+    "payment_invoice",
+    "vendor_names"
+  ],
+  "version": "snapshot-analysis/1.0.0",
+  "view": "review"
+}

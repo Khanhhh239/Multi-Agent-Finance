@@ -1,0 +1,123 @@
+{
+  "tests": [
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_accountant_cannot_request_technical_view",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_accountant_cannot_request_technical_view"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_authorization_happens_before_body_and_snapshot_read",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_authorization_happens_before_body_and_snapshot_read"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_client_role_and_scores_are_rejected",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_client_role_and_scores_are_rejected"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_director_technical_view_contains_only_P1_E3_and_null_aggregate",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_director_technical_view_contains_only_P1_E3_and_null_aggregate"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_empty_asof_and_late_invoice_never_rewrite_past",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_empty_asof_and_late_invoice_never_rewrite_past"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_equivalent_times_retry_and_views_have_same_analysis_binding",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_equivalent_times_retry_and_views_have_same_analysis_binding"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_foreign_company_denied_and_director_has_no_implicit_access",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_foreign_company_denied_and_director_has_no_implicit_access"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_host_origin_query_and_unsupported_methods",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_host_origin_query_and_unsupported_methods"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_internal_error_is_sanitized_and_does_not_return_partial_rows",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_internal_error_is_sanitized_and_does_not_return_partial_rows"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_invalid_body_view_time_and_snapshot_id",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_invalid_body_view_time_and_snapshot_id"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_limits_reject_without_truncation_or_invoking_scorer",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_limits_reject_without_truncation_or_invoking_scorer"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_missing_or_revoked_credentials_are_denied",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_missing_or_revoked_credentials_are_denied"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_no_fit_and_no_other_methods_requested",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_no_fit_and_no_other_methods_requested"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_other_tenant_same_company_cannot_read_snapshot",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_other_tenant_same_company_cannot_read_snapshot"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_partial_source_does_not_disable_E3_or_become_zero",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_partial_source_does_not_disable_E3_or_become_zero"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_permission_revocation_during_compute_denies_review_result",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_permission_revocation_during_compute_denies_review_result"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_review_business_DTO_and_zero_point_E3_signal",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_review_business_DTO_and_zero_point_E3_signal"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_role_downgrade_during_compute_denies_entire_result",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_role_downgrade_during_compute_denies_entire_result"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_simultaneous_group_is_unique_with_refs_on_every_member",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_simultaneous_group_is_unique_with_refs_on_every_member"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_storage_tamper_returns_integrity_error",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_storage_tamper_returns_integrity_error"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_storage_unconfigured_is_503",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_storage_unconfigured_is_503"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_unknown_role_or_permission_from_policy_cannot_bypass",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_unknown_role_or_permission_from_policy_cannot_bypass"
+    },
+    {
+      "id": "test_analysis_api.AnalysisApiTests.test_unknown_snapshot_is_scoped_404",
+      "status": "pass",
+      "testcase": "test_analysis_api.AnalysisApiTests.test_unknown_snapshot_is_scoped_404"
+    }
+  ],
+  "count": 23,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0
+}

@@ -1,0 +1,577 @@
+{
+  "version": "full-rule-pipeline-status/1.0.0",
+  "date": "2026-11-14",
+  "source_profile": "agent2-rule-snapshot/1.0.0",
+  "implemented_rules": 35,
+  "canonical_evaluators": 4,
+  "all_35_he": false,
+  "aggregate_weights_configured": false,
+  "source_packages": 120,
+  "parity_checks": 140,
+  "regression_tests": 255,
+  "ui_checks": 6,
+  "live_services_changed": false,
+  "catalogue": [
+    {
+      "rule_id": "A1",
+      "name": "Chia nhỏ cùng người nhận trong 3 ngày",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "vendors",
+        "payment_requests",
+        "procurement_links",
+        "transaction_documents",
+        "supplier_payment_agreements"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "A2",
+      "name": "Chia nhỏ cùng người lập/người nhận trong 30 ngày",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "vendors",
+        "payment_requests",
+        "procurement_links",
+        "transaction_documents",
+        "supplier_payment_agreements"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "A3",
+      "name": "Chia nhỏ qua cụm người nhận liên kết",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "vendors",
+        "payment_requests",
+        "procurement_links",
+        "transaction_documents",
+        "supplier_payment_agreements",
+        "entity_links"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "A4",
+      "name": "Người lập có nhiều khoản cận hạn mức",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "vendors",
+        "payment_requests",
+        "procurement_links",
+        "transaction_documents",
+        "supplier_payment_agreements",
+        "recurring_payments"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "A5",
+      "name": "Số tiền tròn lệch baseline lịch sử",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "journal_documents",
+        "journal_lines",
+        "recurring_payments"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "A6",
+      "name": "Thanh toán làm tròn vượt hóa đơn gốc",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "transaction_documents"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "B1",
+      "name": "Tài khoản hoặc căn cước NCC trùng nhân viên",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "vendors",
+        "employees"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "B2",
+      "name": "Thông tin hoặc người đại diện NCC liên kết nhân viên",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "vendors",
+        "employees",
+        "entity_links"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "B3",
+      "name": "NCC mới thành lập nhận giao dịch lớn đầu tiên",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "vendors",
+        "employees",
+        "procurement_links",
+        "transaction_documents"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "B4",
+      "name": "Trạng thái người phát hành hóa đơn rủi ro",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "vendors",
+        "vendor_status_history",
+        "tax_risk_history"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "B5",
+      "name": "Nhiều NCC chung thông tin định danh",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "vendors"
+      ],
+      "canonical_supported": true,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "B6",
+      "name": "NCC ngủ đông nhận khoản lớn",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "vendors",
+        "vendor_payment_schedules"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "B7",
+      "name": "Đổi tài khoản gần ngày thanh toán chưa xác minh",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "vendors",
+        "employees",
+        "bank_account_changes"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "C1",
+      "name": "Lập hoặc duyệt ngoài lịch vận hành",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "companies",
+        "calendar",
+        "operating_schedules"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "C2",
+      "name": "Tự duyệt vượt quyền được cấp",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "approval_authorities",
+        "approval_authority_coverage"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "C3",
+      "name": "Duyệt dưới 60 giây ở cấp thẩm quyền cao",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "approval_authorities",
+        "approval_authority_coverage"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "C4",
+      "name": "Thao tác trong kỳ nghỉ phép chính thức",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "leave_periods",
+        "system_actions",
+        "leave_activity_authorizations"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "D1",
+      "name": "Benford chữ số đầu",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "aggregate_or_source"
+    },
+    {
+      "rule_id": "D2",
+      "name": "Benford chữ số thứ hai",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "aggregate_or_source"
+    },
+    {
+      "rule_id": "D3",
+      "name": "Hai chữ số đầu sát hạn mức",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "aggregate_or_source"
+    },
+    {
+      "rule_id": "D4",
+      "name": "Đuôi số đặc biệt vượt baseline",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "aggregate_or_source"
+    },
+    {
+      "rule_id": "D5",
+      "name": "MAD chữ số đầu",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "aggregate_or_source"
+    },
+    {
+      "rule_id": "D6",
+      "name": "Benford theo phân đoạn",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "aggregate_or_source"
+    },
+    {
+      "rule_id": "E1",
+      "name": "Lương không có chấm công hoặc bằng chứng thay thế",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "attendance",
+        "payroll_entitlements"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "E2",
+      "name": "Lương sau chấm dứt hợp đồng",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "employment_events",
+        "payroll_settlements"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "E3",
+      "name": "Tên NCC tương tự",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "vendors"
+      ],
+      "canonical_supported": true,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "E4",
+      "name": "NCC trùng định danh",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "vendors"
+      ],
+      "canonical_supported": true,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "F1",
+      "name": "Điều chỉnh thủ công sát khóa sổ và trọng yếu",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "journal_audit_log",
+        "closing_periods",
+        "materiality_policies"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "F2",
+      "name": "Quản lý ghi đè quy trình",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "workflow_policies",
+        "override_events"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "F3",
+      "name": "Khoảng trống/trùng số chứng từ",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "document_series",
+        "document_register",
+        "document_cancellations"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "F4",
+      "name": "Doanh thu/công nợ kéo dài chưa đối chiếu tiền",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "customers",
+        "receivable_invoices",
+        "receipt_allocations",
+        "receipt_coverage",
+        "receivable_explanations"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "aggregate_or_source"
+    },
+    {
+      "rule_id": "P1",
+      "name": "Thanh toán vượt tổng giá trị cùng hóa đơn",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "vendors",
+        "transaction_documents"
+      ],
+      "canonical_supported": true,
+      "he_supported": false,
+      "canonical_he_supported": true,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "P2",
+      "name": "Chi tiền mặt cần rà soát hạn mức và chứng từ VAT",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "transaction_documents"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "T1",
+      "name": "Tạm ứng còn dư nợ quá hạn",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "advances",
+        "advance_events"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    },
+    {
+      "rule_id": "T2",
+      "name": "Xóa nợ tạm ứng thiếu hồ sơ",
+      "implemented": true,
+      "profile": "agent2-rule-snapshot/1.0.0",
+      "required_tables": [
+        "transactions",
+        "employees",
+        "advances",
+        "advance_events",
+        "transaction_documents"
+      ],
+      "canonical_supported": false,
+      "he_supported": false,
+      "canonical_he_supported": false,
+      "scope": "transaction_and_evidence"
+    }
+  ]
+}

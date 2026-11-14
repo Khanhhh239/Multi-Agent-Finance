@@ -1,0 +1,139 @@
+"""Versioned, exact JSON file mapping for the new import/snapshot workflow."""
+import hashlib
+import json
+from importlib.metadata import version
+from pathlib import Path
+
+import finance_input.json_io as json_io
+import finance_input.validation as core_validation
+from finance_input import schema,CONTRACT_VERSION,SUPPORTED_CONTRACT_VERSIONS
+from finance_input.validation import issue
+from . import imports
+
+PARSER_VERSION = "contract-files/1.2.0"
+PROTOCOL_VERSION = "1.0.0"
+MAX_BYTES = 10 * 1024 * 1024
+MAX_ROWS = 50000
+
+
+class ImportFailure(Exception):
+    def __init__(self, status, code, message, action):
+        super().__init__(message)
+        self.status, self.code, self.message, self.action = status, code, message, action
+
+
+def fail(status, code, message, action):
+    raise ImportFailure(status, code, message, action)
+
+
+def canonical(value):
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+
+
+def digest(value):
+    return hashlib.sha256(value).hexdigest()
+
+
+def mapping_contract(value):
+    if not isinstance(value, dict) or set(value) - {"tables","date_format"}:
+        fail(422, "MAPPING_INVALID", "Mapping chỉ nhận đối tượng tables đổi tên cột.", "Không dùng biểu thức, giá trị mặc định hoặc quyền trong mapping.")
+    tables = value.get("tables", {})
+    if not isinstance(tables, dict):
+        fail(422, "MAPPING_INVALID", "tables phải là đối tượng mapping theo từng bảng.", "Gửi tables: {transactions: {tên_cột_nguồn: tên_cột_chuẩn}}.")
+    result = {}
+    definitions = schema()["$defs"]
+    for table, columns in tables.items():
+        if table not in imports.DEFINITIONS or not isinstance(columns, dict):
+            fail(422, "MAPPING_TABLE", "Bảng mapping không được hỗ trợ.", "Chọn bảng của hợp đồng đã khai báo; trường P1 mới cần contract 1.1.0.")
+        allowed = definitions[imports.DEFINITIONS[table]]["properties"]
+        for source, target in columns.items():
+            if not isinstance(source, str) or not source.strip() or len(source) > 128 or not isinstance(target, str) or target not in allowed:
+                fail(422, "MAPPING_FIELD", "Tên cột hoặc cột đích trong mapping không hợp lệ.", "Dẫn tên cột nguồn và một trường được khai báo trong schema; không đổi giá trị dữ liệu.")
+        if len(set(columns.values())) != len(columns):
+            fail(422, "MAPPING_COLLISION", "Hai cột nguồn đang cùng trỏ vào một cột đích.", "Giữ một nguồn duy nhất cho mỗi cột đích rồi kiểm tra lại.")
+        renamed = {k:v for k,v in columns.items() if k != v}
+        if renamed:
+            result[table] = renamed
+    date_format=value.get('date_format','iso')
+    if date_format not in ('iso','dmy','mdy'):fail(422,'DATE_MAPPING','Định dạng ngày không hợp lệ.','Chọn ISO, ngày/tháng/năm hoặc tháng/ngày/năm.')
+    output={"tables":result} if result else {}
+    if date_format!='iso':output['date_format']=date_format
+    return output
+
+
+def context(scope):
+    # Binds a preview to executable validation and permissions, not just a label.
+    versions = dict(protocol_version=PROTOCOL_VERSION, parser_version=PARSER_VERSION,
+        contract_version=CONTRACT_VERSION, schema_sha256=digest(canonical(schema())),
+        supported_contract_versions=list(SUPPORTED_CONTRACT_VERSIONS),
+        schema_hashes={v:digest(canonical(schema(v))) for v in SUPPORTED_CONTRACT_VERSIONS},
+        validator_version=imports.VALIDATOR_VERSION, profile_version=imports.PROFILE_VERSION,
+        report_version=imports.REPORT_VERSION,
+        parser_fingerprint=digest(Path(__file__).read_bytes()+Path(__file__).with_name('tabular_import.py').read_bytes()), jsonschema_version=version("jsonschema"),
+        validator_fingerprint=digest(b"\n".join(Path(module.__file__).read_bytes()
+            for module in (imports, imports.p1_inputs, core_validation, json_io))))
+    identity = dict(tenant_id=scope.tenant_id, company_ids=sorted(scope.company_ids),
+                    actor_id=scope.actor_id, permissions=sorted(scope.permissions))
+    versions['agent2_rule_profile']='agent2-rule-snapshot/1.0.0'
+    versions['agent2_rule_validator_sha256']=digest(Path(__file__).with_name('rule_snapshot.py').read_bytes()+Path(__file__).with_name('native_rule_node.py').read_bytes()+Path(__file__).with_name('rule_snapshot.schema.json').read_bytes())
+    return versions, digest(canonical(dict(versions=versions, identity=identity)))
+
+
+def rejected(code, message, action, **detail):
+    error = issue(code, "$", message, action)
+    error.update(detail)
+    return dict(status="rejected", contract_version=CONTRACT_VERSION, validator_version=imports.VALIDATOR_VERSION,
+                profile_version=imports.PROFILE_VERSION, report_version=imports.REPORT_VERSION,
+                errors=[error], warnings=[], counts={}, capabilities={}, analysis_limits={})
+
+
+def parse_file(raw, mapping, scope, filename='input.json'):
+    tabular=filename.lower().endswith(('.csv','.xlsx'));locations={}
+    try:
+        if tabular:
+            from .tabular_import import parse,TabularError
+            try:data,locations=parse(raw,filename,mapping)
+            except TabularError as error:
+                return None,rejected(error.code,error.message,error.action,**error.detail)
+        else:data = json_io.loads(raw)
+    except json.JSONDecodeError as error:
+        return None, rejected("INVALID_JSON", "Cú pháp tệp JSON không hợp lệ.", "Sửa cú pháp tại dòng/cột JSON rồi tải lại tệp.", json_line=error.lineno, json_column=error.colno)
+    except (ValueError, UnicodeError, RecursionError, OverflowError):
+        return None, rejected("INVALID_JSON", "Tệp phải là JSON UTF-8, không khóa lặp hoặc số không hữu hạn.", "Xuất lại tệp đúng hợp đồng rồi tải lại; không tự bỏ dòng lỗi.")
+    if isinstance(data,dict) and data.get('contract_version')=='agent2-rule-snapshot/1.0.0' and mapping:
+        return None,rejected('RULE_MAPPING_UNSUPPORTED','Profile nguồn luật cần JSON đúng tên trường.','Xuất theo profile nguồn; không đổi mapping lồng nhau bằng giá trị mặc định.')
+    if isinstance(data, dict):
+        if sum(len(rows) for rows in data.values() if isinstance(rows, list)) > MAX_ROWS:
+            return None, rejected("ROW_LIMIT", "Tệp vượt 50.000 bản ghi.", "Chia gói và giữ đủ các bản ghi được tham chiếu.")
+        errors = []
+        for table, columns in ({} if tabular else mapping.get("tables", {})).items():
+            rows = data.get(table)
+            if not isinstance(rows, list):
+                continue  # canonical validator supplies the required/table error
+            for index, row in enumerate(rows):
+                if not isinstance(row, dict):
+                    continue
+                renamed = {}
+                for source, value in row.items():
+                    target = columns.get(source, source)
+                    if target in renamed:
+                        errors.append(issue("MAPPING_COLLISION", f"/{table}/{index}/{target}",
+                            "Mapping làm hai cột trên cùng dòng ghi đè nhau.", "Sửa mapping để mỗi cột đích có đúng một nguồn; không bỏ cột ngầm."))
+                    renamed[target] = value
+                rows[index] = renamed
+        if errors:
+            report = rejected("MAPPING_COLLISION", "Mapping có cột ghi đè.", "Sửa mapping rồi kiểm tra lại.")
+            if data.get('contract_version') in SUPPORTED_CONTRACT_VERSIONS:report['contract_version']=data['contract_version']
+            report["errors"] = errors
+            return None, report
+    try:
+        report = imports.validate_input(data, scope)
+    except (RecursionError, OverflowError):
+        return None, rejected("INPUT_STRUCTURE", "Cấu trúc dữ liệu quá sâu hoặc không hợp lệ.", "Xuất lại theo schema 1.0.0.")
+    if tabular:
+        import re
+        report['source_format']='xlsx' if filename.lower().endswith('.xlsx') else 'csv'
+        for item in report.get('errors',[])+report.get('warnings',[]):
+            match=re.match(r'(/[^/]+/[0-9]+)(?:/|$)',item.get('path',''))
+            if match and match[1] in locations:item.update(locations[match[1]])
+    return (canonical(data) if report["status"] != "rejected" else None), report

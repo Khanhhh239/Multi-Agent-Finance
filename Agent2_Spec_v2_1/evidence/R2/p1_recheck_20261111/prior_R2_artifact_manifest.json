@@ -1,0 +1,11 @@
+{
+  "kind": "R2 latest evidence index; whole milestone still PARTIAL",
+  "latest": "p1_evaluation_20261111/artifact_manifest.json",
+  "files": [
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/artifact_manifest.json",
+      "sha256": "f9013f4403bf4af8849cdb5377dc686dbfa5a8b8122090d31d02f373c244646e"
+    }
+  ],
+  "previous_manifest": "p1_inputs_20261111/artifact_manifest.json"
+}

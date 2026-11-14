@@ -1,0 +1,8 @@
+{
+  "status": "failed",
+  "stale_prelogin_poll_preserves_login": false,
+  "context_status": 401,
+  "servers": "isolated fixture",
+  "credentials_exported": false,
+  "live_services_changed": false
+}

@@ -1,17 +1,12 @@
-# 01 · Business Analyst — Phân tích kinh tế và yêu cầu sản phẩm
+# 01 · Bài toán và yêu cầu nghiệp vụ
 
-Góc nhìn: BA kiêm nhà nghiên cứu kinh tế – tài chính doanh nghiệp. Chỉ bàn chuyện kinh tế, tài chính, thị trường,
-người dùng và yêu cầu; kỹ thuật nằm ở 04_AI_Methods.
+Tài liệu mô tả Workspace hiện tại, đối chiếu ngày 14/11/2026. Kết quả nghiên cứu và trạng thái nghiệm thu đọc ở [Evaluation](../03_Evaluation/README.md); hợp đồng kỹ thuật đọc ở [dịch vụ](../../agent1_service/README.md) và [adaptive](../../agent1/adaptive/README.md).
 
-| File | Nội dung |
+| Tài liệu | Nội dung chính |
 |---|---|
-| [01_kinh_te_hoc_dong_tien.md](01_kinh_te_hoc_dong_tien.md) | Cơ chế kinh tế: dồn tích vs tiền, vốn lưu động, CCC, rủi ro thời điểm và rủi ro tương quan |
-| [02_problem_statement.md](02_problem_statement.md) | Phát biểu bài toán chính thức, phạm vi, giả thuyết giá trị |
-| [03_noi_dau_va_bang_chung.md](03_noi_dau_va_bang_chung.md) | Nỗi đau theo vai trò, bằng chứng có nguồn (VN và quốc tế), mức độ tin cậy |
-| [04_nhu_cau_nguoi_dung.md](04_nhu_cau_nguoi_dung.md) | Chân dung, Jobs-to-be-done, N1–N7, hành trình, tiêu chí chấp nhận nghiệp vụ |
-| [05_thi_truong_va_canh_tranh.md](05_thi_truong_va_canh_tranh.md) | Quy mô thị trường, đối thủ, cách thị trường định giá và đánh giá, định vị |
-| [06_yeu_cau_va_pham_vi.md](06_yeu_cau_va_pham_vi.md) | Yêu cầu chức năng/phi chức năng ánh xạ T0–T13, ngoài phạm vi, ràng buộc pháp lý |
-| [07_mo_hinh_kinh_doanh_va_rui_ro.md](07_mo_hinh_kinh_doanh_va_rui_ro.md) | Mô hình doanh thu, kênh, rủi ro kinh doanh – pháp lý – đạo đức, chiến lược giảm thiểu |
+| [Kinh tế học dòng tiền](01_kinh_te_hoc_dong_tien.md) | Dồn tích, vốn lưu động, rủi ro thời điểm và tương quan |
+| [Bài toán và người dùng](02_problem_statement.md) | Nỗi đau, câu hỏi nghiệp vụ, giả thuyết giá trị và giới hạn bằng chứng |
+| [Thị trường và mô hình kinh doanh](05_thi_truong_va_canh_tranh.md) | Định vị, nhóm giải pháp thay thế, kênh và giả thuyết thương mại cần kiểm chứng |
+| [Yêu cầu và phạm vi](06_yeu_cau_va_pham_vi.md) | Hành trình sử dụng, chức năng hiện có, tiêu chí UAT và ngoài phạm vi |
 
-Quy ước: số liệu có nguồn ghi kèm liên kết; giả định của người thiết kế ghi "(giả định)"; số chưa kiểm chứng ghi
-"(cần kiểm chứng)".
+Mỗi nội dung có một nơi chính: nhu cầu nằm trong bài toán, thao tác và UAT nằm trong yêu cầu, số đo chất lượng nằm trong Evaluation. Các mục tiêu kinh tế, giá và hiệu quả can thiệp là giả thuyết cho tới khi có bằng chứng trên doanh nghiệp thật.

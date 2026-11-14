@@ -7,7 +7,7 @@ import numpy as np
 import pytest
 
 from agent1.adaptive.cash_adapter import PartialModel
-from agent1.adaptive.data import fingerprint
+from agent1.adaptive.data import fingerprint, validate_dataset
 from experiments.t6_backtest.new_company import (
     freeze_predictions, lock_protocol, path_scores, score_frozen,
 )
@@ -113,3 +113,45 @@ def test_holdout_declaration_overlap_and_changed_data_are_rejected(tmp_path):
     data["payments"][0]["amount"] = 99
     with pytest.raises(ValueError, match="data changed"):
         freeze_predictions(path, case["firm_id"], data, catalog)
+
+
+@pytest.mark.parametrize("later_correction", [False, True])
+def test_frozen_runner_scores_refund_and_uses_only_versions_available_at_truth(tmp_path, later_correction):
+    data, catalog = fixture_data(), Catalog()
+    data["outflows"] = [dict(expense_id="REFUND", amount=100, date="2025-01-07",
+        known_at="2025-01-01", category="vat_refund", source="Approved decision",
+        verified=True, refund_approved_at="2025-01-01")]
+    data["bank"].append(dict(bank_id="REFUND", account="Q", amount=40, direction="in",
+        date="2025-01-07", known_at="2025-01-07", component="other", cash_flow_class="non_ar"))
+    data["expense_payments"] = [dict(settlement_id="REFUND", expense_id="REFUND",
+        bank_id="REFUND", amount=40, payment_date="2025-01-07", known_at="2025-01-07")]
+    data["statements"][-1]["closing_balance"] = 90
+    if later_correction:
+        data["record_history"] = {}
+        for table, index, values in (
+            ("bank", 0, dict(amount=50)),
+            ("payments", 0, dict(amount=50)),
+            ("statements", 1, dict(closing_balance=100)),
+        ):
+            original = deepcopy(data[table])
+            revised = dict(original[index], known_at="2025-05-01", **values)
+            data["record_history"][table] = original + [revised]
+            data[table][index] = revised
+    validate_dataset(data)
+    before = deepcopy(data)
+    spec = company(data)
+    path = tmp_path / "protocol.json"
+    lock_protocol(path, [spec], catalog, simulation_paths=100)
+    folder = freeze_predictions(path, spec["firm_id"], data, catalog,
+        trainer=lambda history, cutoff, **kwargs: kwargs["incumbent"])
+    frozen_bytes = {name: (folder / name).read_bytes()
+                    for name in ("global.json", "adapted.json", "receipt.json")}
+    result = score_frozen(path, spec["firm_id"], data)
+    assert result["models"]["global"] == result["models"]["adapted"]
+    plan = json.loads(frozen_bytes["global.json"])
+    expected_mae = np.mean([abs(week["balance"] - 90) for week in plan["weeks"]])
+    assert result["models"]["global"]["mae_balance_vnd"] == pytest.approx(expected_mae)
+    assert result["models"]["global"]["weeks"] == 13
+    assert score_frozen(path, spec["firm_id"], data) == result
+    assert data == before
+    assert all((folder / name).read_bytes() == value for name, value in frozen_bytes.items())

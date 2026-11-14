@@ -1,0 +1,485 @@
+{
+  "contract_version": "1.0.0",
+  "tenant_id": "demo",
+  "companies": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "C001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "C001",
+        "is_simulated": true
+      },
+      "name": "Doanh nghiệp mô phỏng C001"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C002",
+      "record_id": "C002",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "C002",
+        "is_simulated": true
+      },
+      "name": "Doanh nghiệp mô phỏng C002"
+    }
+  ],
+  "transactions": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "T001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "T001",
+        "is_simulated": true
+      },
+      "amount_vnd": 12000000,
+      "currency": "VND",
+      "kind": "payment",
+      "description": "Chi thanh toán mẫu",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      },
+      "created_by_ref": {
+        "record_id": "E001",
+        "revision": 1
+      }
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "T002",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "T002",
+        "is_simulated": true
+      },
+      "amount_vnd": 12000000,
+      "currency": "VND",
+      "kind": "payment",
+      "description": "Chi thanh toán mẫu",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      },
+      "created_by_ref": {
+        "record_id": "E001",
+        "revision": 1
+      }
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "ADJ001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "ADJ001",
+        "is_simulated": true
+      },
+      "amount_vnd": -2000000,
+      "currency": "VND",
+      "kind": "adjustment",
+      "description": "Điều chỉnh giảm khoản chi",
+      "adjustment_reason": "Hạch toán thừa cần điều chỉnh",
+      "adjusts_ref": {
+        "record_id": "T001",
+        "revision": 1
+      }
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C002",
+      "record_id": "T001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "T001",
+        "is_simulated": true
+      },
+      "amount_vnd": 12000000,
+      "currency": "VND",
+      "kind": "payment",
+      "description": "Chi thanh toán mẫu",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      },
+      "created_by_ref": {
+        "record_id": "E001",
+        "revision": 1
+      }
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C002",
+      "record_id": "T002",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "T002",
+        "is_simulated": true
+      },
+      "amount_vnd": 12000000,
+      "currency": "VND",
+      "kind": "payment",
+      "description": "Chi thanh toán mẫu",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      },
+      "created_by_ref": {
+        "record_id": "E001",
+        "revision": 1
+      }
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C002",
+      "record_id": "ADJ001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "ADJ001",
+        "is_simulated": true
+      },
+      "amount_vnd": -2000000,
+      "currency": "VND",
+      "kind": "adjustment",
+      "description": "Điều chỉnh giảm khoản chi",
+      "adjustment_reason": "Hạch toán thừa cần điều chỉnh",
+      "adjusts_ref": {
+        "record_id": "T001",
+        "revision": 1
+      }
+    }
+  ],
+  "vendors": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "V001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "V001",
+        "is_simulated": true
+      },
+      "name": "NCC mô phỏng"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C002",
+      "record_id": "V001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "V001",
+        "is_simulated": true
+      },
+      "name": "NCC mô phỏng"
+    }
+  ],
+  "invoices": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "I001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "I001",
+        "is_simulated": true
+      },
+      "number": "0000123",
+      "amount_vnd": 20000000,
+      "currency": "VND",
+      "kind": "invoice",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      }
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C002",
+      "record_id": "I001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "I001",
+        "is_simulated": true
+      },
+      "number": "0000123",
+      "amount_vnd": 20000000,
+      "currency": "VND",
+      "kind": "invoice",
+      "vendor_ref": {
+        "record_id": "V001",
+        "revision": 1
+      }
+    }
+  ],
+  "payment_allocations": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "A001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "A001",
+        "is_simulated": true
+      },
+      "transaction_ref": {
+        "record_id": "T001",
+        "revision": 1
+      },
+      "invoice_ref": {
+        "record_id": "I001",
+        "revision": 1
+      },
+      "amount_vnd": 12000000,
+      "currency": "VND",
+      "kind": "allocation"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "A002",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "A002",
+        "is_simulated": true
+      },
+      "transaction_ref": {
+        "record_id": "T002",
+        "revision": 1
+      },
+      "invoice_ref": {
+        "record_id": "I001",
+        "revision": 1
+      },
+      "amount_vnd": 12000000,
+      "currency": "VND",
+      "kind": "allocation"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C002",
+      "record_id": "A001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "A001",
+        "is_simulated": true
+      },
+      "transaction_ref": {
+        "record_id": "T001",
+        "revision": 1
+      },
+      "invoice_ref": {
+        "record_id": "I001",
+        "revision": 1
+      },
+      "amount_vnd": 12000000,
+      "currency": "VND",
+      "kind": "allocation"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C002",
+      "record_id": "A002",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "A002",
+        "is_simulated": true
+      },
+      "transaction_ref": {
+        "record_id": "T002",
+        "revision": 1
+      },
+      "invoice_ref": {
+        "record_id": "I001",
+        "revision": 1
+      },
+      "amount_vnd": 12000000,
+      "currency": "VND",
+      "kind": "allocation"
+    }
+  ],
+  "employees": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "E001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "E001",
+        "is_simulated": true
+      },
+      "name": "Nhân viên mô phỏng",
+      "bank_account": "00123456"
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C002",
+      "record_id": "E001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "E001",
+        "is_simulated": true
+      },
+      "name": "Nhân viên mô phỏng",
+      "bank_account": "00123456"
+    }
+  ],
+  "approvals": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "AP001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "AP001",
+        "is_simulated": true
+      },
+      "transaction_ref": {
+        "record_id": "T001",
+        "revision": 1
+      },
+      "employee_ref": {
+        "record_id": "E001",
+        "revision": 1
+      },
+      "decision": "approved",
+      "limit_vnd": 15000000
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C002",
+      "record_id": "AP001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "AP001",
+        "is_simulated": true
+      },
+      "transaction_ref": {
+        "record_id": "T001",
+        "revision": 1
+      },
+      "employee_ref": {
+        "record_id": "E001",
+        "revision": 1
+      },
+      "decision": "approved",
+      "limit_vnd": 15000000
+    }
+  ],
+  "supporting_documents": [
+    {
+      "tenant_id": "demo",
+      "company_id": "C001",
+      "record_id": "D001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "D001",
+        "is_simulated": true
+      },
+      "name": "Bản xuất sổ mô phỏng",
+      "document_kind": "ledger_extract",
+      "source_kind": "simulated",
+      "content_sha256": "62aa8444df4790b5a9ef617532b96dc4df1d4102b238123eba6d506684972fd9",
+      "verification_status": "unverified",
+      "subject_refs": [
+        {
+          "table": "transactions",
+          "record_id": "T001",
+          "revision": 1
+        }
+      ]
+    },
+    {
+      "tenant_id": "demo",
+      "company_id": "C002",
+      "record_id": "D001",
+      "revision": 1,
+      "observed_at": "2026-10-10T10:00:00+07:00",
+      "effective_at": "2026-10-10T09:00:00+07:00",
+      "source": {
+        "system": "demo_fixture",
+        "record_id": "D001",
+        "is_simulated": true
+      },
+      "name": "Bản xuất sổ mô phỏng",
+      "document_kind": "ledger_extract",
+      "source_kind": "simulated",
+      "content_sha256": "8a37bb3707de0ba7fc5a6a7606dfdb2caba1fcd3c52b6fa9275ac6848ecbd217",
+      "verification_status": "unverified",
+      "subject_refs": [
+        {
+          "table": "transactions",
+          "record_id": "T001",
+          "revision": 1
+        }
+      ]
+    }
+  ],
+  "vendor_bank_history": []
+}

@@ -1,0 +1,57 @@
+{
+  "change_request": "CR-024",
+  "status": "UI_SLICE_READY_FOR_REVIEW_R5_PARTIAL",
+  "collected_at": "2026-11-11T23:14:59.336545+07:00",
+  "head": "f203b39828f567171916b5b4744728ed4b63d17f",
+  "workspace": "D:/agent22",
+  "native_command": "agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/run_r1_tests.py --report Agent2_Spec_v2_1/evidence/R5/import_workbench_20261111/native_tests.json",
+  "native_exit_code": null,
+  "native_summary": {
+    "count": 692,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "native_elapsed_seconds": 336.962,
+  "browser_command": "agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/test_import_workbench_ui.py --output-dir Agent2_Spec_v2_1/evidence/R5/import_workbench_20261111",
+  "browser_exit_code": 0,
+  "browser_checks": 19,
+  "live_url": "http://127.0.0.1:8766/",
+  "portal_identity_integrated": false,
+  "formats": [
+    "JSON 1.0.0",
+    "JSON 1.1.0"
+  ],
+  "full_pipeline_ready": false,
+  "full_R5_gate_run": false,
+  "production_approved": false,
+  "source_hashes": {
+    "agent2/sme_fraud/review_server.py": "3df3b0d4f3ca47115c82dd9f586b9a949d9fddcab029ed633e2343e23fd5a965",
+    "agent2/sme_fraud/auth.py": "d576547b76d341984866a68ddbdf50e20de1c0cca1965bc1657fd2609f3560ba",
+    "agent2/sme_fraud/workbench.py": "122d3f61d9dc29901da86fe8495132822836e6c53efd682c4789a0ba4e0cb301",
+    "agent2/sme_fraud/core_manifest.py": "02455b9d94fa25e57f5e3263cc12473fdb9a1a0b32f6a2a1747ebd3b35426b76",
+    "agent2/sme_fraud/web/index.html": "76607faaf5fb9d7204e020fbbea6be642bd7d0c2caaa50ca707b0b17332b7e6a",
+    "agent2/sme_fraud/web/workbench.css": "285a16cfd6154c636b8322b266e3b1e9661b405522259ac6920863cfdb3d2f7b",
+    "agent2/sme_fraud/web/workbench.js": "48401dd99a418d7c63c781e18e150a69dc7d58aa55c471cd7ba27f69ea24e711",
+    "agent2/sme_fraud/web/import-demo.json": "0314641910a9dd1ef5f23b861705987828481ae35f015b872469b30ed7ffafb3",
+    "agent2/tests/test_workbench.py": "812b7afb67b452a389f29a1b107d5a4f63ecfae9bf2945d1153e0d0691ca8c53",
+    "agent2/tests/test_transition_server.py": "78e06b8f32e02e015cca9e68551227ec97c35ae6f3b4b80a9a9bd0eb08c5c280",
+    "agent2/scripts/test_import_workbench_ui.py": "57ee1e4145350f889a1f567179d189a5d78741204af111b5978d4e6188bd109f",
+    "agent2/docs/IMPORT_WORKBENCH.md": "57b6c6c6f3040567262c74f905a35adb83d412a9d0cea0a1725159a0d4cbe509",
+    "agent2/requirements-ui-test.txt": "6e412e21ba6df74520d1b6af1b1eb005ed0b3c0687a1172a746442f0076ca27f"
+  },
+  "diagnostic_history": "First focused unittest invocation used repository cwd without agent2 on sys.path; rerun from agent2 passed 6. Final native runner sets import paths and passes all 692. Browser acceptance first passed 16 scenarios, final adds no-signal filter, changed-on-disk file and expired preview; 19 pass.",
+  "native_expected_exit_code_from_report_and_runner_logic": 0,
+  "native_shell_wrapper_exit_code": 1,
+  "shell_redirection_diagnostic": {
+    "cause": "PowerShell native stderr redirection marks the command unsuccessful even for process exit 0; unittest writes progress to stderr.",
+    "reproduction": "Python prints one line to stderr and exits 0; bare *> command reports wrapper exit 1. Reading $LASTEXITCODE immediately afterward confirms native process exit 0.",
+    "native_failures": 0,
+    "native_errors": 0,
+    "native_records": 692,
+    "all_records_pass": true,
+    "note": "Original process exit not captured separately; no unsupported observed exit 0 claim. Machine report verifies every test passed."
+  },
+  "handoff_rechecked_client_date": "2026-11-12",
+  "handoff_live_health": 200
+}

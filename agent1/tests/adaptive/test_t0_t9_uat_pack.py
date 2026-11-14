@@ -153,3 +153,111 @@ def test_pagination_fixture_keeps_the_105th_receipt_actionable(client):
     assert response.is_success, response.text
     case = next(row for row in response.json()["cases"] if row["bank_id"] == "PAGE_B105")
     assert case["allocations"]
+
+
+@pytest.mark.parametrize("width", [1500, 390])
+def test_browser_demo_flow_import_reconcile_model_forecast_explain(
+    client, browser_runtime, serve_app, tmp_path, width,
+):
+    """Exercise the demo's actual controls against an isolated company store."""
+    runtime, chrome = browser_runtime
+    with serve_app(client.app) as origin, runtime.sync_playwright() as p:
+        browser = p.chromium.launch(executable_path=str(chrome), headless=True)
+        try:
+            page = browser.new_page(viewport={"width": width, "height": 1000})
+            errors = []
+            page.on("pageerror", lambda error: errors.append(str(error)))
+            page.goto(origin + "/workspace#data")
+            page.locator("#connect-top").click()
+            page.locator("#token-input").fill("uat-fixture-test")
+            page.locator("#connect-form button[type=submit]").click()
+            runtime.expect(page.locator("#connection-state")).to_contain_text("Đã kết nối")
+            page.locator("#date-format").select_option("%Y-%m-%d")
+            page.locator("#number-format").select_option("plain")
+            page.locator("#imported-by").fill("Demo reviewer")
+            for filename, kind in (("01_invoices.csv", "invoices"), ("02_bank.csv", "bank"),
+                                   ("03_payments.csv", "payments"), ("04_statements.csv", "statements")):
+                page.locator("#table-kind").select_option(kind)
+                page.locator("#import-file").set_input_files(str(PACK / "01_core" / filename))
+                page.locator("#import-form button[type=submit]").click()
+                runtime.expect(page.locator("#commit-import")).to_be_enabled()
+                page.locator("#commit-import").click()
+                runtime.expect(page.locator("#preview-panel")).to_be_hidden()
+                runtime.expect(page.locator("#notice")).to_contain_text("Đã lưu")
+            page.locator("#reconciliation-reviewer").fill("Demo reviewer")
+            page.locator("#run-reconciliation").click()
+            case = page.locator(".reconciliation-case").filter(
+                has=page.get_by_role("heading", name="B_EXACT · Có đề xuất", exact=True))
+            runtime.expect(case).to_contain_text("I_EXACT")
+            case.get_by_role("button", name="Duyệt phân bổ", exact=True).click()
+            runtime.expect(page.locator("#notice")).to_contain_text("Đã duyệt")
+            assert observed(data(client), "2026-11-11").remaining_amount.sum() == 100000000
+            page.locator("nav .nav-more > summary").click()
+            page.locator('nav [data-view="training"]').click()
+            runtime.expect(page.locator("#t1-updates")).to_be_visible()
+            page.locator("#train-complete").check()
+            page.locator("#train-asof").fill("11-11-26")
+            runtime.expect(page.locator("#train-complete")).not_to_be_checked()
+            assert not page.evaluate("document.documentElement.scrollWidth > innerWidth")
+            page.locator('nav [data-view="forecast"]').click()
+            page.locator("#forecast-complete").check()
+            page.locator("#forecast-cutoff").fill("11-11-26")
+            runtime.expect(page.locator("#forecast-complete")).not_to_be_checked()
+            page.locator("#horizon-weeks").fill("4")
+            page.locator("#opening-balance").fill("100000000")
+            page.locator("#forecast-complete").check()
+            with page.expect_response("**/v1/predict") as response:
+                page.locator("#forecast-submit").click()
+            result = response.value.json()
+            assert response.value.status == 200, result
+            assert result["outstanding"] == 100000000
+            assert result["t10"]["identity"]["t1_version"]
+            assert "I_EXACT" not in {row["invoice_id"] for row in result["cash_decomposition"]["invoices"]}
+            runtime.expect(page.locator("#forecast-output")).to_be_visible()
+            page.get_by_text("Vì sao dự thu số tiền này? · T1 + adapter partial", exact=True).click()
+            runtime.expect(page.get_by_label("Hóa đơn giải thích partial")).to_be_visible()
+            assert not page.evaluate("document.documentElement.scrollWidth > innerWidth")
+            page.locator("#forecast-output").screenshot(path=str(tmp_path / f"demo-flow-{width}.png"))
+            page.get_by_text("Nếu khách trả chậm hoặc dời khoản chi? · Chạy lại T6", exact=True).click()
+            page.get_by_label("Số tuần trả chậm thêm").fill("1")
+            page.get_by_role("button", name="So sánh với forecast đã lưu", exact=True).click()
+            runtime.expect(page.get_by_label("Giả định của kết quả kịch bản")).to_contain_text("trả chậm thêm 1 tuần")
+            page.locator("#export-forecast").click()
+            assert not errors, errors
+        finally:
+            browser.close()
+
+
+def test_browser_import_discards_preview_when_file_or_importer_changes(
+    client, browser_runtime, client_proxy,
+):
+    runtime, chrome = browser_runtime
+    result = preview(client, "01_core/01_invoices.csv", "invoices")
+    with runtime.sync_playwright() as p:
+        browser = p.chromium.launch(executable_path=str(chrome), headless=True)
+        try:
+            page = browser.new_page()
+            page.route("**/*", client_proxy(client))
+            page.goto("http://testserver/workspace#data")
+            runtime.expect(page.locator("#connection-state")).to_contain_text("Đã kết nối")
+            page.locator("#date-format").select_option("%Y-%m-%d")
+            page.locator("#number-format").select_option("plain")
+            page.locator("#imported-by").fill("First reviewer")
+            held = []
+            page.route("**/v1/imports/preview", lambda route: held.append(route))
+            for change in ("file", "importer"):
+                page.locator("#import-file").set_input_files(str(PACK / "01_core/01_invoices.csv"))
+                page.locator("#import-form button[type=submit]").click()
+                page.wait_for_timeout(100)
+                assert held
+                if change == "file":
+                    page.locator("#import-file").set_input_files(str(PACK / "01_core/02_bank.csv"))
+                else:
+                    page.locator("#imported-by").fill("Second reviewer")
+                held.pop().fulfill(status=200, json=result)
+                runtime.expect(page.locator("#import-form button[type=submit]")).to_be_enabled()
+                runtime.expect(page.locator("#commit-import")).to_be_disabled()
+                runtime.expect(page.locator("#preview-panel")).to_be_hidden()
+            assert client.get("/v1/workspace").json()["counts"]["invoices"] == 0
+        finally:
+            browser.close()

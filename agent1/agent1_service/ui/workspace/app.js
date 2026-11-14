@@ -101,8 +101,8 @@
     cash_in: "Dự kiến thu",
     cash_out: "Dự kiến chi",
     balance: "Số dư kỳ vọng",
-    low: "Mô phỏng P10",
-    high: "Mô phỏng P90",
+    low: "Cận dưới dải số dư",
+    high: "Cận trên dải số dư",
     outstanding: "Còn phải thu",
     overdue_days: "Ngày quá hạn",
     payment_probability_4w: "Xác suất tất toán 4 tuần",
@@ -120,7 +120,7 @@
     appliedCompanyProfile = "",
     manualMapping = {},
     poll = null;
-  let recordsOffset = 0, importsOffset = 0, recordsRequest = 0, importsRequest = 0;
+  let recordsOffset = 0, importsOffset = 0, recordsRequest = 0, importsRequest = 0, importRevision = 0;
   const statusLabels = {recorded:"Đã ghi nhận", open:"Chưa thanh toán", partial:"Một phần", paid:"Đã tất toán",
     cancelled:"Đã hủy nghĩa vụ", replaced:"Đã thay thế", overdue:"Quá hạn, còn phải trả",
     awaiting_approval:"Chờ quyết định hoàn", awaiting_refund_date:"Cần ngày dự kiến nhận hoàn mới",
@@ -172,6 +172,9 @@
     $(id).addEventListener("blur", () => {
       try { inputDate(id); } catch { /* Keep the text for correction. */ }
     });
+  }
+  for (const [dateId, completeId] of [["train-asof", "train-complete"], ["forecast-cutoff", "forecast-complete"]]) {
+    $(dateId).addEventListener("input", () => { $(completeId).checked = false; });
   }
   function notice(message, error = false) {
     $("notice").textContent = message;
@@ -420,6 +423,7 @@
   async function refresh() {
     const next = await api("/workspace");
     if (state && state.dataset_hash !== next.dataset_hash) {
+      invalidateImportPreview();
       $("train-complete").checked = false;
       $("forecast-complete").checked = false;
       reconciliationState = null;
@@ -480,6 +484,7 @@
         : "Tiếp tục nạp thanh toán, kiểm định hoặc lập dự báo theo lịch sử hiện có.";
     }
     renderVersions();
+    renderT1Updates();
     renderJobs();
     if (currentView === "records") await Promise.all([loadRecords(), loadImportHistory()]);
     clearTimeout(poll);
@@ -648,11 +653,16 @@
   $("imports-next").onclick = () => { importsOffset += 20; action(loadImportHistory); };
   $("reload-import-history").onclick = () => action(loadImportHistory, $("reload-import-history"));
   $("record-detail-close").onclick = () => { $("record-detail-panel").hidden = true; };
-  function resetPreview() {
+  function invalidateImportPreview() {
+    importRevision++;
     preview = null;
+    $("preview-panel").hidden = true;
+    $("commit-import").disabled = true;
+  }
+  function resetPreview() {
+    invalidateImportPreview();
     manualMapping = {};
     $("mapping-panel").hidden = $("preview-panel").hidden = true;
-    $("commit-import").disabled = true;
   }
   $("table-kind").onchange = resetPreview;
   $("sheet-name").onchange = () => {
@@ -716,6 +726,7 @@
     $("manual-allocation").hidden = false;
     $("manual-allocation").open = true;
     $(invoiceId ? "allocate-note" : "allocate-invoice").focus();
+    $("manual-allocation").scrollIntoView({behavior: "smooth", block: "center"});
   }
   async function loadReconciliation() {
       const r = await api("/reconciliation");
@@ -1031,10 +1042,8 @@
       if (!plans.length) notice("Chưa có kế hoạch đã lưu.");
     });
 
-  $("date-format").onchange = $("number-format").onchange = () => {
-    preview = null;
-    $("commit-import").disabled = true;
-  };
+  $("date-format").onchange = $("number-format").onchange = invalidateImportPreview;
+  $("imported-by").addEventListener("input", invalidateImportPreview);
   $("xml-known-at").value = localDate;
   $("xml-known-at").onchange = resetPreview;
   $("import-file").onchange = () => {
@@ -1075,7 +1084,11 @@
         if (!$("xml-known-at").value) throw new Error("Chọn ngày biết dữ liệu XML.");
         form.append("known_at", $("xml-known-at").value);
       }
-      preview = await api("/imports/preview", { method: "POST", body: form });
+      invalidateImportPreview();
+      const revision = importRevision;
+      const result = await api("/imports/preview", { method: "POST", body: form });
+      if (revision !== importRevision) return;
+      preview = result;
       const previousSheet = $("sheet-name").value;
       $("sheet-name").replaceChildren(
         ...preview.sheets.map((x) => new Option(x, x)),
@@ -1102,8 +1115,7 @@
           select.disabled = preview.mapping_locked;
           select.onchange = () => {
             manualMapping[field] = select.value;
-            preview = null;
-            $("commit-import").disabled = true;
+            invalidateImportPreview();
           };
           label.append(select);
           return label;
@@ -1273,8 +1285,20 @@
       notice(
         "Đã bắt đầu kiểm định. Bạn có thể chuyển màn hình; tiến độ được cập nhật tự động.",
       );
-    }, event.submitter);
+    }, event.submitter).finally(() => { if (state) renderTrainingAvailability(); });
   };
+  $("train-asof").addEventListener("change", () => { if (state) renderTrainingAvailability(); });
+  function renderTrainingAvailability() {
+    const updates = state.t1_updates, nextDue = updates?.state?.next_due;
+    let cutoffBeforeNext = false;
+    try { cutoffBeforeNext = Boolean(nextDue && inputDate("train-asof") < nextDue); } catch { /* Form validation explains invalid dates. */ }
+    const scheduleBlocked = updates?.due === false || cutoffBeforeNext;
+    $("train-button").disabled = state.jobs.some(j => ["queued", "running"].includes(j.status)) || scheduleBlocked;
+    $("train-schedule-hint").textContent = updates?.due === false
+      ? "Chưa đến lịch cập nhật tiếp: " + displayDate(nextDue) + ". Bạn vẫn có thể nạp dữ liệu và lập dự báo."
+      : cutoffBeforeNext ? "Chọn ngày chốt từ " + displayDate(nextDue) + " đến ngày hiện tại để kiểm định."
+      : "";
+  }
   function renderJobs() {
     const status = {
       queued: "Đang xếp hàng",
@@ -1295,9 +1319,72 @@
     const latest = state.jobs[0];
     if (latest && latest.status === "failed") notice(latest.message, true);
     else if (latest && latest.status === "completed") notice(latest.message || "Đã hoàn tất chu kỳ cập nhật và lưu quyết định chọn phiên bản.");
-    $("train-button").disabled = state.jobs.some((j) =>
-      ["queued", "running"].includes(j.status),
-    );
+    renderTrainingAvailability();
+  }
+  function renderT1Updates(limit = 20, historyOpen = false) {
+    const host = $("t1-updates"), updates = state.t1_updates;
+    const expanded = historyOpen || host.querySelector?.(".challenger-history")?.open;
+    host.replaceChildren(node("h2", "Lịch cập nhật và ứng viên chờ kiểm định"));
+    if (!updates) {
+      host.append(node("p", "Chưa có thông tin lịch cập nhật từ máy chủ."));
+      return;
+    }
+    const schedule = updates.state, summary = node("div", undefined, "update-summary");
+    [
+      ["Lần cập nhật gần nhất", schedule ? displayDate(schedule.last_cycle_asof) : "Chưa có chu kỳ"],
+      ["Có thể cập nhật tiếp", schedule ? displayDate(schedule.next_due) : "Khi dữ liệu đã sẵn sàng"],
+      ["Ứng viên đang chờ", fmt.format(updates.pending_count ?? 0)],
+    ].forEach(([label, value]) => {
+      const item = node("div"); item.append(node("small", label), node("b", value)); summary.append(item);
+    });
+    host.append(summary, node("p", "Phiên bản mới tự được sử dụng sau khi đạt kiểm định. Chọn phiên bản đã lưu để quay lại khi cần."));
+    const messages = {
+      accepted_historical_audit: "Đã tự chọn phiên bản mới qua kiểm định quá khứ.",
+      accepted_prospective_audit: "Đã tự chọn phiên bản mới sau khi đối chiếu dự báo đã lưu.",
+      pending_prospective_audit: "Giữ phiên bản đang dùng; ứng viên chờ đủ nhãn để đối chiếu.",
+      kept_incumbent: "Giữ phiên bản đang dùng vì chưa có bằng chứng đủ để thay thế.",
+    };
+    const latest = updates.runs?.[0];
+    if (latest?.status) host.append(node("p", "Quyết định gần nhất: " + (messages[latest.status] || "Đã lưu kết quả kiểm định.")));
+    const statuses = {
+      waiting_for_91_days: "Chờ đủ 13 tuần",
+      ready_for_audit: "Đã đủ 13 tuần; chờ lượt kiểm định",
+      insufficient_eligible_outcomes: "Chưa đủ khoản có nhãn hợp lệ hoặc xác nhận thanh toán",
+      accepted: "Đã được chấp nhận",
+      rejected: "Không đạt kiểm định; giữ phiên bản đối chứng",
+      stale_incumbent: "Dừng đối chiếu vì phiên bản đối chứng đã thay đổi",
+      retrospective_snapshot_not_for_promotion: "Không dùng dự báo tạo hồi cứu để chọn phiên bản",
+      incompatible_cash_adapter: "Không tương thích phiên bản chuyển tiền; cần kiểm tra lại",
+      origin_not_recorded: "Thiếu ngày tạo ứng viên để xác định mốc đối chiếu",
+    };
+    const candidates = [...(updates.challengers || [])].sort((a, b) =>
+      Number(b.status === "pending") - Number(a.status === "pending") ||
+      (a.status === "pending" ? String(a.origin || "").localeCompare(String(b.origin || ""))
+        : String(b.origin || "").localeCompare(String(a.origin || ""))));
+    if (!candidates.length) {
+      host.append(node("p", "Không có ứng viên đang chờ hoặc lịch sử đối chiếu."));
+      return;
+    }
+    const list = node("ul", undefined, "challenger-list");
+    candidates.slice(0, limit).forEach(candidate => {
+      const row = node("li");
+      row.append(node("b", candidate.origin ? "Ứng viên từ " + displayDate(candidate.origin) : "Ứng viên chưa lưu ngày tạo"),
+        node("span", statuses[candidate.display_status] || "Cần kiểm tra trạng thái ứng viên"),
+        node("small", (candidate.matures_on ? "Mốc đủ 13 tuần: " + displayDate(candidate.matures_on) : "Chưa lưu mốc đối chiếu") +
+          (candidate.eligible_rows != null ? " · " + fmt.format(candidate.eligible_rows) + "/" + fmt.format(candidate.minimum_rows) + " khoản đủ nhãn" : "") +
+          (candidate.evaluated_asof ? " · Đối chiếu ngày " + displayDate(candidate.evaluated_asof) : "")));
+      list.append(row);
+    });
+    const history = node("details", undefined, "challenger-history");
+    history.open = Boolean(expanded);
+    history.append(node("summary", "Xem ứng viên và lịch sử đối chiếu (" + fmt.format(candidates.length) + ")"), list);
+    host.append(history);
+    if (candidates.length > limit) {
+      history.append(node("small", "Hiển thị " + fmt.format(limit) + "/" + fmt.format(candidates.length) + " ứng viên; ưu tiên các ứng viên đang chờ."));
+      const more = node("button", "Xem thêm ứng viên", "button");
+      more.onclick = () => renderT1Updates(limit + 20, true);
+      history.append(more);
+    }
   }
   function renderVersions() {
     const list = $("versions-list");
@@ -1319,16 +1406,23 @@
     state.versions.forEach((version, index) => {
       const row = node("div", undefined, "version"),
         info = node("div"),
-        audit = version.audit;
+        promoted = ["accepted_historical_audit", "accepted_prospective_audit"].includes(version.promotion_status),
+        audit = promoted
+          ? (version.promotion_audit ?? version.audit)
+          : (version.candidate_update_audit ?? version.audit);
       info.append(
         node(
           "h3",
           "Phiên bản " +
             (state.versions.length - index) +
-            " · dữ liệu đến " +
-            displayDate(version.asof),
+            " · cập nhật dữ liệu đến " +
+            displayDate(version.update_asof),
         ),
       );
+      info.append(node("p",
+        "Tham số T1: " + displayDate(version.t1_parameter_asof) +
+        " · Partial: " + displayDate(version.partial_fitted_through ?? version.serving_manifest?.partial_fitted_through) +
+        " · Phiên bản sẵn sàng: " + displayDate(version.asof), "muted"));
       const measures = node("div", undefined, "audit-metrics");
       const candidate = audit?.candidate?.score ?? audit?.challenger?.score;
       const baseline = audit?.baseline?.score;
@@ -1343,12 +1437,17 @@
         measures.append(item);
       });
       const messages = {
-        accepted_historical_audit: "Đã chọn qua kiểm định quá khứ và học lại bằng dữ liệu hợp lệ gần nhất.",
+        accepted_historical_audit: "Đã chọn qua kiểm định quá khứ.",
         accepted_prospective_audit: "Đã chọn sau khi chấm dự báo đã lưu trước khi biết kết quả.",
         pending_prospective_audit: "Giữ model đang dùng; ứng viên mới chờ đủ 13 tuần để đối chiếu.",
         kept_incumbent: "Giữ model đang dùng vì chưa có bằng chứng đủ để thay thế.",
       };
-      info.append(measures, node("p", messages[version.promotion_status] || "Đã lưu kết quả kiểm định."));
+      info.append(node("small", promoted
+        ? "Kết quả kiểm định dùng để chọn phiên bản đang phục vụ."
+        : "Kết quả kiểm tra ứng viên của chu kỳ này."),
+        measures, node("p", messages[version.promotion_status] || "Đã lưu kết quả kiểm định."));
+      if (version.promotion_status === "accepted_prospective_audit" && version.candidate_update_audit)
+        info.append(node("p", "Kết quả tạo ứng viên tiếp theo được lưu riêng; không thay đổi bằng chứng đã chọn phiên bản này."));
       info.append(node("small",
         (version.train_n ?? 0) + " snapshot học, " +
         (version.validation_n ?? 0) + " snapshot validation. " +
@@ -1535,15 +1634,30 @@
         if ((explanation.reference?.population ?? 0) < 16) {
           panel.append(node("p", "Chưa đủ cơ sở đánh giá độ ổn định trên danh mục ít hóa đơn tham chiếu.", "muted"));
         }
+        if (landmark && (explanation.stability?.checked !== true || factors.some(f => f.stability?.status !== "stable"))) {
+          panel.append(node("p", explanation.stability?.checked === true
+            ? "Một số đóng góp nhạy với mẫu tham chiếu hoặc chưa đủ cơ sở kiểm tra. Đọc trạng thái từng nhóm trước khi diễn giải."
+            : "Chưa đủ cơ sở kiểm tra độ ổn định của các đóng góp theo mẫu tham chiếu.", "warning-box"));
+        }
         const grid = node("table", undefined, "t1-grouped-drivers"), head = node("thead"), header = node("tr"), body = node("tbody");
-        ["Nhóm thông tin", "Thay đổi xác suất dự báo"].forEach(label => header.append(node("th", label)));
+        ["Nhóm thông tin", "Thay đổi xác suất dự báo", "Độ ổn định theo mẫu tham chiếu"].forEach(label => header.append(node("th", label)));
         head.append(header); grid.append(head);
         factors.forEach(f => {
           const row = node("tr"), effect = Math.abs(f.contribution_pp) < 0.005 ? 0 : f.contribution_pp;
           row.append(node("td", f.label), node("td", (effect > 0 ? "+" : "") + effect.toLocaleString("vi-VN", {maximumFractionDigits: 2}) + " điểm phần trăm"));
+          const stability = f.stability, checked = landmark && explanation.stability?.checked === true;
+          const status = checked ? {stable: "Ổn định trong các mẫu đã kiểm tra", unstable: "Nhạy với mẫu tham chiếu"}[stability?.status] : null;
+          const detail = node("td", status || "Chưa đủ cơ sở kiểm tra");
+          if (checked && Number.isFinite(stability?.min_contribution_pp) && Number.isFinite(stability?.max_contribution_pp)) {
+            detail.append(node("small", "Khoảng đóng góp đã kiểm tra: " +
+              stability.min_contribution_pp.toLocaleString("vi-VN", {maximumFractionDigits: 2}) + " đến " +
+              stability.max_contribution_pp.toLocaleString("vi-VN", {maximumFractionDigits: 2}) + " điểm phần trăm. Đây không phải khoảng tin cậy của dự báo."));
+          }
+          row.append(detail);
           body.append(row);
         });
-        grid.append(body); panel.append(grid);
+        grid.append(body);
+        const scroll = node("div", undefined, "table-scroll"); scroll.append(grid); panel.append(scroll);
         panel.append(node("p", "Mốc tham chiếu: " + (explanation.baseline_probability * 100).toLocaleString("vi-VN", {maximumFractionDigits: 2}) + "% trên mẫu hóa đơn đang mở. Đây là đóng góp theo nhóm; chưa tách riêng từng thông tin trong nhóm.", "muted"));
         return panel;
       }
@@ -1848,8 +1962,29 @@
     t.assumptions.forEach(note => panel.append(node("p", note, "muted")));
     return panel;
   }
-  function renderT10ScenarioResult(result) {
+  function t10ScenarioAssumptions(assumptions) {
+    if (!assumptions) return "Kịch bản này chưa lưu đầy đủ giả định.";
+    const customer = assumptions.customer_id ? "Khách " + assumptions.customer_id
+      : assumptions.customer_id === null ? "Tất cả khách" : "Chưa ghi khách áp dụng";
+    const receipts = Number.isInteger(assumptions.customer_delay_weeks)
+      ? customer + " trả chậm thêm " + assumptions.customer_delay_weeks + " tuần"
+      : "Chưa ghi số tuần trả chậm";
+    const expense = assumptions.expense_id
+      ? "Khoản chi " + assumptions.expense_id + (Number.isInteger(assumptions.expense_delay_weeks)
+        ? " dời thêm " + assumptions.expense_delay_weeks + " tuần" : " chưa ghi số tuần dời thêm")
+      : assumptions.expense_id === null && assumptions.expense_delay_weeks === 0
+        ? "Không dời chi" : "Chưa ghi đủ giả định dời chi";
+    return receipts + "; " + expense + ".";
+  }
+  function renderT10ScenarioResult(result, plan) {
     const panel = node("div"), pct = value => (100*value).toFixed(2) + "%", money = value => fmt.format(value) + " VND";
+    const assumptions = node("section", undefined, "t10-scenario-assumptions");
+    assumptions.setAttribute("aria-label", "Giả định của kết quả kịch bản");
+    assumptions.append(node("h4", "Giả định của kết quả đang xem"), node("p", t10ScenarioAssumptions(result.assumptions)));
+    const forecastId = result.forecast_id || plan?.id;
+    if (forecastId) assumptions.append(node("p", "So với kế hoạch " + forecastId +
+      (plan?.id === forecastId && plan.cutoff ? " · ngày chốt " + displayDate(plan.cutoff) : ""), "muted"));
+    panel.append(assumptions);
     panel.append(node("p", "Xác suất thiếu tiền ít nhất một tuần: " + pct(result.baseline_any_shortfall_probability) + " → " + pct(result.scenario_any_shortfall_probability) + "; thay đổi " + (100*result.delta_any_shortfall_probability).toFixed(2) + " điểm %. Sai số MC của chênh lệch " + (100*result.delta_probability_mc_standard_error).toFixed(2) + " điểm %."));
     panel.append(node("p", "Dùng cùng nguồn ngẫu nhiên theo hóa đơn và hoạt động. Dải dưới đây là phân vị MC thô; đây là giả định trong mô hình, chưa chứng minh tác động của việc gọi điện."));
     const host = node("div"); panel.append(host);
@@ -1884,7 +2019,7 @@
     const submit = node("button", "So sánh với forecast đã lưu", "button"); submit.type = "submit"; form.append(submit);
     form.onsubmit = event => { event.preventDefault(); action(async () => {
       const result = await api("/forecasts/" + encodeURIComponent(plan.id) + "/scenarios", {method: "POST", body: JSON.stringify({customer_id: customer.value || null, customer_delay_weeks: Number(delay.value), expense_id: expense.value || null, expense_delay_weeks: Number(move.value)})});
-      output.replaceChildren(renderT10ScenarioResult(result));
+      output.replaceChildren(renderT10ScenarioResult(result, plan));
     }, submit); };
     const saved = node("button", "Mở kịch bản đã lưu", "button"), history = node("div"); saved.type = "button";
     saved.onclick = () => action(async () => {
@@ -1892,16 +2027,23 @@
       history.replaceChildren();
       if (!rows.length) history.append(node("p", "Chưa có kịch bản đã lưu."));
       rows.forEach(row => {
-        const button = node("button", row.created_at + " · " + (row.assumptions.customer_id || "Tất cả khách") + " chậm " + row.assumptions.customer_delay_weeks + " tuần · " + (row.assumptions.expense_id || "Không dời chi"), "button");
+        const button = node("button", row.created_at + " · " + t10ScenarioAssumptions(row.assumptions), "button");
         button.type = "button";
         button.onclick = () => action(async () => {
           const result = await api("/forecasts/" + encodeURIComponent(plan.id) + "/scenarios/" + encodeURIComponent(row.id));
-          output.replaceChildren(renderT10ScenarioResult(result));
+          if (result.assumptions) {
+            customer.value = result.assumptions.customer_id ?? "";
+            delay.value = result.assumptions.customer_delay_weeks ?? "";
+            expense.value = result.assumptions.expense_id ?? "";
+            move.value = result.assumptions.expense_delay_weeks ?? "";
+          }
+          output.replaceChildren(renderT10ScenarioResult(result, plan));
         }, button);
         history.append(button);
       });
     }, saved);
-    panel.append(node("p", "So với kế hoạch đang xem; giữ dữ liệu, T1, adapter, partial, T6, số đường và seed đã lưu. Kịch bản không sửa lịch chi hoặc công nợ thật."), form, saved, history, output);
+    panel.append(node("p", "So với kế hoạch đang xem; giữ dữ liệu, T1, adapter, partial, T6, số đường và seed đã lưu. Kịch bản không sửa lịch chi hoặc công nợ thật."),
+      node("h4", "Giả định để chạy kịch bản"), node("p", "Thay đổi các lựa chọn rồi bấm So sánh để tạo kết quả mới. Mỗi kết quả bên dưới ghi riêng giả định đã dùng.", "muted"), form, saved, history, output);
     return panel;
   }
   function renderCashDecomposition(plan) {
@@ -2004,15 +2146,44 @@
     if (t5Ledger) panel.append(t5Ledger);
     return panel;
   }
+  function servingModeLabel(plan) {
+    let mode = plan.serving_mode;
+    if (!mode) {
+      const version = String(plan.model_version || ""), evidence = plan.t10?.partial_profile?.evidence;
+      if (version.startsWith("global:") || !version && plan.t1_provenance?.source === "global_catalog")
+        mode = "global_fallback";
+      else if (evidence?.prior_sha256 && evidence.cells?.some(cell => cell.weeks > 0)) mode = "company_adapted";
+      else mode = plan.mode;
+    }
+    return {
+      global_fallback: "MÔ HÌNH NỀN DỰ PHÒNG",
+      global_selected: "MÔ HÌNH NỀN ĐƯỢC CHỌN",
+      company_adapted: "ĐÃ THÍCH NGHI CHO DOANH NGHIỆP",
+      history_baseline: "THEO LỊCH SỬ",
+    }[mode] || "PHIÊN BẢN ĐÃ LƯU";
+  }
+  function cashBandPresentation(plan) {
+    if (plan.band_status === "calibrated_out_of_sample" || plan.weeks.some(w => w.raw_low != null || w.raw_high != null)) {
+      return {low: "Cận dưới đã hiệu chỉnh", high: "Cận trên đã hiệu chỉnh",
+        note: "Dải số dư đã hiệu chỉnh bằng sai số lịch sử; hai cận không phải P10/P90 mô phỏng. P50 và xác suất dưới ngưỡng vẫn lấy từ mô phỏng."};
+    }
+    if (["raw_simulation", "insufficient_out_of_sample_errors"].includes(plan.band_status)) {
+      return {low: "Mô phỏng P10", high: "Mô phỏng P90", note: "Dải P10–P90 là mô phỏng, chưa hiệu chỉnh độ phủ."};
+    }
+    return {low: "Cận dưới dải số dư", high: "Cận trên dải số dư",
+      note: "Bản lưu chưa ghi loại dải số dư; chưa đủ cơ sở gọi hai cận là P10/P90 mô phỏng."};
+  }
   function renderForecast() {
     const r = lastForecast;
+    const band = cashBandPresentation(r);
+    labels.low = band.low; labels.high = band.high;
+    $("overview-band-note").textContent = $("forecast-band-note").textContent = band.note;
     $("actuals-result").replaceChildren();
     setDate("actuals-date", localDate);
     $("forecast-output").hidden = false;
     $("forecast-empty").hidden = true;
     $("export-forecast").disabled = false;
-    $("forecast-mode").textContent =
-      r.mode === "company_trained" ? "PHIÊN BẢN RIÊNG" : "THEO LỊCH SỬ";
+    $("forecast-mode").textContent = servingModeLabel(r);
     $("kpi-outstanding").textContent = short(r.outstanding);
     $("kpi-balance").textContent = short(r.minimum_balance);
     $("kpi-invoices").textContent =
@@ -2145,13 +2316,13 @@
             value: (_u, v) => (v == null ? "—" : short(v)),
           },
           {
-            label: "P10",
+            label: cashBandPresentation(lastForecast).low,
             stroke: color("--kt-field-line", "#a6b990"),
             width: 1,
             value: (_u, v) => (v == null ? "—" : short(v)),
           },
           {
-            label: "P90",
+            label: cashBandPresentation(lastForecast).high,
             stroke: color("--kt-field-line", "#a6b990"),
             width: 1,
             value: (_u, v) => (v == null ? "—" : short(v)),

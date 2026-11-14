@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "checks": [
+    "fresh review_server process starts with protected HE opt-in config",
+    "Portal authorizer is reused without credential fallback",
+    "C001 five rows complete through actual ciphertext worker"
+  ],
+  "count": 3,
+  "data": "synthetic_only",
+  "live_services_changed": false
+}

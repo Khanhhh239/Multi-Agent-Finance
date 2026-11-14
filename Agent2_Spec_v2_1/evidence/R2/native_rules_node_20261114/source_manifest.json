@@ -1,0 +1,1513 @@
+{
+  "version": "native-rule-demo/1.0.0",
+  "synthetic_only": true,
+  "rule_ids": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "A6",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5",
+    "B6",
+    "B7",
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6",
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "P1",
+    "P2",
+    "T1",
+    "T2"
+  ],
+  "cases": [
+    {
+      "case_id": "C001_A1_signal",
+      "company_id": "C001",
+      "source_file": "C001_A1_signal.source.json",
+      "source_sha256": "06ebac97da25c3124ec18f5133681319cc60e9ded51a7440e39f16d72a179078",
+      "expected": {
+        "rule_id": "A1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0001",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_A1_control",
+      "company_id": "C001",
+      "source_file": "C001_A1_control.source.json",
+      "source_sha256": "52deaee14a1c0a15f19341d4d477fb1e8d837f77b756b9f01111b54415f49615",
+      "expected": {
+        "rule_id": "A1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0001",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_A2_signal",
+      "company_id": "C001",
+      "source_file": "C001_A2_signal.source.json",
+      "source_sha256": "706ecfa2b809ece5d4b6a6ac89f3fe911df83ed21d52e3ac14cfd4b1bc0c4015",
+      "expected": {
+        "rule_id": "A2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0002",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_A2_control",
+      "company_id": "C001",
+      "source_file": "C001_A2_control.source.json",
+      "source_sha256": "f8eb5e3b2e2427db9b6f6ed460a254090e258d0b711e2da76831519fa6f8fdc4",
+      "expected": {
+        "rule_id": "A2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0002",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_A3_signal",
+      "company_id": "C001",
+      "source_file": "C001_A3_signal.source.json",
+      "source_sha256": "2da8b19bcf4124dd4c801f64c503e124c367e937034eb046819061b09491999b",
+      "expected": {
+        "rule_id": "A3",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0002",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_A3_control",
+      "company_id": "C001",
+      "source_file": "C001_A3_control.source.json",
+      "source_sha256": "21e7d0a3034afd5528eb08e0180e2bd58c89412412f3d8050b221e10a1607f61",
+      "expected": {
+        "rule_id": "A3",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0002",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_A4_signal",
+      "company_id": "C001",
+      "source_file": "C001_A4_signal.source.json",
+      "source_sha256": "570f9c7a5431304a75fbc0480963660669372bc67f0970be2dea0b871e829c01",
+      "expected": {
+        "rule_id": "A4",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0002",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_A4_control",
+      "company_id": "C001",
+      "source_file": "C001_A4_control.source.json",
+      "source_sha256": "4685411c094364620c5d7b5d3941f65dc33d8e30e2535cf8bcb2652c1422891d",
+      "expected": {
+        "rule_id": "A4",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0002",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_A5_signal",
+      "company_id": "C001",
+      "source_file": "C001_A5_signal.source.json",
+      "source_sha256": "fc93ddb15a1fc316b384193a6590a376663331912d8962ec2c8bb0e3fa2120b3",
+      "expected": {
+        "rule_id": "A5",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0045",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_A5_control",
+      "company_id": "C001",
+      "source_file": "C001_A5_control.source.json",
+      "source_sha256": "27f1cc42453887a26933e70ce1e8214f8873ebfee4cc88192f0684e355d110c1",
+      "expected": {
+        "rule_id": "A5",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0045",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_A6_signal",
+      "company_id": "C001",
+      "source_file": "C001_A6_signal.source.json",
+      "source_sha256": "6d2e888cd5ed892a51cbb07c600861645026fffafd21e74bc4af4c5177981a28",
+      "expected": {
+        "rule_id": "A6",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_A6_control",
+      "company_id": "C001",
+      "source_file": "C001_A6_control.source.json",
+      "source_sha256": "474a55a054c62c2fc698794039432a369331a76bde81bf0ba327866102d4cd23",
+      "expected": {
+        "rule_id": "A6",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_B1_signal",
+      "company_id": "C001",
+      "source_file": "C001_B1_signal.source.json",
+      "source_sha256": "8d80e5077f41dfc7d70f2b82b0874f3b7f181f77efb115682b49aa1135897b57",
+      "expected": {
+        "rule_id": "B1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_B1_control",
+      "company_id": "C001",
+      "source_file": "C001_B1_control.source.json",
+      "source_sha256": "ffd1af60d343d9a09ea0f0fb281f04d43516ec2c400e8e9cc4dc6a5eedb2c8fd",
+      "expected": {
+        "rule_id": "B1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_B2_signal",
+      "company_id": "C001",
+      "source_file": "C001_B2_signal.source.json",
+      "source_sha256": "695a17d6950eeeff3f4a5a399e66489d8ed5b9a663f22749db783f8acb77a918",
+      "expected": {
+        "rule_id": "B2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_B2_control",
+      "company_id": "C001",
+      "source_file": "C001_B2_control.source.json",
+      "source_sha256": "ffd1af60d343d9a09ea0f0fb281f04d43516ec2c400e8e9cc4dc6a5eedb2c8fd",
+      "expected": {
+        "rule_id": "B2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_B3_signal",
+      "company_id": "C001",
+      "source_file": "C001_B3_signal.source.json",
+      "source_sha256": "dbb26c9207ef73e09d0542b45566862d68c6f9a08f73636e492c093c25bbc56b",
+      "expected": {
+        "rule_id": "B3",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_B3_control",
+      "company_id": "C001",
+      "source_file": "C001_B3_control.source.json",
+      "source_sha256": "b16648db68a2c73862d01fbf43acee74ea47644457c7c852dd0ad34d03702d1d",
+      "expected": {
+        "rule_id": "B3",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_B4_signal",
+      "company_id": "C001",
+      "source_file": "C001_B4_signal.source.json",
+      "source_sha256": "8185072d537eb3954c7f3dd386a9adb35c84f0a150ee6d6d4c599749425d0961",
+      "expected": {
+        "rule_id": "B4",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_B4_control",
+      "company_id": "C001",
+      "source_file": "C001_B4_control.source.json",
+      "source_sha256": "1b5862c8130a06337df75828f425005765779cd7c575a3c573e7fe2be9492232",
+      "expected": {
+        "rule_id": "B4",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_B5_signal",
+      "company_id": "C001",
+      "source_file": "C001_B5_signal.source.json",
+      "source_sha256": "7865394cc525e90e0a41d48f8e5aa2a1bfab78bd8bebe5ffbc24778665d1517a",
+      "expected": {
+        "rule_id": "B5",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_B5_control",
+      "company_id": "C001",
+      "source_file": "C001_B5_control.source.json",
+      "source_sha256": "ed9f8f318bb1196d509ff883a10c035fb29682bf6bfd4679a5aaef49e98504d7",
+      "expected": {
+        "rule_id": "B5",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_B6_signal",
+      "company_id": "C001",
+      "source_file": "C001_B6_signal.source.json",
+      "source_sha256": "2d76bd271b8aa0bd36e7c437f61b39e7f577472aa1d342c842df131f4321f32d",
+      "expected": {
+        "rule_id": "B6",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0025",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_B6_control",
+      "company_id": "C001",
+      "source_file": "C001_B6_control.source.json",
+      "source_sha256": "84c677309a2f1b8ce390f7884a4a98af302b8473d751925f0c556ed839bcb247",
+      "expected": {
+        "rule_id": "B6",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0025",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_B7_signal",
+      "company_id": "C001",
+      "source_file": "C001_B7_signal.source.json",
+      "source_sha256": "4ef71e28f7411cf765fd9b7c3ae0aa8246e3cdaa580d098ae5f016a6e1b76d79",
+      "expected": {
+        "rule_id": "B7",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_B7_control",
+      "company_id": "C001",
+      "source_file": "C001_B7_control.source.json",
+      "source_sha256": "8f9af507cd3c3cdb0f0acfdc9727984428b99de3b46c7e25325d85db7e4ad232",
+      "expected": {
+        "rule_id": "B7",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_C1_signal",
+      "company_id": "C001",
+      "source_file": "C001_C1_signal.source.json",
+      "source_sha256": "0b52c93aee5205a0087d22039dd7b6975c41ce4904be9a3acf8aacabeaba3c4d",
+      "expected": {
+        "rule_id": "C1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_C1_control",
+      "company_id": "C001",
+      "source_file": "C001_C1_control.source.json",
+      "source_sha256": "ffd1af60d343d9a09ea0f0fb281f04d43516ec2c400e8e9cc4dc6a5eedb2c8fd",
+      "expected": {
+        "rule_id": "C1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_C2_signal",
+      "company_id": "C001",
+      "source_file": "C001_C2_signal.source.json",
+      "source_sha256": "406cbd8360f2fa8cd9e193502db967d9567d786aff3b250b2e11f788bd6915c0",
+      "expected": {
+        "rule_id": "C2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_C2_control",
+      "company_id": "C001",
+      "source_file": "C001_C2_control.source.json",
+      "source_sha256": "d88766f99911cc3d812a5f87e31f058070400e46cd3b77dddbf63a9a7a8ccd9d",
+      "expected": {
+        "rule_id": "C2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_C3_signal",
+      "company_id": "C001",
+      "source_file": "C001_C3_signal.source.json",
+      "source_sha256": "3f9b48392ccc949f1258165c672d7dec09270a7525b0086cb103e9ab63a26c0b",
+      "expected": {
+        "rule_id": "C3",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_C3_control",
+      "company_id": "C001",
+      "source_file": "C001_C3_control.source.json",
+      "source_sha256": "1354f232d64f08dba9e5ae175d1753cddb6785f27082421ec4c12a78e6d681a4",
+      "expected": {
+        "rule_id": "C3",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_C4_signal",
+      "company_id": "C001",
+      "source_file": "C001_C4_signal.source.json",
+      "source_sha256": "36e424fc2eeb5955466fda01bf7ff6ac72c211699276a4f85b8e40a20505f3c3",
+      "expected": {
+        "rule_id": "C4",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_C4_control",
+      "company_id": "C001",
+      "source_file": "C001_C4_control.source.json",
+      "source_sha256": "92c3c06a052048993bb74f300fd5c1ee3a481710171892ef72f50d7ec6d6b9ae",
+      "expected": {
+        "rule_id": "C4",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_E1_signal",
+      "company_id": "C001",
+      "source_file": "C001_E1_signal.source.json",
+      "source_sha256": "23040f6e894e01782ab558ec3031117efb33f65629375a217f52752a9d64fb97",
+      "expected": {
+        "rule_id": "E1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_E1_control",
+      "company_id": "C001",
+      "source_file": "C001_E1_control.source.json",
+      "source_sha256": "c935450eed4d0a461a8b64b324138bc65356faf72fb4e6bdce014a6651e0f112",
+      "expected": {
+        "rule_id": "E1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_E2_signal",
+      "company_id": "C001",
+      "source_file": "C001_E2_signal.source.json",
+      "source_sha256": "b90706b6b4dabc6f840b51c9eabc96abbde90c3b5f866ea88a3de5ef1ff9660e",
+      "expected": {
+        "rule_id": "E2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_E2_control",
+      "company_id": "C001",
+      "source_file": "C001_E2_control.source.json",
+      "source_sha256": "dc02bf775d4eaa8489c26f6ec8a26e7dd585345a3c4d41de7c176808b55309a3",
+      "expected": {
+        "rule_id": "E2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_E3_signal",
+      "company_id": "C001",
+      "source_file": "C001_E3_signal.source.json",
+      "source_sha256": "cb66f1ddf44b02c8c06d69f3ae958e25d12fac344fea3f6dfd4ae7cdd6283424",
+      "expected": {
+        "rule_id": "E3",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_E3_control",
+      "company_id": "C001",
+      "source_file": "C001_E3_control.source.json",
+      "source_sha256": "003baac657e3995768b75954d3af8c9094e2fedabaf3ac331714db7333eee108",
+      "expected": {
+        "rule_id": "E3",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_E4_signal",
+      "company_id": "C001",
+      "source_file": "C001_E4_signal.source.json",
+      "source_sha256": "7865394cc525e90e0a41d48f8e5aa2a1bfab78bd8bebe5ffbc24778665d1517a",
+      "expected": {
+        "rule_id": "E4",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_E4_control",
+      "company_id": "C001",
+      "source_file": "C001_E4_control.source.json",
+      "source_sha256": "ed9f8f318bb1196d509ff883a10c035fb29682bf6bfd4679a5aaef49e98504d7",
+      "expected": {
+        "rule_id": "E4",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_F1_signal",
+      "company_id": "C001",
+      "source_file": "C001_F1_signal.source.json",
+      "source_sha256": "3c14e7289b636aeaa806e6f1d7ba12f90555afd2dcd83c0ea0c30f74e0580ec5",
+      "expected": {
+        "rule_id": "F1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_F1_control",
+      "company_id": "C001",
+      "source_file": "C001_F1_control.source.json",
+      "source_sha256": "1a50b7b37d61c30462509bc9a35eaaab653285f8ddd0a00174b3a8c762de030f",
+      "expected": {
+        "rule_id": "F1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_F2_signal",
+      "company_id": "C001",
+      "source_file": "C001_F2_signal.source.json",
+      "source_sha256": "3b5e7ec58cb343fa79d6e3d4660166e4ccb1f7a5eade9bc002b068b1c6e6a7e9",
+      "expected": {
+        "rule_id": "F2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_F2_control",
+      "company_id": "C001",
+      "source_file": "C001_F2_control.source.json",
+      "source_sha256": "4545893a78e343ad070502204cc5b104a50a432e6e012eb19f1d4b72aa961ceb",
+      "expected": {
+        "rule_id": "F2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_F3_signal",
+      "company_id": "C001",
+      "source_file": "C001_F3_signal.source.json",
+      "source_sha256": "2e7995425cddcf3cc37a352c6cb12aa75c0b33683c2e5d8982a3f8133fa0ec53",
+      "expected": {
+        "rule_id": "F3",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_F3_control",
+      "company_id": "C001",
+      "source_file": "C001_F3_control.source.json",
+      "source_sha256": "c98255386e9ed892cfb5f8cad73dd4988727a4ac28799c452211019746dc48ec",
+      "expected": {
+        "rule_id": "F3",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_F4_signal",
+      "company_id": "C001",
+      "source_file": "C001_F4_signal.source.json",
+      "source_sha256": "ddacbd9503e5079416fb6b9770739dc3c6735ca89ac898f8378788f34b887d0f",
+      "expected": {
+        "rule_id": "F4",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_F4_control",
+      "company_id": "C001",
+      "source_file": "C001_F4_control.source.json",
+      "source_sha256": "f7b66c89247248f9a679ee9aacf6ff040a1c84e8f1b48ea0e58c802dac5d7dd5",
+      "expected": {
+        "rule_id": "F4",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_P1_signal",
+      "company_id": "C001",
+      "source_file": "C001_P1_signal.source.json",
+      "source_sha256": "dffc57abc283679122706a115abfb39a11739e9f9ff654ce9342d374a6cf76a6",
+      "expected": {
+        "rule_id": "P1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0001",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_P1_control",
+      "company_id": "C001",
+      "source_file": "C001_P1_control.source.json",
+      "source_sha256": "56bb72c9328428ad828f4266b5009a7cba0d7d59b5904f9cca7e55e9ceb5c5e6",
+      "expected": {
+        "rule_id": "P1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0001",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_P2_signal",
+      "company_id": "C001",
+      "source_file": "C001_P2_signal.source.json",
+      "source_sha256": "034c18b82ded60b67e0f117e22fdca5853db8a4a2995edfa8d828dbc499fc877",
+      "expected": {
+        "rule_id": "P2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_P2_control",
+      "company_id": "C001",
+      "source_file": "C001_P2_control.source.json",
+      "source_sha256": "77bf05ffced79b773ed9db839b7fd13888161f2355a64b007d639c36db8eb29a",
+      "expected": {
+        "rule_id": "P2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_T1_signal",
+      "company_id": "C001",
+      "source_file": "C001_T1_signal.source.json",
+      "source_sha256": "92302a7eb92977f5fba7fab452b7ac8d9aac7da151d95c486efc4e48fcd53e64",
+      "expected": {
+        "rule_id": "T1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_T1_control",
+      "company_id": "C001",
+      "source_file": "C001_T1_control.source.json",
+      "source_sha256": "e43e3ba0999f8444ae85d9f392f1da62dab3152dcec3647df04e02f35257e6fa",
+      "expected": {
+        "rule_id": "T1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_T2_signal",
+      "company_id": "C001",
+      "source_file": "C001_T2_signal.source.json",
+      "source_sha256": "c31b69570cc1144823f1bf7074f6112f66ded800a1842a95f4fda4745b8ef9a5",
+      "expected": {
+        "rule_id": "T2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C001_T2_control",
+      "company_id": "C001",
+      "source_file": "C001_T2_control.source.json",
+      "source_sha256": "13cdeb583585728cdf45342a01be14f2829a71094089bb3b506756197e9ab642",
+      "expected": {
+        "rule_id": "T2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C001_D_GROUP_signal",
+      "company_id": "C001",
+      "source_file": "C001_D_GROUP_signal.source.json",
+      "source_sha256": "40c8c81e63a1407fe645104a30d3b396387b9d2d8eb4e5e8131edb4e1eb77272",
+      "expected": {
+        "rule_ids": [
+          "D1",
+          "D2",
+          "D3",
+          "D4",
+          "D5",
+          "D6"
+        ],
+        "positive": true,
+        "expected_signal": true,
+        "cutoff_at": "2025-08-01T00:00:00+07:00"
+      }
+    },
+    {
+      "case_id": "C001_D_GROUP_control",
+      "company_id": "C001",
+      "source_file": "C001_D_GROUP_control.source.json",
+      "source_sha256": "f270878c766b9825732fe52c50b0c54649af09d1a717b930fe04df69be0f39cc",
+      "expected": {
+        "rule_ids": [
+          "D1",
+          "D2",
+          "D3",
+          "D4",
+          "D5",
+          "D6"
+        ],
+        "positive": false,
+        "expected_signal": false,
+        "cutoff_at": "2025-08-01T00:00:00+07:00"
+      }
+    },
+    {
+      "case_id": "C002_A1_signal",
+      "company_id": "C002",
+      "source_file": "C002_A1_signal.source.json",
+      "source_sha256": "41cbb40d11125a5f5afebad09db0cee9190e789cdcd3ff1d483c18c7068fe101",
+      "expected": {
+        "rule_id": "A1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0001",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_A1_control",
+      "company_id": "C002",
+      "source_file": "C002_A1_control.source.json",
+      "source_sha256": "f3957da90d8b80ff2bc9520d7a6043baef7a0d5abe197804133847a5b581f1fd",
+      "expected": {
+        "rule_id": "A1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0001",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_A2_signal",
+      "company_id": "C002",
+      "source_file": "C002_A2_signal.source.json",
+      "source_sha256": "d251fe0085ffe53704e3aa89282c623e6a6c5287344f7fd528ae4285a6b6aa66",
+      "expected": {
+        "rule_id": "A2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0002",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_A2_control",
+      "company_id": "C002",
+      "source_file": "C002_A2_control.source.json",
+      "source_sha256": "37d81f68af32539c43fdd45153ebd2911c47953ef417e5f08a5ada4d2442f861",
+      "expected": {
+        "rule_id": "A2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0002",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_A3_signal",
+      "company_id": "C002",
+      "source_file": "C002_A3_signal.source.json",
+      "source_sha256": "26117fb5687810ee3ff45cb59cc529254ddb733ddde4ba8feb2d2c5c53aa874d",
+      "expected": {
+        "rule_id": "A3",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0002",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_A3_control",
+      "company_id": "C002",
+      "source_file": "C002_A3_control.source.json",
+      "source_sha256": "8edef333e93e6d12591b98071f6e767fd51ea204e7a8a4090ac0af3d7378f471",
+      "expected": {
+        "rule_id": "A3",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0002",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_A4_signal",
+      "company_id": "C002",
+      "source_file": "C002_A4_signal.source.json",
+      "source_sha256": "cf4e476126ba13dd1177bc98ed10f790171ebd393eaa30ed63c56e5f696b67b0",
+      "expected": {
+        "rule_id": "A4",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0002",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_A4_control",
+      "company_id": "C002",
+      "source_file": "C002_A4_control.source.json",
+      "source_sha256": "ef46f542c609c2a8f94b6b16b71a4a28be451527a76607d9e6bd7f8171991341",
+      "expected": {
+        "rule_id": "A4",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0002",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_A5_signal",
+      "company_id": "C002",
+      "source_file": "C002_A5_signal.source.json",
+      "source_sha256": "1f4e0961468cb37864cec7c5ce15eca6a80e9ebe986aed81f88f890ffa5a21f6",
+      "expected": {
+        "rule_id": "A5",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0045",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_A5_control",
+      "company_id": "C002",
+      "source_file": "C002_A5_control.source.json",
+      "source_sha256": "66b24198a0c2560802e3ffe5199542bc3b8d75cd8619daac46a1faa42d6529b5",
+      "expected": {
+        "rule_id": "A5",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0045",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_A6_signal",
+      "company_id": "C002",
+      "source_file": "C002_A6_signal.source.json",
+      "source_sha256": "d41322debd75f2e9d90350223c245817a293e74176a99d8d56025528dd6c6d05",
+      "expected": {
+        "rule_id": "A6",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_A6_control",
+      "company_id": "C002",
+      "source_file": "C002_A6_control.source.json",
+      "source_sha256": "9146984fb0aaab6c96718433b23c3a415b8470fd662930e1ce42738ce4a2b7bf",
+      "expected": {
+        "rule_id": "A6",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_B1_signal",
+      "company_id": "C002",
+      "source_file": "C002_B1_signal.source.json",
+      "source_sha256": "c7e7cb51c5d095283a714df0cfe75af99aec6429a3da26fdf009b24add0258a8",
+      "expected": {
+        "rule_id": "B1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_B1_control",
+      "company_id": "C002",
+      "source_file": "C002_B1_control.source.json",
+      "source_sha256": "f1f4d4e33b1932e4fbc3394a06a513b750fb96182a8f2f250990c874b2cb7c9d",
+      "expected": {
+        "rule_id": "B1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_B2_signal",
+      "company_id": "C002",
+      "source_file": "C002_B2_signal.source.json",
+      "source_sha256": "5dc3461de3fc788923ee48fd76cfceb77965e80ae2736a75e49d9be7fc9853cf",
+      "expected": {
+        "rule_id": "B2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_B2_control",
+      "company_id": "C002",
+      "source_file": "C002_B2_control.source.json",
+      "source_sha256": "f1f4d4e33b1932e4fbc3394a06a513b750fb96182a8f2f250990c874b2cb7c9d",
+      "expected": {
+        "rule_id": "B2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_B3_signal",
+      "company_id": "C002",
+      "source_file": "C002_B3_signal.source.json",
+      "source_sha256": "6a9e0dec667cea411dfcc60586625dc800608581a2bc8ae1b4812e65aae50c51",
+      "expected": {
+        "rule_id": "B3",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_B3_control",
+      "company_id": "C002",
+      "source_file": "C002_B3_control.source.json",
+      "source_sha256": "5628524c5e0691f8c3dc0df877c03ae4378b8f6db0f9a345120fe284633d3ff5",
+      "expected": {
+        "rule_id": "B3",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_B4_signal",
+      "company_id": "C002",
+      "source_file": "C002_B4_signal.source.json",
+      "source_sha256": "8f1054ed44ddbfdce4220aeaaf7128c13077a0ea4263da4600f05e1ecd5bafe2",
+      "expected": {
+        "rule_id": "B4",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_B4_control",
+      "company_id": "C002",
+      "source_file": "C002_B4_control.source.json",
+      "source_sha256": "2bed83c015dda66aeb4f5058221a5bac6dcf66a6a315e1dad7a55d9489652610",
+      "expected": {
+        "rule_id": "B4",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_B5_signal",
+      "company_id": "C002",
+      "source_file": "C002_B5_signal.source.json",
+      "source_sha256": "3f53539096cee6924a2dbe461b101ce6bb69dfe2d864f1e25764d26c3cd242cc",
+      "expected": {
+        "rule_id": "B5",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_B5_control",
+      "company_id": "C002",
+      "source_file": "C002_B5_control.source.json",
+      "source_sha256": "959c40ec31bd4d17105e06cec2625c4fc784edcc330b478a776bfe875762c215",
+      "expected": {
+        "rule_id": "B5",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_B6_signal",
+      "company_id": "C002",
+      "source_file": "C002_B6_signal.source.json",
+      "source_sha256": "2cbdee28b36a70c9ec91c763d0fa4e5dbce6dc2d6b54aff1f92a43149067a65d",
+      "expected": {
+        "rule_id": "B6",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0025",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_B6_control",
+      "company_id": "C002",
+      "source_file": "C002_B6_control.source.json",
+      "source_sha256": "ad40d4c74518b77cae10d893561aa4d4ffe01af5761e5a3df705eb136c9491e6",
+      "expected": {
+        "rule_id": "B6",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0025",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_B7_signal",
+      "company_id": "C002",
+      "source_file": "C002_B7_signal.source.json",
+      "source_sha256": "78e2e62ee33bfdf254ea0a6a4ed17ac990eddb6bc7063f47b80727e2eb370729",
+      "expected": {
+        "rule_id": "B7",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_B7_control",
+      "company_id": "C002",
+      "source_file": "C002_B7_control.source.json",
+      "source_sha256": "00bf864163a512f28f940ddef9f8d132b0856eeebb05ff901659db8db2712a81",
+      "expected": {
+        "rule_id": "B7",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_C1_signal",
+      "company_id": "C002",
+      "source_file": "C002_C1_signal.source.json",
+      "source_sha256": "846b4562e2d4e94394d985394d9aa317e15c0a9dccb772eacf9bc8c3db55bab5",
+      "expected": {
+        "rule_id": "C1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_C1_control",
+      "company_id": "C002",
+      "source_file": "C002_C1_control.source.json",
+      "source_sha256": "f1f4d4e33b1932e4fbc3394a06a513b750fb96182a8f2f250990c874b2cb7c9d",
+      "expected": {
+        "rule_id": "C1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_C2_signal",
+      "company_id": "C002",
+      "source_file": "C002_C2_signal.source.json",
+      "source_sha256": "ec2e5f000b8e21d834bcb1b069628398e7a7440bee455cd3d1327923cd81fbfa",
+      "expected": {
+        "rule_id": "C2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_C2_control",
+      "company_id": "C002",
+      "source_file": "C002_C2_control.source.json",
+      "source_sha256": "61af9084dc89bf4c8f42380a2e1e144b90cbd7d5c7f6f2921d1acdf02698d695",
+      "expected": {
+        "rule_id": "C2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_C3_signal",
+      "company_id": "C002",
+      "source_file": "C002_C3_signal.source.json",
+      "source_sha256": "fafbc8cd3b82f2f1fabc8609c51724794e2a57d456455d80d8c02d941bc25704",
+      "expected": {
+        "rule_id": "C3",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_C3_control",
+      "company_id": "C002",
+      "source_file": "C002_C3_control.source.json",
+      "source_sha256": "715fee4c13142389111bb1bd039e192592229256326c31068266972761ba4707",
+      "expected": {
+        "rule_id": "C3",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_C4_signal",
+      "company_id": "C002",
+      "source_file": "C002_C4_signal.source.json",
+      "source_sha256": "cf5a551083285725e21789eaea15151b94c6729ccbd7b1bcfec78e3e52c08ea4",
+      "expected": {
+        "rule_id": "C4",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_C4_control",
+      "company_id": "C002",
+      "source_file": "C002_C4_control.source.json",
+      "source_sha256": "722eaebbf778d98c3ba53452c4d00eecfed5bc78657c07353d9ab1f91de4c78b",
+      "expected": {
+        "rule_id": "C4",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_E1_signal",
+      "company_id": "C002",
+      "source_file": "C002_E1_signal.source.json",
+      "source_sha256": "0f413c76a28e2174bef8796b76aa82e781e34a657c2018a722ad063b928aacb4",
+      "expected": {
+        "rule_id": "E1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_E1_control",
+      "company_id": "C002",
+      "source_file": "C002_E1_control.source.json",
+      "source_sha256": "bb09583def286ec3f1c2079d70a6601923709565b971e4f2f222b1abfcba03ba",
+      "expected": {
+        "rule_id": "E1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_E2_signal",
+      "company_id": "C002",
+      "source_file": "C002_E2_signal.source.json",
+      "source_sha256": "545b3df57921d8d75c11c05f3e631f79d8ad522303c977a7e67717ab33066bc9",
+      "expected": {
+        "rule_id": "E2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_E2_control",
+      "company_id": "C002",
+      "source_file": "C002_E2_control.source.json",
+      "source_sha256": "a8c830c788172486c895d7bd03a566443893f6dcc6de2b55e86eca0fd26e0c88",
+      "expected": {
+        "rule_id": "E2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_E3_signal",
+      "company_id": "C002",
+      "source_file": "C002_E3_signal.source.json",
+      "source_sha256": "1a87e635a2cc0dffabe60a8964efd29d5a0d5d41a2e6fe9da0bd9e212c447781",
+      "expected": {
+        "rule_id": "E3",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_E3_control",
+      "company_id": "C002",
+      "source_file": "C002_E3_control.source.json",
+      "source_sha256": "849cf9f802849781f460647ae63ed9e210b013b7731cca92f8a058878fab3c69",
+      "expected": {
+        "rule_id": "E3",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_E4_signal",
+      "company_id": "C002",
+      "source_file": "C002_E4_signal.source.json",
+      "source_sha256": "3f53539096cee6924a2dbe461b101ce6bb69dfe2d864f1e25764d26c3cd242cc",
+      "expected": {
+        "rule_id": "E4",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_E4_control",
+      "company_id": "C002",
+      "source_file": "C002_E4_control.source.json",
+      "source_sha256": "959c40ec31bd4d17105e06cec2625c4fc784edcc330b478a776bfe875762c215",
+      "expected": {
+        "rule_id": "E4",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_F1_signal",
+      "company_id": "C002",
+      "source_file": "C002_F1_signal.source.json",
+      "source_sha256": "fe41ec04cb3390583564881b92a8edc1d672652878bbb56637c32d72a9806900",
+      "expected": {
+        "rule_id": "F1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_F1_control",
+      "company_id": "C002",
+      "source_file": "C002_F1_control.source.json",
+      "source_sha256": "ddf39b11e6d2599f964dddaca8c1688d27cf7084f46f4937b0491d5296d486d8",
+      "expected": {
+        "rule_id": "F1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_F2_signal",
+      "company_id": "C002",
+      "source_file": "C002_F2_signal.source.json",
+      "source_sha256": "37200f055a19ff92a40e087b81cd7875dbcc37084541d3f08dc35bd27926d0f9",
+      "expected": {
+        "rule_id": "F2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_F2_control",
+      "company_id": "C002",
+      "source_file": "C002_F2_control.source.json",
+      "source_sha256": "ac7b600792fe2e89c24634bfb99f30c5b9fc85a8fabe65dfad6badf8cf30b131",
+      "expected": {
+        "rule_id": "F2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_F3_signal",
+      "company_id": "C002",
+      "source_file": "C002_F3_signal.source.json",
+      "source_sha256": "1c9dc2ba588b60e45fcca3a372e3f1165c5200029762b86899f2677a7f5fb3c9",
+      "expected": {
+        "rule_id": "F3",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_F3_control",
+      "company_id": "C002",
+      "source_file": "C002_F3_control.source.json",
+      "source_sha256": "13dd651da1eb20a89dc373d0e0ce0ae7a7607a5a7712e3e6a19a15186a70c1c1",
+      "expected": {
+        "rule_id": "F3",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_F4_signal",
+      "company_id": "C002",
+      "source_file": "C002_F4_signal.source.json",
+      "source_sha256": "a768a3a2c13cc388f6a336f24ad3e2419c86e6b3a5cb25bcc5fb89347032bded",
+      "expected": {
+        "rule_id": "F4",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_F4_control",
+      "company_id": "C002",
+      "source_file": "C002_F4_control.source.json",
+      "source_sha256": "4e70593ef653cd0366f408b5148dfaf4b58488449cf9b8a17731fa0aaa339c61",
+      "expected": {
+        "rule_id": "F4",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_P1_signal",
+      "company_id": "C002",
+      "source_file": "C002_P1_signal.source.json",
+      "source_sha256": "47893a10059ead527408b780b216e004fa034456046cee9e2ec9c775599eee6f",
+      "expected": {
+        "rule_id": "P1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0001",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_P1_control",
+      "company_id": "C002",
+      "source_file": "C002_P1_control.source.json",
+      "source_sha256": "5f5c6d24829c48bc6addd102d5dc6b14c67d8af66b6203df8b8fb448f978f421",
+      "expected": {
+        "rule_id": "P1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0001",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_P2_signal",
+      "company_id": "C002",
+      "source_file": "C002_P2_signal.source.json",
+      "source_sha256": "5f7b302771cb796db75c3b09d2a6b237978d48db3ac7c7b72daf7d21a9f5bca3",
+      "expected": {
+        "rule_id": "P2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_P2_control",
+      "company_id": "C002",
+      "source_file": "C002_P2_control.source.json",
+      "source_sha256": "72877aa3298bd92675b19fb7639a246f691bea716c3e50f0092bfc5cfe7f4b03",
+      "expected": {
+        "rule_id": "P2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_T1_signal",
+      "company_id": "C002",
+      "source_file": "C002_T1_signal.source.json",
+      "source_sha256": "f6568856e391a0258342a60f551d9bc3763de307862f53c454c29ad434e5b932",
+      "expected": {
+        "rule_id": "T1",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_T1_control",
+      "company_id": "C002",
+      "source_file": "C002_T1_control.source.json",
+      "source_sha256": "1f024e2e1aeb8c5d0e1ed255dac5b54264555fed04f81e4a5d9c8f48e916bcba",
+      "expected": {
+        "rule_id": "T1",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_T2_signal",
+      "company_id": "C002",
+      "source_file": "C002_T2_signal.source.json",
+      "source_sha256": "9cd63f25545bd8bd87d3506a4c628438debba4a65ecb1153ecafaf2cdd79c343",
+      "expected": {
+        "rule_id": "T2",
+        "positive": true,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": true
+      }
+    },
+    {
+      "case_id": "C002_T2_control",
+      "company_id": "C002",
+      "source_file": "C002_T2_control.source.json",
+      "source_sha256": "897c79f8efb9b280d9da8b400ed12de97854cd2239947685b2639778ee8a1639",
+      "expected": {
+        "rule_id": "T2",
+        "positive": false,
+        "target_transaction_id": "AUDIT_0000",
+        "expected_signal": false
+      }
+    },
+    {
+      "case_id": "C002_D_GROUP_signal",
+      "company_id": "C002",
+      "source_file": "C002_D_GROUP_signal.source.json",
+      "source_sha256": "47b1e37196ee7e65a678dcaeee02ef2d40cf56def0fe4b6da44a786e16435eb7",
+      "expected": {
+        "rule_ids": [
+          "D1",
+          "D2",
+          "D3",
+          "D4",
+          "D5",
+          "D6"
+        ],
+        "positive": true,
+        "expected_signal": true,
+        "cutoff_at": "2025-08-01T00:00:00+07:00"
+      }
+    },
+    {
+      "case_id": "C002_D_GROUP_control",
+      "company_id": "C002",
+      "source_file": "C002_D_GROUP_control.source.json",
+      "source_sha256": "94163e57d8f2fa69532730fac4d8b404b9420f9f2fd5c7ab040a251e7092ae46",
+      "expected": {
+        "rule_ids": [
+          "D1",
+          "D2",
+          "D3",
+          "D4",
+          "D5",
+          "D6"
+        ],
+        "positive": false,
+        "expected_signal": false,
+        "cutoff_at": "2025-08-01T00:00:00+07:00"
+      }
+    }
+  ],
+  "expectations_are_outside_source": true,
+  "cloud_or_portal_changed": false
+}

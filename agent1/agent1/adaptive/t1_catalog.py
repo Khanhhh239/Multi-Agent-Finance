@@ -11,14 +11,15 @@ import pandas as pd
 
 from .compact_t1 import CompactT1, sha256
 from .landmark_features import FEATURES, SCHEMA, LandmarkHazard
-from .cash_adapter import LABEL_CONTRACT, VERSION as ADAPTER_VERSION, PartialModel, bundle_version
-from .bundle_metadata import serving_manifest
+from .cash_adapter import FIT_VERSION, LABEL_CONTRACT, VERSION as ADAPTER_VERSION, PartialModel, bundle_version
+from .bundle_metadata import serving_manifest, component_timing
 
 DEFAULT = (
     Path(__file__).resolve().parents[2]
-    / "outputs/t1/settlement_partial_catalog_v2_20261113/catalog.json"
+    / "outputs/t1/settlement_partial_catalog_v3_20261114/catalog.json"
 )
-CATALOG_VERSION = "t1-partial-catalog-v2"
+CATALOG_VERSION = "t1-partial-catalog-v3"
+LEGACY_CATALOG_VERSION = "t1-partial-catalog-v2"
 CATALOG = [
     ("global_default", "global", "Mô hình nền", "Phiên bản dự phòng có sẵn"),
     ("global_neural", "global", "Neural toàn cục", "Không cập nhật tham số"),
@@ -42,14 +43,26 @@ class GlobalCatalog:
         self.metadata = json.loads(self.path.read_text(encoding="utf-8"))
         meta = self.metadata
         if meta.get("label_contract") != LABEL_CONTRACT:
-            raise ValueError("Contract nhãn global chưa xác nhận cash-full theo ngày thực thu; đóng gói lại catalog v2")
+            raise ValueError("Contract nhãn global chưa xác nhận cash-full theo ngày thực thu; đóng gói lại catalog hiện hành")
         if (
-            meta.get("version") != CATALOG_VERSION
+            meta.get("version") not in (CATALOG_VERSION, LEGACY_CATALOG_VERSION)
             or meta.get("feature_schema") != SCHEMA
             or meta.get("features") != list(FEATURES)
         ):
             raise ValueError("Schema gói global T1 không tương thích")
         self.digest = sha256(self.path)
+        self.compatible_digests = {self.digest}
+        parent = meta.get("compatible_parent")
+        if parent:
+            path = self.file(parent["file"])
+            if sha256(path) != parent["sha256"]:
+                raise ValueError("Hash catalog T1 trước migration không khớp")
+            previous = json.loads(path.read_text(encoding="utf-8"))
+            if (previous.get("version") != LEGACY_CATALOG_VERSION
+                    or any(previous.get(k) != meta.get(k) for k in
+                           ("models", "replay", "label_contract", "feature_schema", "features"))):
+                raise ValueError("Migration prior phải giữ nguyên T1, replay và contract")
+            self.compatible_digests.add(parent["sha256"])
         self.models = {}
         for name in ("default", "neural", "lightgbm", "xgboost"):
             spec = meta["models"][name]
@@ -93,6 +106,9 @@ class GlobalCatalog:
                 or self.partial.evidence.get("label_contract") != LABEL_CONTRACT
                 or pd.Timestamp(self.partial.fitted_through) > pd.Timestamp(spec["available_asof"])):
             raise ValueError("Contract/thời điểm prior partial không hợp lệ")
+        if (meta["version"] == CATALOG_VERSION
+                and self.partial.evidence.get("fit_version") != FIT_VERSION):
+            raise ValueError("Catalog mới cần prior partial đã bỏ atom giả định")
 
     def file(self, relative):
         candidate = (self.path.parent / relative).resolve()
@@ -122,6 +138,11 @@ class GlobalCatalog:
             for k in ("risk", "operating", "collection_policy", "collection_evaluation")
             if auxiliary and k in auxiliary
         }
+        # Preserve the upper bound before replacing legacy T1's ready date.
+        for name in ("risk", "operating"):
+            if result.get(name):
+                timing = component_timing(auxiliary, name)
+                result[name] = dict(result[name], **{k: timing[k] for k in ("fitted_through", "ready_on")})
         result.update(
             model=model,
             anchor=model,

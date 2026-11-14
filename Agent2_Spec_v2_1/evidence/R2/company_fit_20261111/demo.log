@@ -1,0 +1,4 @@
+C001 isolation_forest | train: 10 reference: 5 | chấm mới: 5 / 5
+C002 ecod | train: 10 reference: 5 | chấm mới: 5 / 5
+Hai doanh nghiệp có artifact riêng; score nạp từ DB bằng tiến trình mới, không fit lại.
+Báo cáo demo: D:\agent22\Agent2_Spec_v2_1\evidence\R2\company_fit_20261111\demo\summary.json

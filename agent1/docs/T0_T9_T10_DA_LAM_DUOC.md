@@ -2,7 +2,9 @@
 
 **Cập nhật:** 14/11/2026. Phần T10 đã đồng bộ với bundle partial/T6 mới; dữ liệu demo và số đo cũ bên dưới giữ đúng phạm vi lịch sử.
 
-**Phạm vi:** Agent 1 trong workspace hiện tại, gồm cả các thay đổi chưa commit.
+**Phạm vi:** Agent 1 trong workspace hiện tại.
+
+**Rà soát demo toàn luồng 14/11/2026:** đã sửa phản hồi xem trước T0 đến muộn, xác nhận thanh toán khi đổi ngày chốt, cảnh báo độ ổn định SHAP và nhãn dải tiền UI/Excel. Luồng trình duyệt đã kiểm ở 1500px/390px. Xem [báo cáo T0 → T9 → T1 → T6 → T10](06_Pilot/SO_TAY_AGENT1.md). Khi demo liền sau duyệt T9, chọn ngày dự báo từ ngày duyệt trở đi để thấy công nợ cập nhật.
 
 Tôi đã triển khai được luồng từ nhập chứng từ, kiểm tra dữ liệu, đối soát khoản thu đến giải thích kết quả dự báo. T0 tạo dữ liệu đầu vào có kiểm tra và lịch sử; T9 nối khoản tiền đã nhận với hóa đơn sau khi được duyệt; T10 giúp người dùng hiểu dự báo, thứ tự ưu tiên thu nợ và ảnh hưởng của các giả định thu chi.
 
@@ -202,7 +204,7 @@ Không dùng các số dư hoặc xác suất trong ảnh/báo cáo cũ làm đ�
 
 Bản T10 **13–14/11/2026** có kiểm công thức partial, bundle/global SHAP, replay
 với nguồn ngẫu nhiên chung, hash/phiên bản, API khi active thay đổi và browser
-desktop/mobile. Xem [kết quả bản mới](../outputs/implementation/t10_bundle_20261113/README.md).
+desktop/mobile. Xem [kết quả bản mới](04_AI_Methods/T10_BUNDLE_EVIDENCE_2026-11-13.md).
 Các con số và lệnh 11/11 sau đây là bằng chứng lịch sử, không đại diện bản mới.
 
 Ngày **11/11/2026**, chạy lại các nhóm kiểm thử T0, T9, Workspace và giải thích T10 trên kho tạm: **275 kiểm thử Python đạt, không có bài thất bại hoặc bị bỏ qua**. Hai file kiểm thử giao diện giải thích đạt **24/24 kiểm thử JavaScript**.
@@ -237,7 +239,7 @@ $checks = @(
 node --test agent1/tests/adaptive/t1_explanations_ui.test.cjs agent1/tests/adaptive/t6_cash_ui.test.cjs
 ```
 
-Lệnh UAT đã được kiểm tra ở chế độ `-DryRun`; phần hướng dẫn demo là kịch bản để chạy tay, chưa phải biên bản một lần demo trực tiếp mới. Báo cáo UI của lần kiểm tra đã lưu ngày 11/11 có ở [báo cáo kiểm tra UI](../outputs/ui_checks/20261111_review/README.md); thư mục này là bằng chứng cục bộ và bị Git bỏ qua.
+Lệnh UAT đã được kiểm tra ở chế độ `-DryRun`; phần hướng dẫn demo là kịch bản để chạy tay, chưa phải biên bản một lần demo trực tiếp mới. Log UI Markdown cũ đã bỏ; kiểm luồng hiện tại theo [bộ UAT](../pilot/t0_t9_uat_20261110/README.md) và [sổ tay Workspace](06_Pilot/SO_TAY_AGENT1.md).
 
 ## 9. Mã nguồn và tài liệu đối chiếu
 
@@ -252,4 +254,4 @@ Lệnh UAT đã được kiểm tra ở chế độ `-DryRun`; phần hướng d
 | Bộ demo | [UAT T0/T9](../pilot/t0_t9_uat_20261110/README.md), [Đại Phát](../pilot/demo_dai_phat/README.md) |
 | Hướng dẫn dịch vụ | [README Agent 1](../README.md), [README dịch vụ](../agent1_service/README.md) |
 
-Trạng thái nghiệm thu và các số đo chất lượng nghiên cứu cần đọc theo đúng phiên bản, dữ liệu và [cổng đánh giá hiện hành](03_Evaluation/GATES_CURRENT.md). Báo cáo triển khai và demo này không thay đổi các kết luận nghiệm thu đó.
+Trạng thái nghiệm thu và các số đo chất lượng nghiên cứu cần đọc theo đúng phiên bản, dữ liệu và [cổng đánh giá hiện hành](03_Evaluation/03_cong_nghiem_thu.md). Báo cáo triển khai và demo này không thay đổi các kết luận nghiệm thu đó.

@@ -1,0 +1,28 @@
+{
+  "tests": [
+    {
+      "id": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_activation_preserves_foreign_binding_and_permissions_without_refit",
+      "status": "pass",
+      "testcase": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_activation_preserves_foreign_binding_and_permissions_without_refit"
+    },
+    {
+      "id": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_binding_or_access_change_cannot_be_silently_overwritten",
+      "status": "pass",
+      "testcase": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_binding_or_access_change_cannot_be_silently_overwritten"
+    },
+    {
+      "id": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_held_out_data_and_unmapped_features_are_explicit",
+      "status": "pass",
+      "testcase": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_held_out_data_and_unmapped_features_are_explicit"
+    },
+    {
+      "id": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_tampered_candidate_and_missing_grants_are_rejected",
+      "status": "pass",
+      "testcase": "test_rule_bridge_models.RuleBridgeModelSetupTests.test_tampered_candidate_and_missing_grants_are_rejected"
+    }
+  ],
+  "count": 4,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0
+}

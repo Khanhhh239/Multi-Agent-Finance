@@ -1,0 +1,176 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "check": "operator login authorizes C001/C002 without exporting credentials",
+      "passed": true
+    },
+    {
+      "check": "C001 returns exactly five available rows",
+      "passed": true,
+      "job_id": "herun_8bbd4940fba14dcc91ba5139d84ec653",
+      "result_sha256": "ba7fa9bcf68ef7f2af9dbd0bdb026fccb4320d711a381ed40f73a316386b6272"
+    },
+    {
+      "check": "Portal stops its Agent2 and worker",
+      "passed": true
+    },
+    {
+      "check": "start again restores the identical C001 job and result",
+      "passed": true
+    },
+    {
+      "check": "worker disconnected after C002 submission; original request kept",
+      "passed": true,
+      "job_id": "herun_8d3642ec0025459b910acfa954c12b9f",
+      "phase_at_disconnect": "preparing",
+      "worker_pid": 25516
+    },
+    {
+      "check": "reconnect completes the same C002 job with five available rows",
+      "passed": true,
+      "job_id": "herun_8d3642ec0025459b910acfa954c12b9f",
+      "result_sha256": "5404485c5e5ef122c4f6058402b016f85a63ef97e5dea6e2af1c1a22e78a12c1"
+    },
+    {
+      "check": "reload preserves C002 job and identical results",
+      "passed": true
+    },
+    {
+      "check": "cross-company job reads rejected despite shared T0-T4 identifiers",
+      "passed": true
+    },
+    {
+      "check": "company snapshots and scores remain distinct",
+      "passed": true
+    },
+    {
+      "check": "model registry, source snapshots and protected keys unchanged",
+      "passed": true
+    },
+    {
+      "check": "other agents unchanged",
+      "passed": true
+    },
+    {
+      "check": "no browser JavaScript errors",
+      "passed": true
+    }
+  ],
+  "count": 12,
+  "browser_errors": [],
+  "portal": "http://127.0.0.1:8800",
+  "data": "existing C001/C002 synthetic packet",
+  "fault": {
+    "job_id": "herun_8d3642ec0025459b910acfa954c12b9f",
+    "phase_at_disconnect": "preparing",
+    "worker_pid": 25516
+  },
+  "results": {
+    "C001": {
+      "as_of": "2026-11-12T09:18:57.070816+00:00",
+      "company_id": "C001",
+      "row_count": 5,
+      "rows": [
+        {
+          "available": true,
+          "reason": null,
+          "record_id": "T0",
+          "revision": 1,
+          "score": 1.79000511307154,
+          "status": "available"
+        },
+        {
+          "available": true,
+          "reason": null,
+          "record_id": "T1",
+          "revision": 1,
+          "score": 0.6315740527903545,
+          "status": "available"
+        },
+        {
+          "available": true,
+          "reason": null,
+          "record_id": "T2",
+          "revision": 1,
+          "score": 1.5368959690319624,
+          "status": "available"
+        },
+        {
+          "available": true,
+          "reason": null,
+          "record_id": "T3",
+          "revision": 1,
+          "score": 0.5006908369801073,
+          "status": "available"
+        },
+        {
+          "available": true,
+          "reason": null,
+          "record_id": "T4",
+          "revision": 1,
+          "score": 1.5182124659034069,
+          "status": "available"
+        }
+      ],
+      "run_id": "herun_8bbd4940fba14dcc91ba5139d84ec653",
+      "score_meaning": "Điểm bất thường của phép thử, không phải xác suất sai phạm.",
+      "snapshot_id": "snp_de7dabce8b1d42378e38b4f3a001107a",
+      "status": "available",
+      "version": "he-enterprise-result/1.1.0"
+    },
+    "C002": {
+      "as_of": "2026-11-12T09:18:58.549025+00:00",
+      "company_id": "C002",
+      "row_count": 5,
+      "rows": [
+        {
+          "available": true,
+          "reason": null,
+          "record_id": "T0",
+          "revision": 1,
+          "score": 1.7900050408676313,
+          "status": "available"
+        },
+        {
+          "available": true,
+          "reason": null,
+          "record_id": "T1",
+          "revision": 1,
+          "score": 0.6315740003346939,
+          "status": "available"
+        },
+        {
+          "available": true,
+          "reason": null,
+          "record_id": "T2",
+          "revision": 1,
+          "score": 1.5368959365897747,
+          "status": "available"
+        },
+        {
+          "available": true,
+          "reason": null,
+          "record_id": "T3",
+          "revision": 1,
+          "score": 0.5006908489571213,
+          "status": "available"
+        },
+        {
+          "available": true,
+          "reason": null,
+          "record_id": "T4",
+          "revision": 1,
+          "score": 1.518212480231087,
+          "status": "available"
+        }
+      ],
+      "run_id": "herun_8d3642ec0025459b910acfa954c12b9f",
+      "score_meaning": "Điểm bất thường của phép thử, không phải xác suất sai phạm.",
+      "snapshot_id": "snp_29122f87a21b4829a2c92f145c28e00d",
+      "status": "available",
+      "version": "he-enterprise-result/1.1.0"
+    }
+  },
+  "scope": "disconnect after submission, before native worker claim; not a native-compute crash test"
+}

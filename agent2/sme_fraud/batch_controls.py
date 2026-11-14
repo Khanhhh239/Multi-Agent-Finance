@@ -6,6 +6,7 @@ import json
 from .generate import parse
 from .noise_policy import independent_requests
 from .spec_policy import bank_identity
+from .p1_timing import unavailable_fields as p1_unavailable_fields
 
 
 class BatchControls:
@@ -119,12 +120,21 @@ class BatchControls:
             invoices = defaultdict(list)
             for row in current:
                 key = self.invoice_key(row)
-                if key:
+                if key and not p1_unavailable_fields(row,now):
                     invoices[key].append(row)
             for key, rows in sorted(invoices.items()):
                 if len(rows) < 2:
                     continue
-                pool = [*self.invoices[key], *rows]
+                history=self.invoices[key]
+                blocked=[r for r in history if p1_unavailable_fields(r,now)]
+                if blocked:
+                    # Do not publish a partial total as an evaluated group.
+                    events.append(self.event('P1',('invoice',*key),now,rows,
+                        dict(invoice_number=key[2],evidence_status='information_gap',
+                            reason='invoice_history_not_available_at_cutoff',
+                            unavailable_fields=sorted({f for r in blocked for f in p1_unavailable_fields(r,now)})),gap=True))
+                    continue
+                pool = [*history, *rows]
                 gross_values = sorted({int(r['invoice_gross_vnd']) for r in pool})
                 total = sum(int(r['amount_vnd']) for r in pool)
                 if len(gross_values) != 1 or gross_values[0] <= 0:

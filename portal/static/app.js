@@ -14,6 +14,7 @@
   let intakeStage = "choose";
   let token = "";
   let authVersion = 0;
+  let agent2RouteEpoch = 0;
   try { token = sessionStorage.getItem("kt-session") || ""; } catch (e) { token = ""; }
 
   const sidebarMedia = window.matchMedia("(max-width: 900px)");
@@ -51,7 +52,12 @@
 
   function setToken(value) {
     const nextToken = value || "";
-    if (token !== nextToken) authVersion += 1;
+    if (token !== nextToken) {
+      authVersion += 1;
+      agent2RouteEpoch += 1;
+      const frame = $("agent-frame-agent2") || $("agent-frame");
+      if (frame) { frame.removeAttribute("src"); delete frame.dataset.src; }
+    }
     token = nextToken;
     try { token ? sessionStorage.setItem("kt-session", token) : sessionStorage.removeItem("kt-session"); } catch (e) { /* private mode */ }
   }
@@ -718,6 +724,22 @@
     agent3: "Tuân thủ thuế GTGT & Hóa đơn",
     agent4: "Mô phỏng & Hỏi đáp thông minh"
   };
+  async function agent2ResumeUrl(fallback) {
+    // Browser preferences never authorize a company. Recheck the current
+    // Portal identity and grants before restoring a page in the iframe.
+    const context = await api("/agent2/api/v1/ui/context");
+    let saved, legacy;
+    try { saved = JSON.parse(sessionStorage.getItem("agent2.company.selection")); } catch (e) { /* optional */ }
+    try { legacy = JSON.parse(sessionStorage.getItem("agent2.workbench")); } catch (e) { /* optional */ }
+    if (!saved && legacy?.actor === context.actor_id && (legacy.context === undefined || legacy.context === (context.context_id || ""))) saved = { version: 1, actor: legacy.actor, context: context.context_id || "", company: legacy.company, page: "data-import" };
+    const pages = ["workspace", "data-import", "encrypted-analysis", "analysis-settings"];
+    if (saved?.version !== 1 || saved.actor !== context.actor_id || saved.context !== (context.context_id || "") || !context.companies.includes(saved.company) || !pages.includes(saved.page)) return fallback;
+    const target = new URL("/agent2/" + saved.page, location.origin);
+    const fields = new URLSearchParams({ company: saved.company });
+    if (saved.page === "workspace" && /^herun_[a-f0-9]{32}$/.test(saved.run || "")) fields.set("run", saved.run);
+    target.hash = fields.toString();
+    return target.href;
+  }
 
   function renderAgentView() {
     if (!currentAgent) return;
@@ -740,14 +762,15 @@
 
     const source = $("agent-source");
     if (source) {
-      source.textContent = a.id === "agent4" ? "Kho mô phỏng độc lập của Agent 4"
+      source.textContent = a.id === "agent2" ? "Chọn doanh nghiệp và bản dữ liệu trong Agent 2; quyền theo phiên Portal."
+        : a.id === "agent4" ? "Kho mô phỏng độc lập của Agent 4"
         : state.company.code ? ["Hồ sơ " + state.company.code, state.package ? "Gói chung v" + state.package.version : "Chưa niêm phong"].join(" · ")
           : "Cấu hình doanh nghiệp để nạp dữ liệu";
       source.href = a.id !== "agent4" && !state.company.code ? "#config" : "#data";
     }
 
     const page = new URL(a.url, location.href);
-    page.searchParams.set("portal", location.origin);
+    if (a.id !== "agent2") page.searchParams.set("portal", location.origin);
     const pageUrl = page.href;
     const newtab = $("agent-newtab");
     if (newtab) newtab.href = pageUrl;
@@ -762,6 +785,10 @@
       else toggleBtn.textContent = isRunning ? "Tắt agent" : "Bật agent";
       toggleBtn.hidden = !(a.owned || a.state === "stopped");
     }
+    const dependency = a.id === 'agent2' ? a.dependency : null;
+    $("agent2-dependency").hidden = !dependency || dependency.status === 'ready' || a.state === 'stopped';
+    $("agent2-dependency").textContent = dependency?.message || '';
+    $("agent2-recover").hidden = !dependency || dependency.status === 'ready' || !a.owned || !dependency.can_recover;
     const frame = $("agent-frame-" + a.id) || $("agent-frame");
     if (a.state === "running") {
       offlineFailures[a.id] = 0;
@@ -770,7 +797,7 @@
     }
 
     // Grace period: keep frame visible during temporary glitches (< 3 poll cycles = 12s)
-    const isOnline = a.state === "running" || (frame.dataset.src && a.state === "starting" && offlineFailures[a.id] < 3);
+    const isOnline = (a.state === "running" || (frame.dataset.src && a.state === "starting" && offlineFailures[a.id] < 3)) && (a.id !== "agent2" || !!token && state.intake.unlocked);
 
     for (const id of ["agent1", "agent2", "agent3", "agent4"]) {
       const f = $("agent-frame-" + id);
@@ -782,7 +809,19 @@
         startLoading();
         frame.classList.add("is-loading");
         frame.dataset.src = pageUrl;
-        frame.src = pageUrl;
+        if (a.id !== "agent2") frame.src = pageUrl;
+        else {
+          const routeEpoch = ++agent2RouteEpoch, version = authVersion;
+          agent2ResumeUrl(pageUrl).catch(() => pageUrl).then(target => {
+            if (routeEpoch !== agent2RouteEpoch || version !== authVersion || currentAgent !== "agent2" || frame.dataset.src !== pageUrl || !token || !state.intake.unlocked) {
+              frame.classList.remove("is-loading");
+              stopLoading();
+              return;
+            }
+            frame.src = target;
+            $("agent-newtab").href = target;
+          });
+        }
         const onLoad = () => {
           frame.removeEventListener("load", onLoad);
           frame.classList.remove("is-loading");
@@ -794,7 +833,10 @@
       $("agent-off").hidden = true;
     } else {
       frame.hidden = true;
-      if (a.state === "stopped") { frame.removeAttribute("src"); delete frame.dataset.src; }
+      if (a.state === "stopped" || a.id === "agent2") {
+        if (a.id === "agent2") agent2RouteEpoch += 1;
+        frame.removeAttribute("src"); delete frame.dataset.src;
+      }
       $("agent-off").hidden = false;
     }
     if (!isOnline) {
@@ -857,6 +899,13 @@
     const isAgent = /^agent[1-4]$/.test(view);
     for (const id of ["overview", "config", "data"]) $("view-" + id).hidden = id !== view;
     $("view-agent").hidden = !isAgent;
+    if (view !== currentAgent) {
+      agent2RouteEpoch += 1;
+      if (currentAgent === "agent2") {
+        const frame = $("agent-frame-agent2") || $("agent-frame");
+        if (frame) { frame.removeAttribute("src"); delete frame.dataset.src; }
+      }
+    }
     if (!isAgent) {
       for (const id of ["agent1", "agent2", "agent3", "agent4"]) {
         const f = $("agent-frame-" + id);
@@ -874,6 +923,21 @@
 
   // ------------------------------------------------------------------ actions
   async function openAgent1Tab(event) {
+    if (currentAgent === "agent2") {
+      event.preventDefault();
+      if (!token || !state.intake.unlocked) { location.hash = "data"; toast("Đăng nhập Portal để mở Agent 2.", true); return; }
+      const tab = window.open("about:blank", "_blank");
+      if (!tab) { toast("Cho phép mở tab mới rồi bấm lại.", true); return; }
+      try {
+        const version = authVersion, target = await agent2ResumeUrl(new URL("/agent2/", location.href).href);
+        if (version !== authVersion || !token || !state.intake.unlocked) { tab.close(); return; }
+        tab.sessionStorage.setItem("kt-session", token);
+        for (const key of ["agent2.company.selection", "agent2.workbench"]) { const value = sessionStorage.getItem(key); if (value) tab.sessionStorage.setItem(key, value); }
+        tab.opener = null; if (!tab.closed) tab.location.replace(target);
+      }
+      catch (err) { tab.close(); toast("Không mở được Agent 2. Dùng Agent 2 ngay trong Portal.", true); }
+      return;
+    }
     if (currentAgent !== "agent1") return;
     event.preventDefault();
     const agent = agentById("agent1");
@@ -910,10 +974,12 @@
 
   async function toggleAgent(a) {
     const action = a.state === "running" || a.state === "starting" ? "stop" : "start";
+    $("agent-start").disabled=true;$("agent-toggle").disabled=true;
     try {
       await api("/api/agents/" + a.id + "/" + action, { method: "POST" });
       toast(action === "start" ? AGENT_LABEL[a.id] + " đang khởi động." : AGENT_LABEL[a.id] + " đã tắt.");
     } catch (err) { toast(err.message, true); }
+    finally {$("agent-start").disabled=false;$("agent-toggle").disabled=false;}
     refresh();
   }
 
@@ -1605,6 +1671,12 @@
   });
   $("agent-start").addEventListener("click", () => toggleAgent(agentById(currentAgent)));
   $("agent-toggle").addEventListener("click", () => toggleAgent(agentById(currentAgent)));
+  $("agent2-recover").addEventListener("click", async()=>{
+    $("agent2-recover").disabled=true;
+    try{await api('/api/agents/agent2/recover',{method:'POST'});toast('Đã kết nối lại. Yêu cầu đã lưu có thể tiếp tục.');}
+    catch(error){toast(error.message,true);}
+    finally{$("agent2-recover").disabled=false;refresh();}
+  });
   $("commit").addEventListener("click", commitAll);
   $("intake-tabs").addEventListener("click", (event) => {
     const button = event.target.closest("[data-intake-stage]");

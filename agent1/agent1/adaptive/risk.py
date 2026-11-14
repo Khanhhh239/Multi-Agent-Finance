@@ -24,6 +24,8 @@ def train_risk(data, asof):
         & (frame.known_at <= frame.issue_date)
     ]
     unavailable = dict(
+        fitted_through=str(pd.Timestamp(asof).date()),
+        ready_on=str(pd.Timestamp(asof).date()),
         status="insufficient_labels",
         horizon_days=365,
         definition="recorded_write_off_within_365_days",
@@ -115,6 +117,8 @@ def train_risk(data, asof):
     if model is not None:
         model.fit(design(frame), label(frame))
     return dict(
+        fitted_through=str(pd.Timestamp(asof).date()),
+        ready_on=str(pd.Timestamp(asof).date()),
         status="evaluated",
         model=model,
         prior=float((label(frame).sum() + 1) / (len(frame) + 2)),

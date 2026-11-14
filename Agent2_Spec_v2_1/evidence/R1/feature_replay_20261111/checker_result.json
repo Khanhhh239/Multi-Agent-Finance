@@ -1,0 +1,17 @@
+{
+  "command": [
+    "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\agent22\\Agent2_Spec_v2_1\\scripts\\check_evidence.py",
+    "R1"
+  ],
+  "exit_code": 0,
+  "result": {
+    "status": "READY_FOR_REVIEW",
+    "stage": "R1",
+    "run_id": "b136fe73-dc33-49c3-889c-2553ce70b4cc",
+    "release_approved": false
+  }
+}

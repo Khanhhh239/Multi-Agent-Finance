@@ -1,0 +1,29 @@
+{
+  "phase": "after",
+  "command": [
+    "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\agent22_setup_20261108\\core_reset_20261110\\run_baseline.py",
+    "after",
+    "D:/agent22_core_candidate_20261110"
+  ],
+  "working_directory": "D:\\agent22_core_candidate_20261110",
+  "started_at": "2026-11-10T03:27:08.629955+00:00",
+  "finished_at": "2026-11-10T03:30:12.979827+00:00",
+  "elapsed_seconds": 184.35,
+  "tests_run": 363,
+  "failures": [],
+  "errors": [],
+  "skipped": [],
+  "python": "3.12.7",
+  "exit_code": 0,
+  "versions": {
+    "numpy": "1.26.4",
+    "scikit-learn": "1.8.0",
+    "scipy": "1.15.1",
+    "networkx": "3.6.1",
+    "joblib": "1.5.1"
+  }
+}

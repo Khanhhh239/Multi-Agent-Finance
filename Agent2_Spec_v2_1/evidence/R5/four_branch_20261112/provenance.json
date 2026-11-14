@@ -1,0 +1,72 @@
+{
+  "date": "2026-11-12",
+  "source": "current working tree; pre-existing changes preserved, not an isolated source commit",
+  "source_sha256": {
+    "agent2/sme_fraud/analysis_resources.py": "b0cdf75db941666349ddfca1b64fcb954b0603a37a7b856b958084a661c21e6d",
+    "agent2/sme_fraud/analysis_branches.py": "9295bea7a8ecf75a459cb1dafcd5bce9a5b8a70bb6308d58d7973f9a9e0ae304",
+    "agent2/sme_fraud/snapshot_analysis.py": "0be48fd979898c80d7f5f3d5135de7fadc9aa00eda1925fb599ec76702546a9a",
+    "agent2/sme_fraud/analysis_api.py": "bbe81497353c5fb2bf6e5b9ed86bae53f0a3189cef492dd8d0b68bdb1ca57a43",
+    "agent2/sme_fraud/review_server.py": "0107fe2b55319fc913d337bad450bd464768f61f3825c5e1772b3a954649f11b",
+    "agent2/sme_fraud/web/index.html": "9071ac3e554e29915a4a87a40e36c95afaf7bf78e05bd21889949c226e7becf8",
+    "agent2/sme_fraud/web/workbench.js": "d5050380aab8fed7b93b8b4283cc06a9a7198e0c837d470cbfa21198823f709a",
+    "agent2/sme_fraud/web/workbench.css": "eea05362c0fc9a4fa0c919a58e39de5719804a6e7c61af6370b2c39f81103ad5",
+    "agent2/tests/test_four_branch_analysis.py": "84cde3b93e810ff6dfc5663870d905c78c50600628bfed71138410b5d3e04174",
+    "agent2/tests/test_analysis_api.py": "364b138e9d9485f3c00965d959e193a8670c2ac320ac88a1091cdd850bb09eb5",
+    "agent2/scripts/demo_four_branch_analysis.py": "89215705d0af43ad2d84dbe0b59bb2e151b00ca24d525d477a844c5cdfdfbe73",
+    "agent2/docs/FOUR_BRANCH_ANALYSIS.md": "d5995ff429035ff091b1a32b6acf88c7185cc7b0dffe9c35b46b33e8b8e9c557",
+    "portal/server.py": "844f554eca80bcb10a27a8a241e1e80f1d24a44df75e2a7c97dbb61f8d318ef2"
+  },
+  "authoritative_browser_directory": "company_demo_reviewed",
+  "data": "synthetic_only; isolated temporary stores for positive browser tests",
+  "verification": {
+    "backend": 742,
+    "portal": 11,
+    "four_branch_browser": 14,
+    "local_browser": 19,
+    "portal_browser": 16
+  },
+  "diagnostic_corrections": [
+    "C002 test fixture company claims and manifest were corrected before final full regression",
+    "SVG node hit rectangle added after pointer test exposed empty group center",
+    "explicit four-branch order corrected and browser demo rerun"
+  ],
+  "live": {
+    "status": "passed",
+    "live_portal": "http://127.0.0.1:8800/#agent2",
+    "updated_service": "Agent2 only via Portal stop/start",
+    "portal_restarted": false,
+    "live_protocol": "snapshot-analysis/1.1.0",
+    "existing_snapshot_rows": 3,
+    "branch_summary": {
+      "rules": {
+        "name": "Luật nghiệp vụ",
+        "available": 0,
+        "partial": 3,
+        "unavailable": 0
+      },
+      "statistics": {
+        "name": "So sánh thống kê",
+        "available": 0,
+        "partial": 0,
+        "unavailable": 3
+      },
+      "graph": {
+        "name": "Quan hệ đối tượng",
+        "available": 3,
+        "partial": 0,
+        "unavailable": 0
+      },
+      "ml": {
+        "name": "Phân tích bất thường",
+        "available": 0,
+        "partial": 0,
+        "unavailable": 3
+      }
+    },
+    "live_fit_calls": 0,
+    "old_local_credential_HTTP_status": 401,
+    "authenticated_live_Portal_analysis": "not run; no live Portal password/session created",
+    "diagnostic_authorization": "existing scoped local worker credential, internal read-only API only; never HTTP fallback",
+    "snapshot_manifests_preserved": true
+  }
+}

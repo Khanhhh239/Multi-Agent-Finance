@@ -1,0 +1,108 @@
+"""Live loopback smoke against the launched Agent2, using isolated synthetic data."""
+import copy
+import hashlib
+import http.client
+import json
+from pathlib import Path
+import sys
+from unittest.mock import patch
+
+ROOT=Path(__file__).resolve().parents[2];sys.path[:0]=[str(ROOT),str(ROOT/'tests')]
+from sme_fraud.auth import FileAuthorizer
+from sme_fraud.import_files import canonical
+from sme_fraud.method_adapters import score_snapshot
+from sme_fraud.snapshot_features import build_from_snapshot
+from sme_fraud.snapshots import SnapshotStore
+from test_p1_evaluation import payments,refresh,DAY
+from test_snapshots import commit_fields
+
+RUNTIME=Path(__file__).parent
+OUTPUT=RUNTIME/'results';OUTPUT.mkdir(exist_ok=False)
+TOKEN=json.loads((RUNTIME/'client.json').read_text('utf-8'))['token']
+checks=[]
+
+
+def request(label,method,path,expected,body=None,*,auth=True,extra=None):
+    headers=dict(extra or {})
+    if auth:headers['Authorization']='Bearer '+TOKEN
+    if isinstance(body,dict):body=canonical(body)
+    if body is not None:headers.setdefault('Content-Type','application/json')
+    connection=http.client.HTTPConnection('127.0.0.1',8766,timeout=20)
+    try:
+        connection.request(method,path,body=body,headers=headers)
+        response=connection.getresponse();raw=response.read();status=response.status
+        mime=response.getheader('Content-Type','')
+        result=json.loads(raw) if 'json' in mime else raw
+    finally:connection.close()
+    assert status==expected,(label,status,expected,result)
+    checks.append(dict(check=label,http_status=status,passed=True))
+    # Never persist Authorization headers or the credential.
+    if isinstance(result,dict):(OUTPUT/(label+'.json')).write_bytes(canonical(result))
+    return result
+
+
+base='/api/v1/companies/C001'
+health=request('health','GET','/api/health',200,auth=False)
+assert health['status']=='ok' and health['mode']=='import_snapshots'
+assert not health['pipeline_ready'] and not health['active_delivery']
+page=request('status_page','GET','/',200,auth=False)
+assert b'Agent2' in page;(OUTPUT/'status-page.html').write_bytes(page)
+data=payments([('OLD',4_000_000,DAY(1)),('A',4_000_000,DAY(2)),('B',4_000_000,DAY(2))])
+request('unauthenticated_denied','POST',base+'/imports/validate',401,data,auth=False)
+request('foreign_company_denied','POST','/api/v1/companies/C002/imports/validate',403,data)
+request('foreign_origin_denied','POST',base+'/imports/validate',403,data,extra={'Origin':'https://untrusted.invalid'})
+valid=request('validation_valid','POST',base+'/imports/validate',200,data)
+assert valid['contract_version']=='1.1.0' and not valid['errors']
+bad=copy.deepcopy(data);del bad['transactions'][1]['record_id']
+invalid=request('validation_row_error','POST',base+'/imports/validate',422,bad)
+assert any(e['row']==2 and e['field']=='record_id' and e['action'] for e in invalid['errors'])
+headers={'Idempotency-Key':'live-upload-0001','X-File-Name':'live-synthetic.json'}
+draft=request('upload','POST',base+'/imports/upload',201,data,extra=headers)
+preview=request('preview','POST',base+'/imports/'+draft['import_id']+'/preview',200,dict(expected_revision=1))
+saved=request('commit','POST',base+'/imports/'+draft['import_id']+'/commit',200,commit_fields(preview),extra={'Idempotency-Key':'live-commit-0001'})
+for index in range(3):
+    repeated=request('commit_retry_'+str(index),'POST',base+'/imports/'+draft['import_id']+'/commit',200,commit_fields(preview),extra={'Idempotency-Key':'live-commit-0001'})
+    assert saved==repeated
+sid=saved['snapshot']['snapshot_id']
+manifest=request('snapshot_manifest','GET',base+'/snapshots/'+sid,200)
+locked=request('snapshot_data','GET',base+'/snapshots/'+sid+'/data',200)
+assert canonical(locked)==canonical(data)
+assert hashlib.sha256(canonical(locked)).hexdigest()==manifest['data_checksum']
+request('foreign_snapshot_denied','GET','/api/v1/companies/C002/snapshots/'+sid,403)
+changed=copy.deepcopy(data);changed['transactions'][1]['description']='Synthetic revised source';refresh(changed)
+second=request('stale_upload','POST',base+'/imports/upload',201,data,extra={'Idempotency-Key':'live-upload-0002','X-File-Name':'stale.json'})
+old=request('stale_preview','POST',base+'/imports/'+second['import_id']+'/preview',200,dict(expected_revision=1))
+request('source_revision','PUT',base+'/imports/'+second['import_id']+'/source',200,changed,extra={'Idempotency-Key':'live-revise-0001','X-File-Name':'revised.json','X-Expected-Revision':'1'})
+request('stale_commit_denied','POST',base+'/imports/'+second['import_id']+'/commit',409,commit_fields(old),extra={'Idempotency-Key':'live-stale-commit'})
+tampered=copy.deepcopy(data);tampered['payment_history_coverage'][-1]['manifest']['records_sha256']='0'*64
+third=request('tampered_upload','POST',base+'/imports/upload',201,tampered,extra={'Idempotency-Key':'live-upload-0003','X-File-Name':'bad-manifest.json'})
+rejected=request('tampered_manifest_denied','POST',base+'/imports/'+third['import_id']+'/preview',422,dict(expected_revision=1))
+assert any(e['code']=='P1_MANIFEST_CHECKSUM' for e in rejected['errors'])
+request('retired_ui','GET','/company-ml',410,auth=False)
+request('retired_api','GET','/api/cases',410,auth=False)
+authorizer=FileAuthorizer(RUNTIME/'auth-policy.json')
+recheck=lambda:authorizer.authorize('Bearer '+TOKEN,'C001')
+scope=recheck();store=SnapshotStore(RUNTIME/'snapshots.sqlite3')
+with patch('sme_fraud.method_adapters.fit_local_reference',side_effect=AssertionError('Implicit fit')) as fit:
+    result=score_snapshot(store,scope,sid,DAY(5),methods=('ecod',),recheck=recheck)
+fit.assert_not_called();assert result['row_count']==3
+groups={}
+for row in result['rows']:
+    p1=next(r for r in row['methods']['rules']['details']['rule_results']['rules'] if r['rule_id']=='P1')
+    assert p1['score']==0
+    assert row['methods']['ecod']['reason']['code']=='artifact_missing'
+    assert row['methods']['rules']['score'] is None
+    for g in p1['details']['simultaneous_checks']:groups[g['group_id']]=g
+assert len(groups)==1 and next(iter(groups.values()))['points']==20
+features=build_from_snapshot(store,scope,sid,DAY(5),recheck)
+assert len(features['contract']['columns'])==33 and len(features['rows'])==3
+assert store.get_snapshot(scope,sid,data=True)==canonical(data)
+checks.append(dict(check='score_from_live_HTTP_snapshot',passed=True,rows=3,feature_columns=33,unique_P1_group=1,group_points=20,row_points=0,missing_model='unavailable_no_fit'))
+(OUTPUT/'score-results.json').write_bytes(canonical(result))
+(OUTPUT/'features.json').write_bytes(canonical(features))
+(OUTPUT/'source.json').write_bytes(canonical(data))
+summary=dict(base_url='http://127.0.0.1:8766',data_kind='synthetic_only_isolated_database',checks=checks,all_pass=True,
+    snapshot_id=sid,http_checks=sum('http_status' in c for c in checks),snapshot_rows=3,feature_columns=33,
+    model_fit_performed=False,active_model_changed=False,pipeline_ready=False,UI='status_page_only_not_workflow_UI')
+(OUTPUT/'summary.json').write_bytes(canonical(summary))
+print(json.dumps(dict(all_pass=True,http_checks=summary['http_checks'],snapshot_rows=3,feature_columns=33,snapshot_id=sid),indent=2))

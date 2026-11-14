@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "live_portal": "http://127.0.0.1:8800/#agent2",
+  "updated_service": "Agent2 only via Portal stop/start",
+  "portal_restarted": false,
+  "live_protocol": "snapshot-analysis/1.1.0",
+  "existing_snapshot_rows": 3,
+  "branch_summary": {
+    "rules": {
+      "name": "Luật nghiệp vụ",
+      "available": 0,
+      "partial": 3,
+      "unavailable": 0
+    },
+    "statistics": {
+      "name": "So sánh thống kê",
+      "available": 0,
+      "partial": 0,
+      "unavailable": 3
+    },
+    "graph": {
+      "name": "Quan hệ đối tượng",
+      "available": 3,
+      "partial": 0,
+      "unavailable": 0
+    },
+    "ml": {
+      "name": "Phân tích bất thường",
+      "available": 0,
+      "partial": 0,
+      "unavailable": 3
+    }
+  },
+  "live_fit_calls": 0,
+  "old_local_credential_HTTP_status": 401,
+  "authenticated_live_Portal_analysis": "not run; no live Portal password/session created",
+  "diagnostic_authorization": "existing scoped local worker credential, internal read-only API only; never HTTP fallback",
+  "snapshot_manifests_preserved": true
+}

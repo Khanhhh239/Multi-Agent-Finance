@@ -1,73 +1,46 @@
-# 1. Chiến lược dữ liệu
+# Chiến lược dữ liệu và hợp đồng Workspace
 
-## 1.1 Sự thật cần nói thẳng
+## Ba tầng bằng chứng
 
-Khảo sát các cổng mở (chính phủ, học thuật, Kaggle, Zenodo, 4TU, UNU-WIDER, Ngân hàng Thế giới) **không tìm thấy bộ
-dữ liệu công khai nào ghi hoá đơn và thanh toán cấp giao dịch của SME Việt Nam** (kết luận của đợt khảo sát, không
-phải khẳng định tuyệt đối). Vì vậy dữ liệu của Agent 1 được xây theo ba tầng; mỗi tầng chỉ được dùng cho đúng loại
-kết luận.
-
-| Tầng | Nội dung | Mục đích | Được phép kết luận |
-|---|---|---|---|
-| **1. Thật, tương tự** | BPI 2019, Customer Invoices, SBA 7(a), Berka, Online Retail II | Chứng minh phương pháp trên dữ liệu thật | "Phương pháp chạy tốt trên dữ liệu thật của lĩnh vực gần" — **không** kết luận về SME VN |
-| **2. Thống kê thật để hiệu chỉnh** | Atradius VN 2025, UK Payment Practices, OxCGRT VN, WDI VN, JPMorgan Chase Institute, luật VN | Đặt tham số máy phát; kiểm tra độc lập | "Phân phối biên của máy phát khớp số liệu công bố" |
-| **3. Tổng hợp có nhãn** | 4 "thế giới" SME VN | Tình huống thật không có: ghi sổ lô, lời hứa, Tết, sốc, điểm gãy, sao kê | "Hệ thống xử lý được tình huống đã chèn" — **không** chứng minh hiệu quả trên DN thật |
-
-Hiệu quả trên DN thật chỉ chứng minh được ở T13 (đối tác thật, chạy song song, có đồng ý theo NĐ 13/2023).
-
-## 1.2 Kết hợp dữ liệu thật và tổng hợp như thế nào
-
-```
-                    ┌───────────── Tầng 2: thống kê thật ─────────────┐
-                    │ Atradius VN · UK PPR · OxCGRT · WDI · luật VN   │
-                    └────────────┬────────────────────────────────────┘
-                                 │ hiệu chỉnh tham số (vòng lặp tự động)
-                                 ▼
-  Tầng 1 (thật) ◄────────── MÁY PHÁT ──────────► Tầng 3 (4 thế giới tổng hợp)
-  chứng minh phương pháp      (T12)               src · tgt · sens_uk · sens_coface
-        │                                                  │
-        └──────────── dùng chung đặc trưng & mô hình ──────┘
-              (đặc trưng bất biến miền: ngày tương đối hạn, tiền tương đối trung vị công ty)
-```
-
-Bốn cách tổng hợp và thật cùng xuất hiện trong thí nghiệm:
-
-1. **Tiền huấn luyện tổng hợp → tinh chỉnh dữ liệu thật/đích** (fine-tune, gộp có trọng số, trọng số tỷ lệ mật độ).
-2. **Huấn luyện trên tổng hợp, kiểm tra trên thật** (chuyển giao zero-shot) và **ngược lại**: nếu kết quả sụt mạnh thì
-   máy phát thiếu cấu trúc — phải công bố kể cả khi xấu.
-3. **Kiểm định độc lập**: dấu hiệu cấu trúc (trả cuối tuần, Benford, độ bền khách, tập trung khách) của tổng hợp so với
-   bộ AR giống ERP thật — chưa dùng để chỉnh.
-4. **Dùng riêng từng mảnh thật cho từng bài toán** (SBA cho T2, Online Retail cho T4, Berka cho T6/T7, BPI cho T1 P2P).
-
-## 1.3 Hai quy tắc chống ảo tưởng
-
-1. **Không kiểm định máy phát bằng chính số liệu đã dùng để chỉnh.** Tái tạo 58/39/3% (Atradius) chỉ chứng minh máy
-   phát chạy đúng. Bằng chứng độ trung thực phải đến từ nguồn độc lập (UK PPR, bộ AR ERP, SBA, Berka).
-2. **Tách ba loại kết luận** (phương pháp / chịu nhiễu / hiệu quả thật). Báo cáo luôn ghi loại nào.
-
-## 1.4 Nguyên tắc kỹ thuật dữ liệu
-
-| Nguyên tắc | Thực thi |
-|---|---|
-| Chống rò rỉ tương lai | Mọi đặc trưng tính *as-of ngày cắt T*; nhãn bị kiểm duyệt tại ngày cuối quan sát; train/cal/test tách rời theo thời gian |
-| Nhãn đúng trước mô hình đúng | Ngày trả = ngày tiền về ngân hàng (không phải ngày ghi sổ); có cả cột `ledger_clear_date` để đo tác hại |
-| Truy vết | `data/raw/MANIFEST.json` (URL, ngày tải, kích thước, SHA-256, giấy phép); `config.json` + seed cho mỗi thế giới |
-| Đơn vị bất biến | Tiền chia trung vị công ty; ngày tương đối hạn; để chạy cho VND/USD/EUR |
-| Niêm phong miền đích | `tgt` dùng seed và tham số riêng; không dùng để chọn siêu tham số của nguồn |
-| Nhật ký giả định | Mọi tham số không có nguồn ghi "giả định" trong `04_may_phat_tong_hop.md` |
-
-## 1.5 Lược đồ chuẩn (T0) — một nguồn, hai góc nhìn
-
-Bảng chuẩn dùng chung cho dữ liệu thật và tổng hợp (cột tối thiểu):
-
-| Bảng | Khoá | Cột chính |
+| Tầng | Vai trò | Giới hạn kết luận |
 |---|---|---|
-| `invoices` | `invoice_id` | `firm_id, customer_id, symbol, invoice_no, issue_date, due_date, term_days, amount_net, vat_rate, amount_gross, credit_note, currency` + nhãn: `paid_date_true, first_payment_date, ledger_clear_date, paid_amount, n_payments, is_bad_debt, writeoff_date, dispute, partial` |
-| `payments` | `payment_id` | `invoice_id, ledger_invoice_id, txn_id, pay_date_true, ledger_post_date, amount, kind (full/partial/final/recovery)` |
-| `bank_txns` | `txn_id` | `firm_id, value_date, amount, direction, counterparty, memo, txn_type, true_customer_id, fee_deducted` |
-| `promises` | — | `invoice_id, customer_id, made_date, promised_date, kept` |
-| `outflows` | — | `firm_id, date, category, amount, known_in_advance` |
-| `customers`/`firms` | `customer_id`/`firm_id` | thuộc tính hành vi *tiềm ẩn* (nhãn gốc) + thuộc tính quan sát được (tên, MST) |
-| `events` | — | điểm gãy và vỡ nợ đã chèn (nhãn T7) |
-| `macro` | `week` | `common_factor, covid_stress, credit_crunch` |
-| `daily_cash` | `firm_id, date` | số dư "không can thiệp" thật (nhãn T6) |
+| Dữ liệu thật tương tự | AR/P2P, khoản vay hoặc chuỗi tiền nước ngoài để thử từng năng lực | Không đại diện giao dịch SME Việt Nam |
+| Thống kê/nguồn công bố | Đặt tham số hoặc đối chiếu độc lập cho máy phát | Khớp một tỷ lệ chưa xác nhận cấu trúc thanh toán |
+| Synthetic có nhãn | Tạo World, shock và tình huống khó để kiểm hợp đồng/mô hình | Chỉ kiểm trong giả định mô phỏng |
+
+Khảo sát trước đây chưa tìm được bộ hóa đơn–thanh toán SME Việt Nam công khai phù hợp. Đây là giới hạn của đợt khảo sát. Hiệu quả thật cần ledger độc lập của đối tác có quyền sử dụng và đánh giá riêng. Tồn kho file nằm trong [README](README.md); danh sách nguồn từng thử không đồng nghĩa raw còn trên đĩa.
+
+## Dữ liệu ứng dụng
+
+Hợp đồng chính: [adaptive/data.py](../../agent1/adaptive/data.py). Bảng dưới nêu trường chính; các trường tùy chọn, alias và quy tắc bắt buộc lấy từ `SCHEMAS`, `REQUIRED` và validator, không tự suy schema từ tài liệu cũ.
+
+| Bảng | Định danh | Trường chính và vai trò |
+|---|---|---|
+| `invoices` | `invoice_id` | `customer_id`, `issue_date`, `due_date`, `amount`; thông tin kế toán/vòng đời khi có |
+| `payments` | `payment_id` | `invoice_id`, `payment_date`, `amount`, `bank_id` khi liên kết sao kê |
+| `bank` | `bank_id` | `account`, `date`, `direction`, `amount`, nội dung/đối tác |
+| `statements` | `statement_id` | `account`, `start_date`, `end_date`, số dư đầu/cuối |
+| `outflows` | `expense_id` | `date`, `amount`, `category`, `known_at`; các lần đến hạn T5, không là bảng chi dự kiến tổng quát |
+| `expense_payments` | `settlement_id` | `expense_id`, `bank_id`, `payment_date`, `amount`, `known_at`; phần nghĩa vụ đã thực trả/nhận |
+| `actions` | `event_id` | `invoice_id`, `date`, `kind`, `promise_date` nếu có, ngày biết |
+| `invoice_events` | `event_id` | `invoice_id`, `event_type`, `event_date`, `known_at`; sự kiện vòng đời chứng từ |
+
+Nạp qua CSV/Excel/XML → ghép cột và định dạng → xem trước → xác nhận lưu. Ngày tiền thực tế và `known_at` phục vụ hai đồng hồ khác nhau. VND phải chính xác theo đơn vị nguyên; số Excel quá lớn phải được đưa dưới dạng Text phù hợp. Cùng `payment_id` và cùng nội dung không tạo thêm lần thu.
+
+T9 tạo đề xuất và ghi sổ quyết định sau duyệt; nhãn `auto` không tự ghi thanh toán. Sửa nguồn/đảo quyết định phải giữ lịch sử và kiểm lại công nợ. Lịch T5 và `expense_payments` tách nghĩa vụ khỏi thực trả; không tự xem khoản đã quá hạn là đã trả.
+
+## Dữ liệu theo ngày chốt và nhãn
+
+1. Đầu vào chỉ chứa phiên bản và giao dịch đã biết tại cutoff. Có ngày giao dịch cũ chưa đủ nếu bằng chứng chỉ được nhận sau cutoff.
+2. Lịch sử huấn luyện T1 dựng từ quan sát hợp lệ; tách outcome horizon khỏi knowledge cutoff, kiểm cả điều chỉnh và hoàn nguyên.
+3. Xác nhận phạm vi thanh toán là dữ liệu người dùng cung cấp. Thiếu phạm vi thì censor phần chưa quan sát, không biến “chưa thấy tiền” thành nhãn âm đã hoàn chỉnh.
+4. Hóa đơn đóng do giảm trừ/xóa nợ khác hóa đơn đã thu tiền đủ. Tất toán T1 khác tiền partial; validation/audit/forecast dùng cùng adapter để tránh đổi nghĩa đầu ra.
+5. Forecast lưu snapshot, bundle và bằng chứng. Nạp dữ liệu hoặc đổi active sau đó không sửa kế hoạch cũ; replay kiểm đúng hash/source/runtime.
+
+Chi tiết: [T1 + partial](../04_AI_Methods/T1_PARTIAL_BUNDLE_RUNTIME_2026-11-13.md), [T6](../04_AI_Methods/T6_PARTIAL_PATHS_PERIODIC_2026-11-13.md), [T10](../04_AI_Methods/T10_BUNDLE_EVIDENCE_2026-11-13.md).
+
+## Phân biệt với dữ liệu nghiên cứu
+
+World dùng schema riêng: `amount_gross`, `paid_date_true`, `bank_txns`, `txn_id`, `promises`, `daily_cash` cùng nhãn ẩn. Không nhập các cột sự thật tương lai thành feature ứng dụng. [ledger_bridge.py](../../agent1/adaptive/ledger_bridge.py) chuyển ledger nghiên cứu sang ngữ nghĩa Workspace; [contracts.py](../../agent1/data/contracts.py) kiểm dữ liệu World.
+
+Nguồn thật có thể dùng thử phương pháp hoặc kiểm độc lập. Nguồn đã hiệu chỉnh máy phát không còn là bằng chứng độc lập cho cùng đại lượng. Chia train/validation/test theo thời gian và World; số hóa đơn lớn không thay số doanh nghiệp/World độc lập.

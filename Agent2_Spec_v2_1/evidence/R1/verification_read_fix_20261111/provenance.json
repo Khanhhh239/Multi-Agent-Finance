@@ -1,0 +1,185 @@
+{
+  "spec_version": "2.1",
+  "change_request": "CR-010",
+  "collected_at": "2026-11-11T09:28:52.507901+07:00",
+  "head": "f203b39828f567171916b5b4744728ed4b63d17f",
+  "cwd": "D:\\agent22",
+  "python": "3.12.7 (tags/v3.12.7:0b05ead, Oct  1 2024, 03:06:41) [MSC v.1941 64 bit (AMD64)]",
+  "commands": [
+    {
+      "name": "before",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/run_r1_tests.py",
+        "--suite",
+        "test_snapshot_verification_access",
+        "--report",
+        "Agent2_Spec_v2_1\\evidence\\R1\\verification_read_fix_20261111\\before_tests.json"
+      ],
+      "exit_code": 1,
+      "result": "before_tests.json"
+    },
+    {
+      "name": "focused",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/run_r1_tests.py",
+        "--suite",
+        "test_snapshot_verification_access",
+        "--suite",
+        "test_snapshot_features",
+        "--suite",
+        "test_input_contract",
+        "--report",
+        "Agent2_Spec_v2_1\\evidence\\R1\\verification_read_fix_20261111\\focused_tests.json"
+      ],
+      "exit_code": 0,
+      "result": "focused_tests.json"
+    },
+    {
+      "name": "native",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/run_r1_tests.py",
+        "--report",
+        "Agent2_Spec_v2_1\\evidence\\R1\\verification_read_fix_20261111\\native_tests.json"
+      ],
+      "exit_code": 0,
+      "result": "native_tests.json"
+    },
+    {
+      "name": "business_review",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/review_r1_business.py",
+        "--output",
+        "Agent2_Spec_v2_1\\evidence\\R1\\verification_read_fix_20261111\\business_review"
+      ],
+      "exit_code": 1,
+      "result": "business_review/review_checks.json",
+      "reason": "BR-08 remains open; BR-07 passes."
+    },
+    {
+      "name": "demo",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/demo_snapshot_features.py"
+      ],
+      "exit_code": 0,
+      "log": "demo.log"
+    }
+  ],
+  "native_summary": {
+    "count": 514,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0
+  },
+  "mandatory_ids": [
+    {
+      "id": "R1-01",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_01"
+    },
+    {
+      "id": "R1-02",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_02"
+    },
+    {
+      "id": "R1-03",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_03"
+    },
+    {
+      "id": "R1-04",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_04"
+    },
+    {
+      "id": "R1-05",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_05"
+    },
+    {
+      "id": "R1-06",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_06"
+    },
+    {
+      "id": "R1-07",
+      "status": "pass",
+      "testcase": "test_r1_acceptance.R1AcceptanceTests.test_R1_07"
+    }
+  ],
+  "source_comparison": {
+    "agent2/sme_fraud/snapshot_features.py": {
+      "before": "174e9384e589df795f2e7aa5d167930c317a1562368896304f41fab7b62ad662",
+      "after": "ea4a05938a403f04791b01c0e476649f581bc6666a2a7ebe1292115130ec096b"
+    },
+    "agent2/sme_fraud/imports.py": {
+      "before": "7c2d09544a7a0c56c23ff7e1c8b395e5ae3ca9c561f0019e4ce4db7a6c486627",
+      "after": "7c2d09544a7a0c56c23ff7e1c8b395e5ae3ca9c561f0019e4ce4db7a6c486627"
+    },
+    "agent2/sme_fraud/feature_pipeline.py": {
+      "before": "9c8808ad90a7d333fbd1f606cf2ca9769e37ce6d030838be0df76e00d305686f",
+      "after": "9c8808ad90a7d333fbd1f606cf2ca9769e37ce6d030838be0df76e00d305686f"
+    },
+    "agent2/tests/fixtures/r1_feature_replay_v1.json": {
+      "before": "d16609827b50bde204807eb86762594cabb3bec938bf92e5e121ecbecebeb9cc",
+      "after": "d16609827b50bde204807eb86762594cabb3bec938bf92e5e121ecbecebeb9cc"
+    }
+  },
+  "feature_contract": {
+    "version": "snapshot-point-in-time/1.0.1",
+    "fingerprint": "f48bf7c93eb6cd28130bd5e98159d7af642637e21373a58642338af55b14eb8d",
+    "columns": 33
+  },
+  "parity": {
+    "same_snapshot": true,
+    "channels_equal": [
+      "features",
+      "missing",
+      "rows",
+      "evidence"
+    ],
+    "columns_equal": true,
+    "old_artifact_id": "ftr_96ce1665f0b1b592cb1398899899a66d666362b58afeb632e79c86676535d555",
+    "new_artifact_id": "ftr_f94d88518f65c1d21b14d4b17e90d112eb071b0c1cf5ebfb738b14c8c176ba35",
+    "old_contract_version": "snapshot-point-in-time/1.0.0",
+    "new_contract_version": "snapshot-point-in-time/1.0.1",
+    "numeric_changes": false
+  },
+  "review_passed": 7,
+  "review_failed": 1,
+  "remaining_issue": "BR-08",
+  "spec_checksum_entries_updated": [
+    "04_contracts_states_modules.md",
+    "98_PROGRESS.md",
+    "99_decision_log.md",
+    "CHANGE_REQUESTS.md"
+  ],
+  "release_approved": false,
+  "r1_status": "PARTIAL",
+  "note": "Real observed command results; timestamps not captured for each subprocess are not invented."
+}

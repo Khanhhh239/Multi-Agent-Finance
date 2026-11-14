@@ -1,0 +1,9 @@
+PASS: BR-01-all-33-columns-and-source-evidence
+PASS: BR-02-late-document-no-past-rewrite
+PASS: BR-03-bank-link-negative-control
+PASS: BR-04-ambiguous-approval-limit
+PASS: BR-05-signed-allocation-correction
+PASS: BR-06-persisted-snapshot-and-artifact
+FAIL: BR-07-verified-snapshot-reader-permission -- Snapshot không thỏa hợp đồng đầu vào.
+FAIL: BR-08-incomplete-prior-invoice-history -- Incomplete prior link reported as known zero: {'prior_invoice_payment_count': 0, 'prior_invoice_allocation_log_abs': 0.0, 'prior_invoice_allocation_negative': 0}
+Reconciled cells: 528 | Passed: 6 | Failed: 2

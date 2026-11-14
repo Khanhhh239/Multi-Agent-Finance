@@ -1,0 +1,43 @@
+test_excel_preserves_text_account_and_sparse_columns (test_bank_intake.SharedBankTest.test_excel_preserves_text_account_and_sparse_columns) ... ok
+test_retry_does_not_write_to_a1_twice (test_bank_intake.SharedBankTest.test_retry_does_not_write_to_a1_twice) ... ok
+test_sample_has_two_targets_and_one_value_per_transaction (test_bank_intake.SharedBankTest.test_sample_has_two_targets_and_one_value_per_transaction) ... ok
+test_vietnamese_split_amount_and_validation (test_bank_intake.SharedBankTest.test_vietnamese_split_amount_and_validation) ... ok
+test_bank_profile_contract (unittest.loader._FailedTest.test_bank_profile_contract) ... ERROR
+test_biometric (unittest.loader._FailedTest.test_biometric) ... ERROR
+
+======================================================================
+ERROR: test_bank_profile_contract (unittest.loader._FailedTest.test_bank_profile_contract)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_bank_profile_contract
+Traceback (most recent call last):
+  File "C:\Users\Technical Support\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Technical Support\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "D:\agent22\portal\test_bank_profile_contract.py", line 19, in <module>
+    from agent1.adaptive.data import parse_rows
+  File "D:\agent22\agent1\agent1\adaptive\data.py", line 10, in <module>
+    from unidecode import unidecode
+ModuleNotFoundError: No module named 'unidecode'
+
+
+======================================================================
+ERROR: test_biometric (unittest.loader._FailedTest.test_biometric)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_biometric
+Traceback (most recent call last):
+  File "C:\Users\Technical Support\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Technical Support\AppData\Local\Programs\Python\Python312\Lib\unittest\loader.py", line 339, in _get_module_from_name
+    __import__(name)
+  File "D:\agent22\portal\test_biometric.py", line 11, in <module>
+    from cryptography.hazmat.primitives import hashes, serialization
+ModuleNotFoundError: No module named 'cryptography'
+
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.097s
+
+FAILED (errors=2)

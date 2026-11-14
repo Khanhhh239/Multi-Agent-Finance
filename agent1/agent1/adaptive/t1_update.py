@@ -16,7 +16,7 @@ from threadpoolctl import threadpool_limits
 
 from .data import fingerprint
 from .bundle_metadata import serving_manifest
-from .cash_adapter import VERSION as ADAPTER_VERSION, bundle_version, fit_partial
+from .cash_adapter import FIT_VERSION, VERSION as ADAPTER_VERSION, bundle_version, fit_partial
 from .landmark_adaptation import continue_neural, continue_tree, pool
 from .landmark_features import SCHEMA
 from .t1_catalog import GlobalCatalog
@@ -126,7 +126,7 @@ def valid_incumbent(bundle, cutoff, catalog):
     if bundle and bundle.get("algorithm_version") == VERSION:
         if pd.Timestamp(bundle["asof"]) > pd.Timestamp(cutoff):
             raise ValueError("Model T1 hiện tại được tạo sau ngày cập nhật")
-        if bundle.get("catalog_sha256") != catalog.digest:
+        if bundle.get("catalog_sha256") not in catalog.compatible_digests:
             raise ValueError("Gói global đã đổi; cần migration có kiểm định riêng")
         if getattr(bundle["model"], "feature_schema", None) != SCHEMA:
             raise ValueError("Schema model T1 đang phục vụ không khớp")
@@ -196,6 +196,8 @@ def train_update(
     grids=None,
 ):
     catalog = catalog or GlobalCatalog()
+    if catalog.partial.evidence.get("fit_version") != FIT_VERSION:
+        raise ValueError("Cần đóng gói catalog partial v3 để cập nhật; catalog cũ chỉ dùng phục vụ/phát lại")
     policy = policy or UpdatePolicy()
     grids = GRIDS if grids is None else grids
     T = pd.Timestamp(cutoff).normalize()
@@ -384,6 +386,11 @@ def train_update(
         final_partial = fit_partial(full, T, prior=catalog.partial,
                                     strength=policy.partial_prior_strength,
                                     half_life_days=policy.half_life_days)
+        parameter_asof = incumbent.get("t1_parameter_asof")
+        if selected["method"].startswith("global_"):
+            parameter_asof = catalog.metadata["models"][selected["method"].removeprefix("global_")]["available_asof"]
+        elif selected["family"]:
+            parameter_asof = catalog.metadata["models"][selected["family"]]["available_asof"]
         if selected["family"] and selected["alpha"] > 0:
             progress(
                 "T1: refit từ global trên cửa sổ gần nhất, chỉ dùng tuần đã quan sát"
@@ -410,6 +417,7 @@ def train_update(
                 )
             )
             final = pool(catalog.models[selected["family"]], updated, selected["alpha"])
+            parameter_asof = str(T.date())
         proposal_version = bundle_version(final, final_partial)
         # A candidate can be trained now, but cannot be back-scored against an
         # incumbent whose own training/selection occurred after the audit origin.
@@ -418,6 +426,7 @@ def train_update(
             "partial": final_partial,
             "version": proposal_version,
             "asof": str(T.date()),
+            "t1_parameter_asof": parameter_asof,
             "method": selected["method"],
             "spec": {
                 k: selected[k] for k in ("family", "learning_rate", "budget", "alpha")
@@ -428,6 +437,7 @@ def train_update(
         if passed and comparator_available:
             result.update(
                 model=final,
+                catalog_sha256=catalog.digest,
                 partial=final_partial,
                 partial_version=final_partial.digest,
                 adapter_version=ADAPTER_VERSION,
@@ -435,7 +445,7 @@ def train_update(
                 anchor=final,
                 weight=1.0,
                 t1_version=proposal_version,
-                t1_parameter_asof=str(T.date()),
+                t1_parameter_asof=parameter_asof,
                 serving_method=selected["method"],
                 promotion_status="accepted_historical_audit",
             )

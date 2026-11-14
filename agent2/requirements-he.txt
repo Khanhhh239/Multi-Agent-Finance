@@ -1,0 +1,4 @@
+# Optional isolated experiment; not imported by the production/local web path.
+-r requirements.txt
+tenseal==0.3.18
+cryptography==50.0.2

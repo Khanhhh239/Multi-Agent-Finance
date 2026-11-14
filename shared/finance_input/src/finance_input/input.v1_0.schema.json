@@ -1,0 +1,1453 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:multi-agent-finance:input:1.0.0",
+  "title": "Finance input bundle 1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "tenant_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9_.:-]+$"
+    },
+    "companies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/company"
+      },
+      "minItems": 1
+    },
+    "transactions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/transaction"
+      }
+    },
+    "vendors": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/vendor"
+      }
+    },
+    "invoices": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/invoice"
+      }
+    },
+    "payment_allocations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/allocation"
+      }
+    },
+    "employees": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/employee"
+      }
+    },
+    "approvals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/approval"
+      }
+    },
+    "supporting_documents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/document"
+      }
+    },
+    "vendor_bank_history": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/bank_history"
+      }
+    }
+  },
+  "required": [
+    "contract_version",
+    "tenant_id",
+    "companies",
+    "transactions",
+    "vendors",
+    "invoices",
+    "payment_allocations",
+    "employees",
+    "approvals",
+    "supporting_documents"
+  ],
+  "$defs": {
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "record_id",
+        "revision"
+      ]
+    },
+    "company": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "company_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "system": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            "record_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            "is_simulated": {
+              "type": "boolean"
+            },
+            "content_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "system",
+            "record_id",
+            "is_simulated"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "tax_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "missing_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "missing",
+              "unknown",
+              "not_provided_by_source",
+              "not_applicable"
+            ]
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        }
+      },
+      "required": [
+        "tenant_id",
+        "company_id",
+        "record_id",
+        "revision",
+        "observed_at",
+        "effective_at",
+        "source",
+        "name"
+      ]
+    },
+    "vendor": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "company_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "system": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            "record_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            "is_simulated": {
+              "type": "boolean"
+            },
+            "content_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "system",
+            "record_id",
+            "is_simulated"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "tax_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "address": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bank_account": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bank_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "missing_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "missing",
+              "unknown",
+              "not_provided_by_source",
+              "not_applicable"
+            ]
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        }
+      },
+      "required": [
+        "tenant_id",
+        "company_id",
+        "record_id",
+        "revision",
+        "observed_at",
+        "effective_at",
+        "source",
+        "name"
+      ]
+    },
+    "transaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "company_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "system": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            "record_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            "is_simulated": {
+              "type": "boolean"
+            },
+            "content_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "system",
+            "record_id",
+            "is_simulated"
+          ]
+        },
+        "amount_vnd": {
+          "type": "integer",
+          "minimum": -999999999999999999,
+          "maximum": 999999999999999999
+        },
+        "currency": {
+          "const": "VND"
+        },
+        "kind": {
+          "enum": [
+            "payment",
+            "receipt",
+            "payroll",
+            "transfer",
+            "adjustment",
+            "reversal"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "vendor_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/reference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "employee_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/reference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "created_by_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/reference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bank_account": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bank_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "adjustment_reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "adjusts_ref": {
+          "$ref": "#/$defs/reference"
+        },
+        "accounting_lines": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "account": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z0-9_.:-]+$"
+              },
+              "debit_vnd": {
+                "type": "integer",
+                "minimum": -999999999999999999,
+                "maximum": 999999999999999999
+              },
+              "credit_vnd": {
+                "type": "integer",
+                "minimum": -999999999999999999,
+                "maximum": 999999999999999999
+              }
+            },
+            "required": [
+              "account",
+              "debit_vnd",
+              "credit_vnd"
+            ]
+          }
+        },
+        "missing_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "missing",
+              "unknown",
+              "not_provided_by_source",
+              "not_applicable"
+            ]
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        }
+      },
+      "required": [
+        "tenant_id",
+        "company_id",
+        "record_id",
+        "revision",
+        "observed_at",
+        "effective_at",
+        "source",
+        "amount_vnd",
+        "currency",
+        "kind",
+        "description"
+      ]
+    },
+    "invoice": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "company_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "system": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            "record_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            "is_simulated": {
+              "type": "boolean"
+            },
+            "content_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "system",
+            "record_id",
+            "is_simulated"
+          ]
+        },
+        "amount_vnd": {
+          "type": "integer",
+          "minimum": -999999999999999999,
+          "maximum": 999999999999999999
+        },
+        "currency": {
+          "const": "VND"
+        },
+        "number": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "kind": {
+          "enum": [
+            "invoice",
+            "adjustment",
+            "credit_note"
+          ]
+        },
+        "vendor_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/reference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "due_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "source-timestamp",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "adjustment_reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "adjusts_ref": {
+          "$ref": "#/$defs/reference"
+        },
+        "missing_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "missing",
+              "unknown",
+              "not_provided_by_source",
+              "not_applicable"
+            ]
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        }
+      },
+      "required": [
+        "tenant_id",
+        "company_id",
+        "record_id",
+        "revision",
+        "observed_at",
+        "effective_at",
+        "source",
+        "amount_vnd",
+        "currency",
+        "number",
+        "kind"
+      ]
+    },
+    "allocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "company_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "system": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            "record_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            "is_simulated": {
+              "type": "boolean"
+            },
+            "content_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "system",
+            "record_id",
+            "is_simulated"
+          ]
+        },
+        "transaction_ref": {
+          "$ref": "#/$defs/reference"
+        },
+        "invoice_ref": {
+          "$ref": "#/$defs/reference"
+        },
+        "amount_vnd": {
+          "type": "integer",
+          "minimum": -999999999999999999,
+          "maximum": 999999999999999999
+        },
+        "currency": {
+          "const": "VND"
+        },
+        "kind": {
+          "enum": [
+            "allocation",
+            "adjustment",
+            "reversal"
+          ]
+        },
+        "adjustment_reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "adjusts_ref": {
+          "$ref": "#/$defs/reference"
+        },
+        "missing_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "missing",
+              "unknown",
+              "not_provided_by_source",
+              "not_applicable"
+            ]
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        }
+      },
+      "required": [
+        "tenant_id",
+        "company_id",
+        "record_id",
+        "revision",
+        "observed_at",
+        "effective_at",
+        "source",
+        "transaction_ref",
+        "invoice_ref",
+        "amount_vnd",
+        "currency",
+        "kind"
+      ]
+    },
+    "employee": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "company_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "system": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            "record_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            "is_simulated": {
+              "type": "boolean"
+            },
+            "content_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "system",
+            "record_id",
+            "is_simulated"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "bank_account": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "bank_code": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "national_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "hired_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "source-timestamp",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "terminated_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "source-timestamp",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "missing_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "missing",
+              "unknown",
+              "not_provided_by_source",
+              "not_applicable"
+            ]
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        }
+      },
+      "required": [
+        "tenant_id",
+        "company_id",
+        "record_id",
+        "revision",
+        "observed_at",
+        "effective_at",
+        "source",
+        "name"
+      ]
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "company_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "system": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            "record_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            "is_simulated": {
+              "type": "boolean"
+            },
+            "content_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "system",
+            "record_id",
+            "is_simulated"
+          ]
+        },
+        "transaction_ref": {
+          "$ref": "#/$defs/reference"
+        },
+        "employee_ref": {
+          "$ref": "#/$defs/reference"
+        },
+        "decision": {
+          "enum": [
+            "approved",
+            "rejected",
+            "pending"
+          ]
+        },
+        "limit_vnd": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 999999999999999999
+        },
+        "comment": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "missing_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "missing",
+              "unknown",
+              "not_provided_by_source",
+              "not_applicable"
+            ]
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        }
+      },
+      "required": [
+        "tenant_id",
+        "company_id",
+        "record_id",
+        "revision",
+        "observed_at",
+        "effective_at",
+        "source",
+        "transaction_ref",
+        "employee_ref",
+        "decision"
+      ]
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "company_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "system": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            "record_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            "is_simulated": {
+              "type": "boolean"
+            },
+            "content_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "system",
+            "record_id",
+            "is_simulated"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "document_kind": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "source_kind": {
+          "enum": [
+            "simulated",
+            "export",
+            "original"
+          ]
+        },
+        "content_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "verification_status": {
+          "enum": [
+            "unverified",
+            "pending_verification",
+            "verified"
+          ]
+        },
+        "verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "verified_by": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            "verified_at": {
+              "type": "string",
+              "format": "source-timestamp",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+            },
+            "basis": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            }
+          },
+          "required": [
+            "verified_by",
+            "verified_at",
+            "basis"
+          ]
+        },
+        "subject_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "table": {
+                "enum": [
+                  "companies",
+                  "transactions",
+                  "vendors",
+                  "invoices",
+                  "payment_allocations",
+                  "employees",
+                  "approvals",
+                  "vendor_bank_history"
+                ]
+              },
+              "record_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z0-9_.:-]+$"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "table",
+              "record_id",
+              "revision"
+            ]
+          }
+        },
+        "missing_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "missing",
+              "unknown",
+              "not_provided_by_source",
+              "not_applicable"
+            ]
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        }
+      },
+      "required": [
+        "tenant_id",
+        "company_id",
+        "record_id",
+        "revision",
+        "observed_at",
+        "effective_at",
+        "source",
+        "name",
+        "document_kind",
+        "source_kind",
+        "content_sha256",
+        "verification_status",
+        "subject_refs"
+      ]
+    },
+    "bank_history": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "company_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "record_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "effective_at": {
+          "type": "string",
+          "format": "source-timestamp",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "system": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            "record_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            "is_simulated": {
+              "type": "boolean"
+            },
+            "content_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "system",
+            "record_id",
+            "is_simulated"
+          ]
+        },
+        "vendor_ref": {
+          "$ref": "#/$defs/reference"
+        },
+        "bank_account": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "bank_code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_.:-]+$"
+        },
+        "verification_status": {
+          "enum": [
+            "unverified",
+            "pending_verification",
+            "verified"
+          ]
+        },
+        "verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "verified_by": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_.:-]+$"
+            },
+            "verified_at": {
+              "type": "string",
+              "format": "source-timestamp",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,6})?(Z|[+-]\\d{2}:\\d{2})$"
+            },
+            "basis": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            }
+          },
+          "required": [
+            "verified_by",
+            "verified_at",
+            "basis"
+          ]
+        },
+        "missing_fields": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "missing",
+              "unknown",
+              "not_provided_by_source",
+              "not_applicable"
+            ]
+          },
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        }
+      },
+      "required": [
+        "tenant_id",
+        "company_id",
+        "record_id",
+        "revision",
+        "observed_at",
+        "effective_at",
+        "source",
+        "vendor_ref",
+        "bank_account",
+        "bank_code",
+        "verification_status"
+      ]
+    }
+  }
+}

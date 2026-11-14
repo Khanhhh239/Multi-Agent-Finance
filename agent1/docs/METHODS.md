@@ -1,9 +1,9 @@
 # Agent 1 — Lựa chọn mô hình và phương pháp theo từng nhiệm vụ T
 
 > **Bản đồ phương pháp theo thiết kế giai đoạn đầu.** Tên “phương pháp chính”
-> không bảo đảm nhánh đó đang chạy trong dịch vụ hoặc đã đạt cổng. Đối chiếu
-> [kết quả từ CSV](03_Evaluation/04_ket_qua_hien_co.md),
-> [cổng hiện hành](03_Evaluation/GATES_CURRENT.md) và mã trước khi tái dùng.
+> trong bảng bên dưới không xác định nhánh đang chạy. Đọc [pipeline hiện tại](04_AI_Methods/01_pipeline_he_thong.md),
+> [hợp đồng từng khối](04_AI_Methods/README.md) và [nghiệm thu](03_Evaluation/03_cong_nghiem_thu.md)
+> trước khi tái sử dụng. Các bảng kết quả Markdown cũ đã bỏ; artifact nghiên cứu giữ đúng phiên bản trong `outputs/`.
 
 Nguyên tắc chọn (T11): mỗi mô hình phải thắng mốc đơn giản trên **tập kiểm tra theo thời gian**; đo **phân phối**
 (pinball, độ phủ, IBS, Brier/ECE) chứ không chỉ điểm; tách ba tầng kết luận; công bố cả kết quả xấu.

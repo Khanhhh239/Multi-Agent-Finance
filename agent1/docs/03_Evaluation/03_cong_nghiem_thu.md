@@ -1,47 +1,72 @@
-# 3. Cổng nghiệm thu (GO / NO-GO)
+# Nghiệm thu và kiểm thử pipeline hiện tại
 
-> **Bảng trạng thái lịch sử ngày 15/10/2026.** Giữ ngưỡng và kết quả tại thời điểm lập; không dùng cột trạng thái bên dưới để kết luận hiện nay. Đọc [GATES_CURRENT.md](GATES_CURRENT.md) và CSV bằng chứng tương ứng.
+## Trạng thái bằng chứng
 
-Ngưỡng là **đề xuất thiết kế** (không có nguồn bên ngoài), đặt trước khi xem kết quả tập kiểm tra giữ lại. Trạng thái
-cập nhật ngày 15/10/2026 từ `outputs/` — "CHƯA ĐO" nghĩa là mã có, thí nghiệm chưa chạy xong.
+Đối chiếu mã và tài liệu ngày **14/11/2026**. Có triển khai và kiểm thử chức năng cho T0/T9 → T1 + partial → T5/T6 → T10. Chưa có bộ đánh giá độc lập trên SME thật đủ để tuyên bố pipeline mới sẵn sàng pilot; giữ kết luận **chưa nghiệm thu/pilot thật NO-GO**. Dọn/gộp tài liệu không thay model active, trạng thái tenant hoặc số đo frozen.
 
-Kí hiệu: ✅ đạt · 🟡 đạt một phần/biên · ❌ không đạt · ⏳ chưa đo.
+Các bảng G1–G18 tháng 10, điểm Khánh/v4/v5/v6/unified và quyết định giữ Workspace cũ thuộc target/catalog/adapter khác. Đã bỏ các báo cáo Markdown đó khỏi thư mục hiện tại; CSV/JSON/source snapshot nghiên cứu còn có thể tra trong `outputs/` đúng phiên bản. Không kế thừa điểm cũ cho catalog v3/partial/T6 v4 hoặc đổi hash báo cáo để giả thành phép đo mới.
 
-| Cổng | Nhiệm vụ | Điều kiện | Bằng chứng | Trạng thái |
-|---|---|---|---|---|
-| **G1** | T1 | WAPE dòng thu 1–4 tuần ≤ 0,70 × B1 (giảm ≥30%) trên ≥2 điểm gốc rolling | `src`: 0,444 vs 1,408 (−68%); 0,403 vs 1,080 (−63%) | ✅ [Tổng hợp] |
-| **G2** | T1 | IBS_13w ≤ 0,80 × B1 | 0,121 vs 0,345; 0,105 vs 0,267 | ✅ [Tổng hợp] |
-| **G3** | T1 | cov80 ∈ [75%, 85%] | 88,5% và 85,7% (quá thận trọng) | 🟡 lệch dương |
-| **G4** | T1 | ECE@4w ≤ 0,05 | 0,061 (2023-07), 0,013 (2024-07) | 🟡 |
-| **G5** | T1 thật | MAE P50 ≤ 0,90 × B1 trên AR thật | Customer Invoices: 2,29 vs 2,77 (−17%) bằng ensemble; DH-GBM đơn 2,53 (−9%) | ✅ [Thật] |
-| **G6** | T1 thật | Pinball ≤ B1d (mốc phân vị theo khách) trên ≥2 bộ thật | Customer Invoices ✅ (0,82 vs 0,98); BPI 2019: 5,10 vs 5,07 (hoà); DH-GBM đơn 8,78 ❌ | 🟡 |
-| **G7** | T1 đích | Fine-tune (M=12 tháng) ≤ 0,90 × zero-shot về pinball trên `tgt` | Zero-shot đã thấp hơn B1 60% pinball; fine-tune M=3 kém zero-shot (6,83 vs 6,28); IW/POOLED hơn zero-shot ~1,5–2% ở M≥12 ⇒ DA2 bị bác bỏ | ❌ (tiêu chí −10%) |
-| **G8** | T2 | PR-AUC ≥ 2× tỷ lệ nền và ECE ≤0,02 trên SBA FY2018–22; tổn thất kỳ vọng/thực ∈ [0,8; 1,25] | thí nghiệm T2 | ⏳ |
-| **G9** | T4 | SPL ≤ min(naive mùa vụ, TB 13 tuần) trên `src` và `tgt` | src 0,2596 vs 0,2701 (−3,9%); tgt zero-shot 0,3474 (có CQR) vs 0,3861 (−10%) | ✅ [Tổng hợp] |
-| **G10** | T4 thật | Như G9 trên Online Retail II | Mô hình riêng LGBM+CQR 0,2875 vs TB13 0,2823 ❌; tiền huấn luyện tổng hợp + CQR 0,2794 ✅ nhẹ; Chronos-Bolt 0,2641 tốt nhất | 🟡 |
-| **G11** | T5 | 100% ví dụ luật | 15/15 kiểm thử | ✅ |
-| **G12** | T6 | cov80 số dư ∈ [75, 85]%; IS80 thấp hơn cả 4 đối chứng; Brier P(thiếu hụt) tốt hơn naive | cov80 ACI 0,794/0,806; IS80 tốt nhất tuần 1–4, thua MC độc lập 1% tuần 5–13; Brier P(thiếu hụt) tốt nhất | 🟡 đạt biên [Tổng hợp] |
-| **G13** | T6 | Lead time trung vị ≥4 tuần cho ≥70% sự kiện thiếu hụt; báo giả ≤1/DN-năm | chưa tính (cần WP-6.7) | ⏳ |
-| **G14** | T7 | Phát hiện ≥50% trong 180 ngày với báo giả ≤0,5/khách-năm trên miền giữ lại | CUSUM 52,4% nhưng 0,63 báo giả; Page–Hinkley 42,9%/0,42 | 🟡 |
-| **G15** | T9 | F1 liên kết > mốc quy tắc tốt nhất; MAE ngày trả ≤ 3 ngày (so với sổ 12,6) | F1 0,689 vs 0,632; MAE 1,97 ngày; **precision 0,78 < 0,99 của quy tắc** | ✅ F1 / ❌ precision |
-| **G16** | T0 | recall & precision cổng chất lượng ≥95% | kiểm thử đạt | ✅ |
-| **G17** | T8 | Giảm MAE P50 trên HĐ có lời hứa ≥10% | MAE trên HĐ có lời hứa −7,2% (12,21→11,33) | ❌ (cần ≥10%) |
-| **G18** | Chung | Nhãn từ sao kê tốt hơn nhãn từ sổ cái (WAPE thu 1–4 tuần giảm ≥10%) | WAPE thu 4 tuần: nhãn ngân hàng 0,405 vs sổ 0,429 (−5,6%) | ❌ (cần ≥10%) |
+## Ba mức kiểm chứng
 
-## Quy tắc quyết định
+| Mức | Điều kiện |
+|---|---|
+| Chức năng | Bất biến dữ liệu/tiền, nguyên tử, cutoff, artifact và replay đúng; có lỗi thì sửa trước khi chấm chất lượng |
+| Chất lượng dự báo | Protocol khóa trước outcome, baseline phù hợp, scope và nhãn đủ, báo cáo theo doanh nghiệp với độ bất định |
+| Giá trị/triển khai thật | Ledger đối tác độc lập, quyền dùng dữ liệu, kiểm tra nghĩa vụ/pháp lý, UAT và phép đo tác động phù hợp |
 
-- **GO sang pilot** khi: G1, G2, G5, G9, G11, G12, G13, G15 (F1 và MAE), G16 đạt; G3/G4 ≤ ±5 điểm; không có nhóm phân tầng
-  nào có cov80 <60%.
-- **NO-GO** nếu G12 hoặc G13 không đạt: dừng, không đưa dải xác suất cho người dùng (chỉ cho kịch bản căng thẳng tất định).
-- **Điều kiện đóng pilot**: thay các cổng [Tổng hợp] bằng đo trên DN thật (T13) — cổng G1/G2/G12/G13 phải đạt lại.
+Audit chọn bundle ở tenant chỉ là quyết định so model theo policy của doanh nghiệp đó; chưa thay nghiệm thu toàn sản phẩm. Runtime vẫn giữ `pilot_ready=false` khi chưa có kiểm định triển khai riêng.
 
-## Đối chứng bắt buộc (không giữ mô hình phức tạp nếu không thắng)
+## Bộ kiểm thử duy trì
 
-| Khối | Mốc đơn giản | Mô hình phức tạp phải thắng |
-|---|---|---|
-| T1 | B0 đúng hạn · B1 trung vị khách · B1d phân vị khách | hazard LightGBM, ensemble |
-| T2 | tỷ lệ nền · quy tắc tuổi nợ TT48 · logistic | cure-GBM |
-| T4 | naive mùa vụ 52 tuần · trung bình 13 tuần | LGBM toàn cục · Chronos · ensemble |
-| T6 | MC độc lập · MC ngày điểm · LGBM-Q trực tiếp · naive | MC copula-t + ACI |
-| T7 | trung bình trượt · CUSUM-MAD | CUSUM-PIT, PH, BOCPD |
-| T9 | khớp đúng số tiền · regex số HĐ | ML reconciler |
+| Nhóm | Vị trí và ca cần giữ |
+|---|---|
+| T0/T9 | [UAT](../../pilot/t0_t9_uat_20261110/README.md), `tests/adaptive/test_t0_t9_uat_pack.py`; lỗi nạp, vòng đời, duyệt/từ chối/đảo, số tiền lớn và lịch sử |
+| T1/partial | `test_cash_adapter.py`, `test_t1_periodic.py`, `test_t1_review_fixes.py`, `test_t1_remaining_fixes.py`, `test_t1_registry_ui.py`; nhãn/coverage, prior, FIFO, ngày/registry và snapshot nhất quán |
+| T5 | `test_t5_runtime.py`, `tests/test_obligations.py`; nghĩa vụ còn lại, bank/hoàn, định danh và không cộng hai lần |
+| T6 | `test_t6_acceptance.py`, `test_t6_operating.py`, `test_t6_memory.py`; invariants thu/nợ, kỳ vọng/MC, scope, RNG và phần hoạt động |
+| Chấm | `test_t6_new_company.py`, `test_t6_scope_backtest.py`; đóng băng, truth cutoff chung và phân rã tiền |
+| T10/UI/export | `test_t10_bundle.py`, `test_cash_explanations.py`, các `.test.cjs` trong `tests/adaptive/`; SHAP/partial, hash, replay, kịch bản và Excel |
+
+Đường dẫn test không có tiền tố đầy đủ trong bảng là dưới `agent1/tests/adaptive/`. Chạy nhóm liên quan với interpreter/môi trường dự án; không lấy số ca test trong log cũ làm kết quả lần chạy mới. Đợt dọn tài liệu chỉ kiểm nội dung/liên kết, không tạo nghiệm thu model.
+
+## Quy trình lock → predict → score
+
+Runner [evaluate_t6_new_company.py](../../scripts/business/evaluate_t6_new_company.py) tách ba pha:
+
+1. **Lock:** khóa doanh nghiệp, dataset/catalog/source hash, policy, budget/seed, tài khoản, số dư/cash floor và quy tắc cảnh báo. Tách doanh nghiệp đã dùng chọn policy/global khỏi nhóm chấm.
+2. **Predict:** chỉ dùng dữ liệu biết tại cutoff; thích nghi bằng validation/audit quá khứ. Lưu dự báo global/local, đường số dư, hash và receipt trước khi đọc outcome. Receipt hợp lệ ngăn học lại khi chạy tiếp.
+3. **Score:** đọc dự báo frozen rồi mở nhãn đủ phạm vi tại `truth_asof`. Dùng cùng snapshot truth cho bank và thành phần; không dùng sửa đổi chỉ biết sau ngày chấm. Chấm theo [metric](01_metric_ky_thuat.md), tách AR, nghĩa vụ thu/chi và hoạt động.
+
+Config ví dụ là mẫu để người đánh giá điền nguồn thực, không phải dữ liệu sẵn có:
+
+```json
+{
+  "development_firms": ["FIRM_USED_FOR_POLICY"],
+  "companies": [{
+    "firm_id": "NEW_FIRM", "dataset": "new_firm.json",
+    "cutoff": "2025-12-31", "truth_asof": "2026-04-30",
+    "accounts": ["BANK_ACCOUNT"], "opening_balance": 100000000,
+    "synthetic": false, "heldout_from_global_and_policy_selection": true
+  }]
+}
+```
+
+`dataset` tương đối với config. Từ gốc repo, khi đã có config/dữ liệu phù hợp:
+
+```powershell
+.\.venv\Scripts\python.exe agent1/scripts/business/evaluate_t6_new_company.py lock --config config.json --output agent1/outputs/t6/new_company_run
+.\.venv\Scripts\python.exe agent1/scripts/business/evaluate_t6_new_company.py predict --output agent1/outputs/t6/new_company_run
+.\.venv\Scripts\python.exe agent1/scripts/business/evaluate_t6_new_company.py score --output agent1/outputs/t6/new_company_run
+```
+
+Khai báo holdout là cam kết cần kiểm về nguồn, mã không tự chứng minh chưa từng xem dữ liệu. Không dùng ledger toy hoặc các stress lặp của cùng doanh nghiệp làm nhiều doanh nghiệp holdout thật. Tồn kho nghiên cứu hiện thiếu raw/Parquet; kiểm [Data README](../02_Data/README.md) trước tái lập.
+
+## Điều kiện chốt một phép đo
+
+- Khóa target, coverage/censoring, origin, scope và baseline trước test; model/partial/operating/T6 đúng version.
+- Quyết định ngưỡng chấp nhận, gain/guard, số doanh nghiệp và cách báo CI trước outcome; chưa lấy ngưỡng lịch sử làm ngưỡng mới đã thông qua.
+- Tách validation chọn cấu hình, audit chọn phiên bản và test/holdout đánh giá sản phẩm. Không đổi ứng viên hoặc protocol để cứu điểm đã thấy.
+- Báo số mẫu/cụm, nhóm xấu, lỗi tiền và calibration/cảnh báo cùng nhau; đạt coverage riêng chưa đủ.
+- UAT kiểm người dùng đọc đúng số dư kỳ vọng/P50, phạm vi chi, thiếu dữ liệu và kịch bản; không hứa liên hệ khách sẽ tạo tác động mô phỏng.
+
+Kết quả kinh tế cần phép đo riêng theo [giá trị và chi phí](02_metric_kinh_te.md). Các script sinh gate/báo cáo nghiên cứu cũ không là công cụ cập nhật trạng thái nghiệm thu hiện tại.

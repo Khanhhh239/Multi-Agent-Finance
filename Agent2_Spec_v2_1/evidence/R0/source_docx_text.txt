@@ -1,0 +1,152 @@
+Hướng dẫn cài đặt pipeline Agent2
+Agent2 đọc giao dịch, tìm bằng chứng và xếp thứ tự các vụ cần rà soát. Tài liệu đi theo một hóa đơn từ lúc nhập đến lúc kế toán nhận cảnh báo. Mỗi bước ghi rõ dữ liệu vào, việc cần làm và kết quả chuyển tiếp.
+Ví dụ xuyên suốt. Ngày 10/11, DN A chuẩn bị thanh toán giao dịch T105 trị giá 120 triệu đồng cho hóa đơn HD78 của nhà cung cấp V07. Tài khoản nhận vừa đổi hai ngày trước. Sổ thanh toán có giao dịch T096 trị giá 120 triệu cùng hóa đơn. Các số và ngưỡng trong ví dụ chỉ dùng để minh họa.
+1 Nhập dữ liệu
+Bảng
+Dữ liệu cần lấy
+Dòng ví dụ
+transactions
+Mã DN, mã giao dịch, thời điểm tạo, duyệt và ghi sổ, loại giao dịch, số tiền nguyên VND
+A, T105, 10/11, chi NCC, 120.000.000
+vendors
+Mã DN và mã NCC. Thêm lịch sử tài khoản nhận tiền nếu có
+A, V07, tài khoản mới hiệu lực 08/11
+invoices và payments
+Mã hóa đơn, mã NCC, tổng tiền, liên kết thanh toán, trạng thái hủy hoặc hoàn
+HD78, V07, 120 triệu. T096 đã trả
+employees và approvals
+Mã người lập, người duyệt, vai trò và hạn mức
+E12 lập, E23 duyệt
+review_labels
+Kết luận, thời điểm xác nhận, mã vụ và nguồn nhãn
+T105 chờ rà soát, chưa có nhãn
+Mỗi dòng giao dịch cần các trường thật của hợp đồng hiện có gồm company_id, transaction_id, created_at, approved_at, posted_at, txn_type và amount_vnd. Các bảng chứng từ bổ sung ở trên là thiết kế tích hợp, ánh xạ theo dữ liệu phần mềm kế toán. Nếu muốn cảnh báo trước khi chi, cần luồng riêng cho lệnh thanh toán chờ xử lý. Hợp đồng hiện tại dựa trên giao dịch đã ghi sổ, nên ví dụ chấm T105 tại lúc ghi sổ.
+Đầu ra là các bảng nội bộ với mã liên kết rõ ràng. Nhãn rà soát để riêng cho train và đánh giá. Mã giao dịch dùng để truy ngược bằng chứng, không đưa vào làm biến dự báo.
+Nối vào mã dùng docs/05_ke_hoach_giao_viec/data_contract.md và agent2/schema.py.
+
+2 Kiểm tra và tạo đặc trưng
+Kiểm tra trước khi chấm. Chuẩn hóa thời gian và số tiền. Kiểm tra mã giao dịch không trùng trong DN, thời gian tạo ≤ duyệt ≤ ghi sổ và mã V07 thuộc DN A. Tiền âm có thể là bút toán điều chỉnh, cần giữ dấu. Nếu thiếu bảng tài khoản, đánh dấu năng lực kiểm tra tài khoản không khả dụng. Nếu có danh mục nhưng V07 trỏ nhầm DN, dừng theo hợp đồng đầu vào.
+Chốt thời điểm. Với T105, chỉ dùng những gì hệ thống biết tại lúc ghi sổ ngày 10/11. Dùng bản danh mục có hiệu lực và đã quan sát tại lúc đó. Nếu T096 chỉ được phát hiện hoặc nhập sau mốc chấm thì không dùng cho T105. Với các dòng đồng thời, chấm theo ảnh chụp lịch sử trước nhóm rồi mới cập nhật.
+Đặc trưng đề xuất
+Cách tính
+Ví dụ
+amount_to_vendor_median
+Tiền giao dịch chia trung vị các khoản chi trước đó cho V07 cùng loại
+120 / 20 = 6 lần
+days_since_bank_change
+Ngày chấm trừ ngày đổi tài khoản đã biết
+10/11 trừ 08/11 = 2 ngày
+prior_paid_same_invoice
+Tổng tiền đã thanh toán cho HD78 trước T105, sau khi đối chiếu hoàn hoặc hủy
+120 triệu
+prior_invoice_payment_count
+Số lần đã trả trước đó cho HD78
+1
+bank_history_available
+Có dữ liệu lịch sử tài khoản đủ để kiểm tra
+1 nếu đủ, 0 nếu thiếu
+Nếu V07 có quá ít lịch sử, dùng nhóm nhà cung cấp tương đồng đã định trước hoặc tắt đặc trưng theo cấu hình. Lưu số quan sát tham chiếu để giải thích vì sao kết quả đáng tin hay còn thiếu dữ liệu.
+Đầu ra là một dòng đặc trưng cho T105, kèm trạng thái khả dụng và tham chiếu chứng từ. Quy tắc tạo đặc trưng, đơn vị và khoảng lịch sử phải giống nhau khi train và khi chấm.
+
+3 Chạy luật và đối chiếu
+Mỗi luật cần ghi điều kiện, trường dữ liệu bắt buộc, ngoại lệ và bằng chứng xuất ra. Luật có ba trạng thái cho từng giao dịch gồm trúng, không trúng và chưa đủ dữ liệu.
+Kiểm tra
+Cách làm
+Kết quả cho T105
+Trả trùng
+Ghép theo DN, NCC và hóa đơn. So tiền đã trả cộng khoản hiện tại với số phải trả. Kiểm tra hủy, hoàn và các khoản trả từng phần
+120 + 120 = 240 triệu so với 120 triệu phải trả, nếu T096 còn hiệu lực
+Đổi tài khoản
+So tài khoản hiện tại với lịch sử và kiểm tra hồ sơ xác minh. Ví dụ ngưỡng đổi trong 7 ngày
+V07 đổi 2 ngày trước. Cần kiểm tra xác minh
+Liên kết đồ thị
+Nối NCC, tài khoản nhận và nhân viên. Tìm đường như V07 → tài khoản X ← V19 từ các liên kết đã biết
+Nếu X dùng chung, hiện đường liên kết và kiểm tra hai NCC có cùng tập đoàn hay đơn vị thu hộ
+Ví dụ luật trả trùng xuất mã DUP_PAYMENT, giao dịch T105, bằng chứng T096 và HD78, số tiền chênh 120 triệu, trạng thái trúng. Mã là ví dụ thiết kế. Nếu thiếu sổ thanh toán, trả trạng thái chưa đủ dữ liệu và nêu thiếu bảng nào.
+Vì sao cần ngoại lệ. Một hóa đơn 120 triệu trả hai đợt 50 và 70 triệu là hợp lệ nếu tổng đúng và khớp chứng từ. Một tài khoản dùng chung cũng có thể là tài khoản thu hộ đã xác minh. Kiểm tra ngoại lệ trước khi nâng mức ưu tiên.
+Đầu ra gồm hit từng luật, điểm luật nếu cấu hình có dùng và bằng chứng có thể mở lại. Agent2 đã có điểm luật, hit và lý do. Các điều kiện minh họa ở đây cần ánh xạ sang luật thực tế trước khi triển khai.
+
+4 Chấm bất thường không cần nhãn
+Các phương pháp dưới đây học từ giao dịch lịch sử. Lúc chấm, mỗi phương pháp trả một số, số càng cao càng bất thường theo cách đo của nó. Dữ liệu tham chiếu phải có trước kỳ chấm.
+Phương pháp
+Input và cách tính
+Output và ví dụ
+EntityDeviation
+Nhận đặc trưng độ lệch theo thực thể đã tạo ở bước 2. Với mỗi tín hiệu đang áp dụng, so với phân phối lịch sử, tính −ln(tỷ lệ đuôi), rồi lấy điểm lớn nhất
+Tỷ lệ đuôi 1% cho điểm khoảng 4,6. Có thể chỉ ra tín hiệu lệch nhất. Mã hiện tại dùng tối thiểu 20 điểm tham chiếu cho mỗi thành phần
+ECOD
+Với mỗi cột số, đếm tỷ lệ lịch sử nằm ở đuôi trái và phải. Đổi từng tỷ lệ thành −ln(tỷ lệ), cộng theo các cách trong thuật toán và lấy tổng lớn nhất
+Tiền cao và thời gian đổi tài khoản rất ngắn có thể làm tăng điểm. Trả điểm tổng và các cột đóng góp nhiều
+HBOS
+Chia giá trị lịch sử của từng cột thành các khoảng. Ước lượng mật độ của mỗi khoảng, lấy −ln(mật độ) rồi cộng theo cột
+Nếu khoảng quanh 120 triệu có mật độ thấp, cột tiền đóng góp điểm cao. Điểm chủ yếu phản ánh độ hiếm của từng cột
+Isolation Forest
+Tạo nhiều cây, chọn ngẫu nhiên cột và ngưỡng chia. Đếm độ sâu cần để cô lập điểm và tổng hợp qua các cây
+T105 dễ bị tách khỏi phần lớn lịch sử thì điểm cao. Trong Agent2 dùng dấu âm của score_samples để hướng điểm thống nhất
+Autoencoder
+Chuẩn hóa cột số, train mạng nén rồi dựng lại vector đầu vào. Chấm bằng trung bình bình phương sai số giữa vector gốc và vector dựng lại
+Nếu tổ hợp tiền cao và tài khoản mới khó dựng lại, sai số tăng. Có thể lưu sai số từng cột làm gợi ý điều tra
+Chạy thử từng cái. Fit trên cùng giai đoạn lịch sử, chạy tất cả trên cùng kỳ sau, lưu raw_score, version và số lượng dữ liệu tham chiếu. Hóa đơn hợp lệ nhưng hiếm vẫn có thể đạt điểm cao. Để quyết định gửi cảnh báo, chuyển các điểm này sang bước 6.
+Nối vào mã dùng các lớp cùng tên trong agent2/methods.py. Phần lưu khả dụng và lý do theo một hợp đồng thống nhất là đề xuất bổ sung.
+
+5 Huấn luyện có giám sát
+5A Khi chưa có huấn luyện mã hóa
+1. Tạo sổ tổng hợp với nhà cung cấp, hóa đơn, thời hạn, người duyệt và thanh toán. Giữ cả các tình huống hợp lệ khó như chia đợt đúng hợp đồng và đổi tài khoản đã xác minh.
+2. Tiêm ca bằng cách thay đổi sự kiện thực tế trong sổ sinh. Ví dụ, hóa đơn HD78 đã trả đủ nhưng tạo thêm T105 trả lần hai. Ghi nhãn 1 cho giao dịch rủi ro theo kịch bản. Dòng hợp lệ đã biết trong dữ liệu sinh có nhãn 0. Không tự gán 0 cho dòng dữ liệu thật chưa rà soát.
+3. Chạy lại toàn bộ bước tạo đặc trưng trên sổ sau khi tiêm. Giữ nhãn và mã kịch bản riêng. Tách DN mô phỏng, mẫu kịch bản và thời gian giữa train và test để tránh học dấu vết của bộ sinh.
+4. Train logistic và LightGBM trên cùng đầu vào và so trên cùng tập giữ lại. Logistic học trọng số cho các cột. LightGBM thêm các cây để sửa lỗi dự báo, mỗi cây chọn điểm chia từ histogram. Chạy thử song song trên dữ liệu thật trước khi cho điểm này ảnh hưởng đến cảnh báo.
+5B Khi N công ty cùng huấn luyện trên cloud
+Ai thực hiện
+Nhận và làm gì
+Gửi đi gì
+DN A đến DN N
+Mỗi DN tạo cùng thứ tự cột và thang đo, chuẩn bị nhãn đã xác nhận, tự tạo và giữ khóa bí mật riêng
+Ciphertext của X và y, khóa công khai và khóa đánh giá theo giao thức. Không gửi khóa bí mật
+Cloud
+Dùng giao thức multi-key HE tương thích để tính trên ciphertext từ nhiều khóa. Tính lặp trên dữ liệu mã hóa và tạo trọng số chung mã hóa
+Model mã hóa kèm định danh phiên huấn luyện
+Các DN được phép
+Kiểm tra đầu ra đúng là model của phiên đã duyệt. Chạy giao thức giải mã phối hợp hoặc chuyển khóa bảo mật nếu giao thức hỗ trợ
+Phần đóng góp giải mã đã được bảo vệ, chỉ cho đúng đầu ra được duyệt
+Môi trường chấm tại DN
+Nhận model đã được cấp quyền và chấm bằng dữ liệu nội bộ. Nếu model phải luôn ở dạng mã hóa, cần giao thức suy luận riêng
+Kết quả chấm và bằng chứng nằm trong DN
+
+5 Tiếp theo Luồng tính toán và mở mô hình
+Ví dụ A, B và C có lần lượt 10, 15 và 8 ca đã xác nhận. Mỗi bên mã hóa cả biến đầu vào lẫn nhãn. Cloud phối hợp để học từ 33 ca trong ví dụ, tùy điều kiện của giao thức. A vẫn giữ khóa riêng để mở dữ liệu gốc của A. Với cấu hình yêu cầu đủ ba bên, model chung phụ thuộc cả ba khóa và A không tự mở model chung. Nếu C vắng mặt ở khâu mở model, phải chờ C hoặc áp dụng giao thức ngưỡng đã thiết kế từ trước.
+Cloud tính logistic như thế nào
+Với một giao dịch, mô hình tính z = w·x + b. Logistic dùng sigmoid(z) để đổi z thành đầu ra trong khoảng 0 đến 1. Trong phiên bản HE, có thể xấp xỉ sigmoid bằng đa thức bậc thấp trên khoảng z đã quy định. Ví dụ cách cập nhật là w_mới = w_cũ − η × trung bình[(p − y)x], trong đó p là xấp xỉ sigmoid(z). Cloud thực hiện cộng, nhân và nhân hằng số trên ciphertext. Chia cho số mẫu công khai có thể thực hiện bằng nhân nghịch đảo đã biết. Các bước đều phải phù hợp với ngân sách phép toán và sai số mã hóa.
+Kiểm chứng trước khi dùng dữ liệu thật. So logistic mã hóa với cùng thuật toán xấp xỉ ở dạng rõ trên dữ liệu sinh. Đo sai khác điểm, thứ hạng, thời gian và tài nguyên. MK-HELR là tài liệu tham khảo nghiên cứu, có bước giải mã rồi mã hóa lại để làm mới ciphertext. Muốn cloud không thấy dữ liệu hoặc trạng thái trung gian thì cần cơ chế làm mới phù hợp hoặc giới hạn vòng tính theo ngân sách phép toán đã kiểm chứng.
+Giới hạn quyền mở. Không cho cloud gửi một ciphertext bất kỳ và yêu cầu các DN mở. Giao thức triển khai cần xác minh đầu ra, xử lý thông đồng theo mô hình đe dọa và kiểm soát truy vấn, log, metadata cũng như rò rỉ qua model. Validation thật có thể chạy tại DN rồi chia sẻ thống kê tổng hợp đã được cho phép. Các cơ chế này cần thiết kế và kiểm chứng trước khi nhận dữ liệu thật.
+Vị trí LightGBM. Dùng bản gốc để train trên synthetic hoặc tại DN với dữ liệu được phép. MKXGB là nghiên cứu riêng cho XGBoost đa khóa. Có thể đưa vào benchmark nghiên cứu nếu cây boosting chứng minh bắt thêm vụ ở cùng mức báo nhầm.
+Nguồn kỹ thuật có thể tra cứu qua DOI 10.1038/s41598-024-63393-1 (MK-HELR) và DOI 10.1016/j.csi.2026.104160 (MKXGB).
+
+6 Kết hợp điểm và chọn trên validation
+Điểm hạng. Với 100 điểm lịch sử cố định, nếu 94 điểm thấp hơn T105 và 4 điểm bằng T105, hạng giữa là (94 + 4/2)/100 = 0,96. Tính riêng theo từng detector với tham chiếu có trước kỳ chấm. Hạng 0,96 mô tả vị trí tương đối, nên không đọc thành 96% xác suất gian lận.
+Khả dụng. Nếu thiếu lịch sử tài khoản, luật đổi tài khoản có thể trả available=false cùng mã thiếu cột. Nếu đủ dữ liệu và kiểm tra không trúng, available=true và hit=false. Khi thiếu cả một phương pháp, dùng bộ trọng số và ngưỡng dự phòng đã đánh giá riêng.
+Điểm tổ hợp. Ví dụ ba hạng luật, ECOD và logistic là 0,98, 0,96 và 0,90. Với trọng số 0,5, 0,3 và 0,2, điểm ưu tiên là 0,958. Đây là một ứng viên cấu hình. Khi có đủ nhãn, thử logistic stacking trên điểm ngoài mẫu của các detector để so với tổ hợp hạng.
+Lý do giải thích. Lấy bằng chứng gốc từ tín hiệu đáng kể, ví dụ “HD78 đã có khoản T096 trị giá 120 triệu, khoản T105 thêm 120 triệu” và “tài khoản V07 đổi 2 ngày trước”. Nếu một phương pháp chỉ báo điểm bất thường, hiển thị điểm và các cột góp phần nếu có. Người rà soát phải mở được chứng từ để kiểm tra.
+Quy trình chọn
+1. Fit detector trên kỳ cũ. Chấm ngoài mẫu ở kỳ sau. Dùng validation để so từng detector, cấu hình hiện tại và vài tổ hợp nhỏ. Tách riêng kỳ chọn ngưỡng và kỳ test cuối. Giữ cùng vụ trong cùng một tập.
+2. So ở cùng ngân sách sau khi gộp vụ. Ví dụ trong cùng 10 DN-tuần, cấu hình A gửi 20 vụ, đúng 12 và nhầm 8. Cấu hình B gửi 20 vụ, đúng 15 và nhầm 5. Precision tăng từ 60% lên 75%, còn báo nhầm giảm từ 0,8 xuống 0,5 vụ mỗi DN-tuần.
+3. Giữ phương pháp thêm vào khi lợi ích lặp lại qua các kỳ và DN. Khóa cấu hình rồi đo trên test mới. Muốn ước lượng số vụ bỏ sót, rà soát thêm mẫu giao dịch không được cảnh báo và ghi xác suất lấy mẫu. Ca chưa kết luận phải báo riêng.
+
+7 Gộp vụ và áp chính sách gửi cảnh báo
+Tạo một vụ từ các giao dịch có liên quan
+Chấm từng giao dịch trước. Sau đó nối những dòng có chung DN và chứng từ hoặc bằng chứng liên kết rõ. Ví dụ, tạo một vụ cho HD78 gồm T105 là giao dịch cần kiểm tra và T096 là giao dịch đã trả dùng làm bằng chứng. Hai hóa đơn độc lập của V07 vẫn là hai vụ, trừ khi có liên kết khác được ghi rõ.
+Điểm vụ ban đầu có thể lấy điểm cao nhất của các giao dịch ứng viên, chẳng hạn 0,958 cho T105. Giữ các dòng liên quan và lý do. Vụ đã mở thì cập nhật khi có giao dịch mới, tránh gửi lại cùng nội dung mỗi lần chạy.
+Quyết định gửi
+Tuyến
+Điều kiện đề xuất
+Kết quả ví dụ
+Đối chiếu bắt buộc
+Luật nghiệp vụ được duyệt, đủ dữ liệu, đã xét ngoại lệ. Có chính sách báo quá tải riêng
+Nếu xác minh trùng thanh toán theo quy tắc nội bộ, chuyển rà soát ngay
+Ưu tiên
+Đạt ngưỡng và đủ bằng chứng, lấy tối đa B vụ mỗi DN mỗi tuần theo thứ tự điểm
+Với ngưỡng thử 0,93 và B = 3, vụ HD78 có thể vào danh sách nếu còn suất
+Theo dõi nội bộ
+Điểm đáng chú ý nhưng thiếu bằng chứng hoặc chưa đủ độ tin cậy để gửi
+Chờ chứng từ, bổ sung vào mẫu rà soát nếu cần
+Kế toán nhìn thấy gì. “HD78 của V07 cần đối chiếu. Đã ghi nhận T096 trị giá 120 triệu. T105 thêm 120 triệu. Kiểm tra trạng thái hoàn hoặc hủy của T096 và chứng từ xác minh tài khoản.” Người rà soát chọn đã xác nhận rủi ro, hợp lệ hoặc chưa kết luận. Giữ mã vụ, chứng từ, thời điểm và phiên bản chính sách.
+Thứ tự cài vào Agent2. Dùng lại schema và detector. Tạo ma trận điểm trước flags trong pipeline_v4.py. Tách bước gộp vụ và cấp ngân sách, dùng lại phần hàng đợi trong alerting.py. Chạy song song cấu hình cũ và mới trước khi bật gửi. Nhánh thử nghiệm HE có thể chạy riêng.

@@ -1,0 +1,11 @@
+{
+  "kind": "R2 latest evidence; snapshot P1/E3 API with role DTOs; R2 PARTIAL",
+  "latest": "analysis_api_20261111/artifact_manifest.json",
+  "files": [
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/analysis_api_20261111/artifact_manifest.json",
+      "sha256": "cfb5a52629759768305da8dca3975d26a4b4ff8e6bc36a14636fd7f6331b3463"
+    }
+  ],
+  "previous_manifest": "p1_native_fix_20261111/artifact_manifest.json"
+}

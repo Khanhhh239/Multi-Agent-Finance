@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "checks": {
+    "files": true,
+    "databases": true,
+    "jobs": true
+  },
+  "models_keys_password_config_snapshot_jobs_reviews_preserved": true,
+  "sqlite_logical_dump_used": true
+}

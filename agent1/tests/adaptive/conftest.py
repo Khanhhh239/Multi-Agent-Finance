@@ -1,10 +1,42 @@
 """Shared browser and Portal setup for Workspace integration tests."""
 import importlib.util
 import json
+import socket
+import threading
+import time
+from contextlib import contextmanager
 from pathlib import Path
 from urllib.parse import urlsplit
 
 import pytest
+
+
+@pytest.fixture
+def serve_app():
+    """Use real HTTP for file uploads, which Playwright route bodies can omit."""
+    @contextmanager
+    def serve(app):
+        import uvicorn
+
+        with socket.socket() as listener:
+            listener.bind(("127.0.0.1", 0))
+            port = listener.getsockname()[1]
+            server = uvicorn.Server(uvicorn.Config(
+                app, host="127.0.0.1", port=port, lifespan="off", log_level="critical",
+                timeout_graceful_shutdown=2,
+            ))
+            thread = threading.Thread(target=server.run, kwargs={"sockets": [listener]}, daemon=True)
+            thread.start()
+            try:
+                deadline = time.monotonic() + 10
+                while not server.started and thread.is_alive() and time.monotonic() < deadline:
+                    time.sleep(0.01)
+                assert server.started, "Isolated Workspace HTTP server did not start"
+                yield f"http://127.0.0.1:{port}"
+            finally:
+                server.should_exit = True
+                thread.join(timeout=5)
+    return serve
 
 
 @pytest.fixture

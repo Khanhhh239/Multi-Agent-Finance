@@ -1,9 +1,9 @@
 # Hiểu toàn bộ dự án Agent 1 — bản dễ nhớ (cập nhật 24/10/2026, chiều)
 
-> **Ảnh chụp ngày 24/10/2026.** Dùng tài liệu này để hiểu kiến trúc và lịch sử kết quả; các mục “hiện tại”, số World và cổng trong thân bài không thay [hướng dẫn nguồn hiện hành](AI_READING_GUIDE.md).
+> **Ảnh chụp ngày 24/10/2026.** Dùng tài liệu này để hiểu kiến trúc và lịch sử kết quả; các mục “hiện tại”, số World và cổng trong thân bài không thay [pipeline đang phục vụ](04_AI_Methods/01_pipeline_he_thong.md) và [hướng dẫn nguồn hiện hành](AI_READING_GUIDE.md).
 
 > Mục tiêu của tài liệu này: đọc một lần (khoảng 40 phút) là nắm được **dự án làm gì, làm bằng cách nào, đã tới đâu, tin được tới mức nào, và việc tiếp theo là gì**.
-> Mọi con số lấy từ kết quả đã đo trong `outputs/` và `docs/03_Evaluation/GATES_CURRENT.md`. Chỗ nào chưa chắc, tài liệu nói rõ là chưa chắc.
+> Các con số thuộc bằng chứng nghiên cứu lịch sử trong `outputs/`; báo cáo Markdown tổng hợp cũ đã bỏ. [Quy tắc nghiệm thu hiện tại](03_Evaluation/03_cong_nghiem_thu.md) không xác nhận lại các số đó cho pipeline mới.
 
 ---
 
@@ -516,17 +516,17 @@ docs/
 ├── HIEU_DU_AN_AGENT1.md                ← bạn đang đọc
 ├── 00_INDEX.md                         tóm tắt một trang
 ├── 01_Business_Analyst/                vì sao sản phẩm tồn tại, ai trả tiền
-├── 02_Data/                            dữ liệu thật, máy phát, hard-case; 10_realism_v2.md
+├── 02_Data/                            tồn kho, nguồn, máy phát/hard-case và quy tắc đánh giá
 ├── 03_Evaluation/
-│   ├── GATES_CURRENT.md                bảng cổng sinh tự động  (đọc đầu tiên)
-│   ├── GO_NO_GO_SYNTHETIC_ONLY.md      quyết định triển khai   (đọc thứ hai)
-│   ├── G13_ALERT_POLICY.md             cảnh báo thiếu tiền
-│   ├── G15_T9_V2_PREREG.md             T9 v2, đăng ký trước + kết quả
-│   └── T9_RECALL_DIAGNOSIS.md          vì sao T9 trượt
+│   ├── 03_cong_nghiem_thu.md                bảng cổng sinh tự động  (đọc đầu tiên)
+│   ├── 03_cong_nghiem_thu.md      quyết định triển khai   (đọc thứ hai)
+│   ├── 03_cong_nghiem_thu.md             cảnh báo thiếu tiền
+│   ├── 03_cong_nghiem_thu.md             T9 v2, đăng ký trước + kết quả
+│   └── 03_cong_nghiem_thu.md          vì sao T9 trượt
 ├── 04_AI_Methods/                      pipeline và mô hình từng trạm
 └── 05_Coding_Agent_Plan/
-    ├── NHAT_KY_SPRINT1_2026-10-20.md   nhật ký thực thi (mục 8–16 là mới nhất)
-    └── PHAM_VI_WP_VA_TIEU_CHI_GOC.md  phạm vi gốc sau gộp; bàn giao cũ ở nhật ký
+    ├── README.md                    chỉ dẫn phát triển/kiểm chứng
+    └── 01_quy_trinh_phat_trien_va_kiem_chung.md  quy trình hiện tại
 
 outputs/   kết quả CSV (sinh ra bởi mã)     scripts/sprint5/   mã đợt gần nhất
 agent1/    thư viện mô hình                 agent1_service/    API + dashboard

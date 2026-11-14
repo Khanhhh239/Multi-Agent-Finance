@@ -1,0 +1,13 @@
+{
+  "command": [
+    "D:\\agent22\\agent1\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\agent22\\Agent2_Spec_v2_1\\scripts\\check_evidence.py",
+    "R0"
+  ],
+  "exit_code": 0,
+  "stderr": "",
+  "script_sha256": "6bf96ec5bcb7d8e0fa4951763a0a95779fba331cdd5e19f28568ca728eecb90c"
+}

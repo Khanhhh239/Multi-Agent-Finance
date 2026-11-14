@@ -1,0 +1,42 @@
+{
+  "R1": {
+    "cwd": "D:/agent22",
+    "tool_version_commands": [
+      ["D:/agent22/agent2/.venv/Scripts/python.exe", "--version"],
+      ["D:/agent22/agent2/.venv/Scripts/python.exe", "-X", "utf8", "-c", "import sqlite3;from importlib.metadata import version;print('sqlite',sqlite3.sqlite_version,'jsonschema',version('jsonschema'),'scikit-learn',version('scikit-learn'))"]
+    ],
+    "commands": [
+      {
+        "argv": ["D:/agent22/agent2/.venv/Scripts/python.exe", "-X", "utf8", "-u", "-B", "agent2/scripts/run_r1_tests.py", "--report", "agent2/.runtime/r1/native_report.json"],
+        "timeout_seconds": 600,
+        "format": "json",
+        "report_path": "agent2/.runtime/r1/native_report.json"
+      }
+    ]
+  },
+  "R2": {
+    "cwd": null,
+    "tool_version_commands": [],
+    "commands": []
+  },
+  "R3": {
+    "cwd": null,
+    "tool_version_commands": [],
+    "commands": []
+  },
+  "R4": {
+    "cwd": null,
+    "tool_version_commands": [],
+    "commands": []
+  },
+  "R5": {
+    "cwd": null,
+    "tool_version_commands": [],
+    "commands": []
+  },
+  "R6": {
+    "cwd": null,
+    "tool_version_commands": [],
+    "commands": []
+  }
+}

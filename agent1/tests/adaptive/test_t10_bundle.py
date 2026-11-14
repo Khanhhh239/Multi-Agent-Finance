@@ -256,6 +256,7 @@ def test_actual_global_bundle_grouped_shap_and_replay_keep_the_same_targets(inpu
 def test_operating_and_new_credit_residuals_keep_the_same_random_draws(inputs, monkeypatch):
     from agent1.adaptive import operating, new_credit
     data, bundle, kwargs = inputs
+    data["bank_scope"] = dict(accounts=["Q"])
     bundle["operating"] = dict(accounts=["Q"], name="fixture", model=None,
         residuals=np.tile(np.array([[[0., 0.]], [[100_000., -20_000.]]]), (1, 13, 1)),
         credit=dict(kind="fixture", residuals=np.tile([[0.], [30_000.]], (1, 13))))

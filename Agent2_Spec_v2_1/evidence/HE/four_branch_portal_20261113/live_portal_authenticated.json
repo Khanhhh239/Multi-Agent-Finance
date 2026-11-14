@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "authenticated_live_portal": true,
+  "actual_fhe": true,
+  "simulated_data": true,
+  "user_entered_password": true,
+  "password_exported": false,
+  "checks": [
+    {
+      "company_id": "C001",
+      "row_count": 5,
+      "reload_same_run": true,
+      "review_cases": 5
+    },
+    {
+      "company_id": "C002",
+      "row_count": 5,
+      "reload_same_run": true,
+      "review_cases": 5
+    }
+  ],
+  "human_reviews_created": false,
+  "browser_errors": []
+}

@@ -1,0 +1,92 @@
+{
+  "count": 21,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "tests": [
+    {
+      "id": "test_he4_service.WorkerSecurity.test_admission_cannot_cross_owner_or_revoked_grant",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_admission_requires_fresh_distinct_signed_capability",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_attempt_setup_io_failure_does_not_leave_permanent_running_claim",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_blob_download_does_not_cross_node_scope",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_fresh_admission_does_not_replace_admitted_nonce_hash",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_fresh_admission_keeps_exact_expired_packet_and_cached_result",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_fresh_admission_rejects_tampered_inner_and_wrong_build",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_fresh_resume_can_only_continue_exact_previously_admitted_request",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_http_fresh_admission_after_seven_hour_pause",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_plaintext_extra_fields_signature_and_expiry_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_resume_does_not_bypass_current_grant_or_owner",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_signed_upload_scope_replay_and_revocation",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_service.WorkerSecurity.test_unknown_circuit_is_rejected_before_native_loading",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_coordinator.Coordinator.test_every_branch_and_unavailable_reason_kept_without_ensemble",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_coordinator.Coordinator.test_expiry_before_initial_delivery_is_retryable_then_freshly_admitted",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_coordinator.Coordinator.test_fresh_admission_lost_reply_recovers_without_new_cipher_or_packet",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_coordinator.Coordinator.test_lost_reply_restart_keeps_envelope_and_does_not_encrypt_again",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_coordinator.Coordinator.test_missing_ml_model_does_not_hide_other_branch_or_fit",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_coordinator.Coordinator.test_model_build_or_policy_change_cannot_resume_with_new_config",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_coordinator.Coordinator.test_response_tamper_is_rejected_before_native_open",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_coordinator.Coordinator.test_seven_hour_authorization_pause_before_admission_keeps_packet_key_and_job",
+      "status": "pass"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "path": "/app.js",
+    "status": 200,
+    "cache_control": "no-store",
+    "matches_source": true
+  },
+  {
+    "path": "/agent2/assets/workspace.js",
+    "status": 200,
+    "cache_control": "no-store",
+    "matches_source": true
+  },
+  {
+    "path": "/agent2/assets/workbench.js",
+    "status": 200,
+    "cache_control": "no-store",
+    "matches_source": true
+  },
+  {
+    "path": "/agent2/assets/he-analysis.js",
+    "status": 200,
+    "cache_control": "no-store",
+    "matches_source": true
+  },
+  {
+    "path": "/agent2/assets/analysis-settings.js",
+    "status": 200,
+    "cache_control": "no-store",
+    "matches_source": true
+  }
+]

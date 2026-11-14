@@ -1,0 +1,327 @@
+{
+  "checks": [
+    {
+      "check": "frozen input IDs and transaction amounts",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "invoice face value",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "15m transactions = 13m allocated + 2m unlinked",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "missing channel is absent, not fabricated",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "source scope is only simulation",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "main: preview accepted with disclosed limits",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "main: saved source is exact semantic input",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "main: committed checksum verified",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "main-results: analysis HTTP 200",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "five transactions retained",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "OLD: amount and status",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "OLD: manual invoice/prior/current/total/excess",
+      "passed": true,
+      "detail": {
+        "expected": {
+          "invoice_gross_vnd": 10000000,
+          "prior_paid_vnd": 0,
+          "current_allocated_vnd": 4000000,
+          "cumulative_paid_vnd": 4000000,
+          "excess_vnd": 0
+        },
+        "actual": {
+          "invoice_gross_vnd": 10000000,
+          "prior_paid_vnd": 0,
+          "current_allocated_vnd": 4000000,
+          "cumulative_paid_vnd": 4000000,
+          "excess_vnd": 0
+        }
+      }
+    },
+    {
+      "check": "OLD: exact invoice reference",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "OLD: simultaneous membership not repeated",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "A: amount and status",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "A: manual invoice/prior/current/total/excess",
+      "passed": true,
+      "detail": {
+        "expected": {
+          "invoice_gross_vnd": 10000000,
+          "prior_paid_vnd": 4000000,
+          "current_allocated_vnd": 4000000,
+          "cumulative_paid_vnd": 8000000,
+          "excess_vnd": 0
+        },
+        "actual": {
+          "invoice_gross_vnd": 10000000,
+          "prior_paid_vnd": 4000000,
+          "current_allocated_vnd": 4000000,
+          "cumulative_paid_vnd": 8000000,
+          "excess_vnd": 0
+        }
+      }
+    },
+    {
+      "check": "A: exact invoice reference",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "A: simultaneous membership not repeated",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "B: amount and status",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "B: manual invoice/prior/current/total/excess",
+      "passed": true,
+      "detail": {
+        "expected": {
+          "invoice_gross_vnd": 10000000,
+          "prior_paid_vnd": 4000000,
+          "current_allocated_vnd": 4000000,
+          "cumulative_paid_vnd": 8000000,
+          "excess_vnd": 0
+        },
+        "actual": {
+          "invoice_gross_vnd": 10000000,
+          "prior_paid_vnd": 4000000,
+          "current_allocated_vnd": 4000000,
+          "cumulative_paid_vnd": 8000000,
+          "excess_vnd": 0
+        }
+      }
+    },
+    {
+      "check": "B: exact invoice reference",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "B: simultaneous membership not repeated",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "OVER: amount and status",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "OVER: manual invoice/prior/current/total/excess",
+      "passed": true,
+      "detail": {
+        "expected": {
+          "invoice_gross_vnd": 10000000,
+          "prior_paid_vnd": 12000000,
+          "current_allocated_vnd": 1000000,
+          "cumulative_paid_vnd": 13000000,
+          "excess_vnd": 3000000
+        },
+        "actual": {
+          "invoice_gross_vnd": 10000000,
+          "prior_paid_vnd": 12000000,
+          "current_allocated_vnd": 1000000,
+          "cumulative_paid_vnd": 13000000,
+          "excess_vnd": 3000000
+        }
+      }
+    },
+    {
+      "check": "OVER: exact invoice reference",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "OVER: simultaneous membership not repeated",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "MISSING: amount and status",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "MISSING: unknown remains without numeric payment facts",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "MISSING: simultaneous membership not repeated",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "one group A+B: 4m + 8m = 12m; excess 2m",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "A and B point to the one root group",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "vendor-name review is not a confirmed duplicate",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "summary scope: 5 flagged rows, one missing check, one group",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "preview discloses original docs/approvals/bank-history missing for all 5",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "asof-oct01: analysis HTTP 200",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Oct 1: no future rows and stable historical checks",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Oct 1: same immutable snapshot",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "asof-oct02: analysis HTTP 200",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Oct 2: no future rows and stable historical checks",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Oct 2: same immutable snapshot",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "asof-oct03: analysis HTTP 200",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Oct 3: no future rows and stable historical checks",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "Oct 3: same immutable snapshot",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "read-only reruns retain one snapshot",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "first-payment: preview accepted with disclosed limits",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "first-payment: saved source is exact semantic input",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "first-payment: committed checksum verified",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "first-payment-results: analysis HTTP 200",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "first-payment probe: arithmetic 11m - 10m = 1m",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "first-payment probe exposes existing prior-payment condition",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "only two isolated snapshots for main and probe",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "check": "no JavaScript errors",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "count": 52,
+  "all_passed": true,
+  "browser_errors": []
+}

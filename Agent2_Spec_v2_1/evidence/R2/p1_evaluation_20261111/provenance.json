@@ -1,0 +1,60 @@
+{
+  "spec_version": "2.1",
+  "change_request": "CR-019",
+  "status": "R2_PARTIAL_P1_evaluation_subtask_complete",
+  "collected_at": "2026-11-11T20:00:50.355249+07:00",
+  "head": "f203b39828f567171916b5b4744728ed4b63d17f",
+  "cwd": "D:\\agent22",
+  "native_command": "agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/run_r1_tests.py --report Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/native_tests.json",
+  "native_exit_code": 0,
+  "native_summary": {
+    "count": 640,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0
+  },
+  "native_elapsed_seconds": 657.524,
+  "focused_exit_code": 0,
+  "focused_summary": {
+    "count": 68,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0
+  },
+  "new_p1_tests": 24,
+  "native_parity_cases": 8,
+  "native_parity_row_comparisons": 16,
+  "signed_domain_native_supported": false,
+  "demo_command": "agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/demo_p1_evaluation.py --output-dir Agent2_Spec_v2_1/evidence/R2/p1_evaluation_20261111/demo",
+  "demo_exit_code": 0,
+  "demo_scenarios": 5,
+  "demo_rows": 13,
+  "all_demo_rows_schema_time_checked": 19,
+  "preservation": "preservation.json",
+  "rule_inputs_version": "rule-inputs/1.1.1",
+  "p1_evaluation_version": "p1-evaluation/1.0.0",
+  "rule_result_shape": "rule-results/1.0.0",
+  "method_output_shape": "method-output/1.1.0",
+  "core_method_sources_unchanged": {
+    "entity_graph.py": "8807e3667be2ad2b270de7d843065bd4e8401a715cb11519561bdcb9d856f2d5",
+    "identity_graph.py": "5fb79620be72a70f63914a9e9f8d7375e1d096dd1fcd7d2dd26e1d85dfbe3597",
+    "ml_estimators.py": "4cda15cd47c2f7080f6416210642406fadb5fbdff98690fb8ca14eddfb1a7c5b",
+    "rules.py": "30e3f3c1399e30b8580674375845c72b4d4111fe387dae6125b4a912b1b556b3",
+    "score_statistics.py": "396c0aab5f9fea7fac245deb0b4d116cf7d78d660bdd16247ea23d8a341f741d",
+    "unsupervised_statistics.py": "c80cdd213e8e877cc163cd5b36094771f219b66cece2428de27416192406ce2d"
+  },
+  "feature_contract_fingerprint": "750e47dac572ad4a07bd308526ca382acda0c90d62b5440236ed9b34c1423d6c",
+  "model_code_runtime_unchanged": true,
+  "input_schemas_unchanged": true,
+  "coverage_basis": "source declaration, not independently verified complete external books",
+  "simultaneous_checks_are_queue_events": false,
+  "operational_model_fit_performed": false,
+  "active_model_changed": false,
+  "full_R2_gate_run": false,
+  "release_approved": false,
+  "diagnostic_history": [
+    "initial focused: two fixture setup errors, fixed before final successful runs",
+    "interrupted native log: stopped for correction outside invoice scope fix; final full suite restarted"
+  ],
+  "log_encoding": "PowerShell UTF-16 logs normalized to UTF-8 without content changes"
+}

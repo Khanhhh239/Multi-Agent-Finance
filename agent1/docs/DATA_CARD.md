@@ -1,11 +1,12 @@
 # Agent 1 — Thẻ dữ liệu (Data Card)
 
 > **Ảnh chụp dữ liệu giai đoạn đầu.** Bảng bốn World và tám nguồn bên dưới
-> không phải tồn kho ngày 27/10/2026: file thô hiện chỉ còn WDI và OxCGRT.
-> Manifest tám nguồn đã chuyển thành [hồ sơ lịch sử](02_Data/MANIFEST_RAW_8_SOURCES_2026-10-14_ARCHIVE.json).
-> Để dùng bộ train synthetic hiện dùng, đọc [báo cáo v4](02_Data/25_V4_SHORTPAY_4SHOCK_RETRAIN_2026-10-28.md)
-> và [cohort JSON](../data/synthetic/v4_shortpay_4shock_20261028_cohort.json); trạng thái
-> pilot đọc ở [cổng hiện hành](03_Evaluation/GATES_CURRENT.md).
+> không phải tồn kho hiện tại. Kiểm ngày 14/11/2026: raw trống, các World
+> chỉ còn config/manifest, không có Parquet. Đọc [tồn kho](02_Data/README.md),
+> [nguồn và giới hạn](02_Data/02_du_lieu_that_dung.md),
+> [provenance v4](02_Data/07_bo_danh_gia.md) và
+> [cohort JSON](../data/synthetic/v4_shortpay_4shock_20261028_cohort.json).
+> Giới hạn bằng chứng và pilot đọc ở [nghiệm thu](03_Evaluation/03_cong_nghiem_thu.md).
 
 Dữ liệu của Agent 1 theo **ba tầng** (Phần 5, mục 0). Mỗi tầng chỉ được dùng cho đúng loại kết luận của nó:
 

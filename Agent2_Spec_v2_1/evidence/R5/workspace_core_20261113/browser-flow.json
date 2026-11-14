@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "checks": [
+    "Portal login opens real company-scoped work area without local access code",
+    "C001: actual csv validation, acknowledgement and immutable snapshot commit",
+    "C001: selected snapshot continues to real encrypted run and five business review cases",
+    "scoped supplementary PDF upload, evidence selection and authenticated download",
+    "lost save response retries the same request and creates one feedback revision",
+    "C001: server feedback, filtering, reload same run and authenticated CSV download",
+    "C002: actual xlsx validation, acknowledgement and immutable snapshot commit",
+    "C002: selected snapshot continues to real encrypted run and five business review cases",
+    "C002: server feedback, filtering, reload same run and authenticated CSV download",
+    "company switch clears prior private review state and manager navigation",
+    "explicit new request after seeded terminal failure retains old failed job and completes real CKKS on same snapshot",
+    "mobile overview keeps run actions within screen width"
+  ],
+  "count": 12,
+  "browser_errors": [],
+  "servers": "isolated Portal and enterprise node",
+  "real_ckks": true,
+  "analysis_mode_metadata_mocked": true,
+  "native_he4_claim": false,
+  "live_services_changed": false,
+  "human_business_labels": false
+}

@@ -1,0 +1,41 @@
+{
+  "status": "committed",
+  "import_id": "imp_ed66daaf150042439f82c143c3ddfe4a",
+  "snapshot": {
+    "snapshot_version": "1.0.0",
+    "snapshot_id": "snp_9bbb8a0f73a649049d2065ca75ab2156",
+    "tenant_id": "demo",
+    "company_id": "C001",
+    "contract_version": "1.1.0",
+    "data_checksum": "d56f9b2316f5e527224f876f0ad3330e96c095450e375d6a111b3f2d3ce722a2",
+    "source_hash": "856fe7ab26c74df79d4fd28f2e9f46e7f812ebcde4c0f4ae8aaa8487d5b41a72",
+    "mapping_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "versions": {
+      "protocol_version": "1.0.0",
+      "parser_version": "json-record-columns/1.1.0",
+      "contract_version": "1.1.0",
+      "schema_sha256": "20fcc891677308c0a8394403deff337d52f722315fe6d75b5d5438cb3351ce22",
+      "supported_contract_versions": [
+        "1.0.0",
+        "1.1.0"
+      ],
+      "schema_hashes": {
+        "1.0.0": "049997d76a1ab977d83f0230388605486f4eddd077fa1ad5045406aa9009a453",
+        "1.1.0": "20fcc891677308c0a8394403deff337d52f722315fe6d75b5d5438cb3351ce22"
+      },
+      "validator_version": "1.2.0",
+      "profile_version": "agent2-posted-vnd/1.1.0",
+      "report_version": "1.2.0",
+      "parser_fingerprint": "c370a5e2d5b9108c32aa6ff62b40a5b120736030a5960c22e7977ab86cba21ea",
+      "jsonschema_version": "4.26.0",
+      "validator_fingerprint": "8d8ae0df3002bb59d7046aaf6244c2eb97d99fd2c7c54b7b1987d1966abf68f0"
+    },
+    "origin_import_id": "imp_ed66daaf150042439f82c143c3ddfe4a",
+    "origin_revision": 1,
+    "origin_preview_id": "prv_5cd38cd1a0c54e78a9a45e65a0ff682a",
+    "origin_report_hash": "371436ca2ffca62717ee4fe16c43816529f3bf0c02f7cbebd65ccb25e5257f99",
+    "created_at": "2026-11-11T18:34:29.228227+00:00",
+    "created_by": "portal-reviewer",
+    "checksum": "3aa077ee92a09ac3685b9c0c1c3f51face98a20d7487c1c359f8dcd6a522df01"
+  }
+}

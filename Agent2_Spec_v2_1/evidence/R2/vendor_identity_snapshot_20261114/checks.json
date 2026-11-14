@@ -1,0 +1,583 @@
+{
+  "status": "passed",
+  "technical_only": true,
+  "is_simulated": true,
+  "source_packages": 10,
+  "parity_checks": 20,
+  "missing_source_checks": 4,
+  "model_fit_performed": false,
+  "new_he_execution": false,
+  "portal_changed": false,
+  "checks": [
+    {
+      "case_id": "C001_signal",
+      "company_id": "C001",
+      "rule_id": "B5",
+      "source_sha256": "2c2127121c8b3d134cf8edae07f272f9abeb724d099b55597ccdfb2c4cd85c3a",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 3,
+      "evidence": {
+        "shared_fields": {
+          "bank_account": [
+            "SIM_SECOND_VENDOR"
+          ],
+          "phone": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_bank_or_phone",
+        "declared_vendor_ids": []
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C001_signal",
+      "company_id": "C001",
+      "rule_id": "E4",
+      "source_sha256": "2c2127121c8b3d134cf8edae07f272f9abeb724d099b55597ccdfb2c4cd85c3a",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 3,
+      "evidence": {
+        "shared_fields": {
+          "bank_account": [
+            "SIM_SECOND_VENDOR"
+          ],
+          "phone": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_bank_or_phone",
+        "declared_vendor_ids": []
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C001_control",
+      "company_id": "C001",
+      "rule_id": "B5",
+      "source_sha256": "c6b36f6e56a22a0925c5c246bd46ea7e32a43e27197446c886fc8f8cc1045614",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_no_hit",
+      "matched": false,
+      "score": 0,
+      "intrinsic_points": 0,
+      "evidence": {},
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C001_control",
+      "company_id": "C001",
+      "rule_id": "E4",
+      "source_sha256": "c6b36f6e56a22a0925c5c246bd46ea7e32a43e27197446c886fc8f8cc1045614",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_no_hit",
+      "matched": false,
+      "score": 0,
+      "intrinsic_points": 0,
+      "evidence": {},
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C001_phone_only",
+      "company_id": "C001",
+      "rule_id": "B5",
+      "source_sha256": "dc43a1283dc438c0b73098afca0b500e03b91cac64a9bd4cf42af35fba2280ce",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 3,
+      "evidence": {
+        "shared_fields": {
+          "phone": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_bank_or_phone",
+        "declared_vendor_ids": []
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C001_phone_only",
+      "company_id": "C001",
+      "rule_id": "E4",
+      "source_sha256": "dc43a1283dc438c0b73098afca0b500e03b91cac64a9bd4cf42af35fba2280ce",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 3,
+      "evidence": {
+        "shared_fields": {
+          "phone": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_bank_or_phone",
+        "declared_vendor_ids": []
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C001_address_only",
+      "company_id": "C001",
+      "rule_id": "B5",
+      "source_sha256": "4a4befacf5972c3ca3f41ea3b84594a4d58ee2ebf3f4a03c48267df7bca9e25d",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 1,
+      "evidence": {
+        "shared_fields": {
+          "address": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_address_only",
+        "declared_vendor_ids": []
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C001_address_only",
+      "company_id": "C001",
+      "rule_id": "E4",
+      "source_sha256": "4a4befacf5972c3ca3f41ea3b84594a4d58ee2ebf3f4a03c48267df7bca9e25d",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 1,
+      "evidence": {
+        "shared_fields": {
+          "address": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_address_only",
+        "declared_vendor_ids": []
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C001_declared",
+      "company_id": "C001",
+      "rule_id": "B5",
+      "source_sha256": "57477d37149c05c76de04ec98b04a594b8ab999497c0417cd0fecf7b767d7ec3",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 3,
+      "evidence": {
+        "shared_fields": {
+          "bank_account": [
+            "SIM_SECOND_VENDOR"
+          ],
+          "phone": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_bank_or_phone",
+        "declared_vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ]
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C001_declared",
+      "company_id": "C001",
+      "rule_id": "E4",
+      "source_sha256": "57477d37149c05c76de04ec98b04a594b8ab999497c0417cd0fecf7b767d7ec3",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 3,
+      "evidence": {
+        "shared_fields": {
+          "bank_account": [
+            "SIM_SECOND_VENDOR"
+          ],
+          "phone": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_bank_or_phone",
+        "declared_vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ]
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C002_signal",
+      "company_id": "C002",
+      "rule_id": "B5",
+      "source_sha256": "bc01c02959e33d8c30fb88f9698819e276f26daf8868aa71026afd92f407507e",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 3,
+      "evidence": {
+        "shared_fields": {
+          "bank_account": [
+            "SIM_SECOND_VENDOR"
+          ],
+          "phone": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_bank_or_phone",
+        "declared_vendor_ids": []
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C002_signal",
+      "company_id": "C002",
+      "rule_id": "E4",
+      "source_sha256": "bc01c02959e33d8c30fb88f9698819e276f26daf8868aa71026afd92f407507e",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 3,
+      "evidence": {
+        "shared_fields": {
+          "bank_account": [
+            "SIM_SECOND_VENDOR"
+          ],
+          "phone": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_bank_or_phone",
+        "declared_vendor_ids": []
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C002_control",
+      "company_id": "C002",
+      "rule_id": "B5",
+      "source_sha256": "5a944211666b6d18e4c58e0537aab6d8d9c9c2514de301c1ab7b695a15135cfd",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_no_hit",
+      "matched": false,
+      "score": 0,
+      "intrinsic_points": 0,
+      "evidence": {},
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C002_control",
+      "company_id": "C002",
+      "rule_id": "E4",
+      "source_sha256": "5a944211666b6d18e4c58e0537aab6d8d9c9c2514de301c1ab7b695a15135cfd",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_no_hit",
+      "matched": false,
+      "score": 0,
+      "intrinsic_points": 0,
+      "evidence": {},
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C002_phone_only",
+      "company_id": "C002",
+      "rule_id": "B5",
+      "source_sha256": "ff296b735e8eafb3ee49868f4337cd3aea1f81fd88d70462285832489b478bf1",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 3,
+      "evidence": {
+        "shared_fields": {
+          "phone": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_bank_or_phone",
+        "declared_vendor_ids": []
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C002_phone_only",
+      "company_id": "C002",
+      "rule_id": "E4",
+      "source_sha256": "ff296b735e8eafb3ee49868f4337cd3aea1f81fd88d70462285832489b478bf1",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 3,
+      "evidence": {
+        "shared_fields": {
+          "phone": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_bank_or_phone",
+        "declared_vendor_ids": []
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C002_address_only",
+      "company_id": "C002",
+      "rule_id": "B5",
+      "source_sha256": "da54e4a790448f55af22c145ffab6898bb0450c76b4201d8933ce0a7be97bdb6",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 1,
+      "evidence": {
+        "shared_fields": {
+          "address": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_address_only",
+        "declared_vendor_ids": []
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C002_address_only",
+      "company_id": "C002",
+      "rule_id": "E4",
+      "source_sha256": "da54e4a790448f55af22c145ffab6898bb0450c76b4201d8933ce0a7be97bdb6",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 1,
+      "evidence": {
+        "shared_fields": {
+          "address": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_address_only",
+        "declared_vendor_ids": []
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C002_declared",
+      "company_id": "C002",
+      "rule_id": "B5",
+      "source_sha256": "e54ec2dd78a2d002701b3fe376c451b1d36cd1f21f3c5c79c013b3d454fff3f5",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 3,
+      "evidence": {
+        "shared_fields": {
+          "bank_account": [
+            "SIM_SECOND_VENDOR"
+          ],
+          "phone": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_bank_or_phone",
+        "declared_vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ]
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    },
+    {
+      "case_id": "C002_declared",
+      "company_id": "C002",
+      "rule_id": "E4",
+      "source_sha256": "e54ec2dd78a2d002701b3fe376c451b1d36cd1f21f3c5c79c013b3d454fff3f5",
+      "as_of": "2025-08-12T11:00:00+07:00",
+      "event_at": "2025-08-12T11:00:00+07:00",
+      "knowledge_at": "2025-08-12T11:00:00+07:00",
+      "status": "evaluated_hit",
+      "matched": true,
+      "score": 0,
+      "intrinsic_points": 3,
+      "evidence": {
+        "shared_fields": {
+          "bank_account": [
+            "SIM_SECOND_VENDOR"
+          ],
+          "phone": [
+            "SIM_SECOND_VENDOR"
+          ]
+        },
+        "vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ],
+        "overlap_kind": "shared_bank_or_phone",
+        "declared_vendor_ids": [
+          "SIM_SECOND_VENDOR",
+          "V0000013"
+        ]
+      },
+      "native_parity": true,
+      "source_unchanged": true
+    }
+  ],
+  "missing": [
+    {
+      "company_id": "C001",
+      "rule_id": "B5",
+      "passed": true
+    },
+    {
+      "company_id": "C001",
+      "rule_id": "E4",
+      "passed": true
+    },
+    {
+      "company_id": "C002",
+      "rule_id": "B5",
+      "passed": true
+    },
+    {
+      "company_id": "C002",
+      "rule_id": "E4",
+      "passed": true
+    }
+  ]
+}

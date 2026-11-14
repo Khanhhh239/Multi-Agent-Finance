@@ -34,6 +34,18 @@ function plan() {
 
 }
 
+test("cash band labels distinguish calibrated endpoints, raw quantiles and legacy unknown bands", () => {
+  const scope = ui();
+  const saved = {band_status:"calibrated_out_of_sample", weeks:[{low:-50, high:150, raw_low:0, raw_high:100}]};
+  const calibrated = scope.cashBandPresentation(saved);
+  assert.equal(calibrated.low, "Cận dưới đã hiệu chỉnh");
+  assert.ok(calibrated.note.includes("không phải P10/P90"));
+  assert.equal(scope.cashBandPresentation({...saved, band_status:undefined}).high, "Cận trên đã hiệu chỉnh");
+  assert.equal(scope.cashBandPresentation({band_status:"raw_simulation", weeks:[{}]}).low, "Mô phỏng P10");
+  assert.equal(scope.cashBandPresentation({band_status:"insufficient_out_of_sample_errors", weeks:[{}]}).high, "Mô phỏng P90");
+  assert.equal(scope.cashBandPresentation({weeks:[{}]}).low, "Cận dưới dải số dư");
+});
+
 test("cash UI shows saved provenance, money bridge and T10 entry points safely as text", () => {
   const panel = ui().renderCashDecomposition(plan());
   const text = content(panel);
@@ -85,6 +97,57 @@ test("scenario form sends assumptions against the saved forecast without replaci
   assert.equal(calls[0][0], "/forecasts/SAVED/scenarios");
   assert.deepEqual(calls[0][1], {customer_id:"CUSTOMER",customer_delay_weeks:2,expense_id:null,expense_delay_weeks:0});
   assert.equal("simulation_seed" in calls[0][1], false);
+});
+
+test("saved scenarios identify their assumptions and restore the form without relabelling old results", async () => {
+  const scope = ui(), data = t10Plan(), calls = [];
+  data.cutoff = "2026-02-10";
+  data.cash_decomposition.outflows = [{expense_id:"RENT"}];
+  const assumptions = {customer_id:"CUSTOMER", customer_delay_weeks:2, expense_id:"RENT", expense_delay_weeks:3};
+  const result = {id:"DELAY3", forecast_id:"SAVED", assumptions,
+    baseline_any_shortfall_probability:.2, scenario_any_shortfall_probability:.4,
+    delta_any_shortfall_probability:.2, delta_probability_mc_standard_error:.01,
+    limitations:[], weeks:[]};
+  scope.action = async fn => fn();
+  scope.api = async url => {
+    calls.push(url);
+    if (url.endsWith("/scenarios")) return [
+      {id:"DELAY1", created_at:"2026-11-14", assumptions:{...assumptions, expense_delay_weeks:1}},
+      {id:"DELAY3", created_at:"2026-11-14", assumptions},
+    ];
+    assert.equal(url, "/forecasts/SAVED/scenarios/DELAY3");
+    return result;
+  };
+  const panel = scope.renderT10Scenarios(data);
+  const get = label => descendants(panel, n => n.attributes["aria-label"] === label)[0];
+  const buttons = () => descendants(panel, n => n.tag === "button");
+  get("Khách trả chậm").value = "";
+  get("Số tuần trả chậm thêm").value = "1";
+  get("Khoản chi cần dời").value = "";
+  get("Số tuần dời chi thêm").value = "0";
+  await buttons().find(n => n.textContent === "Mở kịch bản đã lưu").onclick();
+  assert.ok(buttons().some(n => n.textContent.includes("Khoản chi RENT dời thêm 1 tuần")));
+  await buttons().find(n => n.textContent.includes("Khoản chi RENT dời thêm 3 tuần")).onclick();
+  const summary = get("Giả định của kết quả kịch bản");
+  for (const expected of ["Khách CUSTOMER trả chậm thêm 2 tuần", "Khoản chi RENT dời thêm 3 tuần", "SAVED", "2026-02-10"])
+    assert.ok(content(summary).includes(expected), expected);
+  assert.equal(get("Khách trả chậm").value, "CUSTOMER");
+  assert.equal(String(get("Số tuần trả chậm thêm").value), "2");
+  assert.equal(get("Khoản chi cần dời").value, "RENT");
+  assert.equal(String(get("Số tuần dời chi thêm").value), "3");
+  const savedSummary = content(summary);
+  get("Khách trả chậm").value = "";
+  get("Số tuần trả chậm thêm").value = "13";
+  get("Số tuần dời chi thêm").value = "9";
+  assert.equal(content(summary), savedSummary);
+  assert.ok(content(panel).includes("Giả định để chạy kịch bản"));
+  assert.deepEqual(calls, ["/forecasts/SAVED/scenarios", "/forecasts/SAVED/scenarios/DELAY3"]);
+
+  const all = scope.renderT10ScenarioResult({...result, assumptions:{customer_id:null,
+    customer_delay_weeks:0, expense_id:null, expense_delay_weeks:0}}, data);
+  assert.ok(content(all).includes("Tất cả khách trả chậm thêm 0 tuần; Không dời chi."));
+  const legacy = scope.renderT10ScenarioResult({...result, assumptions:undefined}, data);
+  assert.ok(content(legacy).includes("chưa lưu đầy đủ giả định"));
 });
 
 test("T5 UI keeps paid remainder, overdue warning and refunds visible without HTML injection", () => {

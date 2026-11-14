@@ -1,0 +1,273 @@
+{
+  "tests": [
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_all_transaction_rules_positive_control_and_independent_native_parity",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_all_transaction_rules_positive_control_and_independent_native_parity"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_cross_company_and_missing_permission_denied_before_private_data",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_cross_company_and_missing_permission_denied_before_private_data"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_e4_is_alias_of_b5_and_never_a_second_aggregate_score",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_e4_is_alias_of_b5_and_never_a_second_aggregate_score"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_future_transactions_remain_listed_with_unavailable_reason",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_future_transactions_remain_listed_with_unavailable_reason"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_invalid_reference_types_and_transaction_revisions_rejected_cleanly",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_invalid_reference_types_and_transaction_revisions_rejected_cleanly"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_labels_features_and_expected_results_never_enter_input",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_labels_features_and_expected_results_never_enter_input"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_late_bank_evidence_cannot_change_past_result",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_late_bank_evidence_cannot_change_past_result"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_late_posted_source_rejected_without_rewriting_observation_time",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_late_posted_source_rejected_without_rewriting_observation_time"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_missing_invoice_value_and_bank_identity_are_not_no_hit",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_missing_invoice_value_and_bank_identity_are_not_no_hit"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_missing_or_incomplete_manifest_is_unavailable_not_zero",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_missing_or_incomplete_manifest_is_unavailable_not_zero"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_missing_payroll_context_and_master_unknown_at_action_are_rejected",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_missing_payroll_context_and_master_unknown_at_action_are_rejected"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_negative_native_amount_is_not_silently_abs_or_zero",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_negative_native_amount_is_not_silently_abs_or_zero"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_same_transaction_ids_in_two_companies_stay_separate",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_same_transaction_ids_in_two_companies_stay_separate"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_small_statistical_population_is_unavailable_not_no_hit",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_small_statistical_population_is_unavailable_not_no_hit"
+    },
+    {
+      "id": "test_native_rule_node.NativeRuleNode.test_stale_manifest_duplicate_or_changed_source_rejected_before_engine",
+      "status": "pass",
+      "testcase": "test_native_rule_node.NativeRuleNode.test_stale_manifest_duplicate_or_changed_source_rejected_before_engine"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_batch_installment_exception_is_retained_once_in_diagnostics",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_batch_installment_exception_is_retained_once_in_diagnostics"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_bound_installment_exceptions_are_not_filtered_out",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_bound_installment_exceptions_are_not_filtered_out"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_callback_known_later_preserves_before_and_after_results",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_callback_known_later_preserves_before_and_after_results"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_explicit_authority_matrix_keeps_permitted_exception",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_explicit_authority_matrix_keeps_permitted_exception"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_five_default_rows_include_zero_scores",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_five_default_rows_include_zero_scores"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_foreign_diagnostics_and_out_of_input_batch_participants_are_rejected",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_foreign_diagnostics_and_out_of_input_batch_participants_are_rejected"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_input_permutation_and_duplicate_ids_are_not_silent_row_filters",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_input_permutation_and_duplicate_ids_are_not_silent_row_filters"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_missing_one_engine_row_returns_five_results_and_one_unavailable",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_missing_one_engine_row_returns_five_results_and_one_unavailable"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_paid_leave_keeps_hr_exception_evidence",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_paid_leave_keeps_hr_exception_evidence"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_pinned_legacy_profile_is_compared_without_switching_to_defaults",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_pinned_legacy_profile_is_compared_without_switching_to_defaults"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_returned_objects_do_not_alias_input_engine_output",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_returned_objects_do_not_alias_input_engine_output"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_self_approval_alert_and_lawful_exception_both_survive",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_self_approval_alert_and_lawful_exception_both_survive"
+    },
+    {
+      "id": "test_rule_parity.NativeRuleParityTests.test_simultaneous_invoice_warning_is_retained_as_batch_evidence",
+      "status": "pass",
+      "testcase": "test_rule_parity.NativeRuleParityTests.test_simultaneous_invoice_warning_is_retained_as_batch_evidence"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_e3_matches_native_engine_hit_evidence_and_scoring_policy",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_e3_matches_native_engine_hit_evidence_and_scoring_policy"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_future_vendor_and_revisions_never_change_past_result",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_future_vendor_and_revisions_never_change_past_result"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_hit_has_evidence_and_intrinsic_points_without_inflating_master_risk",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_hit_has_evidence_and_intrinsic_points_without_inflating_master_risk"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_missing_sources_are_null_not_no_hit_and_have_specific_gaps",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_missing_sources_are_null_not_no_hit_and_have_specific_gaps"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_no_hit_is_explicit_and_is_not_a_claim_of_validity",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_no_hit_is_explicit_and_is_not_a_claim_of_validity"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_not_applicable_is_not_a_no_hit",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_not_applicable_is_not_a_no_hit"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_schema_rejects_zero_and_false_on_unavailable_result",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_schema_rejects_zero_and_false_on_unavailable_result"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_scope_cutoff_checksum_and_evidence_tampering_are_rejected",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_scope_cutoff_checksum_and_evidence_tampering_are_rejected"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_snapshot_integration_preserves_every_result_and_never_fits",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_snapshot_integration_preserves_every_result_and_never_fits"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_threshold_is_strict_on_raw_similarity_before_rounding",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_threshold_is_strict_on_raw_similarity_before_rounding"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_uninformative_name_is_unavailable_even_if_field_exists",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_uninformative_name_is_unavailable_even_if_field_exists"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_unrelated_invoice_gap_does_not_disable_vendor_name_rule",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_unrelated_invoice_gap_does_not_disable_vendor_name_rule"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_bad_cutoff_or_foreign_frame_is_rejected",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_bad_cutoff_or_foreign_frame_is_rejected"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_catalog_covers_every_retained_rule_and_explicit_contract_gaps",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_catalog_covers_every_retained_rule_and_explicit_contract_gaps"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_company_isolation_and_permission_guards",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_company_isolation_and_permission_guards"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_current_master_revision_can_change_only_when_both_clocks_allow_it",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_current_master_revision_can_change_only_when_both_clocks_allow_it"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_documents_preserve_simulation_and_verification_provenance",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_documents_preserve_simulation_and_verification_provenance"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_history_excludes_self_and_simultaneous_rows_on_both_clocks",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_history_excludes_self_and_simultaneous_rows_on_both_clocks"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_immutable_source_and_payload_separation",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_immutable_source_and_payload_separation"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_late_document_and_future_source_values_cannot_change_past_bindings",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_late_document_and_future_source_values_cannot_change_past_bindings"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_late_revision_is_filtered_before_choosing_latest_master",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_late_revision_is_filtered_before_choosing_latest_master"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_missing_invoice_revision_is_gap_not_zero_or_future_invoice",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_missing_invoice_revision_is_gap_not_zero_or_future_invoice"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_real_sources_ready_is_distinct_from_evaluated_or_missing",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_real_sources_ready_is_distinct_from_evaluated_or_missing"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_signed_adjustments_are_retained_without_legacy_placeholders",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_signed_adjustments_are_retained_without_legacy_placeholders"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_snapshot_pipeline_has_one_diagnostic_per_rule_and_never_scores_from_readiness",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_snapshot_pipeline_has_one_diagnostic_per_rule_and_never_scores_from_readiness"
+    }
+  ],
+  "count": 53,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0
+}

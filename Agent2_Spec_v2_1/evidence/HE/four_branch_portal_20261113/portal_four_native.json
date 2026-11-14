@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "actual_fhe": true,
+  "portal_fixture": true,
+  "simulated_data": true,
+  "checks": [
+    "actual managed WSL preflight verifies all company contexts and signed worker readiness",
+    "C001: five native encrypted results, all four branch statuses, review cases and same run after reload",
+    "C002: five native encrypted results, all four branch statuses, review cases and same run after reload",
+    "no JavaScript errors and no company run collision"
+  ],
+  "count": 4,
+  "browser_errors": [],
+  "seconds": 1558.7189999999973,
+  "live_services_changed": false
+}

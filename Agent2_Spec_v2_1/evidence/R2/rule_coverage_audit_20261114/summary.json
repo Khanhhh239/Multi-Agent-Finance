@@ -1,0 +1,13 @@
+{
+  "catalog_rules": 35,
+  "declared_source_maps": 35,
+  "snapshot_evaluator_rules": [
+    "E3",
+    "P1"
+  ],
+  "missing_snapshot_evaluators": 33,
+  "he_rule_ids": [
+    "P1"
+  ],
+  "rules_with_contract_schema_gaps": 33
+}

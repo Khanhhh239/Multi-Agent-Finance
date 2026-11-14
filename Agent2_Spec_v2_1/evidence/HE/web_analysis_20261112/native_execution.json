@@ -1,0 +1,13 @@
+{
+  "command": [
+    "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "agent2/scripts/run_r1_tests.py",
+    "--report",
+    "Agent2_Spec_v2_1\\evidence\\HE\\web_analysis_20261112\\native_tests.json"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 396.906
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "BR-026-01",
+    "priority": "high",
+    "classification": "business_policy_decision_required",
+    "title": "Khoản đầu 11 triệu trên hóa đơn 10 triệu chưa được gắn cờ",
+    "evidence": "first-payment-results.json",
+    "detail": "P1 cần có thanh toán trước theo policy hiện tại. Kết quả no_signal nhưng facts có phần vượt 1 triệu; không được hiểu no_signal là hợp lệ. Không tự thay luật khi chưa chốt phạm vi."
+  },
+  {
+    "id": "BR-026-02",
+    "priority": "medium",
+    "classification": "coverage_presentation_gap",
+    "title": "Một kiểm tra chưa đủ nguồn không phải chỉ một giao dịch thiếu chứng từ",
+    "evidence": "main-preview.json / main-results.json",
+    "detail": "Preview báo cả 5 thiếu chứng từ gốc, phê duyệt, lịch sử tài khoản. Kết quả đếm 1 unavailable cho hai kiểm tra đang chạy, còn preview bị ẩn sau lưu. Nên giữ tóm tắt giới hạn nguồn bên cạnh kết quả."
+  },
+  {
+    "id": "BR-026-03",
+    "priority": "medium",
+    "classification": "business_evidence_usability_gap",
+    "title": "Màn hình chưa hiện số hóa đơn và cặp tên NCC cần đối chiếu",
+    "evidence": "main-results.json / source.json",
+    "detail": "DTO có refs I001/V001/V_PEER nhưng không có số 0000123 hoặc hai tên nguồn. Người rà phải mở tệp JSON để biết chi tiết; nên bổ sung trường nghiệp vụ cho phép, không lộ tham số/điểm."
+  }
+]

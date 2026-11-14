@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "checks": [
+    "profile_preview_accepted",
+    "snapshot_saved_cutoff_set_from_source",
+    "all_rule_profile_analyzed_in_ui",
+    "confirmed_signal_and_catalogue_scope_visible",
+    "scope_diagnostics_separate",
+    "remaining_checks_collapsed"
+  ],
+  "page_errors": [],
+  "source_profile": "agent2-rule-snapshot/1.0.0",
+  "live_services_changed": false,
+  "portal_login_used": false
+}

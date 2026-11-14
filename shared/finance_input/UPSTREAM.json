@@ -1,0 +1,144 @@
+{
+  "contract_version": "1.0.0",
+  "remote": "https://github.com/Khanhhh239/Multi-Agent-Finance.git",
+  "ref": "origin/platform-Khanh",
+  "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+  "copied": [
+    {
+      "path": "agent1/agent1_service/ingest/money.py",
+      "target": "src/finance_input/money.py",
+      "sha256": "b6e16fb7721d5325e50dc5dfd9fa1afcfe1dde9907abb97aa8ceae73bee4d5c4",
+      "changes": "none"
+    }
+  ],
+  "audit": [
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent1/agent1/adaptive/data.py",
+      "sha256": "b9ebb8d04a24a1e58c31904b26b7fc3a66488e9e534fabcefa9588f872cac603",
+      "local_sha256": "52d670eca1509e27b337e0d40d11591d62b1a91186b1990ca827cbecf50458b6",
+      "local_matches_remote": false
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent1/agent1_service/ingest/money.py",
+      "sha256": "b6e16fb7721d5325e50dc5dfd9fa1afcfe1dde9907abb97aa8ceae73bee4d5c4",
+      "local_sha256": "d88b7215c23eb3cfaea2ba55b68b51fc34faf8f754d31648b0e1cf76549b8d84",
+      "local_matches_remote": false
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent1/agent1_service/ingest/dates.py",
+      "sha256": "ca7c9133fa85650ac39acd9c3b5cfcef4003e11d07dc945b07ca1916577ee6e4",
+      "local_sha256": "e54dfebe3eddf4682a5b57c74b927ea2cc80afacaccc4c8ea11cd26f0ad26df4",
+      "local_matches_remote": false
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent1/agent1_service/ingest/strict_files.py",
+      "sha256": "b8852a36ca0bb7d049f5a489d143685158b54f300f79cb22094546042b2a978c",
+      "local_sha256": "543c5def012b3959530329d226b9646d06d051ea5d408805a3bafffcd001c85f",
+      "local_matches_remote": false
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent1/agent1_service/workspace/api.py",
+      "sha256": "16b6fe7892825c5ad5f4178575258c96aa676336b40aefefc0dc53215293edeb",
+      "local_sha256": "0d3c279442464fae30052035a8cc25364d41823e87192632538f22c25ae9d55a",
+      "local_matches_remote": false
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent3/agent3_tax_compliance/src/domain/money.py",
+      "sha256": "3280793f77a8bfc614a0ea5fc041208b3b7c6dd316ccae497bb1f6fb903d0b5a",
+      "local_sha256": "3280793f77a8bfc614a0ea5fc041208b3b7c6dd316ccae497bb1f6fb903d0b5a",
+      "local_matches_remote": true
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent3/agent3_tax_compliance/src/domain/base.py",
+      "sha256": "30772458506fd94b4ed96ef604dc491ed594b23053fb7a6faaa65e899b5006a3",
+      "local_sha256": "30772458506fd94b4ed96ef604dc491ed594b23053fb7a6faaa65e899b5006a3",
+      "local_matches_remote": true
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent3/agent3_tax_compliance/src/domain/cfr.py",
+      "sha256": "ea69ea956880276674f73a580ae9c34557fcb1b9a26651cc47203538eea66ff4",
+      "local_sha256": "ea69ea956880276674f73a580ae9c34557fcb1b9a26651cc47203538eea66ff4",
+      "local_matches_remote": true
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent3/agent3_tax_compliance/src/domain/envelope.py",
+      "sha256": "b809deac6cabdbbf6a6da528ee51eab2c39a6496db15c9a45491068ee0da8a06",
+      "local_sha256": "b809deac6cabdbbf6a6da528ee51eab2c39a6496db15c9a45491068ee0da8a06",
+      "local_matches_remote": true
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent3/agent3_tax_compliance/src/canonicalization/normalize.py",
+      "sha256": "9c05c40d10cdebf66c27edca2cc93b45bf4f38612bde23fad0f0858e4aeccb9a",
+      "local_sha256": "9c05c40d10cdebf66c27edca2cc93b45bf4f38612bde23fad0f0858e4aeccb9a",
+      "local_matches_remote": true
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent3/agent3_tax_compliance/src/ingestion/auth.py",
+      "sha256": "41141244baed57cca8f0f794fe87d12b5f911ddb7cd5fb99fdcc755cbf7c0ede",
+      "local_sha256": "41141244baed57cca8f0f794fe87d12b5f911ddb7cd5fb99fdcc755cbf7c0ede",
+      "local_matches_remote": true
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent3/agent3_tax_compliance/src/ingestion/repository.py",
+      "sha256": "46421c2e499b2ad63e50bcabac185d0db1aa22c07a4575138d00f4bd02cfe9bd",
+      "local_sha256": "46421c2e499b2ad63e50bcabac185d0db1aa22c07a4575138d00f4bd02cfe9bd",
+      "local_matches_remote": true
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent3/agent3_tax_compliance/src/business_review/contracts.py",
+      "sha256": "7faeb61289f27a227e1903269dfe19c22a2b98e09988a8bd7802fa8e5f14c4d6",
+      "local_sha256": "7faeb61289f27a227e1903269dfe19c22a2b98e09988a8bd7802fa8e5f14c4d6",
+      "local_matches_remote": true
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent4/agent4/datagen/ledger.py",
+      "sha256": "02d36df57305761b3eadd6cb65a28ca62311b9affb06599246e6fe3979071f8d",
+      "local_sha256": "eb04c2c59b9cd928c666dada47efd9b56152e92c004cf024e6dab5d2ff252682",
+      "local_matches_remote": false
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "agent4/agent4/datagen/build.py",
+      "sha256": "a43bd2e45ee7c01ae67515aa350b26d649e065b5bbc7a6c33b2fb7b38eb9eec8",
+      "local_sha256": "2b992ef52a2e83258395b9faf0cbc592a4070471e48b0d44de96c529c8829aea",
+      "local_matches_remote": false
+    },
+    {
+      "ref": "origin/platform-Khanh",
+      "commit": "140a741e7290e70a783496e56e9ef48268a00f5d",
+      "path": "portal/server.py",
+      "sha256": "39ecbb68c5d3f8019293216b8e7ca8cc77184bd08ca72e2960e6859e9516fca4",
+      "local_sha256": "a941f569a3fab5a3574e48302ee310ec035270a7a538c2f84c2f52a543c7ff67",
+      "local_matches_remote": false
+    }
+  ]
+}

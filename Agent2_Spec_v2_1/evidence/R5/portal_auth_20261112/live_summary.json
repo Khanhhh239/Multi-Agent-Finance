@@ -1,0 +1,42 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "url": "agent2/api/v1/ui/settings",
+      "status": 200
+    },
+    {
+      "url": "agent2/api/health",
+      "status": 200
+    },
+    {
+      "url": "portal/agent2/",
+      "status": 200
+    },
+    {
+      "url": "portal/agent2/assets/workbench.js",
+      "status": 200
+    },
+    {
+      "url": "portal/agent2/api/v1/ui/settings",
+      "status": 200
+    },
+    {
+      "url": "portal/agent2/api/v1/ui/context",
+      "status": 401
+    },
+    {
+      "check": "old local credential is not a Portal fallback",
+      "status": 401
+    }
+  ],
+  "auth_mode": "portal",
+  "snapshot_count": 1,
+  "real_password_created": false,
+  "real_session_created": false,
+  "portal_login_configured": false,
+  "live_data_written": false,
+  "portal_url": "http://127.0.0.1:8800/#agent2",
+  "scope": "existing C001 accountant, data.import only",
+  "browser": "live locked screen and first-password gate passed"
+}

@@ -1,0 +1,11 @@
+{
+  "kind": "R2 latest evidence index; whole milestone still PARTIAL",
+  "latest": "rule_parity_20261111/artifact_manifest.json",
+  "files": [
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/rule_parity_20261111/artifact_manifest.json",
+      "sha256": "1c4f7f53e86c4c77ab75b886650fb826966ef30ec3ebc94f85c998cf5dffe9d3"
+    }
+  ],
+  "previous_manifest": "rule_results_20261111/artifact_manifest.json"
+}

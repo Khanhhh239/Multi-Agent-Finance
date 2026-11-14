@@ -1,0 +1,12 @@
+test_external_occupied_worker_port_is_not_adopted_or_stopped (test_managed_worker.ManagedWorkerTests.test_external_occupied_worker_port_is_not_adopted_or_stopped) ... ok
+test_invalid_dpapi_key_does_not_launch_services_or_overwrite_key (test_managed_worker.ManagedWorkerTests.test_invalid_dpapi_key_does_not_launch_services_or_overwrite_key) ... ok
+test_readiness_binds_fresh_challenge_scope_and_pinned_key_without_jobs (test_managed_worker.ManagedWorkerTests.test_readiness_binds_fresh_challenge_scope_and_pinned_key_without_jobs) ... ok
+test_start_stop_restart_preserves_models_keys_and_completed_results (test_managed_worker.ManagedWorkerTests.test_start_stop_restart_preserves_models_keys_and_completed_results) ... ok
+test_stop_start_preserves_pending_request_for_same_owner_resume (test_managed_worker.ManagedWorkerTests.test_stop_start_preserves_pending_request_for_same_owner_resume) ... ok
+test_worker_loss_recover_keeps_pending_job_and_node (test_managed_worker.ManagedWorkerTests.test_worker_loss_recover_keeps_pending_job_and_node) ... ok
+test_wrong_pinned_worker_key_never_starts_node_and_rolls_back_worker (test_managed_worker.ManagedWorkerTests.test_wrong_pinned_worker_key_never_starts_node_and_rolls_back_worker) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 89.435s
+
+OK

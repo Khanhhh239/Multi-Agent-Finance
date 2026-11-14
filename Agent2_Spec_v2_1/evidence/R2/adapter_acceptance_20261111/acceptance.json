@@ -1,0 +1,30 @@
+{
+  "spec_version": "2.1",
+  "stage": "R2",
+  "run_id": "e0d59a80-3398-4bb2-85da-3567f5970ace",
+  "scope": "CR-014 adapter verification only; not full R2 acceptance",
+  "tests": [
+    {
+      "id": "R2-04",
+      "status": "pass",
+      "expected": "Missing model returns unavailable/null; no fit during scoring.",
+      "observed": "Passing exact-five snapshot case guards CompanyEstimator.fit, RobustZ.fit and both fit_local_reference entry points; all assert_not_called. Present/missing/unconfigured scoring preserves model database dump.",
+      "evidence_path": "adapter_acceptance_20261111/focused_tests.json",
+      "testcases": [
+        "test_method_jobs.CompanyMethodJobTests.test_five_transaction_snapshot_returns_five_results_with_or_without_model",
+        "test_method_adapters.MethodAdapterTests.test_missing_artifact_is_null_and_inference_never_fits"
+      ]
+    },
+    {
+      "id": "R2-07",
+      "status": "pass",
+      "expected": "Five input transactions produce five results per requested adapter, including unavailable; no internal top-K.",
+      "observed": "Separate committed snapshot contains T0 through T4 only. Present ECOD, explicit nonexistent model and unconfigured methods each return row_count=5, exact identities/order, valid output schema. Generic adapter test also returns five rows for all five numerical methods.",
+      "evidence_path": "adapter_acceptance_20261111/focused_tests.json",
+      "testcases": [
+        "test_method_jobs.CompanyMethodJobTests.test_five_transaction_snapshot_returns_five_results_with_or_without_model",
+        "test_method_adapters.MethodAdapterTests.test_every_requested_adapter_returns_five_rows_without_top_k"
+      ]
+    }
+  ]
+}

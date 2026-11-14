@@ -1,0 +1,76 @@
+{
+  "all_pass": true,
+  "cases": [
+    {
+      "case": "row_gap",
+      "checks": {
+        "all_transactions_retained": true,
+        "points_equal": true,
+        "native_score_and_alert_fields_equal": true,
+        "hits_and_exceptions_equal": true,
+        "native_diagnostics_equal": true,
+        "diagnostic_binding_equal": true,
+        "coverage_equal": true,
+        "input_and_engine_output_unchanged": true
+      },
+      "counts": {
+        "input_rows": 2,
+        "output_rows": 2,
+        "hits": 3,
+        "operational_alerts": 0,
+        "zero_score_rows": 0,
+        "suppressed_hits": 0,
+        "suppressed_by_rule": {},
+        "batch_events": 0,
+        "batch_exceptions": 0,
+        "batch_positive_events": 0
+      },
+      "source_checksum": "ccadf34aa79df89b2322178bbb71739936a6af771fa5587d22d955551661f7a6",
+      "config": {
+        "noise_policy": "legacy",
+        "spec_policy": "legacy",
+        "evidence_policy": "disabled",
+        "cash_payment_policy": "disabled",
+        "amount_baseline": "log_mad"
+      },
+      "baseline_sha256": "ef180069e7fab82522a729a3dd4c97b9d8fad22a40acea3eaadfb471946d37b2",
+      "adapted_sha256": "f6cbe9c53e91f542629f39142919cc97976b93080230f98ec4b75e10e1a7cb21"
+    },
+    {
+      "case": "batch_history_gap",
+      "checks": {
+        "all_transactions_retained": true,
+        "points_equal": true,
+        "native_score_and_alert_fields_equal": true,
+        "hits_and_exceptions_equal": true,
+        "native_diagnostics_equal": true,
+        "diagnostic_binding_equal": true,
+        "coverage_equal": true,
+        "input_and_engine_output_unchanged": true
+      },
+      "counts": {
+        "input_rows": 3,
+        "output_rows": 3,
+        "hits": 6,
+        "operational_alerts": 0,
+        "zero_score_rows": 0,
+        "suppressed_hits": 0,
+        "suppressed_by_rule": {},
+        "batch_events": 1,
+        "batch_exceptions": 0,
+        "batch_positive_events": 0
+      },
+      "source_checksum": "5bbc5dfadd4269b187f597d819830b3b8dfcee661b8f96f579edeb2b8e6d1a99",
+      "config": {
+        "noise_policy": "legacy",
+        "spec_policy": "legacy",
+        "evidence_policy": "disabled",
+        "cash_payment_policy": "disabled",
+        "amount_baseline": "log_mad"
+      },
+      "baseline_sha256": "1a051d86717dbd420273f81cfe6b7cc5877674d62d00c8912ef65eb24a798866",
+      "adapted_sha256": "a94f280dc31563b2eceb99bb78bde72fd17fce9389d710ad01238a7502b8757b"
+    }
+  ],
+  "scope": "same_native_inputs_gap_payloads_and_cardinality_not_accuracy"
+}

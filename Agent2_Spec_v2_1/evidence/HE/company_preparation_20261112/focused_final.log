@@ -1,0 +1,10 @@
+test_each_company_has_five_evaluation_rows_and_own_model (test_prepared_demo.PreparedCompanyDemoTests.test_each_company_has_five_evaluation_rows_and_own_model) ... ok
+test_enterprise_keys_are_dpapi_and_no_standalone_credentials_remain (test_prepared_demo.PreparedCompanyDemoTests.test_enterprise_keys_are_dpapi_and_no_standalone_credentials_remain) ... ok
+test_exported_bytes_match_the_immutable_source_upload (test_prepared_demo.PreparedCompanyDemoTests.test_exported_bytes_match_the_immutable_source_upload) ... ok
+test_prepare_again_refuses_and_preserves_existing_keys_and_models (test_prepared_demo.PreparedCompanyDemoTests.test_prepare_again_refuses_and_preserves_existing_keys_and_models) ... ok
+test_reopen_check_uses_saved_models_without_fit_and_keeps_job_ids (test_prepared_demo.PreparedCompanyDemoTests.test_reopen_check_uses_saved_models_without_fit_and_keeps_job_ids) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 8.561s
+
+OK

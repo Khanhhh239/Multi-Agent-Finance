@@ -1,0 +1,63 @@
+{
+  "tests": [
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_all_native_rule_scores_hits_and_exceptions_are_preserved",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_all_native_rule_scores_hits_and_exceptions_are_preserved"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_every_requested_adapter_returns_five_rows_without_top_k",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_every_requested_adapter_returns_five_rows_without_top_k"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_extreme_batch_does_not_change_reference_or_prior_scores",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_extreme_batch_does_not_change_reference_or_prior_scores"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_fit_rejects_overlap_and_silent_imputation",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_fit_rejects_overlap_and_silent_imputation"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_float_parity_all_retained_ml_and_statistics",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_float_parity_all_retained_ml_and_statistics"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_future_or_incompatible_artifact_is_unavailable",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_future_or_incompatible_artifact_is_unavailable"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_missing_artifact_is_null_and_inference_never_fits",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_missing_artifact_is_null_and_inference_never_fits"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_missing_selected_feature_keeps_row_and_preserves_valid_zero_score",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_missing_selected_feature_keeps_row_and_preserves_valid_zero_score"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_no_hit_native_rows_still_receive_available_ml_scores",
+      "status": "fail",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_no_hit_native_rows_still_receive_available_ml_scores"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_snapshot_graph_is_source_backed_and_unsupported_rules_are_explicit",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_snapshot_graph_is_source_backed_and_unsupported_rules_are_explicit"
+    },
+    {
+      "id": "test_method_adapters.MethodAdapterTests.test_wrong_scope_and_corrupt_artifact_do_not_return_scores",
+      "status": "pass",
+      "testcase": "test_method_adapters.MethodAdapterTests.test_wrong_scope_and_corrupt_artifact_do_not_return_scores"
+    }
+  ],
+  "count": 11,
+  "skipped": 0,
+  "failures": 1,
+  "errors": 0
+}

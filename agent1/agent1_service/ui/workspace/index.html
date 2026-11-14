@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="/workspace-assets/style.css" />
     <script defer src="/workspace-assets/vendor/uPlot.iife.min.js"></script>
     <script defer src="/workspace-assets/app.js"></script>
-  <link rel="stylesheet" href="/workspace-assets/ledger.css" />
-  <link rel="stylesheet" href="/workspace-assets/workbench.css" />
-
 <script src="/workspace-assets/platform-theme.js?v=0e11e37e"></script>
 <link rel="stylesheet" href="/workspace-assets/platform-theme.css?v=5275c45e">
 </head>
@@ -138,8 +135,8 @@
                   >Chỉ hiển thị kết quả từ dữ liệu đã nạp</span
                 >
               </div>
-              <p class="helper">
-                Dải P10–P90 là mô phỏng, chưa hiệu chỉnh độ phủ.
+              <p class="helper" id="overview-band-note">
+                Loại dải số dư và phạm vi hiệu chỉnh sẽ hiển thị cùng kế hoạch.
               </p>
             </article>
             <aside class="onboarding">
@@ -496,6 +493,10 @@
               </p>
             </div>
           </div>
+          <article class="paper t1-updates" id="t1-updates" aria-live="polite">
+            <h2>Lịch cập nhật và ứng viên chờ kiểm định</h2>
+            <p>Kết nối doanh nghiệp để xem lịch và trạng thái kiểm định.</p>
+          </article>
           <div class="split-layout">
             <article class="paper">
               <div class="section-heading">
@@ -529,6 +530,7 @@
                   Bắt đầu kiểm định <span>↗</span>
                 </button>
               </form>
+              <small id="train-schedule-hint" class="helper"></small>
               <div id="jobs" aria-live="polite"></div>
             </article>
             <article class="paper versions">
@@ -617,6 +619,7 @@
                   <div id="forecast-totals" class="forecast-totals"></div>
                   <div id="forecast-comparison"></div>
                   <div id="forecast-chart" class="chart-slot"></div>
+                  <p id="forecast-band-note" class="helper"></p>
                   <div id="forecast-alerts"></div>
                   <details class="form-options"><summary>ⓘ Phạm vi, giả định và thời gian tính</summary><div id="forecast-assumptions" class="assumptions"></div></details>
                 </article>
@@ -638,7 +641,7 @@
             <div>
               <div class="eyebrow">HƯỚNG DẪN / 5 PHÚT CHUẨN BỊ</div>
               <h1>Chuẩn bị dữ liệu doanh nghiệp</h1>
-              <a class="button" href="/workspace-assets/manual/index.html" target="_blank" rel="noopener">Hướng dẫn từng bước có ảnh</a>
+              <a class="button" href="/workspace-assets/manual/index.html" target="_blank" rel="noopener">Hướng dẫn từng bước</a>
               <a class="button" href="/workspace-assets/agent1-pilot.zip" download>Tải bộ diễn tập cho kế toán (.zip)</a>
               <p>
                 Xuất file từ phần mềm kế toán hoặc chọn mẫu cho loại sổ cần nạp.
@@ -788,10 +791,12 @@
             <details>
               <summary>Cập nhật hàng tháng như thế nào?</summary>
               <p>
-                Nạp hóa đơn và khoản thu mới bằng mã ổn định. Nếu đã có phiên
-                bản học, giao diện nhắc kiểm định lại. Phiên bản mới không tự
-                thay phiên bản cũ: bạn xem kết quả, chọn sử dụng và có thể quay
-                về bản trước.
+                Nạp hóa đơn và khoản thu mới bằng mã ổn định, rồi chạy kiểm định
+                khi đến lịch cập nhật. Hệ thống tự chuyển sang phiên bản mới
+                khi có đủ nhãn và vượt kiểm định; nếu chưa đạt thì giữ phiên
+                bản đang dùng. Ứng viên chờ đối chiếu cần đủ 13 tuần và dữ liệu
+                thanh toán đầy đủ. Xem quyết định ở trang kiểm định; nút chọn
+                phiên bản đã lưu cho phép quay về bản trước.
               </p>
             </details>
           </article>

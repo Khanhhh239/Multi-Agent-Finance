@@ -1,0 +1,19 @@
+{
+  "command": [
+    "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests_he",
+    "-p",
+    "test_comparison_metrics.py",
+    "-v"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 1.6178033000032883,
+  "expected_tests": 9
+}

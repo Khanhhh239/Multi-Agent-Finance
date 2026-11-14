@@ -1,0 +1,188 @@
+{
+  "count": 45,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "tests": [
+    {
+      "id": "test_selection_comparison.Plans.test_idempotent_sealed_plan_survives_restart_and_feedback",
+      "status": "pass"
+    },
+    {
+      "id": "test_selection_comparison.Plans.test_wrong_key_cannot_replace_store_and_owner_isolated",
+      "status": "pass"
+    },
+    {
+      "id": "test_selection_comparison.Selection.test_duplicate_or_missing_rows_are_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_selection_comparison.Selection.test_feedback_changes_metrics_without_changing_plan_or_selection",
+      "status": "pass"
+    },
+    {
+      "id": "test_selection_comparison.Selection.test_inconclusive_is_reported_separately_and_does_not_become_false_alert",
+      "status": "pass"
+    },
+    {
+      "id": "test_selection_comparison.Selection.test_large_simultaneous_group_is_deferred_whole_not_sliced_to_budget",
+      "status": "pass"
+    },
+    {
+      "id": "test_selection_comparison.Selection.test_missing_and_bad_ml_scores_do_not_hide_rows_or_use_zero_fallback",
+      "status": "pass"
+    },
+    {
+      "id": "test_selection_comparison.Selection.test_no_reviews_are_not_zero_accuracy_or_zero_usefulness_or_zero_time",
+      "status": "pass"
+    },
+    {
+      "id": "test_selection_comparison.Selection.test_preserves_rule_alerts_including_group_and_uses_only_remaining_slots",
+      "status": "pass"
+    },
+    {
+      "id": "test_selection_comparison.Selection.test_ties_deterministic_and_changing_input_order_does_not_change_selection",
+      "status": "pass"
+    },
+    {
+      "id": "test_comparison_api.ComparisonAPI.test_01_same_company_period_budget_missingness_and_no_private_model_metadata",
+      "status": "pass"
+    },
+    {
+      "id": "test_comparison_api.ComparisonAPI.test_02_feedback_updates_metrics_but_selection_and_plan_hash_stay_locked",
+      "status": "pass"
+    },
+    {
+      "id": "test_comparison_api.ComparisonAPI.test_03_no_session_cross_company_query_and_unknown_route_are_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_comparison_api.ComparisonAPI.test_04_client_cannot_change_policy_budget_weights_or_send_outcomes",
+      "status": "pass"
+    },
+    {
+      "id": "test_comparison_api.ComparisonAPI.test_05_revoke_permission_blocks_existing_plan_and_exports",
+      "status": "pass"
+    },
+    {
+      "id": "test_comparison_api.ComparisonAPI.test_06_get_does_not_create_plan_and_unfinished_job_is_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_comparison_api.ComparisonAPI.test_07_changed_result_cannot_silently_reselect",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.BusinessProjection.test_csv_keeps_negative_adjustment_and_escapes_user_text",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.BusinessProjection.test_graph_projection_uses_field_then_entity_axes",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.BusinessProjection.test_new_unknown_model_fields_never_reach_accountant_result",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.WorkspaceAPI.test_case_view_preserves_all_rows_and_keeps_feedback_unverified",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.WorkspaceAPI.test_feedback_and_download_reflect_server_save_and_request_replay",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.WorkspaceAPI.test_missing_session_other_company_query_and_unlisted_export_are_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.WorkspaceAPI.test_overview_has_company_data_and_existing_runs_without_model_configuration",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.WorkspaceAPI.test_pending_progress_has_source_and_counts_but_no_private_inputs",
+      "status": "pass"
+    },
+    {
+      "id": "test_review_api.ReviewAPI.test_client_cannot_replace_pinned_evidence",
+      "status": "pass"
+    },
+    {
+      "id": "test_review_api.ReviewAPI.test_review_round_trip_and_replay",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_backend_not_enabled_returns_explicit_unavailable",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_catalog_preflight_does_not_deserialize_or_fit_models",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_client_cannot_choose_model_key_or_asof",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_dataset_catalog_scoped_checksums_and_no_model_metadata",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_duplicate_pins_are_not_silently_chosen",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_foreign_snapshot_cannot_be_submitted",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_history_uses_business_mode_for_accountant",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_missing_artifact_disables_analysis_in_catalog",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_missing_company_pin_disables_analysis",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_no_session_and_cross_company_requests_are_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_portal_rejects_unknown_he_routes_and_queries",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_portal_serves_page_and_script_without_exposing_keys",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_real_he_result_reuses_same_job_and_five_rows",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_request_requires_idempotency_before_creating_job",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_resume_requires_empty_body_and_owned_job",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_config_api.ConfigurationAPI.test_01_permissions_fit_and_atomic_activation",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_config_api.ConfigurationAPI.test_02_reader_cannot_claim_manager_or_fit_permissions",
+      "status": "pass"
+    },
+    {
+      "id": "test_he4_config_api.ConfigurationAPI.test_03_comparison_uses_current_four_branch_plan_and_review_store",
+      "status": "pass"
+    }
+  ]
+}

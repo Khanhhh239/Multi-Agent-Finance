@@ -1,0 +1,100 @@
+{
+  "kind": "actual_runner_records_plus_validated_demo_outputs",
+  "test_records": [
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_e3_matches_native_engine_hit_evidence_and_scoring_policy",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_e3_matches_native_engine_hit_evidence_and_scoring_policy"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_future_vendor_and_revisions_never_change_past_result",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_future_vendor_and_revisions_never_change_past_result"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_hit_has_evidence_and_intrinsic_points_without_inflating_master_risk",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_hit_has_evidence_and_intrinsic_points_without_inflating_master_risk"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_missing_sources_are_null_not_no_hit_and_have_specific_gaps",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_missing_sources_are_null_not_no_hit_and_have_specific_gaps"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_no_hit_is_explicit_and_is_not_a_claim_of_validity",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_no_hit_is_explicit_and_is_not_a_claim_of_validity"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_not_applicable_is_not_a_no_hit",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_not_applicable_is_not_a_no_hit"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_schema_rejects_zero_and_false_on_unavailable_result",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_schema_rejects_zero_and_false_on_unavailable_result"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_scope_cutoff_checksum_and_evidence_tampering_are_rejected",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_scope_cutoff_checksum_and_evidence_tampering_are_rejected"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_snapshot_integration_preserves_every_result_and_never_fits",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_snapshot_integration_preserves_every_result_and_never_fits"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_threshold_is_strict_on_raw_similarity_before_rounding",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_threshold_is_strict_on_raw_similarity_before_rounding"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_uninformative_name_is_unavailable_even_if_field_exists",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_uninformative_name_is_unavailable_even_if_field_exists"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_unrelated_invoice_gap_does_not_disable_vendor_name_rule",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_unrelated_invoice_gap_does_not_disable_vendor_name_rule"
+    }
+  ],
+  "demo_scenarios": [
+    {
+      "scenario": "hit",
+      "input_count": 5,
+      "output_count": 5,
+      "E3_status": "evaluated_hit",
+      "E3_matched": true,
+      "E3_intrinsic_points": 3,
+      "E3_score": 0,
+      "C2_status": "unavailable",
+      "C2_score": null
+    },
+    {
+      "scenario": "no_hit",
+      "input_count": 5,
+      "output_count": 5,
+      "E3_status": "evaluated_no_hit",
+      "E3_matched": false,
+      "E3_intrinsic_points": 0,
+      "E3_score": 0,
+      "C2_status": "unavailable",
+      "C2_score": null
+    },
+    {
+      "scenario": "insufficient_name",
+      "input_count": 5,
+      "output_count": 5,
+      "E3_status": "unavailable",
+      "E3_matched": null,
+      "E3_intrinsic_points": null,
+      "E3_score": null,
+      "C2_status": "unavailable",
+      "C2_score": null
+    }
+  ]
+}

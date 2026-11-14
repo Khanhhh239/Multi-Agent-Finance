@@ -1,0 +1,4393 @@
+[
+  {
+    "path": "agent2/sme_fraud/a4_pattern_queue.py",
+    "sha256": "a84edcd5cceaf3e4e21a794d1b629670bccb6cdb5094cc4a643afbfd7feb447d",
+    "bytes": 7426,
+    "definitions": [
+      {
+        "name": "active_a4",
+        "kind": "FunctionDef",
+        "line": 11
+      },
+      {
+        "name": "prepare_arrivals",
+        "kind": "FunctionDef",
+        "line": 19
+      },
+      {
+        "name": "finish_cases",
+        "kind": "FunctionDef",
+        "line": 79
+      },
+      {
+        "name": "validate_pattern_case",
+        "kind": "FunctionDef",
+        "line": 106
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/a5_coverage.py",
+    "sha256": "c3e4b3e1e972415bc9d58433a71f794a9112c29fc26676af8048cdc0398c664e",
+    "bytes": 8123,
+    "definitions": [
+      {
+        "name": "observation_summary",
+        "kind": "FunctionDef",
+        "line": 9
+      },
+      {
+        "name": "transaction_record",
+        "kind": "FunctionDef",
+        "line": 21
+      },
+      {
+        "name": "attach_hits",
+        "kind": "FunctionDef",
+        "line": 42
+      },
+      {
+        "name": "counts",
+        "kind": "FunctionDef",
+        "line": 50
+      },
+      {
+        "name": "coverage",
+        "kind": "FunctionDef",
+        "line": 75
+      },
+      {
+        "name": "scoped_coverage",
+        "kind": "FunctionDef",
+        "line": 95
+      },
+      {
+        "name": "write_coverage",
+        "kind": "FunctionDef",
+        "line": 113
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/accounting.py",
+    "sha256": "3b2db738ecd07956e3087bf52e0f8973bc4f4120ea2fe2aed912fe9b5ebdf851",
+    "bytes": 25805,
+    "definitions": [
+      {
+        "name": "normalise_account",
+        "kind": "FunctionDef",
+        "line": 34
+      },
+      {
+        "name": "expense_account",
+        "kind": "FunctionDef",
+        "line": 48
+      },
+      {
+        "name": "account_supported",
+        "kind": "FunctionDef",
+        "line": 52
+      },
+      {
+        "name": "pair_supported",
+        "kind": "FunctionDef",
+        "line": 58
+      },
+      {
+        "name": "_parse",
+        "kind": "FunctionDef",
+        "line": 107
+      },
+      {
+        "name": "_stamp",
+        "kind": "FunctionDef",
+        "line": 111
+      },
+      {
+        "name": "_pick",
+        "kind": "FunctionDef",
+        "line": 115
+      },
+      {
+        "name": "_tax",
+        "kind": "FunctionDef",
+        "line": 119
+      },
+      {
+        "name": "enrich_accounting",
+        "kind": "FunctionDef",
+        "line": 124
+      },
+      {
+        "name": "accounting_features",
+        "kind": "FunctionDef",
+        "line": 344
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/admission_export.py",
+    "sha256": "9ec9ee176810bed6cc256fb20a69498d77910bd4a3321633aa16490415767516",
+    "bytes": 9114,
+    "definitions": [
+      {
+        "name": "digest",
+        "kind": "FunctionDef",
+        "line": 19
+      },
+      {
+        "name": "flag",
+        "kind": "FunctionDef",
+        "line": 24
+      },
+      {
+        "name": "pipe",
+        "kind": "FunctionDef",
+        "line": 30
+      },
+      {
+        "name": "explain_admissions",
+        "kind": "FunctionDef",
+        "line": 34
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/aggregate_challenge.py",
+    "sha256": "2e4ae372b1a7afd98e9db1e03f3b35ad5c92f778c7402e37bd2355e437cb1b42",
+    "bytes": 3501,
+    "definitions": [
+      {
+        "name": "window_case",
+        "kind": "FunctionDef",
+        "line": 12
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/analysis_workspace.py",
+    "sha256": "a395795fe661115afb4b3c70a754a8a72514fdc69f79791ae8fcc608f70e1a77",
+    "bytes": 9923,
+    "definitions": [
+      {
+        "name": "AnalysisWorkspace",
+        "kind": "ClassDef",
+        "line": 8
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/assistant_evidence_review.py",
+    "sha256": "7f8366198dc4902d7c37868c22104eb7cdfb353fe0957eec5d30ee8851cfaa2e",
+    "bytes": 13026,
+    "definitions": [
+      {
+        "name": "sha",
+        "kind": "FunctionDef",
+        "line": 22
+      },
+      {
+        "name": "instant",
+        "kind": "FunctionDef",
+        "line": 29
+      },
+      {
+        "name": "integer",
+        "kind": "FunctionDef",
+        "line": 35
+      },
+      {
+        "name": "refs",
+        "kind": "FunctionDef",
+        "line": 39
+      },
+      {
+        "name": "factual_dossier",
+        "kind": "FunctionDef",
+        "line": 43
+      },
+      {
+        "name": "build_dossiers",
+        "kind": "FunctionDef",
+        "line": 151
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/audit_accounting.py",
+    "sha256": "6df7fe27f1f17353e71bfe6b231c3d1ca90b2afd1c5c10be26a95db399a96333",
+    "bytes": 8792,
+    "definitions": [
+      {
+        "name": "check_accounting",
+        "kind": "FunctionDef",
+        "line": 13
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 103
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/audit_baseline_sla.py",
+    "sha256": "075251b3c051fceba1b73382755b0027aa600767bb0b29f812912d36bb0c064b",
+    "bytes": 28904,
+    "definitions": [
+      {
+        "name": "scenarios",
+        "kind": "FunctionDef",
+        "line": 34
+      },
+      {
+        "name": "pack",
+        "kind": "FunctionDef",
+        "line": 47
+      },
+      {
+        "name": "deadline_status",
+        "kind": "FunctionDef",
+        "line": 51
+      },
+      {
+        "name": "task_deadline",
+        "kind": "FunctionDef",
+        "line": 61
+      },
+      {
+        "name": "selected_order",
+        "kind": "FunctionDef",
+        "line": 66
+      },
+      {
+        "name": "choose",
+        "kind": "FunctionDef",
+        "line": 81
+      },
+      {
+        "name": "blocking_reason",
+        "kind": "FunctionDef",
+        "line": 98
+      },
+      {
+        "name": "make_frames",
+        "kind": "FunctionDef",
+        "line": 110
+      },
+      {
+        "name": "load_frames",
+        "kind": "FunctionDef",
+        "line": 148
+      },
+      {
+        "name": "simulate",
+        "kind": "FunctionDef",
+        "line": 163
+      },
+      {
+        "name": "compare_reference",
+        "kind": "FunctionDef",
+        "line": 322
+      },
+      {
+        "name": "comparison",
+        "kind": "FunctionDef",
+        "line": 332
+      },
+      {
+        "name": "write_result",
+        "kind": "FunctionDef",
+        "line": 347
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 356
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 435
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/audit_if_aggregation.py",
+    "sha256": "071d852a9c0af92897f549d6027d8d52e30ad67d44b41eeb4e40c60cae782e46",
+    "bytes": 19626,
+    "definitions": [
+      {
+        "name": "size_bin",
+        "kind": "FunctionDef",
+        "line": 22
+      },
+      {
+        "name": "rank_average",
+        "kind": "FunctionDef",
+        "line": 26
+      },
+      {
+        "name": "correlation",
+        "kind": "FunctionDef",
+        "line": 35
+      },
+      {
+        "name": "size_correlation",
+        "kind": "FunctionDef",
+        "line": 42
+      },
+      {
+        "name": "stratified_correlation",
+        "kind": "FunctionDef",
+        "line": 46
+      },
+      {
+        "name": "describe_case",
+        "kind": "FunctionDef",
+        "line": 65
+      },
+      {
+        "name": "collect_units",
+        "kind": "FunctionDef",
+        "line": 103
+      },
+      {
+        "name": "score_pools",
+        "kind": "FunctionDef",
+        "line": 140
+      },
+      {
+        "name": "max_reference",
+        "kind": "FunctionDef",
+        "line": 148
+      },
+      {
+        "name": "summarize_group",
+        "kind": "FunctionDef",
+        "line": 183
+      },
+      {
+        "name": "analyze_units",
+        "kind": "FunctionDef",
+        "line": 199
+      },
+      {
+        "name": "audit_aggregation",
+        "kind": "FunctionDef",
+        "line": 232
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 318
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/audit_if_aggregation_dependence.py",
+    "sha256": "3501f173a820b5590dab2b657a2f3642432506f8b8e491c90478878e74b2bfa6",
+    "bytes": 2251,
+    "definitions": [
+      {
+        "name": "dependence_profiles",
+        "kind": "FunctionDef",
+        "line": 9
+      },
+      {
+        "name": "profile_statistics",
+        "kind": "FunctionDef",
+        "line": 40
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/audit_if_coverage.py",
+    "sha256": "974f02187edc01122a2b3f8a75da6db801c26528c21ae191a910857267b2b0fd",
+    "bytes": 17882,
+    "definitions": [
+      {
+        "name": "unique_index",
+        "kind": "FunctionDef",
+        "line": 25
+      },
+      {
+        "name": "feature_status",
+        "kind": "FunctionDef",
+        "line": 35
+      },
+      {
+        "name": "member_audit",
+        "kind": "FunctionDef",
+        "line": 63
+      },
+      {
+        "name": "case_audit",
+        "kind": "FunctionDef",
+        "line": 101
+      },
+      {
+        "name": "summarize",
+        "kind": "FunctionDef",
+        "line": 135
+      },
+      {
+        "name": "verify_commitment",
+        "kind": "FunctionDef",
+        "line": 152
+      },
+      {
+        "name": "audit_coverage",
+        "kind": "FunctionDef",
+        "line": 163
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 294
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/audit_model_windows.py",
+    "sha256": "18267b41eaa222d143076526958bae467c3b182657c121ce795e29a70b8d369c",
+    "bytes": 9469,
+    "definitions": [
+      {
+        "name": "partition_rows",
+        "kind": "FunctionDef",
+        "line": 22
+      },
+      {
+        "name": "audit_model_windows",
+        "kind": "FunctionDef",
+        "line": 42
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 147
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/audit_rules.py",
+    "sha256": "eeb589e1fb1ac1ec23e2811c1637f7866de3705892fb7b6aa43c4011bae2e592",
+    "bytes": 6249,
+    "definitions": [
+      {
+        "name": "read_csv",
+        "kind": "FunctionDef",
+        "line": 14
+      },
+      {
+        "name": "audit",
+        "kind": "FunctionDef",
+        "line": 19
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 99
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/authority_policy.py",
+    "sha256": "e2471d7606b7536b6008879cacb0264a7c417aa0b792de1aa0a1b0afaa0d9202",
+    "bytes": 13066,
+    "definitions": [
+      {
+        "name": "_validated",
+        "kind": "FunctionDef",
+        "line": 16
+      },
+      {
+        "name": "_tokens",
+        "kind": "FunctionDef",
+        "line": 111
+      },
+      {
+        "name": "_Versioned",
+        "kind": "ClassDef",
+        "line": 115
+      },
+      {
+        "name": "ApprovalAuthority",
+        "kind": "ClassDef",
+        "line": 151
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/backup_job.py",
+    "sha256": "20d61f5bd5486420a3e0f2c6b7e80ba5345269470b57458110f694c8a947eea6",
+    "bytes": 18611,
+    "definitions": [
+      {
+        "name": "timestamp",
+        "kind": "FunctionDef",
+        "line": 29
+      },
+      {
+        "name": "atomic_json",
+        "kind": "FunctionDef",
+        "line": 35
+      },
+      {
+        "name": "load_config",
+        "kind": "FunctionDef",
+        "line": 46
+      },
+      {
+        "name": "repository_owner",
+        "kind": "FunctionDef",
+        "line": 108
+      },
+      {
+        "name": "retention_plan",
+        "kind": "FunctionDef",
+        "line": 125
+      },
+      {
+        "name": "prune",
+        "kind": "FunctionDef",
+        "line": 150
+      },
+      {
+        "name": "record",
+        "kind": "FunctionDef",
+        "line": 171
+      },
+      {
+        "name": "run_job",
+        "kind": "FunctionDef",
+        "line": 187
+      },
+      {
+        "name": "status",
+        "kind": "FunctionDef",
+        "line": 219
+      },
+      {
+        "name": "task_xml",
+        "kind": "FunctionDef",
+        "line": 235
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 274
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/backup_suite.py",
+    "sha256": "bd48d8aedfa5c7e1af91401366397b97d790680f9d24dd819288e80043dea037",
+    "bytes": 12163,
+    "definitions": [
+      {
+        "name": "now_iso",
+        "kind": "FunctionDef",
+        "line": 23
+      },
+      {
+        "name": "runtime",
+        "kind": "FunctionDef",
+        "line": 27
+      },
+      {
+        "name": "no_link",
+        "kind": "FunctionDef",
+        "line": 33
+      },
+      {
+        "name": "inventory",
+        "kind": "FunctionDef",
+        "line": 39
+      },
+      {
+        "name": "copy_tree",
+        "kind": "FunctionDef",
+        "line": 50
+      },
+      {
+        "name": "p2_state",
+        "kind": "FunctionDef",
+        "line": 59
+      },
+      {
+        "name": "create_suite",
+        "kind": "FunctionDef",
+        "line": 81
+      },
+      {
+        "name": "verify_suite",
+        "kind": "FunctionDef",
+        "line": 139
+      },
+      {
+        "name": "restore_suite",
+        "kind": "FunctionDef",
+        "line": 173
+      },
+      {
+        "name": "restored_suite",
+        "kind": "FunctionDef",
+        "line": 205
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/bag_of_methods.py",
+    "sha256": "bcd3b8f1c3788e5af1ebb3d77872a202c6b7015111564cca5a866a76ae1edafb",
+    "bytes": 20770,
+    "definitions": [
+      {
+        "name": "RobustZ",
+        "kind": "ClassDef",
+        "line": 34
+      },
+      {
+        "name": "TailExceedance",
+        "kind": "ClassDef",
+        "line": 47
+      },
+      {
+        "name": "ShrunkMahalanobis",
+        "kind": "ClassDef",
+        "line": 60
+      },
+      {
+        "name": "MaskedField",
+        "kind": "ClassDef",
+        "line": 71
+      },
+      {
+        "name": "_Wrapped",
+        "kind": "ClassDef",
+        "line": 101
+      },
+      {
+        "name": "_col",
+        "kind": "FunctionDef",
+        "line": 126
+      },
+      {
+        "name": "Family",
+        "kind": "ClassDef",
+        "line": 130
+      },
+      {
+        "name": "_set",
+        "kind": "FunctionDef",
+        "line": 144
+      },
+      {
+        "name": "_add",
+        "kind": "FunctionDef",
+        "line": 150
+      },
+      {
+        "name": "_amount_spike",
+        "kind": "FunctionDef",
+        "line": 159
+      },
+      {
+        "name": "_split_below_limit",
+        "kind": "FunctionDef",
+        "line": 169
+      },
+      {
+        "name": "_duplicate_payment",
+        "kind": "FunctionDef",
+        "line": 179
+      },
+      {
+        "name": "_self_approval",
+        "kind": "FunctionDef",
+        "line": 185
+      },
+      {
+        "name": "_off_hours",
+        "kind": "FunctionDef",
+        "line": 194
+      },
+      {
+        "name": "_related_vendor",
+        "kind": "FunctionDef",
+        "line": 205
+      },
+      {
+        "name": "_new_vendor_large",
+        "kind": "FunctionDef",
+        "line": 212
+      },
+      {
+        "name": "_weak_evidence",
+        "kind": "FunctionDef",
+        "line": 221
+      },
+      {
+        "name": "_payroll_without_attendance",
+        "kind": "FunctionDef",
+        "line": 229
+      },
+      {
+        "name": "_advance_overdue",
+        "kind": "FunctionDef",
+        "line": 239
+      },
+      {
+        "name": "make_injections",
+        "kind": "FunctionDef",
+        "line": 261
+      },
+      {
+        "name": "Reference",
+        "kind": "ClassDef",
+        "line": 285
+      },
+      {
+        "name": "combine",
+        "kind": "FunctionDef",
+        "line": 301
+      },
+      {
+        "name": "family_recall",
+        "kind": "FunctionDef",
+        "line": 306
+      },
+      {
+        "name": "candidates",
+        "kind": "FunctionDef",
+        "line": 311
+      },
+      {
+        "name": "objective",
+        "kind": "FunctionDef",
+        "line": 320
+      },
+      {
+        "name": "BagOfMethods",
+        "kind": "ClassDef",
+        "line": 326
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/batch_controls.py",
+    "sha256": "5fba17f57fb52cd25158c172fba19b3e2ced834ce2c6cef3a7f67a57645c0c0e",
+    "bytes": 14317,
+    "definitions": [
+      {
+        "name": "BatchControls",
+        "kind": "ClassDef",
+        "line": 11
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/benford.py",
+    "sha256": "af330a8fadcfa5532642784df9013b0f1aadf3462a5c6eaa89152d7204e14227",
+    "bytes": 10743,
+    "definitions": [
+      {
+        "name": "bh_adjust",
+        "kind": "FunctionDef",
+        "line": 13
+      },
+      {
+        "name": "digits_test",
+        "kind": "FunctionDef",
+        "line": 24
+      },
+      {
+        "name": "monthly_diagnostics",
+        "kind": "FunctionDef",
+        "line": 66
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/build_operational_snapshot.py",
+    "sha256": "8819ed5525ad711670ae4ae889ae47cc6e05b80afc691487512deab1b14b380d",
+    "bytes": 13477,
+    "definitions": [
+      {
+        "name": "write_json",
+        "kind": "FunctionDef",
+        "line": 32
+      },
+      {
+        "name": "validate_outputs",
+        "kind": "FunctionDef",
+        "line": 36
+      },
+      {
+        "name": "explain_cases",
+        "kind": "FunctionDef",
+        "line": 70
+      },
+      {
+        "name": "build_snapshot",
+        "kind": "FunctionDef",
+        "line": 96
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 190
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/case_admission.py",
+    "sha256": "68b35088b456c811665767d215c6dae79f78f26df3e0ac464530dfb68b2e1c48",
+    "bytes": 1941,
+    "definitions": [
+      {
+        "name": "admission",
+        "kind": "FunctionDef",
+        "line": 7
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/case_identity.py",
+    "sha256": "1bc0237724a46cf2a3b8248d83fe3cb3cec212230d4ab80f967f0d8f283e5a66",
+    "bytes": 9178,
+    "definitions": [
+      {
+        "name": "digest",
+        "kind": "FunctionDef",
+        "line": 18
+      },
+      {
+        "name": "values",
+        "kind": "FunctionDef",
+        "line": 23
+      },
+      {
+        "name": "component_key",
+        "kind": "FunctionDef",
+        "line": 29
+      },
+      {
+        "name": "scope",
+        "kind": "FunctionDef",
+        "line": 33
+      },
+      {
+        "name": "scope_hash",
+        "kind": "FunctionDef",
+        "line": 51
+      },
+      {
+        "name": "equivalent",
+        "kind": "FunctionDef",
+        "line": 55
+      },
+      {
+        "name": "queue_hash",
+        "kind": "FunctionDef",
+        "line": 64
+      },
+      {
+        "name": "load_lineage",
+        "kind": "FunctionDef",
+        "line": 68
+      },
+      {
+        "name": "write_lineage",
+        "kind": "FunctionDef",
+        "line": 80
+      },
+      {
+        "name": "resolve",
+        "kind": "FunctionDef",
+        "line": 93
+      },
+      {
+        "name": "feedback_view",
+        "kind": "FunctionDef",
+        "line": 103
+      },
+      {
+        "name": "plan_lineage",
+        "kind": "FunctionDef",
+        "line": 116
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/case_queue.py",
+    "sha256": "7b0b7f032cfc0862513cd444ccc82a81ee2cffdd1219c8ef03a7b45ef7c9e208",
+    "bytes": 16095,
+    "definitions": [
+      {
+        "name": "owner_at",
+        "kind": "FunctionDef",
+        "line": 15
+      },
+      {
+        "name": "_source_cases",
+        "kind": "FunctionDef",
+        "line": 20
+      },
+      {
+        "name": "batch_groups",
+        "kind": "FunctionDef",
+        "line": 73
+      },
+      {
+        "name": "operational_members",
+        "kind": "FunctionDef",
+        "line": 121
+      },
+      {
+        "name": "cash_information_members",
+        "kind": "FunctionDef",
+        "line": 127
+      },
+      {
+        "name": "_cash_information_cases",
+        "kind": "FunctionDef",
+        "line": 133
+      },
+      {
+        "name": "review_queue",
+        "kind": "FunctionDef",
+        "line": 165
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/cash_controls.py",
+    "sha256": "77db5815861907503787007c70eae66109ffc888491d9cc4761f95f190d10960",
+    "bytes": 11123,
+    "definitions": [
+      {
+        "name": "local_day",
+        "kind": "FunctionDef",
+        "line": 17
+      },
+      {
+        "name": "vat_policy",
+        "kind": "FunctionDef",
+        "line": 24
+      },
+      {
+        "name": "_cash_payment_evidence",
+        "kind": "FunctionDef",
+        "line": 28
+      },
+      {
+        "name": "validate_review_config",
+        "kind": "FunctionDef",
+        "line": 85
+      },
+      {
+        "name": "cash_payment_check",
+        "kind": "FunctionDef",
+        "line": 112
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/cash_limit_priority.py",
+    "sha256": "5d5ecd421b89eb56ce21f89ddb7c147d3a88f554622cb266d03653bc447bcbd4",
+    "bytes": 2764,
+    "definitions": [
+      {
+        "name": "limit_priority",
+        "kind": "FunctionDef",
+        "line": 8
+      },
+      {
+        "name": "family_score",
+        "kind": "FunctionDef",
+        "line": 24
+      },
+      {
+        "name": "handling_priority",
+        "kind": "FunctionDef",
+        "line": 32
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/company_ml.py",
+    "sha256": "e508a642e2911b9b5fff050ed45c038d98c56e88657ee617b0e8681d64534670",
+    "bytes": 38563,
+    "definitions": [
+      {
+        "name": "runtime",
+        "kind": "FunctionDef",
+        "line": 24
+      },
+      {
+        "name": "dump",
+        "kind": "FunctionDef",
+        "line": 37
+      },
+      {
+        "name": "load",
+        "kind": "FunctionDef",
+        "line": 42
+      },
+      {
+        "name": "decode_snapshot",
+        "kind": "FunctionDef",
+        "line": 46
+      },
+      {
+        "name": "labels_csv",
+        "kind": "FunctionDef",
+        "line": 57
+      },
+      {
+        "name": "label_plan",
+        "kind": "FunctionDef",
+        "line": 83
+      },
+      {
+        "name": "reject_label_conflicts",
+        "kind": "FunctionDef",
+        "line": 98
+      },
+      {
+        "name": "evaluation_partition",
+        "kind": "FunctionDef",
+        "line": 105
+      },
+      {
+        "name": "catboost_training_readiness",
+        "kind": "FunctionDef",
+        "line": 121
+      },
+      {
+        "name": "CompanyML",
+        "kind": "ClassDef",
+        "line": 148
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/company_ml_comparison.py",
+    "sha256": "1ec0f1a502e8cb5daba41147933f158a5d43b6b48d20f144a6bd62452a9fa28b",
+    "bytes": 21945,
+    "definitions": [
+      {
+        "name": "write_json",
+        "kind": "FunctionDef",
+        "line": 34
+      },
+      {
+        "name": "write_csv",
+        "kind": "FunctionDef",
+        "line": 39
+      },
+      {
+        "name": "read_snapshots",
+        "kind": "FunctionDef",
+        "line": 49
+      },
+      {
+        "name": "partition",
+        "kind": "FunctionDef",
+        "line": 81
+      },
+      {
+        "name": "catboost_reason",
+        "kind": "FunctionDef",
+        "line": 93
+      },
+      {
+        "name": "compare",
+        "kind": "FunctionDef",
+        "line": 104
+      },
+      {
+        "name": "collect",
+        "kind": "FunctionDef",
+        "line": 219
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 260
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/compare_if_discovery.py",
+    "sha256": "abca6586547fc2d70e8f1ca854236a193940275abf425d9fb234ad94a0f6721d",
+    "bytes": 31321,
+    "definitions": [
+      {
+        "name": "delay_guard_limit",
+        "kind": "FunctionDef",
+        "line": 26
+      },
+      {
+        "name": "document_key",
+        "kind": "FunctionDef",
+        "line": 47
+      },
+      {
+        "name": "ids",
+        "kind": "FunctionDef",
+        "line": 54
+      },
+      {
+        "name": "case_document_keys",
+        "kind": "FunctionDef",
+        "line": 58
+      },
+      {
+        "name": "lead_case",
+        "kind": "FunctionDef",
+        "line": 74
+      },
+      {
+        "name": "prepare_frames",
+        "kind": "FunctionDef",
+        "line": 90
+      },
+      {
+        "name": "select_mixed",
+        "kind": "FunctionDef",
+        "line": 146
+      },
+      {
+        "name": "simulate",
+        "kind": "FunctionDef",
+        "line": 187
+      },
+      {
+        "name": "run_discovery",
+        "kind": "FunctionDef",
+        "line": 350
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 442
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/compare_shadow.py",
+    "sha256": "aa674a767c77eddc5c051f66167cd8afa63ca0cd49fac9dbb09f25f520b46c59",
+    "bytes": 29418,
+    "definitions": [
+      {
+        "name": "read_json",
+        "kind": "FunctionDef",
+        "line": 27
+      },
+      {
+        "name": "read_csv",
+        "kind": "FunctionDef",
+        "line": 31
+      },
+      {
+        "name": "write_json",
+        "kind": "FunctionDef",
+        "line": 36
+      },
+      {
+        "name": "write_csv",
+        "kind": "FunctionDef",
+        "line": 40
+      },
+      {
+        "name": "baseline_key",
+        "kind": "FunctionDef",
+        "line": 47
+      },
+      {
+        "name": "case_score",
+        "kind": "FunctionDef",
+        "line": 51
+      },
+      {
+        "name": "shadow_order",
+        "kind": "FunctionDef",
+        "line": 63
+      },
+      {
+        "name": "select",
+        "kind": "FunctionDef",
+        "line": 77
+      },
+      {
+        "name": "source_work_scope",
+        "kind": "FunctionDef",
+        "line": 98
+      },
+      {
+        "name": "prepare_case",
+        "kind": "FunctionDef",
+        "line": 108
+      },
+      {
+        "name": "pending",
+        "kind": "FunctionDef",
+        "line": 118
+      },
+      {
+        "name": "simulation",
+        "kind": "FunctionDef",
+        "line": 141
+      },
+      {
+        "name": "load_baseline",
+        "kind": "FunctionDef",
+        "line": 246
+      },
+      {
+        "name": "build_snapshots",
+        "kind": "FunctionDef",
+        "line": 303
+      },
+      {
+        "name": "run_comparison",
+        "kind": "FunctionDef",
+        "line": 338
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 431
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/data_import.py",
+    "sha256": "5a47811550dbfce848a36960e5b111d5b0e79306ccf4518938da7675a13bfc9d",
+    "bytes": 36113,
+    "definitions": [
+      {
+        "name": "issue",
+        "kind": "FunctionDef",
+        "line": 54
+      },
+      {
+        "name": "InputConfirmation",
+        "kind": "ClassDef",
+        "line": 58
+      },
+      {
+        "name": "detect_date_order",
+        "kind": "FunctionDef",
+        "line": 72
+      },
+      {
+        "name": "timestamp",
+        "kind": "FunctionDef",
+        "line": 109
+      },
+      {
+        "name": "read_upload",
+        "kind": "FunctionDef",
+        "line": 132
+      },
+      {
+        "name": "DataImport",
+        "kind": "ClassDef",
+        "line": 230
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/data_provenance.py",
+    "sha256": "0eee72eb8b7cf8d820684dba74f5a8c274475524a0949f41d20f80bb0dcb818f",
+    "bytes": 2164,
+    "definitions": [
+      {
+        "name": "instant",
+        "kind": "FunctionDef",
+        "line": 7
+      },
+      {
+        "name": "period",
+        "kind": "FunctionDef",
+        "line": 12
+      },
+      {
+        "name": "ml_context",
+        "kind": "FunctionDef",
+        "line": 23
+      },
+      {
+        "name": "queue_context",
+        "kind": "FunctionDef",
+        "line": 29
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/dynamic_thresholds.py",
+    "sha256": "41d3ff12da79ba7e5d7fc17f25d633d3a144c5cf4479c8c7ef363d3c173fbdcb",
+    "bytes": 15632,
+    "definitions": [
+      {
+        "name": "digest",
+        "kind": "FunctionDef",
+        "line": 25
+      },
+      {
+        "name": "timestamp",
+        "kind": "FunctionDef",
+        "line": 30
+      },
+      {
+        "name": "integer",
+        "kind": "FunctionDef",
+        "line": 37
+      },
+      {
+        "name": "ThresholdPolicy",
+        "kind": "ClassDef",
+        "line": 46
+      },
+      {
+        "name": "observation",
+        "kind": "FunctionDef",
+        "line": 83
+      },
+      {
+        "name": "key_of",
+        "kind": "FunctionDef",
+        "line": 105
+      },
+      {
+        "name": "DynamicThresholds",
+        "kind": "ClassDef",
+        "line": 109
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/entity_graph.py",
+    "sha256": "8807e3667be2ad2b270de7d843065bd4e8401a715cb11519561bdcb9d856f2d5",
+    "bytes": 14461,
+    "definitions": [
+      {
+        "name": "digest",
+        "kind": "FunctionDef",
+        "line": 24
+      },
+      {
+        "name": "as_of",
+        "kind": "FunctionDef",
+        "line": 29
+      },
+      {
+        "name": "node_id",
+        "kind": "FunctionDef",
+        "line": 36
+      },
+      {
+        "name": "normalized",
+        "kind": "FunctionDef",
+        "line": 42
+      },
+      {
+        "name": "bounded_int",
+        "kind": "FunctionDef",
+        "line": 59
+      },
+      {
+        "name": "binding",
+        "kind": "FunctionDef",
+        "line": 65
+      },
+      {
+        "name": "EntityGraph",
+        "kind": "ClassDef",
+        "line": 69
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/evaluate.py",
+    "sha256": "8a56097d0a0a5a24463021f537b73f74541b8430f57030f4d1402bfcf29b49be",
+    "bytes": 11764,
+    "definitions": [
+      {
+        "name": "wilson",
+        "kind": "FunctionDef",
+        "line": 27
+      },
+      {
+        "name": "threshold_metrics",
+        "kind": "FunctionDef",
+        "line": 38
+      },
+      {
+        "name": "evaluate",
+        "kind": "FunctionDef",
+        "line": 48
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 167
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/evidence_cases.py",
+    "sha256": "2c0bb4ccc7c3cc8245dbe07c837bb828a2627ce212e099b3e4c2f88764d160bd",
+    "bytes": 13009,
+    "definitions": [
+      {
+        "name": "EvidenceCase",
+        "kind": "ClassDef",
+        "line": 9
+      },
+      {
+        "name": "prepare",
+        "kind": "FunctionDef",
+        "line": 29
+      },
+      {
+        "name": "decision",
+        "kind": "FunctionDef",
+        "line": 189
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/evidence_evaluation.py",
+    "sha256": "6df76c57e60f2e33cab60a88cc31c2745646c7199b85b8ad442f14ce7a8bcd85",
+    "bytes": 11750,
+    "definitions": [
+      {
+        "name": "boolean_metrics",
+        "kind": "FunctionDef",
+        "line": 12
+      },
+      {
+        "name": "block_precision",
+        "kind": "FunctionDef",
+        "line": 25
+      },
+      {
+        "name": "budget_review",
+        "kind": "FunctionDef",
+        "line": 47
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/evidence_policy.py",
+    "sha256": "e857775c1ae770ead1549f31e76471c5b6ae97e4a06b3c8f50c9f5740906a9dd",
+    "bytes": 18139,
+    "definitions": [
+      {
+        "name": "required_columns",
+        "kind": "FunctionDef",
+        "line": 30
+      },
+      {
+        "name": "EvidenceBook",
+        "kind": "ClassDef",
+        "line": 35
+      },
+      {
+        "name": "EvidencePolicy",
+        "kind": "ClassDef",
+        "line": 79
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/exception_validation.py",
+    "sha256": "9c61efc9ec35746f00cad5c09e9abe083f8ee1cbee63a88fb55c88403d65dcdc",
+    "bytes": 14556,
+    "definitions": [
+      {
+        "name": "_profile",
+        "kind": "FunctionDef",
+        "line": 22
+      },
+      {
+        "name": "_fields",
+        "kind": "FunctionDef",
+        "line": 70
+      },
+      {
+        "name": "flag",
+        "kind": "FunctionDef",
+        "line": 125
+      },
+      {
+        "name": "_temporal",
+        "kind": "FunctionDef",
+        "line": 134
+      },
+      {
+        "name": "_value",
+        "kind": "FunctionDef",
+        "line": 154
+      },
+      {
+        "name": "validated_record",
+        "kind": "FunctionDef",
+        "line": 184
+      },
+      {
+        "name": "validated_rows",
+        "kind": "FunctionDef",
+        "line": 239
+      },
+      {
+        "name": "validated_tables",
+        "kind": "FunctionDef",
+        "line": 243
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/export_admissions.py",
+    "sha256": "639813fb5a58d6be7f159e3c8aedab23437dc3de79ece615672db02580c45e10",
+    "bytes": 8032,
+    "definitions": [
+      {
+        "name": "read_json",
+        "kind": "FunctionDef",
+        "line": 18
+      },
+      {
+        "name": "read_rows",
+        "kind": "FunctionDef",
+        "line": 22
+      },
+      {
+        "name": "read_jsonl",
+        "kind": "FunctionDef",
+        "line": 27
+      },
+      {
+        "name": "write_json",
+        "kind": "FunctionDef",
+        "line": 32
+      },
+      {
+        "name": "membership",
+        "kind": "FunctionDef",
+        "line": 36
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 43
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 133
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/features.py",
+    "sha256": "c4ea12d5c7552014472c5874896a3e5f67df803d711d0f1685f0b759c682ca68",
+    "bytes": 23354,
+    "definitions": [
+      {
+        "name": "Stream",
+        "kind": "ClassDef",
+        "line": 81
+      },
+      {
+        "name": "build_features",
+        "kind": "FunctionDef",
+        "line": 96
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/feature_contract.py",
+    "sha256": "996513cae2f2a22964afe3dd1c95bfa1b0cbe992d30fa1357d914a4e75fae3df",
+    "bytes": 4811,
+    "definitions": [
+      {
+        "name": "sha",
+        "kind": "FunctionDef",
+        "line": 20
+      },
+      {
+        "name": "digest",
+        "kind": "FunctionDef",
+        "line": 28
+      },
+      {
+        "name": "current_contract",
+        "kind": "FunctionDef",
+        "line": 33
+      },
+      {
+        "name": "input_fingerprint",
+        "kind": "FunctionDef",
+        "line": 43
+      },
+      {
+        "name": "cache_contract",
+        "kind": "FunctionDef",
+        "line": 49
+      },
+      {
+        "name": "validate_cache",
+        "kind": "FunctionDef",
+        "line": 54
+      },
+      {
+        "name": "model_compatibility",
+        "kind": "FunctionDef",
+        "line": 70
+      },
+      {
+        "name": "require_model",
+        "kind": "FunctionDef",
+        "line": 91
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/feature_evidence.py",
+    "sha256": "30d369ee763209c155408dd5024edb4855856cf2f4662c1b3a6107123e8ea9e2",
+    "bytes": 6180,
+    "definitions": [
+      {
+        "name": "FeatureEvidence",
+        "kind": "ClassDef",
+        "line": 14
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/feedback.py",
+    "sha256": "1bbeb33eb66a0f310a107bb098f5143fd8e0bd410edc097a45f2a9ff787915f6",
+    "bytes": 7585,
+    "definitions": [
+      {
+        "name": "feedback_lock",
+        "kind": "FunctionDef",
+        "line": 23
+      },
+      {
+        "name": "event_hash",
+        "kind": "FunctionDef",
+        "line": 55
+      },
+      {
+        "name": "read_audit",
+        "kind": "FunctionDef",
+        "line": 59
+      },
+      {
+        "name": "record_feedback",
+        "kind": "FunctionDef",
+        "line": 74
+      },
+      {
+        "name": "_record_feedback",
+        "kind": "FunctionDef",
+        "line": 81
+      },
+      {
+        "name": "write_review_states",
+        "kind": "FunctionDef",
+        "line": 119
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 139
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/generate.py",
+    "sha256": "3c08d2a21da89332df3cc89b0f8ec61612aea1617209f74a472b04ea2d50205f",
+    "bytes": 40957,
+    "definitions": [
+      {
+        "name": "stamp",
+        "kind": "FunctionDef",
+        "line": 59
+      },
+      {
+        "name": "parse",
+        "kind": "FunctionDef",
+        "line": 63
+      },
+      {
+        "name": "write_csv",
+        "kind": "FunctionDef",
+        "line": 67
+      },
+      {
+        "name": "allocate",
+        "kind": "FunctionDef",
+        "line": 76
+      },
+      {
+        "name": "Generator",
+        "kind": "ClassDef",
+        "line": 84
+      },
+      {
+        "name": "generate",
+        "kind": "FunctionDef",
+        "line": 537
+      },
+      {
+        "name": "save_dataset",
+        "kind": "FunctionDef",
+        "line": 547
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 600
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/identity.py",
+    "sha256": "06150712f92a359b3fa4c4eb4432d5edd59318dd3abac5c618c01d9d26367ccf",
+    "bytes": 1231,
+    "definitions": [
+      {
+        "name": "normalize",
+        "kind": "FunctionDef",
+        "line": 11
+      },
+      {
+        "name": "_normalized",
+        "kind": "FunctionDef",
+        "line": 19
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/identity_graph.py",
+    "sha256": "5fb79620be72a70f63914a9e9f8d7375e1d096dd1fcd7d2dd26e1d85dfbe3597",
+    "bytes": 9041,
+    "definitions": [
+      {
+        "name": "master_versions",
+        "kind": "FunctionDef",
+        "line": 10
+      },
+      {
+        "name": "UnionFind",
+        "kind": "ClassDef",
+        "line": 21
+      },
+      {
+        "name": "KnownGraph",
+        "kind": "ClassDef",
+        "line": 50
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/if_discovery_review.py",
+    "sha256": "7e4415cf02c622dfa23dfa575d26fcaf3c38d22de8bd389c6e100c104a05cf50",
+    "bytes": 11005,
+    "definitions": [
+      {
+        "name": "key_for",
+        "kind": "FunctionDef",
+        "line": 14
+      },
+      {
+        "name": "scope_for",
+        "kind": "FunctionDef",
+        "line": 18
+      },
+      {
+        "name": "select_disagreements",
+        "kind": "FunctionDef",
+        "line": 31
+      },
+      {
+        "name": "prepare_discovery_review",
+        "kind": "FunctionDef",
+        "line": 66
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/independent_ml_review.py",
+    "sha256": "9821d36ed881b28208c1359ebbe2508630938cf2a62df3289383080b8b9f5388",
+    "bytes": 33924,
+    "definitions": [
+      {
+        "name": "unit_key",
+        "kind": "FunctionDef",
+        "line": 38
+      },
+      {
+        "name": "plan_for",
+        "kind": "FunctionDef",
+        "line": 42
+      },
+      {
+        "name": "choose_units",
+        "kind": "FunctionDef",
+        "line": 59
+      },
+      {
+        "name": "row_available",
+        "kind": "FunctionDef",
+        "line": 126
+      },
+      {
+        "name": "public_row",
+        "kind": "FunctionDef",
+        "line": 136
+      },
+      {
+        "name": "evidence_for",
+        "kind": "FunctionDef",
+        "line": 143
+      },
+      {
+        "name": "card_markdown",
+        "kind": "FunctionDef",
+        "line": 196
+      },
+      {
+        "name": "load_tables",
+        "kind": "FunctionDef",
+        "line": 217
+      },
+      {
+        "name": "prepare_review",
+        "kind": "FunctionDef",
+        "line": 228
+      },
+      {
+        "name": "_flag",
+        "kind": "FunctionDef",
+        "line": 339
+      },
+      {
+        "name": "_minutes",
+        "kind": "FunctionDef",
+        "line": 345
+      },
+      {
+        "name": "_measured_time",
+        "kind": "FunctionDef",
+        "line": 352
+      },
+      {
+        "name": "validate_reviews",
+        "kind": "FunctionDef",
+        "line": 366
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 458
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/information_requests.py",
+    "sha256": "e047a254799513396936d55570c9935d191885d7ed21297ae3f784d53a59ce24",
+    "bytes": 7671,
+    "definitions": [
+      {
+        "name": "text",
+        "kind": "FunctionDef",
+        "line": 12
+      },
+      {
+        "name": "timestamp",
+        "kind": "FunctionDef",
+        "line": 18
+      },
+      {
+        "name": "InformationRequests",
+        "kind": "ClassDef",
+        "line": 28
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/integrated_rehearsal.py",
+    "sha256": "c5cac1e186be838397080b6861be2217c047763bd689b3668d75c705171ca333",
+    "bytes": 30812,
+    "definitions": [
+      {
+        "name": "read_json",
+        "kind": "FunctionDef",
+        "line": 32
+      },
+      {
+        "name": "write_json",
+        "kind": "FunctionDef",
+        "line": 36
+      },
+      {
+        "name": "rows",
+        "kind": "FunctionDef",
+        "line": 40
+      },
+      {
+        "name": "jsonl",
+        "kind": "FunctionDef",
+        "line": 46
+      },
+      {
+        "name": "fresh_output",
+        "kind": "FunctionDef",
+        "line": 52
+      },
+      {
+        "name": "no_truth_access",
+        "kind": "FunctionDef",
+        "line": 69
+      },
+      {
+        "name": "copy_cache",
+        "kind": "FunctionDef",
+        "line": 85
+      },
+      {
+        "name": "baseline_delta",
+        "kind": "FunctionDef",
+        "line": 106
+      },
+      {
+        "name": "accounting_tables",
+        "kind": "FunctionDef",
+        "line": 129
+      },
+      {
+        "name": "score_baseline",
+        "kind": "FunctionDef",
+        "line": 140
+      },
+      {
+        "name": "fake_people",
+        "kind": "FunctionDef",
+        "line": 196
+      },
+      {
+        "name": "dry_config",
+        "kind": "FunctionDef",
+        "line": 204
+      },
+      {
+        "name": "prepare_app",
+        "kind": "FunctionDef",
+        "line": 214
+      },
+      {
+        "name": "HttpClient",
+        "kind": "ClassDef",
+        "line": 249
+      },
+      {
+        "name": "verify_app",
+        "kind": "FunctionDef",
+        "line": 269
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 387
+      },
+      {
+        "name": "serve",
+        "kind": "FunctionDef",
+        "line": 470
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 509
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/migrate.py",
+    "sha256": "e875ae6cbd56f8d5b0f5a5cf05d23c8aa355302e16a26b6733633394d4857c4c",
+    "bytes": 6347,
+    "definitions": [
+      {
+        "name": "migrate",
+        "kind": "FunctionDef",
+        "line": 21
+      },
+      {
+        "name": "repair_counterparty_metadata",
+        "kind": "FunctionDef",
+        "line": 69
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 96
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/ml_estimators.py",
+    "sha256": "5aa359271831ec517ea82c0f1d7339894d3f5e648779a5046b633f193631a1e2",
+    "bytes": 6192,
+    "definitions": [
+      {
+        "name": "catalog",
+        "kind": "FunctionDef",
+        "line": 24
+      },
+      {
+        "name": "matrix",
+        "kind": "FunctionDef",
+        "line": 29
+      },
+      {
+        "name": "FrozenECOD",
+        "kind": "ClassDef",
+        "line": 36
+      },
+      {
+        "name": "CompanyEstimator",
+        "kind": "ClassDef",
+        "line": 62
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/ml_review_documents.py",
+    "sha256": "05e76839a71e041c921a0085cebc1daf3654aeb86b2e4b6374582cb54cd09cca",
+    "bytes": 12109,
+    "definitions": [
+      {
+        "name": "journal_documents",
+        "kind": "FunctionDef",
+        "line": 21
+      },
+      {
+        "name": "text",
+        "kind": "FunctionDef",
+        "line": 35
+      },
+      {
+        "name": "ReviewDocuments",
+        "kind": "ClassDef",
+        "line": 41
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/ml_review_guidance.py",
+    "sha256": "7f181cd8e7bc69323fc9e03f8b1819cf45c0e99be867b4d5e2f7feb95a9ca5df",
+    "bytes": 11606,
+    "definitions": [
+      {
+        "name": "money",
+        "kind": "FunctionDef",
+        "line": 15
+      },
+      {
+        "name": "packet_question",
+        "kind": "FunctionDef",
+        "line": 18
+      },
+      {
+        "name": "ReviewGuidance",
+        "kind": "ClassDef",
+        "line": 49
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/ml_review_packets.py",
+    "sha256": "81c8fec16a4430a8e9dd6a2e52ba50595250935cd665177b1c136901cf758598",
+    "bytes": 9848,
+    "definitions": [
+      {
+        "name": "packet_json",
+        "kind": "FunctionDef",
+        "line": 15
+      },
+      {
+        "name": "evidence_files",
+        "kind": "FunctionDef",
+        "line": 30
+      },
+      {
+        "name": "load_packet",
+        "kind": "FunctionDef",
+        "line": 38
+      },
+      {
+        "name": "review_metrics",
+        "kind": "FunctionDef",
+        "line": 142
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/ml_review_web.py",
+    "sha256": "aafeff7c9e46129c49aab81b2627482d508304d65a0dd8df7dbc43255f918214",
+    "bytes": 21421,
+    "definitions": [
+      {
+        "name": "MLReview",
+        "kind": "ClassDef",
+        "line": 20
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/ml_workspace_merge.py",
+    "sha256": "a6b07b4b507739f5963c03acca0fcfd1c699b537d1a710c8d542112ffa8ee079",
+    "bytes": 5097,
+    "definitions": [
+      {
+        "name": "readonly",
+        "kind": "FunctionDef",
+        "line": 14
+      },
+      {
+        "name": "_writable",
+        "kind": "FunctionDef",
+        "line": 25
+      },
+      {
+        "name": "inventory",
+        "kind": "FunctionDef",
+        "line": 32
+      },
+      {
+        "name": "_plan",
+        "kind": "FunctionDef",
+        "line": 45
+      },
+      {
+        "name": "plan_merge",
+        "kind": "FunctionDef",
+        "line": 66
+      },
+      {
+        "name": "merge_workspace",
+        "kind": "FunctionDef",
+        "line": 73
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/name_challenge.py",
+    "sha256": "b020d9cb514597d40f791923bddc5faebbfca1c810141c11e742fc23d25a017a",
+    "bytes": 2012,
+    "definitions": [
+      {
+        "name": "run_challenge",
+        "kind": "FunctionDef",
+        "line": 6
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/noise_policy.py",
+    "sha256": "20ca41015c2cef11f80dd668072df38fdb800539c53fbee7ac3781b344eb0c76",
+    "bytes": 9427,
+    "definitions": [
+      {
+        "name": "name_key",
+        "kind": "FunctionDef",
+        "line": 15
+      },
+      {
+        "name": "name_similarity",
+        "kind": "FunctionDef",
+        "line": 26
+      },
+      {
+        "name": "evidence_id",
+        "kind": "FunctionDef",
+        "line": 32
+      },
+      {
+        "name": "verified_document",
+        "kind": "FunctionDef",
+        "line": 37
+      },
+      {
+        "name": "independent_requests",
+        "kind": "FunctionDef",
+        "line": 45
+      },
+      {
+        "name": "vendor_fulfilment",
+        "kind": "FunctionDef",
+        "line": 66
+      },
+      {
+        "name": "outside_schedule",
+        "kind": "FunctionDef",
+        "line": 74
+      },
+      {
+        "name": "RobustAmounts",
+        "kind": "ClassDef",
+        "line": 117
+      },
+      {
+        "name": "recurring_exception",
+        "kind": "FunctionDef",
+        "line": 149
+      },
+      {
+        "name": "assign_noise_points",
+        "kind": "FunctionDef",
+        "line": 160
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/notifications.py",
+    "sha256": "34d26aa51de2496792fbf2c12b2794e16b60a7322bea5ed94a22dd29e1e131f7",
+    "bytes": 28753,
+    "definitions": [
+      {
+        "name": "company_filter",
+        "kind": "FunctionDef",
+        "line": 18
+      },
+      {
+        "name": "notification_config",
+        "kind": "FunctionDef",
+        "line": 24
+      },
+      {
+        "name": "Notifications",
+        "kind": "ClassDef",
+        "line": 76
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/notification_audit.py",
+    "sha256": "46e94876376ce504c606877f9111080c7cf594bb833616e4cea7688ea640f99b",
+    "bytes": 1900,
+    "definitions": [
+      {
+        "name": "history",
+        "kind": "FunctionDef",
+        "line": 6
+      },
+      {
+        "name": "append",
+        "kind": "FunctionDef",
+        "line": 21
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/notification_channels.py",
+    "sha256": "8879c66c7dc2caeea8c951a642408988011652259f5b463d32c3cbf34d406834",
+    "bytes": 4650,
+    "definitions": [
+      {
+        "name": "DeliveryError",
+        "kind": "ClassDef",
+        "line": 12
+      },
+      {
+        "name": "NoRedirect",
+        "kind": "ClassDef",
+        "line": 19
+      },
+      {
+        "name": "smtp_send",
+        "kind": "FunctionDef",
+        "line": 24
+      },
+      {
+        "name": "zalo_request",
+        "kind": "FunctionDef",
+        "line": 70
+      },
+      {
+        "name": "zalo_send",
+        "kind": "FunctionDef",
+        "line": 78
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/notification_policy.py",
+    "sha256": "280de4f4ac6b3e6df7ed45b293ab649456df148fe6985533a618022afdc457a2",
+    "bytes": 15979,
+    "definitions": [
+      {
+        "name": "validate_roles",
+        "kind": "FunctionDef",
+        "line": 19
+      },
+      {
+        "name": "BusinessNotifications",
+        "kind": "ClassDef",
+        "line": 47
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/notification_worker.py",
+    "sha256": "2d0e360d5d041f83705c443182d92cbb4c9e0a45c69d01e0dabda301abcbbb65",
+    "bytes": 2457,
+    "definitions": [
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 11
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/p2_controls_server.py",
+    "sha256": "ae1fdadb2a490d2cfc990518659e341842ec1580b63952676b9464a64df5c235",
+    "bytes": 7813,
+    "definitions": [
+      {
+        "name": "P2Routes",
+        "kind": "ClassDef",
+        "line": 19
+      },
+      {
+        "name": "make_server",
+        "kind": "FunctionDef",
+        "line": 57
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 132
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/p2_controls_web.py",
+    "sha256": "608399fd60258bccacec56e2182eb6c9f045f0ed0b6d69ce592be163e8fd304a",
+    "bytes": 14672,
+    "definitions": [
+      {
+        "name": "read",
+        "kind": "FunctionDef",
+        "line": 26
+      },
+      {
+        "name": "read_scores",
+        "kind": "FunctionDef",
+        "line": 30
+      },
+      {
+        "name": "artifact_files",
+        "kind": "FunctionDef",
+        "line": 35
+      },
+      {
+        "name": "P2Controls",
+        "kind": "ClassDef",
+        "line": 43
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/p2_control_cases.py",
+    "sha256": "24d72ef5ee253baf93a959ad5780cc0f721ae9179be5453ed516d1c1608d8a49",
+    "bytes": 17100,
+    "definitions": [
+      {
+        "name": "expected",
+        "kind": "FunctionDef",
+        "line": 14
+      },
+      {
+        "name": "declarations",
+        "kind": "FunctionDef",
+        "line": 26
+      },
+      {
+        "name": "build_control",
+        "kind": "FunctionDef",
+        "line": 83
+      },
+      {
+        "name": "check_books",
+        "kind": "FunctionDef",
+        "line": 180
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/payment_evidence.py",
+    "sha256": "d3fb6417f3e5813d382ede3d48b9ef5a20c00c9b8740e872bdc50e7e3dbacedf",
+    "bytes": 22172,
+    "definitions": [
+      {
+        "name": "disbursement",
+        "kind": "FunctionDef",
+        "line": 42
+      },
+      {
+        "name": "positive",
+        "kind": "FunctionDef",
+        "line": 47
+      },
+      {
+        "name": "PaymentEvidence",
+        "kind": "ClassDef",
+        "line": 54
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/platform_theme.py",
+    "sha256": "ecaf3df49bc53cb844c3d75131060dc6d1a337cd46b1ba66d333ae9e664a2668",
+    "bytes": 573,
+    "definitions": [
+      {
+        "name": "theme_assets",
+        "kind": "FunctionDef",
+        "line": 7
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/real_source_acceptance.py",
+    "sha256": "45ced8df28569c4d9032eb42f0d8e05a976997381d641d35f2a28ef999c00b4f",
+    "bytes": 37041,
+    "definitions": [
+      {
+        "name": "sha",
+        "kind": "FunctionDef",
+        "line": 76
+      },
+      {
+        "name": "canonical_sha",
+        "kind": "FunctionDef",
+        "line": 80
+      },
+      {
+        "name": "read_csv",
+        "kind": "FunctionDef",
+        "line": 86
+      },
+      {
+        "name": "manifest_hash",
+        "kind": "FunctionDef",
+        "line": 91
+      },
+      {
+        "name": "_entry_hash",
+        "kind": "FunctionDef",
+        "line": 95
+      },
+      {
+        "name": "_required_columns",
+        "kind": "FunctionDef",
+        "line": 99
+      },
+      {
+        "name": "source_inventory",
+        "kind": "FunctionDef",
+        "line": 105
+      },
+      {
+        "name": "inventory_ready",
+        "kind": "FunctionDef",
+        "line": 129
+      },
+      {
+        "name": "_timezone_timestamp",
+        "kind": "FunctionDef",
+        "line": 136
+      },
+      {
+        "name": "_cutoffs",
+        "kind": "FunctionDef",
+        "line": 146
+      },
+      {
+        "name": "_latest",
+        "kind": "FunctionDef",
+        "line": 154
+      },
+      {
+        "name": "_packet_row",
+        "kind": "FunctionDef",
+        "line": 162
+      },
+      {
+        "name": "review_universe",
+        "kind": "FunctionDef",
+        "line": 173
+      },
+      {
+        "name": "_restricted_score",
+        "kind": "FunctionDef",
+        "line": 232
+      },
+      {
+        "name": "predictions_for_packet",
+        "kind": "FunctionDef",
+        "line": 240
+      },
+      {
+        "name": "predictions_from_result",
+        "kind": "FunctionDef",
+        "line": 246
+      },
+      {
+        "name": "_code_hashes",
+        "kind": "FunctionDef",
+        "line": 291
+      },
+      {
+        "name": "_looks_synthetic",
+        "kind": "FunctionDef",
+        "line": 304
+      },
+      {
+        "name": "make_commitment",
+        "kind": "FunctionDef",
+        "line": 310
+      },
+      {
+        "name": "_write_json",
+        "kind": "FunctionDef",
+        "line": 325
+      },
+      {
+        "name": "_ensure_empty",
+        "kind": "FunctionDef",
+        "line": 329
+      },
+      {
+        "name": "prepare",
+        "kind": "FunctionDef",
+        "line": 335
+      },
+      {
+        "name": "_wilson",
+        "kind": "FunctionDef",
+        "line": 381
+      },
+      {
+        "name": "_parse_flag",
+        "kind": "FunctionDef",
+        "line": 392
+      },
+      {
+        "name": "_validate_reviews",
+        "kind": "FunctionDef",
+        "line": 400
+      },
+      {
+        "name": "_coverage_by_rule",
+        "kind": "FunctionDef",
+        "line": 444
+      },
+      {
+        "name": "_metric",
+        "kind": "FunctionDef",
+        "line": 476
+      },
+      {
+        "name": "evaluate",
+        "kind": "FunctionDef",
+        "line": 568
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 658
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/rebuild_features.py",
+    "sha256": "f3ca19043f404da0c7a6b915dc25c584d4a2a55c2b1a62b0f07b96d85d5f8c5b",
+    "bytes": 1827,
+    "definitions": [
+      {
+        "name": "rebuild",
+        "kind": "FunctionDef",
+        "line": 12
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 31
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/rebuild_source_cache.py",
+    "sha256": "0da62f7f6c87e90352a221a09ed3265bcb280d781647cd18e01e01a4c40e5a36",
+    "bytes": 4859,
+    "definitions": [
+      {
+        "name": "rebuild_cache",
+        "kind": "FunctionDef",
+        "line": 18
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 83
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/release_manager.py",
+    "sha256": "eaf113d491c6e54ef5cb1841fc641649594d46d2083e1584b0d592cae811f991",
+    "bytes": 28455,
+    "definitions": [
+      {
+        "name": "digest",
+        "kind": "FunctionDef",
+        "line": 26
+      },
+      {
+        "name": "sha",
+        "kind": "FunctionDef",
+        "line": 30
+      },
+      {
+        "name": "path_guard",
+        "kind": "FunctionDef",
+        "line": 37
+      },
+      {
+        "name": "fresh",
+        "kind": "FunctionDef",
+        "line": 47
+      },
+      {
+        "name": "inventory",
+        "kind": "FunctionDef",
+        "line": 57
+      },
+      {
+        "name": "write_record",
+        "kind": "FunctionDef",
+        "line": 66
+      },
+      {
+        "name": "read_record",
+        "kind": "FunctionDef",
+        "line": 77
+      },
+      {
+        "name": "literal",
+        "kind": "FunctionDef",
+        "line": 84
+      },
+      {
+        "name": "contracts",
+        "kind": "FunctionDef",
+        "line": 91
+      },
+      {
+        "name": "canonical",
+        "kind": "FunctionDef",
+        "line": 97
+      },
+      {
+        "name": "wheel_metadata",
+        "kind": "FunctionDef",
+        "line": 100
+      },
+      {
+        "name": "build_release",
+        "kind": "FunctionDef",
+        "line": 108
+      },
+      {
+        "name": "verify_release",
+        "kind": "FunctionDef",
+        "line": 174
+      },
+      {
+        "name": "export_archive",
+        "kind": "FunctionDef",
+        "line": 183
+      },
+      {
+        "name": "unpack_archive",
+        "kind": "FunctionDef",
+        "line": 192
+      },
+      {
+        "name": "clean_environment",
+        "kind": "FunctionDef",
+        "line": 212
+      },
+      {
+        "name": "execute",
+        "kind": "FunctionDef",
+        "line": 220
+      },
+      {
+        "name": "environment_report",
+        "kind": "FunctionDef",
+        "line": 228
+      },
+      {
+        "name": "install_release",
+        "kind": "FunctionDef",
+        "line": 233
+      },
+      {
+        "name": "verify_install",
+        "kind": "FunctionDef",
+        "line": 266
+      },
+      {
+        "name": "runtime_call",
+        "kind": "FunctionDef",
+        "line": 276
+      },
+      {
+        "name": "backup_requirement",
+        "kind": "FunctionDef",
+        "line": 286
+      },
+      {
+        "name": "matching_install",
+        "kind": "FunctionDef",
+        "line": 297
+      },
+      {
+        "name": "restore_with",
+        "kind": "FunctionDef",
+        "line": 309
+      },
+      {
+        "name": "deployment_lock",
+        "kind": "FunctionDef",
+        "line": 320
+      },
+      {
+        "name": "deployment_state",
+        "kind": "FunctionDef",
+        "line": 338
+      },
+      {
+        "name": "commit_state",
+        "kind": "FunctionDef",
+        "line": 351
+      },
+      {
+        "name": "revision",
+        "kind": "FunctionDef",
+        "line": 360
+      },
+      {
+        "name": "make_revision",
+        "kind": "FunctionDef",
+        "line": 368
+      },
+      {
+        "name": "init_deployment",
+        "kind": "FunctionDef",
+        "line": 379
+      },
+      {
+        "name": "upgrade",
+        "kind": "FunctionDef",
+        "line": 387
+      },
+      {
+        "name": "rollback",
+        "kind": "FunctionDef",
+        "line": 407
+      },
+      {
+        "name": "run_managed",
+        "kind": "FunctionDef",
+        "line": 422
+      },
+      {
+        "name": "stop_managed",
+        "kind": "FunctionDef",
+        "line": 444
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 455
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/release_runtime.py",
+    "sha256": "fe9d9359e527b1171c0f28bb9d240f725f947301e8293fe6e3cef5d0bf9614ff",
+    "bytes": 6376,
+    "definitions": [
+      {
+        "name": "inspect_data",
+        "kind": "FunctionDef",
+        "line": 15
+      },
+      {
+        "name": "operate",
+        "kind": "FunctionDef",
+        "line": 48
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 87
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/replay_review_workload.py",
+    "sha256": "ee94b6d3155666f9aa8263fdb8c0038312875e4eb280af1c9168ce2585f3eeb0",
+    "bytes": 8693,
+    "definitions": [
+      {
+        "name": "sha",
+        "kind": "FunctionDef",
+        "line": 24
+      },
+      {
+        "name": "read",
+        "kind": "FunctionDef",
+        "line": 32
+      },
+      {
+        "name": "rows",
+        "kind": "FunctionDef",
+        "line": 36
+      },
+      {
+        "name": "write",
+        "kind": "FunctionDef",
+        "line": 41
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 45
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 150
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/review_backup.py",
+    "sha256": "31206137ffffd19e61c2fd29e6bed71855cebe6b0194e7bcc300868cca8cb702",
+    "bytes": 21478,
+    "definitions": [
+      {
+        "name": "sha",
+        "kind": "FunctionDef",
+        "line": 32
+      },
+      {
+        "name": "guarded",
+        "kind": "FunctionDef",
+        "line": 39
+      },
+      {
+        "name": "runtime_contract",
+        "kind": "FunctionDef",
+        "line": 46
+      },
+      {
+        "name": "new_destination",
+        "kind": "FunctionDef",
+        "line": 50
+      },
+      {
+        "name": "stage_directory",
+        "kind": "FunctionDef",
+        "line": 64
+      },
+      {
+        "name": "read_database",
+        "kind": "FunctionDef",
+        "line": 83
+      },
+      {
+        "name": "identifier",
+        "kind": "FunctionDef",
+        "line": 93
+      },
+      {
+        "name": "database_state",
+        "kind": "FunctionDef",
+        "line": 96
+      },
+      {
+        "name": "metadata_rows",
+        "kind": "FunctionDef",
+        "line": 120
+      },
+      {
+        "name": "snapshot_state",
+        "kind": "FunctionDef",
+        "line": 132
+      },
+      {
+        "name": "copy_checked",
+        "kind": "FunctionDef",
+        "line": 168
+      },
+      {
+        "name": "file_inventory",
+        "kind": "FunctionDef",
+        "line": 180
+      },
+      {
+        "name": "create_backup",
+        "kind": "FunctionDef",
+        "line": 190
+      },
+      {
+        "name": "verify_backup",
+        "kind": "FunctionDef",
+        "line": 247
+      },
+      {
+        "name": "restore_backup",
+        "kind": "FunctionDef",
+        "line": 274
+      },
+      {
+        "name": "restored_store",
+        "kind": "FunctionDef",
+        "line": 313
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 336
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/review_capacity.py",
+    "sha256": "f30da67fa13aa862a7125bda4af208b0bb8a6b367938364e269d3de5c5daf4ed",
+    "bytes": 3069,
+    "definitions": [
+      {
+        "name": "positive_int",
+        "kind": "FunctionDef",
+        "line": 10
+      },
+      {
+        "name": "local_date",
+        "kind": "FunctionDef",
+        "line": 16
+      },
+      {
+        "name": "ReviewCapacity",
+        "kind": "ClassDef",
+        "line": 31
+      },
+      {
+        "name": "ReviewCalendar",
+        "kind": "ClassDef",
+        "line": 52
+      },
+      {
+        "name": "workload_scenarios",
+        "kind": "FunctionDef",
+        "line": 74
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/review_decision_gate.py",
+    "sha256": "d9dda3f836507a15a6e87a5bb6d906f797bf089fe8f37098bf47b55be7c27642",
+    "bytes": 5101,
+    "definitions": [
+      {
+        "name": "read_binding",
+        "kind": "FunctionDef",
+        "line": 15
+      },
+      {
+        "name": "write_binding",
+        "kind": "FunctionDef",
+        "line": 26
+      },
+      {
+        "name": "assert_binding",
+        "kind": "FunctionDef",
+        "line": 39
+      },
+      {
+        "name": "bind_store",
+        "kind": "FunctionDef",
+        "line": 50
+      },
+      {
+        "name": "check_decision",
+        "kind": "FunctionDef",
+        "line": 63
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/review_roles.py",
+    "sha256": "1969860e1ae52bea45a0c742e5def9f25fd839f63d83115a1fd7a7ef3cd8bf56",
+    "bytes": 6565,
+    "definitions": [
+      {
+        "name": "ReviewPrincipal",
+        "kind": "ClassDef",
+        "line": 28
+      },
+      {
+        "name": "require_permission",
+        "kind": "FunctionDef",
+        "line": 43
+      },
+      {
+        "name": "policy_status",
+        "kind": "FunctionDef",
+        "line": 53
+      },
+      {
+        "name": "workflow_events",
+        "kind": "FunctionDef",
+        "line": 61
+      },
+      {
+        "name": "finalization_context",
+        "kind": "FunctionDef",
+        "line": 72
+      },
+      {
+        "name": "check_finalization_grant",
+        "kind": "FunctionDef",
+        "line": 78
+      },
+      {
+        "name": "validate_ml_review_pair",
+        "kind": "FunctionDef",
+        "line": 101
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/review_server.py",
+    "sha256": "e5c22f63eab38b6867cc4296dc0331a418944f85b03bc6db9ca953682af4d7d0",
+    "bytes": 35667,
+    "definitions": [
+      {
+        "name": "make_server",
+        "kind": "FunctionDef",
+        "line": 25
+      },
+      {
+        "name": "demo_ml_manager",
+        "kind": "FunctionDef",
+        "line": 412
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 423
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/review_store.py",
+    "sha256": "6e50500c3728a0df00f0a6bc739c3894aff1d76c0f518a6275959947ee063396",
+    "bytes": 54293,
+    "definitions": [
+      {
+        "name": "csv_rows",
+        "kind": "FunctionDef",
+        "line": 29
+      },
+      {
+        "name": "compact",
+        "kind": "FunctionDef",
+        "line": 34
+      },
+      {
+        "name": "source_paths",
+        "kind": "FunctionDef",
+        "line": 38
+      },
+      {
+        "name": "source_fingerprint",
+        "kind": "FunctionDef",
+        "line": 50
+      },
+      {
+        "name": "ReviewStore",
+        "kind": "ClassDef",
+        "line": 61
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/review_support.py",
+    "sha256": "5abfacf96ab18a8742e7fcf4829719764c53864c72fa9a8a8ddd9fd2af33adc9",
+    "bytes": 4816,
+    "definitions": [
+      {
+        "name": "linked_returns",
+        "kind": "FunctionDef",
+        "line": 10
+      },
+      {
+        "name": "cache",
+        "kind": "FunctionDef",
+        "line": 39
+      },
+      {
+        "name": "case_support",
+        "kind": "FunctionDef",
+        "line": 56
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/review_workflow.py",
+    "sha256": "3f21abe94c82d912a0c3ad5aeb5e7c40975890f366a2d220acb1476a754471ac",
+    "bytes": 10007,
+    "definitions": [
+      {
+        "name": "TwoStageReview",
+        "kind": "ClassDef",
+        "line": 11
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/rules.py",
+    "sha256": "30e3f3c1399e30b8580674375845c72b4d4111fe387dae6125b4a912b1b556b3",
+    "bytes": 69346,
+    "definitions": [
+      {
+        "name": "invoice_payment_key",
+        "kind": "FunctionDef",
+        "line": 105
+      },
+      {
+        "name": "load_inputs",
+        "kind": "FunctionDef",
+        "line": 120
+      },
+      {
+        "name": "long_installment_exception",
+        "kind": "FunctionDef",
+        "line": 161
+      },
+      {
+        "name": "rule_coverage",
+        "kind": "FunctionDef",
+        "line": 210
+      },
+      {
+        "name": "score_rules",
+        "kind": "FunctionDef",
+        "line": 237
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/rule_audit.py",
+    "sha256": "f37c1cda2b75294477bd4d7465c514bed72fa2139f91bdb011c396de5ff1d763",
+    "bytes": 43224,
+    "definitions": [
+      {
+        "name": "eligible",
+        "kind": "FunctionDef",
+        "line": 23
+      },
+      {
+        "name": "read_csv",
+        "kind": "FunctionDef",
+        "line": 42
+      },
+      {
+        "name": "sha",
+        "kind": "FunctionDef",
+        "line": 47
+      },
+      {
+        "name": "ratio",
+        "kind": "FunctionDef",
+        "line": 55
+      },
+      {
+        "name": "wilson",
+        "kind": "FunctionDef",
+        "line": 59
+      },
+      {
+        "name": "confusion",
+        "kind": "FunctionDef",
+        "line": 69
+      },
+      {
+        "name": "replay_scores",
+        "kind": "FunctionDef",
+        "line": 83
+      },
+      {
+        "name": "period_for_window",
+        "kind": "FunctionDef",
+        "line": 112
+      },
+      {
+        "name": "scenario_coverage",
+        "kind": "FunctionDef",
+        "line": 119
+      },
+      {
+        "name": "profiles_for_rule",
+        "kind": "FunctionDef",
+        "line": 137
+      },
+      {
+        "name": "audit_scenario",
+        "kind": "FunctionDef",
+        "line": 170
+      },
+      {
+        "name": "fmt",
+        "kind": "FunctionDef",
+        "line": 332
+      },
+      {
+        "name": "recommendation",
+        "kind": "FunctionDef",
+        "line": 336
+      },
+      {
+        "name": "review_decision",
+        "kind": "FunctionDef",
+        "line": 353
+      },
+      {
+        "name": "write_reports",
+        "kind": "FunctionDef",
+        "line": 370
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 538
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/rule_audit_cases.py",
+    "sha256": "0479df12bc4402c63f820022884ad6f05e131c86f82371382dc42d15e923ffae",
+    "bytes": 16659,
+    "definitions": [
+      {
+        "name": "Case",
+        "kind": "ClassDef",
+        "line": 14
+      },
+      {
+        "name": "run_cases",
+        "kind": "FunctionDef",
+        "line": 100
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/rule_audit_policy.py",
+    "sha256": "703c8deadc7de070ad33ebbd5364a8498b75cfb178c61f1896df41be2c81362f",
+    "bytes": 11488,
+    "definitions": [
+      {
+        "name": "target_match",
+        "kind": "FunctionDef",
+        "line": 66
+      },
+      {
+        "name": "eligible",
+        "kind": "FunctionDef",
+        "line": 73
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/rule_branch_controls.py",
+    "sha256": "84a13be774873b916fb9e6aa79321cada343eee34ca83f7198baa23d402144a5",
+    "bytes": 27217,
+    "definitions": [
+      {
+        "name": "catalog",
+        "kind": "FunctionDef",
+        "line": 112
+      },
+      {
+        "name": "build_control",
+        "kind": "FunctionDef",
+        "line": 126
+      },
+      {
+        "name": "namespace",
+        "kind": "FunctionDef",
+        "line": 239
+      },
+      {
+        "name": "expected_route",
+        "kind": "FunctionDef",
+        "line": 247
+      },
+      {
+        "name": "assess",
+        "kind": "FunctionDef",
+        "line": 257
+      },
+      {
+        "name": "write_json",
+        "kind": "FunctionDef",
+        "line": 271
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 274
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/rule_ml_incremental.py",
+    "sha256": "573e528a8ef7399806d3789f78d80b19745a8cb6aabdff78bf134ec8e3854fcf",
+    "bytes": 18323,
+    "definitions": [
+      {
+        "name": "select_arms",
+        "kind": "FunctionDef",
+        "line": 33
+      },
+      {
+        "name": "active_algorithms",
+        "kind": "FunctionDef",
+        "line": 78
+      },
+      {
+        "name": "verify_reports",
+        "kind": "FunctionDef",
+        "line": 93
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 102
+      },
+      {
+        "name": "incremental_metrics",
+        "kind": "FunctionDef",
+        "line": 203
+      },
+      {
+        "name": "collect",
+        "kind": "FunctionDef",
+        "line": 230
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 244
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/run_a4_pattern_trial.py",
+    "sha256": "f18def5093d449d0d71d9c67a80067b70f3b82a007a2317779824c9a281f25f7",
+    "bytes": 13861,
+    "definitions": [
+      {
+        "name": "jsonl",
+        "kind": "FunctionDef",
+        "line": 27
+      },
+      {
+        "name": "signature",
+        "kind": "FunctionDef",
+        "line": 32
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 36
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 203
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/run_a5_coverage.py",
+    "sha256": "2e84f9bcd5d780dc79266f9baff71cdf1003b1719761fdb786f991b3d29b9876",
+    "bytes": 12815,
+    "definitions": [
+      {
+        "name": "fingerprints",
+        "kind": "FunctionDef",
+        "line": 34
+      },
+      {
+        "name": "guard",
+        "kind": "FunctionDef",
+        "line": 40
+      },
+      {
+        "name": "read_hits",
+        "kind": "FunctionDef",
+        "line": 50
+      },
+      {
+        "name": "case_signature",
+        "kind": "FunctionDef",
+        "line": 55
+      },
+      {
+        "name": "compare",
+        "kind": "FunctionDef",
+        "line": 60
+      },
+      {
+        "name": "cohort",
+        "kind": "FunctionDef",
+        "line": 122
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 189
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/run_evidence_evaluation.py",
+    "sha256": "283e0a6be9548ceace81e3b1e572abc2c52da434932e82a7e2827e44d8c2e556",
+    "bytes": 21255,
+    "definitions": [
+      {
+        "name": "source_controls",
+        "kind": "FunctionDef",
+        "line": 31
+      },
+      {
+        "name": "aggregate_controls",
+        "kind": "FunctionDef",
+        "line": 73
+      },
+      {
+        "name": "baseline_prefixes",
+        "kind": "FunctionDef",
+        "line": 109
+      },
+      {
+        "name": "fresh_dataset",
+        "kind": "FunctionDef",
+        "line": 129
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 210
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/run_noise_reduction.py",
+    "sha256": "2081b5f03400020475028a199e24695ac1c4291c115887551dc44192cb56f351",
+    "bytes": 18072,
+    "definitions": [
+      {
+        "name": "sets_from_hits",
+        "kind": "FunctionDef",
+        "line": 20
+      },
+      {
+        "name": "choose_validation",
+        "kind": "FunctionDef",
+        "line": 32
+      },
+      {
+        "name": "evaluate_dataset",
+        "kind": "FunctionDef",
+        "line": 81
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 184
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/run_p2_controls.py",
+    "sha256": "91805a5f6676cc9299cce22180072abdabe0fc76cb7a3e81cb251990479b9a8b",
+    "bytes": 11835,
+    "definitions": [
+      {
+        "name": "read",
+        "kind": "FunctionDef",
+        "line": 23
+      },
+      {
+        "name": "write",
+        "kind": "FunctionDef",
+        "line": 27
+      },
+      {
+        "name": "fingerprints",
+        "kind": "FunctionDef",
+        "line": 31
+      },
+      {
+        "name": "fresh",
+        "kind": "FunctionDef",
+        "line": 36
+      },
+      {
+        "name": "separate",
+        "kind": "FunctionDef",
+        "line": 46
+      },
+      {
+        "name": "prepare",
+        "kind": "FunctionDef",
+        "line": 51
+      },
+      {
+        "name": "verify_sources",
+        "kind": "FunctionDef",
+        "line": 81
+      },
+      {
+        "name": "observations",
+        "kind": "FunctionDef",
+        "line": 92
+      },
+      {
+        "name": "compare",
+        "kind": "FunctionDef",
+        "line": 109
+      },
+      {
+        "name": "evaluate",
+        "kind": "FunctionDef",
+        "line": 120
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 192
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/run_pipeline_rehearsal.py",
+    "sha256": "9e86d15c7beaea0b678d402e27bd15299bd12c299ddc32a917cb3a600e760152",
+    "bytes": 32420,
+    "definitions": [
+      {
+        "name": "read_json",
+        "kind": "FunctionDef",
+        "line": 48
+      },
+      {
+        "name": "write_json",
+        "kind": "FunctionDef",
+        "line": 52
+      },
+      {
+        "name": "read_csv",
+        "kind": "FunctionDef",
+        "line": 56
+      },
+      {
+        "name": "jsonl",
+        "kind": "FunctionDef",
+        "line": 62
+      },
+      {
+        "name": "input_guard",
+        "kind": "FunctionDef",
+        "line": 68
+      },
+      {
+        "name": "fingerprint_inputs",
+        "kind": "FunctionDef",
+        "line": 84
+      },
+      {
+        "name": "verify_manifest",
+        "kind": "FunctionDef",
+        "line": 95
+      },
+      {
+        "name": "verified_table",
+        "kind": "FunctionDef",
+        "line": 107
+      },
+      {
+        "name": "assert_network_scope",
+        "kind": "FunctionDef",
+        "line": 114
+      },
+      {
+        "name": "graph_checks",
+        "kind": "FunctionDef",
+        "line": 124
+      },
+      {
+        "name": "threshold_checks",
+        "kind": "FunctionDef",
+        "line": 149
+      },
+      {
+        "name": "source_comparison",
+        "kind": "FunctionDef",
+        "line": 173
+      },
+      {
+        "name": "score_cohort",
+        "kind": "FunctionDef",
+        "line": 196
+      },
+      {
+        "name": "HttpProbe",
+        "kind": "ClassDef",
+        "line": 289
+      },
+      {
+        "name": "outbox_rows",
+        "kind": "FunctionDef",
+        "line": 315
+      },
+      {
+        "name": "review_rehearsal",
+        "kind": "FunctionDef",
+        "line": 320
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 438
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 495
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/run_rules.py",
+    "sha256": "83ccc85d8fb2908fa690b810a71d96279bdf7bd3caf3cc74f011fa42e3bd7984",
+    "bytes": 15655,
+    "definitions": [
+      {
+        "name": "jsonl",
+        "kind": "FunctionDef",
+        "line": 25
+      },
+      {
+        "name": "empirical_rank",
+        "kind": "FunctionDef",
+        "line": 31
+      },
+      {
+        "name": "evaluate_scores",
+        "kind": "FunctionDef",
+        "line": 37
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 69
+      },
+      {
+        "name": "compare_results",
+        "kind": "FunctionDef",
+        "line": 110
+      },
+      {
+        "name": "math_ceil",
+        "kind": "FunctionDef",
+        "line": 207
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 215
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/run_rule_repairs.py",
+    "sha256": "add14cc4e15925cfc8b0ec89982ea572e38c53aecc9274b2629f5fed6ee4b7cc",
+    "bytes": 14214,
+    "definitions": [
+      {
+        "name": "write_jsonl",
+        "kind": "FunctionDef",
+        "line": 18
+      },
+      {
+        "name": "baseline_hits",
+        "kind": "FunctionDef",
+        "line": 24
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 34
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 131
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/run_spec_alignment.py",
+    "sha256": "368250b1c834b3cb1c8774e4627bb19419af90c12cbb19e6c418d7d0b2a68c1f",
+    "bytes": 12361,
+    "definitions": [
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 20
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 117
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/run_split_pattern_review.py",
+    "sha256": "617dd370c634b169bd523ab9a661aa7a07d4ab313d95ebb5aa441957a9dc14e0",
+    "bytes": 15663,
+    "definitions": [
+      {
+        "name": "jsonl",
+        "kind": "FunctionDef",
+        "line": 30
+      },
+      {
+        "name": "content_signature",
+        "kind": "FunctionDef",
+        "line": 36
+      },
+      {
+        "name": "a4_trace",
+        "kind": "FunctionDef",
+        "line": 50
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 77
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 209
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/run_synthetic_readiness.py",
+    "sha256": "b931773e1cf9ffc21ab363d1e44d421e5cfecd838522a9be1c31a0568c1282ce",
+    "bytes": 17675,
+    "definitions": [
+      {
+        "name": "read",
+        "kind": "FunctionDef",
+        "line": 27
+      },
+      {
+        "name": "key",
+        "kind": "FunctionDef",
+        "line": 31
+      },
+      {
+        "name": "select_packet",
+        "kind": "FunctionDef",
+        "line": 35
+      },
+      {
+        "name": "metrics",
+        "kind": "FunctionDef",
+        "line": 51
+      },
+      {
+        "name": "migration_rehearsal",
+        "kind": "FunctionDef",
+        "line": 62
+      },
+      {
+        "name": "run",
+        "kind": "FunctionDef",
+        "line": 125
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 267
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/shadow_scoring.py",
+    "sha256": "d38358ce72a77f6f81474c6d8091c9a24bbd097b5813835c6afabcd841021252",
+    "bytes": 11186,
+    "definitions": [
+      {
+        "name": "guarded",
+        "kind": "FunctionDef",
+        "line": 29
+      },
+      {
+        "name": "instant",
+        "kind": "FunctionDef",
+        "line": 36
+      },
+      {
+        "name": "scoring_scope",
+        "kind": "FunctionDef",
+        "line": 48
+      },
+      {
+        "name": "output_guard",
+        "kind": "FunctionDef",
+        "line": 64
+      },
+      {
+        "name": "source_checks",
+        "kind": "FunctionDef",
+        "line": 74
+      },
+      {
+        "name": "selected_matrix",
+        "kind": "FunctionDef",
+        "line": 93
+      },
+      {
+        "name": "run_shadow",
+        "kind": "FunctionDef",
+        "line": 136
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 204
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/source_snapshot.py",
+    "sha256": "7ee6fcb5fe7c2d94a60771c84478094f3fa28a92b36aa6490ab24106ccfed9a6",
+    "bytes": 1559,
+    "definitions": [
+      {
+        "name": "inspect_sources",
+        "kind": "FunctionDef",
+        "line": 11
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 25
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/spec_policy.py",
+    "sha256": "911aa8b504efa871c84f8970474431957571d8b96c0aa2ca85d33846d66e6cca",
+    "bytes": 5724,
+    "definitions": [
+      {
+        "name": "identity_matches",
+        "kind": "FunctionDef",
+        "line": 9
+      },
+      {
+        "name": "PeriodPayments",
+        "kind": "ClassDef",
+        "line": 28
+      },
+      {
+        "name": "manual_close_evidence",
+        "kind": "FunctionDef",
+        "line": 64
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/summarise.py",
+    "sha256": "dadfc15e7fb8c3676bc7e073b465d91c25168ad4826bc50443a78acb132986e6",
+    "bytes": 5282,
+    "definitions": [
+      {
+        "name": "summarise",
+        "kind": "FunctionDef",
+        "line": 9
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/summarise_rules.py",
+    "sha256": "34a9f2baffe1e2518fa6c7f486853295cbbbd6b7ca235ac28243dedb5e93849d",
+    "bytes": 4221,
+    "definitions": [
+      {
+        "name": "summarise",
+        "kind": "FunctionDef",
+        "line": 7
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 42
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/sync_dynamic_thresholds.py",
+    "sha256": "f30963a26a4742ae399da6c1692a45f4259682ae78261ac29b8cedb6f7310e04",
+    "bytes": 9600,
+    "definitions": [
+      {
+        "name": "sha",
+        "kind": "FunctionDef",
+        "line": 20
+      },
+      {
+        "name": "atomic_json",
+        "kind": "FunctionDef",
+        "line": 24
+      },
+      {
+        "name": "read_sources",
+        "kind": "FunctionDef",
+        "line": 40
+      },
+      {
+        "name": "_load_version",
+        "kind": "FunctionDef",
+        "line": 65
+      },
+      {
+        "name": "load_snapshot",
+        "kind": "FunctionDef",
+        "line": 83
+      },
+      {
+        "name": "sync",
+        "kind": "FunctionDef",
+        "line": 90
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 152
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/sync_entity_graph.py",
+    "sha256": "252c89732400b0062dfb2b146fe4bb17c2f1d8f7e7d3a85ba8a27698f4a44079",
+    "bytes": 6874,
+    "definitions": [
+      {
+        "name": "read_sources",
+        "kind": "FunctionDef",
+        "line": 17
+      },
+      {
+        "name": "atomic_json",
+        "kind": "FunctionDef",
+        "line": 42
+      },
+      {
+        "name": "load_snapshot",
+        "kind": "FunctionDef",
+        "line": 58
+      },
+      {
+        "name": "sync",
+        "kind": "FunctionDef",
+        "line": 72
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 113
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/sync_feature_model.py",
+    "sha256": "195a9330ee497002328dae4aeeb27c2a93706b7c076c6e2ed15b9f52a9548a23",
+    "bytes": 26526,
+    "definitions": [
+      {
+        "name": "write_json",
+        "kind": "FunctionDef",
+        "line": 41
+      },
+      {
+        "name": "read_rows",
+        "kind": "FunctionDef",
+        "line": 45
+      },
+      {
+        "name": "callback_revisions",
+        "kind": "FunctionDef",
+        "line": 50
+      },
+      {
+        "name": "before_cutoff",
+        "kind": "FunctionDef",
+        "line": 75
+      },
+      {
+        "name": "derive",
+        "kind": "FunctionDef",
+        "line": 82
+      },
+      {
+        "name": "matrix_fingerprint",
+        "kind": "FunctionDef",
+        "line": 139
+      },
+      {
+        "name": "load_old_matrix",
+        "kind": "FunctionDef",
+        "line": 143
+      },
+      {
+        "name": "old_score_snapshot",
+        "kind": "FunctionDef",
+        "line": 159
+      },
+      {
+        "name": "active_hits",
+        "kind": "FunctionDef",
+        "line": 174
+      },
+      {
+        "name": "top_capacity",
+        "kind": "FunctionDef",
+        "line": 184
+      },
+      {
+        "name": "run_dataset",
+        "kind": "FunctionDef",
+        "line": 192
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 387
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/synthetic_dataset.py",
+    "sha256": "f660197900302c1f6fcda8d2ba03c2941b446a79b633541ee945236bb944fcf1",
+    "bytes": 9307,
+    "definitions": [
+      {
+        "name": "write_json",
+        "kind": "FunctionDef",
+        "line": 18
+      },
+      {
+        "name": "columns",
+        "kind": "FunctionDef",
+        "line": 22
+      },
+      {
+        "name": "quarantine_probes",
+        "kind": "FunctionDef",
+        "line": 28
+      },
+      {
+        "name": "diagnostics",
+        "kind": "FunctionDef",
+        "line": 68
+      },
+      {
+        "name": "export_world",
+        "kind": "FunctionDef",
+        "line": 97
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/synthetic_world.py",
+    "sha256": "d9d999efb90c354d64e71805f44bd7adb7266b7254725877e98ed966e0b06f5d",
+    "bytes": 31755,
+    "definitions": [
+      {
+        "name": "month_end",
+        "kind": "FunctionDef",
+        "line": 37
+      },
+      {
+        "name": "World",
+        "kind": "ClassDef",
+        "line": 41
+      },
+      {
+        "name": "raw_export",
+        "kind": "FunctionDef",
+        "line": 411
+      },
+      {
+        "name": "map_export",
+        "kind": "FunctionDef",
+        "line": 419
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/tax_risk.py",
+    "sha256": "787bd479c4915e42e9e6b0a7d5dc15953543b872c60a3bf2754f12fd2641bd3b",
+    "bytes": 7171,
+    "definitions": [
+      {
+        "name": "tax_code",
+        "kind": "FunctionDef",
+        "line": 18
+      },
+      {
+        "name": "timestamp",
+        "kind": "FunctionDef",
+        "line": 26
+      },
+      {
+        "name": "validated",
+        "kind": "FunctionDef",
+        "line": 33
+      },
+      {
+        "name": "TaxRiskHistory",
+        "kind": "ClassDef",
+        "line": 66
+      },
+      {
+        "name": "import_list",
+        "kind": "FunctionDef",
+        "line": 113
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 131
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/temporal_evidence.py",
+    "sha256": "c9e77a0d40e8359fbf2d01b1fafff5b2e91a03818efd37c2f9189e2c68675bf4",
+    "bytes": 9436,
+    "definitions": [
+      {
+        "name": "EmployeeHistory",
+        "kind": "ClassDef",
+        "line": 12
+      },
+      {
+        "name": "employee_at",
+        "kind": "FunctionDef",
+        "line": 47
+      },
+      {
+        "name": "bank_token",
+        "kind": "FunctionDef",
+        "line": 56
+      },
+      {
+        "name": "bank_identity",
+        "kind": "FunctionDef",
+        "line": 64
+      },
+      {
+        "name": "ObservedVersions",
+        "kind": "ClassDef",
+        "line": 75
+      },
+      {
+        "name": "BankChangeHistory",
+        "kind": "ClassDef",
+        "line": 103
+      },
+      {
+        "name": "bank_change_evidence",
+        "kind": "FunctionDef",
+        "line": 123
+      },
+      {
+        "name": "bank_change_state",
+        "kind": "FunctionDef",
+        "line": 157
+      },
+      {
+        "name": "approved_evidence",
+        "kind": "FunctionDef",
+        "line": 162
+      },
+      {
+        "name": "paid_leave_entitlement",
+        "kind": "FunctionDef",
+        "line": 175
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/threshold_artifacts.py",
+    "sha256": "8c8ce62fc30d0976724052bac4456987774cfdda5acb5cbc6ffe579031a2d8f7",
+    "bytes": 985,
+    "definitions": [
+      {
+        "name": "write_parameters",
+        "kind": "FunctionDef",
+        "line": 7
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/threshold_sources.py",
+    "sha256": "d3df6bf3cfdcff19b9e93e539b2e3d1867bab6c8805177312a5d5ac8bf7aaccc",
+    "bytes": 6263,
+    "definitions": [
+      {
+        "name": "account_code",
+        "kind": "FunctionDef",
+        "line": 7
+      },
+      {
+        "name": "expense_account",
+        "kind": "FunctionDef",
+        "line": 13
+      },
+      {
+        "name": "family",
+        "kind": "FunctionDef",
+        "line": 17
+      },
+      {
+        "name": "known_at",
+        "kind": "FunctionDef",
+        "line": 25
+      },
+      {
+        "name": "extract_observations",
+        "kind": "FunctionDef",
+        "line": 29
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/train_source_model.py",
+    "sha256": "a725e5095bfb80614f525152dc21c7e918b28a87598f2f482f153a9af48f556b",
+    "bytes": 13508,
+    "definitions": [
+      {
+        "name": "training_plan",
+        "kind": "FunctionDef",
+        "line": 25
+      },
+      {
+        "name": "matrix_fingerprint",
+        "kind": "FunctionDef",
+        "line": 44
+      },
+      {
+        "name": "window_summary",
+        "kind": "FunctionDef",
+        "line": 49
+      },
+      {
+        "name": "verify_scoring_window",
+        "kind": "FunctionDef",
+        "line": 57
+      },
+      {
+        "name": "train_source_model",
+        "kind": "FunctionDef",
+        "line": 92
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 190
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/validate.py",
+    "sha256": "3f775ffa6aa1aa4dbf36d92a629ceca06f3522244282c3431229f64c4c965f17",
+    "bytes": 8112,
+    "definitions": [
+      {
+        "name": "read_dataset",
+        "kind": "FunctionDef",
+        "line": 16
+      },
+      {
+        "name": "validate",
+        "kind": "FunctionDef",
+        "line": 27
+      },
+      {
+        "name": "main",
+        "kind": "FunctionDef",
+        "line": 116
+      }
+    ]
+  },
+  {
+    "path": "agent2/sme_fraud/version.py",
+    "sha256": "b7564b45238d2dc0eb82053bc18db84725aa484efb50c731d01dbb6ca6e9a660",
+    "bytes": 216,
+    "definitions": []
+  },
+  {
+    "path": "agent2/sme_fraud/__init__.py",
+    "sha256": "6f466bd58d738b598c0b75709049910de15614019bc4914520e6cc4d40c0cdcb",
+    "bytes": 123,
+    "definitions": []
+  }
+]

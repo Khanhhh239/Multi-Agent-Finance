@@ -1,0 +1,90 @@
+{
+  "count": 21,
+  "subset_of": "he_final_tests.json",
+  "tests": [
+    {
+      "id": "test_worker_recovery.NativeWorkerRecoveryTests.test_crash_after_claim_before_reservation",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.NativeWorkerRecoveryTests.test_crash_after_durable_nonce_reservation",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.NativeWorkerRecoveryTests.test_crash_after_native_compute_before_commit",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.NativeWorkerRecoveryTests.test_crash_after_result_commit_returns_identical_cached_ciphertext",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.NativeWorkerRecoveryTests.test_current_grant_revocation_blocks_retry_without_changing_pending_state",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.NativeWorkerRecoveryTests.test_expired_pending_request_cannot_be_recomputed_on_restart",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.NativeWorkerRecoveryTests.test_second_process_cannot_steal_job_while_first_is_paused",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.NativeWorkerRecoveryTests.test_signed_changed_ciphertext_is_rejected_before_native_parse_on_retry",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.NativeWorkerRecoveryTests.test_worker_and_node_restart_preserve_same_private_context",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.WorkerOwnershipTests.test_committed_result_cannot_be_overwritten",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.WorkerOwnershipTests.test_concurrent_duplicate_claims_have_one_owner",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.WorkerOwnershipTests.test_crash_before_reservation_can_create_bound_reservation_on_resume",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.WorkerOwnershipTests.test_legacy_burned_nonce_is_never_upgraded_to_resumable",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.WorkerOwnershipTests.test_legacy_jobs_migrate_without_reopening_old_failed_or_burned_requests",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.WorkerOwnershipTests.test_managed_replay_can_only_resume_same_bound_hash",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.WorkerOwnershipTests.test_newer_storage_is_rejected_without_rewriting_database",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.WorkerOwnershipTests.test_reserve_requires_current_claim",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.WorkerOwnershipTests.test_restart_only_retries_exact_request_hash_and_fences_old_token",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.WorkerOwnershipTests.test_retrieval_requests_recompute_only_for_pending_exact_hash",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.WorkerOwnershipTests.test_second_worker_cannot_reset_running_job",
+      "status": "pass"
+    },
+    {
+      "id": "test_worker_recovery.WorkerOwnershipTests.test_terminal_failure_never_reopens",
+      "status": "pass"
+    }
+  ]
+}

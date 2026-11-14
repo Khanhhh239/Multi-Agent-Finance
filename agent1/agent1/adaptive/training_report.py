@@ -34,6 +34,11 @@ def report_data(bundle, data, identifier):
             k: bundle.get(k)
             for k in [
                 "asof",
+                "update_asof",
+                "t1_parameter_asof",
+                "partial_version",
+                "adapter_version",
+                "serving_manifest",
                 "windows",
                 "train_n",
                 "validation_n",
@@ -41,6 +46,9 @@ def report_data(bundle, data, identifier):
                 "selected_method",
                 "selected_weight",
                 "audit",
+                "promotion_audit",
+                "candidate_update_audit",
+                "prospective_audit_id",
                 "collection_evaluation",
                 "code_hash",
                 "dependencies",
@@ -55,14 +63,14 @@ def report_data(bundle, data, identifier):
                 "catalog_sha256",
                 "limitation",
             ]
-        },
+        } | {"partial_fitted_through": getattr(bundle.get("partial"), "fitted_through", None)},
         training_seconds=bundle.get("training_seconds"),
         deployed=estimator(bundle["model"]),
         risk={k: v for k, v in bundle.get("risk", {}).items() if k != "model"},
         operating={
             k: v
             for k, v in (bundle.get("operating") or {}).items()
-            if k in ["name", "validation", "unavailable", "audit_mae", "reference_mae"]
+            if k in ["version", "name", "accounts", "validation", "unavailable", "audit_mae", "reference_mae", "fitted_through", "ready_on"]
         },
         compute_budget=dict(
             neural_max_iter=os.environ.get("AGENT1_NEURAL_MAX_ITER", "100"),

@@ -1,0 +1,75 @@
+{
+  "spec_version": "2.1",
+  "change_request": "CR-018",
+  "status": "R2_PARTIAL_P1_input_subtask_complete",
+  "collected_at": "2026-11-11T19:31:22.831858+07:00",
+  "head": "f203b39828f567171916b5b4744728ed4b63d17f",
+  "cwd": "D:\\agent22",
+  "native_command": "agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/run_r1_tests.py --report Agent2_Spec_v2_1/evidence/R2/p1_inputs_20261111/native_tests.json",
+  "native_exit_code": 0,
+  "native_summary": {
+    "count": 616,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0
+  },
+  "native_elapsed_seconds": 599.421,
+  "focused_summary": {
+    "count": 148,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0
+  },
+  "focused_run_before_final_since_inception_test": true,
+  "new_p1_cases": 19,
+  "demo_command": "agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/demo_p1_inputs.py --output-dir Agent2_Spec_v2_1/evidence/R2/p1_inputs_20261111/demo",
+  "demo_exit_code": 0,
+  "demo_rows": {
+    "input": 6,
+    "output": 6
+  },
+  "retry_same_snapshot": true,
+  "input_contract_versions": [
+    "1.0.0",
+    "1.1.0"
+  ],
+  "input_1_0_schema_sha256": "a641ba6a919c6309561810ab0171801fef3c5ec2253ca7a459ef6b5b88ea87fe",
+  "input_1_1_schema_sha256": "9077df2c78f29e3e4ee0659888fdc6a9cefdd3e43bc3638c76b18ea084779085",
+  "archived_1_0_schema_identical_to_R1": true,
+  "rule_inputs_version": "rule-inputs/1.1.0",
+  "validator_version": "1.2.0",
+  "validation_report_version": "1.2.0",
+  "core_method_sources_unchanged": {
+    "entity_graph.py": "8807e3667be2ad2b270de7d843065bd4e8401a715cb11519561bdcb9d856f2d5",
+    "identity_graph.py": "5fb79620be72a70f63914a9e9f8d7375e1d096dd1fcd7d2dd26e1d85dfbe3597",
+    "ml_estimators.py": "4cda15cd47c2f7080f6416210642406fadb5fbdff98690fb8ca14eddfb1a7c5b",
+    "rules.py": "30e3f3c1399e30b8580674375845c72b4d4111fe387dae6125b4a912b1b556b3",
+    "score_statistics.py": "396c0aab5f9fea7fac245deb0b4d116cf7d78d660bdd16247ea23d8a341f741d",
+    "unsupervised_statistics.py": "c80cdd213e8e877cc163cd5b36094771f219b66cece2428de27416192406ce2d"
+  },
+  "feature_contract_fingerprint": "750e47dac572ad4a07bd308526ca382acda0c90d62b5440236ed9b34c1423d6c",
+  "feature_columns": 33,
+  "model_versions_unchanged": {
+    "runtime": {
+      "python": "3.12.7",
+      "platform": "win32",
+      "numpy": "1.26.4",
+      "scipy": "1.15.1",
+      "scikit-learn": "1.8.0",
+      "joblib": "1.5.1"
+    },
+    "implementation": {
+      "ml_estimators.py": "4cda15cd47c2f7080f6416210642406fadb5fbdff98690fb8ca14eddfb1a7c5b",
+      "unsupervised_statistics.py": "c80cdd213e8e877cc163cd5b36094771f219b66cece2428de27416192406ce2d",
+      "score_statistics.py": "396c0aab5f9fea7fac245deb0b4d116cf7d78d660bdd16247ea23d8a341f741d",
+      "method_adapters.py": "52421e6e8ea9c4483ff366fb864b1acc9098db94508d55fbf999ec18c3099301",
+      "method_preprocess.py": "1d2244c3e0bae3ba6c82f557db52a4c5e6831cdff53851671809a8897c02e7ba"
+    }
+  },
+  "coverage_basis": "Source declaration bound to submitted records, not independent verification of complete external books",
+  "p1_evaluator_enabled": false,
+  "model_fit_performed": false,
+  "active_model_changed": false,
+  "full_R2_gate_run": false,
+  "release_approved": false
+}

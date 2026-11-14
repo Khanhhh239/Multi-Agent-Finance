@@ -1,49 +1,45 @@
-# 7. Bộ dữ liệu đánh giá — từng năng lực và đánh giá chung
+# Dữ liệu đánh giá và quy tắc tái lập
 
-Nguyên tắc: (i) mỗi năng lực có **bộ kiểm tra riêng** để lỗi một khối không bị che bởi khối khác; (ii) có **bộ đánh giá
-chung** (đầu-cuối) cho kết quả người dùng thấy; (iii) mọi bộ kiểm tra tách theo **thời gian** (và theo **công ty** khi đo
-chuyển miền) với nhãn bị kiểm duyệt đúng tại ngày cắt.
+## Tách ba câu hỏi
 
-## 7.1 Đánh giá riêng từng năng lực (unit benchmarks)
+| Câu hỏi | Bằng chứng cần có |
+|---|---|
+| Phần mềm chạy đúng hợp đồng? | UAT/fixture/kiểm thử bất biến trên mã hiện tại |
+| Dự báo có chất lượng? | Backtest đúng thời gian, nhãn và phạm vi; validation chọn riêng, audit/test chấm riêng |
+| Có giá trị trên SME thật? | Dữ liệu đối tác độc lập và phép đo sử dụng/tác động |
 
-| Mã | Năng lực | Bộ dữ liệu | Quy tắc chia | Nhãn | Mốc bắt buộc | Chỉ số chính |
-|---|---|---|---|---|---|---|
-| E-T0 | Lược đồ, chất lượng | XML từ `tgt` (200 file) + `inject_errors` (5–30%) | — | lỗi đã chèn | không có | recall/precision cổng ≥95% |
-| E-T1a | Thời điểm trả — trong miền | `src` snapshot hằng tuần | rolling-origin 2023-07, 2024-07; train<O, cal=63 ngày liền trước (cách 120 ngày), test 26 tuần | `remaining` bị kiểm duyệt | B0 đúng hạn, B1 trung vị khách, B1d phân vị khách | pinball, MAE P50, cov80, IBS, ECE@4w, C-index, WAPE thu 1–4/5–13 tuần |
-| E-T1b | Thời điểm trả — chuyển miền | `tgt` onboard 2024-07, lịch sử nhìn thấy M ∈ {0,3,6,12,24} tháng | train nguồn đến 2024-07 + M tháng đích; test 52 tuần | như trên | + zero-shot, TGT-only, POOLED, FINE-TUNE, IW-POOLED | như trên theo M |
-| E-T1c | Thời điểm trả — thật | Customer Invoices, BPI 2019 | train<2019-12 / 2018-09; test sau | ngày ghi sổ ERP / clear | như trên | như trên |
-| E-T1d | Chịu nhiễu đuôi | `sens_uk`, `sens_coface` | mô hình huấn luyện ở `src`; test không thích nghi | | | độ suy giảm so với `src` |
-| E-T2a | Nợ xấu — tổng hợp | `src`, `tgt` HĐ đã quá hạn tại T | train<O, test 52 tuần | `is_bad_debt` | quy tắc tuổi nợ TT48, logistic, tỷ lệ nền | PR-AUC, ROC-AUC, Brier, ECE, tổn thất kỳ vọng/thực |
-| E-T2b | Nợ xấu — thật | SBA 7(a) | train FY≤2016, cal FY2017, test FY2018–22 | xoá nợ ≤3 năm | tỷ lệ nền, logistic | như trên + hiệu chỉnh theo FY |
-| E-T3 | Tranh chấp, trả một phần | `src`→`tgt`, đặc trưng as-of ngày lập | | `dispute`, `partial` | tỷ lệ nền, lịch sử khách | AUC, Brier |
-| E-T4 | Doanh thu mới | `src`, `tgt`, Online Retail II | rolling-origin mỗi 4 tuần, 26 tuần cuối | doanh thu tuần | naive mùa vụ, TB 13 tuần, Chronos | SPL (pinball chuẩn hoá), cov80, WAPE |
-| E-T5 | Lịch nghĩa vụ | ví dụ văn bản luật | — | ngày đúng luật | — | 100% đúng (15 kiểm thử) |
-| E-T6a | Khoảng số dư — tổng hợp | `tgt` 14 công ty × 52 điểm cắt × 13 tuần | O=2024-07 | `daily_cash.balance` | MC độc lập, MC ngày điểm B1, LGBM-Q trực tiếp, naive | cov80, interval score, pinball, CRPS |
-| E-T6b | Xác suất thiếu hụt | như trên | | số dư <0 trong 4/13 tuần | | Brier, AUC, lead time |
-| E-T6c | Khoảng trên dữ liệu thật | Berka tài khoản-tuần | train 1993–96, test 1997–98 | số dư thật | naive | cov80 (kỳ vọng ngoài phạm vi cấu trúc hoá đơn) |
-| E-T7 | Điểm gãy | `tgt`+`sens_uk`+`sens_coface` (giữ lại) | ngưỡng chọn ở `src` | `events` | CUSUM-MAD, trung bình trượt | detection@180d, lag, báo giả/khách-năm |
-| E-T8 | Lời hứa | `src` 2024-07→2024-12 | | ngày trả thật | DH-GBM không lời hứa | MAE P50 trên HĐ có lời hứa |
-| E-T9 | Khớp sao kê | `tgt` 2024 (toàn bộ) | mô hình học ở 12 công ty `src` 2023 | `payments.txn_id` | R1 đúng số tiền, R2 regex số HĐ | link precision/recall/F1, MAE ngày trả |
-| E-T10 | Giải thích | `tgt` điểm cắt có thiếu hụt | | tình huống thiếu hụt | xếp hạng theo số tiền | độ ổn định xếp hạng; mô phỏng chính sách "đòi K khoản đầu" |
+Test xanh, readiness synthetic hoặc demo chưa thay kết quả chất lượng. Giới hạn bằng chứng ở [nghiệm thu](../03_Evaluation/03_cong_nghiem_thu.md); định nghĩa chỉ số và quy trình chấm ở [Evaluation](../03_Evaluation/README.md).
 
-## 7.2 Đánh giá chung (end-to-end)
+## Bộ phục vụ kiểm hiện tại
 
-| Mã | Bộ | Kịch bản | Điểm đo |
-|---|---|---|---|
-| E2E-1 | `tgt` 14 công ty × 52 tuần | Chạy toàn bộ pipeline như sản phẩm: T9 → T1 (fine-tune 12 tháng) → T4 → T5 → T6 + ACI → T10 | cov80 số dư, P(thiếu hụt) Brier/AUC, lead-time, ước lượng giá trị kinh tế (03_Evaluation/06) |
-| E2E-2 | Sốc COVID (2021-07→10) và đóng băng tín dụng (2022-10→2023-06) | Cùng pipeline, theo giai đoạn | độ phủ theo chế độ; T7 chuyển chế độ kịp? |
-| E2E-3 | `sens_coface` | Không thích nghi | mức xuống cấp có kiểm soát; vẫn đạt cov ≥70% |
-| E2E-4 | Mô phỏng chính sách | "Đòi K=5 khoản đầu mỗi tuần" vs "đòi khoản to nhất" vs "không làm gì" | số ngày phải thu giảm, số sự kiện thiếu hụt giảm (mô phỏng, không phải nhân quả) |
+| Khối | Dữ liệu/điểm vào | Điều phải đo |
+|---|---|---|
+| T0/T9 | [UAT core/lifecycle/large](../../pilot/t0_t9_uat_20261110/README.md) | Nạp và lỗi, vòng đời, tiền lớn chính xác, duyệt/từ chối/đảo, nguyên tử và truy vết |
+| T1 + partial | Ledger theo cutoff qua `adaptive/t1_data.py`, phạm vi `payment_coverage.py`; test trong `tests/adaptive/` | Outcome 91 ngày và ngày biết riêng; IBS/xác suất tất toán, cash13, nhãn partial; validation/audit cùng adapter |
+| T5 | Nghĩa vụ và `expense_payments` liên kết bank | Phần còn phải trả, ngày dự kiến, không đếm hai lần hoặc mặc định đã trả |
+| T6 | Bundle đang phục vụ, scope tài khoản và lịch sử tiền đã đối chiếu | Sai số kỳ vọng/median, phân vị/coverage/CRPS, Brier và phạm vi thu chi |
+| T10 | Snapshot đã lưu, SHAP/partial evidence và replay | Khớp công thức/phiên bản, phân rã tiền, không cộng phân vị, replay cùng nguồn ngẫu nhiên |
+| Demo | [Đại Phát](../../pilot/demo_dai_phat/README.md) | Tính nhất quán của luồng; đây là doanh nghiệp mô phỏng, không là holdout thật |
 
-## 7.3 Bộ "hard-case chuyên biệt" (đề xuất; chưa sinh)
+T1 phục vụ dùng global → học tiếp local, chọn **bundle T1 + partial**. Chọn/huấn luyện tách khỏi tạo dự báo. Chu kỳ không đủ nhãn giữ/chờ theo audit; không ép chốt bằng test. Đánh giá tiền phải phân biệt AR hiện có, thu hoạt động và số dư bank. Hiệu chỉnh dải phải cùng scope và phiên bản operating/bundle hợp lệ; không mượn sai số của nhánh cũ.
 
-Mỗi bộ ≈ 12 công ty × 7 năm, bật *đúng một* hard case để cô lập năng lực: `hc_lumpy_customer` (1 khách >40%),
-`hc_group_payer` (người trả ≠ khách), `hc_discount_early` (2/10 net 30), `hc_retention` (giữ lại bảo hành),
-`hc_fx` (USD), `hc_credit_note` (điều chỉnh/thay thế), `hc_verbal` (thoả thuận miệng không ghi).
-Cách bật: thêm cờ vào `WorldConfig` (xem 05_Coding_Agent_Plan/WP-D2).
+## Quy tắc chia và nhãn
 
-## 7.4 Quy tắc niêm phong và tái lập
+1. Khóa theo World/seed và thời gian. Doanh nghiệp trong cùng World chia sẻ shock, không coi là nhiều môi trường vĩ mô độc lập.
+2. Giữ đúng ngày biết; đủ ngày theo dõi và xác nhận phạm vi mới tạo nhãn hoàn chỉnh. Chưa thấy thanh toán không đồng nghĩa sẽ không trả.
+3. Không dùng test để chọn tham số hoặc chỉnh máy phát. Nếu đã xem lại holdout, công bố việc dùng lại; cần dữ liệu mới để có đánh giá độc lập tiếp theo.
+4. So các model trên cùng ledger, origin, hóa đơn, phạm vi tiền và metric. Chấm tất toán khác chấm tiền partial; số dư bank khác AR.
+5. Báo cáo theo doanh nghiệp/World, lịch sử ít/nhiều, tuổi nợ và chế độ shock; bootstrap theo cụm phù hợp.
+6. Lưu cohort, schema/contract, feature order, source/hash, bundle, ngày fit/sẵn sàng, seed và budget mô phỏng. Artifact frozen giữ nguyên số đo/hash.
 
-1. `tgt` và các `hc_*`: chỉ dùng ở bước báo cáo cuối; siêu tham số chọn trên `src` (cửa sổ hiệu chỉnh).
-2. Mọi bảng kết quả ghi `seed`, hash cấu hình (`config.json`), phiên bản mã (git SHA) vào CSV đầu ra.
-3. Tái lập bit-by-bit không bắt buộc (đa luồng LightGBM), nhưng sai khác chỉ số giữa các lần chạy phải <0,5% — kiểm tra bằng 3 seed.
+Không tái dùng pipeline tháng 10 `T9 → T1 fine-tune 12 tháng → T4 → T6 + ACI` làm mô tả mặc định ứng dụng. Kết quả BPI/Customer Invoices/SBA/Berka là benchmark lịch sử riêng; muốn chạy lại phải khôi phục nguồn theo protocol tương ứng.
+
+## Provenance cohort v4
+
+[Cohort v4](../../data/synthetic/v4_shortpay_4shock_20261028_cohort.json) khóa 8 World: 4 train, 2 validation, 2 test; smoke ngoài split. Metadata có `source_code_sha256`, hash calibration/OxCGRT/WDI/design và hash manifest từng World; `origin=2024-07-01`, `label_horizon_days=120`, snapshot stride 28 ngày. Đây là protocol nghiên cứu v4, **không thay cửa sổ 91 ngày của runtime hiện tại**.
+
+[Thiết kế v4](../../data/synthetic/v4_shortpay_4shock_20261028_design.json) sửa short-pay và replay bốn template shock giả định. Artifact lịch sử nằm ở `outputs/data/v4_shortpay_4shock_20261028/`; runner là [build_v4_shortpay_4shock.py](../../scripts/build_v4_shortpay_4shock.py). Tồn kho hiện chỉ có metadata, thiếu raw/Parquet; runner kiểm hash nguồn/code nên không có lệnh “chạy lại ngay” trong tài liệu này.
+
+Điểm chất lượng cũ bị kẹp nhãn/phân vị tại 120 ngày không được dùng chứng nhận survival dài hạn. Q90 chạm trần có thể do xác suất tất toán chưa tới 90%, không thể sửa chất lượng bằng cách nâng trần hiển thị. Các nguyên tắc kiểm duyệt được giữ ở [metric kỹ thuật](../03_Evaluation/01_metric_ky_thuat.md); báo cáo Markdown chẩn đoán v4 đã bỏ, artifact/số đo nghiên cứu giữ đúng phiên bản trong `outputs/`.
+
+Cohort v4 là nguồn cho nghiên cứu v5/v6, không tự xác định model active của tenant. GO kỹ thuật trên cohort không nghiệm thu dự báo tiền, cảnh báo hoặc pilot thật.

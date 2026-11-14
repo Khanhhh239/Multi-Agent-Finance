@@ -1,0 +1,15 @@
+{
+  "command": [
+    "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "-m",
+    "experiments.he_inference.services_demo",
+    "--output-dir",
+    "D:\\agent22\\Agent2_Spec_v2_1\\evidence\\HE\\services_20261112\\demo_audited"
+  ],
+  "cwd": "D:\\agent22\\agent2",
+  "exit_code": 0,
+  "verification": "observed completed tool process; summary assertions all passed"
+}

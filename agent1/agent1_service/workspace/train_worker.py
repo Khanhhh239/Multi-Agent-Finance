@@ -8,7 +8,6 @@ import time
 def _run(channel, data, asof, deep, names, incumbent, policy, catalog_path):
     try:
         from agent1.adaptive.methods import train
-        from agent1.adaptive.operating import select_operating
         from threadpoolctl import threadpool_limits
         from agent1.adaptive.t1_catalog import GlobalCatalog
 
@@ -17,11 +16,8 @@ def _run(channel, data, asof, deep, names, incumbent, policy, catalog_path):
                 data, asof, lambda msg: channel.send(("progress", msg)), names=names,
                 incumbent=incumbent, policy=policy,
                 catalog=GlobalCatalog(catalog_path),
+                try_deep_cash=deep,
             )
-            channel.send(
-                ("progress", "Đang kiểm định chuỗi tiền và các phương án học mở rộng")
-            )
-            bundle["operating"] = select_operating(data, asof, deep, include_new_credit=False)
         channel.send(("progress", "Đang hoàn tất phiên bản và báo cáo"))
         channel.send(("ready", bundle))
     except (MemoryError, ValueError, RuntimeError, ImportError) as exc:

@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "path": "/agent2/api/v1/companies/C001/snapshots/snp_2b8bce04da224fc2aa71f94a496ccfed/data",
+      "status": 404,
+      "private_rows_returned": false
+    },
+    {
+      "path": "/agent2/api/v1/companies/C002/snapshots/snp_25b7fd36815346619377fd430b9002fc/data",
+      "status": 404,
+      "private_rows_returned": false
+    },
+    {
+      "path": "/agent2/api/v1/companies/C001/he/jobs/herun_1df14750934b4adba8469f6fbba1290d/result",
+      "status": 404,
+      "private_rows_returned": false
+    },
+    {
+      "path": "/agent2/api/v1/companies/C002/he/jobs/herun_a41f1c89c0b04bb9bd85021731bdaf7f/result",
+      "status": 404,
+      "private_rows_returned": false
+    }
+  ],
+  "scope": "company-route binding using the current workspace principal authorized for both companies; not separate-user identity testing",
+  "credentials_exported": false
+}

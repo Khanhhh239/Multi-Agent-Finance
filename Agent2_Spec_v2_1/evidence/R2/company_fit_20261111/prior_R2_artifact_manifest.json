@@ -1,0 +1,113 @@
+{
+  "kind": "CR-012 normalization evidence, not whole R2 acceptance",
+  "files": [
+    {
+      "path": "agent2/docs/METHOD_OUTPUTS.md",
+      "sha256": "4d6de989c4bd66f467985d5bdace92c3249c74f3b4e8dbc77a0b4c8f5d22614c"
+    },
+    {
+      "path": "agent2/README.md",
+      "sha256": "97978fb006f58495a181878c181524e1e04556e4f12f07f6d3754b271b3e7d9b"
+    },
+    {
+      "path": "agent2/scripts/check_method_outputs.py",
+      "sha256": "2780685dc75317fe9886363137b1aefd070f09204ab090ee0729b87b04692048"
+    },
+    {
+      "path": "agent2/scripts/demo_method_scores.py",
+      "sha256": "8e4be1ef981372baec409119ef1daa437f6efb36c7ed81717b3dae3669699212"
+    },
+    {
+      "path": "agent2/sme_fraud/method_adapters.py",
+      "sha256": "94f24e3ebb42db3a55098f5b620c8d7b39762374c927083dfb39e20bdda94f67"
+    },
+    {
+      "path": "agent2/sme_fraud/method_scores.schema.json",
+      "sha256": "8c3d3bcd28fcd49ccd581d4b8bb45bada5bbd50ada4daaca470560e8b50dfcc2"
+    },
+    {
+      "path": "agent2/tests/test_method_adapters.py",
+      "sha256": "e92a15e54aa2c46aa39d9e0f0a4d84fc4ebb7295cda39ef5203aca8e748fec16"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/04_contracts_states_modules.md",
+      "sha256": "e8caed2c069a3c6ef5d878b6f727d61bfb2db04e6126a52c4fc88482d8a4eed4"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/98_PROGRESS.md",
+      "sha256": "627a5c217bfbc64e7e7f93cc4d28d1c5605d4aa6f43d9ded21a4bc19fba36ff2"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/99_decision_log.md",
+      "sha256": "2568aabef562619099f2a96d7f210bc19c08f64e64ecf68c05544e436e6a1ae6"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/CHANGE_REQUESTS.md",
+      "sha256": "5200c8dc78c70e12bc9b1519bb49ad6a44bbb8d7657ff465dcc1054b2433499b"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/adapter_map.csv",
+      "sha256": "dd40e2053f36a4ac13ed21b9d38f5394872f2a35cb9beb69cb46f3b024dd42ef"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/demo.log",
+      "sha256": "9dd36dfbdf9414d522106a7ae1c9ec40cf3f697aaa9357c97dd23eca38c7ce2f"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/demo_output.json",
+      "sha256": "56f39fedec11cac69b14bb7d777ebd28cf1b4e88a7b4bd4a50557b22e8cbcd89"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/fit_manifest.json",
+      "sha256": "f769d820c1c9a0000a556fb951ad5a74bc01523b67974574ebd62c2ea590ba32"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/focused_tests.json",
+      "sha256": "b61665484800a3da29a4979ad84bfebd4c4957febf25106d2a1690eee4c80edd"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/focused_tests.log",
+      "sha256": "e1db2cea2ebf9ca8bb256b4fe5603b7fe6c12c70e20eb80060397c6fcf7ef8de"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/initial_focused_tests.json",
+      "sha256": "d45db441c51a86784a59574b2d05ea267aa0c343535289e03f498e611f2c36a6"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/initial_focused_tests.log",
+      "sha256": "e179589333ade2e8f2df2e573c4a66b5453addcf565cd71f1ec62d9561037600"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/native_tests.json",
+      "sha256": "9c2b14eac765e21daac7c5415189058db1588fe66ba7f6b5c8313d800de8313a"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/native_tests.log",
+      "sha256": "7654bc5be181938d7bd58123ddcf8d16e6cd72892f72ac3fae28a6f13a4e4f61"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/normalization_checks.json",
+      "sha256": "5eefa29d8a4f51ba693a297f9d05b54b93e5b934a50a4ef58a1555feb0157867"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/parity_report.json",
+      "sha256": "b37d13ddf5665f1b4a66d0aebe71a9f46aa9d2af721dae83ca6cae18229f625c"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/preservation.json",
+      "sha256": "9238811c149de3c709f2ae97f4bf48d3b0af58288240e9646b96a3c0df17bbdf"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/provenance.json",
+      "sha256": "218eeb127986b01d4a4fbfa4fe31747380370f1aee6959a63062bddce17a4cb1"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/REPORT.md",
+      "sha256": "21872ff32552bb8d6481bd0d773ae3093c7d64bf30829f7a8f08084d745dcd35"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/SHA256SUMS",
+      "sha256": "cc658d3ee56060b703aafec714e0760a0f8b9fb8688e3e3a12896b1faf950802"
+    }
+  ]
+}

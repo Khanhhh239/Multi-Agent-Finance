@@ -1,0 +1,69 @@
+{
+  "working_tree_delivery": true,
+  "files": [
+    {
+      "path": "agent2/sme_fraud/selection_comparison.py",
+      "sha256": "2f6435b4402c4a77bc1f31eaa638e5506e21ec0419b64ff408602deeef24dabf"
+    },
+    {
+      "path": "agent2/sme_fraud/comparison_store.py",
+      "sha256": "a0537e7071fad89af28f3295fbe5b50a06fe898e2b5d2b3320f338367efea1c8"
+    },
+    {
+      "path": "agent2/sme_fraud/comparison_api.py",
+      "sha256": "2c621652d5c86261f28a63038976237fc70753b66e1e33527f8b1fd12ddd3d15"
+    },
+    {
+      "path": "agent2/sme_fraud/review_server.py",
+      "sha256": "e4a29b0f0ec5702e028f2621c11c9a1b57b048d4fbc74efd1739a14bb578fcfb"
+    },
+    {
+      "path": "agent2/sme_fraud/workspace_api.py",
+      "sha256": "47094fe7e60e725b0de21a2ae392e80fbefef33a70fc6d6b8b039e8964ccc782"
+    },
+    {
+      "path": "agent2/sme_fraud/web/workspace.html",
+      "sha256": "43233e290c8fe5deea02d7a6aca96c8dfd38276ca1f7f82aeee6591d9ea33480"
+    },
+    {
+      "path": "agent2/sme_fraud/web/workspace.js",
+      "sha256": "22671a2c7f6b24252de980e2c1de3df6e5081caa470edcbda16162e44fab09c6"
+    },
+    {
+      "path": "agent2/sme_fraud/web/workspace.css",
+      "sha256": "a56efdc2485bafa712da4475b60e44f1b11ed5aa661c7085b143b0c86c39fb97"
+    },
+    {
+      "path": "portal/agent2_bridge.py",
+      "sha256": "6c66e60fc8f30e0953446727423f1b762a01988d1f34e7dea06f0d3625aaf964"
+    },
+    {
+      "path": "agent2/tests_he/test_selection_comparison.py",
+      "sha256": "4ed580f7f5cfa4c4e56959c54dee3d80d45f7d40012e210342b4a0e126f9dfb0"
+    },
+    {
+      "path": "agent2/tests_he/test_comparison_api.py",
+      "sha256": "81b358fe3dee630f1f419e4bf467ae5b8fc88434c32300f4990acef900d7be16"
+    },
+    {
+      "path": "agent2/tests_he/comparison_support.py",
+      "sha256": "a0a30f0e776e5b56538de89fc29a900be3bdfee48f1cf6f520156d84f3d8f80b"
+    },
+    {
+      "path": "agent2/tests_he/test_he4_config_api.py",
+      "sha256": "377620e8d4718b3ea91a1f4800ef6332650fb35b295a50da34db1514bc2d9b0f"
+    },
+    {
+      "path": "agent2/scripts/compare_rules_ml.py",
+      "sha256": "1c8b82188fbfefe91d7673c50fb17c6444fa7c026906af543e65ed141d1861f2"
+    },
+    {
+      "path": "agent2/scripts/test_selection_comparison_ui.py",
+      "sha256": "59d2ad3ed0153d2abcc4afacbd495de752aba2fdb2b1546fc0989a87d6492608"
+    },
+    {
+      "path": "agent2/docs/SELECTION_COMPARISON.md",
+      "sha256": "cc626ee068b3792acc8786d19a6599adb87d1fc29afb8468d95af15ed03e7a00"
+    }
+  ]
+}

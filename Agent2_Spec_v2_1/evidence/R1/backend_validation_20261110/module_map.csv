@@ -1,0 +1,9 @@
+logical_module,path,status
+auth,agent2/sme_fraud/auth.py,implemented_local_policy_adapter; identity_portal_pending
+imports/validation,agent2/sme_fraud/imports.py,validator_report_1.1.0; schema_1.0.0
+imports/validation HTTP,agent2/sme_fraud/validation_api.py,POST_validate_only
+server,agent2/sme_fraud/review_server.py,loopback_route; old_workflow_410
+shared core,shared/finance_input/src/finance_input/validation.py,precise_diagnostics
+shared parsing,shared/finance_input/src/finance_input/json_io.py,strict_json
+snapshots,agent2/sme_fraud/snapshots.py,not_implemented
+features,agent2/sme_fraud/features.py,unchanged; new_input_bridge_pending

@@ -1,0 +1,56 @@
+{
+  "spec_version": "2.1",
+  "stage": "R1",
+  "run_id": "d3240f21-cf34-42fb-9576-84c27cbaaff1",
+  "tests": [
+    {
+      "id": "R1-01",
+      "status": "pass",
+      "expected": "cùng ID ở 2 DN không trộn",
+      "observed": "Company/tenant scoped upload, report, commit and snapshot queries; foreign IDs on authorized route return 404 without records.",
+      "evidence_path": "focused_tests.json"
+    },
+    {
+      "id": "R1-02",
+      "status": "blocked",
+      "expected": "chứng từ đến muộn không đổi feature as_of cũ",
+      "observed": "Source known-time fields preserved and existing as_of helper tested, but snapshot-to-feature replay integration still pending.",
+      "evidence_path": "REPORT.md"
+    },
+    {
+      "id": "R1-03",
+      "status": "pass",
+      "expected": "preview đổi file/mapping không commit bằng report cũ",
+      "observed": "Changing source/mapping creates a new draft revision and clears preview; old revision/hashes/validator/permission context rejected; hashes cannot be forged.",
+      "evidence_path": "focused_tests.json"
+    },
+    {
+      "id": "R1-04",
+      "status": "pass",
+      "expected": "retry import 10 lần vẫn một snapshot đã commit",
+      "observed": "Ten sequential and concurrent retries produce one snapshot and one commit event; durable receipt survives restart/response loss; injected mid-transaction failure rolls back.",
+      "evidence_path": "focused_tests.json"
+    },
+    {
+      "id": "R1-05",
+      "status": "pass",
+      "expected": "âm điều chỉnh/thiếu history phân loại đúng; không âm thầm bỏ dòng",
+      "observed": "Signed adjustments and missing-source limitations preserved; raw source/mapping/reports and validated dataset retained, no silently dropped rows.",
+      "evidence_path": "focused_tests.json"
+    },
+    {
+      "id": "R1-06",
+      "status": "blocked",
+      "expected": "Cùng timestamp: 2 khoản đồng thời đều dùng lịch sử trước nhóm, replay đảo thứ tự không đổi feature",
+      "observed": "Atomic import concurrency is tested; simultaneous feature-history replay is a separate unimplemented integration.",
+      "evidence_path": "REPORT.md"
+    },
+    {
+      "id": "R1-07",
+      "status": "pass",
+      "expected": "User DN A gọi import/preview/commit/snapshot của B bị từ chối ở API; 0 record B trả về",
+      "observed": "Upload/source/mapping/preview/commit/report/snapshot/data all check company permission before body/storage; direct foreign IDs do not expose records; revocation before and at transaction exit rolls back.",
+      "evidence_path": "focused_tests.json"
+    }
+  ]
+}

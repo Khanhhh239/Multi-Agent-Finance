@@ -1,0 +1,14 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cấu hình phân tích</title><link rel="stylesheet" href="assets/workbench.css"><script defer src="assets/analysis-settings.js"></script></head>
+<body><header><a class="brand" href="workspace">Sổ Soát <span>Agent2</span></a><a href="workspace" class="text-link">Về màn hình làm việc</a></header><main>
+<div class="intro"><p class="eyebrow">DÀNH CHO QUẢN LÝ</p><h1>Cấu hình phân tích</h1><p>Lưu cấu hình nháp, chuẩn bị phiên bản model rồi mới kích hoạt cho doanh nghiệp.</p></div>
+<div id="notice" role="alert" hidden></div>
+<section class="panel"><label>Doanh nghiệp<select id="company" disabled></select></label><p id="permission"></p></section>
+<section id="settings" class="panel" hidden><h2>Chuẩn bị phiên bản</h2>
+<p class="callout">Chế độ kiểm chứng kỹ thuật. Trọng số tổng hợp, ngân sách và điều kiện bắt buộc rà chưa được tự đặt; chưa tự gửi cảnh báo.</p>
+<label>Dữ liệu lịch sử đã lưu<select id="snapshot"></select></label>
+<div class="grid"><label>Bắt đầu lịch sử<input id="history_start" type="datetime-local" step="1"></label><label>Kết thúc lịch sử (không gồm mốc này)<input id="history_end" type="datetime-local" step="1"></label><label>Bắt đầu tập đối chiếu<input id="reference_start" type="datetime-local" step="1"></label><label>Kết thúc tập đối chiếu (không gồm mốc này)<input id="reference_end" type="datetime-local" step="1"></label><label>Bắt đầu kỳ đánh giá<input id="evaluation_start" type="datetime-local" step="1"></label><label>Số dòng lịch sử tối thiểu<input id="minimum_history" type="number" min="20" step="1" value="20"></label></div>
+<label>Cách đánh giá<select id="evaluation_mode"><option value="backtest">Đối chiếu dữ liệu quá khứ</option><option value="prospective">Chấm kỳ tương lai sau khi chuẩn bị model</option></select></label>
+<p class="hint">Giờ Việt Nam (UTC+07). Tối thiểu 20 dòng là giới hạn kỹ thuật của phép thử, chưa phải tiêu chí nghiệm thu nghiệp vụ. Hiện giữ Mahalanobis và RobustZ với số tiền, giờ phát sinh.</p>
+<div class="actions"><button id="draft" disabled>Lưu cấu hình nháp</button><button id="fit" class="quiet" disabled>Chuẩn bị model</button><button id="activate" class="quiet" disabled>Kích hoạt phiên bản</button></div>
+<p id="status" role="status"></p><details><summary>Phiên bản đang dùng và lịch sử cấu hình</summary><pre id="history" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre></details>
+</section></main></body></html>

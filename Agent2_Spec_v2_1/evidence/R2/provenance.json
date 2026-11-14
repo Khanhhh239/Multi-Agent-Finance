@@ -1,0 +1,182 @@
+{
+  "spec_version": "2.1",
+  "change_request": "CR-012",
+  "scope": "Normalized adapter outputs only, R2 PARTIAL",
+  "collected_at": "2026-11-11T10:47:20.575876+07:00",
+  "head": "f203b39828f567171916b5b4744728ed4b63d17f",
+  "python": "3.12.7 (tags/v3.12.7:0b05ead, Oct  1 2024, 03:06:41) [MSC v.1941 64 bit (AMD64)]",
+  "cwd": "D:\\agent22",
+  "commands": [
+    {
+      "name": "focused",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/run_r1_tests.py",
+        "--suite",
+        "test_method_adapters",
+        "--report",
+        "Agent2_Spec_v2_1/evidence/R2/focused_tests.json"
+      ],
+      "exit_code": 0,
+      "result": "focused_tests.json"
+    },
+    {
+      "name": "native_regression",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/run_r1_tests.py",
+        "--report",
+        "Agent2_Spec_v2_1/evidence/R2/native_tests.json"
+      ],
+      "exit_code": 0,
+      "result": "native_tests.json"
+    },
+    {
+      "name": "demo",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/demo_method_scores.py",
+        "--output",
+        "Agent2_Spec_v2_1/evidence/R2/demo_output.json"
+      ],
+      "exit_code": 0,
+      "result": "demo_output.json"
+    },
+    {
+      "name": "parity",
+      "argv": [
+        "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/check_method_outputs.py",
+        "--output",
+        "Agent2_Spec_v2_1/evidence/R2/parity_report.json"
+      ],
+      "exit_code": 0,
+      "result": "parity_report.json"
+    }
+  ],
+  "native_summary": {
+    "count": 540,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0
+  },
+  "native_elapsed_seconds": 209.941,
+  "normalization": {
+    "kind": "normalization_subtask_checks_not_full_R2_acceptance",
+    "status": "technical_only",
+    "tests": [
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_all_native_rule_scores_hits_and_exceptions_are_preserved",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_all_native_rule_scores_hits_and_exceptions_are_preserved"
+      },
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_demo_scores_new_snapshot_rows_and_retains_unavailable_old_rows",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_demo_scores_new_snapshot_rows_and_retains_unavailable_old_rows"
+      },
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_every_requested_adapter_returns_five_rows_without_top_k",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_every_requested_adapter_returns_five_rows_without_top_k"
+      },
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_extreme_batch_does_not_change_reference_or_prior_scores",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_extreme_batch_does_not_change_reference_or_prior_scores"
+      },
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_fit_rejects_overlap_and_silent_imputation",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_fit_rejects_overlap_and_silent_imputation"
+      },
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_float_parity_all_retained_ml_and_statistics",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_float_parity_all_retained_ml_and_statistics"
+      },
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_future_or_incompatible_artifact_is_unavailable",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_future_or_incompatible_artifact_is_unavailable"
+      },
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_missing_artifact_is_null_and_inference_never_fits",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_missing_artifact_is_null_and_inference_never_fits"
+      },
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_missing_selected_feature_keeps_every_row",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_missing_selected_feature_keeps_every_row"
+      },
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_no_hit_native_rows_still_receive_available_ml_scores",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_no_hit_native_rows_still_receive_available_ml_scores"
+      },
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_snapshot_graph_is_source_backed_and_unsupported_rules_are_explicit",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_snapshot_graph_is_source_backed_and_unsupported_rules_are_explicit"
+      },
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_snapshot_revocation_before_return_blocks_all_scores",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_snapshot_revocation_before_return_blocks_all_scores"
+      },
+      {
+        "id": "test_method_adapters.MethodAdapterTests.test_wrong_scope_and_corrupt_artifact_do_not_return_scores",
+        "status": "pass",
+        "testcase": "test_method_adapters.MethodAdapterTests.test_wrong_scope_and_corrupt_artifact_do_not_return_scores"
+      }
+    ],
+    "canonical_rows": 20,
+    "canonical_new_ml_available": 5,
+    "canonical_old_retained_unavailable": 15,
+    "native_rows": 5,
+    "native_zero_rule_still_ml_available": 3,
+    "numeric_methods_within_D13": 5,
+    "native_rule_graph_rows_equal": 5,
+    "release_approved": false
+  },
+  "parity_producer_sha256": "2780685dc75317fe9886363137b1aefd070f09204ab090ee0729b87b04692048",
+  "core_method_sources": {
+    "rules.py": "30e3f3c1399e30b8580674375845c72b4d4111fe387dae6125b4a912b1b556b3",
+    "ml_estimators.py": "4cda15cd47c2f7080f6416210642406fadb5fbdff98690fb8ca14eddfb1a7c5b",
+    "unsupervised_statistics.py": "c80cdd213e8e877cc163cd5b36094771f219b66cece2428de27416192406ce2d",
+    "score_statistics.py": "396c0aab5f9fea7fac245deb0b4d116cf7d78d660bdd16247ea23d8a341f741d",
+    "entity_graph.py": "8807e3667be2ad2b270de7d843065bd4e8401a715cb11519561bdcb9d856f2d5",
+    "identity_graph.py": "5fb79620be72a70f63914a9e9f8d7375e1d096dd1fcd7d2dd26e1d85dfbe3597"
+  },
+  "R1_feature_contract_unchanged": true,
+  "preserved_source_count": 13,
+  "spec_checksum_entries_updated": [
+    "04_contracts_states_modules.md",
+    "98_PROGRESS.md",
+    "99_decision_log.md",
+    "CHANGE_REQUESTS.md"
+  ],
+  "full_R2_formal_gate_run": false,
+  "persistent_fit_registry": false,
+  "canonical_rule_bridge": false,
+  "accuracy_measured": false,
+  "release_approved": false,
+  "note": "Observed test/demo results. Initial failed clean-row fixture is retained. No fabricated subprocess start timestamps or whole-R2 approval."
+}

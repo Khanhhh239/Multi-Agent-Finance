@@ -1,0 +1,121 @@
+{
+  "kind": "CR-020 recheck evidence; native temporal finding OPEN; audit exit 2; R2 PARTIAL",
+  "files": [
+    {
+      "path": "Agent2_Spec_v2_1/98_PROGRESS.md",
+      "sha256": "eaeccf0d678a1a38309615e6b2869fdd2132ec7216cc6b0cec60a8b13e904abb"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/99_decision_log.md",
+      "sha256": "42948d7b48c3f15c9a75a24ea722ce0c446c199e23ef25653f733ee786204a13"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/CHANGE_REQUESTS.md",
+      "sha256": "45c27a4431329db681be5ea48a5943183f5024fd571bde3b6cd0642be7a60e76"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/SHA256SUMS",
+      "sha256": "965f091c2f191337226240b492321fec4ecf4aef9077299523b3133c7074bacc"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/REPORT.md",
+      "sha256": "405714a8ceda86e35ab98e11df85c7eeb7f43423dd70c2152955097e75422bb2"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/REPORT.md",
+      "sha256": "9dffc7abb9cd55fba695bd03325e4eb1cbb56f71675c47bdd40b5abe307b6b8d"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/audit/below.json",
+      "sha256": "ae1e5623c8c9d959c75266b596e082b7543de95da03daab60ea14cd1ebd40f32"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/audit/exceeded.json",
+      "sha256": "40b11003d2568014a60fa34e8d0c4bb1fa5d5f8636072fc2d026248b5c764353"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/audit/late_allocation.json",
+      "sha256": "954115e683e31aca82347a913dc24c146d0e95d0bae85b6f2cbd17722ee8a90a"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/audit/late_attachment.json",
+      "sha256": "3e6c4cda2bbc69822132f9ccb384e985cc915ff7e8c07be6f35eba1a49b28001"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/audit/late_invoice.json",
+      "sha256": "b62c0726fb1456f8f600ca39e0b3099d9962fe1d588796d6e796f911f6e2608a"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/audit/missing_history.json",
+      "sha256": "42d442a9c0dc8dc23b2f3ad7238fcdb84665b8c84f67486973776f95c5393715"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/audit/simultaneous.json",
+      "sha256": "a76712a2c3bd05ee732073e80be6606d9dea42f0546211c7eea8e9d861efc410"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/audit/summary.json",
+      "sha256": "8e0bf681bc696c1a1eb948098a064b3b80e0810bee4c6fbcf34fdc9e97a59a8a"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/focused_tests.json",
+      "sha256": "b5f0a44c6f991cc176093c6031280a160f362e592797e04bc41e7fa263f82387"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/focused_tests.log",
+      "sha256": "a4e9c2c4b703a39df8a45ad0f6fe162cd0ac8addf7fecc5d39991e89c6e632fb"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/prior_R2_REPORT.md",
+      "sha256": "a2f02fb4a51a083d45ed8747f66048c58a67a64fad6e82d4c8ab22dbeb507500"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/prior_R2_artifact_manifest.json",
+      "sha256": "86f92ea16e33f35f94a75e9ef8b7caec5f89c58e836a99b20f91ef31aa9921b0"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/p1_recheck_20261111/provenance.json",
+      "sha256": "37c73c9871b12179134c4ff9648d013fe64d51ed270d61ec3d7e370ec4f1c8cf"
+    },
+    {
+      "path": "agent2/docs/P1_EVALUATION.md",
+      "sha256": "93f9ef1516b39eff8eb558f376ec7b08b688fcac5ef786419c4e87af365e6d53"
+    },
+    {
+      "path": "agent2/scripts/check_p1_acceptance.py",
+      "sha256": "f7ef4386ead2fef2ffc22eb4982835b25bd7c58d47c862cad340f63d80e6b2a4"
+    },
+    {
+      "path": "agent2/sme_fraud/batch_controls.py",
+      "sha256": "5fba17f57fb52cd25158c172fba19b3e2ced834ce2c6cef3a7f67a57645c0c0e"
+    },
+    {
+      "path": "agent2/sme_fraud/p1_evaluation.py",
+      "sha256": "f7f95b2874755b18131b61bd2b4f2ecfe367500967ab291856d527c7e2f91075"
+    },
+    {
+      "path": "agent2/sme_fraud/p1_inputs.py",
+      "sha256": "5a0262e7d4648387a76a918a9de192800d37ef65f4f34b73d87c146ab20952b2"
+    },
+    {
+      "path": "agent2/sme_fraud/rule_evaluation.py",
+      "sha256": "07b5b33ed4c8295824cf35ee2be27ed70e5d2db36fa80935e3542258d57087ef"
+    },
+    {
+      "path": "agent2/sme_fraud/rule_sources.py",
+      "sha256": "264999fddb81d87f6b591b8b8fcf4bca84a5e808caeb79bdc12277fb57ace0b7"
+    },
+    {
+      "path": "agent2/sme_fraud/rules.py",
+      "sha256": "30e3f3c1399e30b8580674375845c72b4d4111fe387dae6125b4a912b1b556b3"
+    },
+    {
+      "path": "agent2/tests/p1_recheck_support.py",
+      "sha256": "8703d8cc16ea41beb0e2d8e782728b2178c136c5a4029666248ec01770e4cfc2"
+    },
+    {
+      "path": "agent2/tests/test_p1_recheck.py",
+      "sha256": "f9948381f0cc7bfd55b93da0a4b4b76a8b2d41d434c694046a6bbbc84bf79e6a"
+    }
+  ]
+}

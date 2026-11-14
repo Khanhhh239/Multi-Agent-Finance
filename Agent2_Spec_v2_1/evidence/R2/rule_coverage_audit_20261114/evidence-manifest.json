@@ -1,0 +1,35 @@
+{
+  "files": [
+    {
+      "path": "audit-checks.json",
+      "sha256": "69b085c5f20c01c4ddd58e88a9217c80b9f28206a67caba4c1d2f7d9050275c4",
+      "bytes": 373
+    },
+    {
+      "path": "REPORT.md",
+      "sha256": "5724f479b71c979c05f3ea10f9360e4537ba04061f4bbba339451b6eb1a71956",
+      "bytes": 2375
+    },
+    {
+      "path": "spec-log-hash-changes.json",
+      "sha256": "db0324025d31e489d8cabbe951e015cfad1c73147e166b210a4b782045c674ad",
+      "bytes": 720
+    },
+    {
+      "path": "summary.json",
+      "sha256": "19d96e1a4d9800edf136f7d3798c5dd4a6118674609998c9bdbdb45006821dd4",
+      "bytes": 236
+    },
+    {
+      "path": "../../../../reports/rule_coverage_status_20261114.md",
+      "sha256": "135bfac3eb8e16b5e005c96ddc8fa746924a87aec8937f9931949819d051305c",
+      "bytes": 21850
+    },
+    {
+      "path": "../../../../reports/rule_coverage_status_20261114.json",
+      "sha256": "482ce4684150fc5d1da07dfd9b754e27a90f645dda9e001f7c2bba3c1a658eec",
+      "bytes": 202444
+    }
+  ],
+  "private_data_included": false
+}

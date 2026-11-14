@@ -1,0 +1,293 @@
+{
+  "tests": [
+    {
+      "id": "test_input_contract.InputContractTests.test_as_of_is_order_independent_and_copied",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_as_of_is_order_independent_and_copied"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_canonical_money_rejects_float_string_bool_fraction_and_overflow",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_canonical_money_rejects_float_string_bool_fraction_and_overflow"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_company_master_required",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_company_master_required"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_cyclic_adjustments_rejected",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_cyclic_adjustments_rejected"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_errors_have_row_field_and_next_action",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_errors_have_row_field_and_next_action"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_fixture_retains_every_row_and_negative_amount",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_fixture_retains_every_row_and_negative_amount"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_foreign_currency_requires_separate_contract",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_foreign_currency_requires_separate_contract"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_future_effective_record_not_visible_yet",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_future_effective_record_not_visible_yet"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_identical_id_same_company_revision_rejected",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_identical_id_same_company_revision_rejected"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_late_document_not_visible_in_old_knowledge",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_late_document_not_visible_in_old_knowledge"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_late_revision_cannot_replace_past_value",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_late_revision_cannot_replace_past_value"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_leading_zero_identifiers_preserved",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_leading_zero_identifiers_preserved"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_malformed_company_id_does_not_crash",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_malformed_company_id_does_not_crash"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_many_to_many_allocation_is_supported",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_many_to_many_allocation_is_supported"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_missing_known_time_never_defaults_to_event_time",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_missing_known_time_never_defaults_to_event_time"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_missing_vs_unknown_explicit_without_inventing_value",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_missing_vs_unknown_explicit_without_inventing_value"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_money_exact_and_signed_without_rounding",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_money_exact_and_signed_without_rounding"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_negative_invoice_and_allocation_adjustments_are_accepted",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_negative_invoice_and_allocation_adjustments_are_accepted"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_negative_requires_adjustment_kind_reason_original",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_negative_requires_adjustment_kind_reason_original"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_other_company_does_not_satisfy_missing_reference",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_other_company_does_not_satisfy_missing_reference"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_overpayment_and_distinct_payments_same_invoice_not_import_errors",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_overpayment_and_distinct_payments_same_invoice_not_import_errors"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_partial_auxiliary_sources_warn_without_dropping_rows",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_partial_auxiliary_sources_warn_without_dropping_rows"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_pinned_money_reuse_exact_bytes",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_pinned_money_reuse_exact_bytes"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_revision_time_cannot_move_back",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_revision_time_cannot_move_back"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_same_ids_in_two_companies_are_separate",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_same_ids_in_two_companies_are_separate"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_schema_is_valid",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_schema_is_valid"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_scope_denial_does_not_expose_foreign_rows",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_scope_denial_does_not_expose_foreign_rows"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_self_adjustment_rejected",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_self_adjustment_rejected"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_source_and_original_document_not_automatically_verified",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_source_and_original_document_not_automatically_verified"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_timestamps_missing_naive_ambiguous_invalid_rejected",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_timestamps_missing_naive_ambiguous_invalid_rejected"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_unknown_columns_and_label_truth_not_accepted",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_unknown_columns_and_label_truth_not_accepted"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_verification_cannot_use_future_knowledge",
+      "status": "pass",
+      "testcase": "test_input_contract.InputContractTests.test_verification_cannot_use_future_knowledge"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_bad_cutoff_or_foreign_frame_is_rejected",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_bad_cutoff_or_foreign_frame_is_rejected"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_catalog_covers_every_retained_rule_and_explicit_contract_gaps",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_catalog_covers_every_retained_rule_and_explicit_contract_gaps"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_company_isolation_and_permission_guards",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_company_isolation_and_permission_guards"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_current_master_revision_can_change_only_when_both_clocks_allow_it",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_current_master_revision_can_change_only_when_both_clocks_allow_it"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_documents_preserve_simulation_and_verification_provenance",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_documents_preserve_simulation_and_verification_provenance"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_history_excludes_self_and_simultaneous_rows_on_both_clocks",
+      "status": "fail",
+      "testcase": "test_rule_sources.RuleSourceTests.test_history_excludes_self_and_simultaneous_rows_on_both_clocks"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_immutable_source_and_payload_separation",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_immutable_source_and_payload_separation"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_late_document_and_future_source_values_cannot_change_past_bindings",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_late_document_and_future_source_values_cannot_change_past_bindings"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_late_revision_is_filtered_before_choosing_latest_master",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_late_revision_is_filtered_before_choosing_latest_master"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_missing_invoice_revision_is_gap_not_zero_or_future_invoice",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_missing_invoice_revision_is_gap_not_zero_or_future_invoice"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_real_sources_ready_is_distinct_from_evaluated_or_missing",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_real_sources_ready_is_distinct_from_evaluated_or_missing"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_signed_adjustments_are_retained_without_legacy_placeholders",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_signed_adjustments_are_retained_without_legacy_placeholders"
+    },
+    {
+      "id": "test_rule_sources.RuleSourceTests.test_snapshot_pipeline_has_one_diagnostic_per_rule_and_never_scores_from_readiness",
+      "status": "pass",
+      "testcase": "test_rule_sources.RuleSourceTests.test_snapshot_pipeline_has_one_diagnostic_per_rule_and_never_scores_from_readiness"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_e3_matches_native_engine_hit_evidence_and_scoring_policy",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_e3_matches_native_engine_hit_evidence_and_scoring_policy"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_future_vendor_and_revisions_never_change_past_result",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_future_vendor_and_revisions_never_change_past_result"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_hit_has_evidence_and_intrinsic_points_without_inflating_master_risk",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_hit_has_evidence_and_intrinsic_points_without_inflating_master_risk"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_missing_sources_are_null_not_no_hit_and_have_specific_gaps",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_missing_sources_are_null_not_no_hit_and_have_specific_gaps"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_no_hit_is_explicit_and_is_not_a_claim_of_validity",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_no_hit_is_explicit_and_is_not_a_claim_of_validity"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_not_applicable_is_not_a_no_hit",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_not_applicable_is_not_a_no_hit"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_schema_rejects_zero_and_false_on_unavailable_result",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_schema_rejects_zero_and_false_on_unavailable_result"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_scope_cutoff_checksum_and_evidence_tampering_are_rejected",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_scope_cutoff_checksum_and_evidence_tampering_are_rejected"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_snapshot_integration_preserves_every_result_and_never_fits",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_snapshot_integration_preserves_every_result_and_never_fits"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_threshold_is_strict_on_raw_similarity_before_rounding",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_threshold_is_strict_on_raw_similarity_before_rounding"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_uninformative_name_is_unavailable_even_if_field_exists",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_uninformative_name_is_unavailable_even_if_field_exists"
+    },
+    {
+      "id": "test_rule_evaluation.RuleEvaluationTests.test_unrelated_invoice_gap_does_not_disable_vendor_name_rule",
+      "status": "pass",
+      "testcase": "test_rule_evaluation.RuleEvaluationTests.test_unrelated_invoice_gap_does_not_disable_vendor_name_rule"
+    }
+  ],
+  "count": 57,
+  "skipped": 0,
+  "failures": 1,
+  "errors": 0
+}

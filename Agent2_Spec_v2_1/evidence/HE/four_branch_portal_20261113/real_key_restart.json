@@ -1,0 +1,12 @@
+{
+  "actual_concrete": true,
+  "dpapi_provider": true,
+  "separate_helper_processes": true,
+  "private_context_unchanged": true,
+  "encrypted_request_reused": true,
+  "decrypt_after_restart": true,
+  "foreign_context_rejected": true,
+  "expected": 579,
+  "actual": 579,
+  "seconds": 88.29699999999139
+}

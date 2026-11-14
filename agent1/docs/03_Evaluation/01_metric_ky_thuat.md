@@ -1,77 +1,56 @@
-# 1. Chỉ số kỹ thuật
+# Metric kỹ thuật theo pipeline hiện tại
 
-Mã chỉ số: `agent1/eval/metrics.py`. Nguyên tắc: **đo phân phối, không chỉ điểm**; đo theo **kết quả người dùng thấy**
-(dòng thu theo tuần, số dư, cảnh báo), không chỉ sai số từng hoá đơn.
+Chấm đúng đối tượng và phạm vi: xác suất tất toán khác tiền thu partial, thu AR khác số dư bank, dải phục vụ khác phân vị Monte Carlo gốc. Mã chính ở [t1_data.score](../../agent1/adaptive/t1_data.py), [cash_history](../../agent1/adaptive/cash_history.py) và [runner T6](../../scripts/business/evaluate_t6_new_company.py).
 
-## 1.1 T1 — thời điểm trả (phân phối theo tuần)
+## T1 + partial: chọn bằng tiền, chặn suy giảm phân phối
 
-| Chỉ số | Công thức | Vì sao dùng | Đọc thế nào |
-|---|---|---|---|
-| **Pinball loss** (q=0,1/0,5/0,9) | `mean(max(q·e, (q−1)·e))`, `e = y − ŷ_q`; `y = min(số ngày còn lại, 120)` | Quy tắc chấm điểm phù hợp cho phân vị; chỉ số cuộc thi M5 | Thấp tốt; so mốc cùng đơn vị ngày |
-| **MAE P50** | `mean|y − ŷ_0,5|` | Dễ hiểu | Bị đuôi (nợ xấu cap 120) kéo; dùng kèm pinball |
-| **Độ phủ khoảng 80% (cov80)** | `P(ŷ_0,1 ≤ y ≤ ŷ_0,9)` | Hiệu chỉnh | Đích 80%, chấp nhận 75–85% |
-| **Interval score 80%** | `(hi−lo) + (2/α)(lo−y)·1[y<lo] + (2/α)(y−hi)·1[y>hi]` | Phạt cả khoảng rộng lẫn trượt | Thấp tốt |
-| **IBS 13 tuần** | `mean_k mean_i ( 1[y_i ≤ 7k] − F̂_i(7k) )²` | Chấm toàn bộ đường CDF theo tuần — đúng đầu vào của Monte Carlo | Thấp tốt |
-| **Brier / ECE @4 tuần** | `P(trả trong ≤28 ngày)` so nhãn; ECE 10 bin | Độ hiệu chỉnh xác suất | ECE ≤0,05 |
-| **C-index** | tỷ lệ cặp (i trả sớm hơn j) được xếp đúng; lấy mẫu 400k cặp | Xếp hạng ưu tiên đòi nợ | >0,5 tốt hơn ngẫu nhiên |
-| **WAPE dòng thu theo tuần** | `Σ|thực − dự báo| / Σ thực` của `số tiền mở × P(trả tuần k)` cộng theo (công ty, ngày cắt), tuần 1–4 và 5–13 | **Con số kinh tế gần nhất**: sai số dòng thu mà CFO nhìn | Thấp tốt; mốc B1 |
+Với origin o, `A_i` là dư nợ, `c_hat[i,k]`/`c[i,k]` là tỷ lệ tiền dự báo/thực tế của tuần k. Đặt `e_k = Σ_i A_i × (c_hat[i,k] − c[i,k]) / Σ_i A_i`:
 
-**Lưu ý về phép đo cũ:** các báo cáo dùng `weekly_cdf_from_quantiles` nội suy tuyến tính CDF theo tuần từ 3 phân vị
-(B0, B1, QLGBM, AFT) — đây là xấp xỉ thô, **thiên lợi cho mô hình hazard** ở IBS và WAPE. So sánh công bằng
-nhất ở các chỉ số phân vị (pinball, MAE, cov80, IS80). Mã hiện tại dùng `cdf_from_quantiles` với nội suy PCHIP;
-hàm nội suy tuyến tính cũ đã được loại bỏ. Thay đổi mã không cập nhật lại các kết quả lịch sử.
+```text
+cash13(o) = 0,5 × (Σ_k |e_k| + mean_k |Σ_{j≤k} e_j|)
+IBS13(o)  = mean theo hóa đơn, có trọng số A_i,
+            của mean_k (F_hat_i(7k) − 1[paid_days_i ≤ 7k])²
+```
 
-## 1.2 T2 — nợ xấu / cure
+Điểm nhiều origin là trung bình điểm từng origin; cash13 không là MAE mỗi hóa đơn. Validation dùng cùng partial đã fit cho mọi T1; audit so đúng hai bundle thực tế. Xem [T1](../04_AI_Methods/T1_PARTIAL_BUNDLE_RUNTIME_2026-11-13.md) cho guard/policy.
 
-| Chỉ số | Ghi chú |
+Chỉ chấm khoản đủ 91 ngày follow-up có coverage. Tuần chưa đủ quan sát bị censor. Báo cáo cùng số snapshot, hóa đơn duy nhất, dư nợ và origin. Không kẹp outcome chưa biết thành 120 ngày để chấm như ngày trả thật; Q90 vượt chân trời chưa tự là lỗi ghi phân vị và không được giải quyết chất lượng bằng nâng trần hiển thị.
+
+| Chỉ số bổ sung | Cách đọc |
 |---|---|
-| PR-AUC (ưu tiên vì lớp hiếm), ROC-AUC | tỷ lệ nền 1–4% |
-| Brier, log-loss, ECE | hiệu chỉnh |
-| **Tổn thất kỳ vọng / thực tế** `Σ p·amt / Σ y·amt` | gần 1 là tốt; đo theo FY/danh mục |
-| Calibration theo năm tài khoản | ổn định dưới trôi (SBA: tỷ lệ nền 0,7%→2,8%) |
+| Brier tại 4/13 tuần | Bình phương sai số xác suất so nhãn đã biết; thấp tốt |
+| Calibration/ECE | Ghi binning, trọng số và cohort; không đồng nghĩa xếp hạng tốt |
+| Sai số thu tuần/lũy kế VND | Tính trên cùng origin và danh mục, không đánh đồng với pinball ngày tất toán |
+| Partial incidence/tỷ lệ | Theo trạng thái và mức hỗ trợ; cần kiểm cả tiền và phân phối, không chỉ nhãn có/không |
+| Pinball/MAE ngày trả | Chỉ có nghĩa với target/censoring hợp lệ; chưa là tiêu chí chọn mặc định runtime |
 
-## 1.3 T3 — tranh chấp, trả một phần
-AUC, Brier; MAE tỷ lệ thu `paid/invoiced`; tổng tiền kỳ vọng thu so thực.
+## T6: số dư, phân phối và cảnh báo
 
-## 1.4 T4 — doanh thu mới
-**SPL** = pinball trung bình 3 phân vị chia thang `mean|Δy|` trong mẫu (kiểu M5); cov80; WAPE P50; tách chân trời 1–4 / 5–13 tuần.
+Đối chiếu trên cùng phạm vi tài khoản, cutoff, số dư đầu, T5 và trạng thái hoạt động. Tách score thu AR và score số dư. Outcome thiếu sao kê/phạm vi không gán 0.
 
-## 1.5 T5 — lịch nghĩa vụ
-Đúng/sai theo ví dụ trong văn bản (kiểm thử đơn vị) — nhị phân, cần 100%.
-
-## 1.6 T6 — số dư 13 tuần
-| Chỉ số | Công thức / cách đo |
+| Chỉ số | Công thức/ý nghĩa |
 |---|---|
-| cov80 theo tuần k và gộp | khoảng [P10, P90] của mô phỏng chứa số dư thật |
-| Interval score (chuẩn hoá chi tuần) | `y,lo,hi` chia chi tuần trung bình để so giữa công ty |
-| CRPS từ mẫu | `E|X−y| − ½E|X−X'|` |
-| **P(thiếu hụt)**: Brier & AUC | sự kiện "số dư <0 trong 4 / 13 tuần tới" |
-| **Lead time** | số tuần từ lần đầu P(thiếu hụt) ≥ ngưỡng đến lúc thiếu hụt thật |
-| Báo giả / DN-năm | cảnh báo mà không có thiếu hụt trong 13 tuần sau |
-| Độ phủ ACI theo thời gian | cov80 trượt 12 tuần — phát hiện trôi |
+| MAE kỳ vọng/median | Sai số so số dư thật; ghi rõ dùng kỳ vọng hay P50 |
+| Coverage80 | Tỷ lệ số dư thật trong [P10,P90]; báo riêng raw và dải phục vụ |
+| Interval score | `(hi−lo) + 2/α × (lo−y) khi y<lo + 2/α × (y−hi) khi y>hi`, α=0,2 |
+| Pinball q | `max(q × (y−y_hat), (q−1) × (y−y_hat))` |
+| CRPS | `E|X−y| − 0,5 E|X−X'|`, tính từ mẫu tiền theo tuần |
+| Energy score | Chấm cả vector số dư; khoảng cách Euclid chia căn số tuần |
+| Brier tuần/cả kỳ | So xác suất với sự kiện dưới cash floor tương ứng; nguy cơ cả kỳ lấy từ cùng đường danh mục |
+| Báo giả/bỏ sót/lead time | Cần khóa cash floor, ngưỡng xác suất và cách gom sự kiện trước khi mở outcome |
 
-## 1.7 T7 — điểm gãy
-Tỷ lệ phát hiện trong 180 ngày (chỉ tính khách còn ≥5 lần trả sau điểm gãy), độ trễ phát hiện (trung vị), **báo giả /
-khách-năm** (tách báo động trong giai đoạn sốc vĩ mô — là thay đổi thật).
+Không cộng P10 hóa đơn hoặc nhân xác suất các tuần. Không gán dải đã hiệu chỉnh là raw quantile; hiệu chỉnh low/high chưa hiệu chỉnh xác suất cảnh báo. Số đường mô phỏng và sai số MC phải ghi cùng kết quả; kịch bản paired có sai số chuẩn Δ xác suất cả kỳ.
 
-## 1.8 T8 — lời hứa
-Giảm MAE P50 trên hoá đơn có lời hứa so với mô hình không dùng; độ hiệu chỉnh độ tin cậy lời hứa (Brier của "giữ lời").
+Runner `evaluate_t6_new_company.py` tổng hợp trọng số bằng nhau giữa doanh nghiệp. Chấm dùng snapshot truth chung cho bank/AR/T5/hoạt động; hoàn VAT thực nhận giữ riêng để tránh chẩn đoán sai nguồn lỗi. Kết quả trên cùng doanh nghiệp lặp nhiều tuần không là nhiều doanh nghiệp độc lập.
 
-## 1.9 T9 — khớp sao kê
-Link precision/recall/F1 trên cặp (giao dịch, hoá đơn); `txn_customer_recall`; **sai số ngày trả ước lượng** so ngày tiền về thật
-(đối chiếu với sai số của ngày ghi sổ); tỷ lệ khớp nhầm giao dịch nhiễu.
+## T0/T9/T5/T10 và vận hành
 
-## 1.10 T10 — giải thích & khuyến nghị
-Độ ổn định xếp hạng (Spearman giữa các seed MC); **mô phỏng chính sách** "đòi K khoản đầu": giảm P(thiếu hụt) / giảm DSO so
-với "đòi khoản to nhất" và "không làm gì"; tỷ lệ lý do SHAP được chuyên gia (kế toán) gật đầu (UAT).
+| Khối | Cần kiểm/đo |
+|---|---|
+| T0 | Precision/recall lỗi có nhãn, lỗi số tiền/ngày/quan hệ, nguyên tử lần nạp, lịch sử nguồn |
+| T9 | Precision/recall/F1 liên kết trên bộ có đáp án; thêm số tiền phân bổ sai, mơ hồ/không ghép và thao tác duyệt/đảo. Mức đề xuất `auto` chưa là tỷ lệ tự ghi |
+| T5 | Nghĩa vụ còn lại, phạm vi lịch, không đếm đôi tiền đã trả/hoàn; test ngày/hồ sơ chưa thay xác minh pháp lý |
+| T10 | Cộng khớp SHAP và tiền, đúng snapshot/hash, thiếu hỗ trợ phải hiện thiếu, replay no-op và paired scenario |
+| Vận hành | Thời gian/RAM, độ trễ dữ liệu, lỗi nạp, job/CAS, trạng thái challenger, raw/calibrated và phiên bản |
 
-## 1.11 Chỉ số vận hành (MLOps)
-PSI của `c_delay_ewm` hàng tuần (retrain nếu >0,1); độ phủ ACI trượt; thời gian chạy batch/DN; tỷ lệ dữ liệu không qua cổng chất lượng; độ trễ dữ liệu.
-
-## 1.12 Phân tầng bắt buộc khi báo cáo
-Theo `c_n_hist` (khách mới <3 HĐ / quen), kích cỡ HĐ (top 10% giá trị), kỳ hạn, ngành, giai đoạn (bình thường / quanh Tết /
-sốc COVID / đóng băng tín dụng), `posting_mode`, `tail` (atradius/uk/coface). Công bố **nhóm tệ nhất**.
-
-## 1.13 Kiểm định thống kê
-Bootstrap theo **công ty** (cụm) 300 lần cho CI 95%; so sánh mô hình bằng chênh lệch cặp trên cùng điểm cắt; không tuyên bố
-"tốt hơn" nếu CI của hiệu chứa 0.
+Phân tầng theo lượng lịch sử, khách mới, dư nợ, tuổi nợ, scope, bật/tắt hoạt động và chế độ stress; công bố nhóm xấu. So paired trên cùng origin/doanh nghiệp, bootstrap theo doanh nghiệp/World phù hợp; công bố CI và số cụm. Không coi WAPE giảm là bằng chứng trực tiếp vốn đệm hoặc DSO giảm.

@@ -1,0 +1,15 @@
+{
+  "command": [
+    "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-u",
+    "-B",
+    "scripts/demo_snapshot_flow.py"
+  ],
+  "exit_code": 0,
+  "snapshot_count_before": 1,
+  "snapshot_count_after": 1,
+  "local_synthetic_db": "D:\\agent22\\agent2\\.runtime\\snapshot_demo\\snapshots.sqlite3",
+  "log_sha256": "6d32c9c83cd75ba1a20ea1b1d238e7216652b9efa3fcd704173caa3e2c6950c0"
+}

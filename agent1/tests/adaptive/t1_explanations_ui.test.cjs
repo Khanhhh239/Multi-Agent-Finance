@@ -68,6 +68,21 @@ test("landmark18 grouped explanations retain their schema across saved model ide
   assert.ok(text(scope.renderPaymentExplanation({status:"deferred",reason:"Giới hạn 10 hóa đơn"}, {})).includes("Giới hạn 10 hóa đơn"));
 });
 
+test("landmark grouped attribution shows saved sensitivity and never invents a stability check", () => {
+  const scope = ui(), e = explanation();
+  Object.assign(e, {protocol:"landmark-grouped-exact-reference-v2", feature_schema:"t1-landmark-18-v2",
+    method:"exact_grouped_interventional_shapley"});
+  e.factors[0].stability = {status:"unstable", reasons:["magnitude_changed"], min_contribution_pp:0, max_contribution_pp:8};
+  let rendered = text(scope.renderPaymentExplanation(e, {}, .3725));
+  for (const expected of ["Nhạy với mẫu tham chiếu", "0 đến 8", "không phải khoảng tin cậy"]) assert.ok(rendered.includes(expected), expected);
+  assert.ok(!rendered.includes("Ổn định trong các mẫu đã kiểm tra"));
+  e.stability.checked = false;
+  e.factors[0].stability.status = "stable";
+  rendered = text(scope.renderPaymentExplanation(e, {}, .3725));
+  assert.ok(rendered.includes("Chưa đủ cơ sở kiểm tra"));
+  assert.ok(!rendered.includes("Ổn định trong các mẫu đã kiểm tra"));
+});
+
 test("business view contains only the final probability and reviewed drivers, with no technical section", () => {
   const scope = ui(), panel = scope.renderPaymentExplanation(explanation(), {model_version: "NEW-MODEL"}), content = text(panel);
   for (const expected of ["37,25%", "2026-11-11", "100.000 VND", "2 tuần", "Giá trị thực", "Góp phần tăng khả năng tất toán trong 4 tuần"]) {

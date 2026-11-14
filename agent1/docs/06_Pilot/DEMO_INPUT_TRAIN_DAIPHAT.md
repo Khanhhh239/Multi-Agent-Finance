@@ -1,32 +1,32 @@
-# Đại Phát · Nạp dữ liệu và diễn tập
+# Đại Phát · Đầu vào diễn tập
 
-Đọc [README khởi động](../../README.md) để tạo môi trường và chạy workspace DEMO_DAIPHAT ở cổng 8012. [Sổ tay PDF có ảnh](pdf/So-tay-Agent1.pdf) hướng dẫn đủ 12 bước. [Thông tin kỹ thuật và cấu hình](../HANDOFF.md) dành cho người nhận mã nguồn.
+Dữ liệu synthetic cho kho `DEMO_DAIPHAT`, không là doanh nghiệp thật hoặc benchmark độc lập. Từ thư mục `agent1/`, chạy:
 
-## Nạp file
+```powershell
+.\scripts\start-business.ps1 -Port 8012 -Company DEMO_DAIPHAT -DemoTraining
+```
 
-Chọn **Dữ liệu** trên web, chọn đúng loại bảng, định dạng ngày trong file `yyyy-mm-dd`, số tiền `plain`. Với mỗi file, bấm **Kiểm tra file** rồi **Xác nhận lưu dữ liệu**.
+Mở `http://127.0.0.1:8012/workspace`. Dùng khóa do launcher trên máy nhận tạo và in vị trí; không đưa khóa vào tài liệu. Cách thao tác chung nằm trong [sổ tay](SO_TAY_AGENT1.md).
 
-| File từ pilot/demo_dai_phat | Loại bảng | Số dòng |
-|---|---|---:|
-| 01_invoices.csv | Hóa đơn bán hàng | 12.780 |
-| 02_bank.csv | Dòng sao kê ngân hàng | 17.642 |
-| 03_payments.csv | Khoản thanh toán đã nhận | 16.258 |
-| 04_statements.csv | Kỳ sao kê và số dư | 142 |
-| 05_outflows.csv | Lịch chi đã biết | 27 |
-| 06_actions.csv | Nhật ký thu nợ và lời hứa | 5.001 |
+## Nạp sáu file theo thứ tự
 
-Khóa kết nối nằm trong thư mục `.state-business-firm-DEMO_DAIPHAT-data-keys` do máy nhận tạo. Dữ liệu đã có cùng mã sẽ được cập nhật. Sáu khoản thu chưa ghép tổng 42 triệu có thể để chờ xác minh.
+Lấy tệp gốc trong `pilot/demo_dai_phat/`. Chọn ngày ISO `yyyy-mm-dd`, số tiền `plain`, kiểm tra rồi xác nhận từng tệp.
 
-## Kiểm định và dự báo
+| File | Bảng trên Workspace |
+|---|---|
+| `01_invoices.csv` | Hóa đơn bán hàng |
+| `02_bank.csv` | Dòng sao kê ngân hàng |
+| `03_payments.csv` | Khoản thanh toán đã nhận |
+| `04_statements.csv` | Kỳ sao kê và số dư |
+| `05_outflows.csv` | Lịch chi đã biết |
+| `06_actions.csv` | Nhật ký thu nợ và lời hứa |
 
-Ngày chốt học và dự báo là **31-10-26**. Số dư đầu kỳ **425000000 VND**, ngưỡng **200000000 VND**. Chọn **Quản lý → Phiên bản & kiểm định**, xác nhận đủ thanh toán và bắt đầu. Sau khi kiểm tra kết quả, chọn **Sử dụng phiên bản này**.
+Quy mô/giả định nằm trong manifest đi cùng CSV. `invalid_cases/` chỉ dùng trên kho thử riêng để kiểm thông báo lỗi. Không nhập lại bằng mã mới để thử retry; cùng chứng từ giữ cùng ID.
 
-Chạy gốc 13 tuần. Để so kịch bản, chạy gốc 26 tuần rồi chọn thu chậm thêm 28 ngày với cùng thông số. Xuất Excel có ba sheet. Ngày trên giao diện và Excel dùng `dd-mm-yy`.
+## Tham số bài thực hành
 
-Dữ liệu synthetic được train trong kho demo riêng. Job lớn cần ≥3 GiB RAM hệ thống trống, worker giữ giới hạn RSS 2 GiB và không giới hạn tổng thời gian. Giữ máy và dịch vụ chạy trong lúc học.
+Ngày dữ liệu tham chiếu `31-10-26`, số dư đầu `425000000 VND`, mức sàn `200000000 VND`, kỳ 13 tuần. Chỉ dùng cutoff nếu mọi thành phần model thực dùng đã học/sẵn sàng không sau ngày đó; catalog hiện tại có thể không đủ điều kiện cho cutoff lịch sử này. Không sửa ngày artifact để ép chạy. Nếu bị chặn, dùng bản lưu đúng phiên bản hoặc lập một ca diễn tập mới với dữ liệu/số dư/cutoff nhất quán.
 
-## Báo cáo riêng
+Trong **Phiên bản & kiểm định**, xem nguồn phục vụ, ngày dữ liệu, ngày tham số và audit; cập nhật không bảo đảm đổi model. Mô tả học tiếp và chờ challenger ở [T1 + partial](../04_AI_Methods/T1_PARTIAL_BUNDLE_RUNTIME_2026-11-13.md). Không dùng điểm Brier hoặc số dư chụp từ phiên bản cũ làm đáp án cho engine mới.
 
-Báo cáo HTML mã hóa tự lưu tại `outputs/private-training-reports/`. Mật khẩu nằm trong `report-password.txt` ở thư mục khóa doanh nghiệp. Script tự tạo mật khẩu ngẫu nhiên nếu chưa có. Có thể đặt `AGENT1_REPORT_DIR` để chọn nơi lưu khác. Các file này được tạo trên máy nhận và được loại khỏi Git.
-
-Phiên bản minh họa trước đây dùng neural 25 vòng/batch 512, mất 138,84 giây. Mặc định hiện tại là 100/128. Muốn đo cấu hình hiện hành cần chạy lượt mới. Kết quả synthetic dùng kiểm nghiệm quy trình. Bộ hồ sơ xóa nợ, độ phủ khoảng số dư và hiệu quả thu hồi cần được đánh giá trên dữ liệu doanh nghiệp thật.
+Thực hành dự báo → mở lại kế hoạch → đọc bằng chứng partial/T10 → chạy kịch bản cùng snapshot → xuất Excel. Khi so kỳ 26 tuần, lập baseline 26 tuần trước; phạm vi hoạt động vẫn tối đa 13 tuần. Chấm thực tế chỉ khi có sao kê tương ứng; CSV dừng ở cutoff chưa cung cấp nhãn tương lai.

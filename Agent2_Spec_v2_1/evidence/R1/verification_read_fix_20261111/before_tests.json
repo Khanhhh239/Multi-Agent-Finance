@@ -1,0 +1,38 @@
+{
+  "tests": [
+    {
+      "id": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_committed_read_does_not_suppress_other_validation_errors",
+      "status": "pass",
+      "testcase": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_committed_read_does_not_suppress_other_validation_errors"
+    },
+    {
+      "id": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_raw_builder_still_requires_permission_to_assert_verification",
+      "status": "pass",
+      "testcase": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_raw_builder_still_requires_permission_to_assert_verification"
+    },
+    {
+      "id": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_reader_cannot_commit_a_new_verified_import",
+      "status": "pass",
+      "testcase": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_reader_cannot_commit_a_new_verified_import"
+    },
+    {
+      "id": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_reader_job_uses_committed_verification_without_mutating_data_or_permissions",
+      "status": "fail",
+      "testcase": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_reader_job_uses_committed_verification_without_mutating_data_or_permissions"
+    },
+    {
+      "id": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_reader_revocation_after_build_still_prevents_export",
+      "status": "fail",
+      "testcase": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_reader_revocation_after_build_still_prevents_export"
+    },
+    {
+      "id": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_verified_snapshot_still_rejects_wrong_company_or_missing_read_permission",
+      "status": "pass",
+      "testcase": "test_snapshot_verification_access.SnapshotVerificationAccessTests.test_verified_snapshot_still_rejects_wrong_company_or_missing_read_permission"
+    }
+  ],
+  "count": 6,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 2
+}

@@ -1,54 +1,51 @@
-# 6. Yêu cầu sản phẩm và phạm vi
+# Yêu cầu sản phẩm và phạm vi hiện tại
 
-## 6.1 Yêu cầu chức năng (FR) ánh xạ nhiệm vụ T
+Đối chiếu Workspace ngày 14/11/2026. Chi tiết kỹ thuật nằm trong [README dịch vụ](../../agent1_service/README.md), [T1 + partial](../04_AI_Methods/T1_PARTIAL_BUNDLE_RUNTIME_2026-11-13.md), [T6](../04_AI_Methods/T6_PARTIAL_PATHS_PERIODIC_2026-11-13.md) và [T10](../04_AI_Methods/T10_BUNDLE_EVIDENCE_2026-11-13.md). Bảng dưới mô tả hành vi, không chứng nhận chất lượng mô hình.
 
-| Mã | Yêu cầu | Nhiệm vụ | Trạng thái (15/10/2026) |
-|---|---|---|---|
-| FR-01 | Nhập HĐĐT XML (QĐ 1450/1510), sổ ERP, sao kê CSV/Excel về lược đồ chuẩn; cổng chất lượng (MST, cộng tiền, ngày, trùng) | T0 | Có code + kiểm thử |
-| FR-02 | Khớp giao dịch ngân hàng với hoá đơn (một-nhiều, trả một phần), lấy ngày tiền về thật | T9 | Có code, đã đo trên miền đích |
-| FR-03 | Phân phối thời điểm trả theo tuần cho mỗi hoá đơn mở (13 tuần + đuôi) | T1 | Có code, đã đo (tổng hợp + 2 bộ thật) |
-| FR-04 | Xác suất không bao giờ trả / nợ xấu, tổn thất kỳ vọng; đề xuất dự phòng theo TT48/2019 | T2 | Có code + kết quả: tổng hợp PR-AUC 0,97; SBA thật 15,7× nền (nhãn EXEMPT cần xử lý) |
-| FR-05 | Xác suất tranh chấp, trả một phần; số tiền kỳ vọng thu | T3 | Có kết quả: EB lịch sử khách thắng LightGBM |
-| FR-06 | Dự báo doanh thu mới chưa lập hoá đơn (phân vị 1–13 tuần) | T4 | Có code, đã đo (tổng hợp + thật) |
-| FR-07 | Lịch chi tất định: lương, BHXH, GTGT tháng/quý, TNDN tạm nộp, môn bài, thuê, vay; dịch ngày nghỉ/Tết | T5 | Có code + 15 kiểm thử |
-| FR-08 | Mô phỏng số dư 13 tuần, P10/P50/P90, P(thiếu hụt), sốc chung, hiệu chỉnh conformal | T6 | Có code, đã chạy trên `tgt` (cov80 0,79–0,81); chưa đo lead time |
-| FR-09 | Cảnh báo điểm gãy hành vi theo khách/danh mục, chuyển chế độ thận trọng | T7 | Có code, đã đo |
-| FR-10 | Ghi lời hứa trả, độ tin cậy lời hứa theo khách, đưa vào dự báo | T8 | Có trong đặc trưng; giảm MAE 7,2% trên HĐ có lời hứa |
-| FR-11 | Giải thích (lý do) + xếp hạng đòi nợ + kịch bản "nếu như" | T10 | Code demo có, chưa chạy |
-| FR-12 | Backtest rolling-origin, cổng GO/NO-GO, báo cáo trường hợp sai | T11 | Có cho T1/T4/T7/T9 |
-| FR-13 | Máy phát dữ liệu tổng hợp hiệu chỉnh VN | T12 | Xong |
-| FR-14 | Thử nghiệm với DN đối tác, giám sát trôi | T13 | Chưa (cần đối tác) |
+## Hành trình sử dụng
 
-## 6.2 Yêu cầu phi chức năng (NFR)
+1. Kết nối Workspace từ Portal hoặc dịch vụ local; chọn đúng doanh nghiệp.
+2. Nạp CSV/Excel/XML, ghép cột, chọn định dạng ngày/tiền, xem trước và xác nhận lưu. Có lỗi thì sửa trước khi ghi.
+3. Kiểm tra sổ dữ liệu, lịch sử nạp và đề xuất đối soát T9; duyệt, từ chối hoặc phân bổ thủ công có bằng chứng. Chỉ quyết định đã duyệt mới đổi công nợ.
+4. Xác nhận phạm vi thanh toán và lịch nghĩa vụ còn phải trả. Kiểm định/huấn luyện tách khỏi tạo dự báo; đọc trạng thái phiên bản và audit.
+5. Chọn ngày chốt, số dư đầu, ngưỡng cảnh báo và kỳ dự báo; tạo kế hoạch mới.
+6. Xem khoản cần chú ý, giải thích, phân rã thu chi và kịch bản; xuất Excel/bằng chứng, đối chiếu thực tế khi có dữ liệu mới.
 
-| Mã | Yêu cầu | Mục tiêu |
-|---|---|---|
-| NFR-01 Độ chính xác | Vượt mốc đơn giản trên backtest theo thời gian | xem 03_Evaluation/03 (cổng G1–G9) |
-| NFR-02 Hiệu chỉnh | Độ phủ khoảng 80% nằm trong [75, 85]% | CQR/ACI |
-| NFR-03 Hiệu năng | Batch đêm ≤5 phút CPU/DN (≤2.000 hoá đơn mở); kịch bản "nếu như" ≤3 giây | MC 1.000 đường |
-| NFR-04 Khả dụng | 99,5% cho dashboard; batch có thể chạy lại | |
-| NFR-05 Truy vết | Mỗi dự báo lưu phiên bản mô hình, dữ liệu as-of, tham số | MLflow/registry |
-| NFR-06 Bảo mật | Dữ liệu theo NĐ 13/2023: đồng ý của chủ dữ liệu, ẩn danh trong môi trường phát triển, mã hoá khi lưu | |
-| NFR-07 Giải thích | Mỗi cảnh báo có lý do định lượng; LLM không sinh số | kiểm thử đối chiếu số |
-| NFR-08 Bền vững | Chế độ khủng hoảng khi phát hiện điểm gãy: nới khoảng, ưu tiên dữ liệu gần | T7 |
+## Chức năng
 
-## 6.3 Ngoài phạm vi (giai đoạn này)
-
-- Tự động thực hiện thanh toán, vay, chuyển tiền (vượt quyền; rủi ro pháp lý).
-- Tư vấn đầu tư cá nhân hoá.
-- Dự báo chi tiết tồn kho / định giá sản phẩm.
-- Đa tiền tệ phức tạp (chỉ hỗ trợ quy đổi theo tỷ giá ngày ở bản đầu).
-
-## 6.4 Ràng buộc pháp lý và nghiệp vụ
-
-| Văn bản | Ảnh hưởng |
+| Mã | Phạm vi phục vụ |
 |---|---|
-| NĐ 123/2020, QĐ 1450/QĐ-TCT (sửa đổi 1510) | Định dạng XML hoá đơn điện tử là nguồn đầu vào chuẩn |
-| Luật Quản lý thuế 38/2019 (Điều 44, 55), NĐ 126/2020 | Hạn khai/nộp GTGT, TNDN; dịch hạn khi trùng ngày nghỉ |
-| NĐ 293/2025 (lương tối thiểu vùng 2026), luật BHXH 2024 | Chi lương, BHXH |
-| NQ 198/2025/QH15 | Bỏ lệ phí môn bài từ 2026 |
-| NQ giảm thuế GTGT 2% (43/2022 … 204/2025) | Thuế suất 8%/10% theo thời kỳ, loại trừ một số ngành |
-| TT 48/2019/TT-BTC | Khung trích lập dự phòng nợ khó đòi theo tuổi quá hạn (30/50/70/100%) — sàn quy tắc cho T2 |
-| NĐ 13/2023 | Bảo vệ dữ liệu cá nhân; điều kiện dùng dữ liệu đối tác |
+| FR-01 · T0 | Kiểm dữ liệu và quan hệ, tiền VND chính xác, lịch sử snapshot/nguồn/ngày biết; hỗ trợ vòng đời chứng từ theo hợp đồng nạp |
+| FR-02 · T9 | Đề xuất một/nhiều hóa đơn và trả một phần; có duyệt/từ chối/đảo, chặn vượt tiền hoặc công nợ; `auto` là mức đề xuất, vẫn cần duyệt |
+| FR-03 · T1 | Catalog global Neural/LightGBM/XGBoost, học tiếp theo doanh nghiệp, chọn cùng partial adapter qua validation/audit; cập nhật theo chu kỳ và chờ nhãn khi cần |
+| FR-04 · Partial | Tách xác suất tất toán khỏi xác suất/tỷ lệ thu một phần; dùng cùng bundle cho kiểm định, dự báo và mô phỏng |
+| FR-05 · T5 | Nghĩa vụ cố định/hồ sơ đã biết, thanh toán nghĩa vụ và phần còn lại; khoản đến/quá hạn chưa trả được chuyển theo quy tắc hoặc ngày dự kiến mới |
+| FR-06 · T6 | Kế hoạch 1–52 tuần, mặc định 13; kỳ vọng, P10/P50/P90 và nguy cơ thiếu tiền; mô phỏng nhiều lần thu trên dư nợ còn lại |
+| FR-07 · Hoạt động | Ước lượng thu/chi hoạt động khi bật và đủ lịch sử, kiểm phạm vi tài khoản; nhánh thu hóa đơn mới không tự bật |
+| FR-08 · T10 | SHAP T1 tại mốc 4 tuần, bằng chứng tất toán/partial, giải thích ưu tiên và phân rã kế toán; số có nguồn từ engine/template |
+| FR-09 · Kịch bản | Phát lại T6 theo bundle/dữ liệu đã lưu, khách chậm hoặc dời chi; lưu so sánh kỳ vọng, phân vị và xác suất thiếu tiền |
+| FR-10 · Truy vết | Lưu phiên bản, snapshot, manifest/bằng chứng và export; đổi active hoặc nạp mới không sửa kế hoạch cũ |
 
-Mọi quy tắc pháp lý trong code là nguồn thứ cấp đã ghi chú — phải đối chiếu văn bản gốc trước khi dùng thật.
+T2/T3/T4/T7/T8/T11–T13 là mã nhiệm vụ nghiên cứu; sự tồn tại của mô-đun/kết quả cũ chưa có nghĩa mọi đầu ra đó đang bật trên giao diện. Không còn dùng catalog T1 học mới từ đầu tại Workspace; Workspace trong tài liệu này chỉ ứng dụng người dùng.
+
+## Tiêu chí UAT và vận hành
+
+| Nhóm | Cách kiểm |
+|---|---|
+| Nạp dữ liệu | Lỗi chỉ đúng dòng/cột; lần xem trước chưa ghi; gửi lại cùng xác nhận không nhân đôi thanh toán |
+| Đối soát | Chỉ duyệt mới đổi dư nợ, không vượt nguồn; đảo quyết định phục hồi đúng và giữ lịch sử |
+| Ngày chốt | Không dùng giao dịch/phiên bản chỉ biết sau cutoff; xác nhận phạm vi thiếu phải được nêu |
+| Chi | Chỉ tính nghĩa vụ còn lại; thiếu xác nhận không tự xem là đã thanh toán |
+| Tiền và phân rã | Số dư đầu + thu − chi = số dư cuối; không cộng P10 từng hóa đơn thành P10 danh mục |
+| Giải thích | Phản ánh đúng model/partial/snapshot; thiếu cơ sở thì báo thiếu; SHAP tất toán không bị gọi là giải thích tiền |
+| Kịch bản | Cùng nguồn ngẫu nhiên với baseline; tiền ngoài kỳ ghi riêng; đây là độ nhạy trong mô hình |
+| Phiên bản/export | Mở kế hoạch cũ giữ đúng bằng chứng; Excel/JSON khớp số chưa làm tròn |
+| Khả năng hiểu | Người dùng chỉ đúng tuần cần chú ý, phạm vi dự báo và giới hạn; cần thử nghiệm thực tế |
+
+Mục tiêu hiệu năng/SLA cần benchmark theo quy mô và cấu hình trước khi cam kết. Chất lượng xác suất, độ phủ, cảnh báo và pilot dùng [cổng hiện hành](../03_Evaluation/03_cong_nghiem_thu.md), không dùng số test hoặc bảng tháng 10 để thay.
+
+## Ranh giới
+
+Không tự chuyển tiền, vay, thanh toán hoặc liên hệ khách; không tự xóa chênh lệch thành phí hay xóa nợ. Luồng hiện tại chưa cam kết Zalo/chat, tự kết nối mọi cổng hóa đơn, dự phòng pháp lý, thanh khoản hợp nhất đa tài khoản hay đa tiền tệ đầy đủ. Lời hứa/liên hệ được ghi thành dữ liệu có cấu trúc.
+
+Nghĩa vụ cần hồ sơ/ngày hiệu lực và rà soát pháp lý trước dùng thật. Dữ liệu doanh nghiệp cần quyền sử dụng và kiểm soát truy cập phù hợp; hợp đồng triển khai đọc ở [bảo mật](../security_privacy.md). Tài liệu BA không thay văn bản pháp lý hoặc chứng nhận tuân thủ.

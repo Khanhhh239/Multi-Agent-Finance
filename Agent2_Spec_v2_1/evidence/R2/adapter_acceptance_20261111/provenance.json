@@ -1,0 +1,25 @@
+{
+  "spec_version": "2.1",
+  "change_request": "CR-014",
+  "head": "f203b39828f567171916b5b4744728ed4b63d17f",
+  "collected_at": "2026-11-11T13:17:41.389462+07:00",
+  "command": "agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/run_r1_tests.py --suite test_method_adapters --suite test_method_jobs --report Agent2_Spec_v2_1/evidence/R2/adapter_acceptance_20261111/focused_tests.json",
+  "exit_code": 0,
+  "test_summary": {
+    "count": 32,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0
+  },
+  "new_testcases": [
+    "test_method_jobs.CompanyMethodJobTests.test_five_transaction_snapshot_returns_five_results_with_or_without_model",
+    "test_method_jobs.CompanyMethodJobTests.test_full_contract_preprocess_and_runtime_mismatches_are_rejected_before_load"
+  ],
+  "runtime_changes": false,
+  "contract_changes": false,
+  "CR013_model_implementation_hashes_unchanged": true,
+  "full_regression_rerun": false,
+  "full_R2_gate_run": false,
+  "R2_status": "PARTIAL",
+  "release_approved": false
+}

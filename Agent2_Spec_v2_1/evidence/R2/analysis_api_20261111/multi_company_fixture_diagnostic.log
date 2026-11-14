@@ -1,0 +1,85 @@
+agent2/.venv/Scripts/python.exe : test_accountant_cannot_request_technical_view 
+(test_analysis_api.AnalysisApiTests.test_accountant_cannot_request_technical_view) ... ok
+At line:2 char:1
++ agent2/.venv/Scripts/python.exe -X utf8 -u -B agent2/scripts/run_r1_t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_accountant...al_view) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_authorization_happens_before_body_and_snapshot_read 
+(test_analysis_api.AnalysisApiTests.test_authorization_happens_before_body_and_snapshot_read) ... ok
+test_client_role_and_scores_are_rejected (test_analysis_api.AnalysisApiTests.test_client_role_and_scores_are_rejected) 
+... ok
+test_committed_verified_document_does_not_require_new_verification_permission 
+(test_analysis_api.AnalysisApiTests.test_committed_verified_document_does_not_require_new_verification_permission) ... 
+ok
+test_director_technical_view_contains_only_P1_E3_and_null_aggregate 
+(test_analysis_api.AnalysisApiTests.test_director_technical_view_contains_only_P1_E3_and_null_aggregate) ... ok
+test_empty_asof_and_late_invoice_never_rewrite_past 
+(test_analysis_api.AnalysisApiTests.test_empty_asof_and_late_invoice_never_rewrite_past) ... ok
+test_equivalent_times_retry_and_views_have_same_analysis_binding 
+(test_analysis_api.AnalysisApiTests.test_equivalent_times_retry_and_views_have_same_analysis_binding) ... ok
+test_foreign_company_denied_and_director_has_no_implicit_access 
+(test_analysis_api.AnalysisApiTests.test_foreign_company_denied_and_director_has_no_implicit_access) ... ok
+test_host_origin_query_and_unsupported_methods 
+(test_analysis_api.AnalysisApiTests.test_host_origin_query_and_unsupported_methods) ... ok
+test_internal_error_is_sanitized_and_does_not_return_partial_rows 
+(test_analysis_api.AnalysisApiTests.test_internal_error_is_sanitized_and_does_not_return_partial_rows) ... ok
+test_invalid_body_view_time_and_snapshot_id 
+(test_analysis_api.AnalysisApiTests.test_invalid_body_view_time_and_snapshot_id) ... ok
+test_large_signed_VND_values_are_preserved_as_integers 
+(test_analysis_api.AnalysisApiTests.test_large_signed_VND_values_are_preserved_as_integers) ... ok
+test_limits_reject_without_truncation_or_invoking_scorer 
+(test_analysis_api.AnalysisApiTests.test_limits_reject_without_truncation_or_invoking_scorer) ... ok
+test_mismatched_analysis_snapshot_binding_is_rejected 
+(test_analysis_api.AnalysisApiTests.test_mismatched_analysis_snapshot_binding_is_rejected) ... ok
+test_missing_or_revoked_credentials_are_denied 
+(test_analysis_api.AnalysisApiTests.test_missing_or_revoked_credentials_are_denied) ... ok
+test_negative_adjustment_is_returned_and_not_mislabeled_as_no_hit 
+(test_analysis_api.AnalysisApiTests.test_negative_adjustment_is_returned_and_not_mislabeled_as_no_hit) ... ok
+test_no_fit_and_no_other_methods_requested 
+(test_analysis_api.AnalysisApiTests.test_no_fit_and_no_other_methods_requested) ... ok
+test_other_tenant_same_company_cannot_read_snapshot 
+(test_analysis_api.AnalysisApiTests.test_other_tenant_same_company_cannot_read_snapshot) ... ok
+test_partial_source_does_not_disable_E3_or_become_zero 
+(test_analysis_api.AnalysisApiTests.test_partial_source_does_not_disable_E3_or_become_zero) ... ok
+test_permission_revocation_during_compute_denies_review_result 
+(test_analysis_api.AnalysisApiTests.test_permission_revocation_during_compute_denies_review_result) ... ok
+test_review_allowlist_excludes_new_internal_fields_recursively 
+(test_analysis_api.AnalysisApiTests.test_review_allowlist_excludes_new_internal_fields_recursively) ... ok
+test_review_business_DTO_and_zero_point_E3_signal 
+(test_analysis_api.AnalysisApiTests.test_review_business_DTO_and_zero_point_E3_signal) ... ok
+test_role_downgrade_during_compute_denies_entire_result 
+(test_analysis_api.AnalysisApiTests.test_role_downgrade_during_compute_denies_entire_result) ... ok
+test_roles_and_same_transaction_ids_are_separate_per_company 
+(test_analysis_api.AnalysisApiTests.test_roles_and_same_transaction_ids_are_separate_per_company) ... ERROR
+test_simultaneous_group_is_unique_with_refs_on_every_member 
+(test_analysis_api.AnalysisApiTests.test_simultaneous_group_is_unique_with_refs_on_every_member) ... ok
+test_storage_tamper_returns_integrity_error 
+(test_analysis_api.AnalysisApiTests.test_storage_tamper_returns_integrity_error) ... ok
+test_storage_unconfigured_is_503 (test_analysis_api.AnalysisApiTests.test_storage_unconfigured_is_503) ... ok
+test_unknown_role_or_permission_from_policy_cannot_bypass 
+(test_analysis_api.AnalysisApiTests.test_unknown_role_or_permission_from_policy_cannot_bypass) ... ok
+test_unknown_snapshot_is_scoped_404 (test_analysis_api.AnalysisApiTests.test_unknown_snapshot_is_scoped_404) ... ok
+
+======================================================================
+ERROR: test_roles_and_same_transaction_ids_are_separate_per_company 
+(test_analysis_api.AnalysisApiTests.test_roles_and_same_transaction_ids_are_separate_per_company)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\agent22\agent2\tests\test_analysis_api.py", line 118, in 
+test_roles_and_same_transaction_ids_are_separate_per_company
+    second=self.store.commit(writer,draft['import_id'],commit_fields(preview),'other-company-commit')['snapshot']['snap
+shot_id']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\agent22\agent2\sme_fraud\snapshots.py", line 311, in commit
+    fail(409, "VALIDATION_REJECTED", "Dữ liệu còn lỗi nên chưa thể tạo snapshot.", "Sửa tệp/mapping và kiểm tra lại; 
+không bỏ qua lỗi hoặc gửi report tự tạo.")
+  File "D:\agent22\agent2\sme_fraud\import_files.py", line 26, in fail
+    raise ImportFailure(status, code, message, action)
+sme_fraud.import_files.ImportFailure: Dữ liệu còn lỗi nên chưa thể tạo snapshot.
+
+----------------------------------------------------------------------
+Ran 29 tests in 20.094s
+
+FAILED (errors=1)

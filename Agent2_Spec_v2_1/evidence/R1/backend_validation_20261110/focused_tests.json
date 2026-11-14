@@ -1,0 +1,285 @@
+{
+  "spec_version": "2.1",
+  "run_id": "da1e934f-e7d6-4ae4-b74e-740bc45a7695",
+  "tests": [
+    {
+      "id": "test_input_contract.InputContractTests.test_as_of_is_order_independent_and_copied",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_canonical_money_rejects_float_string_bool_fraction_and_overflow",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_company_master_required",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_cyclic_adjustments_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_errors_have_row_field_and_next_action",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_fixture_retains_every_row_and_negative_amount",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_foreign_currency_requires_separate_contract",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_future_effective_record_not_visible_yet",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_identical_id_same_company_revision_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_late_document_not_visible_in_old_knowledge",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_late_revision_cannot_replace_past_value",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_leading_zero_identifiers_preserved",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_malformed_company_id_does_not_crash",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_many_to_many_allocation_is_supported",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_missing_known_time_never_defaults_to_event_time",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_missing_vs_unknown_explicit_without_inventing_value",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_money_exact_and_signed_without_rounding",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_negative_invoice_and_allocation_adjustments_are_accepted",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_negative_requires_adjustment_kind_reason_original",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_other_company_does_not_satisfy_missing_reference",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_overpayment_and_distinct_payments_same_invoice_not_import_errors",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_partial_auxiliary_sources_warn_without_dropping_rows",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_pinned_money_reuse_exact_bytes",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_revision_time_cannot_move_back",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_same_ids_in_two_companies_are_separate",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_schema_is_valid",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_scope_denial_does_not_expose_foreign_rows",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_self_adjustment_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_source_and_original_document_not_automatically_verified",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_timestamps_missing_naive_ambiguous_invalid_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_unknown_columns_and_label_truth_not_accepted",
+      "status": "pass"
+    },
+    {
+      "id": "test_input_contract.InputContractTests.test_verification_cannot_use_future_knowledge",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_bank_history_for_one_vendor_does_not_cover_another_vendor",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_document_linked_to_invoice_is_traced_through_allocations",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_missing_approval_coverage_is_per_transaction",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_missing_history_does_not_remove_transactions_or_claim_ml_readiness",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_new_unverified_revision_cannot_use_older_verified_status",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_one_simulated_document_does_not_clear_other_transactions",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_strict_shared_parser_never_accepts_duplicate_keys",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.SourceLimitTests.test_verified_original_covers_only_linked_transaction",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_authorized_validation_keeps_signed_rows_and_uses_backend_scope",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_bad_transport_headers_rejected_before_read",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_broken_json_duplicate_keys_and_nonfinite_values_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_client_cannot_grant_itself_another_company_or_tenant",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_client_scope_role_extra_fields_are_not_accepted",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_company_b_denied_before_reading_or_parsing_body",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_director_without_company_permission_is_still_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_duplicate_authorization_headers_do_not_choose_one",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_even_multi_company_credential_must_validate_one_company_per_route",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_foreign_row_cannot_be_hidden_in_valid_company_bundle",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_global_credential_revocation",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_input_size_rows_and_media_limits",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_missing_company_column_is_diagnostic_not_fake_authorization_error",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_missing_or_invalid_policy_fails_closed_without_data_echo",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_missing_required_table_names_the_table",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_missing_transaction_id_reports_row_field_and_fix",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_missing_wrong_or_expired_credential_is_401",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_nested_reference_required_key_identified",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_revocation_read_on_every_request",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_security_errors_do_not_echo_raw_transaction_or_token",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_unauthenticated_body_is_never_read",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_untrusted_origin_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_validation_backend.ValidationApiTests.test_wrong_type_duplicate_and_reference_show_actual_field",
+      "status": "pass"
+    },
+    {
+      "id": "test_transition_server.TransitionServerTest.test_health_reports_core_only_not_a_ready_pipeline",
+      "status": "pass"
+    },
+    {
+      "id": "test_transition_server.TransitionServerTest.test_legacy_reads_and_writes_are_retired",
+      "status": "pass"
+    },
+    {
+      "id": "test_transition_server.TransitionServerTest.test_root_is_a_clear_transition_page",
+      "status": "pass"
+    }
+  ],
+  "count": 66,
+  "exit_code": 0,
+  "skipped": 0,
+  "command": [
+    "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\agent22_setup_20261108\\final_backend_evidence_20261110.py"
+  ],
+  "reproduce": [
+    "python -X utf8 -B -m unittest test_input_contract test_validation_backend test_transition_server -v"
+  ],
+  "log_sha256": "9aef0dddf328875c0261c80d1350607e49c32df3ff994a1cedf58bdf75bf8283",
+  "reason": "Final missing/blank-ID diagnostics checked after full suite started"
+}

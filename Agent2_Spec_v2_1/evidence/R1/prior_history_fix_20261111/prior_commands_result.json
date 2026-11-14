@@ -1,0 +1,42 @@
+{
+  "spec_version": "2.1",
+  "stage": "R1",
+  "run_id": "b136fe73-dc33-49c3-889c-2553ce70b4cc",
+  "commit": "f203b39828f567171916b5b4744728ed4b63d17f",
+  "dirty": true,
+  "working_tree_sha256": "f20f0a470727b577565ed80b8dced85b0e9550411140800276ec079e512a2c06",
+  "started_at": "2026-11-10T18:02:57.283466+00:00",
+  "tool_versions": {
+    "D:/agent22/agent2/.venv/Scripts/python.exe --version": {
+      "exit_code": 0,
+      "output": "Python 3.12.7\n"
+    },
+    "D:/agent22/agent2/.venv/Scripts/python.exe -X utf8 -c import sqlite3;from importlib.metadata import version;print('sqlite',sqlite3.sqlite_version,'jsonschema',version('jsonschema'),'scikit-learn',version('scikit-learn'))": {
+      "exit_code": 0,
+      "output": "sqlite 3.45.3 jsonschema 4.26.0 scikit-learn 1.8.0\n"
+    }
+  },
+  "commands": [
+    {
+      "argv": [
+        "D:/agent22/agent2/.venv/Scripts/python.exe",
+        "-X",
+        "utf8",
+        "-u",
+        "-B",
+        "agent2/scripts/run_r1_tests.py",
+        "--report",
+        "agent2/.runtime/r1/native_report.json"
+      ],
+      "cwd": "D:/agent22",
+      "started_at": "2026-11-10T18:02:57.284487+00:00",
+      "finished_at": "2026-11-10T18:05:44.535284+00:00",
+      "exit_code": 0,
+      "timed_out": false,
+      "format": "json",
+      "report_file": "machine_report_0.json",
+      "report_sha256": "0bb5b93f519b3708313d6bf77cf06536e008dcddf6ed4d4906365d6776870f95"
+    }
+  ],
+  "finished_at": "2026-11-10T18:05:44.543856+00:00"
+}

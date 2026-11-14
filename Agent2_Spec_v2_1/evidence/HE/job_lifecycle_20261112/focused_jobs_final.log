@@ -1,0 +1,28 @@
+test_client_lost_submit_reply_reuses_receipt_key (test_node_jobs.DurableFlowTests.test_client_lost_submit_reply_reuses_receipt_key) ... ok
+test_client_resume_same_receipt_does_not_recompute (test_node_jobs.DurableFlowTests.test_client_resume_same_receipt_does_not_recompute) ... ok
+test_completed_result_and_idempotency_survive_node_restart (test_node_jobs.DurableFlowTests.test_completed_result_and_idempotency_survive_node_restart) ... ok
+test_concurrent_repeated_clicks_create_one_job (test_node_jobs.DurableFlowTests.test_concurrent_repeated_clicks_create_one_job) ... ok
+test_expired_inference_can_only_fetch_existing_ciphertext_with_fresh_node_signature (test_node_jobs.DurableFlowTests.test_expired_inference_can_only_fetch_existing_ciphertext_with_fresh_node_signature) ... ok
+test_get_job_and_result_require_current_company_permission (test_node_jobs.DurableFlowTests.test_get_job_and_result_require_current_company_permission) ... ok
+test_job_is_not_readable_through_other_company_url (test_node_jobs.DurableFlowTests.test_job_is_not_readable_through_other_company_url) ... ok
+test_lost_worker_reply_and_node_restart_use_saved_key_without_exporting_again (test_node_jobs.DurableFlowTests.test_lost_worker_reply_and_node_restart_use_saved_key_without_exporting_again) ... ok
+test_received_ciphertext_checkpoint_resumes_decrypt_without_network (test_node_jobs.DurableFlowTests.test_received_ciphertext_checkpoint_resumes_decrypt_without_network) ... ok
+test_saved_he_key_recovers_outage_after_node_restart (test_node_jobs.DurableFlowTests.test_saved_he_key_recovers_outage_after_node_restart) ... ok
+test_submit_poll_result_and_persisted_phase_history (test_node_jobs.DurableFlowTests.test_submit_poll_result_and_persisted_phase_history) ... ok
+test_changed_request_conflicts (test_node_jobs.JobStorageTests.test_changed_request_conflicts) ... ok
+test_ciphertext_tamper_fails_closed (test_node_jobs.JobStorageTests.test_ciphertext_tamper_fails_closed) ... ok
+test_copying_checkpoint_to_another_job_fails_aad (test_node_jobs.JobStorageTests.test_copying_checkpoint_to_another_job_fails_aad) ... ok
+test_duplicate_create_is_persistently_one_job (test_node_jobs.JobStorageTests.test_duplicate_create_is_persistently_one_job) ... ok
+test_missing_master_key_never_generates_new_key_or_database (test_node_jobs.JobStorageTests.test_missing_master_key_never_generates_new_key_or_database) ... ok
+test_new_nonce_for_each_update (test_node_jobs.JobStorageTests.test_new_nonce_for_each_update) ... ok
+test_other_actor_company_and_tenant_cannot_read_job (test_node_jobs.JobStorageTests.test_other_actor_company_and_tenant_cannot_read_job) ... ok
+test_phase_metadata_is_authenticated (test_node_jobs.JobStorageTests.test_phase_metadata_is_authenticated) ... ok
+test_request_and_key_not_plaintext_in_database (test_node_jobs.JobStorageTests.test_request_and_key_not_plaintext_in_database) ... ok
+test_restart_pauses_pending_until_current_authorization (test_node_jobs.JobStorageTests.test_restart_pauses_pending_until_current_authorization) ... ok
+test_second_node_cannot_own_same_state (test_node_jobs.JobStorageTests.test_second_node_cannot_own_same_state) ... ok
+test_wrong_master_key_fails_without_rewriting_jobs (test_node_jobs.JobStorageTests.test_wrong_master_key_fails_without_rewriting_jobs) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 103.369s
+
+OK

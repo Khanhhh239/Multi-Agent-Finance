@@ -1,0 +1,285 @@
+{
+  "kind": "CR-013 durable company fit/score evidence",
+  "files": [
+    {
+      "path": "agent2/docs/COMPANY_MODEL_JOBS.md",
+      "sha256": "1e0182567bc6defd02ea77c81d0ba2a2ac8aab662a096142e832f45fc6f79add"
+    },
+    {
+      "path": "agent2/docs/METHOD_OUTPUTS.md",
+      "sha256": "6573cbe5f64acb2354ecb04c5a58ca494a841e8ba0c652d2c9ef0cdc1a5dad9c"
+    },
+    {
+      "path": "agent2/README.md",
+      "sha256": "aad54fbf4fe481cd4e31173b5f8f298ce8ea8066d5542984a93f8e275725ab7f"
+    },
+    {
+      "path": "agent2/scripts/demo_company_models.py",
+      "sha256": "8e32ea31daff1416eb9ac4c0a894da5e963f5a8fc9284fbde2541902d5ccdaac"
+    },
+    {
+      "path": "agent2/sme_fraud/auth.py",
+      "sha256": "347cb963ee04a0296cd34489ecd54b2c6f491fc69226a1f36cd8e4346a9359e4"
+    },
+    {
+      "path": "agent2/sme_fraud/method_adapters.py",
+      "sha256": "c4b9b54eb3e503ef13e095d218934cb2fc61b6b3501ea533c6bf6044bda7c18a"
+    },
+    {
+      "path": "agent2/sme_fraud/method_jobs.py",
+      "sha256": "78175fb9307b3377f0ac1cf76435b182ee35cd7519389beebe89c5295df287d8"
+    },
+    {
+      "path": "agent2/sme_fraud/method_preprocess.py",
+      "sha256": "1d2244c3e0bae3ba6c82f557db52a4c5e6831cdff53851671809a8897c02e7ba"
+    },
+    {
+      "path": "agent2/sme_fraud/method_storage.sql",
+      "sha256": "5d4b8f79484f5b70138cc8ab4b3959e8b1001a15a59025726f2f5976918459ac"
+    },
+    {
+      "path": "agent2/sme_fraud/method_store.py",
+      "sha256": "628a8c56d649103184634154aa04b3a9e3e3707e17fb5125604fcbabfbf1c0d8"
+    },
+    {
+      "path": "agent2/tests/test_method_jobs.py",
+      "sha256": "7c0232cef48f108b0b1af7ab9c4d88cd5d8b38d5bf2ed8bfbc67cf0b1444d60f"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/04_contracts_states_modules.md",
+      "sha256": "b539739dd2522e68834a110c30d450bdab045063eb5fde41dce54bd7ca716872"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/98_PROGRESS.md",
+      "sha256": "b9a85f84a065b410e4e01ea0a18a5c7f21fe384fe529281fe13c8434d0c1caf9"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/99_decision_log.md",
+      "sha256": "01c1bc1b3a2b2e3f77cc206f2e5fa104b6f494f68b302f3f56a2ffb74dbdd852"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/CHANGE_REQUESTS.md",
+      "sha256": "aaa94cf372abd784a9b3c856c5971fad9da4db56a26d7b991352bbeaee935269"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/adapter_map.csv",
+      "sha256": "4bb8695efd483d582e8b8e3fc202866d9d5081ad8fe82decd3ef684110ba1ab6"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/auth_focused_tests.json",
+      "sha256": "cd13018862e03504a664bd741646190f192150943420a1658939630e99c98f78"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/auth_focused_tests.log",
+      "sha256": "67ee9e104832275ecc80226b622144d5d1ce5d4d85dc610d672019af784c68e9"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/config_validation_failure.json",
+      "sha256": "2633f5c8f9c49f2fadabff6fcc69b7233691975c376e77911f5d04f8fbb9a5fb"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/config_validation_failure.log",
+      "sha256": "08f6e090eb1455ad8c5709eac1c1fc511518b2a81aad3b916f96b2d113b808f3"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/C001-artifacts.json",
+      "sha256": "6fb68b994045057d21bb0b9b5c68ca2d32c6a0ec8eb15add7b84cceea9fde5e9"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/C001-fit-config.json",
+      "sha256": "06859a147554440ae43ac5a1c3ba8d400f4dab406c6c9fb06b4d72b7bfc7a0f9"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/C001-fit.json",
+      "sha256": "b747124a31b992989a7a3ed80ba6216574a672303a733f434cbb7f78c67b4bb7"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/C001-fit.log",
+      "sha256": "43974378700c324a9629c836f17f5fca6ce0311d8c547a15e461ed0859dd8dc8"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/C001-score.log",
+      "sha256": "f051b3e24d9e064201e20af2e10c30afe34dc9489d1cfaf6f831065a187f9880"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/C001-scores.json",
+      "sha256": "6c77dbbb8b62202adfdd86deedcc429d57d033d70abab02b06a85318af3479aa"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/C002-artifacts.json",
+      "sha256": "ba1b764ed8b792cf2f69534a77befbee0aebeeea414639c93775e5b1cfa04792"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/C002-fit-config.json",
+      "sha256": "5a160c9e920508f7bd55a77d40ef9486413ade12ee51c566c389b3dc3c1dafea"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/C002-fit.json",
+      "sha256": "bde0124ed54c877d7e2df6b564db6b9acfdc07b4b10cffe49d9144e05c0d2323"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/C002-fit.log",
+      "sha256": "532813da2cb652ceadf18dcbb3b99de0f03af6906556fc0530fbb5dbefefdeb9"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/C002-score.log",
+      "sha256": "882b5ccfa1abc8a345b606c022e620076c8e5e27853d70c1f9d7b85d20b1d958"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/C002-scores.json",
+      "sha256": "bf0d948605c45527c6dbd8f54eba454d7166152f378a8842449deb27592f6963"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo/summary.json",
+      "sha256": "64ed40840136b7b67c050a1b26f4a070deae767f8c2b66d454d0a2a128365c4b"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo.log",
+      "sha256": "c5fcf3947912e99e81720d22ed052d00f64ade45ae5be6a1396c5beab3d71ce1"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/C001-artifacts.json",
+      "sha256": "2ad6a2a6ce4919cdce8c4a7daf7848b1bf07f652ccbf128af485b4209bdc2dc4"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/C001-fit-config.json",
+      "sha256": "06859a147554440ae43ac5a1c3ba8d400f4dab406c6c9fb06b4d72b7bfc7a0f9"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/C001-fit.json",
+      "sha256": "5fcffbebc8de29523b0663fe2feb7d66d5f9ee6ab65ba664e69a6ba8ed793747"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/C001-fit.log",
+      "sha256": "fbd509aafe586769a875d2b0f4b646e7e55886cd95626da31800da36274e5973"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/C001-score.log",
+      "sha256": "9b4a5a8224faa74a16033d505576c9d954e16b7252fed85defe363e70a980e7a"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/C001-scores.json",
+      "sha256": "eb187c4fe5c8706aa7522bbba878b9e338d89e4c1f48939f2990d2b1d91d2165"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/C002-artifacts.json",
+      "sha256": "d9ffcfdc68b7d19fe86cd33c5781e57f17d9e19183bee5b04aad1cb9454fd535"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/C002-fit-config.json",
+      "sha256": "5a160c9e920508f7bd55a77d40ef9486413ade12ee51c566c389b3dc3c1dafea"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/C002-fit.json",
+      "sha256": "99ad0cc383c2ef026c03b31490c0828b98869f62387fa28a2e8e1971912beca2"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/C002-fit.log",
+      "sha256": "444b1cdaaf976cb8fa43c4ba1b59678e15c30b55358744a0d210022e00a7de79"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/C002-score.log",
+      "sha256": "b26bd3379ad96837a5950be0055084d70b6337d68d34040a78ef18894dbd207a"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/C002-scores.json",
+      "sha256": "5f29ed846ace787ed6363b4e6f94a5a9e639098f87b58bcabe2e7c08a9149bcf"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final/summary.json",
+      "sha256": "da3b8b170eda964dc655c5afd80cd4b37efa45d98384b27bf5e4f5f75ee16f73"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/demo_final.log",
+      "sha256": "172992a4da8689af71d8b0ecef2fb19bd11761f64f511307593220971981270f"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/focused_tests.json",
+      "sha256": "4f674aee645c0e95ea5424eaf50b376bac30248364524a3f4e846757baa481dc"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/focused_tests.log",
+      "sha256": "22ca609e547ad4355a38d41ab9bcc0b9cf25ace76d6594e7cf344a2aeaa0e9eb"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/initial_method_jobs.py",
+      "sha256": "22361f724e9b1a5ea6ff8ef193ffc6f49743047e49eac163d5de95bca0cf43bb"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/initial_tests.json",
+      "sha256": "9bb390c4062902cd1957ebd93b5ecbf918c8beabd71b8dee30e4971313852723"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/initial_tests.log",
+      "sha256": "36424f2ea14f9822cd2590d6970690f2fba3165159bec4fe7e179cd9bb4aba01"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/job_checks.json",
+      "sha256": "98ed4b79702f72cbad6f3f816ce1fd3b4623de6051b52ddc25c5eb3c98eb7084"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/native_tests.json",
+      "sha256": "5235aaa717a87bff1c7cdc781a005e29fb2b7da2f6b514066c44150232d58840"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/native_tests.log",
+      "sha256": "89d1464173440741c1d55be75251d70aa389b3edd1a2171f58e0a789a0457131"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/parity_report.json",
+      "sha256": "b37d13ddf5665f1b4a66d0aebe71a9f46aa9d2af721dae83ca6cae18229f625c"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/preservation.json",
+      "sha256": "9de50dae559d12ecef0a88443c59b91044e717e2ca1240a5b04dd096337c5281"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/prior_R2_adapter_map.csv",
+      "sha256": "dd40e2053f36a4ac13ed21b9d38f5394872f2a35cb9beb69cb46f3b024dd42ef"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/prior_R2_artifact_manifest.json",
+      "sha256": "79aaa0fdb7a6cbc53aeb900f330beb5bb7c9042bd22da38c0ef5d09e9b8832ce"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/prior_R2_fit_manifest.json",
+      "sha256": "f769d820c1c9a0000a556fb951ad5a74bc01523b67974574ebd62c2ea590ba32"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/prior_R2_parity_report.json",
+      "sha256": "b37d13ddf5665f1b4a66d0aebe71a9f46aa9d2af721dae83ca6cae18229f625c"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/prior_R2_provenance.json",
+      "sha256": "218eeb127986b01d4a4fbfa4fe31747380370f1aee6959a63062bddce17a4cb1"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/prior_R2_REPORT.md",
+      "sha256": "21872ff32552bb8d6481bd0d773ae3093c7d64bf30829f7a8f08084d745dcd35"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/provenance.json",
+      "sha256": "3e0943f798b60a694d31295998a8be90e085bbc04d430fd61e0ca7d31eb16bbc"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/company_fit_20261111/REPORT.md",
+      "sha256": "d4c5c47de5bbfcb4b7953286fba1d159ee8e42c0b8de749b4a1d213ff2fcff7d"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/fit_manifest.json",
+      "sha256": "0b04183b3f9f802cd4f96cedbff1da9bb03ace432431243046ffba740f6a2aed"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/parity_report.json",
+      "sha256": "b37d13ddf5665f1b4a66d0aebe71a9f46aa9d2af721dae83ca6cae18229f625c"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/evidence/R2/REPORT.md",
+      "sha256": "854b38dbaaae6bee390f7feced8a77e4e854f25b7a8367fe932dd9acd0fa4037"
+    },
+    {
+      "path": "Agent2_Spec_v2_1/SHA256SUMS",
+      "sha256": "581a1872f3d7336e7e86100af4e510eae53eaf044a1023afa11fc34310881302"
+    }
+  ]
+}

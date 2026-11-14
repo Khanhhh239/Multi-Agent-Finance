@@ -1,0 +1,15 @@
+{
+  "actual_fhe": true,
+  "authenticated_http": true,
+  "coordinator_terminated_during_native_compute": true,
+  "same_admitted_envelope": true,
+  "same_saved_private_context": true,
+  "private_context_hash": "7e062614458b26293a87fe872828279f8bd73c028e549422e37ffbcdfda3a0c4",
+  "one_parent_job": true,
+  "same_ml_child": true,
+  "all_four_statuses": true,
+  "concrete_logical_jobs": 2,
+  "supervisor_preflight_mocked": true,
+  "simulated_data": true,
+  "seconds": 535.3439999999973
+}

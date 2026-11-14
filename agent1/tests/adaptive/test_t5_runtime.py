@@ -219,7 +219,7 @@ def test_api_import_settlement_forecast_records_and_export_are_connected(client)
     assert result.status_code==200,result.text
     plan=result.json()
     assert plan['weeks'][0]['balance']==1000
-    assert plan['band_protocol']=='settlement-partial-paths-v2'
+    assert plan['band_protocol']=='settlement-partial-paths-v4'
     export=load_workbook(BytesIO(workbook_bytes(plan,'SME')))
     assert export['Nghĩa vụ T5'].max_row==3 and export['Thanh toán T5'].max_row==2
     assert export['Hoàn thuế theo lịch'].max_row==2

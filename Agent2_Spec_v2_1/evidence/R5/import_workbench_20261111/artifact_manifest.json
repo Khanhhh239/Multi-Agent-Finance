@@ -1,0 +1,60 @@
+{
+  "change_request": "CR-024",
+  "artifacts": [
+    {
+      "path": "01-preview.png",
+      "sha256": "31438d57f4a4d6af8fcd793108611be578da7891433cfc4497ab57d2a856bb33",
+      "bytes": 104911
+    },
+    {
+      "path": "02-results.png",
+      "sha256": "436dd9455de6db22954daa30454fcd46796070717556fa00b703a76698f70a2e",
+      "bytes": 375441
+    },
+    {
+      "path": "03-mobile.png",
+      "sha256": "a86ec77fe8cb8b882effd7737fea866b99e3899561c38b257a7c0acf3ec3af19",
+      "bytes": 53243
+    },
+    {
+      "path": "04-live-results.png",
+      "sha256": "13f1574bdc2e65ec80b2f48a3bb5c1d61b4fb9d0eae0ccbf68014ce9cdc09d78",
+      "bytes": 250266
+    },
+    {
+      "path": "browser_tests.json",
+      "sha256": "096bbd73695b48da7d56aacc1512b4d53ce5312feae2148fa3831df99aa5fc0f",
+      "bytes": 2247
+    },
+    {
+      "path": "live_summary.json",
+      "sha256": "c59c1fe8e694ba9545702c28ce5d545b3285834fed724e049e7ab247c533ab8a",
+      "bytes": 618
+    },
+    {
+      "path": "native_tests.json",
+      "sha256": "df58b204bb778f8f39904a303777521c6d37f3640d4e6549988355f10c01d2c8",
+      "bytes": 190220
+    },
+    {
+      "path": "native_tests.log",
+      "sha256": "b7e4f3a21c4168ece25473fb3f7febf6bb4453bf27cf8e6effa0765cef8db89f",
+      "bytes": 119051
+    },
+    {
+      "path": "preservation.json",
+      "sha256": "9ad9a8d19cb805275f32ab5f498b0734b322a646078b9a4e5a96d171497f3326",
+      "bytes": 2822
+    },
+    {
+      "path": "provenance.json",
+      "sha256": "1194fb59fdbbfdce097405c21494938229d42879182c682771669ccc57776b10",
+      "bytes": 3641
+    },
+    {
+      "path": "REPORT.md",
+      "sha256": "19c2d5b7f9816870b1de73b76ef01eeee7e533813d7a418c3415de7815c31b49",
+      "bytes": 4636
+    }
+  ]
+}

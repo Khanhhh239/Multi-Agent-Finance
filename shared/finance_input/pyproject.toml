@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "finance-input-contracts"
+version = "1.2.0"
+description = "Scoped, versioned financial input contracts shared by agent profiles"
+requires-python = ">=3.11"
+dependencies = ["jsonschema>=4.23,<5"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+finance_input = ["*.json"]

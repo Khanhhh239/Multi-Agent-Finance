@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "D:\\agent22\\agent2\\.venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-u",
+    "-B",
+    "Agent2_Spec_v2_1/scripts/check_evidence.py",
+    "R1"
+  ],
+  "exit_code": 0
+}

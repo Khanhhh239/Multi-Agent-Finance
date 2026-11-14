@@ -1,0 +1,26 @@
+{
+  "source_sha256": {
+    "agent2/experiments/he_inference/worker_store.py": "a5a822c485fe171203a3af63ac61c130e1ae47180be23ebe0683cfecbc897562",
+    "agent2/experiments/he_inference/worker_server.py": "6cdbabd374f132c676ff55c2d0b5b56a05270864abb6356380d196c9449976b3",
+    "agent2/experiments/he_inference/cloud_worker.py": "55682e3af86cf05776443682d423b396bc8a16a96ab70e94e42e930c828d229a",
+    "agent2/experiments/he_inference/services_demo.py": "83ccdf18c4a4d33cbf54855eaff525ea09a6b22720ab8d21a778b5d18d62a844",
+    "agent2/tests_he/test_worker_recovery.py": "9077cdaf90d32d7b45a18f125fa39ae9f1d7e80b6c60b3a152b14718912a1d2c",
+    "agent2/tests_he/test_services.py": "e0b4cd4d6c18444f44237b942d8e4c0b0d356af3c3d35cb73e4578904cd3b7fe",
+    "agent2/tests_he/test_node_jobs.py": "766d1e56978806e0f94da675a94598cbb0ee7b3f5685f5e1e4e18fcc00efe09f",
+    "agent2/tests_he/test_prepared_demo.py": "3214d26854afadd88aedf6fd3b06a9304739d33ae4c5e81f6274509c1eba3673",
+    "agent2/scripts/test_managed_worker_interruption.py": "85b2759aa9b8b4632e6eeee8115e7a68e7942ecdcfb2ee802522b506abc8d19d",
+    "agent2/experiments/he_inference/benchmark.py": "07c7ef1394a7d202a115f07459dedc6f9200dde271233a283d9ee6265970c8e8",
+    "agent2/experiments/he_inference/comparison_report.py": "3242fba6de653f8717f3b122842cb51fc262f04da9d7699d8cb5012a08683a3c"
+  },
+  "final_he": "he_final_tests.json",
+  "initial_he": "he_tests.json: 201 pass, one direct-process test boundary error; no production guard relaxed",
+  "native": "native_tests.json",
+  "browser": "browser/summary.json",
+  "comparison": "comparison/comparison.json",
+  "changed_source_scope": "worker ownership/replay/cache recovery plus test/support/reporting; business kernels/models/keys unchanged",
+  "full_he_count": 202,
+  "native_count": 742,
+  "recovery_subset": 21,
+  "live_ui_auth_retested": false,
+  "live_deployment": "deployment.json; owned worker signed readiness, schema/cache preservation; Portal not restarted"
+}

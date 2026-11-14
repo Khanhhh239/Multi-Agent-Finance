@@ -1,0 +1,104 @@
+{
+  "count": 24,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "tests": [
+    {
+      "id": "test_workspace_api.BusinessProjection.test_csv_keeps_negative_adjustment_and_escapes_user_text",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.BusinessProjection.test_new_unknown_model_fields_never_reach_accountant_result",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.WorkspaceAPI.test_case_view_preserves_all_rows_and_keeps_feedback_unverified",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.WorkspaceAPI.test_feedback_and_download_reflect_server_save_and_request_replay",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.WorkspaceAPI.test_missing_session_other_company_query_and_unlisted_export_are_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.WorkspaceAPI.test_overview_has_company_data_and_existing_runs_without_model_configuration",
+      "status": "pass"
+    },
+    {
+      "id": "test_workspace_api.WorkspaceAPI.test_pending_progress_has_source_and_counts_but_no_private_inputs",
+      "status": "pass"
+    },
+    {
+      "id": "test_review_api.ReviewAPI.test_client_cannot_replace_pinned_evidence",
+      "status": "pass"
+    },
+    {
+      "id": "test_review_api.ReviewAPI.test_review_round_trip_and_replay",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_backend_not_enabled_returns_explicit_unavailable",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_catalog_preflight_does_not_deserialize_or_fit_models",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_client_cannot_choose_model_key_or_asof",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_dataset_catalog_scoped_checksums_and_no_model_metadata",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_duplicate_pins_are_not_silently_chosen",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_foreign_snapshot_cannot_be_submitted",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_history_uses_business_mode_for_accountant",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_missing_artifact_disables_analysis_in_catalog",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_missing_company_pin_disables_analysis",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_no_session_and_cross_company_requests_are_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_portal_rejects_unknown_he_routes_and_queries",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_portal_serves_page_and_script_without_exposing_keys",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_real_he_result_reuses_same_job_and_five_rows",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_request_requires_idempotency_before_creating_job",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_resume_requires_empty_body_and_owned_job",
+      "status": "pass"
+    }
+  ]
+}

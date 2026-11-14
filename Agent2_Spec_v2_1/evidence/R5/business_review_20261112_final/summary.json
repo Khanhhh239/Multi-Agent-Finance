@@ -1,0 +1,88 @@
+{
+  "status": "arithmetic_reconciled_open_business_findings",
+  "primary_transactions": 5,
+  "probe_transactions": 1,
+  "source_kind": "synthetic_only",
+  "checks": 56,
+  "all_checks_passed": true,
+  "findings": 3,
+  "main_snapshot": {
+    "snapshot_version": "1.0.0",
+    "snapshot_id": "snp_60b31ae7a00b456fa845113e22e03197",
+    "tenant_id": "demo",
+    "company_id": "C001",
+    "contract_version": "1.1.0",
+    "data_checksum": "eb3dc0965c4e670c8f040e8787691f07903c9c26fb7a3c64e97c5c6a6e8184f9",
+    "source_hash": "677ce00defe56f66a7a35d88bfdd491a6339122946c896fc348ebfbee7e64bd8",
+    "mapping_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "versions": {
+      "protocol_version": "1.0.0",
+      "parser_version": "json-record-columns/1.1.0",
+      "contract_version": "1.1.0",
+      "schema_sha256": "20fcc891677308c0a8394403deff337d52f722315fe6d75b5d5438cb3351ce22",
+      "supported_contract_versions": [
+        "1.0.0",
+        "1.1.0"
+      ],
+      "schema_hashes": {
+        "1.0.0": "049997d76a1ab977d83f0230388605486f4eddd077fa1ad5045406aa9009a453",
+        "1.1.0": "20fcc891677308c0a8394403deff337d52f722315fe6d75b5d5438cb3351ce22"
+      },
+      "validator_version": "1.2.0",
+      "profile_version": "agent2-posted-vnd/1.1.0",
+      "report_version": "1.2.0",
+      "parser_fingerprint": "c370a5e2d5b9108c32aa6ff62b40a5b120736030a5960c22e7977ab86cba21ea",
+      "jsonschema_version": "4.26.0",
+      "validator_fingerprint": "8d8ae0df3002bb59d7046aaf6244c2eb97d99fd2c7c54b7b1987d1966abf68f0"
+    },
+    "origin_import_id": "imp_6e48d67d50b44be499680da4239212e9",
+    "origin_revision": 1,
+    "origin_preview_id": "prv_3e36408790454ef88fd23baeff2390a8",
+    "origin_report_hash": "231b810996c7ee237affc7b16bab23ad5876a295be699d1f5fb97d08f64e3dd8",
+    "created_at": "2026-11-11T18:36:55.920454+00:00",
+    "created_by": "portal-reviewer",
+    "checksum": "46100a860ef08ee93e949abc8913a6201f8fff488b9be32572b521973c9e1c3f"
+  },
+  "probe_snapshot": {
+    "snapshot_version": "1.0.0",
+    "snapshot_id": "snp_3b26e807f4674d6cbf30d9db96647e4f",
+    "tenant_id": "demo",
+    "company_id": "C001",
+    "contract_version": "1.1.0",
+    "data_checksum": "d56f9b2316f5e527224f876f0ad3330e96c095450e375d6a111b3f2d3ce722a2",
+    "source_hash": "856fe7ab26c74df79d4fd28f2e9f46e7f812ebcde4c0f4ae8aaa8487d5b41a72",
+    "mapping_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "versions": {
+      "protocol_version": "1.0.0",
+      "parser_version": "json-record-columns/1.1.0",
+      "contract_version": "1.1.0",
+      "schema_sha256": "20fcc891677308c0a8394403deff337d52f722315fe6d75b5d5438cb3351ce22",
+      "supported_contract_versions": [
+        "1.0.0",
+        "1.1.0"
+      ],
+      "schema_hashes": {
+        "1.0.0": "049997d76a1ab977d83f0230388605486f4eddd077fa1ad5045406aa9009a453",
+        "1.1.0": "20fcc891677308c0a8394403deff337d52f722315fe6d75b5d5438cb3351ce22"
+      },
+      "validator_version": "1.2.0",
+      "profile_version": "agent2-posted-vnd/1.1.0",
+      "report_version": "1.2.0",
+      "parser_fingerprint": "c370a5e2d5b9108c32aa6ff62b40a5b120736030a5960c22e7977ab86cba21ea",
+      "jsonschema_version": "4.26.0",
+      "validator_fingerprint": "8d8ae0df3002bb59d7046aaf6244c2eb97d99fd2c7c54b7b1987d1966abf68f0"
+    },
+    "origin_import_id": "imp_dbad3fa83c1744eb90f84a11c54583b2",
+    "origin_revision": 1,
+    "origin_preview_id": "prv_870743fab3254c2c9637d655f5c9458c",
+    "origin_report_hash": "c86bfcdf8150bf6388fdecb0406a7dbb428a417e20bb24d640dd744251ea124a",
+    "created_at": "2026-11-11T18:37:04.382231+00:00",
+    "created_by": "portal-reviewer",
+    "checksum": "7f87a6dda3a7c04e87c0d5184cc64cc3381c7aece61f9f058cf951f0a20e1a92"
+  },
+  "live_services_touched": false,
+  "production_data_written": false,
+  "original_documents_verified": false,
+  "human_business_signoff": false,
+  "rule_model_or_UI_changed": false
+}

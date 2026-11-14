@@ -1,0 +1,14 @@
+{
+  "status": "passed_local_technical",
+  "date": "2026-11-14",
+  "backend_tests": 61,
+  "related_he_tests": 17,
+  "ui_checks": 10,
+  "canonical_feature_fingerprint": "750e47dac572ad4a07bd308526ca382acda0c90d62b5440236ed9b34c1423d6c",
+  "bridge_feature_fingerprint": "b6a7c2fcf47c905c83ed7ed542e42329742b196be91a1e356b12c6cc83edcfc5",
+  "bridge_code_unchanged": true,
+  "live_model_artifacts_unchanged": 4,
+  "live_key_files_unchanged": true,
+  "portal_backend_restarted": false,
+  "live_login_acceptance": false
+}

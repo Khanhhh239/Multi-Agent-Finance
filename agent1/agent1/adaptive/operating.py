@@ -1,11 +1,23 @@
 """Weekly direct sales and variable expenses on reconciled statements only."""
 
+import hashlib
 import os
+import pickle
 from datetime import date, timedelta
 import numpy as np
 from sklearn.ensemble import HistGradientBoostingRegressor
 from .cash_history import weekly_cash
 from .data import account_scope
+
+
+def operating_identity(component):
+    """Persisted fit identity survives estimator serialization and alias changes."""
+    if not component:
+        return None
+    return dict(version=component.get("version"), name=component.get("name"),
+                accounts=sorted(component.get("accounts", [])),
+                fitted_through=component.get("fitted_through"),
+                ready_on=component.get("ready_on"))
 
 
 def available_history(data, clock, accounts):
@@ -109,6 +121,7 @@ def predict_candidate(name, model, y, gap=0):
 
 
 def select_operating(data, asof, try_deep=False, *, include_new_credit=True):
+    ready_on = str(date.fromisoformat(asof))
     accounts = account_scope(data, asof)
     if not accounts:
         return None
@@ -180,7 +193,9 @@ def select_operating(data, asof, try_deep=False, *, include_new_credit=True):
         name = "seasonal"
     from .new_credit import select_credit
 
-    return dict(
+    result = dict(
+        fitted_through=asof,
+        ready_on=ready_on,
         name=name,
         model=fit_candidate(name, y),
         accounts=accounts,
@@ -191,3 +206,8 @@ def select_operating(data, asof, try_deep=False, *, include_new_credit=True):
         unavailable=unavailable,
         credit=select_credit(data, asof, accounts) if include_new_credit else None,
     )
+    # Hash once at fit time, then retain the ID with the artifact. Re-pickling a
+    # loaded sklearn estimator can change bytes despite identical parameters.
+    # This fit ID covers model, residual law, scope and the optional credit head.
+    result["version"] = "operating:" + hashlib.sha256(pickle.dumps(result, protocol=4)).hexdigest()
+    return result

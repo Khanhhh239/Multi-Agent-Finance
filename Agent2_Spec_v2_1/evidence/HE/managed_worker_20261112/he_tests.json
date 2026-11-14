@@ -1,0 +1,644 @@
+{
+  "count": 159,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "tests": [
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_bad_client_signature",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_ciphertexts_are_randomized",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_company_contexts_and_models_are_distinct",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_company_mismatch",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_context_hash_is_pinned",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_disabled_policy",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_duplicate_json_fields",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_evaluation_before_history_is_rejected_before_key_creation",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_existing_other_database_is_not_migrated",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_expiry",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_input_domain",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_key_epoch_mismatch",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_lifetime_bound",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_missing_nonfinite_bool_features_are_not_zero",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_model_ciphertext_is_pinned",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_model_mismatch",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_no_fit_or_decrypt_is_called_by_evaluation",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_original_clear_circuit_and_real_encrypted_worker_match_two_companies",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_packet_tamper_is_rejected_before_native_parse",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_plaintext_field_is_rejected_even_with_valid_signature",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_private_context_is_rejected_even_if_trusted_hash_is_misconfigured",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_public_worker_context_cannot_decrypt",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_query_before_evaluation",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_replay_persists_across_worker_calls",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_result_can_only_be_opened_once",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_result_from_other_company_is_rejected_before_decryption",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_result_from_other_request_is_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_result_tamper_never_reaches_decryption",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_row_budget",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_tenant_mismatch",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_unsupported_profile",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_worker_environment_does_not_forward_enterprise_secrets",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_worker_process_does_not_import_enterprise_or_sklearn",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_inference.EncryptedInferenceTests.test_zero_and_domain_boundary_with_maximum_batch",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_current_user_fresh_process_can_unprotect_with_sanitized_environment",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_dpapi_roundtrip_never_stores_plain_key",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_existing_key_file_is_never_overwritten",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_migration_keeps_old_jobs_and_idempotency_readable",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_missing_key_is_not_created",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_plaintext_key_is_rejected_in_protected_mode",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_protected_provider_unavailable_does_not_fall_back",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_signing_public_key_survives_wrapping",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_strict_node_config_rejects_legacy_signing_key_before_serving",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_tampered_ciphertext_is_not_accepted",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_tampered_key_id_is_not_accepted",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_two_fresh_keys_are_distinct",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_unknown_provider_cannot_fall_back_to_plaintext",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_wrong_protected_key_does_not_rewrite_job_database",
+      "status": "pass"
+    },
+    {
+      "id": "test_key_manager.LocalKeyProtectionTests.test_wrong_purpose_is_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_managed_worker.ManagedWorkerTests.test_external_occupied_worker_port_is_not_adopted_or_stopped",
+      "status": "pass"
+    },
+    {
+      "id": "test_managed_worker.ManagedWorkerTests.test_invalid_dpapi_key_does_not_launch_services_or_overwrite_key",
+      "status": "pass"
+    },
+    {
+      "id": "test_managed_worker.ManagedWorkerTests.test_readiness_binds_fresh_challenge_scope_and_pinned_key_without_jobs",
+      "status": "pass"
+    },
+    {
+      "id": "test_managed_worker.ManagedWorkerTests.test_start_stop_restart_preserves_models_keys_and_completed_results",
+      "status": "pass"
+    },
+    {
+      "id": "test_managed_worker.ManagedWorkerTests.test_stop_start_preserves_pending_request_for_same_owner_resume",
+      "status": "pass"
+    },
+    {
+      "id": "test_managed_worker.ManagedWorkerTests.test_worker_loss_recover_keeps_pending_job_and_node",
+      "status": "pass"
+    },
+    {
+      "id": "test_managed_worker.ManagedWorkerTests.test_wrong_pinned_worker_key_never_starts_node_and_rolls_back_worker",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.DurableFlowTests.test_client_lost_submit_reply_reuses_receipt_key",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.DurableFlowTests.test_client_resume_same_receipt_does_not_recompute",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.DurableFlowTests.test_completed_result_and_idempotency_survive_node_restart",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.DurableFlowTests.test_concurrent_repeated_clicks_create_one_job",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.DurableFlowTests.test_expired_inference_can_only_fetch_existing_ciphertext_with_fresh_node_signature",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.DurableFlowTests.test_get_job_and_result_require_current_company_permission",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.DurableFlowTests.test_job_is_not_readable_through_other_company_url",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.DurableFlowTests.test_lost_worker_reply_and_node_restart_use_saved_key_without_exporting_again",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.DurableFlowTests.test_received_ciphertext_checkpoint_resumes_decrypt_without_network",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.DurableFlowTests.test_saved_he_key_recovers_outage_after_node_restart",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.DurableFlowTests.test_submit_poll_result_and_persisted_phase_history",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.JobStorageTests.test_changed_request_conflicts",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.JobStorageTests.test_ciphertext_tamper_fails_closed",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.JobStorageTests.test_copying_checkpoint_to_another_job_fails_aad",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.JobStorageTests.test_duplicate_create_is_persistently_one_job",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.JobStorageTests.test_missing_master_key_never_generates_new_key_or_database",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.JobStorageTests.test_new_nonce_for_each_update",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.JobStorageTests.test_other_actor_company_and_tenant_cannot_read_job",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.JobStorageTests.test_phase_metadata_is_authenticated",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.JobStorageTests.test_request_and_key_not_plaintext_in_database",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.JobStorageTests.test_restart_pauses_pending_until_current_authorization",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.JobStorageTests.test_second_node_cannot_own_same_state",
+      "status": "pass"
+    },
+    {
+      "id": "test_node_jobs.JobStorageTests.test_wrong_master_key_fails_without_rewriting_jobs",
+      "status": "pass"
+    },
+    {
+      "id": "test_prepared_demo.PreparedCompanyDemoTests.test_checker_uses_separate_state_while_web_node_is_running",
+      "status": "pass"
+    },
+    {
+      "id": "test_prepared_demo.PreparedCompanyDemoTests.test_each_company_has_five_evaluation_rows_and_own_model",
+      "status": "pass"
+    },
+    {
+      "id": "test_prepared_demo.PreparedCompanyDemoTests.test_enterprise_keys_are_dpapi_and_no_standalone_credentials_remain",
+      "status": "pass"
+    },
+    {
+      "id": "test_prepared_demo.PreparedCompanyDemoTests.test_exported_bytes_match_the_immutable_source_upload",
+      "status": "pass"
+    },
+    {
+      "id": "test_prepared_demo.PreparedCompanyDemoTests.test_opening_web_snapshot_store_keeps_locked_demo_valid",
+      "status": "pass"
+    },
+    {
+      "id": "test_prepared_demo.PreparedCompanyDemoTests.test_prepare_again_refuses_and_preserves_existing_keys_and_models",
+      "status": "pass"
+    },
+    {
+      "id": "test_prepared_demo.PreparedCompanyDemoTests.test_reopen_check_uses_saved_models_without_fit_and_keeps_job_ids",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_authorization_precedes_both_databases",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_batch_over_limit_is_not_truncated",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_changed_evaluation_without_new_job_is_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_cli_fresh_process_reads_registry_and_writes_local_result",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_cli_unsupported_model_writes_unavailable_not_scores",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_cloud_package_contains_no_private_registry_or_snapshot_identifiers",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_current_33_feature_contract_is_required",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_existing_ecod_is_unsupported_not_deserialized_or_converted",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_fingerprint_mismatch",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_fit_provenance_must_match_successful_job_before_load",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_history_rows_are_not_re_scored_as_new",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_missing_features_keep_all_rows_and_only_encrypt_eligible",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_missing_model_does_not_create_database_or_fit",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_missing_snapshot_does_not_create_database",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_model_payload_hash",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_model_version",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_mutating_package_does_not_mutate_pending_request",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_no_cross_company_artifact",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_no_cross_company_snapshot",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_offline_fit_idempotency_and_no_fit_with_reader",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_preprocess_hash",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_read_only_snapshot_adapter_refuses_writes",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_read_permission_does_not_require_model_fit",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_registry_model_two_companies_roundtrip_without_fit_or_db_writes",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_revoke_before_package",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_revoke_before_result_decryption",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_revoke_during_load",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_runtime_mismatch",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_seen_identity_later_date_is_excluded_but_other_rows_kept",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_selected_column_order",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_unknown_registry_version",
+      "status": "pass"
+    },
+    {
+      "id": "test_registry_export.RegistryExportTests.test_valid_later_model_does_not_score_before_its_evaluation_period",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_bad_content_type_and_oversized_body",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_cross_company_session_is_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_duplicate_node_request_returns_same_run_without_second_worker_job",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_evaluation_signature_tamper_is_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_expired_request_cannot_read_cached_ciphertext",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_grant_revocation_blocks_previously_registered_session",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_host_and_browser_origin_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_http_does_not_write_registry_or_snapshot",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_missing_and_unsupported_model_never_send_worker_job",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_missing_node_credential_is_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_node_rejects_caller_selected_worker_url",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_node_rejects_plain_feature_body",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_node_response_contains_no_technical_receipt_or_keys",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_partial_missing_data_keeps_five_rows",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_registration_signature_tamper_is_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_retry_lost_worker_response_reuses_original_ciphertext_and_node_key",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_revoke_reader_blocks_cached_plaintext_result",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_same_key_with_changed_source_reference_is_conflict",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_two_companies_receive_all_five_results_with_separate_processes",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_unknown_and_decryption_routes_do_not_exist_on_worker",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_unknown_company_is_denied_before_body",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_untrusted_provisioning_key_cannot_register_own_policy",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_worker_bundle_excludes_enterprise_models_data_and_decryption_code",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_worker_cached_ciphertext_survives_worker_restart",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_worker_does_not_accept_policy_from_evaluation_body",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_worker_rejects_raw_input_without_session",
+      "status": "pass"
+    },
+    {
+      "id": "test_services.SeparatedServicesTests.test_worker_url_is_loopback_only",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_backend_not_enabled_returns_explicit_unavailable",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_catalog_preflight_does_not_deserialize_or_fit_models",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_client_cannot_choose_model_key_or_asof",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_dataset_catalog_scoped_checksums_and_no_model_metadata",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_duplicate_pins_are_not_silently_chosen",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_foreign_snapshot_cannot_be_submitted",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_missing_artifact_disables_analysis_in_catalog",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_missing_company_pin_disables_analysis",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_no_session_and_cross_company_requests_are_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_portal_rejects_unknown_he_routes_and_queries",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_portal_serves_page_and_script_without_exposing_keys",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_real_he_result_reuses_same_job_and_five_rows",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_request_requires_idempotency_before_creating_job",
+      "status": "pass"
+    },
+    {
+      "id": "test_web_analysis.HEWebTests.test_resume_requires_empty_body_and_owned_job",
+      "status": "pass"
+    }
+  ]
+}
