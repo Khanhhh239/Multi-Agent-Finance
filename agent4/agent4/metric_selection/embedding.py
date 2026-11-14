@@ -28,6 +28,10 @@ _DIMENSION_NAMES = {
     "branch_code": "branch",
     "department_code": "department",
     "partner_code": "partner",
+    "aging_bucket": "aging bucket",
+    "salesperson_code": "salesperson",
+    "transaction_id": "transaction",
+    "component_unit": "component unit",
 }
 _UNSAFE_DOCUMENT = re.compile(
     r"\b(?:select|from|insert|update|delete|drop|with|alter|create|attach|truncate|pragma)\s+"

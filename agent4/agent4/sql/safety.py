@@ -103,6 +103,11 @@ def validate_sql_safety(
     )
     checks["tenant_scope_present"] = _scope_matches(
         bound, expected, runtime_context, warehouse_tenant_id
+    ) and all(
+        set(cap.get("required_roles", ())) <= set(runtime_context.get("roles") or ())
+        and set(cap.get("required_views", ())) <= set(runtime_context.get("allowed_views") or ())
+        for metric_id in expected.metric_ids
+        for cap in [catalog.get_capability(metric_id)]
     )
     if not all(checks.values()) or bound.contract_version != "bound-query.v1":
         raise _rejected(checks)

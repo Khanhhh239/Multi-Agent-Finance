@@ -43,6 +43,7 @@ class SelectionTrace:
     candidate_expanded: bool = False
     usage: dict[str, int] | None = None
     selection_cache_hit: bool | None = None
+    selection_draft: dict[str, Any] | None = None
 
     @property
     def recovery_triggered(self) -> bool:
@@ -253,11 +254,14 @@ async def _select_from_retrieval(
     elif trace.retrieved_metric_ids:
         allowed_views = set(auth_context["allowed_views"])
         candidates = []
-        for metric_id in trace.retrieved_metric_ids:
+        for row in retrieval["candidates"]:
+            metric_id = row["metric_id"]
             metric = catalog.get(metric_id)
             metric["supported_views"] = sorted(
                 allowed_views.intersection(metric["supported_views"])
             )
+            if row.get("mention_score", 0) > 0:
+                metric["matched_terms"] = row["matched_terms"]
             candidates.append(metric)
         examples = None
         if fewshot is not None:
@@ -285,6 +289,14 @@ async def _select_from_retrieval(
                 if exc.usage is not None and usage is not None:
                     trace.usage = {key: exc.usage[key] + usage[key] for key in usage}
 
+    # Record only the schema-checked status and IDs the model was allowed to see.
+    candidates = set(trace.retrieved_metric_ids)
+    draft_ids = draft["metric_ids"]
+    trace.selection_draft = {
+        "status": draft["status"],
+        "candidate_metric_ids": [metric_id for metric_id in draft_ids if metric_id in candidates],
+        "outside_candidate_count": sum(metric_id not in candidates for metric_id in draft_ids),
+    }
     with trace.measure("validation_ms"):
         try:
             validated = validate_metrics(draft, retrieval, catalog, auth_context, query_context)

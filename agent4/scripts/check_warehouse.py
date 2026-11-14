@@ -45,7 +45,7 @@ def catalog_results(
     for metric in MetricCatalog(canonical=True).list_metrics(
         approved_only=True, allowed_metrics=metric_ids
     ):
-        if not metric["verified_handler"]:
+        if not metric["verified_handler"] or metric["base_relation"] == "metric_query":
             continue
         for view in metric["supported_views"]:
             if metric["base_relation"] == "budget":

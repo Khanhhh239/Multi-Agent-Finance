@@ -439,6 +439,12 @@ def validate_semantic_plan_draft(
     scoped_filters = _scope_row_filters(filters, auth_context)
     catalog_hash = catalog.get_catalog_hash()
     capabilities = _capabilities(ids, validated_metrics, catalog, catalog_hash)
+    if any(
+        set(cap.get("required_roles", ())) - set(auth_context["roles"])
+        or set(cap.get("required_views", ())) - set(auth_context["allowed_views"])
+        for cap in capabilities
+    ):
+        raise _forbidden()
 
     if status == "needs_clarification":
         if question is None or not unresolved or reason is not None:

@@ -90,6 +90,27 @@ def stub_model(monkeypatch: pytest.MonkeyPatch):
 
 
 @pytest.mark.asyncio
+async def test_prompt_receives_only_longest_independent_mentions(stub_model) -> None:
+    calls = stub_model(_draft("net_margin_pct", "gross_profit"))
+    config = MetricSelectionConfig(
+        retrieval=RetrievalConfig(mode="lexical_only", mention_retrieval_enabled=True),
+    )
+    result = await select_metrics_with_recovery(
+        _query("Net profit margin and gross profit for 2025?"),
+        MetricCatalog(canonical=True),
+        auth_context={"allowed_views": ["mgmt"]},
+        config=config,
+    )
+
+    assert result["metric_ids"] == ["net_margin_pct", "gross_profit"]
+    table = json.loads(calls[0]["messages"][1]["content"])["candidates"]
+    by_id = {row[0]: row[table["fields"].index("matched_terms")] for row in table["rows"]}
+    assert by_id["net_margin_pct"] == ["net profit margin"]
+    assert by_id["gross_profit"] == ["gross profit"]
+    assert by_id.get("net_profit") is None
+
+
+@pytest.mark.asyncio
 async def test_empty_fallback_uses_only_visible_metrics(selection_catalog: MetricCatalog) -> None:
     auth = {
         "allowed_views": ["mgmt"],

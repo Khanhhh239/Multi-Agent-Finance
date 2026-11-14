@@ -32,6 +32,7 @@ from agent4.metric_selection.config import (
     ExpansionConfig,
     LLMSelectionConfig,
     MetricSelectionConfig,
+    RerankingConfig,
     RetrievalConfig,
     load_config,
 )
@@ -61,6 +62,7 @@ from agent4.metric_selection.index import (
 )
 from agent4.metric_selection.lexical import LEXICAL_INDEX_VERSION, lexical_retrieve
 from agent4.metric_selection.llm_selector import LLMMetricSelector
+from agent4.metric_selection.mentions import retrieve_mentions
 from agent4.metric_selection.orchestrator import orchestrate_retrieval
 from agent4.metric_selection.rerank import rerank_candidates
 from vals.run_eval import Prediction
@@ -489,6 +491,63 @@ class TestMetricRetrievalPipelineContracts:
 
 
 class TestOnlineRetrievalBoundaries:
+    def test_mentions_preserve_separate_profit_and_margin_requests(self) -> None:
+        query = query_intake(
+            {
+                "api_version": "v1",
+                "locale": "vi-VN",
+                "question": "Lợi nhuận gộp và biên lợi nhuận gộp tháng 8?",
+            }
+        )
+        result = orchestrate_retrieval(
+            query,
+            ProductionMetricCatalog(canonical=True),
+            auth_context={"allowed_views": ["mgmt"]},
+            config=MetricSelectionConfig(
+                retrieval=RetrievalConfig(
+                    mode="lexical_only",
+                    lexical_top_k=1,
+                    fusion_top_k=2,
+                    mention_retrieval_enabled=True,
+                ),
+                reranking=RerankingConfig(final_top_k=2),
+            ),
+        )
+        assert [(row["metric_id"], row["matched_terms"]) for row in result["candidates"]] == [
+            ("gross_margin_pct", ["biên lợi nhuận gộp"]),
+            ("gross_profit", ["lợi nhuận gộp"]),
+        ]
+        assert all("mention" in row["retrieval_sources"] for row in result["candidates"])
+
+    def test_mentions_filter_access_after_resolving_overlaps(self) -> None:
+        query = query_intake(
+            {"api_version": "v1", "locale": "en-US", "question": "Net profit margin in 2025?"}
+        )
+        result = orchestrate_retrieval(
+            query,
+            ProductionMetricCatalog(),
+            auth_context={"allowed_views": ["mgmt"], "allowed_metrics": ["net_profit"]},
+            config=MetricSelectionConfig(
+                retrieval=RetrievalConfig(mode="lexical_only", mention_retrieval_enabled=True),
+            ),
+        )
+        assert [row["metric_id"] for row in result["candidates"]] == ["net_profit"]
+        assert result["candidates"][0]["retrieval_sources"] == ["lexical"]
+        assert "matched_terms" not in result["candidates"][0]
+
+    def test_shared_mention_keeps_candidates_without_unique_evidence(self) -> None:
+        result = retrieve_mentions(
+            "Cost?",
+            [
+                {"metric_id": "cost_a", "label": "First cost", "aliases": ["cost"]},
+                {"metric_id": "cost_b", "label": "Second cost", "aliases": ["cost"]},
+            ],
+        )
+        assert [(row["metric_id"], row["score"]) for row in result["hits"]] == [
+            ("cost_a", 0),
+            ("cost_b", 0),
+        ]
+
     def test_dense_request_rejects_incompatible_embedding(self, tmp_path: Path) -> None:
         catalog = ProductionMetricCatalog()
         provider = ProductionEmbeddingProvider()

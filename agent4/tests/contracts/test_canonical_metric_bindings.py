@@ -20,12 +20,26 @@ from agent4.sql.safety import validate_sql_safety
 _BENCHMARK = Path(__file__).resolve().parents[2] / "data/eval/contract_benchmark_questions.jsonl"
 
 
-def test_canonical_catalog_has_all_registry_ids_and_only_22_visible_metrics(analyst_auth):
+def test_canonical_catalog_has_all_registry_ids_and_respects_view_scope(analyst_auth):
     catalog = MetricCatalog(canonical=True)
     assert all(catalog.contains(metric_id) for metric_id in REGISTRY)
     assert not catalog.get("experimental_cash_burn")["verified_handler"]
     visible = {metric["metric_id"] for metric in catalog.list_visible_metrics(analyst_auth)}
-    assert len(visible) == 22
+    with_tax = {**analyst_auth, "allowed_views": ["mgmt", "tax"]}
+    visible_with_tax = {metric["metric_id"] for metric in catalog.list_visible_metrics(with_tax)}
+    with_payroll = {**with_tax, "roles": [*with_tax["roles"], "payroll_viewer"]}
+    assert {metric["metric_id"] for metric in catalog.list_visible_metrics(with_payroll)} == {
+        *REGISTRY,
+        "budget_amount",
+    }
+    assert "payroll_summary" not in visible_with_tax
+    assert visible_with_tax - visible == {
+        "taxable_income",
+        "deductible_expenses",
+        "cit_estimate",
+        "mgmt_vs_tax_gap",
+        "vat_position",
+    }
     assert visible.isdisjoint(LEGACY_METRIC_IDS)
     for alias, canonical in LEGACY_METRIC_IDS.items():
         auth = {**analyst_auth, "allowed_metrics": [alias]}
@@ -47,7 +61,7 @@ def test_legacy_catalog_can_explicitly_select_canonical_metrics(analyst_auth):
     assert not catalog.validate_access("operating_expense", auth)
 
 
-@pytest.mark.parametrize("metric_id", ["gross_revenue", "free_cash_flow", "altman_z_score"])
+@pytest.mark.parametrize("metric_id", ["free_cash_flow", "altman_z_score"])
 def test_registered_metadata_is_rejected_before_sql(metric_id, analyst_auth):
     with pytest.raises(ContractError) as error:
         validate_metrics(

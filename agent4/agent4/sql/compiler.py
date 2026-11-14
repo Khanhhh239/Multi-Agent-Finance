@@ -6,6 +6,7 @@ import hashlib
 import json
 from collections.abc import Mapping
 from dataclasses import dataclass, field
+from datetime import timedelta
 from types import MappingProxyType
 from typing import Literal
 
@@ -15,6 +16,7 @@ from agent4.core.catalog import (
     MetricCatalog,
 )
 from agent4.core.errors import ContractError
+from agent4.engine.metric_queries import METRIC_QUERIES
 from agent4.planning.validator import ValidatedPlan
 
 _STAGE = "sql_compiler"
@@ -102,6 +104,11 @@ def compile_sql(
 
     if len(sources) != 1:
         raise _unsupported("Metrics require different warehouse sources.")
+    if sources == {"metric_query"}:
+        if len(plan.metric_ids) != 1:
+            raise _unsupported("This metric requires its own result table.")
+        definition = catalog.get(plan.metric_ids[0])
+        return _compile_metric_query(plan, definition, units, row_cap)
     is_budget = sources == {"budget"}
     relation = "budget" if is_budget else _VIEW_RELATIONS[plan.view]
     if plan.time.mode == "as_of" and _PERIOD_DIMENSIONS.intersection(plan.dimensions):
@@ -179,6 +186,65 @@ def _time_predicates(plan: ValidatedPlan, is_budget: bool) -> tuple[list[str], l
         "NOT is_closing",
         "source_module IS DISTINCT FROM 'OPENING'",
     ], [time.start.isoformat(), time.end.isoformat()]
+
+
+def _compile_metric_query(
+    plan: ValidatedPlan, definition: dict, units: dict[str, str], row_cap: int
+) -> BoundQuery:
+    # Dimensions and their SQL template come from the registered definition.
+    # Reject all unsupported filters, including mandatory server row scopes.
+    metric_id = plan.metric_ids[0]
+    dimensions = METRIC_QUERIES[metric_id].dimensions
+    if plan.filters or set(plan.dimensions) - set(dimensions):
+        raise _unsupported("This metric has no binding for the requested row scope or filter.")
+    if plan.view not in definition["supported_views"]:
+        raise _unsupported("This metric does not support the requested view.")
+    start, end = (plan.time.start, plan.time.end)
+    if plan.time.as_of is not None:
+        start = end = plan.time.as_of
+    if start is None or end is None:
+        raise _unsupported("A bounded reporting period is required.")
+    if metric_id == "payroll_summary" and (start.day != 1 or (end + timedelta(days=1)).day != 1):
+        raise _unsupported("Payroll summary requires complete calendar months.")
+    projection = ", ".join([*dimensions, f'ROUND(value, 2) AS "{metric_id}"'])
+    default_sort = metric_id in {
+        "ar_by_customer",
+        "ar_by_salesperson",
+        "ap_by_vendor",
+        "expense_spikes",
+        "top_sales_transactions",
+    }
+    order = list(dimensions)
+    if plan.sort is not None or default_sort:
+        direction = _DIRECTIONS[plan.sort.direction] if plan.sort is not None else "DESC"
+        order.insert(0, f"value {direction} NULLS LAST")
+    ordering = f" ORDER BY {', '.join(order)}" if order else ""
+    limit = min(
+        plan.row_cap,
+        row_cap,
+        plan.top_k or (10 if metric_id == "top_sales_transactions" else row_cap),
+    )
+    params = [start.isoformat(), end.isoformat(), limit]
+    sql = (
+        "WITH period AS (SELECT CAST(? AS DATE) AS start_date, CAST(? AS DATE) AS end_date, "
+        "(SELECT CAST(value AS DATE) FROM company_info WHERE key = 'as_of_date') AS watermark), "
+        f"metric_rows AS ({definition['sql_expr']}) "
+        f"SELECT {projection} FROM metric_rows{ordering} LIMIT ?"
+    )
+    return BoundQuery(
+        sql,
+        tuple(params),
+        plan.metric_ids,
+        dimensions,
+        MappingProxyType(units),
+        limit,
+        _fingerprint(sql, params),
+        "metric_query",
+        plan.tenant_id,
+        plan.catalog_hash,
+        plan.policy_hash,
+        plan,
+    )
 
 
 def _fingerprint(sql: str, params: list[str | int]) -> str:

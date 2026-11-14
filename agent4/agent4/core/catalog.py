@@ -8,6 +8,7 @@ import json
 from collections.abc import Collection
 from typing import Any
 
+from agent4.engine.metric_queries import METRIC_QUERIES
 from agent4.engine.metrics import REGISTRY, MetricDef, Term
 
 from .errors import ContractError
@@ -41,6 +42,8 @@ def _ledger_sum(terms: tuple[Term, ...]) -> str:
     amounts = {
         "net_debit": "debit_amount - credit_amount",
         "net_credit": "credit_amount - debit_amount",
+        "debit": "debit_amount",
+        "credit": "credit_amount",
     }
     expressions = []
     for term in terms:
@@ -166,6 +169,67 @@ def _warehouse_metric(
         operations,
         sql_expr,
     )
+
+
+def _registry_ledger_metric(
+    metric_id: str,
+    label_en: str,
+    dimensions: tuple[str, ...] = (),
+    *,
+    expression: str | None = None,
+) -> dict[str, Any]:
+    metric = REGISTRY[metric_id]
+    operations = ["aggregate"]
+    if dimensions:
+        operations.append("breakdown")
+    if {"month", "quarter", "year"}.intersection(dimensions):
+        operations.append("timeseries")
+    return {
+        **_definition(
+            metric_id,
+            metric.label,
+            label_en,
+            metric.description,
+            metric.synonyms,
+            metric.unit,
+            "amount",
+            metric.period_type,
+            metric.views,
+            dimensions,
+            tuple(operations),
+            expression if expression is not None else _amount(metric.terms),
+        ),
+        "default_view": metric.default_view,
+    }
+
+
+def _query_metric(metric_id: str) -> dict[str, Any]:
+    metric = REGISTRY[metric_id]
+    query = METRIC_QUERIES[metric_id]
+    dimensions = query.dimensions
+    operations = ["aggregate", "breakdown", "ranking"] if dimensions else ["aggregate"]
+    return {
+        **_definition(
+            metric_id,
+            metric.label,
+            query.label_en,
+            metric.description,
+            metric.synonyms,
+            "mixed" if metric_id == "payroll_summary" else metric.unit,
+            "ratio" if metric.unit == "days" else "amount",
+            metric.period_type,
+            metric.views,
+            dimensions,
+            tuple(operations),
+            query.sql,
+            base_relation="metric_query",
+        ),
+        "default_view": metric.default_view,
+        "required_views": query.required_views,
+        "required_roles": ("payroll_viewer",) if metric_id == "payroll_summary" else (),
+        "result_dimensions": dimensions,
+        "forecast": query.forecast,
+    }
 
 
 _OPERATING_PROFIT = (*REGISTRY["gross_profit"].terms, Term(("641", "642"), -1))
@@ -504,9 +568,56 @@ _NEW_EXECUTABLE_DEFINITIONS = [
         _ratio(_TOTAL_LIABILITIES, _TOTAL_EQUITY),
     ),
 ]
+_PERIODS = ("month", "quarter", "year")
+_REVENUE_DIMENSIONS = (*_PERIODS, "branch_code")
+_REGISTRY_LEDGER_DEFINITIONS = [
+    _registry_ledger_metric("gross_revenue", "Gross Revenue", _REVENUE_DIMENSIONS),
+    _registry_ledger_metric("revenue_deductions", "Revenue Deductions", _REVENUE_DIMENSIONS),
+    _registry_ledger_metric("goods_revenue", "Net Goods Revenue", _REVENUE_DIMENSIONS),
+    _registry_ledger_metric("service_revenue", "Net Service Revenue", _REVENUE_DIMENSIONS),
+    _registry_ledger_metric("finance_income", "Finance Income", _PERIODS),
+    _registry_ledger_metric("finance_cost", "Finance Cost", _PERIODS),
+    _registry_ledger_metric("other_income", "Other Income"),
+    _registry_ledger_metric("other_expenses", "Other Expenses"),
+    _registry_ledger_metric("depreciation_expense", "Depreciation Expense", _PERIODS),
+    _registry_ledger_metric("term_deposits", "Term Deposits"),
+    _registry_ledger_metric("inventory_value", "Inventory Value"),
+    _registry_ledger_metric("tax_payable", "Tax Payable"),
+    _registry_ledger_metric("fixed_assets_net", "Net Fixed Assets"),
+    _registry_ledger_metric("total_assets", "Total Assets"),
+    _registry_ledger_metric("total_liabilities", "Total Liabilities"),
+    _registry_ledger_metric("net_cash_flow", "Net Cash Flow", _PERIODS),
+    _registry_ledger_metric("taxable_income", "Estimated Taxable Income", _PERIODS),
+    _registry_ledger_metric("deductible_expenses", "Tax Deductible Expenses", ("month", "quarter")),
+    _registry_ledger_metric(
+        "ebitda",
+        "EBITDA",
+        _PERIODS,
+        expression=_amount(
+            (
+                *_PROFIT_BEFORE_TAX,
+                Term(("635",), where="source_document_type IN ('INTEREST', 'LOAN_INTEREST')"),
+                *REGISTRY["depreciation_expense"].terms,
+            )
+        ),
+    ),
+    _registry_ledger_metric("equity", "Equity", expression=_amount(_TOTAL_EQUITY)),
+    _registry_ledger_metric("working_capital", "Net Working Capital"),
+    _registry_ledger_metric("expense_by_category", "Expenses by Category", ("cost_category",)),
+    _registry_ledger_metric(
+        "cit_estimate",
+        "Estimated Corporate Income Tax",
+        expression=f"GREATEST({_amount(REGISTRY['taxable_income'].terms)}, 0) * 0.20",
+    ),
+    *(_query_metric(metric_id) for metric_id in METRIC_QUERIES),
+]
 _EXECUTABLE_BY_ID = {
     metric["metric_id"]: metric
-    for metric in (*_EXECUTABLE_DEFINITIONS, *_NEW_EXECUTABLE_DEFINITIONS)
+    for metric in (
+        *_EXECUTABLE_DEFINITIONS,
+        *_NEW_EXECUTABLE_DEFINITIONS,
+        *_REGISTRY_LEDGER_DEFINITIONS,
+    )
 }
 
 _PLACEHOLDER_DEFINITIONS = [
@@ -678,6 +789,11 @@ class MetricCatalog:
             "default_view": metric["default_view"],
             "status": metric["status"],
             "verified_handler": metric["verified_handler"],
+            **{
+                key: copy.deepcopy(metric[key])
+                for key in ("required_roles", "required_views", "result_dimensions", "forecast")
+                if key in metric
+            },
         }
 
     def list_visible_metrics(self, auth_context: dict[str, Any]) -> list[dict[str, Any]]:
@@ -699,6 +815,9 @@ class MetricCatalog:
             and metric["status"] == "approved"
             and metric["verified_handler"] is True
             and (allowed_metrics is None or metric["metric_id"] in allowed_metrics)
+            and set(metric.get("required_views", ()))
+            <= set(auth_context.get("allowed_views") or ())
+            and set(metric.get("required_roles", ())) <= set(auth_context.get("roles") or ())
             and set(auth_context.get("allowed_views") or ()).intersection(metric["supported_views"])
         )
 

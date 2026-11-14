@@ -86,6 +86,13 @@ _FORMAT_REMINDER = (
     "\nReturn exactly one JSON object with status, metric_ids, clarification_question, "
     "and unsupported_reason. Follow the field types above."
 )
+_MENTION_GUIDANCE = (
+    "\nThe matched_terms column, when present, lists the longest catalog phrases in "
+    "the question. Use it to distinguish a metric from shorter names inside it, "
+    "such as net profit inside net profit margin. Include each independently requested "
+    "metric. Ignore components and context. A phrase match alone does not authorize "
+    "an unknown formula or forecast."
+)
 
 
 class SelectionFormatError(ContractError):
@@ -232,13 +239,12 @@ class LLMMetricSelector:
             }
             return validate_llm_selection_draft(draft), None
 
+        use_mentions = any(candidate.get("matched_terms") for candidate in candidates)
+        fields = (*_CANDIDATE_FIELDS, "matched_terms") if use_mentions else _CANDIDATE_FIELDS
         payload = {
             "candidates": {
-                "fields": _CANDIDATE_FIELDS,
-                "rows": [
-                    [candidate.get(field) for field in _CANDIDATE_FIELDS]
-                    for candidate in candidates
-                ],
+                "fields": fields,
+                "rows": [[candidate.get(field) for field in fields] for candidate in candidates],
             },
             "dynamic_fewshot": {"examples": prompt_examples},
             "question": question,
@@ -248,7 +254,9 @@ class LLMMetricSelector:
             "messages": [
                 {
                     "role": "system",
-                    "content": _SYSTEM_PROMPT + (_FORMAT_REMINDER if remind_schema else ""),
+                    "content": _SYSTEM_PROMPT
+                    + (_MENTION_GUIDANCE if use_mentions else "")
+                    + (_FORMAT_REMINDER if remind_schema else ""),
                 },
                 {
                     "role": "user",

@@ -84,4 +84,10 @@ async def predict(request: dict) -> dict:
         "stage_latency_ms": trace.selection.stage_latency_ms,
         "selected_example_ids": trace.selection.selected_example_ids,
         "error": {key: error[key] for key in ("stage", "code")} if error else None,
+        "trace": {
+            "catalog_hash": trace.catalog_hash,
+            "policy_hash": trace.policy_hash,
+            "selection_draft": trace.selection.selection_draft,
+            "answer_validation_passed": trace.answer_validation_passed,
+        },
     }

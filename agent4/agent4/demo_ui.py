@@ -553,11 +553,23 @@ fetchJson("/v1/demo-questions").then(renderExamples).catch(() => {
   byId("examples").textContent = "Không tải được câu hỏi mẫu.";
 });
 fetchJson("/v1/metrics").then(metrics => {
-  byId("catalog-title").textContent = `Danh mục · ${metrics.length} chỉ tiêu đã xác minh`;
+  byId("catalog-title").textContent = `Danh mục · ${metrics.length} chỉ tiêu có truy vấn`;
   for (const metric of metrics) {
     metricLabels.set(metric.metric_id, metric.name_vi);
     const item = node("li");
-    item.append(node("strong", metric.name_vi));
+    const choose = node("button", metric.name_vi);
+    choose.type = "button";
+    choose.addEventListener("click", () => {
+      const snapshot = metric.period_type === "snapshot";
+      const tax = !metric.allowed_views.includes("mgmt");
+      const when = locale.value === "en-US"
+        ? snapshot ? "as of August 31, 2026" : "for August 2026"
+        : snapshot ? "tính đến 31/08/2026" : "tháng 08/2026";
+      const view = tax ? (locale.value === "en-US" ? " in the tax view" : " theo view thuế") : "";
+      question.value = `metric_id: ${metric.metric_id} ${when}${view}`;
+      question.focus();
+    });
+    item.append(choose);
     item.append(node("small", `${metric.metric_id} · ${metric.unit} · ${metric.allowed_views.join(", ")}`));
     byId("metrics").append(item);
   }

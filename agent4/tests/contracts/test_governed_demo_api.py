@@ -10,6 +10,7 @@ from fastapi.testclient import TestClient
 from agent4.api import create_app, create_demo_app
 from agent4.core.context import build_auth_context
 from agent4.core.errors import ContractError
+from agent4.engine.metrics import REGISTRY
 from agent4.metric_selection.config import MetricSelectionConfig
 
 _WAREHOUSE = Path(__file__).resolve().parents[2] / "data/cfo_warehouse.duckdb"
@@ -53,7 +54,7 @@ def test_demo_factory_publishes_ui_health_and_reference_data(demo, demo_warehous
         "status": "ok",
         "demo_mode": True,
         "db_path": str(demo_warehouse),
-        "verified_metrics_count": 22,
+        "verified_metrics_count": 67,
         "llm_model": "demo-contract-model",
         "embedding_model": "hashing-v1",
         "retrieval_mode": "full_catalog",
@@ -64,7 +65,7 @@ def test_demo_factory_publishes_ui_health_and_reference_data(demo, demo_warehous
     assert "unsafe-inline" not in ui.headers["Content-Security-Policy"]
     assert ui.headers["Cache-Control"] == "no-store"
     metrics = demo.get("/v1/metrics").json()
-    assert len(metrics) == 22
+    assert len(metrics) == 67
     assert {tuple(sorted(metric)) for metric in metrics} == {
         tuple(
             sorted(
@@ -80,8 +81,8 @@ def test_demo_factory_publishes_ui_health_and_reference_data(demo, demo_warehous
             )
         )
     }
-    assert "gross_margin_pct" in {metric["metric_id"] for metric in metrics}
-    assert "gross_margin" not in {metric["metric_id"] for metric in metrics}
+    ids = {metric["metric_id"] for metric in metrics}
+    assert ids == {*REGISTRY, "budget_amount"}
     examples = demo.get("/v1/demo-questions").json()
     assert [example["id"] for example in examples] == [f"D-{n:02d}" for n in range(1, 13)]
     assert examples[10]["persona"] == "branch_viewer"
@@ -98,6 +99,49 @@ def test_non_demo_ignores_persona_and_requires_auth(monkeypatch):
         assert client.get("/v1/metrics").status_code == 404
         assert client.get("/health").json() == {"status": "ok", "demo_mode": False}
         assert client.get("/healthz").json() == {"status": "live"}
+
+
+def test_explicit_demo_metric_runs_its_own_query_and_keeps_scope(demo):
+    response = _query(
+        demo, "metric_id: payroll_summary tháng 08/2026", options={"include_evidence_preview": True}
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "ready"
+    rows = {row["component"]: row for row in body["data"]["rows"]}
+    assert rows["headcount"]["component_unit"] == "count"
+    assert rows["gross_salary"]["component_unit"] == "VND"
+    assert (
+        _query(demo, "metric_id: payroll_summary tháng 08/2026", headers=_BRANCH).status_code == 403
+    )
+
+
+@pytest.mark.parametrize(
+    ("question", "view"),
+    [
+        ("payroll_summary for August 2026 in the management view", "mgmt"),
+        ("mgmt_vs_tax_gap for August 2026 in the tax view", "tax"),
+    ],
+)
+def test_custom_metrics_require_authorization_for_all_their_sources(
+    monkeypatch, demo_warehouse, question, view
+):
+    monkeypatch.delenv("AGENT4_DEMO_MODE", raising=False)
+    app = create_app(
+        warehouses={"demo-enterprise": demo_warehouse},
+        selection_config=MetricSelectionConfig(),
+    )
+
+    @app.middleware("http")
+    async def inject_claims(request, call_next):
+        request.state.idp_claims = _CLAIMS
+        request.state.server_policy = {"allowed_views": [view], "policy_version": "test-custom"}
+        return await call_next(request)
+
+    with TestClient(app) as client:
+        result = _query(client, question, locale="en-US").json()
+    assert result["status"] == "forbidden"
+    assert result["data"] is None
 
 
 def test_environment_can_enable_demo(monkeypatch):

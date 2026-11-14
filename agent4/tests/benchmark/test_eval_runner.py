@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from collections import Counter
 from decimal import Decimal
@@ -112,10 +113,57 @@ def test_expected_policy_rejection_is_safety_evidence_not_runtime_error():
     result = scores(case, prediction, "e2e")
     assert result["checks"]["safety_pass"] is True
     assert "runtime_failure" not in result["failure_categories"]
+    assert result["classification"] == "planning"  # Expected plan fixture is still unmatched.
     attempted = prediction.execution.model_copy(update={"attempted": True})
     result = scores(case, prediction.model_copy(update={"execution": attempted}), "e2e")
     assert result["checks"]["safety_pass"] is False
     assert "runtime_failure" in result["failure_categories"]
+    assert result["classification"] == "safety"
+
+
+@pytest.mark.parametrize(
+    ("status", "stage", "classification"),
+    [
+        ("error", "adapter", "runtime"),
+        ("temporarily_unavailable", "llm_metric_selection", "runtime"),
+        ("unsupported", "semantic_plan_validation", "planning"),
+        ("unsupported", "sql_compiler", "compilation"),
+        ("error", "result_validation", "result"),
+        ("error", "answer_validation", "answer"),
+    ],
+)
+def test_classification_distinguishes_stage_rejections_from_runtime(status, stage, classification):
+    case = make_case()
+    prediction = Prediction.model_validate(
+        {"id": case.id, "final_status": status, "error": {"stage": stage, "code": "test_code"}}
+    )
+    row = scores(case, prediction, "e2e")
+    assert row["classification"] == classification
+    assert row["observations"]["error"] == {"stage": stage, "code": "test_code"}
+    assert row["observations"]["trace"] is None
+    assert len(row["failure_categories"]) > 1
+    assert "trace" not in prediction.artifact()  # Old prediction hashes are stable.
+
+
+def test_holdout_requires_seal_and_no_development_overlap(tmp_path, monkeypatch, capsys):
+    dev = tmp_path / "dev.jsonl"
+    case = make_case()
+    dev.write_text(case.model_dump_json() + "\n")
+    monkeypatch.setattr(run_eval, "DEFAULT_DATASET", dev)
+    holdout = tmp_path / "test.jsonl"
+    case = case.model_copy(update={"id": "BM-201", "split": "test", "review_status": "approved"})
+    holdout.write_text(case.model_dump_json() + "\n")
+    args = ["--split", "test", "--dataset", str(holdout)]
+    assert run_eval.main(args) == 2
+    assert "requires --holdout-sha256" in capsys.readouterr().err
+    with pytest.raises(ValueError, match="approved SHA-256"):
+        run_eval.verify_holdout(holdout, [case], "0" * 64)
+    with pytest.raises(ValueError, match="overlaps"):
+        run_eval.verify_holdout(holdout, [case], hashlib.sha256(holdout.read_bytes()).hexdigest())
+    case = case.model_copy(update={"user_query": "Câu hỏi holdout khác"})
+    holdout.write_text(case.model_dump_json() + "\n")
+    approved = hashlib.sha256(holdout.read_bytes()).hexdigest()
+    assert run_eval.main([*args, "--holdout-sha256", approved, "--validate-only"]) == 0
 
 
 def test_dataset_structure_only_has_separate_multi_metric_coverage() -> None:

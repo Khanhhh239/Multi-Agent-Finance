@@ -91,6 +91,10 @@ def validate_metrics(
                 final_status="forbidden",
                 metric_id=metric_id,
             )
+        if set(capability.get("required_roles", ())) - set(auth_context.get("roles") or ()) or set(
+            capability.get("required_views", ())
+        ) - set(auth_context.get("allowed_views") or ()):
+            raise _reject("forbidden_metric", "Metric is not authorized.", final_status="forbidden")
         if requested_view not in capability["supported_views"]:
             raise _reject(
                 "unsupported_view",

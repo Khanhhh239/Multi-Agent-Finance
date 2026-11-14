@@ -68,16 +68,20 @@ def validate_result(
     ):
         raise _invalid()
     caps = {mid: catalog.get_capability(mid) for mid in plan.metric_ids}
-    expected = [{"key": dim, "type": "string", "unit": None} for dim in plan.dimensions] + [
+    custom = next(iter(caps.values()), {}) if len(caps) == 1 else {}
+    dimensions = custom.get("result_dimensions", plan.dimensions)
+    expected = [{"key": dim, "type": "string", "unit": None} for dim in dimensions] + [
         {"key": mid, "type": "decimal", "unit": cap["unit"]} for mid, cap in caps.items()
     ]
     if cols != expected:
         raise _invalid()
-    keys = {*plan.dimensions, *plan.metric_ids}
+    keys = {*dimensions, *plan.metric_ids}
     clean_rows = []
     warnings = []
     for row in rows:
         if not isinstance(row, dict) or row.keys() != keys:
+            raise _invalid()
+        if "component_unit" in dimensions and row["component_unit"] not in ("VND", "count"):
             raise _invalid()
         clean_row = {}
         for key, value in row.items():
@@ -104,7 +108,9 @@ def validate_result(
         raise _invalid() from None
     time = plan.time
     if time.mode == "range":
-        outside = time.start > watermark or (start is not None and time.end < start)
+        outside = (not custom.get("forecast") and time.start > watermark) or (
+            start is not None and time.end < start
+        )
         partial = time.end > watermark or (closed is not None and time.end.isoformat()[:7] > closed)
     else:
         outside = start is not None and time.as_of < start

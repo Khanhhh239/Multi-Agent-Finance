@@ -28,6 +28,7 @@ from agent4.core.errors import FINAL_STATUSES, ContractError
 from agent4.engine.metrics import REGISTRY
 from agent4.metric_selection.config import MetricSelectionConfig, load_config
 from agent4.metric_selection.recovery import SelectionTrace, select_metrics_with_recovery
+from agent4.metric_selection.validator import validate_metrics
 from agent4.planning.clarification import ClarificationSessionStore, resolve_clarification_turn
 from agent4.planning.planner import _filters, build_semantic_plan_draft, detect_query_views
 from agent4.planning.validator import (
@@ -47,6 +48,7 @@ _WRITE_INTENT = re.compile(
     r"|\b(?:xóa bút toán|hạch toán lại|thực hiện chuyển khoản|thanh toán cho nhà cung cấp)\b",
     re.IGNORECASE,
 )
+_EXPLICIT_METRIC = re.compile(r"^metric_id:\s*([a-z][a-z0-9_]*)\s+")
 
 
 @dataclass
@@ -58,6 +60,9 @@ class PipelineTrace:
     sql_cache_hit: bool | None = None
     include_demo_evidence: bool = False
     demo_evidence: dict | None = field(default=None, repr=False)
+    catalog_hash: str | None = None
+    policy_hash: str | None = None
+    answer_validation_passed: bool | None = None
 
 
 def build_final_response(
@@ -151,6 +156,7 @@ async def run_governed_pipeline(
     catalog = catalog or MetricCatalog(canonical=True)
     sessions = sessions if sessions is not None else _SESSIONS
     trace = trace if trace is not None else PipelineTrace()
+    trace.catalog_hash = catalog.get_catalog_hash()
     if trace.include_demo_evidence:
         trace.demo_evidence = {"trace_id": trace_id}
     if warehouses is None:
@@ -172,6 +178,8 @@ async def run_governed_pipeline(
             seed,
         )
     except ContractError as exc:
+        if exc.stage == "answer_validation":
+            trace.answer_validation_passed = False
         response = build_final_response(request_id, exc.final_status, error=exc)
     _LOG.info(
         "governed_query",
@@ -201,6 +209,7 @@ async def _run(
     measure = trace.selection.measure
     with measure("intake"):
         auth = build_auth_context(claims, policy)
+        trace.policy_hash = auth["policy_hash"]
         query = query_intake(payload, app_config.max_question_length)
         options = query["options"]
         if options.get("use_cache") is False:
@@ -233,15 +242,39 @@ async def _run(
         elif not views and "mgmt" not in auth["allowed_views"] and "tax" in auth["allowed_views"]:
             context["requested_view"] = "tax"
         with measure("metric_selection"):
-            metrics = await select_metrics_with_recovery(
-                query,
-                catalog,
-                auth_context=auth,
-                query_context=context,
-                config=config,
-                seed=seed,
-                trace=trace.selection,
-            )
+            explicit = _EXPLICIT_METRIC.match(query["normalized_question"])
+            if explicit:
+                metric_id = explicit[1]
+                capability = catalog.get_capability(metric_id)
+                if not views and capability["default_view"] in auth["allowed_views"]:
+                    context["requested_view"] = capability["default_view"]
+                candidates = (
+                    [{"metric_id": metric_id}] if catalog.validate_access(metric_id, auth) else []
+                )
+                trace.selection.retrieved_metric_ids = [row["metric_id"] for row in candidates]
+                trace.selection.retrieval_result = {"candidates": candidates}
+                metrics = validate_metrics(
+                    {
+                        "status": "resolved",
+                        "metric_ids": [metric_id],
+                        "clarification_question": None,
+                        "unsupported_reason": None,
+                    },
+                    trace.selection.retrieval_result,
+                    catalog,
+                    auth,
+                    context,
+                )
+            else:
+                metrics = await select_metrics_with_recovery(
+                    query,
+                    catalog,
+                    auth_context=auth,
+                    query_context=context,
+                    config=config,
+                    seed=seed,
+                    trace=trace.selection,
+                )
         trace.selected_metrics = {
             key: metrics.get(key) for key in ("status", "metric_ids", "clarification_question")
         }
@@ -304,6 +337,7 @@ async def _run(
     with measure("answer"):
         draft_answer = generate_grounded_answer(plan, result, catalog, locale=locale)
         answer = validate_answer(draft_answer, result, plan, catalog, locale=locale)
+    trace.answer_validation_passed = True
     evidence = None
     if options.get("include_evidence_preview"):
         with measure("evidence"):
@@ -409,7 +443,11 @@ def _check_request_scope(question: str, catalog: MetricCatalog, auth: dict) -> s
                 )
             if capability["status"] != "approved" or capability["verified_handler"] is not True:
                 raise _unsupported_request()
-            if allowed is not None and identifier not in allowed:
+            if (
+                (allowed is not None and identifier not in allowed)
+                or set(capability.get("required_roles", ())) - set(auth["roles"])
+                or set(capability.get("required_views", ())) - set(auth["allowed_views"])
+            ):
                 raise _forbidden_metric()
     if allowed is not None:
         matched: dict[str, set[str]] = {}

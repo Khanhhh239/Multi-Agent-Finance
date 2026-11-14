@@ -47,7 +47,7 @@ def build_evidence_preview(
                         "metric_id": mid,
                         "metric_label": metric_label(definition, locale),
                         "value": row[mid],
-                        "unit": definition["unit"],
+                        "unit": row.get("component_unit", definition["unit"]),
                         "source_columns": [mid],
                         "source_rows": [index],
                         "cited_row_preview": row,

@@ -299,15 +299,37 @@ python vals/run_eval.py --mode e2e \
 Mỗi dòng file predictions là một `Prediction`, ghép bằng `id`. ID ngoài dataset
 hoặc trùng bị reject; ID thiếu vẫn được tính là failure. Có thể dùng file predictions
 toàn bộ dataset khi lọc `--category`; chỉ các ID được chọn tham gia chấm.
-Mặc định là dev; chỉ dùng `--split test`
-khi đã có test data được review. `--ks 5 10` dùng cho retrieval.
+Mặc định là dev. Để chấm holdout, reviewer giữ bộ câu hỏi độc lập trong một
+file riêng, xác nhận nhãn và đối soát câu trùng nghĩa với dev và example bank.
+Reviewer giữ bản đã duyệt cùng SHA-256 bên ngoài luồng tuning. Truyền
+`--split test --dataset <file> --holdout-sha256 <sha256-đã-duyệt>` khi chấm.
+Runner kiểm tra hash, yêu cầu mọi record thuộc split `test` đã duyệt và đối
+chiếu ID cùng câu hỏi chuẩn hóa với tập dev mặc định. Dùng `--example-bank`
+với bank thực sự dùng trong run. Kiểm tra này phát hiện câu trùng chính xác
+sau chuẩn hóa. Reviewer chịu trách nhiệm kiểm tra câu diễn đạt lại.
+`--ks 5 10` dùng cho retrieval.
 
 Artifact của một run:
 
 - `summary.json`: metrics tổng và theo category, metadata, baseline và gates.
 - `predictions.jsonl`: output chuẩn hóa cùng trace/usage.
-- `cases.jsonl`: checks, prediction hash và thông tin so sánh từng case.
+- `cases.jsonl`: checks, prediction hash, `classification` và `observations`
+  cho từng case. Thứ tự trong `retrieved_metric_ids` thể hiện thứ hạng. Các
+  observation ghi lại selection đã validate, bản rút gọn của draft, plan,
+  mã lỗi, dấu vết execution, usage và latency nếu adapter quan sát được.
 - `failures.jsonl`: các case có lỗi và failure category.
+
+`classification` gán đúng một giá trị cho mỗi case. Runner ưu tiên lỗi
+runtime khi thiếu prediction hoặc dịch vụ không khả dụng, rồi ưu tiên safety
+nếu một case đáng lẽ bị chặn lại đã được thực thi. Với các lỗi còn lại, runner
+dùng stage đã dừng pipeline nếu có, hoặc chọn từ các check không đạt. Báo
+cáo giữ các cờ `failure_categories` có thể chồng lấn để so với M4.3.
+`no_detected_failure` nghĩa là không thấy lỗi qua các phép chấm có dữ liệu.
+`trace_coverage` ghi mẫu số và số lần quan sát cho mỗi trường trace mới.
+`answer_validation_passed` là kết quả kiểm tra nội bộ, độc lập với điểm
+đánh giá answer từ reviewer. Draft trace chỉ chứa status, ID trong tập ứng
+viên và số ID ngoài tập ứng viên. Khi chấm lại dự đoán cũ, trường trace
+chưa được thu thập vẫn để `null`.
 
 Output directory phải mới để tránh ghi đè baseline. Không sửa dataset trong run.
 

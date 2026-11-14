@@ -3,7 +3,7 @@
 from typing import Any
 
 from agent4.core.cache import LRUTTLCache, build_scoped_cache_key, file_revision
-from agent4.core.catalog import MetricCatalog
+from agent4.core.catalog import CANONICAL_TO_LEGACY, LEGACY_METRIC_IDS, MetricCatalog
 from agent4.core.errors import ContractError, enforce_exact_keys
 
 from .catalog_adapter import build_full_catalog_retrieval_result
@@ -13,6 +13,7 @@ from .embedding import EmbeddingProvider
 from .fusion import fuse_candidates
 from .index import INDEX_VERSION, MetricVectorIndex, load_or_build_index
 from .lexical import LEXICAL_INDEX_VERSION, lexical_retrieve
+from .mentions import retrieve_mentions
 from .rerank import expand_related_candidates, rerank_candidates
 
 _RETRIEVAL_SELECTION_CACHE = LRUTTLCache[str, Any](
@@ -163,8 +164,30 @@ def _retrieve(
     settings = config.retrieval
     question = normalized_query["question"]
     query = normalized_query["normalized_question"]
-    if settings.mode == "full_catalog":
+    if settings.mode == "full_catalog" and not settings.mention_retrieval_enabled:
         return build_full_catalog_retrieval_result(question, catalog, auth_context)
+    visible = catalog.list_visible_metrics(auth_context)
+    if settings.mention_retrieval_enabled and requested_view:
+        visible = [metric for metric in visible if requested_view in metric["supported_views"]]
+    allowed_ids = {metric["metric_id"] for metric in visible}
+    mentions = (
+        _authorized_mentions(query, catalog, allowed_ids)
+        if settings.mention_retrieval_enabled
+        else None
+    )
+    if settings.mode == "full_catalog":
+        full = build_full_catalog_retrieval_result(question, catalog, auth_context)
+        if mentions is not None:
+            full["candidates"] = _with_mentions(
+                [
+                    candidate
+                    for candidate in full["candidates"]
+                    if candidate["metric_id"] in allowed_ids
+                ],
+                mentions,
+            )
+            full["status"] = "candidates_found" if full["candidates"] else "empty_candidates"
+        return full
 
     catalog_hash = catalog.get_catalog_hash()
     result = {
@@ -177,7 +200,6 @@ def _retrieve(
         "lexical_index_version": None,
         "reranker_version": None,
     }
-    allowed_ids = {metric["metric_id"] for metric in catalog.list_visible_metrics(auth_context)}
     if not allowed_ids or not query.strip():
         return result
 
@@ -233,11 +255,13 @@ def _retrieve(
         )
         result["lexical_index_version"] = LEXICAL_INDEX_VERSION
 
-    fused = fuse_candidates(dense, lexical, settings.rrf_k)
+    fused = fuse_candidates(dense, lexical, settings.rrf_k, mention_out=mentions)
     candidates = fused["candidates"]
     if not candidates:
         return result
     if settings.mode != "dense_only":
+        if mentions is not None:
+            candidates = sorted(candidates, key=lambda row: -row.get("mention_score", 0))
         candidates = candidates[: settings.fusion_top_k]
         candidates = expand_related_candidates(candidates, allowed_ids, config.expansion)
         if config.reranking.metadata_enabled:
@@ -258,9 +282,50 @@ def _retrieve(
                 for item in reranked["ranked_candidates"]
             ]
             result["reranker_version"] = reranked["reranker_version"]
+        if mentions is not None:
+            candidates = _with_mentions(candidates, mentions)
         candidates = candidates[: config.reranking.final_top_k]
+    elif mentions is not None:
+        candidates = _with_mentions(candidates, mentions)
     return {
         **result,
         "status": "candidates_found",
         "candidates": [{"rerank_score": None, **candidate} for candidate in candidates],
     }
+
+
+def _authorized_mentions(
+    query: str, catalog: MetricCatalog, allowed_ids: set[str]
+) -> dict[str, Any]:
+    # Resolve overlapping phrases before applying access, so a restricted longer
+    # phrase cannot become evidence for an unrelated shorter phrase.
+    mentions = retrieve_mentions(query, catalog.list_metrics())
+    hits = []
+    for hit in mentions["hits"]:
+        metric_id = hit["metric_id"]
+        if metric_id not in allowed_ids:
+            metric_id = CANONICAL_TO_LEGACY.get(
+                metric_id, LEGACY_METRIC_IDS.get(metric_id, metric_id)
+            )
+        if metric_id in allowed_ids:
+            hits.append({**hit, "metric_id": metric_id, "rank": len(hits) + 1})
+    return {**mentions, "hits": hits}
+
+
+def _with_mentions(
+    candidates: list[dict[str, Any]], mentions: dict[str, Any]
+) -> list[dict[str, Any]]:
+    hits = {hit["metric_id"]: hit for hit in mentions["hits"]}
+    ordered = sorted(candidates, key=lambda row: -hits.get(row["metric_id"], {}).get("score", 0))
+    result = []
+    for rank, candidate in enumerate(ordered, start=1):
+        hit = hits.get(candidate["metric_id"])
+        row = {**candidate, "rank": rank}
+        if hit is not None:
+            row["mention_score"] = hit["score"]
+            row["matched_terms"] = hit["matched_terms"]
+            row["retrieval_sources"] = list(
+                dict.fromkeys([*candidate["retrieval_sources"], "mention"])
+            )
+        result.append(row)
+    return result

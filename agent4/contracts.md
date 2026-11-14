@@ -185,7 +185,8 @@ get_catalog_hash()
 ### Rules
 
 - Catalog là source of truth duy nhất của metric.
-- `MetricCatalog()` mặc định liệt kê 13 metric M0.2 đã xác minh. Pipeline production dùng `MetricCatalog(canonical=True)` để liệt kê 22 metric canonical đã xác minh. Cả hai chế độ tra cứu được ID của hai bộ catalog và chỉ liệt kê ID được yêu cầu khi có `allowed_metrics`, theo quyền view của người dùng.
+- `MetricCatalog()` mặc định liệt kê 13 metric M0.2 đã xác minh. Pipeline production dùng `MetricCatalog(canonical=True)`, có binding cho 66 ID registry và `budget_amount`. Danh sách trả về tuân theo allowlist, view và vai trò. `payroll_summary` yêu cầu `payroll_viewer`. `mgmt_vs_tax_gap` yêu cầu quyền cả hai view.
+- Câu hỏi bắt đầu bằng `metric_id: <id>` chọn đúng ID đã khai báo. Pipeline vẫn kiểm tra quyền, view, kỳ và plan trước khi biên dịch.
 - Metric canonical chỉ có metadata trả `unsupported_metric` khi được chọn. Metric lạ trả `unknown_metric`.
 - Formula/handler/source phải được version hóa cùng metric.
 - Downstream module không được tự copy hoặc thay đổi business definition.
@@ -466,6 +467,8 @@ retrieval_unavailable
 Ở chế độ full catalog, candidate được xếp theo thứ tự catalog sau khi lọc quyền truy cập, với `retrieval_sources=["catalog_full"]`. Các trường score, embedding và phiên bản index là `null` khi tầng tương ứng không chạy.
 
 Ở chế độ online, `AuthContext` do server cung cấp giới hạn tập metric trước khi cắt Top-K. Dense retrieval dùng index offline khớp phiên bản và trả `retrieval_unavailable` khi index thiếu, lỗi thời hoặc provider gặp sự cố. Nếu cấu hình bật mở rộng quan hệ, orchestrator thêm các metric được phép trước khi rerank. Reranker giữ nguyên tập đã nhận.
+
+Khi bật `mention_retrieval_enabled`, orchestrator ưu tiên cụm tên hoặc alias dài nhất tại mỗi vị trí. Candidate có cụm khớp ghi nguồn `mention`, danh sách `matched_terms` và `mention_score`. Cụm dùng chung giữa nhiều metric có score bằng 0. Orchestrator lọc theo quyền và view trước khi đưa bằng chứng vào candidate set. Bộ chọn nhận các cụm có score dương, còn validator áp dụng lại quyền và kiểm tra khả năng thực thi như với các nguồn retrieval khác.
 
 ## 12. Dynamic Few-shot Example Bank Contract
 
@@ -863,7 +866,7 @@ ValidatedPlan + CatalogSnapshot
 - Downstream dùng đối tượng `BoundQuery` bất biến. Scope tenant và policy
   được giữ trong metadata nội bộ. Warehouse một tenant cần được ràng buộc
   với tenant tương ứng trước khi thực thi.
-- Compiler dùng binding đã xác minh cho 22 metric canonical và sáu ID tương thích M0.2. Metric tiền tệ dùng hai chữ số thập phân và tỷ lệ canonical dùng sáu chữ số. `gross_margin` và `net_profit_margin` tiếp tục trả phần trăm với hai chữ số.
+- Compiler đăng ký binding cho 66 metric registry, `budget_amount` và sáu ID tương thích M0.2. Metric có template riêng chạy từng metric và trả các chiều kết quả cố định trong catalog. Nếu plan có filter mà template chưa hỗ trợ, kể cả filter scope bắt buộc, compiler từ chối thực thi. Kết quả lương dùng `component_unit` để phân biệt số người và VND. Metric tiền tệ dùng hai chữ số thập phân và tỷ lệ canonical dùng sáu chữ số. `gross_margin` và `net_profit_margin` tiếp tục trả phần trăm với hai chữ số.
 - Metric thiếu binding và plan trộn các nguồn vật lý bị từ chối với `unsupported_data_source`. Tỷ lệ snapshot dùng số dư lũy kế tại một ngày chốt, với phép chia cho 0 trả `NULL`. Chuỗi snapshot nhiều kỳ nằm ngoài phạm vi compiler hiện tại.
 - Giới hạn hiệu dụng là giá trị nhỏ nhất của `top_k` (nếu có), giới hạn
   của plan và giới hạn của compiler. Xếp hạng dùng metric và chiều sắp xếp

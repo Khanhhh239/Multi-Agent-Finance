@@ -248,6 +248,19 @@ class StageError(StrictModel):
     code: str
 
 
+class SelectionDraftTrace(StrictModel):
+    status: SelectionStatus
+    candidate_metric_ids: list[str]
+    outside_candidate_count: StrictInt = Field(ge=0)
+
+
+class PipelineTraceEvidence(StrictModel):
+    catalog_hash: str | None = None
+    policy_hash: str | None = None
+    selection_draft: SelectionDraftTrace | None = None
+    answer_validation_passed: StrictBool | None = None
+
+
 class Prediction(StrictModel):
     id: str
     retrieved_metric_ids: list[str] | None = None
@@ -265,6 +278,11 @@ class Prediction(StrictModel):
     stage_latency_ms: dict[str, float] = Field(default_factory=dict)
     selected_example_ids: list[str] = Field(default_factory=list)
     error: StageError | None = None
+    trace: PipelineTraceEvidence | None = None
+
+    def artifact(self) -> dict[str, Any]:
+        # Preserve hashes used by independent reviews of pre-trace predictions.
+        return self.model_dump(mode="json", exclude={"trace"} if self.trace is None else None)
 
     @model_validator(mode="after")
     def consistent(self) -> Prediction:
@@ -324,6 +342,10 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
     return records
 
 
+def question_key(question: str) -> str:
+    return " ".join(question.casefold().split()).rstrip("?.! ")
+
+
 def load_cases(path: Path) -> list[BenchmarkCase]:
     cases = []
     ids: set[str] = set()
@@ -333,7 +355,7 @@ def load_cases(path: Path) -> list[BenchmarkCase]:
             case = BenchmarkCase.model_validate(record)
         except ValueError as exc:
             raise ValueError(f"{path.name}: record {number}: {exc}") from exc
-        query_key = " ".join(case.user_query.casefold().split()).rstrip("?.! ")
+        query_key = question_key(case.user_query)
         if case.id in ids or query_key in queries:
             raise ValueError(f"Duplicate ID or question: {case.id}")
         ids.add(case.id)
@@ -342,6 +364,18 @@ def load_cases(path: Path) -> list[BenchmarkCase]:
     if len({case.dataset_version for case in cases}) != 1:
         raise ValueError("Mixed dataset versions are not allowed")
     return cases
+
+
+def verify_holdout(path: Path, cases: list[BenchmarkCase], expected_sha256: str) -> None:
+    if hashlib.sha256(path.read_bytes()).hexdigest() != expected_sha256:
+        raise ValueError("Holdout dataset does not match the approved SHA-256")
+    if any(case.split != "test" for case in cases):
+        raise ValueError("Use a separate file containing only reviewed test cases")
+    dev = load_cases(DEFAULT_DATASET)
+    if {case.id for case in dev}.intersection(case.id for case in cases) or {
+        question_key(case.user_query) for case in dev
+    }.intersection(question_key(case.user_query) for case in cases):
+        raise ValueError("Holdout overlaps with the development dataset")
 
 
 def load_predictions(path: Path, cases: list[BenchmarkCase]) -> dict[str, Prediction]:
@@ -358,7 +392,7 @@ def load_predictions(path: Path, cases: list[BenchmarkCase]) -> dict[str, Predic
 
 def load_example_manifest(path: Path, cases: list[BenchmarkCase]) -> set[str]:
     """Audit exact question overlap without invoking retrieval or an embedding model."""
-    queries = {" ".join(case.user_query.casefold().split()).rstrip("?.! ") for case in cases}
+    queries = {question_key(case.user_query) for case in cases}
     ids: set[str] = set()
     for record in read_jsonl(path):
         example_id = record.get("id", record.get("example_id"))
@@ -367,7 +401,7 @@ def load_example_manifest(path: Path, cases: list[BenchmarkCase]) -> set[str]:
             raise ValueError("Example bank requires a string id/example_id and question/user_query")
         if example_id in ids:
             raise ValueError("Duplicate example-bank ID")
-        if " ".join(question.casefold().split()).rstrip("?.! ") in queries:
+        if question_key(question) in queries:
             raise ValueError(f"Benchmark question appears in the few-shot bank: {example_id}")
         ids.add(example_id)
     return ids
@@ -585,7 +619,7 @@ def score_case(
                 "llm_metric_selection": "metric_selection_failure",
             }.get(stage, "runtime_failure")
         )
-    return {
+    row = {
         "id": case.id,
         "case_category": case.case_category,
         "expected_metric_ids": case.expected_metric_ids,
@@ -596,8 +630,88 @@ def score_case(
         "retrieval": retrieval,
         "retrieval_observed": bool(prediction and prediction.retrieved_metric_ids is not None),
         "failure_categories": sorted(set(failures)),
-        "prediction_sha256": digest(prediction.model_dump(mode="json")) if prediction else None,
+        "prediction_sha256": digest(prediction.artifact()) if prediction else None,
+        "observations": prediction.model_dump(
+            mode="json",
+            include={
+                "retrieved_metric_ids",
+                "selection",
+                "plan",
+                "execution",
+                "error",
+                "trace",
+                "latency_ms",
+                "stage_latency_ms",
+                "usage",
+            },
+        )
+        if prediction
+        else None,
     }
+    row["classification"] = classify_case(row, prediction)
+    return row
+
+
+def classify_case(row: dict[str, Any], prediction: Prediction | None) -> str:
+    """Assign one outcome while retaining the existing checks and overlapping flags."""
+    if prediction is None or prediction.final_status == "temporarily_unavailable":
+        return "runtime"
+    if (
+        "final_status_match" in row["checks"]
+        and row["expected_final_status"] in {"forbidden", "unsupported", "needs_clarification"}
+        and prediction.execution
+        and prediction.execution.attempted
+    ):
+        return "safety"
+    failures = row["failure_categories"]
+    if not failures:
+        return "no_detected_failure"
+    if prediction.error:
+        stage = {
+            "adapter": "runtime",
+            "metric_retrieval": "retrieval",
+            "retrieval": "retrieval",
+            "metric_selection": "selection",
+            "llm_metric_selection": "selection",
+            "metrics_validation": "selection",
+            "query_planning": "planning",
+            "semantic_plan_validation": "planning",
+            "clarification": "clarification",
+            "sql_generation": "compilation",
+            "sql_compilation": "compilation",
+            "sql_compiler": "compilation",
+            "sql_safety": "safety",
+            "sql_execution": "execution",
+            "result_validation": "result",
+            "answer_validation": "answer",
+            "auth_policy_context": "authorization",
+            "query_intake": "intake",
+            "request_scope": "request_scope",
+        }.get(prediction.error.stage)
+        if stage and not (
+            row["checks"].get("final_status_match")
+            and prediction.final_status in {"forbidden", "unsupported"}
+            and prediction.execution is not None
+            and not prediction.execution.attempted
+            and prediction.result is None
+        ):
+            return stage
+    for flag, stage in (
+        ("retrieval_failure", "retrieval"),
+        ("metric_selection_failure", "selection"),
+        ("invalid_parameters", "planning"),
+        ("ambiguous_query_handling_failure", "clarification"),
+        ("safety_failure", "safety"),
+        ("sql_result_failure", "result"),
+        ("answer_hallucination", "answer"),
+        ("answer_incorrect", "answer"),
+        ("incomplete_response", "response"),
+        ("missing_required_warning", "response"),
+        ("runtime_failure", "runtime"),
+    ):
+        if flag in failures:
+            return stage
+    return "final_status"
 
 
 def mean(values: list[float]) -> float | None:
@@ -744,6 +858,23 @@ def summarize(
             "cost_per_query_usd": float(cost / len(cases)) if cost is not None else None,
         },
         "failures": dict(Counter(failure for row in rows for failure in row["failure_categories"])),
+        "case_classifications": dict(Counter(row["classification"] for row in rows)),
+        "trace_coverage": {
+            name: {
+                "scored": sum(
+                    bool(p.trace is not None and getattr(p.trace, name) is not None)
+                    for case in cases
+                    if (p := predictions.get(case.id)) is not None
+                ),
+                "eligible": len(cases),
+            }
+            for name in (
+                "catalog_hash",
+                "policy_hash",
+                "selection_draft",
+                "answer_validation_passed",
+            )
+        },
         "gold_result_coverage": {"reviewed": result_eligible, "total": len(cases)},
     }
 
@@ -894,6 +1025,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--mode", choices=("retrieval", "selection", "e2e"), default="e2e")
     parser.add_argument("--split", choices=("dev", "test"), default="dev")
+    parser.add_argument("--holdout-sha256", help="Approved SHA-256 for the reviewed test dataset")
     parser.add_argument("--category", action="append", choices=sorted(CATEGORIES))
     source = parser.add_mutually_exclusive_group()
     source.add_argument("--adapter", help="Async input-only adapter: module.path:predict")
@@ -944,6 +1076,12 @@ def main(argv: list[str] | None = None) -> int:
         if not math.isfinite(args.adapter_timeout_s) or args.adapter_timeout_s <= 0:
             raise ValueError("Adapter timeout must be positive and finite")
         all_cases = load_cases(args.dataset)
+        if args.split == "test" and not args.validate_only and not args.holdout_sha256:
+            raise ValueError("Test evaluation requires --holdout-sha256 from the reviewer")
+        if args.holdout_sha256:
+            if args.split != "test":
+                raise ValueError("--holdout-sha256 requires --split test")
+            verify_holdout(args.dataset, all_cases, args.holdout_sha256)
         cases = [
             case
             for case in all_cases
@@ -1005,6 +1143,7 @@ def main(argv: list[str] | None = None) -> int:
         }
         metadata = {
             **comparison,
+            "diagnostics_version": "v1",
             "comparison_key": digest(comparison),
             "git": git_state(),
             "timestamp_utc": datetime.now(UTC).isoformat(),
@@ -1073,10 +1212,7 @@ def main(argv: list[str] | None = None) -> int:
                 judgment = Judgment.model_validate(record)
                 if judgment.id not in predictions or judgment.id in judgments:
                     raise ValueError("Unexpected or duplicate judgment ID")
-                if (
-                    digest(predictions[judgment.id].model_dump(mode="json"))
-                    != judgment.prediction_sha256
-                ):
+                if digest(predictions[judgment.id].artifact()) != judgment.prediction_sha256:
                     raise ValueError(f"Judgment is bound to a different prediction: {judgment.id}")
                 judgments[judgment.id] = judgment
                 if judgment.id in by_id:
@@ -1088,6 +1224,7 @@ def main(argv: list[str] | None = None) -> int:
                     if not judgment.numerical_correctness or not judgment.answer_accuracy:
                         row["failure_categories"].append("answer_incorrect")
                     row["failure_categories"] = sorted(set(row["failure_categories"]))
+                    row["classification"] = classify_case(row, predictions[judgment.id])
         rates = (args.input_usd_per_million, args.output_usd_per_million)
         metrics = summarize(cases, predictions, rows, args.mode, args.ks, rates, judgments)
         report = {
@@ -1123,10 +1260,13 @@ def main(argv: list[str] | None = None) -> int:
         for name, records in (
             (
                 "predictions.jsonl",
-                [predictions[c.id].model_dump(mode="json") for c in cases if c.id in predictions],
+                [predictions[c.id].artifact() for c in cases if c.id in predictions],
             ),
             ("cases.jsonl", rows),
-            ("failures.jsonl", [row for row in rows if row["failure_categories"]]),
+            (
+                "failures.jsonl",
+                [row for row in rows if row["classification"] != "no_detected_failure"],
+            ),
         ):
             (target / name).write_text(
                 "".join(json.dumps(record, ensure_ascii=False) + "\n" for record in records),
@@ -1146,7 +1286,7 @@ def main(argv: list[str] | None = None) -> int:
         return (
             1
             if any(not gate["passed"] for gate in report["quality_gates"])
-            or metrics["failures"].get("runtime_failure")
+            or metrics["case_classifications"].get("runtime")
             else 0
         )
     except ConfigurationError:

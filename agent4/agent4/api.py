@@ -26,7 +26,7 @@ def _demo_identity(persona: str, metric_ids: list[str]) -> tuple[dict, dict]:
     claims = {
         "tenant_id": _DEMO_TENANT,
         "user_id": "hcm-viewer" if branch else "cfo-demo",
-        "roles": ["branch_viewer" if branch else "finance_analyst"],
+        "roles": ["branch_viewer"] if branch else ["finance_analyst", "payroll_viewer"],
     }
     policy = {
         "policy_version": f"demo-v1-{persona}",
@@ -79,7 +79,9 @@ def create_app(
                     view for view in _DEMO_VIEWS if view in metric["supported_views"]
                 ],
             }
-            for metric in catalog.list_visible_metrics({"allowed_views": _DEMO_VIEWS})
+            for metric in catalog.list_visible_metrics(
+                {"allowed_views": _DEMO_VIEWS, "roles": ["finance_analyst", "payroll_viewer"]}
+            )
         ]
 
         @app.get("/", include_in_schema=False)

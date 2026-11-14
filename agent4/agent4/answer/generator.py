@@ -33,7 +33,9 @@ def generate_grounded_answer(
         row = rows[0]
         group = ", ".join(
             safe_display_text(row[dimension])
-            for dimension in plan.dimensions
+            for dimension in (
+                column["key"] for column in result["columns"] if column["type"] == "string"
+            )
             if row[dimension] is not None
         )
         for mid in plan.metric_ids:
@@ -43,7 +45,9 @@ def generate_grounded_answer(
             if value is None:
                 text = f"{label} không xác định." if vi else f"{label} is undefined."
             else:
-                unit = safe_display_text(metric["unit"])
+                unit = safe_display_text(
+                    row["component_unit"] if metric["unit"] == "mixed" else metric["unit"]
+                )
                 text = f"{label} là {value} {unit}." if vi else f"{label} is {value} {unit}."
             if group:
                 text = f"({group}) {text}"

@@ -29,9 +29,13 @@ _DIMENSIONS = {
     "branch_code": r"chi nhánh|branch(?:es)?|branch_code",
     "product_line": r"dòng sản phẩm|nhóm sản phẩm|product lines?|product_line",
     "department_code": r"phòng ban|phòng|bộ phận|departments?|department_code",
-    "cost_category": r"khoản mục chi phí|khoản mục|cost categor(?:y|ies)|cost_category",
+    "cost_category": r"khoản mục chi phí|khoản mục|cost categor(?:y|ies)|categor(?:y|ies)|cost_category",
     "partner_code": r"mã đối tác|đối tác|khách hàng|nhà cung cấp|partners?|customers?|vendors?|suppliers?|partner_code",
     "segment": r"phân khúc(?: khách hàng)?|segments?",
+    "salesperson_code": r"nhân viên phụ trách|nhân viên kinh doanh|salespeople|salesperson",
+    "aging_bucket": r"nhóm tuổi nợ|aging buckets?",
+    "transaction_id": r"giao dịch(?: bán hàng)?|hóa đơn|(?:sales )?transactions?|invoices?",
+    "component": r"nhóm thu chi|nhóm thu/chi|components?",
 }
 _PERIOD_DIMENSIONS = ("month", "quarter", "year")
 _DIMENSION_NAMES = "(?:" + "|".join(f"(?:{names})" for names in _DIMENSIONS.values()) + ")"
@@ -161,7 +165,7 @@ def _has(pattern: str, text: str) -> bool:
 
 def _metric_ambiguity(question: str) -> str:
     if _has(r"công nợ|outstanding balances?|debt", question) and not _has(
-        r"phải thu|phải trả|khách hàng|nhà cung cấp|receivable|payable|loan|short.term|long.term",
+        r"phải thu|phải trả|khách hàng|nhà cung cấp|receivable|payable|loan|short.term|long.term|debt to equity",
         question,
     ):
         return "debt"
@@ -347,6 +351,11 @@ def build_semantic_plan_draft(
     top_k = next(iter(limits)) if len(limits) == 1 else None
     sort_requested = ranking or _has(_SORT, question)
     asc, desc = _has(_ASC, question), _has(_DESC, question)
+    if ids == ["top_sales_transactions"] and ranking:
+        if not dimensions:
+            dimensions = ["transaction_id"]
+        if top_k is None and not limits:
+            top_k = 10
     sort = None
     if sort_requested and len(ids) == 1 and asc != desc:
         sort = {"metric_id": ids[0], "direction": "asc" if asc else "desc"}
@@ -396,7 +405,12 @@ def build_semantic_plan_draft(
 
     reason = None
     if not unresolved:
-        if requests_comparison(question):
+        comparison_text = (
+            re.sub(r"\b(?:budget vs actual|management vs tax gap)\b", "", question)
+            if ids in (["budget_vs_actual"], ["mgmt_vs_tax_gap"])
+            else question
+        )
+        if requests_comparison(comparison_text):
             reason = "unsupported_comparison"
         elif any(
             view not in cap["supported_views"]

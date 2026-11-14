@@ -14,7 +14,7 @@ CHECK_PATHS ?= agent4 tests scripts vals
 
 .PHONY: help install-dev format format-check lint typecheck \
 	test test-core test-selection test-warehouse test-planning test-sql test-answer \
-	test-security test-benchmark test-mpx10 verify ci eval-validate eval demo
+	test-security test-benchmark test-mpx10 check-metric-coverage check-catalog-execution verify ci eval-validate eval demo
 
 help:
 	@echo "  make demo              Start the governed synthetic-data demo on port 8000"
@@ -29,6 +29,8 @@ help:
 	@echo "  make test-selection    Run M1 contract tests"
 	@echo "  make test-warehouse    Run catalog SQL against the configured DuckDB read-only"
 	@echo "  make test-mpx10        Run M0/M1 contracts and verify the MPX10 v3 references"
+	@echo "  make check-metric-coverage  Check registry coverage and reconcile ledger metrics on MPX10"
+	@echo "  make check-catalog-execution  Run all 66 metric IDs on the configured read-only warehouse"
 	@echo "  make test-planning     Run M2 contract tests"
 	@echo "  make test-sql          Run M3 contract tests"
 	@echo "  make test-answer       Run M4.1 contract tests"
@@ -80,6 +82,14 @@ test-warehouse:
 
 test-mpx10: test-core test-selection
 	$(PYTHON) -m scripts.check_mpx10
+
+check-metric-coverage:
+	$(PYTHON) -m scripts.metric_coverage --check
+	$(PYTHON) -m scripts.check_revenue_candidates
+	$(PYTHON) -m scripts.check_registry_ledger
+
+check-catalog-execution:
+	$(PYTHON) -m scripts.check_catalog_execution
 
 test-planning:
 	$(PYTEST) -q tests/contracts/test_planning_and_plan_validation.py tests/contracts/test_clarification_mode.py

@@ -1,0 +1,20 @@
+version: "1"
+prompt_version: metric-selection-v2-mentions
+cache_enabled: true
+retrieval:
+  mode: lexical_only
+  lexical_top_k: 8
+  fusion_top_k: 8
+  mention_retrieval_enabled: true
+expansion:
+  enabled: false
+reranking:
+  final_top_k: 8
+llm:
+  provider: ollama
+  model: qwen2.5:0.5b
+  temperature: 0
+  timeout_s: 30
+  max_retries: 0
+  context_window: 4096
+  structured_output: true
