@@ -24,11 +24,6 @@ async function printHandbook() {
                 table{font-size:9.6pt;line-height:1.38}th,td{padding:6px 8px}td:first-child{width:24%}
                 .table-frame{overflow:visible}figure{padding:2.5mm;margin:4mm 0;border-radius:2mm}
                 figure svg{max-height:115mm;overflow:hidden}figcaption{font-size:9.3pt;line-height:1.38}
-                figure[data-shot='11-import.png'] svg{max-height:86mm}
-                figure[data-shot='17-forecast-form.png'] svg{max-height:103mm}
-                figure[data-shot='18-base-result.png'] svg{max-height:78mm}
-                figure[data-shot='19-weekly.png'] svg{max-height:70mm}
-                figure[data-shot='23-export.png'] svg{max-height:19mm}
                 a{overflow-wrap:anywhere}p{orphans:3;widows:3}footer{margin-top:6mm;font-size:8.5pt}
             }
         ` });

@@ -6,6 +6,24 @@ import pandas as pd
 from .data import as_of
 
 
+def created_prospectively(plan):
+    """Compare creation with the cutoff in the ledger's Vietnamese calendar.
+
+    Offset-aware timestamps denote instants; legacy naive dates/times already
+    use the business calendar. Missing or invalid clocks cannot certify OOS.
+    """
+    try:
+        created = pd.Timestamp(plan.get("created_at"))
+        cutoff = pd.Timestamp(plan["cutoff"])
+        if pd.isna(created) or pd.isna(cutoff):
+            return False
+        if created.tzinfo is None:
+            created = created.tz_localize("Asia/Ho_Chi_Minh")
+        return created.tz_convert("Asia/Ho_Chi_Minh").date() <= cutoff.date()
+    except (KeyError, ValueError, TypeError, OverflowError):
+        return False
+
+
 def weekly_cash(data, start, weeks, asof, accounts):
     """One common scope for all weeks. Uncovered dates are missing rather than zero."""
     data = as_of(data, asof)
@@ -113,8 +131,14 @@ def calibrate_bands(plan, previous, data):
         if str(end) > plan["cutoff"] or (last and end > last):
             continue
         if (
-            old["created_at"][:10] > old["cutoff"]
+            not created_prospectively(old)
             or old.get("accounts") != plan["accounts"]
+        ):
+            continue
+        # Older operating fits/plans without a persisted fit ID cannot prove
+        # compatibility. Keep them readable, but do not pool their errors.
+        if plan.get("operating_included") and not all(
+            (p.get("operating_identity") or {}).get("version") for p in (old, plan)
         ):
             continue
         if any(
@@ -124,6 +148,7 @@ def calibrate_bands(plan, previous, data):
                 "mode",
                 "scenario",
                 "operating_included",
+                "operating_identity",
                 "new_credit_included",
                 "confirmed_weeks",
                 "band_protocol",

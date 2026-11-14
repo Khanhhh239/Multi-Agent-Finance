@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 
 VERSION = "settlement-partial-cash-v2"
+FIT_VERSION = "partial-empirical-prior-v3"
 LABEL_CONTRACT = "cash-calendar-full-settlement-v2"
 
 
@@ -140,13 +141,20 @@ def fit_partial(frame, cutoff, *, prior, strength=30.0, half_life_days=180.0):
         positive = ratios > 0
         # No fabricated partial behavior: an empty global cell has zero
         # incidence. Its ratio atom is unreachable until evidence is observed.
-        prior_p = prior.probability[group] if prior else 0.0
-        prior_values = np.asarray(prior.ratios[group] if prior else [0.5])
-        prior_w = np.asarray(prior.weights[group] if prior else [1.0])
+        prior_p = prior.probability[group] if prior is not None else 0.0
+        prior_mass = strength if prior is not None else 0.0
         positive_mass = float(w[positive].sum())
-        ps.append((positive_mass + strength * prior_p) / (n + strength))
-        v = np.r_[prior_values, ratios[positive]]
-        rw = np.r_[prior_w * strength, w[positive]]
+        ps.append((positive_mass + prior_mass * prior_p) / (n + prior_mass)
+                  if n + prior_mass else 0.0)
+        # An empty cell's ratio atom is only a serialization placeholder. It
+        # must not turn into thirty 50%-receipts when the first event arrives.
+        if prior is not None and prior_p > 0:
+            v = np.r_[prior.ratios[group], ratios[positive]]
+            rw = np.r_[np.asarray(prior.weights[group]) * prior_mass, w[positive]]
+        else:
+            v, rw = ratios[positive], w[positive]
+        if not len(v):
+            v, rw = np.array([0.5]), np.ones(1)  # q=0: unreachable by either engine.
         order = np.argsort(v, kind="stable")
         v, rw = v[order], rw[order] / rw.sum()
         # Bounded weighted empirical quantiles keep tenant artifacts compact.
@@ -157,7 +165,8 @@ def fit_partial(frame, cutoff, *, prior, strength=30.0, half_life_days=180.0):
         weights.append(rw)
         evidence.append(dict(weeks=len(samples), effective_weeks=n, partial_weeks=int(positive.sum())))
     return PartialModel(np.asarray(ps), tuple(values), tuple(weights), str(cutoff.date()),
-                        dict(cells=evidence, prior_sha256=prior.digest if prior else None,
+                         dict(cells=evidence, fit_version=FIT_VERSION,
+                              prior_sha256=prior.digest if prior is not None else None,
                              prior_strength=strength, label_contract=LABEL_CONTRACT))
 
 
@@ -225,6 +234,9 @@ def iter_cash_paths(distribution, frame, partial, amounts, rng, paths, *, shared
 
     The latent cash-full event follows T1 even on paths with earlier partials.
     Tail is a timing category, never a second write-off probability.
+    Customer stress retains only RNG states, replaying one invoice's draws at a
+    time. Repeated customers do not advance the parent RNG, preserving paired
+    scenarios and the exact draws of the original tensor-caching engine.
     """
     if partial is None or partial.version != VERSION:
         raise ValueError("Cần nhánh partial đã fit để chuyển T1 thành dòng tiền")
@@ -237,12 +249,16 @@ def iter_cash_paths(distribution, frame, partial, amounts, rng, paths, *, shared
     horizon = p.shape[1] - 1
     late, initial = overdue(frame), receipt_state(frame)
     customers = frame.customer_id.astype(str).to_numpy()
-    shared = {}
+    shared_states = {}
+    shared_rng = np.random.Generator(type(rng.bit_generator)(0)) if shared_customer else None
     for i in range(len(p)):
         if shared_customer:
-            if customers[i] not in shared:
-                shared[customers[i]] = rng.random((3, paths, horizon))
-            draws = shared[customers[i]]
+            if customers[i] not in shared_states:
+                shared_states[customers[i]] = rng.bit_generator.state
+                draws = rng.random((3, paths, horizon))
+            else:
+                shared_rng.bit_generator.state = shared_states[customers[i]]
+                draws = shared_rng.random((3, paths, horizon))
         else:
             draws = rng.random((3, paths, horizon))
         remaining = np.full(paths, float(amounts[i]))

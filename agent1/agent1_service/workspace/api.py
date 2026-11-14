@@ -32,6 +32,7 @@ from agent1.adaptive.data import (
 from ..ingest.einvoice_xml import read_invoice_xml
 from ..ingest.strict_files import read_csv, read_excel, source_hash
 from agent1.adaptive.methods import train, forecast
+from agent1.adaptive.cash_history import created_prospectively
 from agent1.adaptive.t1_catalog import CATALOG
 from agent1.adaptive.obligations import obligation_amounts
 from agent1.adaptive.obligation_imports import plan_obligation_import
@@ -303,6 +304,8 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             )
         }
         meta.update(created_at=row.get("created_at") or "", legacy=True)
+        if "company_bundle_version" in row:
+            meta["company_bundle_version"] = row["company_bundle_version"]
         put(firm_id, "forecast_index", [meta])
 
     @router.get("/access")
@@ -337,9 +340,12 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             data = current(firm)
             counts = {k: len(data.get(k, [])) for k in SCHEMAS}
         active = records(firm, "model_active")
+        from .t1_lifecycle import with_promotion_evidence, update_status
+        lifecycle = update_status(store, firm)
         versions = sorted(
             (r for r in records(firm, "models") if r.get("algorithm_version") == "t1-partial-bundle-v2"), key=lambda r: r["created_at"], reverse=True
         )
+        versions = [with_promotion_evidence(store, firm, row) for row in versions]
         jobs = sorted(
             records(firm, "jobs"), key=lambda r: r["created_at"], reverse=True
         )
@@ -359,6 +365,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             active_version=active[0]["version"] if active else None,
             versions=[public_run(v) for v in versions],
             jobs=jobs[:10],
+            t1_updates=lifecycle,
             method_count=len(CATALOG),
             needs_retraining=bool(
                 active
@@ -821,8 +828,6 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                             incumbent=incumbent, policy=policy, catalog_path=str(catalog.path),
                         )
                     bundle = train(given, when, callback, incumbent=incumbent, catalog=catalog, policy=policy)
-                    from agent1.adaptive.operating import select_operating
-                    bundle["operating"] = select_operating(given, str(when.date()), False, include_new_credit=False)
                     bundle["synthetic_sandbox"] = demo_training_allowed(firm)
                     return bundle
 
@@ -875,25 +880,50 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
 
     @router.get("/t1/updates")
     def t1_updates(firm=Depends(read_access)):
-        return dict(
-            state=one(firm, "t1_update_state", "current"),
-            runs=sorted(records(firm, "t1_update_runs"), key=lambda r:r["created_at"], reverse=True)[:100],
-            challengers=[{k:v for k,v in row.items() if k not in {"snapshot", "artifact_id"}} for row in records(firm, "t1_challengers")],
-        )
+        from .t1_lifecycle import update_status
+        return update_status(store, firm)
+
+    def saved_forecast_uses_model(firm, model):
+        """Registry IDs identify provenance; T1 bundle hashes identify parameters."""
+        indexed = {r["id"]: r for r in records(firm, "forecast_index")}
+        ids = set(indexed) | set(store.ids(firm, "company_predictions")) | set(store.ids(firm, "company_forecast_replays"))
+        for forecast_id in ids:
+            index = indexed.get(forecast_id, {})
+            if "company_bundle_version" in index:
+                if index["company_bundle_version"] == model["id"]:
+                    return True
+                continue
+            plan = one(firm, "predictions", forecast_id) or {}
+            if "company_bundle_version" in plan:
+                if plan["company_bundle_version"] == model["id"]:
+                    return True
+                continue
+            if any(r.get("model_version") == model["id"] for r in (index, plan)):
+                return True  # Before bundle-hash model_version was introduced.
+            replay = one(firm, "forecast_replays", forecast_id) or {}
+            if "company_bundle_version" in replay:
+                if replay["company_bundle_version"] == model["id"]:
+                    return True
+                continue
+            # Old snapshots may retain only a T1 identity. Preserve all matching
+            # registry versions rather than guessing which one was used.
+            identity = replay.get("identity") or {}
+            versions = (index.get("model_version"), plan.get("model_version"), identity.get("t1_version"))
+            if model.get("t1_version") and model["t1_version"] in versions:
+                return True
+        return False
 
     @router.delete("/models/{identifier}")
     def retire_model(identifier: str, confirm: str, firm=Depends(authorize)):
-        with mutex:
+        with mutex, store.lock, store.connection:
+            store.connection.execute("BEGIN IMMEDIATE")
             if confirm != identifier:
                 raise HTTPException(422, "Xác nhận lại đúng mã phiên bản cần xóa.")
             model = one(firm, "models", identifier)
             if not model:
                 raise HTTPException(404, "Không có phiên bản")
             active = one(firm, "model_active", "active") or {}
-            if active.get("version") == identifier or any(
-                r.get("model_version") == identifier
-                for r in records(firm, "forecast_index")
-            ):
+            if active.get("version") == identifier or saved_forecast_uses_model(firm, model):
                 raise HTTPException(
                     409, "Phiên bản đang dùng hoặc đã được lưu trong kế hoạch."
                 )
@@ -1182,7 +1212,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             warning_lead_weeks=[
                 r["week"] for r in ready if r["alert"] and r["shortfall"]
             ],
-            prospective=plan.get("created_at", "9999")[:10] <= plan["cutoff"],
+            prospective=created_prospectively(plan),
             mae=sum(r["abs_error"] for r in ready) / len(ready) if ready else None,
             coverage80=sum(r["interval_hit"] for r in ready) / len(ready)
             if ready
@@ -1204,12 +1234,19 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
         bundle = None
         model = None
         try:
-            data = current(firm)
+            from .t1_lifecycle import load_active
+            # SQLite's read transaction also protects against imports/activation
+            # by another worker or CLI. Release it before expensive inference.
+            with mutex, store.lock, store.connection:
+                store.connection.execute("BEGIN")
+                data = current(firm)
+                coverage = records(firm, "payment_coverage")
+                if coverage:
+                    data = dict(data, payment_coverage=[*data.get("payment_coverage", []), *coverage])
+                bundle, model = load_active(store, firm, cutoff)
             check_bank_scope(data)
-            from .t1_lifecycle import load_active, current_data as current_t1_data
-            bundle, model = load_active(store, firm, cutoff)
             from agent1.adaptive.t1_data import visible_data
-            t1_input_hash = fingerprint(visible_data(current_t1_data(store, firm), cutoff))
+            t1_input_hash = fingerprint(visible_data(data, cutoff))
             started = time.perf_counter()
             result = forecast(
                 data,
@@ -1243,11 +1280,10 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 confirmed_weeks=body.confirmed_weeks,
                 dataset_hash=fingerprint(data),
             )
+            result["company_bundle_version"] = result["model_version"]
             if bundle and bundle.get("t1_version"):
-                result["company_bundle_version"] = result["model_version"]
                 result["model_version"] = bundle["t1_version"]
             elif bundle and bundle.get("t1_provenance"):
-                result["company_bundle_version"] = result["model_version"]
                 result["model_version"] = "landmark:" + bundle["t1_provenance"]["metadata_sha256"][:16]
             for invoice in result["collections"]:
                 explanation = invoice.get("payment_explanation")
@@ -1288,8 +1324,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 past = [
                     r
                     for r in records(firm, "forecast_index")
-                    if r["created_at"]
-                    and r["created_at"][:10] <= r["cutoff"]
+                    if created_prospectively(r)
                     and r["cutoff"] < cutoff
                     and r.get("model_version") == result["model_version"]
                 ]
@@ -1317,6 +1352,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                             "opening_balance",
                             "dataset_hash",
                             "model_version",
+                            "company_bundle_version",
                             "scenario",
                             "minimum_balance",
                             "horizon_weeks",
@@ -1327,7 +1363,12 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
             engine_id = result["t10"]["identity"]["t6"]["source_sha256"]
             if not one(firm, "forecast_engines", engine_id):
                 batches["company_forecast_engines"] = [archive_engine(result["t6_version"])]
-            store.put_many(firm, batches)
+            with store.lock, store.connection:
+                store.connection.execute("BEGIN IMMEDIATE")
+                registry_id = result.get("company_bundle_version")
+                if registry_id and not one(firm, "models", registry_id):
+                    raise HTTPException(409, "Phiên bản dùng để tính đã bị xóa; lập lại dự báo bằng phiên bản đang dùng.")
+                store.put_many(firm, batches)
             return result
         except ValueError as exc:
             raise HTTPException(422, str(exc))

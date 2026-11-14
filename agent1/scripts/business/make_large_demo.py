@@ -255,7 +255,6 @@ def build():
             *files,
             OUT / "manifest.json",
             OUT / "README.md",
-            OUT / "README.txt",
             *sorted(bad.glob("*.csv")),
         ]:
             z.write(p, p.relative_to(OUT))

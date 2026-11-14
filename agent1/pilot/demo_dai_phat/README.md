@@ -1,9 +1,7 @@
-# Đại Phát · Bộ đầu vào thực hành
+# Đại Phát · CSV synthetic
 
-Dữ liệu 100% synthetic cho workspace DEMO_DAIPHAT. Nạp sáu CSV theo số 01–06 và chọn đúng loại bảng cùng tên trong hướng dẫn. Ngày trong CSV là `yyyy-mm-dd`, số tiền `plain`.
+Các file 01–06, manifest và `invalid_cases/` phục vụ diễn tập Workspace trong kho `DEMO_DAIPHAT` riêng. Ngày CSV ISO `yyyy-mm-dd`, tiền `plain`; giữ ID nguồn.
 
-Đọc [hướng dẫn khởi động](../../README.md) và [PDF có ảnh](../../docs/06_Pilot/pdf/So-tay-Agent1.pdf). Workspace demo cho phép train và validation. Dữ liệu thật dùng kho SME riêng.
+[Hướng dẫn đầu vào Đại Phát](../../docs/06_Pilot/DEMO_INPUT_TRAIN_DAIPHAT.md) là nơi duy nhất ghi thứ tự nạp và tham số bài tập. [Sổ tay Workspace](../../docs/06_Pilot/SO_TAY_AGENT1.md) giữ thao tác, cách đọc audit và kế hoạch.
 
-Ngày chốt thực hành **31-10-26**, số dư đầu kỳ **425000000 VND**, ngưỡng cảnh báo **200000000 VND**. Bộ dữ liệu có 6 khoản thu chưa ghép tổng 42 triệu để tập hàng chờ. Từng file trong `invalid_cases/` dùng thử thông báo lỗi, không nạp vào bộ sạch.
-
-`manifest.json` ghi quy mô và giới hạn của bộ này. Báo cáo huấn luyện và trọng số được tạo trên máy nhận. Có thể tái tạo dữ liệu bằng `python scripts/business/make_large_demo.py` từ thư mục repo.
+Manifest mô tả quy mô/giả định. Dữ liệu không đại diện cho doanh nghiệp thật; cutoff bài tập phải phù hợp ngày sẵn sàng của bundle hiện dùng. Không dùng PDF/điểm dự báo cũ làm đáp án. Tái tạo bằng `scripts/business/make_large_demo.py` từ thư mục `agent1/` sẽ ghi lại bộ demo và gói ZIP; chỉ chạy khi chủ động muốn tái tạo.

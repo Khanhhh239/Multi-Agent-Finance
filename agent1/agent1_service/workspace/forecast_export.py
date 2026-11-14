@@ -92,6 +92,17 @@ def workbook_bytes(plan, company):
     summary = workbook.active
     summary.title = "Kết quả dự báo"
     scenario = plan.get("scenario") or {}
+    calibrated = plan.get("band_status") == "calibrated_out_of_sample" or any(
+        row.get("raw_low") is not None or row.get("raw_high") is not None
+        for row in plan["weeks"]
+    )
+    raw_band = plan.get("band_status") in ("raw_simulation", "insufficient_out_of_sample_errors")
+    band_note = (
+        "Dải đã hiệu chỉnh bằng sai số lịch sử; cận dưới/trên không phải P10/P90 mô phỏng. "
+        "P50 và xác suất dưới ngưỡng vẫn là mô phỏng."
+        if calibrated else "Dải P10–P90 mô phỏng, chưa hiệu chỉnh độ phủ."
+        if raw_band else "Bản lưu chưa ghi loại dải số dư; chưa đủ cơ sở gọi hai cận là P10/P90."
+    )
     details = [
         ("Doanh nghiệp", company),
         ("Ngày dự báo", _value("cutoff", plan["cutoff"])),
@@ -111,6 +122,7 @@ def workbook_bytes(plan, company):
         ("Thời gian tính (ms)", plan.get("inference_ms")),
         ("Phiên bản", plan.get("model_version") or "Theo lịch sử"),
         ("Mã kế hoạch", plan.get("id")),
+        ("Cách đọc dải số dư", band_note),
     ]
     details.extend(
         ("Phạm vi và giả định", note) for note in plan.get("assumptions", [])
@@ -165,12 +177,25 @@ def workbook_bytes(plan, company):
             ("cash_out", "Dự chi (VND)"),
             ("balance", "Số dư kỳ vọng (VND)"),
             ("median_balance", "Trung vị số dư · P50 (VND)"),
-            ("low", "P10 (VND)"),
-            ("high", "P90 (VND)"),
+            ("low", "Cận dưới đã hiệu chỉnh (VND)" if calibrated
+             else "P10 mô phỏng (VND)" if raw_band else "Cận dưới dải số dư (VND)"),
+            ("high", "Cận trên đã hiệu chỉnh (VND)" if calibrated
+             else "P90 mô phỏng (VND)" if raw_band else "Cận trên dải số dư (VND)"),
             ("outflow_status", "Lịch chi"),
             ("below_floor_probability", "Xác suất dưới ngưỡng"),
+            ("raw_p10", "P10 mô phỏng gốc (VND)"),
+            ("raw_p90", "P90 mô phỏng gốc (VND)"),
         ],
-        plan["weeks"],
+        (
+            dict(
+                row,
+                raw_p10=(row.get("balance_quantiles") or {}).get(
+                    "0.1", row.get("raw_low", row.get("low") if raw_band and not calibrated else None)),
+                raw_p90=(row.get("balance_quantiles") or {}).get(
+                    "0.9", row.get("raw_high", row.get("high") if raw_band and not calibrated else None)),
+            )
+            for row in plan["weeks"]
+        ),
     )
     _write_table(
         workbook.create_sheet("Khoản cần chú ý"),

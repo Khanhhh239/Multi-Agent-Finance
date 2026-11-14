@@ -61,8 +61,8 @@ Worker cập nhật tiến độ mỗi 15 giây và không cắt theo tổng th�
 
 ## Tài liệu và file sinh
 
-- `docs/06_Pilot/SO_TAY_AGENT1.md` là nguồn sổ tay. Ảnh thật nằm trong `agent1_service/ui/workspace/manual/img/`.
-- Cài `Markdown` vào môi trường Python rồi chạy `python scripts/business/build_handbook.py` để dựng HTML offline và hướng dẫn trên web. Để in lại PDF, cài Node.js, Microsoft Edge và `npm install --no-save --package-lock=false playwright`, rồi chạy `node scripts/business/print_handbook.cjs`. PDF được lưu tại `docs/06_Pilot/pdf/So-tay-Agent1.pdf`.
+- `docs/06_Pilot/SO_TAY_AGENT1.md` là nguồn sổ tay. Hướng dẫn web bám nội dung này; ảnh chụp giao diện cũ đã được bỏ.
+- Cài `Markdown` hoặc `markdown-it-py` vào môi trường Python rồi chạy `python scripts/business/build_handbook.py` để dựng HTML offline và hướng dẫn trên web. Để in lại PDF, cài Node.js, Microsoft Edge và `npm install --no-save --package-lock=false playwright`, rồi chạy `node scripts/business/print_handbook.cjs`. PDF được lưu tại `docs/06_Pilot/pdf/So-tay-Agent1.pdf`.
 - `python scripts/business/check_large_demo.py` kiểm tra sáu bảng, lỗi có chủ đích và các kịch bản xem trước. Chạy từ thư mục repo.
 - `python scripts/business/make_large_demo.py` tái tạo dữ liệu synthetic và dữ liệu xem trước. Lưu thay đổi dữ liệu thử trước khi tái tạo.
 - `outputs/`, `tmp/` và các thư mục `.state*` chứa file chạy trên máy. Bộ dữ liệu thật, parquet, token, mật khẩu, trọng số đã học và báo cáo riêng không đi kèm bản bàn giao.
@@ -73,7 +73,7 @@ Bộ kiểm thử sau khi ghép với nhánh nghiên cứu: 692 đạt, 2 bỏ q
 
 Phiên bản minh họa Đại Phát đã đánh giá 16 cấu hình hóa đơn cùng một ensemble, gồm 3 neural, và 6 ứng viên/ensemble chuỗi tiền. Brier audit T1 0,0949 so với mốc 0,1341 trên 82 hóa đơn. Khoảng tin cậy cải thiện chứa 0. Lượt minh họa dùng neural 25 vòng/batch 512 và mất 138,84 giây. Cấu hình mặc định hiện tại đã trở lại 100/128. Mô hình học, token và báo cáo riêng do máy nhận tự tạo.
 
-Rủi ro cần đọc theo phạm vi hiện có là nhãn xóa nợ thiếu, lịch chi chưa đầy đủ và độ phủ dải tiền chưa có bằng chứng trên SME thật. Những việc tiếp theo gồm gợi ý đối soát có duyệt, lịch chi định kỳ, kiểm định rolling-origin số dư và tác động thu hồi sau liên hệ. [Rà soát theo yêu cầu sản phẩm](06_Pilot/RA_SOAT_WORKSPACE_DONG_TIEN.md).
+Rủi ro cần đọc theo phạm vi hiện có là nhãn xóa nợ thiếu, lịch chi chưa đầy đủ và độ phủ dải tiền chưa có bằng chứng trên SME thật. Những việc tiếp theo gồm gợi ý đối soát có duyệt, lịch chi định kỳ, kiểm định rolling-origin số dư và tác động thu hồi sau liên hệ. [Rà soát theo yêu cầu sản phẩm](06_Pilot/SO_TAY_AGENT1.md).
 
 ## Checklist nhận bàn giao
 

@@ -1,79 +1,33 @@
-# Chương trình chạy thử "Trợ lý Dòng tiền" — Dữ liệu cần doanh nghiệp cung cấp
+# Dữ liệu cần chuẩn bị cho Agent 1
 
-> **Bản đề xuất chuẩn bị pilot, chưa phải chương trình đã được chấp thuận hoặc triển khai.** Trạng thái pilot thật hiện là [NO-GO](../03_Evaluation/GATES_CURRENT.md); rà soát lại điều kiện trước khi gửi bản này cho doanh nghiệp.
+Danh sách đầu vào để chuẩn bị pilot; chưa là lời mời hoặc cam kết triển khai. Phải chốt quyền sử dụng, phạm vi và điều kiện [nghiệm thu](../03_Evaluation/03_cong_nghiem_thu.md) trước khi nhận dữ liệu thật.
 
-> Tài liệu gửi doanh nghiệp tham gia chạy thử. Bản 1.0, 24/10/2026. Đi kèm: **Cam kết bảo mật dữ liệu** (`02_CAM_KET_BAO_MAT.md`).
+## Chốt phạm vi trước khi xuất
 
-## 1. Chương trình là gì (một đoạn)
+Chọn doanh nghiệp, tài khoản ngân hàng VND, ngày chốt, số dư đầu và mức tiền tối thiểu. Dùng mã khách/chứng từ/bí danh tài khoản nhất quán giữa các bảng. Ghi thời điểm thực sự biết thông tin (`known_at`); file xuất hôm nay không chứng minh mọi phiên bản đã có ở các ngày quá khứ.
 
-Chúng tôi đang thử một công cụ dự báo **13 tuần tới, tuần nào doanh nghiệp có thể thiếu tiền**, xác suất bao nhiêu, và **nên đòi khoản nào trước**.
-Trong chạy thử, công cụ **chỉ ghi lại dự báo**, không gửi gì cho khách hàng của quý doanh nghiệp, không can thiệp vào phần mềm kế toán hay ngân hàng.
-Sau 8 tuần, chúng tôi so dự báo với thực tế và gửi quý doanh nghiệp báo cáo.
+CSV UTF-8/XLSX hoặc XML hóa đơn được hỗ trợ theo [schema dịch vụ](../../agent1_service/README.md#hợp-đồng-đầu-vào-sme). Giới hạn Workspace hiện tại: 5 MB/file, 50.000 dòng; chọn rõ ngày/số và sheet. Không làm mất số 0 đầu, không có dòng tổng cộng, tiền VND nguyên. Thiếu trường bắt buộc phải sửa ở bản xem trước.
 
-**Quý doanh nghiệp nhận được (miễn phí trong chạy thử):**
-- Báo cáo hằng tuần: dải số dư dự kiến 13 tuần (kịch bản tốt / giữa / xấu) và các hoá đơn nên ưu tiên thu.
-- Báo cáo cuối chương trình: dự báo đã đúng/sai thế nào so với thực tế, tình trạng công nợ phải thu, khách trả chậm.
-- Báo cáo chất lượng dữ liệu kế toán (hoá đơn trùng, thiếu, lệch số tiền...).
-
-**Chúng tôi cần:** dữ liệu lịch sử để học thói quen trả tiền của khách, và dữ liệu cập nhật hằng tuần trong 8 tuần chạy thử.
-
-## 2. Dữ liệu cần — mức tối thiểu (bắt buộc)
-
-| # | Dữ liệu | Khoảng thời gian | Định dạng nhận được | Dùng để |
-|---|---|---|---|---|
-| 1 | **Hoá đơn điện tử đầu ra** (bán hàng) | **12–18 tháng gần nhất** | File **XML** gốc của hoá đơn điện tử (xuất từ hệ thống hoá đơn điện tử của nhà cung cấp hoặc cổng tra cứu) | Biết ai nợ bao nhiêu, hạn nào |
-| 2 | **Sao kê tài khoản ngân hàng** (tất cả tài khoản nhận tiền khách hàng) | **Cùng kỳ với #1** | Excel/CSV xuất từ ngân hàng điện tử. Đọc sẵn mẫu của **Vietcombank, BIDV, Techcombank, ACB**; ngân hàng khác gửi kèm 1 dòng mô tả cột | Biết tiền về ngày nào, từ ai |
-| 3 | **Số dư tài khoản ngân hàng đầu kỳ** | Ngày đầu của #2 | Một con số cho mỗi tài khoản | Điểm xuất phát dòng tiền |
-| 4 | **Các khoản chi cố định đã biết** (lương, thuê, trả nợ vay, thuế...) | 12 tháng tới (nếu có) | Excel đơn giản: ngày, số tiền, loại | Dự báo tiền ra |
-
-Mỗi file tối đa **10 MB**; nếu lớn hơn, chia theo tháng.
-
-## 3. Dữ liệu nên có (giúp dự báo tốt hơn rõ rệt)
-
-| # | Dữ liệu | Định dạng | Vì sao quan trọng |
-|---|---|---|---|
-| 5 | **Sổ chi tiết công nợ phải thu** (từ phần mềm kế toán) | Excel; tối thiểu các cột: số hoá đơn, mã khách, ngày hoá đơn, hạn thanh toán, số tiền | Biết hoá đơn nào đã được kế toán gạch nợ, giúp ghép tiền về với hoá đơn chính xác hơn |
-| 6 | **Lời hứa trả tiền của khách** (nếu có ghi lại) | Excel: khách, hoá đơn, ngày hứa trả | Lời hứa giúp dự báo chính xác hơn khoảng 10–20% (đo trên dữ liệu mô phỏng) |
-| 7 | **Hoá đơn điều chỉnh / thay thế / huỷ** | XML như #1 | Tránh tính nhầm công nợ |
-
-## 4. Trong 8 tuần chạy thử
-
-| Việc | Tần suất | Thời gian ước tính phía doanh nghiệp |
+| Bảng | Nội dung cần có | Vai trò |
 |---|---|---|
-| Gửi sao kê ngân hàng tuần vừa qua + hoá đơn mới phát hành | 1 lần/tuần | 10–15 phút |
-| (Không bắt buộc) Xác nhận 2–3 giao dịch mà hệ thống không tự ghép được | 1 lần/tuần | 5 phút |
+| Hóa đơn và vòng đời | ID ổn định, khách, ngày lập/hạn, số tiền, ngày biết; chứng từ điều chỉnh/thay thế/hủy và liên kết nguồn khi có | Công nợ hiệu lực tại ngày chốt; XML thiếu hạn không được tự suy hạn |
+| Dòng ngân hàng | ID, tài khoản, ngày, chiều thu/chi, tiền; nội dung/người chuyển/mã khách/phân loại nếu có | Tiền thực; không đồng nhất với phân bổ công nợ |
+| Thanh toán đã phân bổ | ID payment, hóa đơn, ngày, tiền, bank ID nếu có, ngày biết | Các lần thu từng phần/tất toán; một khoản cho nhiều hóa đơn tách dòng |
+| Kỳ sao kê và số dư | Tài khoản, kỳ, số dư đầu/cuối, ngày biết | Đối chiếu số dư và xác định tuần quan sát được |
+| Nghĩa vụ T5 | Mỗi lần đến hạn có ID, ngày, tiền, loại, ngày biết và nguồn/phê duyệt khi cần | Lương/thuê/vay/thuế đã biết; không coi là toàn bộ chi tương lai |
+| Thực trả/nhận T5 | ID settlement, nghĩa vụ, bank, ngày, tiền, ngày biết | Tính phần còn lại; hoàn VAT đã duyệt là dòng thu riêng |
+| Hành động/lời hứa | ID sự kiện/hóa đơn, ngày, loại, ngày biết; ngày hứa khi có | Bằng chứng xử lý và danh sách ưu tiên; không cam kết làm tăng độ chính xác |
 
-Theo mô phỏng của chúng tôi, việc kế toán xác nhận **khoảng 3 giao dịch mỗi tuần** giúp giảm đáng kể cảnh báo nhầm. Đây là kết quả mô phỏng, chạy thử sẽ cho con số thật.
+## Lịch sử và độ đầy đủ
 
-## 5. Không cần gửi
+Nên chuẩn bị lịch sử công nợ và sao kê cùng kỳ, gồm cả hóa đơn chưa trả, credit/write-off và thay đổi phiên bản. Không chỉ xuất hóa đơn đã tất toán. Độ dài lịch sử tự nó chưa đủ để học tiếp; T1 còn kiểm số mẫu, coverage và nhãn trưởng thành 91 ngày. Thiếu điều kiện thì giữ global/incumbent, không tạo nhãn thay thế.
 
-- Mật khẩu ngân hàng, mã OTP, quyền truy cập phần mềm kế toán — **không bao giờ yêu cầu**.
-- Hợp đồng, hồ sơ nhân sự, bảng lương chi tiết theo người (chỉ cần **tổng** chi lương theo kỳ).
-- Thông tin cá nhân của nhân viên.
+Nhánh hoạt động cần lịch sử sao kê liên tục, đúng tài khoản và đủ điều kiện kiểm định. Bộ chọn hiện yêu cầu ít nhất 104 tuần và ba gốc validation cùng audit; mỗi đoạn fit cần ít nhất 52 tuần. Dự báo cũng kiểm lại tối thiểu 52 tuần lịch sử, nhưng riêng điều kiện này không đủ để chọn learner. Hóa đơn mới tương lai mặc định không bật. Đánh giá kế hoạch 13 tuần phải chờ đủ thực tế tương ứng; chương trình quan sát tám tuần chưa chấm trọn mọi kế hoạch 13 tuần.
 
-## 6. Có thể che bớt trước khi gửi (nếu quý doanh nghiệp muốn)
+Kế toán xác nhận riêng phạm vi thanh toán đã đủ đến cutoff và tuần lịch chi đã rà soát. Có một khoản chi không có nghĩa cả tuần đầy đủ; chưa có sao kê không phải thu/chi bằng 0. Số dư đầu + thu − chi phải khớp số dư cuối trên cùng tài khoản.
 
-Công cụ **không cần biết tên thật của khách hàng**, chỉ cần một mã nhất quán để nhận ra cùng một khách.
-Quý doanh nghiệp có thể thay tên khách bằng mã (ví dụ KH001) **trên cả hoá đơn và sao kê, cùng một cách thay**.
-Lưu ý: nội dung chuyển khoản (ví dụ "TT HD 0345") **nên giữ nguyên** vì đó là tín hiệu ghép tiền quan trọng nhất; chỉ che tên người nếu có.
+## Tiếp nhận và cập nhật
 
-## 7. Danh sách kiểm tra trước khi gửi
+Kiểm quyền sử dụng và [bảo vệ dữ liệu](02_CAM_KET_BAO_MAT.md), dùng kho riêng. Nạp theo thứ tự trong [sổ tay](SO_TAY_AGENT1.md), giữ ID ổn định cho kỳ tiếp theo. T9 chỉ giảm công nợ sau duyệt; ca thiếu bằng chứng để chờ xác minh. Không cần mật khẩu/OTP ngân hàng hoặc quyền tự chuyển tiền.
 
-- [ ] XML hoá đơn đầu ra 12–18 tháng
-- [ ] Sao kê tất cả tài khoản nhận tiền, cùng kỳ
-- [ ] Số dư đầu kỳ từng tài khoản
-- [ ] Danh sách chi cố định 12 tháng tới (nếu có)
-- [ ] (Nên có) Sổ chi tiết công nợ phải thu
-- [ ] Đã ký **Cam kết bảo mật dữ liệu** hai bên
-- [ ] Đã thống nhất người liên hệ và kênh gửi file (khuyến nghị: thư mục chia sẻ có mật khẩu hoặc trao tay; **không** gửi qua email không mã hoá)
-
-## 8. Thời gian
-
-| Bước | Thời gian |
-|---|---|
-| Ký cam kết, gửi dữ liệu lịch sử | Tuần 0 |
-| Chúng tôi nạp dữ liệu, gửi báo cáo chất lượng dữ liệu và dự báo đầu tiên | Trong 3 ngày làm việc |
-| Chạy thử, báo cáo hằng tuần | Tuần 1–8 |
-| Báo cáo tổng kết, xoá dữ liệu (nếu quý doanh nghiệp yêu cầu) | Tuần 9 |
-
-Liên hệ: **[Họ tên, số điện thoại, email người phụ trách]**
+Khóa dự báo trước khi biết kết quả và cập nhật thực thu/thực chi theo kỳ đã thống nhất. Biểu mẫu, quan sát người dùng và tiêu chí quyết định tập trung trong [bộ pilot](../../pilot/BO_PILOT_SME.md).

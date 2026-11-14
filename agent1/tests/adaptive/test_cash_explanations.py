@@ -254,6 +254,7 @@ def test_operating_and_new_credit_stay_separate_and_variable_cost_is_not_counted
 ):
     from agent1.adaptive import new_credit, operating
 
+    book["bank_scope"] = dict(accounts=["Q"])
     book["outflows"] = [
         {
             "expense_id": "VARIABLE-1",
@@ -384,6 +385,27 @@ def test_export_contains_full_contributions_scenarios_and_legacy_support(book):
         "Kế hoạch từng tuần",
         "Khoản cần chú ý",
     ]
+
+
+@pytest.mark.parametrize("legacy", [False, True])
+def test_export_distinguishes_calibrated_bounds_from_original_mc_quantiles(book, legacy):
+    plan = forecast(book, CUTOFF, 100, bundle(), horizon_weeks=4)
+    plan["band_status"] = "calibrated_out_of_sample"
+    for row in plan["weeks"]:
+        row.update(raw_low=row["low"], raw_high=row["high"])
+        row["low"] -= 500
+        row["high"] += 500
+    if legacy:
+        plan.pop("band_status")
+    wb = load_workbook(BytesIO(workbook_bytes(plan, "TEST")))
+    sheet = wb["Kế hoạch từng tuần"]
+    rows = list(sheet.values)
+    first = dict(zip(rows[0], rows[1]))
+    assert first["Cận dưới đã hiệu chỉnh (VND)"] == plan["weeks"][0]["low"]
+    assert first["Cận trên đã hiệu chỉnh (VND)"] == plan["weeks"][0]["high"]
+    assert first["P10 mô phỏng gốc (VND)"] == plan["weeks"][0]["raw_low"]
+    assert first["P90 mô phỏng gốc (VND)"] == plan["weeks"][0]["raw_high"]
+    assert "không phải P10/P90" in str(list(wb["Kết quả dự báo"].values))
 
 
 def test_api_persists_provenance_and_uses_saved_values_on_get_and_export(
@@ -523,9 +545,27 @@ def test_browser_cash_breakdown_filters_groups_and_compares_on_desktop_and_mobil
                 panel.get_by_text("Nếu khách trả chậm hoặc dời khoản chi? · Chạy lại T6", exact=True).click()
                 page.get_by_label("Khách trả chậm", exact=True).select_option("C1")
                 page.get_by_label("Số tuần trả chậm thêm").fill("2")
+                page.get_by_label("Khoản chi cần dời", exact=True).select_option("E1")
+                page.get_by_label("Số tuần dời chi thêm").fill("1")
                 page.get_by_role("button", name="So sánh với forecast đã lưu", exact=True).click()
                 playwright.expect(panel).to_contain_text("Xác suất thiếu tiền ít nhất một tuần")
                 playwright.expect(panel).to_contain_text("Δ P50")
+                assumptions = page.get_by_label("Giả định của kết quả kịch bản", exact=True)
+                saved_summary = "Khách C1 trả chậm thêm 2 tuần; Khoản chi E1 dời thêm 1 tuần."
+                playwright.expect(assumptions).to_contain_text(saved_summary)
+                playwright.expect(assumptions).to_contain_text("ngày chốt 10-02-26")
+                page.get_by_label("Khách trả chậm", exact=True).select_option("C2")
+                page.get_by_label("Số tuần trả chậm thêm").fill("1")
+                page.get_by_label("Khoản chi cần dời", exact=True).select_option("E2")
+                page.get_by_label("Số tuần dời chi thêm").fill("3")
+                playwright.expect(assumptions).to_contain_text(saved_summary)
+                page.get_by_role("button", name="Mở kịch bản đã lưu", exact=True).click()
+                page.get_by_role("button", name=saved_summary).click()
+                playwright.expect(page.get_by_label("Khách trả chậm", exact=True)).to_have_value("C1")
+                playwright.expect(page.get_by_label("Số tuần trả chậm thêm")).to_have_value("2")
+                playwright.expect(page.get_by_label("Khoản chi cần dời", exact=True)).to_have_value("E1")
+                playwright.expect(page.get_by_label("Số tuần dời chi thêm")).to_have_value("1")
+                playwright.expect(assumptions).to_contain_text(saved_summary)
                 for width in (1500, 390):
                     page.set_viewport_size({"width": width, "height": 1000})
                     page.wait_for_function(

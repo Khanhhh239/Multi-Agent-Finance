@@ -1,106 +1,50 @@
-# 2. Dữ liệu thật đã dùng trong các thí nghiệm trước (có SHA-256)
+# Nguồn thật và điều kiện sử dụng
 
-> **Hồ sơ thí nghiệm, không phải danh mục file hiện có.** Manifest ngày 14/10
-> ghi 8 nguồn và khoảng 1,5 GB dữ liệu đã tải; bản lưu ở
-> [MANIFEST_RAW_8_SOURCES_2026-10-14_ARCHIVE.json](MANIFEST_RAW_8_SOURCES_2026-10-14_ARCHIVE.json).
-> Trong workspace ngày 27/10, `data/raw/MANIFEST.json` và file thô chỉ còn
-> **WDI Việt Nam và OxCGRT**; 6 nguồn còn lại cần tải lại và kiểm hash trước khi
-> chạy lại thí nghiệm. Các thống kê bên dưới là kết quả lịch sử, không chứng minh
-> file thô hoặc cache hiện có. Bộ nạp: `agent1/data/real_loaders.py`.
+Hiện chưa có dữ liệu raw trong `data/`; `data/raw/` là thư mục làm việc trống được `agent1/paths.py` tự tạo (kiểm 14/11/2026). Các nguồn bên dưới là nguồn từng khảo sát/thử nghiệm, không phải danh mục đầu vào sẵn chạy. Bộ nạp nằm ở [real_loaders.py](../../agent1/data/real_loaders.py), công cụ lấy nguồn ở [crawl.py](../../scripts/crawl.py). Chạy lại cần file gốc, giấy phép, ngày tải/vintage và hash đúng phiên bản; không suy từ số dòng báo cáo cũ rằng cache còn tồn tại.
 
-Thang tin cậy: A = chính thức/bình duyệt; B = uy tín nhưng có hạn chế phương pháp; C = cộng đồng, nguồn gốc không rõ.
+## Nguồn từng dùng
 
-## 2.1 Tổng quan
+| Nguồn | Vai trò | Giới hạn quan trọng |
+|---|---|---|
+| BPI Challenge 2019 | Thử thời điểm thanh toán trên sự kiện P2P | Phải trả của tập đoàn; `Clear Invoice` là sự kiện quy trình; thiếu due date thật, không phải AR SME Việt Nam |
+| Customer Invoices/HighRadius, bản sao cộng đồng | AR giống ERP, thử T1 và cấu trúc hành vi | Nguồn gốc/giấy phép chưa rõ; `clear_date` là ngày ghi sổ; tập open bị chia theo thời gian; không có nhãn vỡ nợ/sao kê |
+| SBA 7(a) FOIA | Xác suất xóa nợ/hiệu chỉnh sự kiện hiếm | Khoản vay Mỹ khác hóa đơn B2B; xử lý nhãn và thời gian theo dõi riêng |
+| Berka PKDD'99 | Chuỗi tiền thật, độ phủ và phát hiện thay đổi | Ngân hàng Séc thập niên 1990, nhiều tài khoản cá nhân; không học hành vi hóa đơn |
+| Online Retail II | Doanh thu tuần, thử mô hình T4 | Giao dịch bán lẻ/bán buôn Anh; không có lịch thanh toán công nợ |
+| UK Payment Practices | Tham chiếu họ phân phối trễ | Thống kê DN lớn bên trả, không phải lịch trả cấp hóa đơn; không dùng làm đích Việt Nam |
+| OxCGRT Việt Nam | Nguồn chính sách COVID cho đường sốc | Chỉ số chính sách khác tác động kinh tế/thanh toán; metadata công bố cần kiểm khi dùng làm feature |
+| WDI Việt Nam | Lãi suất và bối cảnh vĩ mô | Chỉ số năm, revision/vintage khác nhau; không là quan sát thanh toán |
 
-| # | Bộ | Loại | Quy mô sau chuẩn hoá | Tin cậy | Dùng cho |
-|---|---|---|---|---|---|
-| 1 | BPI Challenge 2019 | Nhật ký sự kiện P2P thật | 211.142 "hoá đơn" (dòng PO), 1.850 nhà cung cấp, 3 công ty | A | T1 trên dữ liệu thật (phía phải trả) |
-| 2 | Customer Invoices (HighRadius) | AR giống ERP | 49.998 hoá đơn, 1.461 khách | C | T1 trên AR; kiểm tra độc lập cấu trúc |
-| 3 | SBA 7(a) | Khoản vay SME Mỹ | 638.249 khoản (FY2010–2023), nhãn xoá nợ ≤3 năm, tỷ lệ 1,64% | A | T2 nợ xấu trên dữ liệu thật |
-| 4 | Berka PKDD'99 | Giao dịch ngân hàng thật | 1.478 tài khoản × 6 năm = 404.880 tài khoản-tuần | A | T6/T7 dòng tiền thật, khoảng dự báo |
-| 5 | Online Retail II | Giao dịch bán buôn/bán lẻ Anh | 1.067.371 dòng → 73 chuỗi doanh thu tuần × 106 tuần | A | T4 doanh thu mới trên dữ liệu thật |
-| 6 | UK Payment Practices | Thống kê thật | 115.490 báo cáo DN lớn | A | Kiểm tra họ phân phối trễ (độc lập), tranh chấp |
-| 7 | OxCGRT (Việt Nam) | Chỉ số chính sách COVID | 1.096 ngày | A | Sốc COVID thật trong máy phát; T7 |
-| 8 | WDI Việt Nam | Vĩ mô | 6 chỉ số | A | Lãi suất vay, vĩ mô |
+Phân biệt các nguồn chính thức, dữ liệu công khai có điều khoản và bản sao cộng đồng. Kết quả phương pháp trên một nguồn không nâng độ tin cậy của nguồn khác hoặc của bộ synthetic. Liên kết thống kê/phương pháp nằm ở [tài liệu tham khảo](08_tai_lieu_tham_khao.md).
 
-## 2.2 Chi tiết từng bộ
+## Nguồn đã loại hoặc hoãn
 
-### BPI Challenge 2019 (`bpi2019/BPI_Challenge_2019.xes`, 729 MB, MD5 đã xác minh)
-- **Là gì**: quy trình mua hàng – nhận hàng – hoá đơn – thanh toán của một tập đoàn sơn đa quốc gia Hà Lan; 76.349 chứng từ,
-  251.734 dòng hàng, ~1,5 triệu sự kiện, 42 loại hoạt động, 627 tác nhân (20 là tác nhân xử lý theo lô). CC BY 4.0.
-- **Chuẩn hoá của chúng ta**: mỗi dòng hàng PO có "hoá đơn" khi có sự kiện `Record Invoice Receipt`/`Vendor creates invoice`;
-  "tất toán" = `Clear Invoice` sau đó. Giữ hoá đơn lập 02/01/2018–17/01/2019. Hoá đơn chưa clear khi log kết thúc = **kiểm
-  duyệt phải tự nhiên** (13,3%).
-- **Thống kê**: số ngày từ nhận hoá đơn đến clear — phân vị 10/50/90/99 = 29 / 64 / 106 / 146 ngày (trung vị dài hơn nhiều so
-  với hạn 30 ngày thông thường → quy trình duyệt lô).
-- **Giới hạn**: phía **phải trả** của tập đoàn châu Âu (không phải phải thu SME VN); không có hạn thanh toán → dùng
-  `due_date = issue_date`, đặc trưng "ngày tới hạn" mất tác dụng — kết quả ở BPI chủ yếu kiểm tra khả năng chịu miền
-  khó, không phải bài toán chính.
+| Nhóm | Quyết định nghiên cứu và điều kiện xem lại |
+|---|---|
+| Bộ AR cộng đồng không xác minh (Global B2B Payment, AR Payment Delay, IBM mirror, Payment Date) | Chưa đưa vào nguồn chính; cần kiểm nguồn gốc, license, censoring và dấu hiệu sinh bằng trọng số cố định |
+| Home Credit, M5 | Cần đăng nhập/chấp nhận điều khoản và kiểm mức phù hợp; không phải đầu vào hiện có |
+| Freddie Mac, Bondora | Cấu trúc khoản vay khác AR; chỉ thử chuyển trạng thái khi có dữ liệu/điều khoản phù hợp |
+| Payment Times Reports Úc | Cần kiểm điều khoản và lấy nguồn trước; vai trò thống kê tương tự UK PPR |
+| SEC, Companies House | Có thể tham chiếu BCTC/đuôi shock; cần quy trình truy cập hợp lệ, mapping và ngày công bố |
+| UNU-WIDER SME Việt Nam, World Bank Enterprise Surveys | Cần quyền truy cập, xác nhận biến bán chịu và phạm vi năm/ngành |
+| Olist, OCEL mô phỏng | Khác bài toán hoặc là mô phỏng; kiểm giấy phép trước dùng; không nâng thành ledger SME Việt Nam |
+| Xero, Coface | Chỉ tham chiếu phương pháp/độ nhạy; Xero có chọn lọc hóa đơn đã trả, khảo sát Coface không thay nhãn AR Việt Nam |
 
-### Customer Invoices (`customer_invoices/Dataset.csv`, 7,9 MB, bản sao GitHub của Kaggle pradumn203)
-- **Là gì**: 50.000 dòng × 19 cột (dedupe còn 49.998), hoá đơn 14/12/2018–19/05/2020, USD 92,3%, CAD 7,7%; điều khoản kiểu SAP
-  (NAA8, NAH4, CA10…); `clear_date` là ngày ghi sổ ERP.
-- **Dấu hiệu "giống ERP thật"** (Phần 7 §6): khoảng đáo hạn cố định theo mã điều khoản; trả cuối tuần 0,34%; số tiền lệch
-  phải (skew 2,99), gần Benford (MAD 0,0082); khách giải thích 46–60% phương sai trễ; Spearman 0,75 giữa hai nửa thời gian.
-- **Dấu hiệu bị biến đổi**: tên khách thay ngẫu nhiên theo dòng (65,9% mã khách có >1 tên); 9,6% chưa đóng nhưng từ 3/2020
-  gần như 100% "chưa đóng" (cột `isOpen` do người ra đề chia theo ngày).
-- **Phân bố trễ (đã đóng)**: sớm 36,6%, đúng hạn 21,0%, trễ 1–30 ngày 40,2%, 31–60 ngày 1,7%, >60 ngày 0,5%.
-  Ngắn hơn nhiều so với "một tháng" của Atradius VN → **không dùng để hiệu chỉnh độ trễ cho VN**.
-- **Giới hạn**: nguồn gốc/giấy phép không rõ; không có nhãn vỡ nợ; không có sao kê; kết thúc ngay trước COVID.
-  → Chỉ dùng để thử phương pháp và làm tham chiếu cấu trúc; không ghi là "dữ liệu thật của doanh nghiệp".
+Đây là quyết định trong khảo sát trước, không xác nhận điều khoản/trạng thái tải hiện nay. Nguồn chỉ chứa hóa đơn đã đóng hoặc loại trả cực chậm không đủ để tạo nhãn kiểm duyệt hợp lệ. Không điều chỉnh đuôi Việt Nam chỉ để giống ERP nước ngoài.
 
-### SBA 7(a) (`sba/FOIA_7a_FY2010_FY2019.csv` 255 MB + `FOIA_7a_FY2020_Present.csv` 181 MB + từ điển dữ liệu)
-- **Là gì**: toàn bộ khoản vay 7(a) được phê duyệt, trạng thái (PIF/CHGOFF/EXEMPT…), ngày xoá nợ, số tiền, lãi suất, kỳ hạn,
-  NAICS, bang, loại hình DN, tuổi DN, có thế chấp, bán thứ cấp… (as-of 30/06/2026).
-- **Chuẩn hoá**: loại CANCLD/COMMIT; chỉ giữ khoản phê duyệt ≥3 năm trước as-of để nhãn "xoá nợ trong 3 năm" không bị
-  kiểm duyệt; 638.249 khoản; tỷ lệ dương 1,64%, thay đổi theo năm: 2,3% (FY2010) → 0,7–0,8% (FY2020–21, hỗ trợ COVID) → 2,8% (FY2023).
-- **Chia theo thời gian**: train FY≤2016, hiệu chỉnh FY2017, test FY2018–2022.
-- **Giới hạn**: cho vay chứ không phải hoá đơn B2B; Mỹ; nhãn thưa. Dùng để chứng minh **phần "nhạy cảm vỡ nợ" của mô hình
-  chữa lành** và độ hiệu chỉnh xác suất hiếm (T2), không dùng làm số liệu nợ xấu cho VN.
+## Đối chiếu BCTC niêm yết
 
-### Berka PKDD'99 (`berka/*.asc`, 70 MB; bản sao GitHub jlacko)
-- **Là gì**: 8 bảng của một ngân hàng Séc (1993–1998): 4.500 tài khoản, ~1 triệu giao dịch, 682 khoản vay.
-- **Chuẩn hoá**: dòng ròng tuần/tài khoản; giữ tài khoản có ≥150 tuần → 1.478 tài khoản, 404.880 tài khoản-tuần
-  (28/12/1992–28/12/1998); số dư cuối tuần.
-- **Giới hạn**: nước khác, thập niên 1990, đa số cá nhân. Dùng để kiểm tra **độ phủ khoảng dự báo trên chuỗi dòng tiền thật**
-  và thử bộ phát hiện điểm gãy; không để học hành vi trả hoá đơn.
+[vn_listed_inputs.json](vn_listed_inputs.json) là đầu vào còn dùng bởi [run_vn_listed_check.py](../../scripts/run_vn_listed_check.py). Giữ số liệu và xuất xứ ở JSON thay vì chép lại thành bảng thứ hai. Đây là ba DN-kỳ, chưa có người chép số độc lập thứ hai; PDF gốc cần khôi phục trước khi xác minh lại.
 
-### Online Retail II (`online_retail_ii/*.zip`, 46 MB; UCI, CC BY 4.0)
-- **Là gì**: 1.067.371 dòng giao dịch của một nhà bán buôn/bán lẻ online Anh, 12/2009–12/2011.
-- **Chuẩn hoá**: doanh thu tuần (đã trừ trả hàng) theo 12 quốc gia lớn + 60 khách lớn + tổng = 73 chuỗi × 106 tuần.
-- **Giới hạn**: bán lẻ, không có thanh toán/công nợ, mùa vụ Giáng sinh thay vì Tết. Chỉ dùng cho T4 (và đánh giá mô hình
-  nền tảng Chronos trên chuỗi thật).
+| DN-kỳ | Nguồn và trang đã dùng | Giới hạn |
+|---|---|---|
+| SMC 2024 | [BCTC hợp nhất](https://smc.vn/wp-content/uploads/2025/05/BCTC-HOP-NHAT-SAU-KIEM-TOAN-2024-ENG.pdf), PDF 7/9/11; [đính chính](https://smc.vn/dinh-chinh-bao-cao-tai-chinh-nam-2024/) | Trường hợp công nợ đặc biệt, không đại diện ngành thép |
+| TCM 2022 | [BCTC kiểm toán](https://www.thanhcong.com.vn/wp-content/uploads/2023/03/20230324-TCM-BCTC-hop-nhat-nam-2022-da-kiem-toan_VN.pdf), PDF 7/9/10 | Không gắn số 2022 thành 2024 |
+| NTP 2024 | [Báo cáo thường niên](https://admin.nhuatienphong.vn/img/posts/1_f2284364f5cd0dd5e057ecb4e3e165f0BCTN%202024.pdf), PDF 59–60 | Mẫu riêng, không thay tên thành BMP |
 
-### UK Payment Practices (`uk_ppr/payment_practices.csv`, 103 MB; OGL v3.0)
-- **Là gì**: báo cáo 6 tháng của DN lớn Anh: thời gian trả trung bình, % hoá đơn trả trong 30/31–60/>60 ngày, % không trả
-  đúng hạn, % không trả do tranh chấp, điều khoản.
-- **Thống kê (trung vị các báo cáo)**: 33 ngày trả trung bình; 60% trong 30 ngày; 27% trong 31–60; 7% >60; 20% không đúng hạn.
-  Tranh chấp: trung vị 0%, P90 0% (đa số báo cáo ghi 0 → tỷ lệ tranh chấp thật nằm ở đuôi; xem hạn chế).
-- **Giới hạn**: tổng hợp theo công ty–kỳ, bên trả là DN lớn Anh. Dùng để kiểm tra họ phân phối, **không** làm đích hiệu chỉnh.
+```text
+DSO proxy = 365 × phải thu khách hàng ngắn hạn bình quân / doanh thu thuần
+DPO proxy = 365 × phải trả người bán ngắn hạn bình quân / giá vốn
+```
 
-### OxCGRT (`oxcgrt/OxCGRT_compact_national_v1.csv`, 43 MB; CC BY 4.0)
-- Chỉ số nghiêm ngặt trung bình của Việt Nam: 2,8 (1/2020) → 88,8 (4/2020) → ~58–78 (2020–2021) → 25,9 (6–12/2022).
-  Máy phát chuyển thành "sốc kinh tế" = phần vượt ngưỡng 55 của chỉ số, nhân mức yêu cầu ở nhà (C6M).
-
-### WDI Việt Nam (`wdi_vn/wdi_vietnam.csv`)
-- 6 chỉ số: tăng trưởng GDP, lạm phát, lãi suất cho vay, tỷ giá, tín dụng tư nhân/GDP, GDP. Máy phát dùng lãi suất cho vay
-  để tính lãi vay; còn lại dành cho kịch bản vĩ mô.
-
-## 2.3 Bảng "dữ liệu thật → năng lực"
-
-| Năng lực | Bộ thật | Cách dùng | Câu hỏi trả lời được |
-|---|---|---|---|
-| T1 thời điểm trả | Customer Invoices, BPI 2019 | Train/test theo thời gian, mốc B0/B1 | Phương pháp hazard có thắng mốc trên dữ liệu thật? |
-| T2 nợ xấu | SBA 7(a) | Train FY≤2016, test FY2018–2022 | Xác suất hiếm có được hiệu chỉnh? PR-AUC? |
-| T4 doanh thu mới | Online Retail II | Rolling-origin 26 tuần cuối | LightGBM/Chronos/mốc: ai thắng trên dữ liệu thật? |
-| T6 khoảng dự báo | Berka | Dòng tiền ròng tuần → độ phủ khoảng | Kết quả đã lưu trong `outputs/berka/`; muốn chạy lại phải khôi phục nguồn thô. |
-| T7 điểm gãy | Berka, OxCGRT | Phân đoạn/CUSUM trên chuỗi thật | Kết quả lịch sử trong `outputs/`; không suy ra hiệu năng với SME Việt Nam. |
-| T12 độ trung thực | UK PPR, Customer Invoices | So dấu hiệu cấu trúc | Máy phát có "thật" hơn trọng số cố định? |
-## Bổ sung đối chiếu công khai ngày 20/10/2026
-
-Đã đọc BCTC chính chủ SMC 2024, TCM 2022 và NTP 2024 để kiểm tra DSO/DPO mô tả,
-không hiệu chỉnh máy phát. Xem [phạm vi, trang nguồn và giới hạn mẫu](09_vn_listed_spot_check.md).
-Ba DN-kỳ chưa đại diện ngành hoặc SME; BMP trả HTTP403, mẫu nhựa dùng NTP riêng.
-Lệnh tải: `python scripts/crawl.py --only vn_listed_fy2024,vn_tcm_fy2022,vn_ntp_fy2024`;
-lệnh đối chiếu: `python scripts/run_vn_listed_check.py`.
-
+Phải thu dùng số gộp trước dự phòng; không gồm mọi khoản cho vay/tạm ứng. Giá vốn khác giá trị mua chịu. Khác biệt VAT, mùa vụ, bán thu ngay, xóa nợ và số dư chỉ ở hai thời điểm hạn chế khả năng so với World. Một doanh nghiệp mỗi ngành và khác năm không đủ để đặt dung sai hoặc bootstrap CI đại diện SME; các điểm này không dùng chỉnh máy phát.

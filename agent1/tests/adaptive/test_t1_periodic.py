@@ -338,6 +338,7 @@ def fake_fit(data, T, progress, *, incumbent, catalog, policy):
             "model": FixedModel(13),
             "version": "challenger",
             "asof": str(T.date()),
+            "t1_parameter_asof": str(T.date()),
             "method": "neural_local",
             "historical_audit_passed": True,
         },
@@ -537,7 +538,7 @@ def test_new_receipt_reforecasts_remaining_debt_without_retraining(tmp_path, cat
     def forbidden(*args, **kwargs):
         pytest.fail("A payment/forecast must not train T1")
     monkeypatch.setattr(t1_update, "train_update", forbidden)
-    monkeypatch.setattr(life, "train_update", forbidden)
+    monkeypatch.setattr(life, "train", forbidden)
     app = create_app(state_dir=tmp_path/"api", key_dir=tmp_path/"keys", token="receipt-test", firm_id="A")
     with TestClient(app) as client:
         client.headers["Authorization"] = "Bearer receipt-test"

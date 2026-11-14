@@ -12,7 +12,7 @@ Từ thư mục gốc repository, chạy:
 
 Mở `http://127.0.0.1:8021/workspace#data`. Nhập khóa từ đường dẫn script in ra. Script dùng Python đã có trong repo, tạo kho và khóa riêng cho UAT, phục hồi biến môi trường khi thoát. Nhấn Ctrl+C để dừng. Muốn chạy lại từ đầu, đổi `-RunId run2`; dữ liệu lần trước vẫn được giữ. Không cần huấn luyện để test T0/T9.
 
-Nếu test cùng Portal, tạo doanh nghiệp **test mới** trong **Hồ sơ doanh nghiệp**, chọn ngày **ISO / yyyy-mm-dd**, tiền **plain**. Trong khung Agent 1, mục **Dữ liệu** được ẩn vì Portal quản lý nạp gói chung. Bấm **Mở tab riêng** ở đầu khung Agent 1, rồi vào **Dữ liệu** của tab mới để nạp trực tiếp các CSV của bộ core. Để kiểm tra đường nhập sao kê chung của Portal, dùng riêng mục P01 bên dưới; luồng đó yêu cầu cả Agent 1 và Agent 3 sẵn sàng. Không nạp cùng một sao kê qua hai đường trong một doanh nghiệp test.
+Nếu test cùng Portal, tạo doanh nghiệp **test mới** trong **Hồ sơ doanh nghiệp**, chọn ngày **ISO / yyyy-mm-dd**, tiền **plain**. Agent 1 có thể nạp trực tiếp bằng **Nạp dữ liệu** trong khung hoặc tab riêng. Dùng đúng một đường nhập cho bộ core; kiểm doanh nghiệp đang mở trước khi xác nhận. Để kiểm tra đường nhập sao kê chung của Portal, dùng riêng mục P01 bên dưới; luồng đó yêu cầu cả Agent 1 và Agent 3 sẵn sàng. Không nạp cùng một sao kê qua hai đường trong một doanh nghiệp test.
 
 ## Nạp và kiểm T0
 
@@ -111,7 +111,7 @@ Với lifecycle, kiểm lịch sử tại các cutoff bằng luồng dự báo c
 
 ## Ghi kết quả và chạy lại kiểm chứng
 
-Dùng [TEST_LOG.md](TEST_LOG.md) để ghi Pass/Fail, ảnh trước/sau, mã giao dịch và lỗi. Dừng ca ngay nếu thấy thu trùng, trừ công nợ sai khách, làm mất lịch sử hoặc sửa nguồn không đảo phân bổ liên quan.
+Ghi kết quả vào hồ sơ thử riêng: ngày, người test, commit, suite/RunId/doanh nghiệp, mã ca, P/F/B, tiền trước/sau, ảnh và lỗi thực tế. Trạng thái trống là chưa chạy; lỗi đã biết vẫn ghi F nếu tái hiện. Không lưu nhật ký Markdown mới trong repo. Các mã S/N/T/P và đáp án nằm ngay trong hướng dẫn này. Dừng ca ngay nếu thấy thu trùng, trừ công nợ sai khách, làm mất lịch sử hoặc sửa nguồn không đảo phân bổ liên quan.
 
 Từ root repository, chạy xác minh bằng Python có sẵn:
 

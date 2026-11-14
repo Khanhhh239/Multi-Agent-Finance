@@ -2,11 +2,10 @@
 from copy import deepcopy
 from datetime import date, timedelta
 
-import numpy as np
 import pytest
 from threadpoolctl import threadpool_limits
 
-from agent1.adaptive.data import as_of, validate_dataset
+from agent1.adaptive.data import validate_dataset
 from experiments.t6_backtest.evaluation import measure, score, ar_score, event_score, knowledge_snapshot
 from experiments.t6_backtest.stress import make_stress
 
@@ -68,6 +67,79 @@ def test_bank_bridge_keeps_excluded_new_invoice_receipts_and_each_cost(cash_case
     assert metrics["mae_balance_vnd"] == 18
     assert metrics["coverage80"] == 1 and metrics["false_alert_weeks"] == 13
     assert metrics["recall_weekly"] is None and metrics["precision_weekly"] == 0
+
+
+@pytest.mark.parametrize("kind,changes", [
+    ("bank", {"amount": 110}),
+    ("payments", {"amount": 90}),
+    ("expense_payments", {"amount": 30}),
+    ("outflows", {"category": "variable_cost"}),
+    ("invoices", {"issue_date": "2026-01-20", "record_version": 2}),
+    ("payments", {"_deleted": True}),
+    ("expense_payments", {"_deleted": True}),
+])
+def test_scoring_is_invariant_to_revisions_known_after_truth(cash_case, kind, changes):
+    data, plan, end = cash_case
+    expected = measure(data, plan, end, ["Q"])
+    late = str(date.fromisoformat(end) + timedelta(days=1))
+
+    def revise(table, index, **values):
+        original = deepcopy(data[table])
+        revised = dict(original[index], known_at=late, **values)
+        data.setdefault("record_history", {})[table] = original + [revised]
+        data[table] = [
+            revised if i == index else row for i, row in enumerate(original)
+            if i != index or not revised.get("_deleted")
+        ]
+
+    # All revised ledgers remain valid now; scoring an earlier truth date must
+    # restore the original cash, allocation, classification and coverage facts.
+    revise(kind, 1 if kind == "invoices" else 0, **changes)
+    if kind == "bank":
+        revise("payments", 0)
+        revise("statements", 1, closing_balance=200)
+    validate_dataset(data)
+    before = deepcopy((data, plan))
+    assert measure(data, plan, end, ["Q"]) == expected
+    assert (data, plan) == before
+
+
+@pytest.mark.parametrize("received", [40, 100])
+def test_vat_refund_is_obligation_income_instead_of_an_expense_or_scope_gap(cash_case, received):
+    data, plan, end = cash_case
+    cutoff, day = plan["cutoff"], "2026-02-07"
+    data["outflows"].append(dict(expense_id="REFUND", amount=100, date=day,
+        known_at=cutoff, category="vat_refund", source="Approved decision", verified=True,
+        refund_approved_at=cutoff))
+    data["bank"].append(dict(bank_id="REFUND", account="Q", amount=received, date=day,
+        known_at=day, direction="in", component="other", cash_flow_class="non_ar"))
+    data["expense_payments"].append(dict(settlement_id="REFUND", expense_id="REFUND",
+        bank_id="REFUND", amount=received, payment_date=day, known_at=day))
+    data["statements"][-1]["closing_balance"] += received
+    validate_dataset(data)
+    plan["weeks"][0]["cash_in"] += 100
+    plan["cash_decomposition"]["weeks"][0]["obligation_in"] = 100
+    for week in plan["weeks"]:
+        week["balance"] += 100
+    rows = measure(data, plan, end, ["Q"])
+    first = rows[0]
+    assert first["actual_balance"] == 190 + received
+    assert first["actual_in"] == 155 + received
+    assert first["actual_out"] == 65
+    assert first["actual_obligation_in"] == received
+    assert first["actual_other_in"] == 5
+    assert first["cumulative_scope_effect"] == -10
+    assert first["cumulative_obligation_effect"] == 100 - received
+    assert all(abs(row["error_bridge_residual"]) < 1e-10 for row in rows)
+
+
+@pytest.mark.parametrize("category,direction", [("vat_refund", "out"), ("supplier_contract", "in")])
+def test_scoring_still_rejects_the_wrong_bank_direction_for_an_obligation(cash_case, category, direction):
+    data, plan, end = cash_case
+    data["outflows"][0]["category"] = category
+    next(row for row in data["bank"] if row["bank_id"] == "FIX")["direction"] = direction
+    with pytest.raises(ValueError, match="Invalid expense/bank allocation"):
+        measure(data, plan, end, ["Q"])
 
 
 def test_scope_scoring_refuses_missing_bank_coverage_and_new_credit(cash_case):

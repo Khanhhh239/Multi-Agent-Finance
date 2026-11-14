@@ -6,6 +6,10 @@ Luồng `/v1` hiện dùng [bundle T1 + partial v2](../docs/04_AI_Methods/T1_PAR
 Neural/LightGBM/XGBoost global và các bản học tiếp, không còn ensemble học từ
 đầu bằng local/Workspace. Gói global cấu hình bằng `AGENT1_T1_GLOBAL_CATALOG`;
 export các artifact hiện có bằng `scripts/package_t1_global_catalog.py`.
+Catalog mặc định là `settlement_partial_catalog_v3_20261114`:
+T1/replay giữ nguyên byte v2, prior partial được fit lại không có atom giả định
+50%. Cấu hình env còn trỏ v2 cần đổi sang v3 để học mới; bundle tenant cũ vẫn
+được giữ làm incumbent cho tới khi audit chấp nhận ứng viên.
 
 `POST /v1/training` hoặc `/v1/t1/updates` tạo chu kỳ, mặc định cách 28 ngày,
 cửa sổ 730 ngày. `GET /v1/t1/updates` trả trạng thái, quyết định và challenger.
@@ -17,14 +21,34 @@ và phạm vi thanh toán được kiểm trước khi dựng nhãn. SHAP nhận
 dùng. Đường env research allowlist cũ không
 override `/v1/predict` nữa. Các API nghiên cứu legacy được ghi riêng bên dưới.
 
+Nhãn kinh tế kết thúc ở origin + 91 ngày; bằng chứng đến muộn được xét theo
+ngày phát sinh, còn thay đổi sau cửa sổ không xóa nhãn trưởng thành.
+`promotion_audit` giữ quyết định chọn phiên bản; `candidate_update_audit`
+giữ kết quả tạo ứng viên mới. API/UI khôi phục được audit promotion cũ từ
+challenger accepted khớp định danh khi bằng chứng đó vẫn còn trong kho.
+
+Forecast/index giữ ID registry ở
+`company_bundle_version` riêng với hash `model_version`; xóa một phiên bản đã
+dùng trong kế hoạch trả 409, gồm dữ liệu legacy có thể truy vết từ payload hoặc
+replay. Forecast đang tính không commit nếu registry đã bị xóa. Nhãn phục vụ
+phân biệt global dự phòng, global được chọn và bundle thích nghi bằng tham số
+thực tế. `/v1/workspace.t1_updates` đưa lịch, mốc 91 ngày và trạng thái ứng viên
+vào UI. Khi audit đạt, backend tự kích hoạt; người dùng có thể chọn lại bản đã
+lưu. UI không hứa scheduler tự chạy và không gọi global dự phòng là bản riêng.
+
 Job để scheduler gọi theo nguồn dữ liệu đã xác nhận đầy đủ:
 `python -m agent1_service.jobs.t1_update --firm SME --state PATH --payments-complete`.
-Đặt `PYTHONPATH` tới thư mục `agent1`; không cần web server đang chạy. Chưa tự
-cài scheduler hoặc chạy cập nhật trên kho doanh nghiệp nào trong lượt sửa mã.
+Đặt `PYTHONPATH` tới thư mục `agent1`; không cần web server đang chạy. Scheduler phải được cấu hình/gọi riêng; lịch hiển thị không xác nhận job đã chạy.
 
-## Luồng doanh nghiệp (cập nhật T1 ngày 13/11/2026)
+API/worker và job này dùng chung hàm huấn luyện
+bundle: risk/operating được làm mới ngay cả khi audit giữ nguyên T1. Thiếu
+lịch sử hợp lệ thì bundle mới bỏ learner operating cũ; CLI mặc định xét
+seasonal/GBM. Kịch bản dời chi không tái tạo chi biến đổi ở tuần cũ. Ngày tạo
+dự báo được đổi về giờ Việt Nam để xét tính ngoài mẫu, hiệu chỉnh và actuals.
 
-[Bắt đầu từ README](../README.md) · [Bàn giao kỹ thuật](../docs/HANDOFF.md) · [Sổ tay PDF](../docs/06_Pilot/pdf/So-tay-Agent1.pdf).
+## Luồng doanh nghiệp
+
+[Bắt đầu từ README](../README.md) · [Pipeline hiện tại](../docs/04_AI_Methods/01_pipeline_he_thong.md) · [Sổ tay Workspace](../docs/06_Pilot/SO_TAY_AGENT1.md).
 
 Định hướng: một khung thích nghi cho từng doanh nghiệp, chọn phương pháp bằng lịch sử
 của chính doanh nghiệp. Dữ liệu tổng hợp chỉ thử phần mềm. Mã nằm ở
@@ -36,21 +60,11 @@ commit `89c144ba3b3d2e7d79d8cb70dc7baf99dc319268`: giữ hợp đồng ngày bi�
 nhãn thanh toán, censoring và không suy missing = unpaid. Đây là lớp triển khai mới
 trên workspace Agent1 hiện tại; **không phải tuyên bố đã merge toàn bộ T0 của nhánh đó**.
 
-### Chạy trên Windows
+### Khởi động
 
-```powershell
-# Tại gốc dự án; Python 3.12
-py -3.12 -m venv .venv  # chỉ khi chưa có
-.\.venv\Scripts\python.exe -m pip install -r requirements-service.txt
-.\scripts\start-business.ps1
-```
+Chạy theo [README](../README.md#khởi-động-từ-repository-hiện-tại) từ gốc repository chung. Launcher `agent1/scripts/start-business.ps1` in URL, thư mục dữ liệu và vị trí khóa. Mỗi triển khai phục vụ một doanh nghiệp; dùng kho, khóa và tiến trình riêng cho DN khác. Khóa nhập tay chỉ giữ trong bộ nhớ; kết nối Portal/tab riêng dùng phiên như README mô tả.
 
-Mở `http://127.0.0.1:8011/workspace` (trang `/` cũng mở giao diện mới).
-Khóa truy cập tự tạo ở `.state-business-keys/api-token.txt`; dán vào nút **Kết nối**.
-Không gửi khóa trong URL, Git, ảnh hoặc báo cáo. Khóa chỉ giữ trong bộ nhớ trình duyệt;
-tải lại trang cần kết nối lại. `-Company TEN_DN -Port 8012` đổi mã/cổng của triển khai.
-Mỗi triển khai phục vụ **một doanh nghiệp**; dùng thư mục dữ liệu, khóa và tiến trình
-riêng cho doanh nghiệp khác. Không đổi `Company` để giả lập SaaS nhiều tenant trên cùng kho.
+Các lệnh Docker và Python ngắn bên dưới giả định cwd là `agent1/` và môi trường của Agent 1 đã được cài phù hợp.
 
 Docker: `docker compose -f compose.business.yaml up --build -d`.
 Compose này bắt đầu từ kho rỗng, không seed synthetic; volume dữ liệu và khóa riêng,
@@ -129,7 +143,7 @@ artifact đã được chấm. Đủ điều kiện cập nhật không có ngh�
 Mọi kết quả vẫn mang `pilot_ready=false` đến khi có kiểm định triển khai riêng.
 
 Xem đầy đủ cửa sổ, guard, schema, API và job tại
-[hợp đồng T1 hiện tại](../docs/04_AI_Methods/T1_GLOBAL_LOCAL_RUNTIME_2026-11-13.md).
+[hợp đồng T1 hiện tại](../docs/04_AI_Methods/T1_PARTIAL_BUNDLE_RUNTIME_2026-11-13.md).
 API công khai chỉ trả metadata/chất lượng; không trả estimator, trọng số hoặc
 bảng dự báo từng hóa đơn dùng audit. Bag learner chuỗi tiền là thành phần riêng.
 
@@ -266,7 +280,7 @@ phân rã toàn danh mục có lọc/phân trang. [Hợp đồng T10 và bước
 
 Khi portal khởi động Agent 1, `AGENT1_COMPANY_PROFILE_FILE` trỏ tới hồ sơ riêng chỉ chứa `code`, `date_format` (`dmy` hoặc `iso`) và `number_format` (`vi-VN` hoặc `plain`). Mã phải khớp doanh nghiệp của token. Agent 1 đọc lại hồ sơ khi tải workspace, tạo mẫu và nhập tệp; các ô định dạng trong giao diện lấy từ cấu hình chung. Hồ sơ đổi sau bước xem trước thì phải kiểm tra tệp lại trước khi ghi. Khi chạy độc lập không đặt biến này, Agent 1 vẫn cho chọn định dạng từng tệp như trước.
 
-Portal dùng `POST /api/agents/agent1/connect-link` để mở tab riêng. API kế toán cấp mã ngẫu nhiên lưu tạm trong bộ nhớ của tiến trình; URL chuyển tab chỉ chứa mã này trong fragment. Agent 1 xóa fragment trước khi đổi mã qua POST cùng origin. Khóa truy cập giữ trong bộ nhớ JavaScript, không lưu vào URL hay trình duyệt. Mã hết hạn, đã đổi hoặc mất sau khi Agent 1 khởi động lại đều yêu cầu mở tab mới từ portal; truy cập trực tiếp vẫn dùng hộp kết nối thủ công. Tải lại tab riêng cũng cần kết nối lại.
+Portal dùng `POST /api/agents/agent1/connect-link` để mở tab riêng. API kế toán cấp mã ngẫu nhiên lưu tạm trong bộ nhớ của tiến trình; URL chuyển tab chỉ chứa mã này trong fragment. Agent 1 xóa fragment trước khi đổi mã qua POST cùng origin. Khóa truy cập giữ trong bộ nhớ JavaScript, không lưu vào URL hay trình duyệt. Mã hết hạn, đã đổi hoặc mất sau khi Agent 1 khởi động lại đều yêu cầu mở tab mới từ portal; truy cập trực tiếp vẫn dùng hộp kết nối thủ công. Tab riêng có thể khôi phục phiên cookie HttpOnly khi phiên còn hiệu lực; ngắt kết nối, hết hạn hoặc khởi động lại dịch vụ kết thúc phiên.
 
 Job chạy riêng qua executor một worker; request vẫn trả ngay. Khởi động lại máy chủ
 đánh dấu job dở dang là lỗi có thể chạy lại, không giả báo hoàn thành. Xóa toàn DN qua
@@ -291,7 +305,7 @@ Không tự gửi dữ liệu tới nhà cung cấp AI, CDN, font bên ngoài ha
 Phạm vi chính là công nợ mở và lịch chi đã biết. Phần hoạt động và hóa đơn bán chịu mới
 chỉ được cộng khi có dữ liệu, phiên bản đủ điều kiện và đã chọn phạm vi này; tối đa 13 tuần
 đầu. Lịch chi chưa nạp vẫn cần rà soát, kể cả khi dự báo trả giá trị chi bằng 0.
-Chưa xử lý FX, tín dụng ngân hàng, hoàn tiền và lịch trả góp chi tiết. P10/P90 là dải mô
+Chưa xử lý FX hoặc tự quyết định tín dụng ngân hàng. T5 nhận từng lần đến hạn/trả góp đã biết; không tự sinh toàn bộ lịch hợp đồng từ bảng nhập đơn giản. P10/P90 là dải mô
 phỏng; độ phủ dòng tiền chưa có bằng chứng trên SME thật. Brier 4 tuần đo xác suất tất toán.
 
 ### Giao diện và nguồn mở
@@ -551,11 +565,11 @@ không đổi giá trị hay trạng thái xác minh của các quy tắc pháp 
 
 ## Giới hạn hiện tại
 
-Engine local dùng lịch sử đối soát đã xác nhận và mô hình riêng DN đã chọn;
-chưa chọn model thì dùng B1d. Endpoint dự báo không tự huấn luyện.
-Chưa thay thế mô hình tiền huấn luyện/fine-tune của thí nghiệm T6; lịch chi chưa có
-`known_at` được dự báo từ lịch sử. E2E thực nghiệm ghi rõ giới hạn này và không mở cổng pilot.
-Theo dõi cổng tại `docs/03_Evaluation/GATES_CURRENT.md`.
+Workspace dùng catalog global hoặc bundle T1 + partial đã qua lựa chọn/audit
+theo doanh nghiệp; thiếu bằng chứng thì giữ global/incumbent. Endpoint dự báo
+không tự huấn luyện. Lịch T5 cần ngày biết và xác nhận phạm vi; hoạt động chỉ
+được ước lượng khi bật và đủ điều kiện. Xem [pipeline hiện tại](../docs/04_AI_Methods/01_pipeline_he_thong.md)
+và [giới hạn nghiệm thu](../docs/03_Evaluation/03_cong_nghiem_thu.md).
 
 <a id="luong-t0-t9-thong-nhat"></a>
 
@@ -699,10 +713,7 @@ Kiểm chứng kỹ thuật không thay G15/G13, UAT hoặc pilot thật. Không
 liệu synthetic để tự chọn một model thắng rồi bật triển khai; fixture chỉ
 kiểm bảo toàn tiền, trạng thái, idempotency và chống rò rỉ thời gian.
 
-Bằng chứng kỹ thuật của đợt tích hợp: [JUnit hồi quy](../outputs/implementation/t9_canonical_runtime_tests.xml)
-và [metadata kiểm chứng](../outputs/implementation/t9_canonical_runtime_verification.json).
-Kiểm tra cú pháp/định danh DOM đã qua; kiểm tra trực quan trên Chrome chưa
-hoàn thành vì computer-use không xác định được URL đủ chắc chắn và đã dừng.
+Hợp đồng T0/T9 hiện tại ở [luồng dữ liệu và đối soát](../docs/04_AI_Methods/02_t0_t9_du_lieu_va_doi_soat.md). Kiểm thử theo [hướng dẫn tests](../tests/README.md); không dùng báo cáo của đợt tích hợp cũ để xác nhận trạng thái hiện tại.
 
 ## Phiên bản mô hình và giám sát local
 
@@ -746,7 +757,16 @@ Dashboard hiển thị báo cáo đã lưu, phiên bản và cảnh báo local.
 
 ## Vận hành pilot SME
 
-### T6 và ứng viên T1 landmark 18 feature
+T1 phân biệt ngày chốt dữ liệu, ngày tham số T1, ngày fit partial và ngày bundle
+sẵn sàng. Risk/operating lưu ngày học và ngày sẵn sàng riêng; forecast từ chối
+nhánh cần dùng chưa tồn tại tại cutoff. Chọn global/incumbent nguyên trạng không
+được đổi ngày học T1. `/v1/predict` chụp dữ liệu, coverage và bundle trong cùng
+giao dịch đọc SQLite rồi giải phóng trước mô phỏng; hash và replay dùng chính
+bản chụp đó. Báo cáo mã hóa được tạo sau khi gắn chu kỳ hiện tại, cùng manifest
+với artifact/registry/decision. Chi tiết trong
+[runtime T1](../docs/04_AI_Methods/T1_PARTIAL_BUNDLE_RUNTIME_2026-11-13.md).
+
+### Ngân sách tính T6 và grouped SHAP T1
 
 `POST /v1/predict` nhận `simulation_paths` (100–10000, mặc định 1000),
 `shap_limit` (0–30, mặc định 30), và `simulation_seed` (mặc định 7). Toàn bộ
@@ -763,7 +783,7 @@ chưa thay cổng pilot thật. Chi tiết T1 ở hợp đồng hiện tại ph�
 
 Xem [bộ pilot](../pilot/BO_PILOT_SME.md) và [sổ nghiệm thu](../pilot/quyet_dinh.md). Mỗi DN dùng tiến trình, thư mục CSDL, khóa mã hóa và token riêng. Đặt các token đọc riêng biệt bằng `AGENT1_AGENT4_TOKEN`, `AGENT1_VIEWER_TOKEN`; không tái sử dụng giữa các DN hoặc với token quản trị. Thu hồi bằng cách xóa/đổi biến và khởi động lại. Quyền đọc chỉ mở danh sách và bản dự báo đã lưu. Kế toán giữ quyền nhập, chạy, kích hoạt và đối chiếu.
 
-Đối soát: `GET /v1/reconciliation`, `POST /v1/allocations`. Tra kết quả với `GET /v1/forecasts/{id}/actuals?asof=YYYY-MM-DD`; thêm `payments_complete=true` chỉ khi đã kiểm tra đủ thu đến ngày chấm để lấy precision–coverage danh sách thu nợ. Đầu ra có sai số bằng VND, độ phủ, độ rộng, báo giả/bỏ sót, hash dữ liệu thực tế. Ngày tạo sau ngày chốt đánh dấu hồi cứu. Công nợ trả từng phần chỉ có mô hình tiền riêng khi có ≥20 lịch sử tương đồng; dải mô phỏng gốc chưa được hiệu chỉnh.
+Đối soát: `GET /v1/reconciliation`, `POST /v1/allocations`. Tra kết quả với `GET /v1/forecasts/{id}/actuals?asof=YYYY-MM-DD`; thêm `payments_complete=true` chỉ khi đã kiểm tra đủ thu đến ngày chấm để lấy precision–coverage danh sách thu nợ. Đầu ra có sai số bằng VND, độ phủ, độ rộng, báo giả/bỏ sót, hash dữ liệu thực tế. Ngày tạo dự báo được đổi về ngày Việt Nam khi xét tính prospective. Nhánh partial dùng prior global và điều chuẩn bằng lịch sử local theo bundle, không bật/tắt bằng quy tắc 20 lịch sử cũ. Dải gốc và dải hiệu chỉnh có trạng thái riêng; hiệu chỉnh cần ít nhất 12 origin prospective không chồng lấn và cùng identity/phạm vi theo hợp đồng T6.
 
 Với sao kê đã đối soát liên tục ≥104 tuần, so mốc cùng kỳ 52 tuần với GBM cho hai nhóm bán thu ngay/chi biến đổi. Chọn `try_deep_cash` để xét Chronos local (thư mục `AGENT1_CHRONOS_DIR`) và GRU Gaussian tự hồi quy khi đủ 156 tuần; `AGENT1_DL_DEVICE=cpu` mặc định. Ba gốc hiệu chỉnh 13 tuần và một kỳ kiểm tra độc lập; phải chọn `include_operating` mới đưa dự báo này vào kế hoạch. Với hóa đơn bán chịu sắp phát hành, chỉ cộng dòng thu riêng khi có đủ hóa đơn trưởng thành liên kết sao kê và ứng viên vượt mốc không cộng ở kỳ kiểm tra. Nếu thiếu bằng chứng, giao diện ghi phần này chưa được tính.
 

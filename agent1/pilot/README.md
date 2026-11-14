@@ -1,38 +1,18 @@
-# Hồ sơ chuẩn bị pilot
+# Bộ dữ liệu và biểu mẫu diễn tập
 
-Agent 1 dự báo dòng tiền 13 tuần và hỗ trợ đối soát, ưu tiên thu nợ, kịch bản căng thẳng.
-Hiệu quả trên doanh nghiệp Việt Nam phải được đo trong pilot, không suy từ tổng hợp.
+| Tài nguyên | Mục đích |
+|---|---|
+| [Bộ pilot](BO_PILOT_SME.md) | Bài quan sát kế toán, mốc trước pilot và quy trình chạy song song |
+| [Biên bản](quyet_dinh.md) | Chốt phạm vi/tiêu chí trước, quyết định sau quan sát |
+| Phiếu quan sát và sổ dự báo | Công cụ đóng gói sinh hai CSV trống trong ZIP; lưu kết quả ở kho thử riêng |
+| `fixtures/` | Bài nhỏ phân bổ 100 triệu vào hai hóa đơn 30/70; kiểm thao tác, không dùng chọn model |
+| [Đại Phát](demo_dai_phat/README.md) | Sáu CSV synthetic để diễn tập luồng lớn |
+| [UAT T0/T9](t0_t9_uat_20261110/README.md) | Bộ có đáp án kiểm nhập/đối soát/vòng đời và các ca âm |
 
-Bắt đầu tại [bộ pilot A04/A12](BO_PILOT_SME.md): bài thử cho 5 kế toán, phiếu quan sát, nhật ký chạy song song và biên bản quyết định.
+[Hướng dẫn vận hành](../docs/06_Pilot/README.md), dữ liệu cần chuẩn bị và bảo vệ dữ liệu tập trung trong docs/06. [Nghiệm thu](../docs/03_Evaluation/03_cong_nghiem_thu.md) giữ điều kiện dùng thật; có biểu mẫu/dữ liệu mẫu không có nghĩa pilot đã triển khai.
 
-## Tuyển và dữ liệu
+`analysis.py` là helper phân tích ngoại tuyến khi đủ đầu vào: `economic_metrics` cần bảng hóa đơn có ngày trả/xóa nợ, `amount_gross`, `term_days` và bảng số dư theo ngày; không nhận trực tiếp sáu CSV Workspace. `difference_in_differences` cần panel có nhóm dùng/đối chứng và kỳ trước/sau. Số thiếu giữ trống; K3 cần phân phối dự báo phù hợp. DiD không tự chứng minh tác động nhân quả. Không tự liên hệ doanh nghiệp hoặc gửi dữ liệu ra ngoài từ việc đọc bộ này.
 
-Đề xuất DN có ít nhất 10 lao động, bán chịu B2B, dùng hoá đơn điện tử và có ít nhất 12 tháng lịch sử.
-Đầu vào mong muốn: XML hoá đơn, sao kê, sổ công nợ 24 tháng, lịch lương/thuế/thuê/vay,
-ngưỡng số dư an toàn và thông tin đối chiếu của kế toán. Không tự liên hệ DN hoặc gửi dữ liệu ra ngoài.
+Từ gốc repository, chạy `.\.venv\Scripts\python.exe agent1/scripts/business/package_pilot.py` để dựng `agent1_service/ui/workspace/agent1-pilot.zip` bên trong `agent1/`. Gói đọc ba Markdown và bốn fixture hiện tại, sinh `uat_observations.csv` và `shadow_runs.csv` chỉ có hàng tiêu đề; không đọc kho doanh nghiệp hoặc kết quả quan sát. ZIP diễn tập nhỏ không bao gồm bộ Đại Phát/UAT lớn hay helper phân tích.
 
-## Mẫu nội dung đồng ý để chuyên gia rà soát
-
-Ghi tên đơn vị kiểm soát/xử lý dữ liệu, người đại diện DN, mục đích thử nghiệm,
-loại dữ liệu, người có quyền truy cập, thời gian lưu, nơi xử lý, thủ tục rút lại/xoá,
-đầu mối xử lý sự cố và cơ chế phản hồi. Hoàn thiện văn bản theo pháp luật hiện hành
-trước khi ký; đây là danh sách nội dung, chưa phải hợp đồng pháp lý được duyệt.
-
-## Đo lường
-
-Chạy song song 8–12 tuần; chỉ bật hiển thị khi đủ cổng; quan sát 12–24 tuần tiếp theo.
-Nếu có ít nhất sáu DN, lập nhóm đối chứng theo thiết kế ở docs/03_Evaluation/02.
-`analysis.py` tính K1–K9 khi có đầu vào; số thiếu giữ trống. K3 cần phân phối dự báo
-đã kiểm định và chưa tự tính từ số dư quan sát. DiD có CI theo DN nhưng không tự khẳng định nhân quả.
-
-## UAT cần người thực hiện
-
-U1 xem tuần có rủi ro; U2 đối chiếu số dư/công nợ; U3 thử khách trễ; U4 dời chi;
-U5 ghi lời hứa; U6 xem lời giải thích và phản hồi cảnh báo. Lưu người tham gia,
-thời gian, kết quả và lỗi; cần ít nhất ba người. Chưa có phiên UAT người thật trong hồ sơ này.
-
-## Dự phòng
-
-Dữ liệu thiếu: giữ hàng chờ, đối chiếu với kế toán. Báo giả nhiều: rà soát ngưỡng
-trên dữ liệu hiệu chỉnh, hạn chế tần suất. Độ phủ trôi bốn tuần: dừng dải xác suất,
-chạy kịch bản tất định và huấn luyện lại. Sự cố dữ liệu: cô lập, giữ nhật ký và xử lý theo quy trình bảo mật.
+Chỉ giữ Đại Phát, fixture nhỏ và UAT có đáp án. Bộ Minh An đã nghỉ dùng; không lưu receipt kiểm thử hoặc nhật ký quan sát trong thư mục nguồn này.

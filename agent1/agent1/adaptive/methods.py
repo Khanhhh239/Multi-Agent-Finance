@@ -4,10 +4,13 @@ import numpy as np
 import pandas as pd
 from .data import observed, as_of, _payment_links, payment_target
 from .cash_adapter import expected_cash_components, iter_cash_paths, VERSION as ADAPTER_VERSION
+from .bundle_metadata import serving_mode, component_timing, serving_manifest
+from .t10_explanations import T6_VERSION
 
 
-def train(data, asof, progress=lambda x: None, names=None, *, incumbent=None, catalog=None, policy=None):
-    """Production T1 uses pretrained families only; no scratch-local ensemble."""
+def train(data, asof, progress=lambda x: None, names=None, *, incumbent=None, catalog=None, policy=None,
+          try_deep_cash=False):
+    """Train the serving bundle: audited T1, risk and optional operating cash."""
     from .t1_update import train_update
 
     if names is not None:
@@ -16,11 +19,23 @@ def train(data, asof, progress=lambda x: None, names=None, *, incumbent=None, ca
     from .risk import train_risk
 
     progress("Đang kiểm định rủi ro và chính sách thu hồi độc lập với T1")
-    result["risk"] = train_risk(data, pd.Timestamp(asof))
+    result["risk"] = dict(train_risk(data, pd.Timestamp(asof)),
+                          fitted_through=str(pd.Timestamp(asof).date()),
+                          ready_on=str(pd.Timestamp(asof).date()))
+    from .operating import select_operating
+
+    progress("Đang kiểm định chuỗi tiền và các phương án học mở rộng")
+    # Refresh auxiliary fits even when T1 is retained. Ineligible new history
+    # clears the old operating learner rather than silently keeping its scope.
+    result["operating"] = select_operating(
+        data, str(pd.Timestamp(asof).date()), try_deep_cash, include_new_credit=False)
     # Ranking remains a separate policy. Do not backtest a freshly selected T1
     # on older origins or fit the removed customer/scratch-local T1 in triage.
     result["collection_policy"] = (incumbent or {}).get("collection_policy", "amount")
     result["collection_evaluation"] = (incumbent or {}).get("collection_evaluation", {"status": "fixed_amount_policy", "policy": "amount"})
+    manifest = result["serving_manifest"]
+    result["serving_manifest"] = serving_manifest(result, data_version=manifest["data_version"],
+        policy=manifest["policy"], ready_on=manifest["ready_on"])
     return result
 
 
@@ -133,6 +148,19 @@ def forecast(
         raise ValueError("Bundle dự báo thiếu nhánh partial; cập nhật phiên bản T1 + adapter")
     if pd.Timestamp(partial.fitted_through) > clock:
         raise ValueError("Nhánh partial được học sau ngày dự báo")
+    if bundle.get("t1_parameter_asof") and pd.Timestamp(bundle["t1_parameter_asof"]) > clock:
+        raise ValueError("Tham số T1 được học sau ngày dự báo")
+    # A retained T1 can coexist with freshly fitted auxiliary models. Gate the
+    # components actually requested, rather than using T1's old ready date.
+    used_auxiliary = (["risk"] if (bundle.get("risk") or {}).get("status") == "evaluated" else [])
+    if include_operating and bundle.get("operating"):
+        used_auxiliary.append("operating")
+    for name in used_auxiliary:
+        timing = component_timing(bundle, name)
+        if not all(timing[k] and pd.Timestamp(timing[k]) <= clock
+                   for k in ("fitted_through", "ready_on")):
+            label = "rủi ro xóa nợ" if name == "risk" else "bán thu ngay và chi biến đổi"
+            raise ValueError(f"Nhánh {label} chưa sẵn sàng tại ngày dự báo; chọn phiên bản cũ phù hợp hoặc ngày dự báo mới hơn")
     if bundle and any(getattr(bundle.get(key), "requires_ledger_context", False)
                       for key in ("model", "anchor")):
         from .compact_t1 import workspace_context
@@ -189,6 +217,12 @@ def forecast(
                                                    for v in expense_shifts.values())
             or set(expense_shifts) - {r['expense_id'] for r in t5['outflows']}):
         raise ValueError("Khoản chi hoặc số tuần dời chi không hợp lệ.")
+    # Deduplicate operating costs against the original schedule. Deferring a
+    # known payment changes its timing, not the uncommitted operating budget.
+    known_variable = np.zeros(horizon)
+    for row in t5['outflows']:
+        if row['category'] == 'variable_cost':
+            known_variable[row['week'] - 1] += row['amount']
     moved, beyond = [], []
     for row in t5['outflows']:
         shift_out = expense_shifts.get(row['expense_id'], 0)
@@ -199,15 +233,12 @@ def forecast(
               scenario_expense_shifts=expense_shifts)
     outgoing = np.zeros(horizon)
     obligation_in = np.zeros(horizon)
-    known_variable = np.zeros(horizon)
     scheduled = np.zeros(horizon, bool)
     scheduled_outflows = t5['outflows']
     for r in scheduled_outflows:
         week = r['week'] - 1
         outgoing[week] += r['amount']
         scheduled[week] = True
-        if r['category'] == 'variable_cost':
-            known_variable[week] += r['amount']
     for r in t5['inflows']:
         obligation_in[r['week'] - 1] += r['amount']
     coverage = [
@@ -222,6 +253,8 @@ def forecast(
     operating_weeks = min(horizon, 13) if operating else 0
     estimate = None
     new_credit = None
+    credit_outcomes = None
+    cash_sales = np.zeros(horizon)
     variable_cost_topup = np.zeros(horizon)
     if include_operating and not operating:
         raise ValueError(
@@ -229,24 +262,37 @@ def forecast(
         )
     if operating:
         from .operating import available_history, predict_candidate
+        from .data import account_scope
 
+        if not operating.get("accounts") or set(operating["accounts"]) != set(account_scope(data, cutoff)):
+            raise ValueError("Phạm vi tài khoản của phiên bản hoạt động khác dữ liệu hiện tại; cập nhật phiên bản trước khi bật dự báo hoạt động.")
         series, gap = available_history(data, cutoff, operating["accounts"])
         if len(series) < 52:
             raise ValueError("Thiếu tuần sao kê đã đối chiếu đến ngày dự báo.")
         estimate = predict_candidate(
             operating["name"], operating["model"], series, gap
         )[:operating_weeks]
+        # Exact finite-mixture expectations and MC use the same residual law,
+        # including nonzero residual means, clipping and the known-cost floor.
+        outcomes = np.maximum(0, estimate + operating["residuals"][:, :operating_weeks])
+        sales_outcomes = outcomes[:, :, 0]
+        cost_outcomes = np.maximum(
+            0, outcomes[:, :, 1] * expense_multiplier - known_variable[:operating_weeks]
+        )
+        cash_sales[:operating_weeks] = sales_outcomes.mean(0)
         if operating.get("credit"):
             from .new_credit import build, point
 
             m = build(data, cutoff, operating["accounts"])
             if m is not None:
-                new_credit = point(m, operating["credit"]["kind"])[:operating_weeks]
+                credit_point = point(m, operating["credit"]["kind"])[:operating_weeks]
+                credit_outcomes = np.maximum(
+                    0, credit_point + operating["credit"]["residuals"][:, :operating_weeks]
+                )
+                new_credit = credit_outcomes.mean(0)
                 incoming[:operating_weeks] += new_credit
-        incoming[:operating_weeks] += estimate[:, 0]
-        variable_cost_topup[:operating_weeks] = np.maximum(
-            0, estimate[:, 1] * expense_multiplier - known_variable[:operating_weeks]
-        )
+        incoming += cash_sales
+        variable_cost_topup[:operating_weeks] = cost_outcomes.mean(0)
         outgoing += variable_cost_topup
     incoming += obligation_in
     expected = balance + np.cumsum(incoming - outgoing)
@@ -254,17 +300,11 @@ def forecast(
     paths = np.full((simulation_paths, horizon), float(balance)) - np.cumsum(outgoing)
     paths += np.cumsum(obligation_in)
     if operating:
-        errors = operating["residuals"][:, :operating_weeks]
-        draws = np.maximum(0, estimate + errors[rng.integers(0, len(errors), simulation_paths)])
-        costs = known_variable[:operating_weeks]
-        added = np.maximum(0, draws[:, :, 1] * expense_multiplier - costs)
-        point_added = np.maximum(0, estimate[:, 1] * expense_multiplier - costs)
-        operating_movements = draws[:, :, 0] - added + point_added
-        if new_credit is not None:
-            residuals = operating["credit"]["residuals"][:, :operating_weeks]
-            operating_movements += np.maximum(
-                0, new_credit + residuals[rng.integers(len(residuals), size=simulation_paths)]
-            )
+        take = rng.integers(0, len(outcomes), simulation_paths)
+        operating_movements = (sales_outcomes[take] - cost_outcomes[take]
+                               + variable_cost_topup[:operating_weeks])
+        if credit_outcomes is not None:
+            operating_movements += credit_outcomes[rng.integers(len(credit_outcomes), size=simulation_paths)]
         movement = np.zeros_like(paths)
         movement[:, :operating_weeks] = operating_movements
         paths += np.cumsum(movement, axis=1)
@@ -364,6 +404,7 @@ def forecast(
                     reason="Chưa tính SHAP theo giới hạn giải thích của kế hoạch.")
             for row in priorities:
                 row["ranking_explanation"]["probability_explanation"] = row.pop("triage_explanation")
+    from .operating import operating_identity
     result = dict(
         t1_provenance=bundle.get("t1_provenance") if bundle else None,
         compute_budget=dict(simulation_paths=simulation_paths, simulation_seed=simulation_seed,
@@ -373,7 +414,8 @@ def forecast(
         cutoff=str(clock.date()),
         horizon_weeks=horizon,
         operating_weeks=operating_weeks,
-        mode="company_trained" if bundle else "history_baseline",
+        mode=serving_mode(bundle),
+        serving_mode=serving_mode(bundle),
         open_invoices=len(opened),
         partial_cash_supported=partial_n,
         adapter_version=ADAPTER_VERSION,
@@ -382,6 +424,7 @@ def forecast(
         written_off_count=len(lost),
         payment_delay_shift_days=shift_days,
         operating_included=estimate is not None,
+        operating_identity=operating_identity(operating),
         new_credit_included=new_credit is not None,
         outstanding=float(amounts.sum()),
         minimum_balance=float(expected.min()),
@@ -392,7 +435,7 @@ def forecast(
         timing_dependence="shared_customer_stress"
         if shared_customer_risk
         else "independent",
-        band_protocol="settlement-partial-paths-v2",
+        band_protocol=T6_VERSION,
         band_status="raw_simulation",
         any_below_floor_probability=float((paths < cash_floor).any(axis=1).mean()),
         weeks=[
@@ -450,10 +493,7 @@ def forecast(
     )
     from .cash_explanations import explain_cash
 
-    cash_sales = np.zeros(horizon)
     credit_receipts = np.zeros(horizon)
-    if estimate is not None:
-        cash_sales[:operating_weeks] = estimate[:, 0]
     if new_credit is not None:
         credit_receipts[:operating_weeks] = new_credit
     result["cash_decomposition"] = explain_cash(

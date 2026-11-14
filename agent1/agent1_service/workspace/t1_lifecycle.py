@@ -13,6 +13,7 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 from agent1.adaptive.data import fingerprint
 from agent1.adaptive.bundle_metadata import serving_manifest
+from agent1.adaptive.methods import train
 from agent1.adaptive.payment_coverage import attest
 from agent1.adaptive.t1_catalog import GlobalCatalog
 from agent1.adaptive.t1_data import (
@@ -24,13 +25,68 @@ from agent1.adaptive.t1_update import (
     VERSION,
     UpdatePolicy,
     improves,
-    train_update,
     valid_incumbent,
 )
 
 
 def now():
     return datetime.now(ZoneInfo("Asia/Ho_Chi_Minh"))
+
+
+def _challenger_metadata(record):
+    fields = ("id", "origin", "status", "baseline_version", "challenger_version",
+              "created_at", "evaluated_asof", "evaluation", "policy")
+    return {k: record[k] for k in fields if k in record}
+
+
+def update_status(store, firm):
+    """Business-facing lifecycle state without snapshots or model artifacts."""
+    today = pd.Timestamp(now().date())
+    with store.lock:
+        state = store.one(firm, "company_t1_update_state", "current")
+        runs = sorted(store.get(firm, "company_t1_update_runs"),
+                      key=lambda r: r.get("created_at", ""), reverse=True)[:100]
+        ids = set(store.ids(firm, "company_t1_challengers"))
+        indexed = {r["id"]: r for r in store.get(firm, "company_t1_challenger_index")}
+        # Backfill old stores once, one snapshot at a time. Subsequent polls
+        # read only compact metadata; the lifecycle writer keeps it atomic.
+        if ids - indexed.keys():
+            with store.connection:
+                store.connection.execute("BEGIN IMMEDIATE")
+                # A CLI cycle may have committed since the first read. Never
+                # overwrite its newer status with a stale migration snapshot.
+                ids = set(store.ids(firm, "company_t1_challengers"))
+                indexed = {r["id"]: r for r in store.get(firm, "company_t1_challenger_index")}
+                missing = []
+                for identifier in sorted(ids - indexed.keys()):
+                    record = store.one(firm, "company_t1_challengers", identifier)
+                    if record:
+                        row = _challenger_metadata(record)
+                        indexed[identifier] = row
+                        missing.append(row)
+                if missing:
+                    store.put(firm, "company_t1_challenger_index", missing)
+        records = [row for key, row in indexed.items() if key in ids]
+    challengers = []
+    for record in records:
+        row = dict(record)
+        maturity = pd.Timestamp(record["origin"]) + pd.Timedelta(days=91) if record.get("origin") else None
+        evaluation = record.get("evaluation") or {}
+        status = record["status"]
+        if status == "pending":
+            status = ("origin_not_recorded" if maturity is None
+                      else "waiting_for_91_days" if today < maturity
+                      else "insufficient_eligible_outcomes"
+                      if evaluation.get("status") == "insufficient_eligible_outcomes"
+                      else "ready_for_audit")
+        row.update(matures_on=str(maturity.date()) if maturity is not None else None, display_status=status,
+                   eligible_rows=evaluation.get("rows", evaluation.get("n")),
+                   minimum_rows=(record.get("policy") or {}).get("minimum_audit_snapshots", 20))
+        challengers.append(row)
+    challengers.sort(key=lambda r: (r.get("origin", ""), r["id"]), reverse=True)
+    return dict(state=state, runs=runs, challengers=challengers,
+                pending_count=sum(r["status"] == "pending" for r in challengers),
+                asof=str(today.date()), due=not state or today >= pd.Timestamp(state["next_due"]))
 
 
 def encode(bundle):
@@ -64,6 +120,31 @@ def current_data(store, firm):
     return data
 
 
+def with_promotion_evidence(store, firm, row):
+    """Recover pre-fix metadata from its accepted frozen challenger, read-only."""
+    if row.get("promotion_audit"):
+        return row
+    identifier = row.get("prospective_audit_id")
+    if not identifier and row.get("promotion_status") == "accepted_prospective_audit" and row.get("id"):
+        decision = store.one(firm, "company_t1_update_runs", row["id"]) or {}
+        identifier = decision.get("prospective_audit_id")
+    if not identifier:
+        return row
+    challenger = (store.one(firm, "company_t1_challenger_index", identifier)
+                  or store.one(firm, "company_t1_challengers", identifier) or {})
+    evaluation = challenger.get("evaluation") or {}
+    if (challenger.get("status") != "accepted" or evaluation.get("status") != "scored"
+            or challenger.get("challenger_version") != row.get("t1_version")):
+        return row
+    audit = dict(evaluation, accepted=True, kind="prospective", challenger_id=identifier,
+                 evaluated_asof=challenger["evaluated_asof"], serving_version=row["t1_version"])
+    result = dict(row, promotion_audit=audit, prospective_audit_id=identifier,
+                  candidate_update_audit=row.get("candidate_update_audit", row.get("audit")))
+    if row.get("promotion_status") == "accepted_prospective_audit":
+        result["audit"] = deepcopy(audit)
+    return result
+
+
 def load_active(store, firm, cutoff, *, catalog=None):
     catalog = catalog or GlobalCatalog()
     active = store.one(firm, "company_model_active", "active")
@@ -78,7 +159,7 @@ def load_active(store, firm, cutoff, *, catalog=None):
         if not weight:
             raise ValueError("Thiếu artifact của phiên bản đang phục vụ")
         bundle = decode(weight)
-    result = valid_incumbent(bundle, cutoff, catalog)
+    result = with_promotion_evidence(store, firm, valid_incumbent(bundle, cutoff, catalog))
     return result, record
 
 
@@ -88,6 +169,9 @@ def metadata(bundle, identifier, created_at):
         "update_asof",
         "dataset_hash",
         "audit",
+        "promotion_audit",
+        "candidate_update_audit",
+        "prospective_audit_id",
         "validation_n",
         "train_n",
         "algorithm_version",
@@ -108,6 +192,7 @@ def metadata(bundle, identifier, created_at):
         "final_data",
         "legacy_t1_ignored",
         "serving_manifest",
+        "update_period",
     )
     return dict(
         {k: bundle.get(k) for k in fields},
@@ -115,6 +200,7 @@ def metadata(bundle, identifier, created_at):
         artifact_id=identifier,
         created_at=created_at,
         operating_ready=bool(bundle.get("operating")),
+        partial_fitted_through=bundle["partial"].fitted_through,
         synthetic_sandbox=bool(bundle.get("synthetic_sandbox")),
     )
 
@@ -208,7 +294,11 @@ def run_cycle(
             # fitted at the old origin. Never backdate the selection decision.
             baseline["asof"] = str(T.date())
             baseline["promotion_status"] = "accepted_prospective_audit"
-            baseline["audit"] = dict(result, accepted=True)
+            baseline["promotion_audit"] = dict(
+                result, accepted=True, kind="prospective", challenger_id=record["id"],
+                evaluated_asof=str(T.date()), serving_version=record["challenger_version"],
+            )
+            baseline["audit"] = deepcopy(baseline["promotion_audit"])
             baseline["serving_manifest"] = serving_manifest(
                 baseline, data_version=baseline["serving_manifest"]["data_version"],
                 policy=baseline["serving_manifest"]["policy"], ready_on=str(T.date()),
@@ -217,12 +307,25 @@ def run_cycle(
             promoted_live = record["id"]
         break  # Audit one preselected challenger; never search by audit outcomes.
     progress("T1: tạo ứng viên trên cửa sổ trượt gần nhất")
-    fit = trainer or train_update
+    fit = trainer or train
     bundle = fit(data, T, progress, incumbent=baseline, catalog=catalog, policy=policy)
     proposal = bundle.pop("proposal", None)
+    bundle["candidate_update_audit"] = deepcopy(bundle["audit"])
     if promoted_live:
         bundle["promotion_status"] = "accepted_prospective_audit"
         bundle["prospective_audit_id"] = promoted_live
+        bundle["promotion_audit"] = deepcopy(baseline["promotion_audit"])
+        # Legacy readers of audit still see the actual activation decision.
+        bundle["audit"] = deepcopy(bundle["promotion_audit"])
+    elif bundle["promotion_status"] == "accepted_historical_audit":
+        bundle["promotion_audit"] = dict(
+            bundle["audit"], kind="historical", evaluated_asof=str(T.date()),
+            serving_version=bundle["t1_version"],
+        )
+        bundle["prospective_audit_id"] = None
+    elif baseline.get("promotion_audit"):
+        bundle["promotion_audit"] = deepcopy(baseline["promotion_audit"])
+        bundle["prospective_audit_id"] = baseline.get("prospective_audit_id")
     bundle["t1_provenance"] = dict(
         bundle.get("t1_provenance", {}),
         promotion_status=bundle["promotion_status"],
@@ -231,6 +334,21 @@ def run_cycle(
     identifier = uuid.uuid4().hex
     from agent1.adaptive.training_report import save_training_report
 
+    bundle["update_period"] = {
+        "previous_cycle_asof": state.get("last_cycle_asof"),
+        "current_asof": str(T.date()),
+        "lookback_days": policy.lookback_days,
+        "strategy": "restart_each_family_from_global_on_rolling_history_with_censored_recent_weeks",
+        "new_observation_period": {
+            "after": state.get("last_cycle_asof"),
+            "through": str(T.date()),
+        },
+    }
+    manifest = bundle["serving_manifest"]
+    bundle["serving_manifest"] = serving_manifest(
+        bundle, data_version=manifest["data_version"], policy=manifest["policy"],
+        ready_on=manifest["ready_on"],
+    )
     encrypted_report = bool(save_training_report(bundle, data, identifier))
     challenger_row = challenger_weight = None
     if (
@@ -241,12 +359,14 @@ def run_cycle(
         shadow = deepcopy(bundle)
         shadow.update(
             model=proposal["model"],
+            catalog_sha256=catalog.digest,
             partial=proposal["partial"],
             partial_version=proposal["partial"].digest,
             anchor=proposal["model"],
             weight=1.0,
             t1_version=proposal["version"],
-            t1_parameter_asof=proposal["asof"],
+            asof=proposal["asof"],
+            t1_parameter_asof=proposal.get("t1_parameter_asof"),
             serving_method=proposal["method"],
             promotion_status="pending_prospective_audit",
         )
@@ -280,16 +400,6 @@ def run_cycle(
                 "policy": bundle["policy"],
             }
             challenger_weight = dict(id=identifier, **encode(shadow))
-    bundle["update_period"] = {
-        "previous_cycle_asof": state.get("last_cycle_asof"),
-        "current_asof": str(T.date()),
-        "lookback_days": policy.lookback_days,
-        "strategy": "restart_each_family_from_global_on_rolling_history_with_censored_recent_weeks",
-        "new_observation_period": {
-            "after": state.get("last_cycle_asof"),
-            "through": str(T.date()),
-        },
-    }
     payload = dict(id=identifier, **encode(bundle))
     report = metadata(bundle, identifier, created)
     report["encrypted_report"] = encrypted_report
@@ -303,8 +413,12 @@ def run_cycle(
         "next_due": next_due,
         "prospective_audit_id": promoted_live,
         "audit": bundle["audit"],
+        "promotion_audit": bundle.get("promotion_audit"),
+        "candidate_update_audit": bundle["candidate_update_audit"],
         "model_id": identifier,
         "created_at": created,
+        "update_period": bundle["update_period"],
+        "serving_manifest": bundle["serving_manifest"],
         "activated": True,
     }
     batches = {
@@ -328,6 +442,10 @@ def run_cycle(
     if challenger_row:
         batches.setdefault("company_t1_challengers", []).append(challenger_row)
         batches["company_t1_challenger_weights"] = [challenger_weight]
+    if batches.get("company_t1_challengers"):
+        batches["company_t1_challenger_index"] = [
+            _challenger_metadata(row) for row in batches["company_t1_challengers"]
+        ]
     batches["company_model_active"] = [{"id": "active", "version": identifier}]
     # CAS and all related records commit together. A concurrent import or model
     # activation must never silently overwrite the incumbent being compared.

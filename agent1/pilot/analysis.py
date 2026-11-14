@@ -1,7 +1,6 @@
 """Phân tích pilot từ số quan sát; không thay số thật bằng giả định kinh tế."""
 import numpy as np
 import pandas as pd
-from agent1.eval.cluster import mean_ci
 
 
 def economic_metrics(invoices,cash,*,period_start,period_end,annual_credit_sales=None,

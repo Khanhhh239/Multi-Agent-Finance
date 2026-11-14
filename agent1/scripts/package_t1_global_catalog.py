@@ -9,7 +9,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import sys
+from copy import deepcopy
 from pathlib import Path
 
 import numpy as np
@@ -17,11 +19,9 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from agent1.adaptive.cash_adapter import LABEL_CONTRACT, fit_partial
-from agent1.adaptive.compact_t1 import CompactT1, sha256
-from agent1.adaptive.landmark_features import FEATURES, SCHEMA, LandmarkEnsemble
+from agent1.adaptive.cash_adapter import FIT_VERSION, fit_partial
+from agent1.adaptive.compact_t1 import sha256
 from agent1.adaptive.t1_catalog import CATALOG_VERSION, DEFAULT, GlobalCatalog
-from agent1.adaptive.t1_data import risk_rows
 
 
 def write(path, record):
@@ -49,54 +49,35 @@ def prepared(source, role):
 def package(output):
     if output.exists():
         catalog = GlobalCatalog(output / "catalog.json")
+        if catalog.metadata["version"] != CATALOG_VERSION:
+            raise ValueError("Không ghi đè catalog frozen cũ; chọn thư mục mới cho prior v3")
         print(f"Verified existing catalog {catalog.digest}")
         return
     source = ROOT / "outputs/t1/aligned_cashcalendar_20261113"
-    old = ROOT / "outputs/t1/global_local_catalog_v1_20261113"
-    contract = json.loads((source / "target_contract.json").read_text(encoding="utf-8"))
-    if contract["version"] != LABEL_CONTRACT:
-        raise ValueError("Nguồn global chưa sửa nhãn tất toán theo ngày thực thu")
-    records = json.loads((source / "candidate_results.json").read_text(encoding="utf-8"))
-    sample = json.loads((source / "training_sample.json").read_text(encoding="utf-8"))["sample_sha256"]
-    loaded, sources = {}, {}
-    for name in ("neural", "lightgbm", "xgboost", "customer"):
-        trial = next(r["selected_trial"] for r in records if r["name"] == name)
-        path = source / "trials" / f"{name}_{trial}" / "model"
-        meta = json.loads((path / "metadata.json").read_text(encoding="utf-8"))
-        if meta.get("sample_sha256") != sample:
-            raise ValueError("Các global phải dùng chung snapshot, nhãn và trọng số")
-        loaded[name] = CompactT1.load(path)
-        sources[name] = sha256(path / "metadata.json")
-    original = json.loads((old / "default/metadata.json").read_text(encoding="utf-8"))
-    loaded["default"] = LandmarkEnsemble(
-        [loaded[m["name"]] for m in original["members"]], original["weights"])
+    legacy = GlobalCatalog(ROOT / "outputs/t1/settlement_partial_catalog_v2_20261113/catalog.json")
     prior_frame, prior_receipts = prepared(source, "validation")
+    if prior_receipts != legacy.metadata["partial"]["sources"]:
+        raise ValueError("Migration prior phải dùng đúng snapshot global đã khóa")
     prior = fit_partial(prior_frame, "2024-06-30", prior=None)
-    replay_frame, replay_receipts = prepared(source, "train")
-    (x, y, w), replay_evidence = risk_rows(replay_frame, cap=4096)
     output.mkdir(parents=True)
-    models = {}
+    # Copy bytes, including metadata: this migration changes only the prior law.
     for name in ("default", "neural", "lightgbm", "xgboost"):
-        directory = output / name
-        loaded[name].save(directory, dict(available_asof="2024-07-01", label_contract=LABEL_CONTRACT,
-                                         target_contract_sha256=sha256(source / "target_contract.json"),
-                                         source_metadata_sha256=sources.get(name, sources)))
-        models[name] = dict(directory=name, metadata_sha256=sha256(directory / "metadata.json"),
-                            available_asof="2024-07-01")
-    np.savez_compressed(output / "replay.npz", x=x, y=y, weights=w)
+        if legacy.metadata["models"][name]["directory"] != name:
+            raise ValueError("Cấu trúc catalog nguồn không hỗ trợ migration này")
+        shutil.copytree(legacy.file(name), output / name)
+    replay_file = legacy.metadata["replay"]["file"]
+    if replay_file != "replay.npz":
+        raise ValueError("Tên replay nguồn không hỗ trợ migration này")
+    shutil.copy2(legacy.file(replay_file), output / replay_file)
+    shutil.copy2(legacy.path, output / "parent_catalog.json")
     write(output / "partial.json", prior.record())
-    metadata = dict(
-        version=CATALOG_VERSION, feature_schema=SCHEMA, features=list(FEATURES), synthetic=True,
-        label_contract=LABEL_CONTRACT, models=models, shared_pretraining_sample_sha256=sample,
-        replay=dict(file="replay.npz", sha256=sha256(output / "replay.npz"),
-                    available_asof="2024-07-01", evidence=replay_evidence, sources=replay_receipts),
-        partial=dict(file="partial.json", sha256=sha256(output / "partial.json"),
-                     available_asof="2024-07-01", sources=prior_receipts),
-        label_audit=dict(source_target_contract=contract, source_metadata_sha256=sources,
-                         original_g0_sha256=sha256(old / "default/metadata.json"),
-                         original_g0_status="quarantined_pre_cash_calendar_target",
-                         g0_composition="same members and weights, corrected-label members"),
-        bundle_quality="requires_new_validation_and_audit; historical scores do not certify adapter v2",
+    metadata = deepcopy(legacy.metadata)
+    metadata.update(
+        version=CATALOG_VERSION,
+        compatible_parent=dict(file="parent_catalog.json", sha256=legacy.digest),
+        partial=dict(legacy.metadata["partial"], sha256=sha256(output / "partial.json"),
+                     fit_version=FIT_VERSION),
+        bundle_quality="corrected_prior; requires_new_quality_audit; no inherited_quality_scores",
     )
     write(output / "catalog.json", metadata)
     catalog = GlobalCatalog(output / "catalog.json")

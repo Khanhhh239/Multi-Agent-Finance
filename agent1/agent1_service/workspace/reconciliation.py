@@ -10,7 +10,7 @@ import uuid
 
 import pandas as pd
 
-from agent1.adaptive.data import (SCHEMAS, IDS, MONEY_FIELDS, ACCOUNTING, as_of, effective_data, fingerprint,
+from agent1.adaptive.data import (SCHEMAS, IDS, MONEY_FIELDS, ACCOUNTING, effective_data, fingerprint,
                                  merge_import, parse_rows, validate_dataset, vnd, _payment_links, payment_target)
 from agent1.reconciliation._thang.allocation import Config
 from agent1.reconciliation._thang.constrained import allocate

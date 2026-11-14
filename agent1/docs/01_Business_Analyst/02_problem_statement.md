@@ -1,46 +1,48 @@
-# 2. Problem Statement
+# Bài toán, người dùng và giả thuyết giá trị
 
-## 2.1 Phát biểu một câu
+## Bài toán
 
-> Chủ doanh nghiệp nhỏ và kế toán kiêm nhiệm ở Việt Nam **không biết trước 4–13 tuần** tuần nào công ty sẽ thiếu tiền,
-> với xác suất bao nhiêu và vì sao, vì dòng thu phụ thuộc hành vi trả tiền không chắc chắn, tương quan và một phần nằm
-> ngoài sổ sách; hệ quả là vay nóng, trễ lương/thuế/nhà cung cấp, giữ tiền nhàn rỗi quá mức hoặc phá sản dù có lãi.
+Chủ doanh nghiệp và kế toán của doanh nghiệp bán chịu cần biết tuần nào tiền có thể xuống dưới mức an toàn, khoản thu/chi nào tạo ra rủi ro và điều gì xảy ra khi khách trả chậm. Dữ liệu hóa đơn, thanh toán và sao kê có thể thiếu, ghi nhận muộn hoặc chưa khớp nhau; ngày đến hạn chưa phải ngày tiền thực về.
 
-## 2.2 Phát biểu chuẩn (5W2H)
+Workspace lập dự báo theo tuần trong **1–52 tuần, mặc định 13 tuần**. Phần giải thích xác suất tất toán T1 dùng mốc **4 tuần**, độc lập với kỳ kế hoạch dòng tiền. Chân trời có thể chọn trên giao diện chưa đồng nghĩa mọi chân trời đã đạt chất lượng dự báo.
 
-| Mục | Nội dung |
+## Người dùng và nỗi đau
+
+| Vai trò | Nhu cầu |
 |---|---|
-| **Ai** | SME Việt Nam bán B2B có công nợ (sản xuất, bán buôn, dịch vụ B2B), 10–200 lao động, doanh thu 5–300 tỷ/năm; người dùng là chủ DN, kế toán trưởng/kế toán kiêm nhiệm; người hưởng lợi gián tiếp là ngân hàng/đơn vị cho vay |
-| **Cái gì** | Dự báo phân phối số dư tiền mặt theo tuần cho 13 tuần tới, xác suất thiếu hụt, nguyên nhân, hành động khuyến nghị và kịch bản "nếu như" |
-| **Khi nào** | Cập nhật mỗi đêm/tuần; cảnh báo ngay khi xác suất thiếu hụt vượt ngưỡng hoặc hành vi khách đổi |
-| **Ở đâu** | Trên dữ liệu doanh nghiệp đã có: hoá đơn điện tử (XML theo NĐ 123/2020), sổ kế toán, sao kê ngân hàng; kênh cảnh báo Zalo OA / ứng dụng |
-| **Vì sao** | Bảng tính giả định trả đúng hạn, bỏ qua tương quan và nợ xấu; dữ liệu sổ sai ngày do ghi theo lô; thông tin lời hứa trả nằm ngoài hệ thống |
-| **Như thế nào** | Mô hình hoá từng hoá đơn (khi nào/có trả/trả bao nhiêu) + chi tất định theo luật + doanh thu mới, tổng hợp bằng mô phỏng có sốc chung, hiệu chỉnh khoảng, giải thích bằng ngôn ngữ tự nhiên (LLM chỉ diễn giải số đã tính) |
-| **Bao nhiêu** | Mục tiêu: độ phủ khoảng 80% trong ±5 điểm; cảnh báo trước ≥4 tuần cho ≥70% sự kiện thiếu hụt; sai số dòng thu 4 tuần thấp hơn mốc ≥30% (chi tiết 03_Evaluation) |
+| Chủ doanh nghiệp | Kiểm tra đệm tiền, tuần cần chuẩn bị vốn và kịch bản khách lớn chậm |
+| Kế toán/kế toán trưởng | Nạp sổ, kiểm lỗi, đối soát sao kê, theo dõi công nợ và nghĩa vụ còn phải trả |
+| Người phụ trách thu hồi | Biết khoản nào được ưu tiên, vì sao và lịch sử liên hệ/lời hứa |
+| Người kiểm tra nội bộ | Truy lại dữ liệu, quyết định đối soát và phiên bản tạo dự báo |
 
-## 2.3 Các câu hỏi nghiệp vụ phải trả lời được (N1–N7, Phần 7)
+Ngân hàng hoặc đối tác phần mềm kế toán là đối tượng thương mại tiềm năng; luồng thẩm định tín dụng hay chia sẻ dự báo cho ngân hàng chưa phải chức năng mặc định của Workspace.
 
-| Mã | Câu hỏi của người dùng | Đầu ra sản phẩm |
+## Câu hỏi nghiệp vụ
+
+| Mã | Câu hỏi | Đầu ra và giới hạn |
 |---|---|---|
-| N1 | "4–13 tuần tới có tuần nào tiền xuống dưới mức an toàn? Xác suất?" | Dải P10/P50/P90 số dư theo tuần + P(thiếu hụt) |
-| N2 | "Khoản nào sẽ trễ, đòi khoản nào trước hiệu quả nhất?" | Danh sách hoá đơn xếp theo mức giảm P(thiếu hụt) nếu thu sớm |
-| N3 | "Khách nào có thể không trả, giá trị đang rủi ro?" | P(nợ xấu) theo hoá đơn/khách, tổn thất kỳ vọng, đề xuất dự phòng theo TT48 |
-| N4 | "Nếu khách lớn trả chậm 2 tuần / tôi hoãn một khoản chi?" | Kịch bản "nếu như" chạy lại mô phỏng |
-| N5 | "Vì sao tuần đó bị cảnh báo?" | Lý do (đóng góp đặc trưng, khoản thu lớn bị trễ, khoản chi lớn) |
-| N6 | "Số dư, công nợ hệ thống dùng có khớp sổ của tôi?" | Đối chiếu sổ – sao kê, cổng chất lượng dữ liệu |
-| N7 | "Khách đang chậm hơn thường lệ — có chuyện gì?" | Cảnh báo điểm gãy hành vi theo khách / toàn danh mục |
+| N1 | Tuần nào có thể thiếu tiền? | Kỳ vọng, P10/P50/P90 và xác suất dưới ngưỡng; xem cả phạm vi chi và trạng thái hiệu chỉnh |
+| N2 | Nên xem khoản thu nào trước? | Hàng đợi theo chính sách dư nợ/nguy cơ/tích hai yếu tố, có giải thích; chưa đo tác động liên hệ |
+| N3 | Còn bao nhiêu công nợ có rủi ro? | Công nợ theo ngày chốt và thông tin rủi ro có hỗ trợ; chưa cam kết xác suất không bao giờ trả hoặc dự phòng pháp lý |
+| N4 | Nếu khách chậm hoặc dời chi thì sao? | Chạy lại T6 từ kế hoạch đã lưu, so kỳ vọng, phân vị và xác suất thiếu tiền |
+| N5 | Vì sao có kết quả này? | SHAP T1, bằng chứng tất toán/partial và phân rã kế toán theo đúng snapshot |
+| N6 | Có khớp sổ và sao kê không? | Kiểm dữ liệu, lịch sử nạp, đề xuất đối soát có người duyệt và khả năng đảo quyết định |
+| N7 | Dữ liệu/mô hình còn phù hợp không? | Kiểm định theo ngày chốt, phiên bản và lịch cập nhật; T7 nghiên cứu chưa tương đương cảnh báo Zalo đang chạy |
 
-## 2.4 Giả thuyết giá trị (phải kiểm chứng ở T13)
+## Bằng chứng và giới hạn
 
-- **H1 (độ chính xác)**: Dự báo dòng thu theo hành vi từng khách chính xác hơn giả định đúng hạn và trung vị trễ ≥30%.
-- **H2 (cảnh báo sớm)**: Cảnh báo thiếu hụt trước ≥4 tuần giúp DN hành động rẻ hơn (vay kế hoạch thay vì vay nóng).
-- **H3 (vốn lưu động)**: Danh sách "đòi khoản nào trước" giảm DSO hành vi ≥3 ngày trong 6 tháng.
-- **H4 (niềm tin)**: Dải xác suất kèm lý do được chủ DN dùng lại hằng tuần (tỷ lệ quay lại ≥60%).
-- **H5 (chi phí dữ liệu)**: Không cần nhập tay: hoá đơn điện tử + sao kê đủ để chạy (≥90% hoá đơn khớp tự động).
+Khảo sát Atradius Việt Nam 2025 là nguồn tham chiếu ban đầu về bán chịu, kỳ hạn, quá hạn và nợ xấu. Phạm vi khảo sát ba ngành và các tỷ lệ tổng hợp không xác nhận hành vi của từng hóa đơn hoặc toàn bộ SME Việt Nam. Nguồn, mục đích dùng và giới hạn nằm ở [tài liệu tham khảo dữ liệu](../02_Data/08_tai_lieu_tham_khao.md).
 
-## 2.5 Điều sản phẩm KHÔNG hứa
+Các bộ AR/P2P, khoản vay và dòng tiền nước ngoài chỉ kiểm tra từng phần phương pháp. Kết quả trên World synthetic chỉ phản ánh các giả định đã sinh. Số giờ tiết kiệm, DSO giảm, tỷ lệ đối soát hay hiệu quả thu hồi trên doanh nghiệp thật phải có phép đo riêng; không lấy số của pipeline tháng 10 làm kết quả Workspace hiện tại. Xem [cổng nghiệm thu](../03_Evaluation/03_cong_nghiem_thu.md).
 
-- Không dự báo được thiên nga đen; thay vào đó **phát hiện nhanh + suy biến có kiểm soát + biết trước sức chịu đựng**
-  (kịch bản căng thẳng). Định vị: *radar cảnh báo sớm, không phải quả cầu pha lê*.
-- Không thay thế quyết định tín dụng của ngân hàng, không là tư vấn đầu tư.
-- Không tự sinh số bằng LLM; mọi con số đến từ lớp mô hình định lượng có kiểm định.
+## Giả thuyết cần kiểm chứng
+
+| Giả thuyết | Phép đo cần có |
+|---|---|
+| Dự báo hành vi hữu ích hơn lịch đến hạn/trung vị khách | Backtest theo thời gian, cùng dữ liệu và phạm vi thu chi |
+| Cảnh báo giúp chuẩn bị vốn sớm | Lead time, báo giả và hành động thực tế trên doanh nghiệp |
+| Danh sách ưu tiên tiết kiệm công sức | Thời gian xử lý và kết quả thu hồi với thiết kế đối chứng |
+| Giải thích tăng mức sử dụng | UAT khả năng hiểu, mức quay lại và lỗi diễn giải |
+| Nạp/đối soát giảm thao tác thủ công | Thời gian nạp, lỗi, số quyết định phải sửa và tỷ lệ ghép chính xác |
+
+Các mức giảm sai số 30%, giảm DSO 3 ngày hoặc khớp tự động 90% từng nêu là mục tiêu giả định, chưa phải cam kết hiện hành. Tiêu chí sử dụng cụ thể nằm trong [yêu cầu và phạm vi](06_yeu_cau_va_pham_vi.md).

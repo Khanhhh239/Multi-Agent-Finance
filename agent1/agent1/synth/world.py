@@ -133,7 +133,7 @@ class WorldConfig:
     accounting_version: int = 6  # publication metadata and strict forecast feature policy
     shock_schedule: list[ShockEpisode] = field(default_factory=list)
     customer_realism: bool = False   # thử nghiệm (Sprint 4 vòng 2): khách mua lẻ + dị biệt khách; CHƯA có lợi ích đo được
-    realism: str = 'v1'   # 'v2' (Sprint 4): cuối tuần, phân tán số tiền, HĐ điều chỉnh nhỏ — xem docs/02_Data/10_realism_v2.md
+    realism: str = 'v1'   # 'v2': cuối tuần, phân tán số tiền, HĐ điều chỉnh nhỏ — xem docs/02_Data/04_may_phat_tong_hop.md
 
 
 # ---------------------------------------------------------------------------- calendar arrays

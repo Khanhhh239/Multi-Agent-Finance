@@ -1,9 +1,6 @@
-# Bước 7 — T10 giải thích bundle T1 + adapter partial + T6 đã lưu
+# T10: giải thích và kịch bản từ forecast đã lưu
 
-**Bắt đầu: 13/11/2026; cập nhật: 14/11/2026.** Đây là hợp đồng mã phục vụ và kiểm thử chức
-năng, chưa phải nghiệm thu độ chính xác dải tiền, doanh nghiệp thật hoặc tác
-động của hoạt động thu nợ. Phần T10 trong tài liệu T0–T9–T10 ngày 11/11 đã
-được đồng bộ theo hợp đồng này.
+Đặc tả Workspace đối chiếu 14/11/2026, dùng T6 `settlement-partial-paths-v4`. Đây là hợp đồng phần mềm, chưa nghiệm thu chất lượng tiền hoặc tác động thu hồi trên doanh nghiệp thật.
 
 ## Bốn đích giải thích
 
@@ -116,37 +113,17 @@ hoạt động vẫn đi qua T6, gồm quy tắc top-up chi biến đổi tránh
 Kịch bản hiển thị **phân vị mô phỏng thô** của baseline/kịch bản và ghi riêng
 trạng thái dải đã phục vụ. Không áp dải đã nới theo sai số ngoài mẫu cho kịch
 bản chưa kiểm chứng. Kỳ vọng, median và raw quantile của forecast gốc giữ
-riêng. Protocol dải tăng thành `settlement-partial-paths-v2`; calibration không
-gộp các forecast khác adapter, partial hoặc T6.
+riêng. Protocol hiện tại là `settlement-partial-paths-v4`; calibration không
+gộp các forecast khác adapter, partial, operating identity hoặc T6.
 
-## Giao diện, export và code đã gỡ
+## Ưu tiên, giao diện và export
 
-Workspace có bảng bằng chứng theo hóa đơn/tuần, trạng thái partial, phân phối
-tỷ lệ/mức hỗ trợ, tải JSON đã lưu, form kịch bản chạy T6 và mở lại các kịch bản đã lưu. Excel thêm
-`Bằng chứng partial theo tuần`, `Profile partial và hỗ trợ`, `Phiên bản T10`.
+Hàng đợi ưu tiên dùng chính sách đang phục vụ (dư nợ, nguy cơ hoặc tích hai yếu tố), có công thức/điểm và quy tắc bằng điểm được lưu. Không gán điểm trực tiếp cho tranh chấp, lời hứa hoặc tuổi nợ khi chúng không tham gia công thức. Loại write-off và các khoản tạm hoãn liên hệ theo quy tắc không đồng nghĩa loại mọi khoản đó khỏi danh mục dự thu T6.
 
-Đã xóa `_timing_comparison`, bộ sinh ba đường chỉ dịch kỳ vọng, phần UI và
-hai sheet `So sánh thời điểm` / `Kịch bản từng tuần` tương ứng. Gỡ cả bộ so sánh kỳ vọng dựa trên biến nhớ `baselineForecast` ở UI; so sánh hiện dùng snapshot. Xóa mô tả cũ
-“400 đường, mỗi dư nợ chỉ rút một tuần thu”. Sửa các chỗ gọi và kiểm thử dùng
-hợp đồng mới. Báo cáo/source snapshot frozen và pipeline research `/forecast`
-còn bên gọi được giữ riêng; chúng không phải T10 của `/v1/predict`.
+Forecast mới ghi `ranking_explanation.probability_source.method=active_t1`: nguy cơ dùng cùng T1/pooling/kịch bản đang dự báo, không fit customer T1 riêng để xếp hạng. Forecast lịch sử giữ nguồn đã lưu. Cùng điểm giữ thứ tự snapshot; khoản mới liên hệ/tạm bỏ qua chưa đủ 7 ngày bị hoãn theo quy tắc hiện hành. Điểm tiền tính bằng Decimal; UI/Excel phải giữ đúng chênh lệch 1 VND và biểu diễn chuỗi khi vượt độ chính xác số của nơi nhận.
 
-Không dùng LLM trong luồng này. Bảng và câu diễn đạt lấy trường số đã kiểm;
-nếu thêm LLM sau này, LLM chỉ được diễn đạt các kết quả/bằng chứng đó. Luôn
-phân biệt quan hệ dự báo với tác động can thiệp, phù hợp lưu ý về xác suất
-quan sát/can thiệp trong [Janzing và cộng sự, 2020](https://proceedings.mlr.press/v108/janzing20a.html).
+Workspace có bằng chứng hóa đơn/tuần, sáu ô partial, mức hỗ trợ, JSON và kịch bản T6 đã lưu. Excel có `Bằng chứng partial theo tuần`, `Profile partial và hỗ trợ`, `Phiên bản T10`, cùng các sheet kế hoạch/phân rã. Tiền hiển thị có thể làm tròn; đối chiếu bằng số gốc trong JSON/export.
 
-## Kiểm chứng
+Không dùng LLM trong luồng này; bảng/template lấy trường số engine đã kiểm. SHAP là quan hệ dự báo theo reference, không là tác động can thiệp, phù hợp lưu ý của [Janzing và cộng sự, 2020](https://proceedings.mlr.press/v108/janzing20a.html). Không dùng bộ so sánh chỉ dịch kỳ vọng hoặc model đang active để thay kịch bản snapshot.
 
-Các ca chính ở `tests/adaptive/test_t10_bundle.py`: cộng khớp adapter, hỗ trợ
-partial, no-op chính xác, khách cụ thể/nhóm chung RNG, dời chi ra ngoài kỳ,
-raw/calibrated, sai phiên bản/hash, active model/dataset đổi, grouped SHAP và
-phát lại bundle global thật. Browser test mở bằng chứng và chạy kịch bản ở
-desktop/mobile. Kết quả cuối và giới hạn được ghi trong thư mục
-`outputs/implementation/t10_bundle_20261113/`.
-
-Kết quả chốt **14/11/2026**: 401 ca Python đạt, 3 bỏ qua do thiếu Torch; 31
-ca JavaScript đạt, Ruff E9/F không lỗi. Đây là kết quả hợp ca sau cùng từ
-lượt chạy rộng và lượt chạy lại 150 ca bị ảnh hưởng, không phải full-suite
-thứ hai. [Receipt và ví dụ JSON/Excel](../../outputs/implementation/t10_bundle_20261113/README.md)
-ghi cả các lỗi ban đầu và giới hạn của fixture.
+Kiểm thử và quy trình chấm ở [nghiệm thu](../03_Evaluation/03_cong_nghiem_thu.md). Cấu trúc mô phỏng/hiệu chỉnh ở [T6](T6_PARTIAL_PATHS_PERIODIC_2026-11-13.md); adapter và chọn bundle ở [T1 + partial](T1_PARTIAL_BUNDLE_RUNTIME_2026-11-13.md).

@@ -103,7 +103,7 @@ def test_mean_median_quantiles_keep_all_debt_and_ignore_explanation_budget_and_r
 def test_calibration_uses_new_protocol_oos_only_and_preserves_mean_and_raw_quantiles(monkeypatch):
     from agent1.adaptive import cash_history
 
-    def plan(cutoff, created=None, protocol="settlement-partial-paths-v2"):
+    def plan(cutoff, created=None, protocol="settlement-partial-paths-v4"):
         return dict(cutoff=cutoff, created_at=created or cutoff, accounts=["Q"],
                     model_version="BUNDLE", band_protocol=protocol, assumptions=[],
                     weeks=[dict(balance=10., expected_balance=10., median_balance=5.,
@@ -117,8 +117,47 @@ def test_calibration_uses_new_protocol_oos_only_and_preserves_mean_and_raw_quant
     assert (week["raw_low"], week["raw_high"], week["low"], week["high"]) == (0, 20, -10, 30)
     assert week["balance"] == week["expected_balance"] == 10 and week["median_balance"] == 5
     assert week["balance_quantiles"] == {"0.1": 0., "0.5": 5., "0.9": 20.}
-    for incompatible in ([dict(p, band_protocol="cash-v3-t5-ledger") for p in previous],
+    for incompatible in ([dict(p, band_protocol="settlement-partial-paths-v3") for p in previous],
+                         [dict(p, band_protocol="settlement-partial-paths-v2") for p in previous],
+                         [dict(p, band_protocol="cash-v3-t5-ledger") for p in previous],
                          [dict(p, created_at="2026-01-01") for p in previous]):
         current = plan("2025-01-01")
         cash_history.calibrate_bands(current, incompatible, {})
         assert current["calibration_origins"] == 0 and current["weeks"][0]["low"] == 0
+
+
+@pytest.mark.parametrize("created,expected", [
+    ("2026-10-31T16:59:59.999999+00:00", True),
+    ("2026-10-31T17:00:00+00:00", False),
+    ("2026-10-31T20:00:00Z", False),
+    ("2026-11-01T03:00:00+07:00", False),
+    ("2026-10-31T23:59:59+07:00", True),
+    ("2026-10-31T23:59:59", True),
+    ("2026-10-31", True),
+    (None, False), ("invalid", False),
+])
+def test_prospective_clock_uses_vietnamese_midnight(created, expected):
+    from agent1.adaptive.cash_history import created_prospectively
+
+    assert created_prospectively(dict(cutoff="2026-10-31", created_at=created)) is expected
+
+
+def test_calibration_accepts_the_same_instant_in_utc_or_local_time():
+    from agent1.adaptive.cash_history import calibrate_bands
+
+    def plan(day, created):
+        return dict(cutoff=day, created_at=created, accounts=["Q"], model_version="same-t1",
+            opening_balance=100., cash_floor=0., assumptions=[], alerts=[],
+            weeks=[dict(week=1, date=str((pd.Timestamp(day)+pd.Timedelta(days=7)).date()),
+                        balance=100., low=90., high=110., cash_in=0., cash_out=0.)])
+
+    data = dict(invoices=[], payments=[], bank=[], outflows=[], statements=[dict(
+        statement_id="S", account="Q", start_date="2025-01-01", end_date="2026-11-14",
+        known_at="2026-11-14", opening_balance=0, closing_balance=0)])
+    days = [str(d.date()) for d in pd.date_range("2026-01-01", periods=12, freq="14D")]
+    for time in ("T16:59:59+00:00", "T23:59:59+07:00"):
+        current = plan("2026-11-14", "2026-11-14T12:00:00+07:00")
+        calibrate_bands(current, [plan(day, day+time) for day in days], data)
+        assert current["calibration_origins"] == 12
+        assert current["band_status"] == "calibrated_out_of_sample"
+        assert (current["weeks"][0]["low"], current["weeks"][0]["high"]) == (0, 200)

@@ -1,5 +1,5 @@
 """Measure forecast cash against reconciled bank truth without silently changing scope."""
-from datetime import date, timedelta
+from datetime import date
 
 import numpy as np
 
@@ -25,6 +25,10 @@ def knowledge_snapshot(data, cutoff):
 
 
 def measure(data, plan, truth_asof, accounts):
+    # Cash truth and its component bridge must read the same record versions.
+    # Otherwise a later correction/deletion can remove an earlier allocation
+    # from the bridge even though evaluate_plan restores it for bank balances.
+    data = as_of(data, truth_asof)
     outcomes = evaluate_plan(data, plan, truth_asof, accounts)
     if len(outcomes) != HORIZON or not all(r["covered"] and r["balance_available"] for r in outcomes):
         raise ValueError("Need reconciled coverage for all thirteen outcome weeks")
@@ -37,7 +41,7 @@ def measure(data, plan, truth_asof, accounts):
     bank = {r["bank_id"]: r for r in data["bank"]
             if r["account"] in accounts and r["known_at"] <= truth_asof}
     amounts = {k: np.zeros(HORIZON) for k in (
-        "opening_ar", "new_invoice", "cash_sale", "variable", "scheduled", "other_in", "other_out")}
+        "opening_ar", "new_invoice", "cash_sale", "obligation", "variable", "scheduled", "other_in", "other_out")}
 
     def index(day):
         n = (date.fromisoformat(day) - start).days
@@ -59,9 +63,11 @@ def measure(data, plan, truth_asof, accounts):
         txn = bank.get(r.get("bank_id"))
         if r["known_at"] > truth_asof or txn is None or index(txn["date"]) is None:
             continue
-        if txn["direction"] != "out" or r["payment_date"] != txn["date"]:
+        category = expenses[r["expense_id"]]["category"]
+        refund = category == "vat_refund"
+        if txn["direction"] != ("in" if refund else "out") or r["payment_date"] != txn["date"]:
             raise ValueError("Invalid expense/bank allocation")
-        kind = "variable" if expenses[r["expense_id"]]["category"] == "variable_cost" else "scheduled"
+        kind = "obligation" if refund else "variable" if category == "variable_cost" else "scheduled"
         amounts[kind][index(txn["date"])] += r["amount"]
         allocated[txn["bank_id"]] = allocated.get(txn["bank_id"], 0) + r["amount"]
     for txn in bank.values():
@@ -82,7 +88,7 @@ def measure(data, plan, truth_asof, accounts):
     rows = []
     cumulative = dict(ar=0., sale=0., variable=0., scheduled=0., scope=0., obligation=0.)
     for i, (w, actual, parts) in enumerate(zip(plan["weeks"], outcomes, plan["cash_decomposition"]["weeks"])):
-        ain = sum(amounts[k][i] for k in ("opening_ar", "new_invoice", "cash_sale", "other_in"))
+        ain = sum(amounts[k][i] for k in ("opening_ar", "new_invoice", "cash_sale", "obligation", "other_in"))
         aout = sum(amounts[k][i] for k in ("variable", "scheduled", "other_out"))
         if not np.allclose([ain, aout], [actual["actual_in"], actual["actual_out"]], rtol=0, atol=.01):
             raise ValueError("Bank components do not sum to observed cash")
@@ -93,7 +99,7 @@ def measure(data, plan, truth_asof, accounts):
                       variable=amounts["variable"][i] - pvar,
                       scheduled=amounts["scheduled"][i] - pscheduled,
                       scope=amounts["other_out"][i] - amounts["new_invoice"][i] - amounts["other_in"][i],
-                      obligation=parts["obligation_in"])
+                      obligation=parts["obligation_in"] - amounts["obligation"][i])
         for k, v in errors.items():
             cumulative[k] += v
         error = w["balance"] - actual["actual_balance"]
@@ -108,6 +114,7 @@ def measure(data, plan, truth_asof, accounts):
                    predicted_ar_in=parts["ar_in"], actual_ar_in=float(amounts["opening_ar"][i]),
                    actual_cumulative_ar_in=float(amounts["opening_ar"][:i+1].sum()),
                    predicted_cash_sale_in=parts["cash_sale_in"], actual_cash_sale_in=float(amounts["cash_sale"][i]),
+                   predicted_obligation_in=parts["obligation_in"], actual_obligation_in=float(amounts["obligation"][i]),
                    predicted_variable_out=pvar, actual_variable_out=float(amounts["variable"][i]),
                    predicted_scheduled_out=pscheduled, actual_scheduled_out=float(amounts["scheduled"][i]),
                    actual_excluded_new_invoice_in=float(amounts["new_invoice"][i]),

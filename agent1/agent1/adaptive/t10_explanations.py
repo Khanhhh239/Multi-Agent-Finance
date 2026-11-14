@@ -18,7 +18,7 @@ import platform
 import numpy as np
 
 PROTOCOL = "t10-settlement-partial-evidence-v1"
-T6_VERSION = "settlement-partial-paths-v2"
+T6_VERSION = "settlement-partial-paths-v4"
 
 
 def digest(value):
@@ -54,6 +54,8 @@ def archive_engine(identity):
 
 
 def bundle_identity(bundle):
+    from .operating import operating_identity
+
     try:
         models = pickle.dumps((bundle["weight"], bundle["model"], bundle["anchor"]), protocol=4)
     except (AttributeError, TypeError, pickle.PicklingError) as exc:
@@ -61,6 +63,7 @@ def bundle_identity(bundle):
     return dict(t1_version=bundle.get("t1_version") or "t1:" + hashlib.sha256(models).hexdigest(),
                 t1_sha256=hashlib.sha256(models).hexdigest(),
                 adapter_version=bundle["partial"].version, partial_version=bundle["partial"].digest,
+                operating=operating_identity(bundle.get("operating")),
                 t6=engine_identity())
 
 
@@ -183,6 +186,9 @@ def replay_scenario(plan, snapshot, *, customer_id=None, customer_delay_weeks=0,
             or bundle["partial"].version != snapshot["identity"]["adapter_version"]
             or bundle.get("t1_version") is not None and bundle["t1_version"] != snapshot["identity"]["t1_version"]):
         raise ValueError("Phiên bản T1/adapter/partial không khớp snapshot")
+    from .operating import operating_identity
+    if operating_identity(bundle.get("operating")) != snapshot["identity"].get("operating"):
+        raise ValueError("Phiên bản hoạt động không khớp snapshot")
     kwargs = dict(snapshot["kwargs"], shap_limit=0, return_paths=True)
     base = forecast(snapshot["data"], bundle=bundle, **kwargs)
     for original, repeated in zip(plan["weeks"], base["weeks"], strict=True):
