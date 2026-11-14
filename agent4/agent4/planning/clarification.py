@@ -23,7 +23,13 @@ from .planner import (
     parse_time_slot,
     requests_comparison,
 )
-from .validator import PlanClarification, ValidatedPlan, _safe_text, validate_semantic_plan_draft
+from .validator import (
+    PlanClarification,
+    ValidatedPlan,
+    _safe_text,
+    unsupported_comparison,
+    validate_semantic_plan_draft,
+)
 
 _METRICS = {
     "profit": {"gross_profit", "net_profit"},
@@ -190,14 +196,20 @@ def resolve_clarification_turn(
         slots = draft["unresolved_slots"].copy()
         if isinstance(answers, str):
             answers = {slots[0]: answers}
-        if not isinstance(answers, dict) or not answers or not answers.keys() <= set(slots):
+        supported_slots = {"metric", "time", "view", "dimensions", "sort", "top_k"}
+        if (
+            not isinstance(answers, dict)
+            or not answers
+            or not answers.keys() <= set(slots)
+            or not answers.keys() <= supported_slots
+        ):
             raise _invalid()
 
-        # Count invalid attempts too. Save only validated draft changes.
+        # Count invalid answers for slots with a supported resolver.
         session["turns"] += 1
         store._sessions.set(key, session)
         prompts = {item["slot"]: item for item in payload["slot_prompts"]}
-        for slot in ("view", "metric", "time", "dimensions", "filters", "sort", "top_k"):
+        for slot in ("view", "metric", "time", "dimensions", "sort", "top_k"):
             if slot not in answers:
                 continue
             value = answers[slot]
@@ -250,14 +262,14 @@ def resolve_clarification_turn(
             elif slot == "sort" and isinstance(value, str):
                 mid, direction = _choice(value, prompts[slot]).split()
                 draft[slot] = {"metric_id": mid, "direction": direction}
-            elif (
-                slot == "top_k" and isinstance(value, str) and value.isascii() and value.isdecimal()
-            ):
-                if len(value) > 3:
+            elif slot == "top_k":
+                if not isinstance(value, str) or not value.isascii() or not value.isdecimal():
+                    raise _invalid()
+                if len(value) > 3 or not 1 <= int(value) <= 100:
                     raise _invalid()
                 draft[slot] = int(value)
             else:
-                draft[slot] = value
+                raise _invalid()
             slots.remove(slot)
 
         draft.update(
@@ -267,12 +279,7 @@ def resolve_clarification_turn(
         )
         if not slots and requests_comparison(query["normalized_question"]):
             store._sessions.discard(key)
-            raise ContractError(
-                "unsupported_metric",
-                "clarification",
-                "Comparison is outside this query contract.",
-                final_status="unsupported",
-            )
+            raise unsupported_comparison()
         # Validate value shapes before deriving dependent slots from them.
         validate_semantic_plan_draft(
             {**draft, "unresolved_slots": slots or [next(iter(answers))]},

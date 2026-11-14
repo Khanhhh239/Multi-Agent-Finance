@@ -180,7 +180,12 @@ async def run_governed_pipeline(
     except ContractError as exc:
         if exc.stage == "answer_validation":
             trace.answer_validation_passed = False
-        response = build_final_response(request_id, exc.final_status, error=exc)
+        answer = (
+            "Hiện chưa hỗ trợ tính chênh lệch giữa hai kỳ. Bạn có thể hỏi số liệu từng kỳ riêng."
+            if exc.code == "unsupported_comparison" and request_payload.get("locale") == "vi-VN"
+            else ""
+        )
+        response = build_final_response(request_id, exc.final_status, error=exc, answer=answer)
     _LOG.info(
         "governed_query",
         extra={

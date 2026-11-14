@@ -124,6 +124,13 @@ def _unsupported(code: str, message: str) -> ContractError:
     return ContractError(code, _STAGE, message, final_status="unsupported")
 
 
+def unsupported_comparison() -> ContractError:
+    return _unsupported(
+        "unsupported_comparison",
+        "Period comparisons are not supported. Query each period separately.",
+    )
+
+
 def _forbidden() -> ContractError:
     return ContractError(
         "forbidden_metric",
@@ -453,6 +460,8 @@ def validate_semantic_plan_draft(
     if status == "unsupported":
         if reason is None or question is not None or unresolved:
             raise _invalid("Unsupported plan requires only a reason code.")
+        if reason == "unsupported_comparison":
+            raise unsupported_comparison()
         raise _unsupported("unsupported_metric", "Planner could not produce a supported plan.")
 
     if not ids or question is not None or unresolved or reason is not None or view is None:

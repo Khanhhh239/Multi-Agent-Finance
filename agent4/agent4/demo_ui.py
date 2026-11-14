@@ -206,8 +206,13 @@ textarea::placeholder { color: #607579; }
 .placeholder { color: var(--muted); }
 .meta { display: flex; flex-wrap: wrap; gap: 7px; margin: 13px 0 0; padding: 0; list-style: none; }
 .meta li { padding: 5px 8px; border-radius: 5px; background: #edf4f2; font-size: .79rem; overflow-wrap: anywhere; }
+.quick-prompt { flex-basis: 100%; color: var(--muted); font-size: .86rem; }
 .reply { border: 0; border-radius: 6px; color: #075447; background: #e6f3ee; padding: 6px 9px; font-size: .83rem; }
+.reply.cancel { color: #465d62; background: #edf1f0; }
 .quick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 13px; }
+.clarification-form { flex-basis: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 7px; }
+.clarification-form label { grid-column: 1 / -1; color: var(--muted); font-size: .82rem; }
+.clarification-form textarea { min-height: 68px; font-size: .86rem; }
 .table-panel { padding: 17px 19px; }
 .table-head { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin-bottom: 10px; }
 .table-count { color: var(--muted); font-size: .81rem; }
@@ -282,7 +287,7 @@ pre {
             <span class="spinner" aria-hidden="true"></span><span>Đang truy vấn</span>
             <span id="elapsed" aria-hidden="true">0,0 giây</span>
           </div>
-          <button class="run" type="submit" id="run">Truy vấn <span lang="en">(Run Query)</span></button>
+          <button class="run" type="submit" id="run"><span id="run-label">Truy vấn</span> <span lang="en">(Run Query)</span></button>
         </div>
       </form>
     </section>
@@ -294,7 +299,7 @@ pre {
       <div class="result-body" aria-live="polite">
         <p id="answer" class="answer placeholder">Nhập câu hỏi hoặc chọn một câu mẫu.</p>
         <ul class="meta" id="meta" hidden></ul>
-        <div class="quick" id="quick" hidden aria-label="Bổ sung kỳ báo cáo"></div>
+        <div class="quick" id="quick" hidden aria-label="Làm rõ câu hỏi"></div>
       </div>
     </section>
     <section class="panel table-panel" id="data-panel" aria-labelledby="data-title" hidden>
@@ -329,14 +334,11 @@ const statusText = {
   temporarily_unavailable: ["ERROR", "danger"],
   error: ["ERROR", "danger"],
 };
-const quickReplies = [
-  ["trong tháng 08/2026", "in August 2026"],
-  ["trong Quý 2/2026", "in Q2 2026"],
-  ["tính đến 31/12/2025", "as of December 31, 2025"],
-];
 const metricLabels = new Map();
 let active = null;
 let clock = null;
+let activeClarification = null;
+const defaultQuestionPlaceholder = question.placeholder;
 
 function node(tag, text, className) {
   const element = document.createElement(tag);
@@ -353,6 +355,9 @@ function updateScope() {
   byId("scope").textContent = persona.value === "branch_viewer"
     ? "Phạm vi HCM · chỉ góc nhìn quản trị · 4 ID chỉ tiêu được cấp quyền"
     : "Toàn doanh nghiệp demo · góc nhìn quản trị và thuế";
+}
+function setRunLabel(pendingClarification) {
+  byId("run-label").textContent = pendingClarification ? "Hỏi câu mới" : "Truy vấn";
 }
 function resetResult(message) {
   byId("answer").textContent = message;
@@ -372,11 +377,17 @@ function stopProgress() {
 persona.addEventListener("change", () => {
   active?.abort();
   active = null;
+  activeClarification = null;
+  setRunLabel(false);
+  question.placeholder = defaultQuestionPlaceholder;
   stopProgress();
   updateScope();
   resetResult("Chạy truy vấn để xem kết quả trong phạm vi persona hiện tại.");
 });
 function setExample(example, card) {
+  activeClarification = null;
+  setRunLabel(false);
+  question.placeholder = defaultQuestionPlaceholder;
   for (const selected of document.querySelectorAll('.example[aria-current="true"]')) {
     selected.removeAttribute("aria-current");
   }
@@ -460,7 +471,71 @@ function renderMeta(body) {
   }
   meta.hidden = !meta.children.length;
 }
-function renderResult(body, httpStatus, sent, sentLocale) {
+function renderClarification(clarification, sent, sentLocale, continuation) {
+  const slot = clarification?.slot_prompts?.[0];
+  if (!clarification?.session_id || !slot) {
+    activeClarification = null;
+    setRunLabel(false);
+    question.placeholder = defaultQuestionPlaceholder;
+    return;
+  }
+  setRunLabel(true);
+  activeClarification = {
+    sessionId: clarification.session_id,
+    originalQuestion: continuation?.originalQuestion ?? sent,
+    locale: continuation?.locale ?? sentLocale,
+    persona: persona.value,
+    clarification,
+  };
+
+  const quick = byId("quick");
+  quick.replaceChildren(node("p", slot.prompt, "quick-prompt"));
+  for (const choice of slot.choices ?? []) {
+    const reply = node("button", choice.label, "reply");
+    reply.type = "button";
+    reply.addEventListener("click", () => { void submitClarification(choice.value); });
+    quick.append(reply);
+  }
+  if (slot.slot === "filters" && !(slot.choices ?? []).length) {
+    quick.append(node(
+      "p",
+      "Mục lọc này chưa hỗ trợ diễn giải câu trả lời tự do. Hãy đặt câu hỏi mới và nêu rõ giá trị lọc.",
+      "quick-prompt",
+    ));
+  } else {
+    const replyForm = node("form", null, "clarification-form");
+    const replyLabel = node("label", "Câu trả lời cho mục đang làm rõ");
+    const replyInput = node("textarea");
+    replyInput.id = "clarification-answer";
+    replyLabel.htmlFor = replyInput.id;
+    replyInput.required = true;
+    replyInput.maxLength = 500;
+    replyInput.setAttribute("aria-label", "Câu trả lời cho mục đang làm rõ");
+    replyInput.placeholder = slot.prompt || "Nhập câu trả lời…";
+    const sendReply = node("button", "Gửi câu trả lời", "reply");
+    sendReply.type = "submit";
+    replyForm.append(replyLabel, replyInput, sendReply);
+    replyForm.addEventListener("submit", event => {
+      event.preventDefault();
+      void submitClarification(replyInput.value);
+    });
+    quick.append(replyForm);
+  }
+  const cancel = node("button", "Bỏ làm rõ và hỏi câu khác", "reply cancel");
+  cancel.type = "button";
+  cancel.addEventListener("click", beginNewQuestion);
+  quick.append(cancel);
+  quick.hidden = false;
+}
+function beginNewQuestion() {
+  activeClarification = null;
+  setRunLabel(false);
+  question.value = "";
+  question.placeholder = defaultQuestionPlaceholder;
+  resetResult("Nhập câu hỏi mới hoặc chọn một câu mẫu.");
+  question.focus();
+}
+function renderResult(body, httpStatus, sent, sentLocale, continuation) {
   const [label, tone] = statusText[body.status] ?? statusText.error;
   const badge = byId("status");
   badge.textContent = `${label} (${httpStatus})`;
@@ -471,7 +546,14 @@ function renderResult(body, httpStatus, sent, sentLocale) {
   byId("reason").hidden = !code;
   const answer = byId("answer");
   answer.classList.remove("placeholder");
-  answer.textContent = body.answer || body.error?.message || "Không có kết quả để hiển thị.";
+  const clarificationError = continuation
+    && body.error?.stage === "clarification"
+    && body.error?.code === "invalid_request";
+  answer.textContent = clarificationError
+    ? (sentLocale === "en-US"
+        ? "I couldn’t match that reply to this clarification. Try a valid answer or start a new question."
+        : "Mình chưa ghép được câu trả lời với mục đang làm rõ. Hãy thử câu trả lời phù hợp hoặc bắt đầu câu hỏi mới.")
+    : body.answer || body.error?.message || "Không có kết quả để hiển thị.";
   renderMeta(body);
   renderTable(body);
   const evidence = body.demo_evidence;
@@ -481,25 +563,21 @@ function renderResult(body, httpStatus, sent, sentLocale) {
   byId("sql").textContent = evidence?.sql ?? "";
   byId("plan").textContent = evidence?.semantic_plan ? JSON.stringify(evidence.semantic_plan, null, 2) : "";
   if (body.status === "needs_clarification") {
-    const quick = byId("quick");
-    quick.replaceChildren();
-    for (const [vi, en] of quickReplies) {
-      const reply = node("button", vi, "reply");
-      reply.type = "button";
-      reply.addEventListener("click", () => {
-        question.value = sent.replace(/[.?!]+$/, "") + " " + (sentLocale === "en-US" ? en : vi);
-        locale.value = sentLocale;
-        void submit();
-      });
-      quick.append(reply);
+    renderClarification(body.clarification, sent, sentLocale, continuation);
+  } else if (continuation) {
+    if (body.status === "error" || body.status === "temporarily_unavailable") {
+      renderClarification(continuation.clarification, continuation.originalQuestion, continuation.locale, continuation);
+    } else {
+      activeClarification = null;
+      setRunLabel(false);
     }
-    quick.hidden = false;
   }
 }
-async function submit() {
-  const sent = question.value.trim();
-  const sentLocale = locale.value;
-  if (!sent || !byId("query-form").reportValidity()) return;
+async function sendQuery(sent, sentLocale, continuation) {
+  if (continuation && continuation.persona !== persona.value) {
+    activeClarification = null;
+    return;
+  }
   active?.abort();
   clearInterval(clock);
   const controller = new AbortController();
@@ -521,17 +599,21 @@ async function submit() {
       signal: controller.signal,
       body: JSON.stringify({
         api_version: "v1", question: sent, locale: sentLocale,
-        options: {include_table: true, include_evidence_preview: true},
+        ...(continuation ? {session_id: continuation.sessionId} : {}),
+        options: {
+          include_table: true, include_evidence_preview: true,
+          ...(!continuation ? {clarification_mode: "guided"} : {}),
+        },
       }),
     });
     let body;
     try { body = await response.json(); }
     catch { body = {status: "error", error: {code: "invalid_response", message: "API không trả dữ liệu JSON."}}; }
-    if (active === controller) renderResult(body, response.status, sent, sentLocale);
+    if (active === controller) renderResult(body, response.status, sent, sentLocale, continuation);
   } catch {
     if (active === controller) renderResult(
       {status: "error", error: {code: "connection_error", message: "Không kết nối được API."}},
-      503, sent, sentLocale,
+      503, sent, sentLocale, continuation,
     );
   } finally {
     if (active === controller) {
@@ -539,6 +621,28 @@ async function submit() {
       stopProgress();
     }
   }
+}
+async function submitClarification(reply = null) {
+  const continuation = activeClarification;
+  if (!continuation) return;
+  const sent = typeof reply === "string" ? reply.trim() : byId("clarification-answer").value.trim();
+  const sentLocale = continuation.locale;
+  if (!sent) {
+    byId("clarification-answer")?.reportValidity();
+    return;
+  }
+  await sendQuery(sent, sentLocale, continuation);
+}
+async function submit() {
+  const sent = question.value.trim();
+  if (!sent || !byId("query-form").reportValidity()) {
+    question.reportValidity();
+    return;
+  }
+  activeClarification = null;
+  setRunLabel(false);
+  question.placeholder = defaultQuestionPlaceholder;
+  await sendQuery(sent, locale.value, null);
 }
 byId("query-form").addEventListener("submit", event => { event.preventDefault(); void submit(); });
 updateScope();

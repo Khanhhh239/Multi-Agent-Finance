@@ -4,6 +4,7 @@ import logging
 from pathlib import Path
 from shutil import copyfile
 
+import httpx
 import pytest
 from fastapi.testclient import TestClient
 
@@ -12,6 +13,7 @@ from agent4.core.context import build_auth_context
 from agent4.core.errors import ContractError
 from agent4.engine.metrics import REGISTRY
 from agent4.metric_selection.config import MetricSelectionConfig
+from agent4.metric_selection.validator import validate_metrics
 
 _WAREHOUSE = Path(__file__).resolve().parents[2] / "data/cfo_warehouse.duckdb"
 _BRANCH = {"X-Demo-Persona": "branch_viewer"}
@@ -207,6 +209,146 @@ def test_clarification_preserves_persona_and_mandatory_filter(demo):
     result = _query(demo, "Tháng 08/2026", headers=_BRANCH, session_id=sid).json()
     assert result["status"] == "ready"
     assert result["demo_evidence"]["semantic_plan"]["filters"][0]["value"] == "HCM"
+
+
+@pytest.mark.asyncio
+async def test_invalid_filter_clarification_answer_is_rejected_at_clarification_boundary(demo_app):
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=demo_app), base_url="http://test"
+    ) as client:
+        ask = await client.post(
+            "/v1/query",
+            json={
+                "api_version": "v1",
+                "question": "metric_id: net_revenue tại chi nhánh XYZ trong tháng 08/2026",
+                "locale": "vi-VN",
+                "options": {"clarification_mode": "guided"},
+            },
+        )
+        assert ask.status_code == 200
+        clarification = ask.json()["clarification"]
+        response = await client.post(
+            "/v1/query",
+            json={
+                "api_version": "v1",
+                "question": "Lãi gộp quý 3/2026 tăng hay giảm so với quý 2? Chênh bao nhiêu tiền?",
+                "locale": "vi-VN",
+                "session_id": clarification["session_id"],
+            },
+        )
+    assert clarification["unresolved_slots"] == ["filters"]
+    assert clarification["slot_prompts"][0]["choices"] == []
+    assert response.status_code == 400
+    body = response.json()
+    assert body["status"] == "error"
+    assert body["error"]["code"] == "invalid_request"
+    assert body["error"]["stage"] == "clarification"
+    assert body["data"] is None
+    assert set(body["demo_evidence"]) == {"trace_id"}
+
+
+@pytest.mark.asyncio
+async def test_demo_reports_unsupported_period_comparison_without_starting_a_session():
+    app = create_app(
+        demo_mode=True, selection_config=MetricSelectionConfig(llm={"provider": "mock"})
+    )
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=app), base_url="http://test"
+    ) as client:
+        response = await client.post(
+            "/v1/query",
+            json={
+                "api_version": "v1",
+                "question": "Lãi gộp quý 3/2026 tăng hay giảm so với quý 2? Chênh bao nhiêu tiền?",
+                "locale": "vi-VN",
+                "options": {"clarification_mode": "guided"},
+            },
+        )
+
+    assert response.status_code == 422
+    body = response.json()
+    assert body["status"] == "unsupported"
+    assert body["error"]["code"] == "unsupported_comparison"
+    assert "chênh lệch giữa hai kỳ" in body["answer"]
+    assert "clarification" not in body
+    assert body["data"] is None
+    assert set(body["demo_evidence"]) == {"trace_id"}
+
+
+@pytest.mark.asyncio
+async def test_guided_clarification_continues_original_question(monkeypatch, tmp_path):
+    preset = tmp_path / "selection.yaml"
+    preset.write_text("llm: {provider: mock, model: demo-contract-model}\n", encoding="utf-8")
+    monkeypatch.setenv("AGENT4_DB_PATH", str(_WAREHOUSE))
+    monkeypatch.setenv("AGENT4_SELECTION_CONFIG", str(preset))
+    monkeypatch.setenv("AGENT4_REPORTING_LAST_CLOSED_MONTH", "2026-08")
+    demo_app = create_demo_app()
+
+    async def ambiguous_selection(query, catalog, *, auth_context, query_context, **_kwargs):
+        return validate_metrics(
+            {
+                "status": "ambiguous",
+                "metric_ids": [],
+                "clarification_question": None,
+                "unsupported_reason": None,
+            },
+            {"candidates": []},
+            catalog,
+            auth_context,
+            query_context,
+        )
+
+    monkeypatch.setattr("agent4.pipeline.select_metrics_with_recovery", ambiguous_selection)
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app=demo_app), base_url="http://test"
+    ) as client:
+        ask = await client.post(
+            "/v1/query",
+            json={
+                "api_version": "v1",
+                "question": "Lợi nhuận tại HCM?",
+                "locale": "vi-VN",
+                "options": {"clarification_mode": "guided"},
+            },
+        )
+        assert ask.status_code == 200
+        body = ask.json()
+        assert body["status"] == "needs_clarification"
+        clarification = body["clarification"]
+        assert clarification["slot_prompts"][0]["slot"] == "metric"
+        assert {choice["value"] for choice in clarification["slot_prompts"][0]["choices"]} == {
+            "gross_profit",
+            "net_profit",
+        }
+        metric_choice = next(
+            choice
+            for choice in clarification["slot_prompts"][0]["choices"]
+            if choice["value"] == "gross_profit"
+        )
+        assert clarification["partial_interpretation"]["filters"][0]["value"] == "HCM"
+
+        follow_up = await client.post(
+            "/v1/query",
+            json={
+                "api_version": "v1",
+                "question": metric_choice["value"],
+                "locale": "vi-VN",
+                "session_id": clarification["session_id"],
+            },
+        )
+    assert follow_up.status_code == 200
+    result = follow_up.json()
+    assert result["status"] == "needs_clarification"
+    next_clarification = result["clarification"]
+    assert next_clarification["session_id"] == clarification["session_id"]
+    assert next_clarification["unresolved_slots"] == ["time"]
+    assert next_clarification["slot_prompts"][0]["slot"] == "time"
+    assert next_clarification["partial_interpretation"]["metric_ids"] == ["gross_profit"]
+    assert next_clarification["partial_interpretation"]["filters"][0]["value"] == "HCM"
+    assert {choice["value"] for choice in next_clarification["slot_prompts"][0]["choices"]} == {
+        "2026-08",
+        "Q2 2026",
+    }
 
 
 @pytest.mark.parametrize("metric", ["experimental_cash_burn", "altman_z_score"])

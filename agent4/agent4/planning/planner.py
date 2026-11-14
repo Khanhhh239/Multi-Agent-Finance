@@ -403,27 +403,27 @@ def build_semantic_plan_draft(
         unresolved["top_k"] = "top_k"
         top_k = None
 
+    comparison_text = (
+        re.sub(r"\b(?:budget vs actual|management vs tax gap)\b", "", question)
+        if ids in (["budget_vs_actual"], ["mgmt_vs_tax_gap"])
+        else question
+    )
     reason = None
-    if not unresolved:
-        comparison_text = (
-            re.sub(r"\b(?:budget vs actual|management vs tax gap)\b", "", question)
-            if ids in (["budget_vs_actual"], ["mgmt_vs_tax_gap"])
-            else question
+    if requests_comparison(comparison_text):
+        reason = "unsupported_comparison"
+        unresolved.clear()
+    elif not unresolved and any(
+        view not in cap["supported_views"]
+        or not {operation, "rank" if operation == "ranking" else operation}.intersection(
+            cap["supported_operations"]
         )
-        if requests_comparison(comparison_text):
-            reason = "unsupported_comparison"
-        elif any(
-            view not in cap["supported_views"]
-            or not {operation, "rank" if operation == "ranking" else operation}.intersection(
-                cap["supported_operations"]
-            )
-            or any(
-                not _supported_dimension(field, cap, question)
-                for field in [*dimensions, *(flt["field"] for flt in filters)]
-            )
-            for cap in capabilities
-        ):
-            reason = "incompatible_plan"
+        or any(
+            not _supported_dimension(field, cap, question)
+            for field in [*dimensions, *(flt["field"] for flt in filters)]
+        )
+        for cap in capabilities
+    ):
+        reason = "incompatible_plan"
 
     metric_unresolved = "metric" in unresolved
     if metric_unresolved and "time" in unresolved and operation == "aggregate":
@@ -455,14 +455,18 @@ def detect_query_views(question: str) -> set[str]:
 
 
 def requests_comparison(question: str) -> bool:
-    if not _has(r"so sánh|versus|vs|compare|compared (?:to|with)|year.over.year", question):
+    if not _has(
+        r"so sánh|so với (?:cùng kỳ|kỳ|quý|tháng|năm|tuần|ngày|nửa đầu năm|nửa cuối năm)"
+        r"|versus|vs|compare|compared (?:to|with)|year.over.year",
+        question,
+    ):
         return False
     grouped_range = (
         _has(r"between|giữa", question)
         and set(_dimensions(question, ranking=False)).intersection(_PERIOD_DIMENSIONS)
         and not _has(
             r"change|growth|difference|delta|increase|decrease|percent(?:age)?|"
-            r"chênh lệch|thay đổi|tăng trưởng|tăng|giảm|phần trăm",
+            r"chênh|thay đổi|tăng trưởng|tăng|giảm|phần trăm",
             question,
         )
     )

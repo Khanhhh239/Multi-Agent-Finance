@@ -754,10 +754,11 @@ NormalizedQuery + ValidatedMetricSet + QueryContext
   `=` cho một giá trị và `IN` cho danh sách. Xếp hạng dùng `ranking`,
   `sort = {metric_id, direction}` và, khi được yêu cầu, `top_k` từ 1 đến 100.
   Adapter đánh giá chuyển riêng sang tên chiều, toán tử và `rank` của benchmark v2.
-- `comparison` là `null` trong M2.1. Yêu cầu so sánh rõ ràng mà không còn slot
-  cần làm rõ có trạng thái `unsupported`. Câu yêu cầu xem các giá trị theo
-  từng kỳ trong một khoảng rõ ràng dùng `timeseries`. Draft không mang theo câu hỏi gốc,
-  câu làm rõ từ model, metadata phân quyền hay định danh vật lý.
+- `comparison` là `null` trong M2.1. Yêu cầu tính chênh lệch hoặc so sánh hai kỳ
+  ngoài khả năng hiện tại trả `unsupported` với mã `unsupported_comparison`,
+  kể cả khi một kỳ chỉ được nêu rút gọn. Trường hợp yêu cầu hiển thị các giá
+  trị theo từng kỳ trong một khoảng rõ ràng dùng `timeseries`. Draft không
+  mang theo câu hỏi gốc, câu làm rõ từ model, metadata phân quyền hay định danh vật lý.
 
 ## 17. Semantic Plan Validation Contract
 
@@ -820,6 +821,9 @@ SemanticPlanDraft + ValidatedMetricSet + CatalogSnapshot + AuthContext + Policy
   It contains the pending slots, authorized choices, partial interpretation and an opaque session ID.
 - Continue by sending the session ID and the selected choice or explicit reporting period in
   `question`. The server uses the first pending slot for a text reply and validates the resulting plan.
+- A request without `session_id` starts a new query. The demo keeps this path separate from its
+  clarification reply form. An answer for a slot without a supported resolver is rejected as a
+  clarification-stage `invalid_request` (HTTP 400) before plan validation.
 - Sessions are process-local, tenant/user scoped, limited to three follow-up turns and
   expire after 300 seconds of inactivity. Authorization or catalog changes invalidate the session.
 - Optional server reporting calendar metadata provides period suggestions.

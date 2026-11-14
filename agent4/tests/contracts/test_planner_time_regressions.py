@@ -128,14 +128,26 @@ def test_bare_margin_requires_clarification():
     assert draft["unresolved_slots"] == ["metric"]
 
 
-def test_explicit_comparison_still_requires_comparison_support():
-    draft, _, _ = _plan(
-        "Compare gross profit in Q3 2026 with Q2 2026, including the absolute change.",
-        "en-US",
-        "gross_profit",
-    )
+@pytest.mark.parametrize(
+    ("question", "locale"),
+    [
+        ("Compare gross profit in Q3 2026 with Q2 2026, including the absolute change.", "en-US"),
+        ("Lãi gộp quý 3/2026 tăng hay giảm so với quý 2? Chênh bao nhiêu tiền?", "vi-VN"),
+        ("Lãi gộp quý 3/2026 tăng hay giảm so với quý 2/2026?", "vi-VN"),
+    ],
+)
+def test_unsupported_comparison_does_not_ask_for_a_period(question, locale):
+    draft, _, _ = _plan(question, locale, "gross_profit")
     assert draft["status"] == "unsupported"
     assert draft["reason_code"] == "unsupported_comparison"
+    assert draft["unresolved_slots"] == []
+    assert draft["question_for_user"] is None
+
+
+def test_budget_vs_actual_preserves_its_catalog_operation():
+    draft, _, _ = _plan("Budget vs actual for August 2026?", "en-US", "budget_vs_actual")
+    assert draft["status"] == "ready"
+    assert draft["metric_ids"] == ["budget_vs_actual"]
 
 
 @pytest.mark.asyncio
