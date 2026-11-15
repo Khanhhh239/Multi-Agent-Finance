@@ -6,7 +6,7 @@ from fastapi.responses import HTMLResponse
 
 _DEMO_EXAMPLES = (
     ("Chỉ tiêu", "Doanh thu thuần", "Doanh thu thuần tháng 08/2026 là bao nhiêu?", "vi-VN"),
-    ("Chỉ tiêu", "Gross margin", "What was the gross margin in August 2026?", "en-US"),
+    ("Chỉ tiêu", "Biên lợi nhuận gộp", "What was the gross margin in August 2026?", "en-US"),
     (
         "Chỉ tiêu",
         "Số dư tiền",
@@ -45,7 +45,7 @@ _DEMO_EXAMPLES = (
     ),
     (
         "Góc nhìn và bộ lọc",
-        "Vendor expense YTD",
+        "Chi phí nhà cung cấp lũy kế",
         "What was the total operating expense for vendor NCC-MK-DG in FY 2026 (up to September 2026)?",
         "en-US",
     ),
@@ -200,16 +200,20 @@ textarea::placeholder { color: #607579; }
 .status[data-tone="notice"] { background: #fff0d6; color: #754700; }
 .status[data-tone="danger"] { background: #fce8e5; color: #8a2f27; }
 .status[data-tone="info"] { background: #e3edf9; color: #304e79; }
-.reason { color: var(--muted); font: .75rem/1.5 "IBM Plex Mono", monospace; overflow-wrap: anywhere; }
 .result-body { padding: 19px; }
 .answer { white-space: pre-wrap; overflow-wrap: anywhere; }
 .placeholder { color: var(--muted); }
 .meta { display: flex; flex-wrap: wrap; gap: 7px; margin: 13px 0 0; padding: 0; list-style: none; }
 .meta li { padding: 5px 8px; border-radius: 5px; background: #edf4f2; font-size: .79rem; overflow-wrap: anywhere; }
-.quick-prompt { flex-basis: 100%; color: var(--muted); font-size: .86rem; }
-.reply { border: 0; border-radius: 6px; color: #075447; background: #e6f3ee; padding: 6px 9px; font-size: .83rem; }
+.quick-prompt { color: var(--ink); font-size: .96rem; font-weight: 650; }
+.quick-title { color: var(--muted); font-size: .8rem; }
+.reply { border: 0; border-radius: 6px; color: #075447; background: #e6f3ee; padding: 8px 11px; font-size: .87rem; min-height: 38px; }
 .reply.cancel { color: #465d62; background: #edf1f0; }
-.quick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 13px; }
+.quick {
+  display: grid; gap: 10px; margin-top: 14px; padding: 14px;
+  background: #f6f9f8; border: 1px solid var(--line); border-radius: 9px;
+}
+.choices { display: flex; flex-wrap: wrap; gap: 8px; max-height: 190px; overflow: auto; }
 .clarification-form { flex-basis: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 7px; }
 .clarification-form label { grid-column: 1 / -1; color: var(--muted); font-size: .82rem; }
 .clarification-form textarea { min-height: 68px; font-size: .86rem; }
@@ -253,10 +257,10 @@ pre {
       <div><strong>Agent 4</strong><span>Truy vấn tài chính · Dữ liệu tổng hợp</span></div>
     </div>
     <div class="health" id="health" aria-live="polite"><span>Đang kết nối API</span></div>
-    <label class="persona-wrap">Persona
+    <label class="persona-wrap">Vai trò
       <select id="persona">
-        <option value="cfo_full">CFO / Finance Lead (Full Access)</option>
-        <option value="branch_viewer">HCM Branch Viewer (Restricted RBAC)</option>
+        <option value="cfo_full">Giám đốc tài chính · Toàn quyền</option>
+        <option value="branch_viewer">Người xem chi nhánh HCM · Giới hạn</option>
       </select>
     </label>
   </div>
@@ -281,20 +285,19 @@ pre {
           placeholder="Ví dụ: Doanh thu thuần tháng 08/2026 là bao nhiêu?"></textarea>
         <div class="form-actions">
           <label class="locale-control">Ngôn ngữ
-            <select id="locale"><option value="vi-VN">Tiếng Việt</option><option value="en-US">English</option></select>
+            <select id="locale"><option value="vi-VN">Tiếng Việt</option><option value="en-US">Tiếng Anh</option></select>
           </label>
           <div class="run-state" id="progress" hidden aria-live="polite">
             <span class="spinner" aria-hidden="true"></span><span>Đang truy vấn</span>
             <span id="elapsed" aria-hidden="true">0,0 giây</span>
           </div>
-          <button class="run" type="submit" id="run"><span id="run-label">Truy vấn</span> <span lang="en">(Run Query)</span></button>
+          <button class="run" type="submit" id="run"><span id="run-label">Truy vấn</span></button>
         </div>
       </form>
     </section>
     <section class="panel result-panel" aria-labelledby="answer-title">
       <div class="result-head">
         <h2 id="answer-title">Kết quả</h2><span class="status" id="status" hidden></span>
-        <span class="reason" id="reason" hidden></span>
       </div>
       <div class="result-body" aria-live="polite">
         <p id="answer" class="answer placeholder">Nhập câu hỏi hoặc chọn một câu mẫu.</p>
@@ -309,11 +312,11 @@ pre {
       </div>
     </section>
     <details class="panel drawer" id="drawer" hidden>
-      <summary>Governance &amp; bằng chứng SQL</summary>
-      <p>Trace ID <span class="trace-value" id="trace-id"></span></p>
+      <summary>Kiểm soát truy vấn và bằng chứng SQL</summary>
+      <p>Mã theo dõi <span class="trace-value" id="trace-id"></span></p>
       <div class="drawer-grid" id="sql-plan" hidden>
-        <div><h3>SQL chỉ đọc</h3><pre id="sql"></pre></div>
-        <div><h3>Semantic plan</h3><pre id="plan"></pre></div>
+        <div><h3>Câu lệnh chỉ đọc</h3><pre id="sql"></pre></div>
+        <div><h3>Kế hoạch truy vấn</h3><pre id="plan"></pre></div>
       </div>
     </details>
   </div>
@@ -326,15 +329,57 @@ const question = byId("question");
 const locale = byId("locale");
 const run = byId("run");
 const statusText = {
-  ready: ["OK", "success"],
-  needs_clarification: ["NEEDS CLARIFICATION", "notice"],
-  no_data: ["NO DATA", "info"],
-  forbidden: ["UNAUTHORIZED", "danger"],
-  unsupported: ["UNSUPPORTED", "notice"],
-  temporarily_unavailable: ["ERROR", "danger"],
-  error: ["ERROR", "danger"],
+  ready: ["Hoàn tất", "success"],
+  needs_clarification: ["Cần bổ sung thông tin", "notice"],
+  no_data: ["Không có dữ liệu", "info"],
+  forbidden: ["Ngoài phạm vi quyền", "danger"],
+  unsupported: ["Chưa hỗ trợ", "notice"],
+  temporarily_unavailable: ["Tạm thời gián đoạn", "danger"],
+  error: ["Chưa xử lý được", "danger"],
 };
 const metricLabels = new Map();
+const dimensionLabels = {
+  branch_code: "Chi nhánh",
+  product_line: "Dòng sản phẩm",
+  department_code: "Phòng ban",
+  cost_category: "Khoản mục chi phí",
+  partner_code: "Đối tác",
+  segment: "Phân khúc",
+  month: "Tháng",
+  quarter: "Quý",
+  year: "Năm",
+  salesperson_code: "Nhân viên phụ trách",
+  aging_bucket: "Nhóm tuổi nợ",
+  transaction_id: "Mã giao dịch",
+  component: "Thành phần",
+  branch: "Chi nhánh",
+  department: "Phòng ban",
+  customer: "Khách hàng",
+  vendor: "Nhà cung cấp",
+  item: "Mặt hàng",
+  account: "Tài khoản",
+};
+const friendlyErrors = {
+  forbidden_metric: "Tài khoản hiện tại chưa được cấp quyền xem chỉ tiêu này.",
+  forbidden: "Tài khoản hiện tại chưa được cấp quyền xem dữ liệu này.",
+  unsupported_comparison: "Chưa thể so sánh hai kỳ trong một câu hỏi. Bạn có thể hỏi từng kỳ riêng.",
+  incompatible_metrics: "Các chỉ tiêu này không thể tổng hợp cùng nhau. Hãy hỏi riêng từng chỉ tiêu.",
+  unsupported_metric: "Chỉ tiêu này chưa được hỗ trợ. Hãy chọn một chỉ tiêu trong danh mục.",
+  unsupported_data_source: "Chưa có dữ liệu để trả lời yêu cầu này.",
+  unsupported_view: "Góc nhìn được yêu cầu chưa hỗ trợ cho chỉ tiêu này.",
+  unsupported_request: "Câu hỏi này chưa thuộc phạm vi truy vấn tài chính được hỗ trợ.",
+  invalid_request: "Mình chưa hiểu câu hỏi. Hãy viết lại và nêu rõ chỉ tiêu hoặc kỳ báo cáo.",
+  retrieval_unavailable: "Hệ thống truy vấn đang tạm gián đoạn. Vui lòng thử lại sau.",
+  clarification_unavailable: "Chưa thể tiếp tục phần làm rõ. Vui lòng gửi lại câu hỏi.",
+  connection_error: "Chưa kết nối được với hệ thống. Vui lòng thử lại sau.",
+  invalid_response: "Hệ thống chưa trả được kết quả. Vui lòng thử lại sau.",
+};
+const warningLabels = {
+  partial_data_watermark: "Kỳ báo cáo chưa hoàn tất",
+  ratio_undefined: "Không tính được tỷ lệ do thiếu dữ liệu hoặc mẫu số bằng 0",
+  no_data_for_period: "Không có dữ liệu trong kỳ này",
+  no_data_found: "Không tìm thấy dữ liệu phù hợp",
+};
 let active = null;
 let clock = null;
 let activeClarification = null;
@@ -362,7 +407,7 @@ function setRunLabel(pendingClarification) {
 function resetResult(message) {
   byId("answer").textContent = message;
   byId("answer").classList.add("placeholder");
-  for (const id of ["status", "reason", "meta", "quick", "data-panel", "drawer"]) byId(id).hidden = true;
+  for (const id of ["status", "meta", "quick", "data-panel", "drawer"]) byId(id).hidden = true;
   byId("drawer").open = false;
   for (const id of ["sql", "plan", "trace-id", "table-head", "table-body", "meta", "quick"]) {
     byId(id).replaceChildren();
@@ -424,6 +469,10 @@ function formatCell(value, column) {
   const [whole, fraction] = text.split(".");
   return whole.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + (fraction ? "," + fraction : "");
 }
+function displayUnit(unit) {
+  return ({VND: "VNĐ", ratio: "lần", days: "ngày", count: "số lượng", mixed: "tùy thành phần"})[unit]
+    ?? unit;
+}
 function renderTable(body) {
   const preview = body.evidence?.preview_table;
   const data = body.data;
@@ -432,8 +481,9 @@ function renderTable(body) {
   if (!columns.length || !rows.length) return;
   const headers = node("tr");
   for (const col of columns) {
-    const label = metricLabels.get(col.key) ?? col.key;
-    const th = node("th", col.unit ? `${label} (${col.unit})` : label);
+    const label = metricLabels.get(col.key) ?? dimensionLabels[col.key] ?? col.key.replaceAll("_", " ");
+    const unit = displayUnit(col.unit);
+    const th = node("th", unit ? `${label} (${unit})` : label);
     th.scope = "col";
     headers.append(th);
   }
@@ -455,11 +505,11 @@ function renderMeta(body) {
   const interpretation = body.interpretation;
   const time = interpretation?.time;
   const entries = [
-    ["Chỉ tiêu", interpretation?.metric_ids?.join(", ")],
+    ["Chỉ tiêu", interpretation?.metric_ids?.map(id => metricLabels.get(id)).filter(Boolean).join(", ")],
     ["Kỳ", time?.as_of ?? (time?.start && `${time.start} → ${time.end}`)],
-    ["View", interpretation?.view],
+    ["Góc nhìn", ({mgmt: "Quản trị", tax: "Thuế"})[interpretation?.view]],
     ["Dữ liệu đến", body.provenance?.data_watermark],
-    ["Cảnh báo", body.warnings?.join(", ")],
+    ["Lưu ý", (body.warnings ?? []).map(code => warningLabels[code]).filter(Boolean).join(" · ")],
   ];
   const meta = byId("meta");
   meta.replaceChildren();
@@ -489,13 +539,19 @@ function renderClarification(clarification, sent, sentLocale, continuation) {
   };
 
   const quick = byId("quick");
-  quick.replaceChildren(node("p", slot.prompt, "quick-prompt"));
+  quick.setAttribute("aria-label", "Câu hỏi cần làm rõ");
+  quick.replaceChildren(
+    node("p", "Cần làm rõ một thông tin", "quick-title"),
+    node("p", slot.prompt, "quick-prompt"),
+  );
+  const choices = node("div", null, "choices");
   for (const choice of slot.choices ?? []) {
     const reply = node("button", choice.label, "reply");
     reply.type = "button";
     reply.addEventListener("click", () => { void submitClarification(choice.value); });
-    quick.append(reply);
+    choices.append(reply);
   }
+  if (choices.childElementCount) quick.append(choices);
   if (slot.slot === "filters" && !(slot.choices ?? []).length) {
     quick.append(node(
       "p",
@@ -521,7 +577,7 @@ function renderClarification(clarification, sent, sentLocale, continuation) {
     });
     quick.append(replyForm);
   }
-  const cancel = node("button", "Bỏ làm rõ và hỏi câu khác", "reply cancel");
+  const cancel = node("button", "Hủy và nhập câu hỏi khác", "reply cancel");
   cancel.type = "button";
   cancel.addEventListener("click", beginNewQuestion);
   quick.append(cancel);
@@ -535,25 +591,34 @@ function beginNewQuestion() {
   resetResult("Nhập câu hỏi mới hoặc chọn một câu mẫu.");
   question.focus();
 }
-function renderResult(body, httpStatus, sent, sentLocale, continuation) {
+function friendlyErrorMessage(body) {
+  const code = body.error?.code ?? body.reason_code;
+  if (code && friendlyErrors[code]) return friendlyErrors[code];
+  if (body.status === "forbidden") return friendlyErrors.forbidden;
+  if (body.status === "unsupported") return friendlyErrors.unsupported_request;
+  if (body.status === "temporarily_unavailable") return friendlyErrors.retrieval_unavailable;
+  return "Chưa thể xử lý yêu cầu này. Vui lòng thử lại sau.";
+}
+function renderResult(body, sent, sentLocale, continuation) {
   const [label, tone] = statusText[body.status] ?? statusText.error;
   const badge = byId("status");
-  badge.textContent = `${label} (${httpStatus})`;
+  badge.textContent = label;
   badge.dataset.tone = tone;
   badge.hidden = false;
-  const code = body.error?.code ?? body.reason_code;
-  byId("reason").textContent = code ?? "";
-  byId("reason").hidden = !code;
   const answer = byId("answer");
   answer.classList.remove("placeholder");
   const clarificationError = continuation
     && body.error?.stage === "clarification"
     && body.error?.code === "invalid_request";
+  const guidedSlot = body.clarification?.slot_prompts?.[0];
+  const hasError = ["forbidden", "unsupported", "temporarily_unavailable", "error"].includes(body.status);
   answer.textContent = clarificationError
-    ? (sentLocale === "en-US"
-        ? "I couldn’t match that reply to this clarification. Try a valid answer or start a new question."
-        : "Mình chưa ghép được câu trả lời với mục đang làm rõ. Hãy thử câu trả lời phù hợp hoặc bắt đầu câu hỏi mới.")
-    : body.answer || body.error?.message || "Không có kết quả để hiển thị.";
+    ? "Mình chưa ghép được câu trả lời với mục đang làm rõ. Hãy chọn một phương án hoặc nhập lại câu trả lời."
+    : hasError
+      ? friendlyErrorMessage(body)
+      : body.status === "needs_clarification" && guidedSlot
+        ? "Chọn một phương án hoặc nhập câu trả lời bên dưới để tiếp tục."
+        : body.answer || "Không có nội dung để hiển thị.";
   renderMeta(body);
   renderTable(body);
   const evidence = body.demo_evidence;
@@ -609,11 +674,11 @@ async function sendQuery(sent, sentLocale, continuation) {
     let body;
     try { body = await response.json(); }
     catch { body = {status: "error", error: {code: "invalid_response", message: "API không trả dữ liệu JSON."}}; }
-    if (active === controller) renderResult(body, response.status, sent, sentLocale, continuation);
+    if (active === controller) renderResult(body, sent, sentLocale, continuation);
   } catch {
     if (active === controller) renderResult(
       {status: "error", error: {code: "connection_error", message: "Không kết nối được API."}},
-      503, sent, sentLocale, continuation,
+      sent, sentLocale, continuation,
     );
   } finally {
     if (active === controller) {
@@ -648,9 +713,8 @@ byId("query-form").addEventListener("submit", event => { event.preventDefault();
 updateScope();
 
 fetchJson("/health").then(health => {
-  const model = node("span", "LLM · " + health.llm_model);
-  const db = node("span", "DB · " + health.db_path.split(/[\\/]/).pop());
-  db.title = health.db_path;
+  const model = node("span", "Mô hình · " + health.llm_model);
+  const db = node("span", "Kho dữ liệu · Demo");
   byId("health").replaceChildren(model, db);
 }).catch(() => { byId("health").textContent = "API chưa sẵn sàng"; });
 fetchJson("/v1/demo-questions").then(renderExamples).catch(() => {
@@ -669,12 +733,17 @@ fetchJson("/v1/metrics").then(metrics => {
       const when = locale.value === "en-US"
         ? snapshot ? "as of August 31, 2026" : "for August 2026"
         : snapshot ? "tính đến 31/08/2026" : "tháng 08/2026";
-      const view = tax ? (locale.value === "en-US" ? " in the tax view" : " theo view thuế") : "";
-      question.value = `metric_id: ${metric.metric_id} ${when}${view}`;
+      const view = tax ? (locale.value === "en-US" ? " in the tax view" : " theo góc nhìn thuế") : "";
+      const label = locale.value === "en-US" ? metric.name_en : metric.name_vi;
+      question.value = locale.value === "en-US"
+        ? `${label} ${when}${view}?`
+        : `${label} ${when}${view} là bao nhiêu?`;
       question.focus();
     });
     item.append(choose);
-    item.append(node("small", `${metric.metric_id} · ${metric.unit} · ${metric.allowed_views.join(", ")}`));
+    const unit = displayUnit(metric.unit);
+    const views = metric.allowed_views.map(view => ({mgmt: "Quản trị", tax: "Thuế"})[view] ?? view);
+    item.append(node("small", `${unit} · ${views.join(", ")}`));
     byId("metrics").append(item);
   }
 }).catch(() => { byId("metrics").append(node("li", "Không tải được danh mục.")); });

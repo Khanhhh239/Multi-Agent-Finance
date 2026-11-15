@@ -170,16 +170,20 @@ make demo PYTHON=.venv/bin/python
 ```
 
 Mở [giao diện demo](http://localhost:8000). Demo dùng `data/cfo_warehouse.duckdb`
-và `config/selection.yaml` theo mặc định. Đặt `AGENT4_DB_PATH` cho warehouse tổng
-hợp khác và `AGENT4_SELECTION_CONFIG` cho preset model khác. Với runtime Kaggle,
-có thể dùng preset ở mục Metric Selection Engine và override endpoint/model
-bằng các biến môi trường được liệt kê ở đó. `AGENT4_METRIC_SELECTION_CONFIG` là
-tên thay thế khi chưa đặt `AGENT4_SELECTION_CONFIG`.
+và `config/selection.yaml` theo mặc định: LLM `qwen3.5:9b`, embedding
+`qwen3-embedding:4b`, retrieval hybrid. Đặt `AGENT4_DB_PATH` cho warehouse tổng
+hợp khác và `AGENT4_SELECTION_CONFIG` cho preset model khác.
+`AGENT4_METRIC_SELECTION_CONFIG` là tên thay thế khi chưa đặt
+`AGENT4_SELECTION_CONFIG`.
 
 Persona CFO và HCM có thể chọn từ trình duyệt. HCM chỉ đọc các dòng HCM của
 view quản trị. Demo mode cấp quyền CFO demo mặc định cho khách truy cập và
 trả SQL có placeholder trong phần bằng chứng, vì vậy hãy dùng warehouse
 dữ liệu tổng hợp khi chạy chế độ này.
+
+Các preset đánh giá riêng như `config/eval_governed_dev.yaml` có thể dùng model
+nhẹ hơn để chạy thử. Muốn chạy theo cấu hình demo/Kaggle mặc định ở trên, không
+chọn các preset đánh giá đó.
 
 ## Safe Text-to-SQL demo (tham chiếu phiên bản trước)
 
@@ -221,12 +225,10 @@ timeout nằm trong `config/selection.yaml`. Xem [quy trình đánh giá](docs/e
 
 ### Ollama và OpenAI-compatible trên Kaggle
 
-Dùng `config/eval_kaggle_qwen3.yaml` để bật hybrid retrieval và embedding
-`qwen3-embedding:4b` (768 chiều). Preset yêu cầu endpoint có model ID
-`hf.co/Qwen/Qwen3-9B-Instruct-2507-GGUF`. ID này chưa được xác minh trong
-registry công khai. Với Ollama có model công khai cùng dòng 2507, đặt
-`AGENT4_LLM_MODEL=qwen3:4b-instruct-2507-q4_K_M`.
-[Tag Ollama](https://ollama.com/library/qwen3:4b-instruct-2507-q4_K_M)
+Dùng `config/eval_kaggle_qwen3.yaml` cho cùng cặp model mặc định:
+LLM `qwen3.5:9b` và embedding `qwen3-embedding:4b` (768 chiều). Endpoint Ollama
+cần có sẵn cả hai model với đúng model ID này. Nếu dùng OpenAI-compatible API,
+đặt provider và base URL tương ứng bằng các biến môi trường bên dưới.
 
 - LLM đọc `AGENT4_LLM_PROVIDER`, `AGENT4_LLM_BASE_URL`, `AGENT4_LLM_MODEL` và
   `AGENT4_LLM_API_KEY`.
@@ -240,10 +242,24 @@ Khởi tạo trước index cho pipeline governed bằng cùng cấu hình và b
 sẽ dùng lúc chạy API hoặc benchmark.
 
 ```bash
+export AGENT4_SELECTION_CONFIG=config/eval_kaggle_qwen3.yaml
 python -m scripts.build_vector_index --config config/eval_kaggle_qwen3.yaml
+make demo PYTHON=.venv/bin/python
 ```
 
-Pipeline dùng `AGENT4_METRIC_SELECTION_CONFIG=config/eval_kaggle_qwen3.yaml`.
+Trước khi gửi câu hỏi, kiểm tra cấu hình app đang dùng:
+
+```bash
+curl -s http://localhost:8000/health
+```
+
+Response cần hiển thị `qwen3.5:9b`, `qwen3-embedding:4b` và retrieval mode
+`hybrid`. Nếu endpoint Ollama không ở `http://localhost:11434`, đặt
+`AGENT4_LLM_BASE_URL` và `AGENT4_EMBED_BASE_URL` trước khi dựng index và chạy
+demo. Các biến `AGENT4_LLM_MODEL`, `AGENT4_EMBED_MODEL` và
+`AGENT4_RETRIEVAL_MODE` cũng có thể override preset.
+Lệnh `make demo` chạy ở foreground; kiểm tra `/health` từ terminal thứ hai.
+
 Khi caching được bật và backend remote sẵn sàng, hybrid/dense retrieval tự
 xây lại index thiếu hoặc không tương thích. Nếu archive hỏng, chạy lại lệnh
 CLI để tạo index mới sau khi kiểm tra file.

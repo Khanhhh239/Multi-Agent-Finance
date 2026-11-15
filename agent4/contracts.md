@@ -1043,6 +1043,9 @@ ValidatedPlan + ValidatedResult + MetricMetadata + Locale + ResponseOptions
 - Không đưa SQL vào answer.
 - Không bỏ qua warning quan trọng.
 - Với answer đơn giản, ưu tiên deterministic template hơn LLM.
+- Câu trả lời `vi-VN` nhóm giá trị `VND` theo tỉ, triệu, nghìn và đồng.
+  Cách hiển thị giữ chính xác cả dấu và phần thập phân. Bảng và bằng chứng
+  tiếp tục chứa giá trị gốc từ `ValidatedResult`.
 
 ## 23. Answer Validation Contract
 

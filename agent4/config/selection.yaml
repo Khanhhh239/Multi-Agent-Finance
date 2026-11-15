@@ -2,14 +2,15 @@ version: "1"
 prompt_version: metric-selection-v1-e0
 
 embedding:
-  provider: hashing
-  model: hashing-v1
+  provider: ollama
+  base_url: http://localhost:11434
+  model: qwen3-embedding:4b
   dimensions: 768
   cache_enabled: true
-  cache_path: .cache/metric_selection_index.npz
+  cache_path: .cache/metric_selection_index_qwen3_4b.npz
 
 retrieval:
-  mode: full_catalog
+  mode: hybrid
   dense_enabled: true
   lexical_enabled: true
   fusion_method: rrf
@@ -47,7 +48,7 @@ fewshot:
 llm:
   provider: ollama
   base_url: http://localhost:11434
-  model: qwen3:4b
+  model: qwen3.5:9b
   temperature: 0
   timeout_s: 360
   max_retries: 1

@@ -13,8 +13,17 @@ def test_guided_controls_follow_server_slot_choices_and_session():
     assert "session_id: continuation.sessionId" in page
     assert 'clarification_mode: "guided"' in page
     assert 'pendingClarification ? "Hỏi câu mới" : "Truy vấn"' in page
-    assert "Bỏ làm rõ và hỏi câu khác" in page
-    assert "I couldn’t match that reply to this clarification." in page
+    assert "Hủy và nhập câu hỏi khác" in page
     assert "Mình chưa ghép được câu trả lời với mục đang làm rõ." in page
+    assert "Cần bổ sung thông tin" in page
+    assert "Kho dữ liệu · Demo" in page
+    assert "Kiểm soát truy vấn và bằng chứng SQL" in page
+    assert 'node("p", slot.prompt, "quick-prompt")' in page
+    assert 'node("div", null, "choices")' in page
+    assert "Chọn một phương án hoặc nhập câu trả lời bên dưới để tiếp tục." in page
+    assert "body.error?.message" not in page
+    assert "metric_id: ${metric.metric_id}" not in page
+    assert "Run Query" not in page
+    assert "Governance &amp;" not in page
     assert "const quickReplies = [" not in page
     assert "sent.replace(/[.?!]+$/" not in page

@@ -15,8 +15,7 @@ retrieval:
 llm:
   provider: ollama
   base_url: http://localhost:11434
-  # This ID requires a server that exposes it. Override AGENT4_LLM_MODEL for a public tag.
-  model: hf.co/Qwen/Qwen3-9B-Instruct-2507-GGUF
+  model: qwen3.5:9b
   structured_output: true
   max_retries: 1
   temperature: 0.0

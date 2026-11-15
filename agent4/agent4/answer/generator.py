@@ -11,6 +11,25 @@ def metric_label(metric: dict, locale: str) -> str:
     return safe_display_text(label)
 
 
+def _format_vnd_vi(value: str) -> str:
+    """Group an exact, validated decimal string into Vietnamese money units."""
+    whole, _, fraction = value.removeprefix("-").partition(".")
+    integer = int(whole)
+    fraction = fraction.rstrip("0")
+    parts = []
+    for scale, name in ((10**9, "tỉ"), (10**6, "triệu"), (10**3, "nghìn")):
+        group, integer = divmod(integer, scale)
+        if group:
+            parts.append(f"{group:,} {name}".replace(",", "."))
+    if integer or fraction or not parts:
+        remainder = f"{integer},{fraction}" if fraction else str(integer)
+        if parts and integer < 100:
+            parts.append("lẻ")
+        parts.append(remainder)
+    sign = "âm " if value.startswith("-") and (whole.strip("0") or fraction) else ""
+    return f"{sign}{' '.join(parts)} đồng"
+
+
 def generate_grounded_answer(
     plan: ValidatedPlan,
     validated_result: dict,
@@ -48,7 +67,8 @@ def generate_grounded_answer(
                 unit = safe_display_text(
                     row["component_unit"] if metric["unit"] == "mixed" else metric["unit"]
                 )
-                text = f"{label} là {value} {unit}." if vi else f"{label} is {value} {unit}."
+                amount = _format_vnd_vi(value) if vi and unit == "VND" else f"{value} {unit}"
+                text = f"{label} là {amount}." if vi else f"{label} is {amount}."
             if group:
                 text = f"({group}) {text}"
             claims.append({"text": text, "source_columns": [mid], "source_rows": [0]})
