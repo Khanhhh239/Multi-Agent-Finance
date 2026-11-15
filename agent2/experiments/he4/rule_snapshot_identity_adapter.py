@@ -295,6 +295,9 @@ def plan_b5_e4_from_rule_snapshot(data: dict, scope) -> dict:
 
     source = data['source']
     as_of = source['as_of']
+    checked = validate_bundle(source, scope)
+    if checked['status'] != 'accepted':
+        fail(422, 'NATIVE_RULE_SOURCE_INVALID', 'Bundle nguồn luật không hợp lệ.', 'Sửa lỗi nguồn.')
     tables = source['tables']
     visible_txs = {
         r['transaction_id']: deepcopy(r)
@@ -305,7 +308,11 @@ def plan_b5_e4_from_rule_snapshot(data: dict, scope) -> dict:
         [r for r in tables.get('vendors', []) if r.get('observed_at', '') <= as_of],
         key=lambda r: (r['observed_at'], r['vendor_id']),
     )
-    b5_gaps = list(_gaps(source, 'B5'))
+    b5_gaps = []
+    for gap_rule in ('B5', 'E4'):
+        for gap in _gaps(source, gap_rule):
+            if gap not in b5_gaps:
+                b5_gaps.append(gap)
 
     rows_plan = []
     for cid in data['candidate_transaction_ids']:
@@ -353,7 +360,19 @@ def plan_b5_e4_from_rule_snapshot(data: dict, scope) -> dict:
                     tokens[slot_i, field_j] = _token_nibbles(field_name, norm)
                     known[slot_i, field_j] = 1
         if not np.any(known):
-            rows_plan.append(dict(record_id=cid, transaction_id=cid, available=True, status='evaluated_no_hit', reason=None, requests=[]))
+            if invalid_contact:
+                rows_plan.append(
+                    dict(
+                        record_id=cid,
+                        transaction_id=cid,
+                        available=False,
+                        status='unavailable',
+                        reason='identity_field_unknown',
+                        requests=[],
+                    )
+                )
+            else:
+                rows_plan.append(dict(record_id=cid, transaction_id=cid, available=True, status='evaluated_no_hit', reason=None, requests=[]))
             continue
         rows_plan.append(
             dict(

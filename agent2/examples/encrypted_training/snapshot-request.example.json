@@ -1,0 +1,13 @@
+{
+  "version": "snapshot-he-training-adapter/0.1.0",
+  "snapshot_id": "snp_REPLACE_WITH_COMMITTED_SNAPSHOT_ID",
+  "as_of": "2025-08-12T00:00:00+07:00",
+  "training_start": "2025-08-11T00:00:00+07:00",
+  "training_end": "2025-08-12T00:00:00+07:00",
+  "rows": [
+    {"record_id": "REPLACE_TRANSACTION_1", "revision": 1},
+    {"record_id": "REPLACE_TRANSACTION_2", "revision": 1},
+    {"record_id": "REPLACE_TRANSACTION_3", "revision": 1},
+    {"record_id": "REPLACE_TRANSACTION_4", "revision": 1}
+  ]
+}

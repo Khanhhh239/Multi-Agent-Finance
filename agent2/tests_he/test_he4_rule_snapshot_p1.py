@@ -257,6 +257,19 @@ class RuleSnapshotP1Tests(unittest.TestCase):
                 self.store, _scope('C001'), sid1, src1['as_of'], recheck=lambda: _scope('C002')
             )
 
+    def test_negative_amount_vnd_rejected_without_abs_coerce(self):
+        from sme_fraud.rule_snapshot import validate as validate_rule_snapshot
+
+        src, info = scenario('P1', False, 'C001')
+        src['tables']['transactions'][-1]['amount_vnd'] = -500_000
+        _rehash(src)
+        data = _wrap(src, [info['target_transaction_id']])
+        report = validate_rule_snapshot(data, _scope('C001'), committed=True)
+        self.assertEqual(report['status'], 'rejected')
+        self.assertTrue(any('amount_vnd' in err.get('message', '') for err in report['errors']))
+        with self.assertRaises(ImportFailure):
+            plan_p1_from_rule_snapshot(data, _scope('C001'))
+
 
 if __name__ == '__main__':
     unittest.main()

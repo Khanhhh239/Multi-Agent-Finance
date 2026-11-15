@@ -1,5 +1,32 @@
 # Contracts, thuật ngữ, trạng thái và module
 
+## CR-055 — snapshot-he-training-adapter/0.1.0
+
+Read-only snapshot reader reuse integrity/scope checks, canonical hoặc nguồn
+đầy đủ 35 luật qua feature builder hiện có. Request gồm snapshot/as_of/window
+và4 ID/revision; không chọn theo labels/rules/model hoặc lấy bốn đầu. Mapping
+existing-binary-pair/1.0.0 theo thứ tự round_million,creator_equals_approver,
+identity0/1 int64; thiếu/ngoài miền reject batch/x=null, không clip/impute.
+Preview plan_sha256 khóa snapshot/source feature contract/mapping/code/window/
+rows. prepare-snapshot đọc/kiểm lại trước encrypt; provenance ký ở DN theo
+candidate, không gửi source IDs/raw features lên worker. Không đổi FeatureContract33,
+kernel, supervised circuit, model store, chính sách nhãn, HE inference cũ hoặc live.
+
+## CR-054 — supervised encrypted training opt-in
+
+Namespace `experiments.he_training`, version encrypted-supervised-training/0.1.0,
+target verified-fraud/1.0.0; không thay contract 33 feature/ML không nhãn hoặc HE
+inference cũ. Prototype logistic SGD lượng tử hóa có 4 dòng/2 biến, all inputs
+X/y/weights encrypted, composable weights output. Không phải adapter Concrete
+ML SGDClassifier. Upload chưa tạo job; consent ký gắn tenant/company/dataset/
+receipt/label revision/build/key epoch rồi mới chạy. Model trả ciphertext, DN
+kiểm chữ ký và parity trước khi duyệt shadow; không active hoặc claim accuracy.
+Label review ràng buộc nguồn, row ID và xác minh riêng; inconclusive/null không
+train, confirmed_risk của phiếu cũ không thành gian lận. FileAuthorizer operator
+tách live, context khóa DPAPI/AES-GCM ở DN, worker bundle không có enterprise
+secret/data/label/model rõ. Retry/resume theo checkpoint, không cam kết exactly
+once native compute hoặc chống worker ác ý bằng chữ ký. R0–R6 giữ trạng thái.
+
 ## CR-053 — lựa chọn DN và routing Portal khi reload
 
 `agent2.company.selection` là preference sessionStorage theo tab, version1:

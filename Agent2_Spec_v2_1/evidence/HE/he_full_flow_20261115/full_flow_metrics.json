@@ -1,0 +1,836 @@
+{
+  "mode": "real_concrete_http_fhe",
+  "timestamp": "2026-11-15T13:15:44.458809+07:00",
+  "peak_wsl_rss_mb": 7479.3,
+  "provision_stats": [
+    {
+      "action": "provision_reused",
+      "company": "C001",
+      "profile": "rules",
+      "evaluation_keys_bytes": 1394657872
+    },
+    {
+      "action": "provision_reused",
+      "company": "C001",
+      "profile": "c3",
+      "evaluation_keys_bytes": 1541004464
+    },
+    {
+      "action": "provision_reused",
+      "company": "C001",
+      "profile": "graph",
+      "evaluation_keys_bytes": 1616717208
+    },
+    {
+      "action": "provision_reused",
+      "company": "C002",
+      "profile": "rules",
+      "evaluation_keys_bytes": 1394657872
+    },
+    {
+      "action": "provision_reused",
+      "company": "C002",
+      "profile": "c3",
+      "evaluation_keys_bytes": 1541004464
+    },
+    {
+      "action": "provision_reused",
+      "company": "C002",
+      "profile": "graph",
+      "evaluation_keys_bytes": 1616717208
+    }
+  ],
+  "batch_timings": {
+    "C001_COLD": {
+      "company": "C001",
+      "snapshot_id": "snp_aad362ba0b8346d29d085148e8077130",
+      "job_id": "herun_ae70fd1666ed4e4bb9d65165328e8bb5",
+      "total_seconds": 1173.0,
+      "row_count": 3,
+      "resumed_from_sqlite": true
+    },
+    "C001_WARM_EXTRA": {
+      "company": "C001",
+      "snapshot_id": "snp_4c7786fb8c8e4714a000028af68edc74",
+      "job_id": "herun_5574551e71c343ccb596f7f668810159",
+      "total_seconds": 22333.0,
+      "row_count": 2,
+      "resumed_from_sqlite": true
+    },
+    "C001_LIMITS_GAPS": {
+      "company": "C001",
+      "snapshot_id": "snp_fa95b7995b1d4664a90f1420901f7415",
+      "job_id": "herun_c1d81b53aff344bdb87393e4f6977859",
+      "total_seconds": 0.0,
+      "row_count": 2,
+      "resumed_from_sqlite": true
+    },
+    "C002_COLD": {
+      "company": "C002",
+      "snapshot_id": "snp_0987a9a30b1c48c2aca3cb884d741b5b",
+      "job_id": "herun_039c362078c24a48af17e146e7b8e9a7",
+      "total_seconds": 1215.0,
+      "row_count": 3,
+      "resumed_from_sqlite": true
+    },
+    "C001_ACCT": {
+      "company": "C001",
+      "snapshot_id": "snp_aad362ba0b8346d29d085148e8077130",
+      "job_id": "herun_085c675c9b8a42ac984884a312b0984a",
+      "total_seconds": 1441.0,
+      "row_count": 3,
+      "resumed_from_sqlite": true
+    }
+  },
+  "crypto_bridge_events": [
+    {
+      "op": "encrypt",
+      "company": "C001",
+      "profile": "c3",
+      "seconds": 46.469,
+      "checkpoint_reused": false,
+      "request_cipher_bytes": 6537264
+    },
+    {
+      "op": "encrypt",
+      "company": "C001",
+      "profile": "c3",
+      "seconds": 1.86,
+      "checkpoint_reused": true,
+      "request_cipher_bytes": 6537264
+    },
+    {
+      "op": "decrypt",
+      "company": "C001",
+      "profile": "c3",
+      "seconds": 44.625,
+      "result_cipher_bytes": 270760
+    },
+    {
+      "op": "encrypt",
+      "company": "C001",
+      "profile": "c3",
+      "seconds": 45.765,
+      "checkpoint_reused": false,
+      "request_cipher_bytes": 6537264
+    },
+    {
+      "op": "decrypt",
+      "company": "C001",
+      "profile": "c3",
+      "seconds": 41.641,
+      "result_cipher_bytes": 270760
+    },
+    {
+      "op": "encrypt",
+      "company": "C001",
+      "profile": "c3",
+      "seconds": 42.047,
+      "checkpoint_reused": false,
+      "request_cipher_bytes": 6537264
+    },
+    {
+      "op": "decrypt",
+      "company": "C001",
+      "profile": "c3",
+      "seconds": 50.813,
+      "result_cipher_bytes": 270760
+    }
+  ],
+  "transport_events": [
+    {
+      "op": "upload",
+      "purpose": "public_evaluation_keys",
+      "seconds": 14.531,
+      "bytes": 1541004464
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.454,
+      "bytes": 524664
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.453,
+      "bytes": 524664
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.375,
+      "bytes": 524664
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.5,
+      "bytes": 524664
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.437,
+      "bytes": 12536
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.516,
+      "bytes": 2097928
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.484,
+      "bytes": 2097928
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.469,
+      "bytes": 49432
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.531,
+      "bytes": 131352
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.406,
+      "bytes": 49432
+    },
+    {
+      "op": "post",
+      "route": "/v1/evaluate",
+      "profile": "c3",
+      "seconds": 64.485,
+      "status": "ok"
+    },
+    {
+      "op": "post",
+      "route": "/v1/evaluate",
+      "profile": "c3",
+      "seconds": 64.485,
+      "status": "error",
+      "code": "WORKER_CONNECTION_UNAVAILABLE"
+    },
+    {
+      "op": "post",
+      "route": "/v1/results",
+      "profile": null,
+      "seconds": 0.14,
+      "status": "ok"
+    },
+    {
+      "op": "download",
+      "seconds": 0.063,
+      "bytes": 270760
+    },
+    {
+      "op": "upload",
+      "purpose": "public_evaluation_keys",
+      "seconds": 15.844,
+      "bytes": 1541004464
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.547,
+      "bytes": 524664
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.625,
+      "bytes": 524664
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.5,
+      "bytes": 524664
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.641,
+      "bytes": 524664
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.562,
+      "bytes": 12536
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.625,
+      "bytes": 2097928
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.594,
+      "bytes": 2097928
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.672,
+      "bytes": 49432
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.531,
+      "bytes": 131352
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.625,
+      "bytes": 49432
+    },
+    {
+      "op": "post",
+      "route": "/v1/results",
+      "profile": null,
+      "seconds": 0.031,
+      "status": "error",
+      "code": "SESSION_NOT_REGISTERED"
+    },
+    {
+      "op": "post",
+      "route": "/v1/resume",
+      "profile": "c3",
+      "seconds": 14.265,
+      "status": "error",
+      "code": "SESSION_NOT_REGISTERED"
+    },
+    {
+      "op": "post",
+      "route": "/v1/admit",
+      "profile": "c3",
+      "seconds": 63.031,
+      "status": "ok"
+    },
+    {
+      "op": "download",
+      "seconds": 0.062,
+      "bytes": 270760
+    },
+    {
+      "op": "upload",
+      "purpose": "public_evaluation_keys",
+      "seconds": 13.922,
+      "bytes": 1541004464
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.64,
+      "bytes": 524664
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.704,
+      "bytes": 524664
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.671,
+      "bytes": 524664
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.625,
+      "bytes": 524664
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.657,
+      "bytes": 12536
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.687,
+      "bytes": 2097928
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.719,
+      "bytes": 2097928
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.625,
+      "bytes": 49432
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.719,
+      "bytes": 131352
+    },
+    {
+      "op": "upload",
+      "purpose": "ciphertext",
+      "seconds": 0.672,
+      "bytes": 49432
+    },
+    {
+      "op": "post",
+      "route": "/v1/evaluate",
+      "profile": "c3",
+      "seconds": 46.219,
+      "status": "error",
+      "code": "WORKER_CONNECTION_UNAVAILABLE"
+    },
+    {
+      "op": "post",
+      "route": "/v1/results",
+      "profile": null,
+      "seconds": 0.063,
+      "status": "error",
+      "code": "RESULT_NOT_READY"
+    },
+    {
+      "op": "post",
+      "route": "/v1/resume",
+      "profile": "c3",
+      "seconds": 73.656,
+      "status": "ok"
+    },
+    {
+      "op": "download",
+      "seconds": 0.062,
+      "bytes": 270760
+    }
+  ],
+  "recovery": {
+    "R1_encrypt_checkpoint_recovery": true,
+    "R2_lost_evaluate_reply_results_recovery": true,
+    "R3_ttl_pause_fresh_admission": true,
+    "R4_real_sigkill_worker_restart_resume": true
+  },
+  "blob_store_capacity": {
+    "worker_quota_bytes": 8589934592,
+    "worker1_c001": {
+      "total_bytes": 4685992656,
+      "total_gib": 4.3642,
+      "blob_count": 106,
+      "largest_blobs_bytes": [
+        1616717208,
+        1541004464,
+        1394657872,
+        33562896,
+        33562896,
+        2098440,
+        2098440,
+        2098440,
+        2097928,
+        2097928
+      ]
+    },
+    "worker2_c002": {
+      "total_bytes": 4645144512,
+      "total_gib": 4.3261,
+      "blob_count": 40,
+      "largest_blobs_bytes": [
+        1616717208,
+        1541004464,
+        1394657872,
+        33562896,
+        33562896,
+        2098440,
+        2098440,
+        2098440,
+        2097928,
+        2097928
+      ]
+    },
+    "worker1_c001_pre_resume": {
+      "total_bytes": 4825801608,
+      "total_gib": 4.4944,
+      "blob_count": 99,
+      "largest_blobs_bytes": [
+        1616717208,
+        1541004464,
+        1394657872,
+        33562896,
+        33562896,
+        33562896,
+        33562896,
+        33562896,
+        33562896,
+        2098440
+      ]
+    }
+  },
+  "portal_cross_company_isolation": {
+    "c1_audit_matched": true,
+    "c2_audit_clean": true,
+    "accountant_masked": true,
+    "workspace_review_csv_verified": true
+  },
+  "parity_matrix_summary": {
+    "total": 23,
+    "passed": 20,
+    "partial": 3,
+    "failed": 0
+  },
+  "parity_matrix": [
+    {
+      "case_id": "P1_01_overpay_hit",
+      "group": "p1",
+      "native_status": "evaluated_hit",
+      "native_matched": true,
+      "native_score": 20,
+      "plaintext_he_status": "evaluated_hit",
+      "plaintext_he_matched": true,
+      "plaintext_he_reason": null,
+      "real_http_he_status": "evaluated_hit",
+      "real_http_he_matched": true,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "P1_02_plus_1_tolerance_boundary",
+      "group": "p1",
+      "native_status": "evaluated_no_hit",
+      "native_matched": false,
+      "native_score": 0,
+      "plaintext_he_status": "evaluated_no_hit",
+      "plaintext_he_matched": false,
+      "plaintext_he_reason": null,
+      "real_http_he_status": "evaluated_no_hit",
+      "real_http_he_matched": false,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "P1_03_simultaneous_same_second_batch",
+      "group": "p1",
+      "native_status": "evaluated_no_hit",
+      "native_matched": false,
+      "native_score": 0,
+      "plaintext_he_status": "evaluated_no_hit",
+      "plaintext_he_matched": false,
+      "plaintext_he_reason": null,
+      "real_http_he_status": "evaluated_no_hit",
+      "real_http_he_matched": false,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "P1_04_missing_invoice_number",
+      "group": "p1",
+      "native_status": "unavailable",
+      "native_matched": null,
+      "native_score": null,
+      "plaintext_he_status": "unavailable",
+      "plaintext_he_matched": null,
+      "plaintext_he_reason": "invoice_identity_not_provided",
+      "real_http_he_status": "not_run_in_http_batch",
+      "real_http_he_matched": null,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "P1_05_prior_limit_over_4",
+      "group": "p1",
+      "native_status": "evaluated_hit",
+      "native_matched": true,
+      "native_score": 20,
+      "plaintext_he_status": "unavailable",
+      "plaintext_he_matched": null,
+      "plaintext_he_reason": "he_p1_source_limit",
+      "real_http_he_status": "unavailable",
+      "real_http_he_matched": null,
+      "real_http_he_reason": "he_p1_source_limit",
+      "parity_verdict": "partial",
+      "note": "Bounded <=4 HE circuit limit returned unavailable as designed (never sliced)."
+    },
+    {
+      "case_id": "P1_06_negative_amount_rejected_schema",
+      "group": "p1",
+      "native_status": "rejected_schema",
+      "plaintext_he_status": "rejected_schema",
+      "real_http_he_status": "rejected_schema",
+      "parity_verdict": "partial",
+      "note": "agent2-rule-snapshot/1.0.0 schema rejects amount_vnd < 0 (no abs coercion); signed adjustments belong to canonical 1.1.0."
+    },
+    {
+      "case_id": "P1_07_payroll_not_applicable",
+      "group": "p1",
+      "native_status": "not_applicable",
+      "native_matched": null,
+      "native_score": null,
+      "plaintext_he_status": "not_applicable",
+      "plaintext_he_matched": null,
+      "plaintext_he_reason": "rule_not_applicable_to_source_kinds",
+      "real_http_he_status": "not_applicable",
+      "real_http_he_matched": null,
+      "real_http_he_reason": "rule_not_applicable_to_source_kinds",
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "P1_08_post_cutoff_late_tx",
+      "group": "p1",
+      "native_status": "unavailable",
+      "native_matched": null,
+      "native_score": null,
+      "plaintext_he_status": "unavailable",
+      "plaintext_he_matched": null,
+      "plaintext_he_reason": "transaction_not_known_at_cutoff",
+      "real_http_he_status": "unavailable",
+      "real_http_he_matched": null,
+      "real_http_he_reason": "transaction_not_known_at_cutoff",
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "C3_01_fast_15s_high_hit",
+      "group": "c3",
+      "native_status": "evaluated_hit",
+      "native_matched": true,
+      "native_score": 8,
+      "plaintext_he_status": "evaluated_hit",
+      "plaintext_he_matched": true,
+      "plaintext_he_reason": null,
+      "real_http_he_status": "evaluated_hit",
+      "real_http_he_matched": true,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "C3_02_exact_60s_boundary_no_hit",
+      "group": "c3",
+      "native_status": "evaluated_no_hit",
+      "native_matched": false,
+      "native_score": 0,
+      "plaintext_he_status": "evaluated_no_hit",
+      "plaintext_he_matched": false,
+      "plaintext_he_reason": null,
+      "real_http_he_status": "evaluated_no_hit",
+      "real_http_he_matched": false,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "C3_03_standard_authority_no_hit",
+      "group": "c3",
+      "native_status": "evaluated_no_hit",
+      "native_matched": false,
+      "native_score": 0,
+      "plaintext_he_status": "evaluated_no_hit",
+      "plaintext_he_matched": false,
+      "plaintext_he_reason": null,
+      "real_http_he_status": "not_run_in_http_batch",
+      "real_http_he_matched": null,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "C3_04_conflicting_tie_ambiguous",
+      "group": "c3",
+      "native_status": "unavailable",
+      "native_matched": null,
+      "native_score": null,
+      "plaintext_he_status": "unavailable",
+      "plaintext_he_matched": null,
+      "plaintext_he_reason": "authority_not_covered_or_ambiguous_at_action",
+      "real_http_he_status": "unavailable",
+      "real_http_he_matched": null,
+      "real_http_he_reason": "authority_not_covered_or_ambiguous_at_action",
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "C3_05_unknown_role_no_rule_unavailable",
+      "group": "c3",
+      "native_status": "unavailable",
+      "native_matched": null,
+      "native_score": null,
+      "plaintext_he_status": "unavailable",
+      "plaintext_he_matched": null,
+      "plaintext_he_reason": "actor_role_not_known_for_authority_scope",
+      "real_http_he_status": "not_run_in_http_batch",
+      "real_http_he_matched": null,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "C3_06_missing_authorities_coverage",
+      "group": "c3",
+      "native_status": "unavailable",
+      "native_matched": null,
+      "native_score": null,
+      "plaintext_he_status": "unavailable",
+      "plaintext_he_matched": null,
+      "plaintext_he_reason": "source_coverage_missing",
+      "real_http_he_status": "not_run_in_http_batch",
+      "real_http_he_matched": null,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "C3_07_authority_rules_over_4_limit",
+      "group": "c3",
+      "native_status": "evaluated_hit",
+      "native_matched": true,
+      "native_score": 8,
+      "plaintext_he_status": "unavailable",
+      "plaintext_he_matched": null,
+      "plaintext_he_reason": "he_c3_authority_limit",
+      "real_http_he_status": "unavailable",
+      "real_http_he_matched": null,
+      "real_http_he_reason": "he_c3_authority_limit",
+      "parity_verdict": "partial",
+      "note": "Bounded <=4 HE circuit limit returned unavailable as designed (never sliced)."
+    },
+    {
+      "case_id": "C3_08_negative_delta_no_hit",
+      "group": "c3",
+      "native_status": "evaluated_no_hit",
+      "native_matched": false,
+      "native_score": 0,
+      "plaintext_he_status": "evaluated_no_hit",
+      "plaintext_he_matched": false,
+      "plaintext_he_reason": null,
+      "real_http_he_status": "not_run_in_http_batch",
+      "real_http_he_matched": null,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "B1_01_bank_identity_undisclosed_hit",
+      "group": "b1",
+      "native_status": "evaluated_hit",
+      "native_matched": true,
+      "native_score": 20,
+      "plaintext_he_status": "evaluated_hit",
+      "plaintext_he_matched": true,
+      "plaintext_he_reason": null,
+      "real_http_he_status": "evaluated_hit",
+      "real_http_he_matched": true,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "B1_02_disclosed_downgraded_score_4",
+      "group": "b1",
+      "native_status": "evaluated_hit",
+      "native_matched": true,
+      "native_score": 4,
+      "plaintext_he_status": "evaluated_hit",
+      "plaintext_he_matched": true,
+      "plaintext_he_reason": null,
+      "real_http_he_status": "not_run_in_http_batch",
+      "real_http_he_matched": null,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "B1_03_missing_recipient_bank_code",
+      "group": "b1",
+      "native_status": "unavailable",
+      "native_matched": null,
+      "native_score": null,
+      "plaintext_he_status": "unavailable",
+      "plaintext_he_matched": null,
+      "plaintext_he_reason": "recipient_bank_identity_incomplete",
+      "real_http_he_status": "not_run_in_http_batch",
+      "real_http_he_matched": null,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "B1_04_graph_over_4_limit",
+      "group": "b1",
+      "native_status": "unavailable",
+      "native_matched": null,
+      "native_score": null,
+      "plaintext_he_status": "unavailable",
+      "plaintext_he_matched": null,
+      "plaintext_he_reason": "recipient_bank_identity_incomplete",
+      "real_http_he_status": "unavailable",
+      "real_http_he_matched": null,
+      "real_http_he_reason": "recipient_bank_identity_incomplete",
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "B5E4_01_shared_phone_strong_single_family",
+      "group": "b5_e4",
+      "native_status": "evaluated_hit",
+      "native_matched": true,
+      "native_score": 0,
+      "plaintext_he_status": "evaluated_hit",
+      "plaintext_he_matched": true,
+      "plaintext_he_reason": null,
+      "real_http_he_status": "evaluated_hit",
+      "real_http_he_matched": true,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "B5E4_02_shared_address_weak_intrinsic_1",
+      "group": "b5_e4",
+      "native_status": "evaluated_hit",
+      "native_matched": true,
+      "native_score": 0,
+      "plaintext_he_status": "evaluated_hit",
+      "plaintext_he_matched": true,
+      "plaintext_he_reason": null,
+      "real_http_he_status": "evaluated_hit",
+      "real_http_he_matched": true,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    },
+    {
+      "case_id": "B5E4_03_unknown_contact_unavailable",
+      "group": "b5_e4",
+      "native_status": "unavailable",
+      "native_matched": null,
+      "native_score": null,
+      "plaintext_he_status": "unavailable",
+      "plaintext_he_matched": null,
+      "plaintext_he_reason": "identity_field_unknown",
+      "real_http_he_status": "not_run_in_http_batch",
+      "real_http_he_matched": null,
+      "real_http_he_reason": null,
+      "parity_verdict": "pass",
+      "note": null
+    }
+  ]
+}

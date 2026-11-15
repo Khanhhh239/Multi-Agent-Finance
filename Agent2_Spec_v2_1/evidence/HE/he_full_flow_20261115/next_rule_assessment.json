@@ -1,0 +1,597 @@
+{
+  "timestamp": "2026-11-15T01:30:49.936222+07:00",
+  "rule_comparison": {
+    "A6": {
+      "name": "Thanh toán làm tròn vượt hóa đơn gốc",
+      "weight": 8,
+      "hard_trigger": false,
+      "required_tables": [
+        "transactions",
+        "employees",
+        "transaction_documents"
+      ],
+      "fhe_complexity": "64-bit VND modulo-1000 LUT + strictly-greater comparison + invoice_gross_vnd > 0 + transaction_documents",
+      "shares_tables_with_existing_he": "partial (transactions + employees shared with P1, needs additional transaction_documents)"
+    },
+    "C2": {
+      "name": "Tự duyệt vượt quyền được cấp",
+      "weight": 20,
+      "hard_trigger": true,
+      "required_tables": [
+        "transactions",
+        "employees",
+        "approval_authorities",
+        "approval_authority_coverage"
+      ],
+      "fhe_complexity": "Reuses exact c3 authority matrix (MAX_AUTHORITIES=4, nibble word64 range checks) + maker==approver & self_approval_allowed bit",
+      "shares_tables_with_existing_he": "100% identical to C3 (transactions, employees, approval_authorities, approval_authority_coverage)"
+    }
+  },
+  "cohorts": {
+    "repo_examples": {
+      "summary": {
+        "evaluated_bundles": 8,
+        "rejected_bundles": 0,
+        "total_rows": 96,
+        "covered_he5_hits": 3,
+        "rules": {
+          "A6": {
+            "weight": 8,
+            "hard_trigger": false,
+            "required_tables": [
+              "transactions",
+              "employees",
+              "transaction_documents"
+            ],
+            "applicable_rows": 94,
+            "source_complete_rows": 93,
+            "source_complete_rate": 0.9894,
+            "domain_fit_rows": 93,
+            "domain_fit_rate_of_complete": 1.0,
+            "domain_fit_rate_of_applicable": 0.9894,
+            "hits": 0,
+            "incremental_hits_beyond_he5": 0
+          },
+          "C2": {
+            "weight": 20,
+            "hard_trigger": true,
+            "required_tables": [
+              "transactions",
+              "employees",
+              "approval_authorities",
+              "approval_authority_coverage"
+            ],
+            "applicable_rows": 96,
+            "source_complete_rows": 5,
+            "source_complete_rate": 0.0521,
+            "domain_fit_rows": 5,
+            "domain_fit_rate_of_complete": 1.0,
+            "domain_fit_rate_of_applicable": 0.0521,
+            "hits": 1,
+            "incremental_hits_beyond_he5": 1
+          }
+        }
+      },
+      "details": [
+        {
+          "label": "C001_5_giao_dich.json",
+          "company_id": "C001",
+          "valid": true,
+          "total_rows": 45,
+          "covered_he_hits": 0,
+          "A6": {
+            "applicable": 45,
+            "source_complete": 45,
+            "domain_fit": 45,
+            "missing_invoice_fields": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_no_hit"
+          },
+          "C2": {
+            "applicable": 45,
+            "source_complete": 0,
+            "domain_fit": 0,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "unavailable"
+          }
+        },
+        {
+          "label": "C002_5_giao_dich.json",
+          "company_id": "C002",
+          "valid": true,
+          "total_rows": 45,
+          "covered_he_hits": 0,
+          "A6": {
+            "applicable": 45,
+            "source_complete": 45,
+            "domain_fit": 45,
+            "missing_invoice_fields": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_no_hit"
+          },
+          "C2": {
+            "applicable": 45,
+            "source_complete": 0,
+            "domain_fit": 0,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "unavailable"
+          }
+        },
+        {
+          "label": "C001_B1_signal.json",
+          "company_id": "C001",
+          "valid": true,
+          "total_rows": 1,
+          "covered_he_hits": 1,
+          "A6": {
+            "applicable": 1,
+            "source_complete": 1,
+            "domain_fit": 1,
+            "missing_invoice_fields": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_no_hit"
+          },
+          "C2": {
+            "applicable": 1,
+            "source_complete": 1,
+            "domain_fit": 1,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_no_hit"
+          }
+        },
+        {
+          "label": "C001_C2_signal.json",
+          "company_id": "C001",
+          "valid": true,
+          "total_rows": 1,
+          "covered_he_hits": 0,
+          "A6": {
+            "applicable": 1,
+            "source_complete": 1,
+            "domain_fit": 1,
+            "missing_invoice_fields": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_no_hit"
+          },
+          "C2": {
+            "applicable": 1,
+            "source_complete": 1,
+            "domain_fit": 1,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 1,
+            "incremental_beyond_he5": 1,
+            "guarded_dataset_status": "evaluated_hit"
+          }
+        },
+        {
+          "label": "C001_coverage_unknown.json",
+          "company_id": "C001",
+          "valid": true,
+          "total_rows": 1,
+          "covered_he_hits": 1,
+          "A6": {
+            "applicable": 1,
+            "source_complete": 0,
+            "domain_fit": 0,
+            "missing_invoice_fields": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "unavailable"
+          },
+          "C2": {
+            "applicable": 1,
+            "source_complete": 0,
+            "domain_fit": 0,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "unavailable"
+          }
+        },
+        {
+          "label": "C001_E2_signal.json",
+          "company_id": "C001",
+          "valid": true,
+          "total_rows": 1,
+          "covered_he_hits": 0,
+          "A6": {
+            "applicable": 0,
+            "source_complete": 0,
+            "domain_fit": 0,
+            "missing_invoice_fields": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "not_applicable"
+          },
+          "C2": {
+            "applicable": 1,
+            "source_complete": 1,
+            "domain_fit": 1,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_no_hit"
+          }
+        },
+        {
+          "label": "C001_F4_signal.json",
+          "company_id": "C001",
+          "valid": true,
+          "total_rows": 1,
+          "covered_he_hits": 0,
+          "A6": {
+            "applicable": 0,
+            "source_complete": 0,
+            "domain_fit": 0,
+            "missing_invoice_fields": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "not_applicable"
+          },
+          "C2": {
+            "applicable": 1,
+            "source_complete": 1,
+            "domain_fit": 1,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_no_hit"
+          }
+        },
+        {
+          "label": "C002_B1_signal.json",
+          "company_id": "C002",
+          "valid": true,
+          "total_rows": 1,
+          "covered_he_hits": 1,
+          "A6": {
+            "applicable": 1,
+            "source_complete": 1,
+            "domain_fit": 1,
+            "missing_invoice_fields": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_no_hit"
+          },
+          "C2": {
+            "applicable": 1,
+            "source_complete": 1,
+            "domain_fit": 1,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_no_hit"
+          }
+        }
+      ]
+    },
+    "rule35_ml_eval_demo": {
+      "summary": {
+        "evaluated_bundles": 2,
+        "rejected_bundles": 0,
+        "total_rows": 134,
+        "covered_he5_hits": 125,
+        "rules": {
+          "A6": {
+            "weight": 8,
+            "hard_trigger": false,
+            "required_tables": [
+              "transactions",
+              "employees",
+              "transaction_documents"
+            ],
+            "applicable_rows": 128,
+            "source_complete_rows": 128,
+            "source_complete_rate": 1.0,
+            "domain_fit_rows": 128,
+            "domain_fit_rate_of_complete": 1.0,
+            "domain_fit_rate_of_applicable": 1.0,
+            "hits": 1,
+            "incremental_hits_beyond_he5": 0
+          },
+          "C2": {
+            "weight": 20,
+            "hard_trigger": true,
+            "required_tables": [
+              "transactions",
+              "employees",
+              "approval_authorities",
+              "approval_authority_coverage"
+            ],
+            "applicable_rows": 134,
+            "source_complete_rows": 134,
+            "source_complete_rate": 1.0,
+            "domain_fit_rows": 134,
+            "domain_fit_rate_of_complete": 1.0,
+            "domain_fit_rate_of_applicable": 1.0,
+            "hits": 1,
+            "incremental_hits_beyond_he5": 0
+          }
+        }
+      },
+      "details": [
+        {
+          "label": "rule35_eval_C001_all_tx",
+          "company_id": "C001",
+          "valid": true,
+          "total_rows": 67,
+          "covered_he_hits": 62,
+          "A6": {
+            "applicable": 64,
+            "source_complete": 64,
+            "domain_fit": 64,
+            "missing_invoice_fields": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_no_hit"
+          },
+          "C2": {
+            "applicable": 67,
+            "source_complete": 67,
+            "domain_fit": 67,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 1,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_hit"
+          }
+        },
+        {
+          "label": "rule35_eval_C002_all_tx",
+          "company_id": "C002",
+          "valid": true,
+          "total_rows": 67,
+          "covered_he_hits": 63,
+          "A6": {
+            "applicable": 64,
+            "source_complete": 64,
+            "domain_fit": 64,
+            "missing_invoice_fields": 0,
+            "hits": 1,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_hit"
+          },
+          "C2": {
+            "applicable": 67,
+            "source_complete": 67,
+            "domain_fit": 67,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_no_hit"
+          }
+        }
+      ]
+    },
+    "sme_generator_stress": {
+      "summary": {
+        "evaluated_bundles": 4,
+        "rejected_bundles": 0,
+        "total_rows": 440,
+        "covered_he5_hits": 24,
+        "rules": {
+          "A6": {
+            "weight": 8,
+            "hard_trigger": false,
+            "required_tables": [
+              "transactions",
+              "employees",
+              "transaction_documents"
+            ],
+            "applicable_rows": 139,
+            "source_complete_rows": 131,
+            "source_complete_rate": 0.9424,
+            "domain_fit_rows": 131,
+            "domain_fit_rate_of_complete": 1.0,
+            "domain_fit_rate_of_applicable": 0.9424,
+            "hits": 8,
+            "incremental_hits_beyond_he5": 0
+          },
+          "C2": {
+            "weight": 20,
+            "hard_trigger": true,
+            "required_tables": [
+              "transactions",
+              "employees",
+              "approval_authorities",
+              "approval_authority_coverage"
+            ],
+            "applicable_rows": 440,
+            "source_complete_rows": 324,
+            "source_complete_rate": 0.7364,
+            "domain_fit_rows": 268,
+            "domain_fit_rate_of_complete": 0.8272,
+            "domain_fit_rate_of_applicable": 0.6091,
+            "hits": 29,
+            "incremental_hits_beyond_he5": 29
+          }
+        }
+      },
+      "details": [
+        {
+          "label": "gen_C001",
+          "company_id": "C001",
+          "valid": true,
+          "total_rows": 109,
+          "covered_he_hits": 5,
+          "A6": {
+            "applicable": 31,
+            "source_complete": 31,
+            "domain_fit": 31,
+            "missing_invoice_fields": 0,
+            "hits": 2,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_hit"
+          },
+          "C2": {
+            "applicable": 109,
+            "source_complete": 109,
+            "domain_fit": 109,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 9,
+            "incremental_beyond_he5": 9,
+            "guarded_dataset_status": "evaluated_hit"
+          }
+        },
+        {
+          "label": "gen_C002",
+          "company_id": "C002",
+          "valid": true,
+          "total_rows": 116,
+          "covered_he_hits": 8,
+          "A6": {
+            "applicable": 44,
+            "source_complete": 36,
+            "domain_fit": 36,
+            "missing_invoice_fields": 8,
+            "hits": 2,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "unavailable"
+          },
+          "C2": {
+            "applicable": 116,
+            "source_complete": 0,
+            "domain_fit": 0,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 0,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "unavailable"
+          }
+        },
+        {
+          "label": "gen_C003",
+          "company_id": "C003",
+          "valid": true,
+          "total_rows": 120,
+          "covered_he_hits": 5,
+          "A6": {
+            "applicable": 32,
+            "source_complete": 32,
+            "domain_fit": 32,
+            "missing_invoice_fields": 0,
+            "hits": 2,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_hit"
+          },
+          "C2": {
+            "applicable": 120,
+            "source_complete": 120,
+            "domain_fit": 64,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 56,
+            "hits": 14,
+            "incremental_beyond_he5": 14,
+            "guarded_dataset_status": "evaluated_hit"
+          }
+        },
+        {
+          "label": "gen_C004",
+          "company_id": "C004",
+          "valid": true,
+          "total_rows": 95,
+          "covered_he_hits": 6,
+          "A6": {
+            "applicable": 32,
+            "source_complete": 32,
+            "domain_fit": 32,
+            "missing_invoice_fields": 0,
+            "hits": 2,
+            "incremental_beyond_he5": 0,
+            "guarded_dataset_status": "evaluated_hit"
+          },
+          "C2": {
+            "applicable": 95,
+            "source_complete": 95,
+            "domain_fit": 95,
+            "missing_coverage_or_ambiguous": 0,
+            "exceeds_max_authorities": 0,
+            "hits": 6,
+            "incremental_beyond_he5": 6,
+            "guarded_dataset_status": "evaluated_hit"
+          }
+        }
+      ]
+    },
+    "combined_summary": {
+      "evaluated_bundles": 14,
+      "rejected_bundles": 0,
+      "total_rows": 670,
+      "covered_he5_hits": 152,
+      "rules": {
+        "A6": {
+          "weight": 8,
+          "hard_trigger": false,
+          "required_tables": [
+            "transactions",
+            "employees",
+            "transaction_documents"
+          ],
+          "applicable_rows": 361,
+          "source_complete_rows": 352,
+          "source_complete_rate": 0.9751,
+          "domain_fit_rows": 352,
+          "domain_fit_rate_of_complete": 1.0,
+          "domain_fit_rate_of_applicable": 0.9751,
+          "hits": 9,
+          "incremental_hits_beyond_he5": 0
+        },
+        "C2": {
+          "weight": 20,
+          "hard_trigger": true,
+          "required_tables": [
+            "transactions",
+            "employees",
+            "approval_authorities",
+            "approval_authority_coverage"
+          ],
+          "applicable_rows": 670,
+          "source_complete_rows": 463,
+          "source_complete_rate": 0.691,
+          "domain_fit_rows": 407,
+          "domain_fit_rate_of_complete": 0.879,
+          "domain_fit_rate_of_applicable": 0.6075,
+          "hits": 31,
+          "incremental_hits_beyond_he5": 30
+        }
+      }
+    }
+  },
+  "wsl_compile_benchmark": {
+    "a6_direct_mod1000": {
+      "ok": false,
+      "error": "Function you are trying to compile cannot be compiled\n\n %0 = amount                       # EncryptedScalar<uint24>        ∈ [500000, 10000000]\n %1 = gross                        # EncryptedScalar<uint24>        ∈ [500000, 9999001]\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this 24-bit value is used as an input to a table lookup\n                                                                                        <stdin>:23\n %2 = 0                            # ClearScalar<uint1>             ∈ [0, 0]\n %3 = greater(%1, %2)              # EncryptedScalar<uint1>         ∈ [1, 1]\n^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ but only up to 16-bit table lookups are supported\n                                                                             <stdin>:16\n %4 = 1000                         # ClearScalar<uint10>            ∈ [1000, 1000]\n %5 = remainder(%1, %4)            # EncryptedScalar<uint3>         ∈ [0, 7]\n %6 = 0                            # ClearScalar<uint1>             ∈ [0, 0]\n %7 = greater(%5, %6)              # EncryptedScalar<uint1>         ∈ [0, 1]\n %8 = 1000                         # ClearScalar<uint10>            ∈ [1000, 1000]\n %9 = remainder(%0, %8)            # EncryptedScalar<uint1>         ∈ [0, 0]\n%10 = 0                            # ClearScalar<uint1>             ∈ [0, 0]\n%11 = equal(%9, %10)               # EncryptedScalar<uint1>         ∈ [1, 1]\n%12 = 1                            # ClearScalar<uint1>             ∈ [1, 1]\n%13 = add(%1, %12)                 # EncryptedScalar<uint24>        ∈ [500001, 9999002]\n%14 = greater(%0, %13)             # EncryptedScalar<uint1>         ∈ [0, 1]\n%15 = bitwise_and(%3, %7)          # EncryptedScalar<uint1>         ∈ [0, 1]\n%16 = bitwise_and(%15, %11)        # EncryptedScalar<uint1>         ∈ [0, 1]\n%17 = bitwise_and(%16, %14)        # EncryptedScalar<uint1>         ∈ [0, 1]\nreturn %17",
+      "peak_rss_mb": 340.6
+    },
+    "c2_authority_gate_extension": {
+      "ok": true,
+      "bit_width": 1,
+      "compile_s": 0.379,
+      "keygen_s": 1.682,
+      "encrypt_run_decrypt_s": 0.657,
+      "sample_out": 1,
+      "peak_rss_mb": 662.1
+    }
+  },
+  "elapsed_seconds": 11.844
+}

@@ -5,3 +5,6 @@ __pycache__/
 *.joblib
 *.sqlite3*
 *.log
+
+# Local compiler/debug dumps
+.artifacts/

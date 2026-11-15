@@ -1,5 +1,17 @@
 # Tiến độ spec v2.1
 
+CR-055 (15/11/2026): **READY_FOR_REVIEW kỹ thuật** — snapshot→HE training input
+read-only, binary pair hiện có, pin nguồn/selection/cutoff/mapping trước encrypt.
+28 test +2 DN native encryption/upload đạt; template nhãn null, 0 job train.
+Giữ core33/engine và live; chưa train batch lớn/Portal. Xem
+../reports/he_training_snapshot_adapter_20261115.md.
+
+CR-054 (15/11/2026): **READY_FOR_REVIEW prototype kỹ thuật** — branch train có
+nhãn encrypted, consent và nhận/phê duyệt model shadow; 4 dòng/2 biến, không
+chuyển phiếu rà thành nhãn fraud. Dữ liệu/nhãn nghiệm thu là mô phỏng, không
+thay Portal/model/key/luật hiện hữu hoặc chốt gate. Nguồn và kết quả kiểm chứng:
+../reports/he_supervised_training_20261115.md.
+
 CR-053 (14/11/2026): **FIXED / READY_FOR_REVIEW kỹ thuật** — reload Portal giữ
 C002, màn hình, snapshot và as_of; quyền mới được kiểm trước restore. Routing17,
 workspace12 và auth22 đạt; live asset5/5 khớp source/no-store, không restart hoặc

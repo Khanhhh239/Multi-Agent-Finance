@@ -23,12 +23,12 @@ from pathlib import Path
 PAGE=(Path(__file__).with_name('web')/'status.html').read_text('utf-8')
 
 
-def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources=None,he_backend=None):
+def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources=None,he_backend=None,review_store=None,comparison_store=None):
     authorizer=authorizer or FileAuthorizer(None)
     if he_backend and he_backend.node.auth is not authorizer:
         raise ValueError('HE must use the same current authorizer as the web server')
-    reviews=None
-    comparisons=None
+    reviews=review_store
+    comparisons=comparison_store
     manager=None
     if he_backend and hasattr(he_backend,'settings'):
         from experiments.he4.config_manager import Manager
@@ -61,7 +61,7 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
         def do_GET(self):
             if handle_workbench(self,authorizer,analysis_mode='four_encrypted_branches' if he_backend and hasattr(he_backend,'settings') else None):return
             if handle_workspace(self,authorizer,snapshot_store,he_backend,reviews):return
-            if handle_comparison(self,authorizer,snapshot_store,he_backend,reviews,comparisons,'GET'):return
+            if handle_comparison(self,authorizer,snapshot_store,he_backend,reviews,comparisons,'GET',analysis_resources):return
             if handle_reviews(self,authorizer,snapshot_store,he_backend,reviews,'GET'):return
             if handle_config(self,authorizer,manager,'GET'):return
             if handle_he_workbench(self,authorizer,he_backend,'GET'):return
@@ -76,7 +76,7 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
         def do_POST(self):
             if handle_config(self,authorizer,manager,'POST'):return
             if handle_reviews(self,authorizer,snapshot_store,he_backend,reviews,'POST'):return
-            if handle_comparison(self,authorizer,snapshot_store,he_backend,reviews,comparisons,'POST'):return
+            if handle_comparison(self,authorizer,snapshot_store,he_backend,reviews,comparisons,'POST',analysis_resources):return
             if handle_he_workbench(self,authorizer,he_backend,'POST'):return
             if not handle_analysis(self,authorizer,snapshot_store,'POST',analysis_resources) and not handle_validation(self,authorizer) and not handle_snapshots(self,authorizer,snapshot_store,'POST'):
                 self.respond(410,dict(error='Chưa mở ghi dữ liệu hoặc chạy job; API cũ đã được lưu trữ.',mode='validation_only'))

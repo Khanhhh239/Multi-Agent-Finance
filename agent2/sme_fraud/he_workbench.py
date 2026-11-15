@@ -30,7 +30,8 @@ def saved_runs(jobs,scope):
                 data=store.open(row)
                 if number==0 and data.get('legacy_job'):children.add(data['legacy_job'])
                 owned.append(dict(job_id=row['id'],snapshot_id=data['request']['snapshot_id'],as_of=data['request']['as_of'],phase=row['phase'],
-                    created_at=row['created'],row_count=(data.get('result') or {}).get('row_count'),analysis_mode='four_encrypted_branches' if hasattr(jobs,'legacy') and number==0 else 'mahalanobis'))
+                    created_at=row['created'],row_count=(data.get('result') or {}).get('row_count'),
+                    analysis_mode='rule_snapshot_he_groups' if data['request'].get('snapshot_contract')=='agent2-rule-snapshot/1.0.0' else 'four_encrypted_branches' if hasattr(jobs,'legacy') and number==0 else 'mahalanobis'))
     values=sorted((r for r in owned if r['job_id'] not in children),key=lambda r:(r['created_at'],r['job_id']),reverse=True)
     return dict(runs=values[:50],limited=len(values)>50)
 
@@ -155,7 +156,7 @@ def handle_he_workbench(handler, authorizer, backend, method):
         # Status URLs from the node belong to its internal API, not the browser.
         if isinstance(value, dict) and 'job_id' in value:
             value = {k:v for k,v in value.items() if k in {'job_id','phase','message','attempts','reason','created_at','updated_at','events','poll_after_ms'}}
-        if isinstance(value,dict) and value.get('version')=='he-four-branch-result/1.0.0':
+        if isinstance(value,dict) and value.get('version') in ('he-four-branch-result/1.0.0','he-rule-snapshot-groups-result/1.0.0'):
             def money_strings(item):
                 if isinstance(item,dict):return {k:str(v) if k.endswith('_vnd') and type(v) is int else money_strings(v) for k,v in item.items()}
                 if isinstance(item,list):return [money_strings(v) for v in item]
@@ -170,7 +171,7 @@ def handle_he_workbench(handler, authorizer, backend, method):
                     from .he_result_view import review_result
                     value=review_result(value)
                 else:
-                    value=dict(value,runs=[dict(r,analysis_mode='four_encrypted_branches' if r.get('analysis_mode')=='four_encrypted_branches' else 'encrypted_analysis') for r in value['runs']])
+                    value=dict(value,runs=[dict(r,analysis_mode=r['analysis_mode'] if r.get('analysis_mode') in ('four_encrypted_branches','rule_snapshot_he_groups') else 'encrypted_analysis') for r in value['runs']])
         if recheck()!=scope:fail(409,'AUTH_CONTEXT_CHANGED','Quyền truy cập đã thay đổi.','Mở lại từ Portal.')
         handler.respond(status, value)
     except (AuthError, ImportFailure) as error:

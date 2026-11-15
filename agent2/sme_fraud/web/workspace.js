@@ -81,10 +81,10 @@
     put('ws-cases',...cases.map(c=>{const b=node('button');b.className='case-choice';b.setAttribute('aria-pressed',String(selected===c.case_id));b.append(node('strong',c.record_id+' · '+money(c.amount_vnd)),node('small',c.review.revision?outcome[c.review.feedback.outcome]:'Chưa ghi kết quả'),node('small',c.payment_signal?'Cần đối chiếu thanh toán':c.payment_unavailable?'Thanh toán chưa đủ nguồn':date(c.event_at)));b.addEventListener('click',()=>{if(dirty&&!confirm('Phiếu đang có nội dung chưa lưu. Bỏ nội dung này để mở phiếu khác?'))return;renderCase(c);});return b;}));if(!cases.length)put('ws-cases',node('p','Không có giao dịch thuộc bộ lọc này.'));
   }
   function sourceCard(ev){
-    const record=ev.record,box=node('div');box.className='source-card';const details=node('details');details.append(node('summary',(tables[ev.table]||'Bản ghi nguồn')+' · '+record.record_id));
-    const facts=[['Loại nguồn',ev.simulated?'Dữ liệu mô phỏng':ev.original_verified?'Chứng từ gốc có trạng thái xác minh tại nguồn':'Bản ghi nguồn, chưa xác minh chứng từ gốc'],['Có hiệu lực',date(record.effective_at)],['Được biết lúc',date(record.observed_at)]];
-    for(const k of ['amount_vnd','total_vnd','gross_amount_vnd'])if(record[k]!=null)facts.push(['Số tiền',money(record[k])]);
-    if(record.number)facts.push(['Số hóa đơn',record.number]);if(record.description)facts.push(['Nội dung',record.description]);
+    const record=ev.record,box=node('div');box.className='source-card';const details=node('details');const rid=record.record_id||record.transaction_id||record.vendor_id||record.employee_id||record.document_id||record.authority_id||record.coverage_id||'';details.append(node('summary',(tables[ev.table]||'Bản ghi nguồn')+' · '+rid));
+    const facts=[['Loại nguồn',ev.simulated?'Dữ liệu mô phỏng':ev.original_verified?'Chứng từ gốc có trạng thái xác minh tại nguồn':'Bản ghi nguồn, chưa xác minh chứng từ gốc'],['Có hiệu lực',date(record.effective_at||record.posted_at||record.recorded_at||record.observed_at)],['Được biết lúc',date(record.observed_at)]];
+    for(const k of ['amount_vnd','total_vnd','gross_amount_vnd','invoice_gross_vnd'])if(record[k]!=null)facts.push(['Số tiền',money(record[k])]);
+    if(record.number||record.invoice_number)facts.push(['Số hóa đơn',record.number||record.invoice_number]);if(record.description)facts.push(['Nội dung',record.description]);
     for(const [k,label] of [['transaction_ref','Giao dịch'],['invoice_ref','Hóa đơn'],['adjusts_ref','Điều chỉnh khoản']])if(record[k])facts.push([label,record[k].record_id]);
     if(record.covered_from)facts.push(['Lịch sử từ',date(record.covered_from)],['Lịch sử đến',date(record.covered_through)],['Hóa đơn trong phạm vi',(record.invoice_refs||[]).map(x=>x.record_id).join(', ')]);
     if(record.source)facts.push(['Nguồn',record.source.system+' · '+record.source.record_id]);

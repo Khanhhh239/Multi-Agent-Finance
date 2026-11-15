@@ -1,0 +1,120 @@
+{
+  "count": 28,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "tests": [
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_both_profiles_map_existing_binary_features_without_scaling",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_cli_preview_and_rejection_do_not_provision_keys",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_future_coverage_claim_cannot_enable_historical_training",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_future_row_and_nonexistent_revision_are_kept_as_issues_not_dropped",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_late_approval_does_not_change_past_feature",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_missing_db_does_not_create_storage",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_no_first_four_padding_or_duplicate_transactions",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_out_of_domain_does_not_round_clip_or_recode",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_partial_source_and_missing_approver_never_imputed_zero",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_readonly_export_does_not_modify_db_or_require_evidence_verify",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_real_and_simulated_source_modes_not_silently_mixed",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_same_transaction_ids_in_companies_are_scoped",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_stale_preview_and_changed_auth_prevent_encryption",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_window_and_explicit_row_order_preserved",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_checkpoint_restart_continues_same_encrypted_weights",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_confirm_then_run_retries_same_job_once_and_returns_ciphertext",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_consent_required_before_run",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_data_and_consent_conflicts_do_not_overwrite",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_enterprise_rechecks_permissions_and_requires_explicit_approval",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_foreign_company_actor_signature_and_revoked_grant_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_local_dataset_signature_detects_changes_after_encryption",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_only_explicit_verified_fraud_labels_are_accepted",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_plain_data_labels_unknown_fields_and_broken_cipher_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_quantized_scalar_oracle_matches_vector_equations",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_same_dataset_id_in_two_companies_has_separate_jobs",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_shadow_requires_signed_approval_for_exact_candidate",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_upload_receipt_does_not_train_or_create_model",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_wrong_receipt_context_target_or_key_denied",
+      "status": "pass"
+    }
+  ]
+}

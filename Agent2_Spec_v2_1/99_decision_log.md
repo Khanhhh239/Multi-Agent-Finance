@@ -1,5 +1,36 @@
 # Decision log — nguồn chuẩn cho quyết định
 
+### CR-055 — snapshot sang đầu vào supervised HE
+
+15/11/2026: người dùng giao lấy giao dịch từ snapshot đã lưu, mapping rõ và giữ
+thời điểm nguồn, không cắt/đổi giá trị để vừa circuit. Chọn hai feature đã có
+round_million và creator_equals_approver, vốn binary0/1, ánh xạ identity sang
+int64; không đổi COLUMNS/contract33 hoặc học scaler. Native/canonical dùng đúng
+builder hiện có, giữ toàn lịch sử và per-row cutoff. Chọn4 ID/revision tường minh,
+window/as_of; missing/outside giữ lỗi, cả batch không mã hóa. Phạm vi nguồn khai
+báo sau cutoff không được dùng cho replay quá khứ. Snapshot/model provenance
+và mapping được ghim theo checksum trước encrypt, không gửi source IDs lên cloud.
+28 test và hai DN mã hóa thật/upload biên nhận đạt; không train/nhãn tự động,
+không thay live/key/model/Portal hoặc tự chốt gate.
+
+### CR-054 — prototype huấn luyện có nhãn trên bản mã
+
+15/11/2026: người dùng chấp nhận luồng DN mã hóa/upload → nhận biên nhận → DN
+xác minh nhãn và đồng ý train → cloud train ciphertext → trả model ciphertext →
+DN giải mã/kiểm tra/phê duyệt. Qua câu hỏi xác nhận, nhãn chốt là **gian lận đã
+xác minh / đã xác minh không gian lận**. Không dùng “có vấn đề cần xử lý” thay
+fraud, không tự chuyển phiếu rà hoặc prediction thành nhãn; chưa đủ căn cứ giữ
+null. Triển khai branch thử nghiệm SGD logistic lượng tử hóa Concrete thật,
+4 dòng/2 biến; không thay lựa chọn fit local của nhánh ML không nhãn hiện hữu.
+
+X/y/weights encrypted, worker lặp update trên encrypted weights; secret context
+DPAPI/AES-GCM tại DN. Biên nhận/consent khóa dataset/revision nhãn/build/key;
+source local ký và label commitment HMAC, đọc model không xác minh nhãn mới.
+Chỉ approve shadow sau parity; chưa kích hoạt MethodStore/Portal/hàng đợi.
+Nghiệm thu dùng synthetic_expected, không ghi nhân viên thật đã xác minh.
+Chi phí HE/domain là giới hạn kỹ thuật, không ngưỡng sản xuất hoặc business
+accuracy. Không mở rộng nhiệm vụ sang production/DONE R0–R6/F1–F3.
+
 ### CR-053 — sửa reload Portal về sai doanh nghiệp
 
 14/11/2026: người dùng chọn phát hiện QA cũ C002 có thể thành C001 sau reload.

@@ -1,12 +1,15 @@
 # Agent2 — pipeline v2.1 và không gian làm việc
 
-**Cập nhật 14/11/2026:** đã sửa [reload Portal giữ đúng C001/C002, màn hình và
-snapshot](../reports/portal_company_routing_20261114.md); ghép tương thích với
-Portal mới dùng iframe riêng cho từng Agent và giữ cơ chế phiên đăng nhập của
-nhóm. [Model bridge mô phỏng](../reports/rule_bridge_models_20261114.md) dùng
-Isolation Forest/C001, ECOD/C002 và RobustZ riêng từng doanh nghiệp; model,
-database, khóa và cấu hình local không được đưa lên Git, cần chuẩn bị riêng
-theo hướng dẫn. Kết quả mô phỏng chưa chứng minh độ chính xác nghiệp vụ thật.
+**Đầu vào train HE từ snapshot:** đã có [preview → kiểm tra → mã hóa](docs/HE_TRAINING_SNAPSHOT_ADAPTER.md)
+cho hai feature binary hiện có, giữ point-in-time/tenant/revision và provenance.
+Chọn rõ 4 giao dịch, không tự cắt/điền dữ liệu hoặc train khi chưa xác minh nhãn.
+
+**Prototype 15/11/2026:** có nhánh thử [train có nhãn trên bản mã](docs/HE_SUPERVISED_TRAINING.md):
+doanh nghiệp mã hóa dữ liệu → nhận biên nhận → xác minh/mã hóa nhãn → cloud
+worker train → trả model mã hóa → doanh nghiệp giải mã, kiểm tra và duyệt shadow.
+Nhãn mục tiêu là gian lận đã xác minh/đã xác minh không gian lận. Mới là SGD
+logistic lượng tử hóa 2 biến/4 dòng, chưa nối Portal hay chứng minh hiệu quả
+gian lận thật; không thay ML không nhãn, model/khóa/luật đang chạy.
 
 **CR-050: đã nối [đủ 35 luật qua pipeline snapshot nguồn đầy đủ](docs/FULL_RULE_PIPELINE.md)**
 tại node doanh nghiệp, có kiểm tra/lưu bất biến, API theo quyền và giao diện.

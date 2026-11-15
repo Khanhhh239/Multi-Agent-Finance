@@ -16,7 +16,7 @@ from .review_api import cases_for,summarize
 ROUTE=re.compile(r'/api/v1/companies/([A-Za-z0-9_.:-]{1,128})/workspace(?:/runs/(herun_[a-f0-9]{32})(?:/(report|report\.csv))?)?\Z')
 NAMES={'rules':'Đối chiếu thanh toán','statistics':'So sánh với lịch sử','graph':'Liên kết đối tượng','ml':'Phân tích bất thường'}
 PHASES={'queued':'Đã nhận yêu cầu','preparing':'Đang chuẩn bị dữ liệu','ready':'Đang chuẩn bị phép tính tiếp theo','sending':'Đang gửi và tính trên dữ liệu mã hóa','received':'Đang kiểm tra kết quả mã hóa','decrypting':'Đang giải mã tại doanh nghiệp','retryable':'Đang chờ kết nối lại','waiting_worker':'Đang chờ bộ xử lý','waiting_authorization':'Cần đăng nhập để tiếp tục','completed':'Đã phân tích xong','failed':'Lượt phân tích gặp lỗi','expired':'Yêu cầu đã hết hạn'}
-REASONS={'rule_sources_unavailable':'Thiếu hóa đơn, liên kết thanh toán hoặc phạm vi lịch sử.','artifact_missing':'Chưa có phiên bản phân tích phù hợp.','artifact_not_pinned':'Chưa cấu hình phiên bản phân tích cho doanh nghiệp.','artifact_incompatible':'Phiên bản phân tích chưa tương thích với dữ liệu.','input_out_of_domain':'Giá trị nằm ngoài phạm vi đã kiểm chứng của phiên bản hiện tại.','features_missing':'Thiếu dữ liệu đầu vào cần thiết.','features_all_missing':'Chưa có đủ dữ liệu đầu vào.','he_graph_node_limit':'Số đối tượng vượt phạm vi phân tích liên kết hiện tại.','he_p1_source_limit':'Lịch sử liên quan vượt phạm vi tính hiện tại; cần người quản lý kiểm tra.','he_batch_limit':'Tệp vượt số giao dịch hỗ trợ trong một lượt chấm hiện tại.','artifact_training_overlap':'Giao dịch đã thuộc dữ liệu chuẩn bị phiên bản; cần dùng kỳ đánh giá riêng.','before_evaluation_period':'Giao dịch nằm trước kỳ đánh giá của phiên bản.','he_graph_sources_missing':'Chưa có đủ thuộc tính để đối chiếu liên kết.','he_statistics_out_of_domain':'Dữ liệu nằm ngoài phạm vi so sánh lịch sử đã kiểm chứng.'}
+REASONS={'rule_sources_unavailable':'Thiếu hóa đơn, liên kết thanh toán hoặc phạm vi lịch sử.','artifact_missing':'Chưa có phiên bản phân tích phù hợp.','artifact_not_pinned':'Chưa cấu hình phiên bản phân tích cho doanh nghiệp.','artifact_incompatible':'Phiên bản phân tích chưa tương thích với dữ liệu.','input_out_of_domain':'Giá trị nằm ngoài phạm vi đã kiểm chứng của phiên bản hiện tại.','features_missing':'Thiếu dữ liệu đầu vào cần thiết.','features_all_missing':'Chưa có đủ dữ liệu đầu vào.','he_graph_node_limit':'Số đối tượng vượt phạm vi phân tích liên kết hiện tại (tối đa 4 nút).','he_p1_source_limit':'Lịch sử liên quan vượt phạm vi tính hiện tại (tối đa 4 dòng); không tự cắt bớt lịch sử.','he_batch_limit':'Tệp vượt số giao dịch hỗ trợ trong một lượt chấm hiện tại.','artifact_training_overlap':'Giao dịch đã thuộc dữ liệu chuẩn bị phiên bản; cần dùng kỳ đánh giá riêng.','before_evaluation_period':'Giao dịch nằm trước kỳ đánh giá của phiên bản.','he_graph_sources_missing':'Chưa có đủ thuộc tính để đối chiếu liên kết.','he_statistics_out_of_domain':'Dữ liệu nằm ngoài phạm vi so sánh lịch sử đã kiểm chứng.','rule_snapshot_he_unsupported':'Phần này chạy local theo 35 luật / 33 feature, chưa có mạch HE tương ứng.','invoice_identity_not_provided':'Thiếu số hóa đơn định danh.','he_c3_authority_limit':'Số quy tắc thẩm quyền vượt giới hạn 4 dòng của mạch HE C3.','he_c3_domain_limit':'Giá trị thời gian/số tiền vượt miền an toàn của mạch HE C3.','authority_not_covered_or_ambiguous_at_action':'Thiếu hoặc xung đột phạm vi thẩm quyền phê duyệt tại thời điểm duyệt.','actor_role_not_known_for_authority_scope':'Không xác định được vai trò người duyệt khi chưa có quy tắc thẩm quyền khớp.','recipient_bank_identity_incomplete':'Thiếu mã ngân hàng cho tài khoản nhận tiền.','identity_field_unknown':'Thiếu hoặc chưa chuẩn hóa được thông tin liên hệ của nhà cung cấp.'}
 OUTCOMES={'confirmed_risk':'Có vấn đề cần xử lý','legitimate':'Không phát hiện vấn đề','inconclusive':'Chưa đủ căn cứ'}
 
 
@@ -42,6 +42,38 @@ def progress(jobs,scope,job,status):
 
 
 def case_view(case,row):
+    if 'groups' in row:
+        groups=row['groups'];p1=groups.get('p1',{});p1_row=[p1['row_check']] if p1.get('row_check') else [];p1_sim=p1.get('simultaneous_checks',[])
+        checks=[]
+        for gk,title in (('p1','P1 · Thanh toán vượt nghĩa vụ hóa đơn'),('c3','C3 · Phê duyệt nhanh < 60 giây'),('b1','B1 · Tài khoản/định danh NCC trùng nhân viên'),('b5_e4','B5/E4 · NCC dùng chung định danh')):
+            g=groups.get(gk,{});applicable=g.get('status')!='not_applicable';available=bool(g.get('available'))
+            checks.append(dict(kind=gk,title=title,status='available' if available else 'unavailable' if applicable else 'not_applicable',message=g.get('explanation') or REASONS.get(g.get('reason'),'Chưa đủ nguồn phân tích.')))
+        for bk,title in (('statistics','Thống kê (chưa hỗ trợ HE 35 luật)'),('ml','Phân tích bất thường ML 33 feature (local only)')):
+            b=row.get('branches',{}).get(bk,{})
+            checks.append(dict(kind=bk,title=title,status='unavailable',message=b.get('message') or REASONS.get(b.get('reason'),'Chưa hỗ trợ HE.')))
+        fields=('case_id','record_id','revision','amount_vnd','currency','event_at','as_of','question','next_step','evidence','review')
+        value={k:case[k] for k in fields};tx=next((e['record'] for e in case['evidence'] if e['table']=='transactions' and e['record']['record_id']==case['record_id']),{})
+        kind=tx.get('kind') or tx.get('txn_type')
+        if kind in ('salary','payroll'):
+            value.update(question='Khoản lương có đúng người, kỳ hưởng và căn cứ phê duyệt không?',next_step='Đối chiếu bảng lương, bảng công, hồ sơ nhân sự và chứng từ chuyển tiền. Thiếu tài liệu thì ghi rõ phần cần bổ sung.')
+        elif kind=='adjustment':
+            value.update(question='Khoản điều chỉnh có đúng khoản gốc, số tiền và căn cứ cho phép không?',next_step='Đối chiếu bản ghi gốc, liên kết điều chỉnh, bút toán và hồ sơ phê duyệt liên quan.')
+        links=[]
+        b1=groups.get('b1',{})
+        for eid in b1.get('matched_employee_ids',[]):
+            links.append(dict(source=tx.get('vendor_id') or case['record_id'],target=eid,relation='B1 trùng tài khoản/CCCD nhân viên',context_only=False))
+        for eid in b1.get('ambiguous_employee_ids',[]):
+            links.append(dict(source=tx.get('vendor_id') or case['record_id'],target=eid,relation='B1 trùng số tài khoản nhưng thiếu mã ngân hàng',context_only=True))
+        b5=groups.get('b5_e4',{})
+        for field_name,peers in (b5.get('shared_fields') or {}).items():
+            for peer_id in peers:
+                links.append(dict(source=tx.get('vendor_id') or case['record_id'],target=peer_id,relation=f'B5/E4 dùng chung {field_name}',context_only=field_name=='address'))
+        hit=any(c.get('matched') for c in p1_row+p1_sim)
+        value.update(why=case['why'],checks=checks,payment_signal=hit,payment_unavailable=not p1.get('available',False) and p1.get('status')!='not_applicable',
+            invoice_checks=[{k:c[k] for k in ('prior_paid_vnd','current_allocated_vnd','invoice_gross_vnd','cumulative_paid_vnd','excess_vnd','matched') if k in c} for c in p1_row],
+            simultaneous_checks=[{k:c[k] for k in ('prior_paid_vnd','current_allocated_vnd','invoice_gross_vnd','cumulative_paid_vnd','excess_vnd','matched') if k in c} for c in p1_sim],graph_links=links,
+            missing_sources=[dict(message=g.get('explanation') or REASONS.get(g.get('reason'),g.get('reason')),action='Bổ sung nguồn hoặc kiểm tra giới hạn mạch HE tương ứng.') for g in groups.values() if not g.get('available') and g.get('status')!='not_applicable'])
+        return value
     branch=row.get('branches',{}).get('rules',{})
     invoices=branch.get('invoice_checks',[]);groups=branch.get('simultaneous_checks',[])
     hit=next((c for c in invoices if c.get('matched')),None);group=next((c for c in groups if c.get('matched')),None)
@@ -131,7 +163,7 @@ def handle_workspace(handler,authorizer,snapshots,backend,reviews):
             if state['phase']=='completed':
                 code,result=backend.node.jobs.result(company,header,job)
                 if code!=200:fail(409,'RESULT_NOT_READY','Kết quả chưa sẵn sàng.','Chờ hoàn tất rồi tải lại.')
-                review_store=reviews['current' if result.get('version')=='he-four-branch-result/1.0.0' else 'legacy'] if isinstance(reviews,dict) else reviews
+                review_store=reviews['current' if result.get('version') in ('he-four-branch-result/1.0.0','he-rule-snapshot-groups-result/1.0.0') else 'legacy'] if isinstance(reviews,dict) else reviews
                 if review_store is None:fail(503,'REVIEWS_NOT_CONFIGURED','Kho phiếu rà chưa được cấu hình.','Liên hệ người quản lý.')
                 cases=cases_for(snapshots,scope,result,review_store,recheck);rows={(r['record_id'],r['revision']):r for r in result['rows']}
                 value.update(snapshot_id=result['snapshot_id'],as_of=result['as_of'],row_count=result['row_count'],summary=summarize(cases),

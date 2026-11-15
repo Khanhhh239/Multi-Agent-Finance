@@ -1,0 +1,63 @@
+{
+  "status": "passed",
+  "native": {
+    "company_checks": [
+      {
+        "company_id": "C001",
+        "features": [
+          "round_million",
+          "creator_equals_approver"
+        ],
+        "mapping_fingerprint": "d161a81d19a7255ebc8c3956732794d7fce0f6af424bae478c000542c37d5e82",
+        "plan_sha256": "1845e4be40d30586b7398954ca627318562db974e686ee9c5c3ac86da30a0de8",
+        "retry_kept_dataset": true,
+        "review_labels_null": true,
+        "rows": 4,
+        "signed_receipt_verified": true,
+        "snapshot_id": "snp_4c9ac83a3e1342fca1b7d00d3f1c903c",
+        "snapshot_to_ciphertext": true,
+        "status": "passed"
+      },
+      {
+        "company_id": "C002",
+        "features": [
+          "round_million",
+          "creator_equals_approver"
+        ],
+        "mapping_fingerprint": "d161a81d19a7255ebc8c3956732794d7fce0f6af424bae478c000542c37d5e82",
+        "plan_sha256": "69ef0b6a1fc1298ae337c80308a8e9faff43833c51a7d242b3bd8d55c84143a0",
+        "retry_kept_dataset": true,
+        "review_labels_null": true,
+        "rows": 4,
+        "signed_receipt_verified": true,
+        "snapshot_id": "snp_b0bf8a06cfac41939700d05906192668",
+        "snapshot_to_ciphertext": true,
+        "status": "passed"
+      }
+    ],
+    "labels_supplied": false,
+    "limits": [
+      "Four explicitly selected rows and two existing binary features only.",
+      "This acceptance verifies input preparation and upload, not new encrypted training or fraud accuracy."
+    ],
+    "live_changed": false,
+    "new_key_generation": false,
+    "plaintext_source_sent_to_worker": false,
+    "real_concrete_encryption": true,
+    "real_http_worker": true,
+    "source": "committed synthetic agent2-rule-snapshot/1.0.0",
+    "status": "passed",
+    "train_jobs_created": 0
+  },
+  "unit_checks": 28,
+  "source_sha256": {
+    "agent2/experiments/he_training/snapshot_adapter.py": "d5e1b119c162c6096809dc1eda8e4407304c863a590ccd8d45bfbd54d9ee1bc3",
+    "agent2/experiments/he_training/enterprise.py": "fdfedbf86fe0fb5472a0bd58554cb787aead8a42d04eadd33e18a5b7896fbfd4",
+    "agent2/experiments/he_training/cli.py": "8ad898b39bdfc29e9fd00a3d606bf5e5cba2b3401f9d5f6918eb3a9ef82b9684",
+    "agent2/scripts/check_training_snapshot_adapter.py": "8abb74839f8fe491d49ec2d0a20215ee0eccf9342c1f461b68d9431f0996803c",
+    "agent2/tests_he/test_training_snapshot_adapter.py": "bb58f9db081917b70b43c2844c9f71a2c12747b26e30c6c9cc2cbefa8fa5c546",
+    "agent2/tests_he/training_snapshot_support.py": "bb45ea5b6634e85b6e1b20b664872ec59fe2b811fed26f6bee8ef6ed858a7531"
+  },
+  "core_feature_contract_changed": false,
+  "live_changed": false
+}

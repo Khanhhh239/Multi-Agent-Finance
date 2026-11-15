@@ -27,9 +27,11 @@ from . import FRESH_ADMISSION
 class Settings:
     def __init__(self,config):
         required={'version','state_dir','enterprise_root','state_key_file','worker_url','worker_verify_key','builds','bindings_file','linux_distro','linux_python'}
-        if set(config)!=required or config['version']!='he4-enterprise/1.0.0':raise ValueError('HE4 enterprise configuration')
+        if set(config)!=required or config['version'] not in ('he4-enterprise/1.0.0','he4-enterprise/1.1.0'):raise ValueError('HE4 enterprise configuration')
+        self.supports_rule_snapshot=config['version']=='he4-enterprise/1.1.0'
         worker_address(config['worker_url']);self.config=deepcopy(config);self.mutation_lock=threading.RLock()
-        if set(config['builds'])!={'rules','statistics','graph'}:raise ValueError('three Concrete circuits required')
+        if not self.supports_rule_snapshot and set(config['builds'])!={'rules','statistics','graph'}:raise ValueError('three Concrete circuits required')
+        if self.supports_rule_snapshot and (not {'rules','c3','graph'}<=set(config['builds']) or not set(config['builds'])<={'rules','statistics','c3','graph'}):raise ValueError('rule-snapshot HE requires rules, c3, graph builds')
         if not isinstance(config['worker_verify_key'],str) or len(bytes.fromhex(config['worker_verify_key']))!=32:raise ValueError('worker key')
 
     def capture(self,scope):
@@ -56,10 +58,15 @@ class Settings:
             programs[profile]=dict(path=str(root),circuit_sha256=manifest['files']['server.zip'],specs_sha256=manifest['files']['client.specs.json'])
         from . import snapshot_adapter,inputs
         from sme_fraud import p1_evaluation,p1_inputs,rule_sources,snapshot_features
+        pinned=[__file__,snapshot_adapter.__file__,inputs.__file__,p1_evaluation.__file__,p1_inputs.__file__,rule_sources.__file__,snapshot_features.__file__,
+                Path(__file__).with_name('enterprise_helper.py'),Path(__file__).with_name('windows_bridge.py')]
+        if self.supports_rule_snapshot:
+            from . import c3_circuit,rule_snapshot_adapter,rule_snapshot_c3_adapter,rule_snapshot_identity_adapter,rule_snapshot_coordinator
+            from sme_fraud import authority_policy,native_rule_node,rule_snapshot
+            pinned.extend([c3_circuit.__file__,rule_snapshot_adapter.__file__,rule_snapshot_c3_adapter.__file__,rule_snapshot_identity_adapter.__file__,
+                           rule_snapshot_coordinator.__file__,authority_policy.__file__,native_rule_node.__file__,rule_snapshot.__file__])
         return dict(binding=found,programs=programs,worker_url=c['worker_url'],worker_verify_key=c['worker_verify_key'],
-                    implementation_sha256=digest(b''.join(Path(p).read_bytes() for p in
-                        (__file__,snapshot_adapter.__file__,inputs.__file__,p1_evaluation.__file__,p1_inputs.__file__,rule_sources.__file__,snapshot_features.__file__,
-                         Path(__file__).with_name('enterprise_helper.py'),Path(__file__).with_name('windows_bridge.py')))))
+                    implementation_sha256=digest(b''.join(Path(p).read_bytes() for p in pinned)))
 
 
 class FourJobs(Jobs):
@@ -107,6 +114,18 @@ class FourJobs(Jobs):
         # between the pending-run check and the atomic model binding switch.
         with self.settings.mutation_lock:
             context=self.settings.capture(scope)
+            if getattr(self.settings,'supports_rule_snapshot',False):
+                snap=ReadOnlySnapshots(self.node.snapshot_db)
+                manifest=snap.get_snapshot(scope,body['snapshot_id'],lambda:self._scope(header,company))
+                if manifest.get('contract_version')=='agent2-rule-snapshot/1.0.0':
+                    if body['artifact_id'] is not None:raise ServiceError(400,'HE4_REQUEST_FIELDS')
+                    source_data=loads(snap.get_snapshot(scope,body['snapshot_id'],lambda:self._scope(header,company),data=True))
+                    source_as_of=source_data['source']['as_of']
+                    if utc(body['as_of'])!=utc(source_as_of):raise ServiceError(409,'HE4_AS_OF_MISMATCH')
+                    request=dict(body,as_of=source_as_of,snapshot_contract='agent2-rule-snapshot/1.0.0',he4_context=context)
+                    job=self.store.create(scope,key,request)
+                    self.schedule(scope,header,job)
+                    return self.status(company,header,job)
             if context['binding'].get('ml_artifact_id',body['artifact_id'])!=body['artifact_id']:raise ServiceError(409,'HE4_MODEL_SELECTION_CHANGED')
             request=dict(body,as_of=utc(body['as_of']).isoformat(),he4_context=context)
             job=self.store.create(scope,key,request)
@@ -131,19 +150,27 @@ class FourJobs(Jobs):
                 # Both stores lose in-memory authorization tickets on a DN
                 # crash. Re-authorize the saved child; never submit a new one.
                 self.legacy.resume(company,header,data['legacy_job'])
+            is_rule_snapshot=r.get('snapshot_contract')=='agent2-rule-snapshot/1.0.0'
+            if is_rule_snapshot and not getattr(self.settings,'supports_rule_snapshot',False):raise HEUnavailable('he4_rule_snapshot_unsupported')
             if data['pending'] is None:
-                plan=prepare_snapshot(ReadOnlySnapshots(self.node.snapshot_db),scope,r['snapshot_id'],r['as_of'],model_db=self.node.model_db,
-                    statistics_artifact=context['binding']['statistics_artifact_id'],recheck=lambda:self.guard(job,scope)[0])
-                tasks=[];dedup={}
-                for row_index,planned in enumerate(plan['rows']):
-                    for branch_name,branch in planned['branches'].items():
-                        branch['task_indexes']=[]
-                        for request_index,request in enumerate(branch['requests']):
-                            signature=digest(canonical(dict(profile=request['profile'],program=context['programs'][request['profile']],values=request['values'])))
-                            if signature not in dedup:
-                                dedup[signature]=len(tasks);tasks.append(dict(profile=request['profile'],values=request['values'],context=None,packet=None,response=None,result=None))
-                            branch['task_indexes'].append(dedup[signature])
-                data['pending']=dict(plan=plan,tasks=tasks,cursor=0)
+                if is_rule_snapshot:
+                    from .rule_snapshot_coordinator import prepare_rule_snapshot_he_plan
+                    prepared=prepare_rule_snapshot_he_plan(ReadOnlySnapshots(self.node.snapshot_db),scope,r['snapshot_id'],r['as_of'],
+                        context['programs'],recheck=lambda:self.guard(job,scope)[0])
+                    data['pending']=dict(plan=prepared['plan'],tasks=prepared['tasks'],cursor=0)
+                else:
+                    plan=prepare_snapshot(ReadOnlySnapshots(self.node.snapshot_db),scope,r['snapshot_id'],r['as_of'],model_db=self.node.model_db,
+                        statistics_artifact=context['binding']['statistics_artifact_id'],recheck=lambda:self.guard(job,scope)[0])
+                    tasks=[];dedup={}
+                    for row_index,planned in enumerate(plan['rows']):
+                        for branch_name,branch in planned['branches'].items():
+                            branch['task_indexes']=[]
+                            for request_index,request in enumerate(branch['requests']):
+                                signature=digest(canonical(dict(profile=request['profile'],program=context['programs'][request['profile']],values=request['values'])))
+                                if signature not in dedup:
+                                    dedup[signature]=len(tasks);tasks.append(dict(profile=request['profile'],values=request['values'],context=None,packet=None,response=None,result=None))
+                                branch['task_indexes'].append(dedup[signature])
+                    data['pending']=dict(plan=plan,tasks=tasks,cursor=0)
                 self._save(scope,job,data,'ready')
             pending=data['pending'];tasks=pending['tasks']
             for index in range(pending['cursor'],len(tasks)):
@@ -192,6 +219,10 @@ class FourJobs(Jobs):
                     elif error.code=='he4_helper_unavailable':raise ServiceError(503,error.code)
                     else:raise
                 pending['cursor']=index+1;self._save(scope,job,data,'ready')
+            if is_rule_snapshot:
+                from .rule_snapshot_coordinator import assemble_rule_snapshot_he_result
+                data['result']=assemble_rule_snapshot_he_result(job,r,pending,context);data['pending']=None
+                self._save(scope,job,data,'completed');return False
             if r['artifact_id'] is None:
                 status,legacy=200,dict(company_id=company,rows=[dict(record_id=row['record_id'],revision=row['revision'],available=False,status='unavailable',reason='artifact_missing',score=None,raw_score=None) for row in pending['plan']['rows']])
             else:status,legacy=self.legacy.result(company,header,data['legacy_job'])

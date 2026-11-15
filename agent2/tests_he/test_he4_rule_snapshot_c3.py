@@ -184,6 +184,48 @@ class RuleSnapshotC3Tests(unittest.TestCase):
         self.assertEqual(plan['rows'][0]['reason'], 'he_c3_authority_limit')
         self.assertEqual(plan['rows'][0]['requests'], [])
 
+    def test_c3_negative_delta_unknown_role_and_standard_authority(self):
+        # 1. approved_at < created_at -> negative seconds, not fast (<60s), evaluated_no_hit
+        src, info = scenario('C3', True, 'C001')
+        cid = info['target_transaction_id']
+        for tx in src['tables']['transactions']:
+            if tx['transaction_id'] == cid:
+                tx['approved_at'] = (datetime.fromisoformat(tx['created_at']) - timedelta(seconds=10)).isoformat()
+        _rehash(src)
+        res_neg = _run_plain_c3(plan_c3_from_rule_snapshot(_wrap(src, [cid]), _scope('C001')))
+        self.assertTrue(res_neg['rows'][0]['available'])
+        self.assertFalse(res_neg['rows'][0]['matched'])
+        self.assertEqual(res_neg['rows'][0]['status'], 'evaluated_no_hit')
+
+        # 2. standard authority_level on high amount with <60s -> explicit authority_matrix overrides proxy -> no hit
+        src_std, info_std = scenario('C3', True, 'C001')
+        cid_std = info_std['target_transaction_id']
+        for auth in src_std['tables']['approval_authorities']:
+            if auth.get('authority_level') in ('high', 'executive'):
+                auth['authority_level'] = 'standard'
+        _rehash(src_std)
+        res_std = _run_plain_c3(plan_c3_from_rule_snapshot(_wrap(src_std, [cid_std]), _scope('C001')))
+        self.assertTrue(res_std['rows'][0]['available'])
+        self.assertFalse(res_std['rows'][0]['matched'])
+        self.assertEqual(res_std['rows'][0]['status'], 'evaluated_no_hit')
+
+        # 3. no_matching_authority with UNKNOWN approver role -> unavailable (actor_role_not_known_for_authority_scope)
+        src_unk, info_unk = scenario('C3', True, 'C001')
+        cid_unk = info_unk['target_transaction_id']
+        approver_id = next(t['approver_id'] for t in src_unk['tables']['transactions'] if t['transaction_id'] == cid_unk)
+        src_unk['tables']['approval_authorities'] = [
+            a for a in src_unk['tables']['approval_authorities'] if a.get('authority_id') == src_unk['tables']['approval_authorities'][0]['authority_id']
+        ]
+        src_unk['tables']['approval_authorities'][0]['max_amount_vnd'] = 1
+        for emp in src_unk['tables']['employees']:
+            if emp['employee_id'] == approver_id:
+                emp['role'] = 'UNKNOWN'
+        _rehash(src_unk)
+        res_unk = _run_plain_c3(plan_c3_from_rule_snapshot(_wrap(src_unk, [cid_unk]), _scope('C001')))
+        self.assertFalse(res_unk['rows'][0]['available'])
+        self.assertEqual(res_unk['rows'][0]['status'], 'unavailable')
+        self.assertEqual(res_unk['rows'][0]['reason'], 'actor_role_not_known_for_authority_scope')
+
 
 if __name__ == '__main__':
     unittest.main()

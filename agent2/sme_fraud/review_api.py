@@ -30,7 +30,52 @@ def summarize(cases):
         limitation='Declared feedback on this run only; no verified labels or same-budget rules baseline.')
 
 
+def _rule_snapshot_cases_for(store,scope,result,review_store,recheck):
+    sid=result['snapshot_id'];manifest=store.get_snapshot(scope,sid,recheck);raw=store.get_snapshot(scope,sid,recheck,data=True)
+    if digest(raw)!=manifest['data_checksum']:fail(503,'REVIEW_EVIDENCE_BINDING','Snapshot không khớp checksum đã khóa.','Kiểm tra kho snapshot.')
+    data=loads(raw);source=data['source'];tables=source['tables'];as_of=source['as_of'];company=next(iter(scope.company_ids))
+    id_fields={'transactions':'transaction_id','vendors':'vendor_id','employees':'employee_id','transaction_documents':'document_id','approval_authorities':'authority_id','approval_authority_coverage':'coverage_id'}
+    by_key={}
+    for tname,id_key in id_fields.items():
+        for rec in tables.get(tname,[]):
+            by_key[tname,rec[id_key],rec['observed_at']]=rec
+    cases=[]
+    for row in result['rows']:
+        rid=row['record_id'];rev=int(row.get('revision',1));known=bool(row.get('known_at_cutoff',True))
+        event_at=row.get('posted_at') or as_of;refs={}
+        for branch in row.get('branches',{}).values():
+            for ref in branch.get('evidence_refs',[]):
+                rec=by_key.get((ref['table'],ref['record_id'],ref['observed_at']))
+                if rec is None or rec.get('company_id')!=company:
+                    fail(503,'REVIEW_EVIDENCE_BINDING','Căn cứ chưa khớp nguồn snapshot của lần chạy.','Kiểm tra bản nguồn và phiên bản phân tích; không thêm căn cứ từ ngoài snapshot.')
+                eff=rec.get('posted_at') or rec.get('recorded_at') or rec['observed_at']
+                if utc(rec['observed_at'])>utc(as_of) or utc(eff)>utc(event_at):
+                    fail(503,'REVIEW_EVIDENCE_TIME','Căn cứ chưa khả dụng tại thời điểm giao dịch đang rà.','Đối chiếu thời điểm nguồn; không dùng chứng từ đến muộn để kết luận cho quá khứ.')
+                refs[ref['table'],ref['record_id'],ref['observed_at']]=(id_fields[ref['table']],rec)
+        items=[]
+        for (table,rec_id,_),(id_key,rec) in sorted(refs.items()):
+            view=display_record(rec);view.setdefault('record_id',rec[id_key]);view.setdefault('effective_at',rec.get('posted_at') or rec.get('recorded_at') or rec['observed_at'])
+            items.append(dict(evidence_id='ev_'+digest(canonical(rec)),table=table,record=view,simulated=bool(rec.get('is_simulated')),original_verified=False))
+        groups=row.get('groups',{});case_id=review_store.case_id(scope,result['run_id'],rid,rev)
+        hit_notes=[g['explanation'] for g in groups.values() if g.get('available') and g.get('matched') and g.get('explanation')]
+        unavail_notes=[g['explanation'] for g in groups.values() if not g.get('available') and g.get('status')!='not_applicable' and g.get('explanation')]
+        if hit_notes:why=' '.join(hit_notes)+' Cần đối chiếu chứng từ gốc và phần còn thiếu trước khi kết luận.'
+        elif not known:why='Giao dịch chưa được ghi nhận/hạch toán tại thời điểm cắt dữ liệu.'
+        elif any(g.get('available') for g in groups.values()):why='Các nhóm luật đã bật HE (P1, C3, B1, B5/E4) đã chạy kiểm tra trên bản mã và chưa thấy tín hiệu sai lệch tại các nhóm khả dụng.'
+        else:why='Chưa đủ nguồn hoặc vượt miền mạch HE cho các nhóm đang bật. Có thể bổ sung nguồn trước khi kết luận.'
+        limits=[g['reason'] for g in groups.values() if not g.get('available') and g.get('reason')]
+        if row.get('branches',{}).get('ml',{}).get('reason'):limits.append(row['branches']['ml']['reason'])
+        cases.append(dict(case_id=case_id,record_id=rid,revision=rev,amount_vnd=str(row['amount_vnd'] if row.get('amount_vnd') is not None else 0),
+            currency=row.get('currency','VND'),event_at=event_at,as_of=as_of,
+            question='Khoản tiền này có đúng đối tượng, nghĩa vụ, phê duyệt và thời điểm được phép không?',
+            why=why,next_step='Đối chiếu hóa đơn, phê duyệt, tài khoản nhận tiền và NCC dùng chung định danh; thiếu nguồn thì ghi rõ phần cần bổ sung.',
+            evidence=items,analysis_limits=sorted(set(limits)),extra_notes=unavail_notes,review=review_store.get(scope,case_id)))
+    return cases
+
+
 def cases_for(store,scope,result,review_store,recheck):
+    if result.get('version')=='he-rule-snapshot-groups-result/1.0.0':
+        return _rule_snapshot_cases_for(store,scope,result,review_store,recheck)
     sid=result['snapshot_id'];raw=loads(store.get_snapshot(scope,sid,recheck,data=True))
     frame=build_from_snapshot(store,scope,sid,result['as_of'],recheck)
     sources={(table,r['record_id'],r['revision']):r for table,rows in raw.items() if isinstance(rows,list) for r in rows}
@@ -84,7 +129,7 @@ def handle_reviews(handler,authorizer,snapshots,backend,reviews,method):
         header=handler.headers.get_all('Authorization',[None])[0]
         status,result=backend.node.jobs.result(company,header,job)
         if status!=200:fail(409,'REVIEW_RESULT_REQUIRED','Lần phân tích chưa có kết quả hoàn tất.','Chờ phân tích xong rồi mở phiếu rà.')
-        if isinstance(reviews,dict):reviews=reviews['current' if result.get('version')=='he-four-branch-result/1.0.0' else 'legacy']
+        if isinstance(reviews,dict):reviews=reviews['current' if result.get('version') in ('he-four-branch-result/1.0.0','he-rule-snapshot-groups-result/1.0.0') else 'legacy']
         cases=cases_for(snapshots,scope,result,reviews,recheck)
         if not case_id and method=='GET':
             value=dict(version='enterprise-review-packet/1.0.0',run_id=job,company_id=company,snapshot_id=result['snapshot_id'],as_of=result['as_of'],training_eligible=False,identity_basis='Portal workspace actor; not independently verified human',timing_basis='server_connected_active_time',summary=summarize(cases),cases=cases)
