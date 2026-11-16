@@ -24,7 +24,7 @@ function ui() {
   context.inputDate = () => context.selectedDate;
   vm.createContext(context);
   vm.runInContext(section("  function servingModeLabel(", "  function renderForecast("), context);
-  vm.runInContext(section("  function renderTrainingAvailability(", "  function renderJobs("), context);
+  vm.runInContext(section("  function updateDecisionMessage(", "  function renderJobs("), context);
   vm.runInContext(section("  function renderT1Updates(", "  function renderVersions("), context);
   vm.runInContext(section("  function renderVersions(", '  $("export-report").onclick'), context);
   return context;
@@ -86,7 +86,7 @@ test("challenger history remains accessible beyond the first twenty records", ()
 test("missing schedule and empty challenger states are explicit", () => {
   const c = ui();
   c.renderT1Updates();
-  assert.match(content(c.elements["t1-updates"]), /Không có ứng viên/);
+  assert.match(content(c.elements["t1-updates"]), /Không có phương án mới/);
   c.state.t1_updates = null;
   c.renderT1Updates();
   assert.match(content(c.elements["t1-updates"]), /Chưa có thông tin lịch cập nhật/);
@@ -99,7 +99,7 @@ test("version UI separates data cutoff, parameter fit, partial fit and readiness
   c.renderVersions();
   const panel = c.elements["versions-list"];
   assert.match(content(descendants(panel, "h3")[0]), /cập nhật dữ liệu đến 2025-04-02/);
-  assert.match(content(panel), /Tham số T1: 2024-11-10 · Partial: 2025-02-01 · Phiên bản sẵn sàng: 2025-03-01/);
+  assert.match(content(panel), /Ước tính thanh toán cập nhật: 2024-11-10 · Ước tính trả từng phần: 2025-02-01 · Phiên bản sẵn sàng: 2025-03-01/);
 });
 
 test("legacy missing data cutoff remains unknown instead of borrowing ready date", () => {
@@ -110,4 +110,14 @@ test("legacy missing data cutoff remains unknown instead of borrowing ready date
   assert.match(content(descendants(panel, "h3")[0]), /cập nhật dữ liệu đến —/);
   assert.doesNotMatch(content(descendants(panel, "h3")[0]), /2025-03-01/);
   assert.match(content(panel), /Phiên bản sẵn sàng: 2025-03-01/);
+});
+
+test("completion messages distinguish missing history, pending outcomes and a chosen version", () => {
+  const c = ui();
+  const kept = c.updateDecisionMessage({status:"kept_incumbent",candidate_update_audit:{status:"insufficient_local_windows"}});
+  assert.match(kept,/Chưa đủ lịch sử/);
+  assert.doesNotMatch(kept,/đang chờ|Đã chọn/);
+  assert.match(c.updateDecisionMessage({status:"pending_prospective_audit"}),/đang chờ đủ dữ liệu thực tế/);
+  assert.match(c.updateDecisionMessage({status:"accepted_prospective_audit"}),/Đã chọn phiên bản mới/);
+  assert.match(c.jobMessage({status:"completed",message:"Ứng viên đang chờ",decision:{status:"kept_incumbent",audit:{status:"insufficient_local_windows"}}}),/Chưa đủ lịch sử/);
 });

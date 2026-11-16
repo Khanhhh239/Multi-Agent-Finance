@@ -520,7 +520,7 @@ def test_browser_ranking_uses_saved_policy_and_separate_shap_on_both_screen_size
                 dialog = page.locator("#ranking-explanation-0")
                 playwright.expect(dialog).to_contain_text(plan["model_version"])
                 playwright.expect(dialog).to_contain_text("T1 đang dùng")
-                dialog.locator(".ranking-explanation > details > summary").click()
+                dialog.locator("summary").filter(has_text="Vì sao có khả năng tất toán này?").click()
                 shap = dialog.locator("details .t1-explanation")
                 playwright.expect(shap).to_contain_text("Nhóm thông tin")
                 assert "RANK-MODEL" not in shap.inner_text()

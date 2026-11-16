@@ -214,13 +214,13 @@ def test_browser_demo_flow_import_reconcile_model_forecast_explain(
             assert result["t10"]["identity"]["t1_version"]
             assert "I_EXACT" not in {row["invoice_id"] for row in result["cash_decomposition"]["invoices"]}
             runtime.expect(page.locator("#forecast-output")).to_be_visible()
-            page.get_by_text("Vì sao dự thu số tiền này? · T1 + adapter partial", exact=True).click()
-            runtime.expect(page.get_by_label("Hóa đơn giải thích partial")).to_be_visible()
+            page.get_by_text("Vì sao dự kiến thu được tiền?", exact=True).click()
+            runtime.expect(page.get_by_label("Hóa đơn cần xem cách dự thu")).to_be_visible()
             assert not page.evaluate("document.documentElement.scrollWidth > innerWidth")
             page.locator("#forecast-output").screenshot(path=str(tmp_path / f"demo-flow-{width}.png"))
-            page.get_by_text("Nếu khách trả chậm hoặc dời khoản chi? · Chạy lại T6", exact=True).click()
+            page.get_by_text("Nếu khách trả chậm hoặc dời khoản chi?", exact=True).click()
             page.get_by_label("Số tuần trả chậm thêm").fill("1")
-            page.get_by_role("button", name="So sánh với forecast đã lưu", exact=True).click()
+            page.get_by_role("button", name="So sánh với kế hoạch đã lưu", exact=True).click()
             runtime.expect(page.get_by_label("Giả định của kết quả kịch bản")).to_contain_text("trả chậm thêm 1 tuần")
             page.locator("#export-forecast").click()
             assert not errors, errors

@@ -520,8 +520,8 @@ def test_browser_cash_breakdown_filters_groups_and_compares_on_desktop_and_mobil
                 page.locator("#saved-plans").click()
                 page.locator("#plans-list button").first.click()
                 panel = page.locator("#cash-decomposition")
-                playwright.expect(panel).to_contain_text("T1 + adapter partial")
-                playwright.expect(panel).to_contain_text("Chạy lại T6")
+                playwright.expect(panel).to_contain_text("Vì sao dự kiến thu được tiền?")
+                playwright.expect(panel).to_contain_text("Nếu khách trả chậm hoặc dời khoản chi?")
                 playwright.expect(panel).to_contain_text("không giới hạn 30")
                 contributions = panel.locator(".table-scroll").first
                 playwright.expect(contributions.locator("tbody tr")).to_have_count(3)
@@ -536,19 +536,19 @@ def test_browser_cash_breakdown_filters_groups_and_compares_on_desktop_and_mobil
                 panel.get_by_text(
                     "Lịch chi đã biết và số tiền sau kịch bản", exact=True
                 ).click()
-                expenses = panel.locator("details").first
+                expenses = panel.get_by_text("Lịch chi đã biết và số tiền sau kịch bản", exact=True).locator("..")
                 playwright.expect(expenses).to_contain_text("E1")
                 assert "E2" not in expenses.inner_text()
-                panel.get_by_text("Vì sao dự thu số tiền này? · T1 + adapter partial", exact=True).click()
-                page.get_by_label("Hóa đơn giải thích partial").select_option("A")
+                panel.get_by_text("Vì sao dự kiến thu được tiền?", exact=True).click()
+                page.get_by_label("Hóa đơn cần xem cách dự thu").select_option("A")
                 playwright.expect(panel).to_contain_text("Dư nợ tại ngày chốt 800 VND")
-                panel.get_by_text("Nếu khách trả chậm hoặc dời khoản chi? · Chạy lại T6", exact=True).click()
+                panel.get_by_text("Nếu khách trả chậm hoặc dời khoản chi?", exact=True).click()
                 page.get_by_label("Khách trả chậm", exact=True).select_option("C1")
                 page.get_by_label("Số tuần trả chậm thêm").fill("2")
                 page.get_by_label("Khoản chi cần dời", exact=True).select_option("E1")
                 page.get_by_label("Số tuần dời chi thêm").fill("1")
-                page.get_by_role("button", name="So sánh với forecast đã lưu", exact=True).click()
-                playwright.expect(panel).to_contain_text("Xác suất thiếu tiền ít nhất một tuần")
+                page.get_by_role("button", name="So sánh với kế hoạch đã lưu", exact=True).click()
+                playwright.expect(panel).to_contain_text("Khả năng thiếu tiền ít nhất một tuần")
                 playwright.expect(panel).to_contain_text("Δ P50")
                 assumptions = page.get_by_label("Giả định của kết quả kịch bản", exact=True)
                 saved_summary = "Khách C1 trả chậm thêm 2 tuần; Khoản chi E1 dời thêm 1 tuần."

@@ -1126,6 +1126,14 @@ dialog p {
 .error-text {
   color: var(--red);
 }
+input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="true"] {
+  border-color: var(--red);
+}
+.field-error {
+  display: block;
+  margin-top: 6px;
+}
+#notice:not(.error) { position:static; }
 @media (min-width: 1450px) {
   main {
     padding-top: 52px;
@@ -1688,6 +1696,8 @@ main { max-width: 1580px; padding: 24px 24px 0; }
 .cash-details { padding:12px 0; border-top:1px solid var(--line); }
 .cash-details > summary { cursor:pointer; }
 .cash-details[open] > summary { margin-bottom:12px; }
+.version-evidence, .guide-details { margin:12px 0; }
+.version-evidence > summary, .guide-details > summary { cursor:pointer; color:var(--muted); }
 .t1-grouped-drivers small { display:block; margin-top:6px; }
 @media (max-width:600px) {
   .cash-bridge { grid-template-columns:repeat(2, minmax(0, 1fr)); }
@@ -1751,4 +1761,18 @@ main { max-width: 1580px; padding: 24px 24px 0; }
   .forecast-inputs form { grid-template-columns: minmax(0, 1fr); }
   .forecast-toolbar { flex-wrap: wrap; }
   .history-list { right: auto; left: 0; }
+}
+@media (max-width:850px), (pointer:coarse) {
+  :root[data-agent="1"] :is(button, .button, select, input:not([type="checkbox"]):not([type="radio"]):not([type="file"])) {
+    min-height:44px;
+    min-width:44px;
+  }
+  :root[data-agent="1"] button { white-space:normal; }
+  :root[data-agent="1"] details:not(.field-help) > summary { min-height:44px; padding-block:10px; }
+  :root[data-agent="1"] .field-help > summary { width:44px; height:44px; min-width:44px; }
+  :root[data-agent="1"] .check-row { min-height:44px; align-items:center; }
+  :root[data-agent="1"] .check-row input { flex:0 0 auto; }
+  :root[data-agent="1"] .rail .brand { min-height:44px; }
+  .cash-pagination { flex-wrap:wrap; }
+  .cash-pagination span { flex-basis:100%; order:-1; text-align:center; }
 }

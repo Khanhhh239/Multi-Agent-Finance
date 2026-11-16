@@ -273,13 +273,14 @@ def test_workspace_shows_promotion_audit_separately_from_next_candidate(
                 page.route("**/*", client_proxy(client))
                 page.goto("http://testserver/workspace#training")
                 page.locator("#versions-list .version").wait_for()
+                page.locator(".version-evidence > summary").first.click()
                 text = page.locator("#versions-list").inner_text()
                 assert ".1234" in text and ".5678" in text
                 assert "9.9999" not in text and "8.8888" not in text
                 assert "Kết quả kiểm định dùng để chọn" in text
                 assert "cập nhật dữ liệu đến 02-04-25" in page.locator("#versions-list h3").inner_text()
-                assert "Tham số T1: 10-11-24" in text
-                assert "Partial: 01-01-20" in text
+                assert "Ước tính thanh toán cập nhật: 10-11-24" in text
+                assert "Ước tính trả từng phần: 01-01-20" in text
                 assert "Phiên bản sẵn sàng: 01-03-25" in text
                 assert not page.evaluate("document.documentElement.scrollWidth > innerWidth")
                 page.screenshot(path=str(tmp_path / f"version-dates-{width}.png"), full_page=True)
@@ -290,6 +291,7 @@ def test_workspace_shows_promotion_audit_separately_from_next_candidate(
                 store.put("A", "company_models", [record])
                 page.reload()
                 page.locator("#versions-list .version").wait_for()
+                page.locator(".version-evidence > summary").first.click()
                 text = page.locator("#versions-list").inner_text()
                 assert ".7777" in text and ".1234" not in text
                 assert "Kết quả kiểm tra ứng viên của chu kỳ này" in text

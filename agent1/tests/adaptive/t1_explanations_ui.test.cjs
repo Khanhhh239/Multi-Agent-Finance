@@ -289,7 +289,7 @@ test("ranking explanation shows its score, peer comparison and distinct probabil
     "khác nguồn", "không áp dụng kịch bản", "Tranh chấp: Có", "Không đổi điểm", "20%", "7 ngày"]) {
     assert.ok(content.includes(expected), expected);
   }
-  const details = panel.children.find(n => n.tag === "details");
+  const details = panel.children.find(n => n.tag === "details" && n.children[0].textContent === "Vì sao có khả năng tất toán này?");
   assert.ok(text(details).includes("chưa giải thích toàn bộ thứ tự ưu tiên"));
   assert.ok(text(details).includes("30%"));
   assert.ok(!text(details).includes("SHAP"));

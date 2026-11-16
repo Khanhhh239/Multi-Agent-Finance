@@ -49,7 +49,7 @@ test("cash band labels distinguish calibrated endpoints, raw quantiles and legac
 test("cash UI shows saved provenance, money bridge and T10 entry points safely as text", () => {
   const panel = ui().renderCashDecomposition(plan());
   const text = content(panel);
-  for (const expected of ["SAVED", "2026-02-10", "thiếu 90 VND", "T1 + adapter partial", "Chạy lại T6", "<script>unsafe</script>", "<img onerror=unsafe>", "990 VND"]) assert.ok(text.includes(expected), expected);
+  for (const expected of ["SAVED", "2026-02-10", "thiếu 90 VND", "Vì sao dự kiến thu được tiền?", "Nếu khách trả chậm hoặc dời khoản chi?", "<script>unsafe</script>", "<img onerror=unsafe>", "990 VND"]) assert.ok(text.includes(expected), expected);
   assert.equal(descendants(panel, node => node.tag === "script" || node.tag === "img").length, 0);
 });
 
@@ -78,7 +78,7 @@ test("risk comparison shows portfolio quantiles and probability changes as model
     delta_any_shortfall_probability:.2, delta_probability_mc_standard_error:.01, limitations:["Không cộng P10 hóa đơn."],
     weeks:[{week:1,baseline,scenario,delta:{expected_balance:-20,balance_quantiles:{"0.1":-20,"0.5":-20,"0.9":-20}, below_floor_probability:.2}}]});
   const text = content(panel);
-  for (const value of ["Δ P10", "Δ P50", "Δ P90", "20.00 điểm %", "MC thô", "chưa chứng minh tác động", "Không cộng P10 hóa đơn"]) assert.ok(text.includes(value), value);
+  for (const value of ["Δ P10", "Δ P50", "Δ P90", "20.00 điểm phần trăm", "MC thô", "chưa chứng minh tác động", "Không cộng P10 hóa đơn"]) assert.ok(text.includes(value), value);
 });
 
 test("scenario form sends assumptions against the saved forecast without replacing its seed or bundle", async () => {
@@ -129,8 +129,10 @@ test("saved scenarios identify their assumptions and restore the form without re
   assert.ok(buttons().some(n => n.textContent.includes("Khoản chi RENT dời thêm 1 tuần")));
   await buttons().find(n => n.textContent.includes("Khoản chi RENT dời thêm 3 tuần")).onclick();
   const summary = get("Giả định của kết quả kịch bản");
-  for (const expected of ["Khách CUSTOMER trả chậm thêm 2 tuần", "Khoản chi RENT dời thêm 3 tuần", "SAVED", "2026-02-10"])
+  for (const expected of ["Khách CUSTOMER trả chậm thêm 2 tuần", "Khoản chi RENT dời thêm 3 tuần"])
     assert.ok(content(summary).includes(expected), expected);
+  for (const expected of ["SAVED", "2026-02-10"])
+    assert.ok(content(panel).includes(expected), expected);
   assert.equal(get("Khách trả chậm").value, "CUSTOMER");
   assert.equal(String(get("Số tuần trả chậm thêm").value), "2");
   assert.equal(get("Khoản chi cần dời").value, "RENT");

@@ -27,7 +27,7 @@
         <details class="nav-more">
           <summary>Quản lý</summary>
           <button data-view="overview">Tổng quan</button>
-          <button data-view="training">Phiên bản và kiểm định</button>
+          <button data-view="training">Cập nhật dự báo</button>
           <button data-view="guide">Hướng dẫn</button>
         </details>
       </nav>
@@ -141,7 +141,7 @@
             </article>
             <aside class="onboarding">
               <span class="eyebrow">BẮT ĐẦU CÙNG AGENT1</span>
-              <h2>Một lần thiết lập.<br />Mỗi tháng tốt hơn.</h2>
+              <h2>Nạp dữ liệu.<br />Chủ động thu chi.</h2>
               <ol>
                 <li>
                   <span>01</span>
@@ -153,8 +153,8 @@
                 <li>
                   <span>02</span>
                   <div>
-                    <b>Kiểm định trên lịch sử</b>
-                    <p>So sánh các phương án bằng dữ liệu riêng của bạn.</p>
+                    <b>Kiểm tra dự báo trên lịch sử</b>
+                    <p>Chỉ đổi phiên bản khi có đủ bằng chứng tốt hơn.</p>
                   </div>
                 </li>
                 <li>
@@ -175,7 +175,7 @@
             <div>
               <h3 id="next-title">Dữ liệu đúng là khởi đầu tốt nhất.</h3>
               <p id="next-copy">
-                Nạp sổ hóa đơn và các khoản đã thu. Lịch cố định T5 là phần bổ sung khi lập dòng tiền.
+                Nạp sổ hóa đơn và các khoản đã thu. Lịch chi đã biết là phần bổ sung khi lập dòng tiền.
                 Không cần biết lập trình.
               </p>
             </div>
@@ -192,7 +192,7 @@
             <form id="records-filter" class="records-filter">
               <label>Bảng<select id="records-kind"><option value="invoices">Hóa đơn</option><option value="payments">Thanh toán</option>
                 <option value="bank">Dòng sao kê</option><option value="statements">Kỳ sao kê</option>
-                <option value="outflows">Lịch cố định · T5</option><option value="expense_payments">Thanh toán nghĩa vụ T5</option><option value="actions">Nhật ký thu nợ</option><option value="invoice_events">Sự kiện hóa đơn</option></select></label>
+                <option value="outflows">Lịch chi đã biết</option><option value="expense_payments">Tiền đã trả / nhận theo lịch</option><option value="actions">Nhật ký thu nợ</option><option value="invoice_events">Sự kiện hóa đơn</option></select></label>
               <label>Tìm kiếm<input id="records-query" maxlength="200" placeholder="Mã, khách hàng, tài khoản, nội dung…"></label>
               <label>Trạng thái<select id="records-status"><option value="">Tất cả</option></select></label>
               <label>Từ ngày<input id="records-from" type="date"></label><label>Đến ngày<input id="records-to" type="date"></label>
@@ -221,7 +221,7 @@
             <div>
               <div class="eyebrow">02 / DỮ LIỆU DOANH NGHIỆP</div>
               <h1>Nạp dữ liệu và đối soát</h1>
-              <a href="/workspace-assets/demo-dai-phat-input-train.zip" download>Tải đầu vào Đại Phát · 6 CSV + hướng dẫn train</a>
+              <a href="/workspace-assets/demo-dai-phat-input-train.zip" download>Tải đầu vào Đại Phát · 6 CSV + hướng dẫn thực hành</a>
               <p>
                 Chọn file, ghép cột, kiểm tra rồi mới lưu. Tệp gốc trên máy bạn
                 không bị sửa; Workspace lưu các bản ghi đã kiểm tra.
@@ -254,8 +254,8 @@
                     <option value="statements">Kỳ sao kê và số dư</option>
                     <option value="payments">Khoản thanh toán đã nhận</option>
                     <option value="actions">Nhật ký thu nợ và lời hứa</option>
-                    <option value="outflows">Lịch cố định · T5 (tùy chọn)</option>
-                    <option value="expense_payments">Thanh toán nghĩa vụ T5 trên sao kê</option>
+                    <option value="outflows">Lịch chi đã biết (tùy chọn)</option>
+                    <option value="expense_payments">Tiền đã trả / nhận theo lịch trên sao kê</option>
                   </select></label
                 >
                 <div class="two-fields">
@@ -340,7 +340,7 @@
                 </dd>
                 <dt>Ngày ghi nhận là gì?</dt>
                 <dd>
-                  Ngày doanh nghiệp biết thông tin đó. Với T5, đây là ngày đã biết lịch cố định,
+                  Ngày doanh nghiệp biết thông tin đó. Với lịch chi, đây là ngày đã biết lịch cố định,
                   có thể trước ngày đến hạn trả.
                 </dd>
               </dl>
@@ -348,7 +348,7 @@
           </div>
           <article class="paper reconciliation-panel" id="reconciliation-panel">
             <div class="section-heading">
-              <div><h2>Đối soát khoản thu · T9</h2>
+              <div><h2>Ghép khoản thu với hóa đơn</h2>
                 <p class="helper">Tìm hóa đơn phù hợp, đối chiếu chứng từ rồi duyệt. Đề xuất và điểm gợi ý chưa làm giảm công nợ.</p>
               </div>
             </div>
@@ -423,8 +423,8 @@
                 <label>Bảng<select id="source-correction-kind">
                   <option value="invoices">Hóa đơn</option><option value="bank">Dòng sao kê ngân hàng</option>
                   <option value="payments">Thanh toán nhập từ CSV</option><option value="statements">Kỳ sao kê và số dư</option>
-                  <option value="actions">Nhật ký thu nợ và lời hứa</option><option value="outflows">Lịch cố định · T5</option>
-                  <option value="expense_payments">Thanh toán nghĩa vụ T5</option>
+                  <option value="actions">Nhật ký thu nợ và lời hứa</option><option value="outflows">Lịch chi đã biết</option>
+                  <option value="expense_payments">Tiền đã trả / nhận theo lịch</option>
                 </select></label>
                 <label>Mã bản ghi<input id="source-correction-id" required placeholder="Ví dụ: HD001 hoặc GD001" /></label>
               </div>
@@ -465,8 +465,8 @@
                     <option value="statements">Kỳ sao kê và số dư</option>
                     <option value="payments">Thanh toán</option>
                     <option value="actions">Nhật ký thu nợ và lời hứa</option>
-                    <option value="outflows">Lịch cố định · T5</option>
-                    <option value="expense_payments">Thanh toán nghĩa vụ T5</option>
+                    <option value="outflows">Lịch chi đã biết</option>
+                    <option value="expense_payments">Tiền đã trả / nhận theo lịch</option>
                   </select></label
                 ><label
                   >Mã bản ghi<input
@@ -486,21 +486,21 @@
           <div class="page-heading compact">
             <div>
               <div class="eyebrow">03 / THIẾT LẬP và KIỂM ĐỊNH</div>
-              <h1>Phiên bản dự báo</h1>
+              <h1>Cập nhật dự báo</h1>
               <p>
-                Học tiếp bằng lịch sử gần đây. Giữ phiên bản đang dùng cho đến
-                khi có đủ bằng chứng để thay thế.
+                Kiểm tra bằng lịch sử thu tiền của doanh nghiệp. Nếu dữ liệu chưa đủ
+                hoặc phương án mới chưa tốt hơn, tiếp tục dùng phiên bản hiện có.
               </p>
             </div>
           </div>
           <article class="paper t1-updates" id="t1-updates" aria-live="polite">
-            <h2>Lịch cập nhật và ứng viên chờ kiểm định</h2>
+            <h2>Lịch cập nhật và kết quả kiểm tra</h2>
             <p>Kết nối doanh nghiệp để xem lịch và trạng thái kiểm định.</p>
           </article>
           <div class="split-layout">
             <article class="paper">
               <div class="section-heading">
-                <h2>Tạo phiên bản mới</h2>
+                <h2>Kiểm tra và cập nhật</h2>
 
               </div>
 
@@ -527,7 +527,7 @@
                   Khi thiếu lịch sử, hệ thống giữ phiên bản đang dùng hoặc mô hình nền.
                 </p></details>
                 <button class="button primary" id="train-button">
-                  Bắt đầu kiểm định <span>↗</span>
+                  Kiểm tra và cập nhật <span>↗</span>
                 </button>
               </form>
               <small id="train-schedule-hint" class="helper"></small>
@@ -540,7 +540,7 @@
                 <h2>Phiên bản của doanh nghiệp</h2>
               </div>
               <button class="button" id="export-report">
-                Tải báo cáo kiểm định ↓
+                Tải kết quả kiểm tra ↓
               </button>
             </div>
 
@@ -566,6 +566,7 @@
           <div class="forecast-workbench">
             <article class="paper forecast-inputs">
               <h2>Lập kế hoạch</h2>
+              <p id="forecast-input-context" class="helper" role="status" hidden></p>
               <form id="forecast-form">
                 <div class="two-fields">
                   <label>Ngày dự báo<input id="forecast-cutoff" placeholder="dd-mm-yy" maxlength="10" required></label>
@@ -583,7 +584,7 @@
                   <option value="base">Kế hoạch gốc</option>
                   <option value="delay14">Thu chậm thêm 14 ngày</option>
                   <option value="delay28">Thu chậm thêm 28 ngày</option>
-                  <option value="cost25">Chi cố định T5 tăng 25%</option>
+                  <option value="cost25">Chi theo lịch tăng 25%</option>
                   <option value="stress">Rủi ro tập trung theo khách</option>
                   <option value="custom">Tự đặt giả định</option>
                 </select></label>
@@ -591,16 +592,16 @@
                   <legend>Giả định kịch bản</legend>
                   <div class="two-fields">
                     <label>Thu chậm (ngày)<input id="delay-days" type="number" min="0" max="90" step="1" value="0" required></label>
-                    <label>Thay đổi chi (%)<input id="expense-change" type="number" min="-100" max="200" step="1" value="0" required></label>
+                    <label>Thay đổi chi (%)<input id="expense-change" type="number" min="-100" max="200" step="any" value="0" required></label>
                   </div>
                   <label>Mã khách chịu ảnh hưởng<input id="delay-customer" list="forecast-customers" placeholder="Để trống áp dụng mọi khách"><datalist id="forecast-customers"></datalist></label>
                   <label class="check-row"><input type="checkbox" id="common-risk">Mô phỏng rủi ro chung theo khách</label>
                 </fieldset>
                 <details class="form-options">
                   <summary>Phạm vi và tùy chọn</summary>
-                  <label>Các tuần đã rà soát đủ lịch cố định T5<input id="confirmed-weeks" placeholder="Ví dụ 1,2,3"></label>
+                  <label>Các tuần đã rà soát đủ lịch chi<input id="confirmed-weeks" placeholder="Ví dụ 1,2,3"></label>
                   <label class="check-row"><input type="checkbox" id="include-operating">Ước lượng dòng tiền hoạt động</label>
-                  <details class="field-help"><summary aria-label="Giải thích phạm vi dự báo">?</summary><p>Chi theo lịch chỉ gồm các nghĩa vụ cố định T5 đã nạp, như lương, thuê, trả nợ định kỳ. Không yêu cầu lập bảng chi dự kiến khác. Nếu bật ước lượng hoạt động, mô hình bổ sung chi biến đổi từ lịch sử sao kê, tối đa 13 tuần đầu. Thu chậm được làm tròn lên theo tuần.</p></details>
+                  <details class="field-help"><summary aria-label="Giải thích phạm vi dự báo">?</summary><p>Chi theo lịch chỉ gồm các khoản chi theo lịch đã nạp, như lương, thuê, trả nợ định kỳ. Không yêu cầu lập bảng chi dự kiến khác. Nếu bật ước lượng hoạt động, mô hình bổ sung chi biến đổi từ lịch sử sao kê, tối đa 13 tuần đầu. Thu chậm được làm tròn lên theo tuần.</p></details>
                 </details>
                 <label class="check-row"><input type="checkbox" id="forecast-complete" required>Đã nạp đủ thanh toán đến ngày dự báo</label>
                 <button type="submit" class="button primary" id="forecast-submit">Lập dự báo</button>
@@ -682,7 +683,7 @@
             </article>
             <article class="paper">
               <span class="chapter">03</span>
-              <h2>Lịch cố định · T5 (tùy chọn)</h2>
+              <h2>Lịch chi đã biết (tùy chọn)</h2>
               <p>
                 Các nghĩa vụ cố định đã biết: lương, tiền thuê, trả nợ định kỳ, phí thuê bao.
                 Chỉ nạp các lần đến hạn theo lịch hoặc hợp đồng; không cần lập thêm bảng chi dự kiến khác.
@@ -692,19 +693,23 @@
                 <li>Số tiền và loại chi</li>
                 <li>Ngày doanh nghiệp biết khoản chi</li>
                 <li>Cùng một lần đến hạn dùng một mã ổn định để nạp lại không cộng trùng</li>
+              </ul>
+              <details class="guide-details"><summary>Hợp đồng, trả từng phần và khoản chi đặc biệt</summary>
+              <ul>
                 <li>Bổ sung mã hợp đồng/khoản cố định, kỳ thanh toán (YYYY-MM, YYYY-Q1…YYYY-Q4 hoặc YYYY) và đợt đến hạn (1, 2…). Gốc và lãi vay là hai loại nghĩa vụ riêng</li>
                 <li>Mỗi kỳ/đợt mới có mã lần đến hạn riêng. Đổi ngày trả vẫn giữ kỳ nghĩa vụ; đợt đến hạn khác với số lần thực trả. Dữ liệu cũ chưa đủ định danh được nhắc bổ sung theo cùng mã</li>
                 <li>Trước khi lưu, đối chiếu các dòng thêm mới, sửa và trùng giữ nguyên. Khi mã trong file khác mã được giữ lại, dùng mã được giữ lại để nạp thanh toán</li>
-                  <li>Thanh toán thực tế nạp ở bảng Thanh toán nghĩa vụ T5, liên kết đúng mã lần đến hạn và mã dòng sao kê; hỗ trợ trả từng phần</li>
+                  <li>Thanh toán thực tế nạp ở bảng Tiền đã trả / nhận theo lịch, liên kết đúng mã lần đến hạn và mã dòng sao kê; hỗ trợ trả từng phần</li>
                   <li>Hủy phần còn lại bằng trạng thái cancelled. Khoản đến/quá hạn chưa trả được giữ lại trong dự báo</li>
                   <li>Nghĩa vụ mở rộng dùng loại pit_withholding, foreign_contractor_tax, salary_bonus, rent_contract, loan_interest, loan_principal hoặc cit_final; cần nguồn hồ sơ và verified=true</li>
                   <li>Hoàn VAT dùng loại vat_refund, ngày quyết định hoàn và ngày dự kiến nhận; tiền hoàn được ghi riêng ở dòng thu</li>
                   <li>Chia lịch vay tổng thành gốc/lãi hoặc thay lịch thuê cũ: khai mã lịch được thay thế để không cộng hai lần; lịch đã trả phải giữ cùng mã</li>
               </ul>
+              </details>
               <button class="button template-link" data-kind="outflows">
-                Tải mẫu lịch cố định T5 ↓
+                Tải mẫu lịch chi đã biết ↓
               </button>
-                <button class="button template-link" data-kind="expense_payments">Tải mẫu thanh toán nghĩa vụ T5 ↓</button>
+                <button class="button template-link" data-kind="expense_payments">Tải mẫu khoản thanh toán lịch chi ↓</button>
             </article>
           </div>
           <article class="paper">
@@ -713,9 +718,11 @@
               Nạp dòng sao kê trước. Mỗi giao dịch có mã riêng, bí danh tài
               khoản, ngày, chiều thu hoặc chi và số tiền dương. Một khoản thu có
               thể ghép dần với nhiều hóa đơn; phần chưa ghép vẫn là tiền ngân
-              hàng. Dùng <code>cash_sale</code> cho bán thu ngay, <code>variable_cost</code> cho chi biến
-              đổi; giao dịch còn lại dùng other.
+              hàng.
             </p>
+            <details class="guide-details"><summary>Mã phân loại thu, chi trong tệp</summary>
+              <p>Dùng <code>cash_sale</code> cho bán thu ngay, <code>variable_cost</code> cho chi biến đổi; giao dịch còn lại dùng <code>other</code>.</p>
+            </details>
             <button class="button template-link" data-kind="bank">
               Tải mẫu sao kê ↓
             </button>
@@ -730,12 +737,15 @@
           </article>
           <article class="paper">
             <h2>Ghi nhận kết quả thu nợ</h2>
+            <p>Ghi lại lần liên hệ, lời hứa trả, tranh chấp hoặc quyết định tạm hoãn để biết khoản nào cần theo dõi tiếp.</p>
+            <details class="guide-details"><summary>Mã sự kiện và cách cập nhật trong tệp</summary>
             <p>
               Nhập mã sự kiện và mã hóa đơn. Dùng contact (đã liên hệ), skip
               (hoãn 7 ngày), promise (nhập ngày khách hứa), dispute (tranh
               chấp), <code>resolved</code> (hết tranh chấp) hoặc <code>write_off</code> (đã xóa nợ). Sửa
               bằng cách nạp lại đúng mã và duyệt thay đổi.
             </p>
+            </details>
             <button class="button template-link" data-kind="actions">
               Tải mẫu nhật ký ↓
             </button>
@@ -754,7 +764,7 @@
             <details>
               <summary>File mẫu có dùng để huấn luyện không?</summary>
               <p>
-                Có, trong workspace DEMO_DAIPHAT (cổng 8012). Bộ Đại Phát được phép train, chia tập theo thời gian, tuning và validation. Kết quả chỉ dùng thử luồng. Workspace doanh nghiệp thật vẫn từ chối dòng DEMO_. Sau khi train xong, báo cáo chi tiết được lưu dưới dạng HTML mã hóa trong Downloads/Agent1_Tai_lieu_va_Data_Demo/Ket_qua_train; mở file và nhập mật khẩu đã cấu hình.
+                Có, trong không gian diễn tập DEMO_DAIPHAT được bật riêng. Kết quả chỉ dùng thử chức năng, không chứng minh độ chính xác trên doanh nghiệp thật. Không nạp dòng DEMO_ vào kho doanh nghiệp thật. Khi có báo cáo chi tiết, dùng vị trí báo cáo và mật khẩu do người quản trị cung cấp trên máy đang chạy.
               </p>
             </details>
             <details>

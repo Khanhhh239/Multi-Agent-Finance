@@ -253,11 +253,11 @@ def test_browser_reviews_all_import_rows_diffs_and_blocks_wrong_period(client, b
             playwright.expect(page.locator('#preview-title')).to_contain_text('23 thêm mới · 1 sửa · 1 trùng giữ nguyên')
             panel = page.locator('#import-plan')
             playwright.expect(panel.locator('tbody tr')).to_have_count(22)  # 20 items plus before/after
-            page.get_by_label('Lọc kết quả nạp T5').select_option('changed')
+            page.get_by_label('Lọc kết quả nạp lịch chi').select_option('changed')
             panel.locator('details summary').click()
             playwright.expect(panel.locator('details')).to_contain_text('200')
             playwright.expect(panel.locator('details')).to_contain_text('250')
-            page.get_by_label('Lọc kết quả nạp T5').select_option('new')
+            page.get_by_label('Lọc kết quả nạp lịch chi').select_option('new')
             panel.get_by_role('button', name='Sau →', exact=True).click()
             playwright.expect(panel.locator('tbody tr')).to_have_count(3)
             playwright.expect(panel).to_contain_text('<img src=x onerror=unsafe>')

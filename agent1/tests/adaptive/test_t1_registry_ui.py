@@ -220,7 +220,7 @@ def test_browser_shows_schedule_challenger_states_and_legacy_global_label(
             page.locator(".challenger-history > summary").click()
             expect(panel).to_contain_text("13-02-27")
             expect(panel).to_contain_text("Chờ đủ 13 tuần")
-            expect(panel).to_contain_text("5/20 khoản đủ nhãn")
+            expect(panel).to_contain_text("5/20 khoản đủ dữ liệu thực tế")
             expect(panel).to_contain_text("Đã được chấp nhận")
             expect(panel).to_contain_text("Không đạt kiểm định")
             expect(panel).to_contain_text("phiên bản đối chứng đã thay đổi")

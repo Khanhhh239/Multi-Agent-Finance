@@ -52,12 +52,14 @@ test("blocked popup does not issue a ticket", async () => {
   assert.equal(p.messages.length, 1);
 });
 
-test("other agents retain their ordinary new-tab links", async () => {
-  const p = popup();
-  p.scope.currentAgent = "agent2";
-  await p.scope.openAgent1Tab(p.event);
-  assert.equal(p.prevented(), false);
-  assert.equal(p.trace.length, 0);
+test("agents without a dedicated handoff retain their ordinary new-tab links", async () => {
+  for (const agent of ["agent3", "agent4"]) {
+    const p = popup();
+    p.scope.currentAgent = agent;
+    await p.scope.openAgent1Tab(p.event);
+    assert.equal(p.prevented(), false);
+    assert.equal(p.trace.length, 0);
+  }
 });
 
 test("stopped Agent 1 does not open a blank tab", async () => {

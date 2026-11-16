@@ -47,6 +47,21 @@ from agent1.reconciliation.pipeline import today as t9_today
 from agent1.reconciliation.pipeline import NON_AR
 
 
+def update_decision_message(decision):
+    messages = {
+        "not_due": "Chưa đến lịch cập nhật tiếp theo. Bạn vẫn có thể lập dự báo bằng phiên bản đang dùng.",
+        "accepted_historical_audit": "Đã chọn phiên bản mới sau khi kiểm tra trên lịch sử.",
+        "accepted_prospective_audit": "Đã chọn phiên bản mới sau khi đối chiếu dự báo đã lưu với thực tế.",
+        "pending_prospective_audit": "Tiếp tục dùng phiên bản hiện có. Phương án mới đang chờ đủ dữ liệu thực tế để so sánh.",
+    }
+    if decision.get("status") == "kept_incumbent":
+        audit = decision.get("candidate_update_audit") or decision.get("audit") or {}
+        if str(audit.get("status", "")).startswith("insufficient"):
+            return "Chưa đủ lịch sử để so sánh. Tiếp tục dùng phiên bản hiện có."
+        return "Chưa có bằng chứng phương án mới tốt hơn. Tiếp tục dùng phiên bản hiện có."
+    return messages.get(decision.get("status"), "Đã lưu kết quả kiểm tra. Xem chi tiết phiên bản để biết bước tiếp theo.")
+
+
 class Training(BaseModel):
     model_config = ConfigDict(extra="forbid")
     asof: str
@@ -122,18 +137,18 @@ class CorrectionCommit(BaseModel):
 class Prediction(BaseModel):
     model_config = ConfigDict(extra="forbid")
     cutoff: str
-    opening_balance: float = Field(allow_inf_nan=False)
-    horizon_weeks: int = Field(default=13, ge=1, le=52)
+    opening_balance: float = Field(allow_inf_nan=False, strict=True)
+    horizon_weeks: int = Field(default=13, ge=1, le=52, strict=True)
     simulation_paths: int = Field(default=1000, ge=100, le=10000, strict=True)
     shap_limit: int = Field(default=30, ge=0, le=30, strict=True)
     simulation_seed: int = Field(default=7, ge=0, lt=2**32, strict=True)
-    delay_days: int = Field(default=0, ge=0, le=90)
-    expense_multiplier: float = Field(default=1, ge=0, le=3, allow_inf_nan=False)
+    delay_days: int = Field(default=0, ge=0, le=90, strict=True)
+    expense_multiplier: float = Field(default=1, ge=0, le=3, allow_inf_nan=False, strict=True)
     payments_complete: bool = False
-    confirmed_weeks: list[Annotated[int, Field(ge=1, le=52)]] = Field(
+    confirmed_weeks: list[Annotated[int, Field(ge=1, le=52, strict=True)]] = Field(
         default_factory=list, max_length=52
     )
-    cash_floor: float = Field(default=0.0, allow_inf_nan=False)
+    cash_floor: float = Field(default=0.0, allow_inf_nan=False, strict=True)
     shared_customer_risk: bool = False
     delay_customer: str | None = None
     include_operating: bool = False
@@ -838,11 +853,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
                 job.update(
                     status="completed", version=decision.get("model_id"),
                     decision=decision,
-                    message=(
-                        "Chưa đến chu kỳ cập nhật tiếp theo: " + decision["next_due"]
-                        if decision["status"] == "not_due"
-                        else "Đã chọn phiên bản dự báo; ứng viên thiếu nhãn được giữ để chấm sau."
-                    ),
+                    message=update_decision_message(decision),
                 )
             except Exception as exc:
                 job.update(
