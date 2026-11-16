@@ -1,0 +1,44 @@
+{
+  "version": "case-queue-policy/1.0.0",
+  "policy_id": "fixture-case-queue-policy",
+  "policy_version": "fixture-1.0.0",
+  "fixture_declaration": {
+    "is_experimental_fixture": true,
+    "approved_for_production": false,
+    "open_decision_gates": [
+      "D-04",
+      "D-05",
+      "D-06",
+      "D-07"
+    ],
+    "note": "Cấu hình thử nghiệm/nghiệm thu R3 (approved_for_production=false). Các quyết định D-04, D-05, D-06, D-07 vẫn mở; ngân sách thử nghiệm selection_comparison.BUDGET=5 cấp giao dịch được giữ tách biệt."
+  },
+  "budget": {
+    "unit": "case",
+    "case_budget_limit": 3,
+    "period_kind": "calendar_week_vn",
+    "benchmark_transaction_cap_preserved": 5,
+    "benchmark_separated": true
+  },
+  "scoring": {
+    "aggregation": "max_candidate_score",
+    "evidence_adds_score": false,
+    "rule_weight": 1.0,
+    "ml_weight": 2.0,
+    "calibrated_weight": 0.0,
+    "min_case_score": 7.0,
+    "allow_hard_trigger_admission": true,
+    "require_sufficient_evidence": true,
+    "mandatory_rules": []
+  },
+  "material_change": {
+    "min_score_delta": 0.25,
+    "snapshot_change_only_is_material": false,
+    "ordering_change_only_is_material": false,
+    "auto_reopen_closed_on_material": true
+  },
+  "backlog": {
+    "auto_expire_backlog": false,
+    "retention_without_decision_indefinite": true
+  }
+}

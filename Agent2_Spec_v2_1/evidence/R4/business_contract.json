@@ -1,0 +1,494 @@
+{
+  "schema_version": "r4-business-contract/1.0.0",
+  "generated_at": "2026-11-15T18:32:53.875350+00:00",
+  "approved_for_production": false,
+  "open_decisions": {
+    "D-08": {
+      "decision_id": "D-08",
+      "status": "OPEN",
+      "topic": "Chuẩn nhãn kiểm định ML (ReviewLabel target/approval) độc lập với luồng xử lý khắc phục",
+      "fixture_behavior": "Xác nhận hoàn tất ActionTask hoặc đóng vụ KHÔNG tự sinh ReviewLabel 0/1."
+    },
+    "D-14": {
+      "decision_id": "D-14",
+      "status": "OPEN",
+      "topic": "Chính sách hồ sơ bắt buộc theo loại vấn đề, SLA/hạn mặc định và thẩm quyền hoàn tất ActionTask",
+      "fixture_behavior": "Dùng policy fixture theo từng nhóm vấn đề (approved_for_production=false); không tự bịa SLA mặc định (due_at do người giao việc nhập kèm múi giờ hoặc để null)."
+    }
+  },
+  "policy_fixture": {
+    "schema_version": "document_requirement_policy/1.0.0",
+    "policy_id": "rem-policy-fixture-v1",
+    "policy_version": "1.0.0",
+    "effective_from": "2026-11-01T00:00:00+07:00",
+    "approved_for_production": false,
+    "open_decision_gates": [
+      "D-08",
+      "D-14"
+    ],
+    "sla_policy": {
+      "default_due_days": null,
+      "due_at_source": "explicit_or_null",
+      "note": "D-14 OPEN: hệ thống không tự đặt hạn mặc định 7 ngày; due_at phải do người tạo/giao việc nhập rõ kèm múi giờ hoặc để null."
+    },
+    "families": {
+      "payment_invoice": {
+        "family_label_vi": "Thanh toán & đối chiếu hóa đơn công nợ",
+        "default_issue_type": "payment_discrepancy",
+        "default_assignee_role": "ke_toan_cong_no",
+        "requirements": [
+          {
+            "document_type": "invoice",
+            "title_vi": "Hóa đơn VAT / chứng từ công nợ gốc",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "invoices"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "payment_allocation",
+            "title_vi": "Bảng phân bổ thanh toán theo hóa đơn",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "payment_allocations",
+              "bank_transactions"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "bank_transfer_receipt",
+            "title_vi": "Ủy nhiệm chi / sao kê chuyển khoản ngân hàng",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "bank_transactions"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "credit_or_adjustment_note",
+            "title_vi": "Biên bản bù trừ / hoàn tiền / điều chỉnh hóa đơn",
+            "requirement_level": "conditional",
+            "applicable_when": [
+              "overpaid_or_multiple_payments",
+              "has_refund_or_adjustment"
+            ],
+            "required_sources": [
+              "payment_allocations",
+              "credit_notes"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "counterparty_reconciliation",
+            "title_vi": "Biên bản đối chiếu công nợ với nhà cung cấp",
+            "requirement_level": "conditional",
+            "applicable_when": [
+              "overpaid_or_multiple_payments",
+              "disputed"
+            ],
+            "required_sources": [
+              "vendor_statements"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": false
+          }
+        ]
+      },
+      "payroll_entitlement": {
+        "family_label_vi": "Lương, phụ cấp & chế độ nhân sự",
+        "default_issue_type": "process_exception",
+        "default_assignee_role": "nhan_su_tien_luong",
+        "requirements": [
+          {
+            "document_type": "hr_employment_record",
+            "title_vi": "Hồ sơ nhân sự / hợp đồng lao động còn hiệu lực",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "employees"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "payroll_entitlement_decision",
+            "title_vi": "Quyết định hưởng chế độ / bảng định mức kỳ",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "payroll_entitlements"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "timesheet_approval",
+            "title_vi": "Bảng chấm công đã ký duyệt",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "timesheets"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "payroll_sheet",
+            "title_vi": "Bảng tính lương / phụ cấp chi tiết theo kỳ",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "payroll_items"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "payroll_payment_voucher",
+            "title_vi": "Chứng từ chi lương / ủy nhiệm chi ngân hàng",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "bank_transactions"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          }
+        ]
+      },
+      "advance_lifecycle": {
+        "family_label_vi": "Tạm ứng & thanh toán hoàn ứng",
+        "default_issue_type": "missing_document",
+        "default_assignee_role": "ke_toan_thanh_toan",
+        "requirements": [
+          {
+            "document_type": "advance_request",
+            "title_vi": "Giấy đề nghị tạm ứng được phê duyệt",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "advance_requests"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "advance_disbursement",
+            "title_vi": "Chứng từ chi tạm ứng",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "bank_transactions"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "advance_settlement",
+            "title_vi": "Bảng thanh toán hoàn ứng & hóa đơn đính kèm",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "advance_settlements"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          }
+        ]
+      },
+      "vendor_bank_identity": {
+        "family_label_vi": "Định danh nhà cung cấp & tài khoản thụ hưởng",
+        "default_issue_type": "process_exception",
+        "default_assignee_role": "kiem_soat_noi_bo",
+        "requirements": [
+          {
+            "document_type": "vendor_master_kyc",
+            "title_vi": "Hồ sơ định danh nhà cung cấp / ĐKKD",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "vendors"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "bank_account_confirmation",
+            "title_vi": "Xác nhận tài khoản ngân hàng / phụ lục đổi tài khoản",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "vendor_bank_accounts"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "invoice",
+            "title_vi": "Hóa đơn hoặc hợp đồng khớp tên người thụ hưởng",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "invoices"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          }
+        ]
+      },
+      "approval_controls": {
+        "family_label_vi": "Thẩm quyền & quy trình phê duyệt",
+        "default_issue_type": "process_exception",
+        "default_assignee_role": "phe_duyet_tai_chinh",
+        "requirements": [
+          {
+            "document_type": "approval_log_and_policy",
+            "title_vi": "Nhật ký phê duyệt & quy chế phân cấp thẩm quyền",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "approval_events",
+              "approval_policies"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "payment_request_voucher",
+            "title_vi": "Đề nghị thanh toán có đủ chữ ký duyệt",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "payment_requests"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          }
+        ]
+      },
+      "split_obligation": {
+        "family_label_vi": "Nghi vấn tách nhỏ nghĩa vụ / hóa đơn né ngưỡng",
+        "default_issue_type": "process_exception",
+        "default_assignee_role": "kiem_soat_noi_bo",
+        "requirements": [
+          {
+            "document_type": "purchase_requisition_or_contract",
+            "title_vi": "Đề nghị mua sắm / hợp đồng tổng hợp",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "contracts",
+              "invoices"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "split_payment_bundle",
+            "title_vi": "Bảng kê các giao dịch / hóa đơn tách nhỏ cùng đối tượng",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "bank_transactions",
+              "payment_allocations"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          }
+        ]
+      },
+      "accounting_controls": {
+        "family_label_vi": "Kiểm soát hạch toán & khóa sổ",
+        "default_issue_type": "data_issue",
+        "default_assignee_role": "ke_toan_tong_hop",
+        "requirements": [
+          {
+            "document_type": "general_ledger_voucher",
+            "title_vi": "Chứng từ ghi sổ & giải trình bút toán điều chỉnh",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "gl_entries"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          }
+        ]
+      },
+      "amount_deviation": {
+        "family_label_vi": "Bất thường giá trị / đơn giá giao dịch",
+        "default_issue_type": "unexplained_anomaly",
+        "default_assignee_role": "ke_toan_cong_no",
+        "requirements": [
+          {
+            "document_type": "invoice",
+            "title_vi": "Hóa đơn & bảng kê khối lượng/đơn giá",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "invoices"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          },
+          {
+            "document_type": "price_quotation_comparison",
+            "title_vi": "Báo giá / hợp đồng đối chiếu đơn giá",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "quotations"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": false
+          }
+        ]
+      },
+      "ml_anomaly": {
+        "family_label_vi": "Cảnh báo bất thường cần giải trình nguồn gốc",
+        "default_issue_type": "unexplained_anomaly",
+        "default_assignee_role": "kiem_soat_noi_bo",
+        "requirements": [
+          {
+            "document_type": "supporting_transaction_voucher",
+            "title_vi": "Chứng từ gốc & bản giải trình nghiệp vụ giao dịch",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "bank_transactions"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          }
+        ]
+      }
+    },
+    "rule_overrides": {
+      "P1": {
+        "additional_requirements": [],
+        "note": "Ưu tiên đối chiếu hóa đơn gốc, phân bổ thanh toán lũy kế (T096+T105) và biên bản hoàn trả/bù trừ nếu chi vượt."
+      },
+      "C3": {
+        "additional_requirements": [
+          {
+            "document_type": "second_level_review_note",
+            "title_vi": "Biên bản rà soát hậu kiểm đối với khoản duyệt nhanh",
+            "requirement_level": "required",
+            "applicable_when": [
+              "always"
+            ],
+            "required_sources": [
+              "approval_events"
+            ],
+            "requires_verification": true,
+            "blocks_task_completion_when_missing": true
+          }
+        ],
+        "note": "Áp dụng cho luật C3 (duyệt nhanh dưới ngưỡng thời gian)."
+      }
+    }
+  },
+  "canonical_enums": {
+    "DocumentChecklist.item_status": [
+      "present",
+      "missing",
+      "pending_verification",
+      "not_applicable",
+      "unknown"
+    ],
+    "ActionTask.status": [
+      "open",
+      "in_progress",
+      "waiting_external",
+      "completed",
+      "cancelled"
+    ],
+    "ReconciliationResult.status": [
+      "matched",
+      "partially_paid",
+      "overpaid",
+      "unmatched",
+      "disputed",
+      "unavailable"
+    ],
+    "IssueType": [
+      "data_issue",
+      "missing_document",
+      "payment_discrepancy",
+      "process_exception",
+      "unexplained_anomaly"
+    ]
+  },
+  "identity_and_rbac_honesty": {
+    "portal_login_note": "Portal hiện dùng tài khoản dùng chung theo workspace policy; trường assignee tách rõ server_actor vs department_role và gắn identity_verified=false.",
+    "current_permissions": {
+      "operator_read_upload_submit": "data.import",
+      "verifier_doc_and_task_confirm": "evidence.verify",
+      "excluded": [
+        "model.fit"
+      ]
+    },
+    "planned_permission_split": [
+      "case.read",
+      "case.transition",
+      "evidence.upload",
+      "evidence.verify",
+      "task.assign",
+      "task.submit",
+      "task.confirm",
+      "remediation.admin"
+    ]
+  }
+}

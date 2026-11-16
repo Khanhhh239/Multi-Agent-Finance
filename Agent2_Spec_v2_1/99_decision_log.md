@@ -1,5 +1,107 @@
 # Decision log — nguồn chuẩn cho quyết định
 
+### CR-062 — Portal dùng luồng bundle chung
+
+16/11/2026: người dùng giao chọn DN/snapshot/chạy, xem vụ, ghi rà và giao task
+ngay từ vụ; phần so sánh P1 cũ không đại diện baseline 35 luật. Tái sử dụng
+CR-061 và ActionTask; server ghim provenance cho task, giữ lịch sử/policy/HE
+hiện có. UI chính chuyển vào bundle khi release service có cấu hình; đường
+HE/P1 cũ ghi rõ lịch sử/giới hạn. Không chốt production hoặc quyết định chất
+lượng, trọng số, budget, SLA hay xác minh danh tính cá nhân.
+
+### CR-061 — bộ điều phối trọn luồng theo bundle
+
+16/11/2026: người dùng giao Snapshot→feature→nhánh khả dụng→phối hợp→gộp vụ→
+policy/budget→queue shadow→phiếu→report; bộ ba snapshot/run/bundle xuyên suốt,
+gộp trước ngân sách và tách ứng viên/bằng chứng. Phần gửi cloud phải HE thật;
+unsupported không được fallback rõ hoặc gọi ECOD local là HE.
+
+Tái sử dụng CR-060, hoàn thiện phần review/report tại DN. Membership dữ liệu
+được chạy cấu hình staging đã duyệt, không được đổi cấu hình; director vẫn quản
+lifecycle. Feedback trong DN chia sẻ có CAS/audit, kho riêng tránh đổi namespace
+phiếu HE cũ. Không tự xác minh chứng từ upload/nhãn, không tự đóng task hoặc
+phát hành model. Cloud request chưa tương thích bị chặn trước chấm rõ; capability
+unavailable, không gửi raw. Không chốt D-04/05/06/07/09/17/18/19 hoặc deploy live.
+
+### CR-060 — tiếp tục handoff release/rollback, nối những phần còn thiếu
+
+16/11/2026: người dùng gửi lại nhiệm vụ release/rollback trong tệp đính kèm.
+Tiếp tục phần độc lập còn thiếu: trusted validation-package registry, bundle1.1
+và executor shadow tại DN đến case queue. Không hiểu thành duyệt active, quality
+threshold hoặc bỏ yêu cầu cloud ciphertext-only. ECOD/MethodStore local không
+được gọi là HE; đường HE hiện hữu không nhận plaintext fallback.
+
+Case policy/ML threshold/fallback order được khai báo ở gói thử, không tự chọn số
+sản xuất. Phép so5 giao dịch/DN/phương án và ngân sách cấp vụ vẫn khác nhau.
+Đổi loại kỳ quota cần migration riêng; release đổi điểm nhưng không đổi nguồn/
+candidates không tự gửi lại vụ cũ. Các quy tắc mới chỉ bảo vệ release/rollback,
+không chốt D-04/05/06/07/09/17/18/19. Producer/runtime và study provenance được
+kiểm lại; synthetic chỉ là bằng chứng kỹ thuật. Workspace vẫn dùng danh tính
+chung; quality gate/production/full HE và toàn R6 tiếp tục BLOCKED.
+
+### CR-059 — gate phát hành và rollback theo bundle
+
+16/11/2026: người dùng giao thực hiện handoff release/rollback đính kèm. Cho phép
+xây infrastructure, schema/API/UI và kiểm thử độc lập; không được hiểu là duyệt
+ngưỡng chất lượng, policy active, quyền production hoặc rollout live. Không tự
+đặt trọng số/budget/mandatory/fallback thay owner. Giữ quyết định mở
+D-04/05/06/07/09/17/18/19; fixture/smoke không đóng các quyết định đó.
+
+Triển khai kỹ thuật hiện tại: staging executor tại DN dùng engine/PIT/MethodStore
+có sẵn, metadata riêng, CAS pointer, pin run và rollback không phục hồi đè DB.
+Các policy/HE chưa có full executor được khai báo unused hoặc blocked, không cho
+production activate và không gán provenance release ngược cho job cũ. Approval
+staging24h chỉ là điều kiện kỹ thuật, không phê duyệt SLA/quality của DN.
+Danh tính Portal workspace chung chưa là danh tính người duyệt độc lập.
+Monitoring chưa đo thì null, trigger chỉ yêu cầu điều tra, không tự train/activate.
+Phần nghiệp vụ/HE/quality release toàn pipeline tiếp tục chờ adapter và quyết định
+đúng thẩm quyền; không gọi kết quả lượt này là hoàn thành toàn R6/production.
+
+### CR-058 — kiểm thử lại và bắt đầu benchmark chung
+
+15/11/2026: người dùng giao kiểm thử lại, đối chiếu pipeline ban đầu, có phần thiếu
+thì bắt đầu làm. Đã đọc PDF5 trang và v2.1; ưu tiên quyết định người dùng mới hơn,
+không khôi phục joint multi-key/LightGBM/weights hoặc budget3 vụ từ đề xuất cũ
+thành yêu cầu sản xuất. Giữ policy thử5 giao dịch/DN/phương án đã chốt, luật trước
+ML bù chỗ trống. Bắt đầu ma trận chung35 luật/MethodScore/graph/supervised shadow
+trên cùng snapshot/cutoff, ghim source/model/code và không dùng điểm làm nhãn.
+Shadow nghiệm thu dùng model Concrete thật đã nhận trước, chấm local tại DN;
+lượt này không train HE lại hoặc chấm inference HE cloud. Không đổi live/key/model.
+Sửa test import, fixture snapshot commit đúng schema và giữ evidence cũ, null
+model pins và nạp state KDF legacy/Portal bảo toàn ciphertext. Các quyết định
+D-04/05/06/07/09 vẫn chặn phần active, không tự phê duyệt vì technical pass.
+
+### CR-057 — train nhiều batch mã hóa với holdout riêng
+
+15/11/2026: người dùng giao nhiều batch mã hóa, giữ weights mã hóa và tách dữ liệu
+đánh giá. Giữ circuit4 dòng/2 biến, max_steps4 đã công bố; cho2–4 batch nhưng
+batch_count×epochs<=4, không đổi miền/cắt/đệm/nhân bản dữ liệu hoặc tăng budget
+build ngầm. Window train trước holdout và ID duy nhất toàn partition, dùng
+adapter PIT hiện có. Nhãn khóa được đọc trực tiếp từ kho server DN với proof
+nguồn/phiên bản, không ép mỗi batch đủ hai lớp hoặc yêu cầu người fit xác minh lại.
+Trọng số encrypted đầu ra làm input tiếp theo, SQLite checkpoint atomic và lease
+một process, run trùng trả status; retry sau crash có thể tính lại lượt chưa commit.
+HE thật C001/C002 đạt4 update,8 train/4 holdout riêng; C001 SIGKILL khi update2
+pending giữ checkpoint1, cùng job/key/build sau restart. Guard chữ ký/checkpoint
+bổ sung khi native run đang chạy đã unit-test và kiểm lại cached ciphertext thật
+trên cả2 DN; không đổi circuit/model/cipher kết quả. Không claim native compute
+exactly-once, hiệu quả gian lận thật hoặc calibrated accuracy. Không tự rollout
+Portal, active model/queue hay chốt gate R0–R6.
+
+### CR-056 — xác minh nhãn và khóa phiên bản tại doanh nghiệp
+
+15/11/2026: người dùng giao người rà xem giao dịch/chứng từ, xác nhận gian lận
+hoặc không gian lận, chưa rõ để trống; khóa theo snapshot và phiên bản. Nối UI/API
+nguồn hiện có và adapter train thử 4 dòng/2 biến, không tự lấy mẫu hoặc đổi miền.
+Ghi nhãn tách phiếu rà hữu ích, server-authoritative actor/time, quyền xác minh
+riêng và kiểm lại scope. Chỉ evidence manifest của giao dịch; bản xuất không
+tự thành chứng từ gốc. Nguồn mô phỏng không xác nhận nhãn thật. Revision append-only
+AEAD, khóa hash và đọc đúng bản cũ sau sửa; null không thành non-fraud. Các tác vụ
+không chạy train/đổi model/queue; chưa nối tệp khóa sang consent dataset/receipt.
+Giữ Portal workspace identity hiện có và nêu giới hạn chưa định danh cá nhân;
+không tự cấp quyền hoặc restart live. Nghiệm thu riêng trên dữ liệu mô phỏng,
+không kết luận hiệu quả nghiệp vụ/accuracy hoặc chốt gate.
+
 ### CR-055 — snapshot sang đầu vào supervised HE
 
 15/11/2026: người dùng giao lấy giao dịch từ snapshot đã lưu, mapping rõ và giữ

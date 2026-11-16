@@ -70,7 +70,7 @@ class ReviewStore:
             value['attachments'].append({k:v for k,v in item.items() if k!='content'})
         return value
 
-    def attach(self,scope,case_id,name,content):
+    def attach(self,scope,case_id,name,content,*,recheck=None):
         if not isinstance(name,str) or not 1<=len(name)<=160 or any(c in name for c in '/\\\r\n\x00'):
             fail(422,'ATTACHMENT_NAME','Tên tài liệu không hợp lệ.','Dùng tên tệp ngắn, không có đường dẫn.')
         try:raw=base64.b64decode(content,validate=True)
@@ -81,11 +81,13 @@ class ReviewStore:
         owner=self.owner(scope);identity='att_'+hashlib.sha256(raw).hexdigest()
         value=dict(id=identity,name=name,mime=mime,size=len(raw),sha256=hashlib.sha256(raw).hexdigest(),content=base64.b64encode(raw).decode(),original_verified=False,actor_id=scope.actor_id,uploaded_at=time.time())
         with self.transaction() as conn:
+            if recheck is not None and recheck()!=scope:fail(409,'AUTH_CONTEXT_CHANGED','Quyền đã thay đổi.','Tải lại phiên làm việc.')
             if conn.execute('SELECT 1 FROM attachments WHERE owner=? AND case_id=? AND id=?',(owner,case_id,identity)).fetchone():return identity
             if conn.execute('SELECT count(*) FROM attachments WHERE owner=? AND case_id=?',(owner,case_id)).fetchone()[0]>=10:
                 fail(413,'ATTACHMENT_COUNT','Mỗi phiếu tối đa 10 tài liệu.','Gộp các trang trong một PDF tối đa 2 MB.')
             nonce=os.urandom(12);blob=self.aes.encrypt(nonce,canonical(value),canonical([VERSION,owner,case_id,identity]))
             conn.execute('INSERT INTO attachments VALUES (?,?,?,?,?)',(owner,case_id,identity,nonce,blob))
+            if recheck is not None and recheck()!=scope:fail(409,'AUTH_CONTEXT_CHANGED','Quyền đã thay đổi trước khi lưu.','Tải lại phiên làm việc.')
         return identity
 
     def attachment(self,scope,case_id,identity):
@@ -121,7 +123,7 @@ class ReviewStore:
             lease=self._tick(self.owner(scope),case_id,token)
             return dict(active_seconds=round(lease['seconds'],3),timing_basis='server_connected_active_time')
 
-    def save(self,scope,case_id,expected,feedback,allowed_evidence,lease_token,request_id):
+    def save(self,scope,case_id,expected,feedback,allowed_evidence,lease_token,request_id,*,recheck=None):
         fields={'outcome','usefulness','explanation','action','missing_materials','evidence_ids','checks_completed'}
         if not isinstance(feedback,dict) or set(feedback)!=fields:
             fail(400,'REVIEW_FIELDS','Phiếu thiếu trường hoặc có trường không được nhận.','Tải lại phiếu và điền đúng các ô trên màn hình.')
@@ -143,6 +145,7 @@ class ReviewStore:
             fail(400,'REVIEW_REVISION','Thiếu phiên bản hoặc mã yêu cầu lưu.','Tải lại phiếu rồi thử lưu lại.')
         owner=self.owner(scope);digest=hashlib.sha256(canonical([expected,feedback])).hexdigest()
         with self.lock,self.transaction() as conn:
+            if recheck is not None and recheck()!=scope:fail(409,'AUTH_CONTEXT_CHANGED','Quyền đã thay đổi.','Tải lại phiên làm việc.')
             old=self._read(conn,owner,case_id)
             for event in old['history']:
                 if event['request_id']==request_id:
@@ -157,5 +160,6 @@ class ReviewStore:
             if len(value['history'])>100:fail(409,'REVIEW_REVISION_LIMIT','Phiếu đã đạt 100 lần sửa.','Người quản lý cần lưu trữ và mở đợt rà mới.')
             nonce=os.urandom(12);blob=self.aes.encrypt(nonce,canonical(value),self.aad(owner,case_id,expected+1))
             conn.execute('INSERT INTO reviews VALUES (?,?,?,?,?)',(owner,case_id,expected+1,nonce,blob))
+            if recheck is not None and recheck()!=scope:fail(409,'AUTH_CONTEXT_CHANGED','Quyền đã thay đổi trước khi lưu.','Tải lại phiên làm việc.')
             del self.leases[(owner,case_id)]
             return value

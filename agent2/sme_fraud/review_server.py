@@ -17,13 +17,22 @@ from .review_api import handle_reviews
 from .config_api import handle_config
 from .workspace_api import handle_workspace
 from .comparison_api import handle_comparison
+from .label_api import handle_labels
+from .batch_training_api import BatchTrainingManager,handle_batch_training
+from .case_queue_api import handle_case_queue
+from .case_queue_store import CaseQueueStore
+from .pipeline_benchmark_api import handle_pipeline_benchmark
+from .remediation_api import handle_remediation
+from .remediation_store import RemediationStore
+from .pipeline_release_api import handle_releases
+from .bundle_workspace_api import handle_bundle_workspace
 
 from pathlib import Path
 
 PAGE=(Path(__file__).with_name('web')/'status.html').read_text('utf-8')
 
 
-def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources=None,he_backend=None,review_store=None,comparison_store=None):
+def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources=None,he_backend=None,review_store=None,comparison_store=None,label_store=None,batch_training=None,case_queue_store=None,remediation_store=None,release_service=None):
     authorizer=authorizer or FileAuthorizer(None)
     if he_backend and he_backend.node.auth is not authorizer:
         raise ValueError('HE must use the same current authorizer as the web server')
@@ -38,6 +47,19 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
         from cryptography.hazmat.primitives.kdf.hkdf import HKDF
         from .review_store import ReviewStore
         jobs=he_backend.node.jobs.store
+        if release_service is None:
+            from .pipeline_release import ReleaseService
+            from .pipeline_release_store import ReleaseStore
+            release_key=HKDF(algorithm=hashes.SHA256(),length=32,salt=b'agent2-pipeline-release-v1',info=b'enterprise-release-storage').derive(jobs.mac_key)
+            release_service=ReleaseService(ReleaseStore(jobs.path.with_name('pipeline-releases.sqlite3'),release_key),snapshot_store,analysis_resources)
+        if label_store is None:
+            from .label_packets import LabelStore
+            label_key=HKDF(algorithm=hashes.SHA256(),length=32,salt=b'agent2-labels-v1',info=b'enterprise-verified-labels').derive(jobs.mac_key)
+            label_store=LabelStore(jobs.path.with_name('verified-labels.sqlite3'),label_key)
+        if batch_training is None:
+            batch_key=HKDF(algorithm=hashes.SHA256(),length=32,salt=b'agent2-batch-training-v1',info=b'enterprise-batch-training').derive(jobs.mac_key)
+            runtime_cfg=os.environ.get('AGENT2_BATCH_TRAINING_CONFIG') or jobs.path.with_name('batch-training-runtime.json')
+            batch_training=BatchTrainingManager(jobs.path.with_name('batch-training.sqlite3'),batch_key,snapshot_store=snapshot_store,label_store=label_store,runtime_config_path=runtime_cfg)
         key=HKDF(algorithm=hashes.SHA256(),length=32,salt=b'agent2-review-v1',info=b'enterprise-review-storage').derive(jobs.mac_key)
         reviews=ReviewStore(jobs.path.with_name('reviews.sqlite3'),key)
         from .comparison_store import ComparisonStore
@@ -49,6 +71,21 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
             reviews=dict(current=reviews,legacy=ReviewStore(legacy.path.with_name('reviews.sqlite3'),legacy_key))
             legacy_comparison_key=HKDF(algorithm=hashes.SHA256(),length=32,salt=b'agent2-comparison-v1',info=b'enterprise-selection-plans').derive(legacy.mac_key)
             comparisons=dict(current=comparisons,legacy=ComparisonStore(legacy.path.with_name('comparisons.sqlite3'),legacy_comparison_key))
+    if case_queue_store is None:
+        cq_db=os.environ.get('AGENT2_CASE_QUEUE_DB')
+        if cq_db:case_queue_store=CaseQueueStore(cq_db)
+        elif he_backend and he_backend.node.jobs:case_queue_store=CaseQueueStore(he_backend.node.jobs.store.path.with_name('case-queue.sqlite3'))
+        elif snapshot_store and hasattr(snapshot_store,'path'):case_queue_store=CaseQueueStore(snapshot_store.path.with_name('case-queue.sqlite3'))
+    if remediation_store is None:
+        rem_db=os.environ.get('AGENT2_REMEDIATION_DB')
+        if rem_db:remediation_store=RemediationStore(rem_db)
+        elif he_backend and he_backend.node.jobs:remediation_store=RemediationStore(he_backend.node.jobs.store.path.with_name('remediation.sqlite3'))
+        elif snapshot_store and hasattr(snapshot_store,'path'):remediation_store=RemediationStore(snapshot_store.path.with_name('remediation.sqlite3'))
+        elif case_queue_store and hasattr(case_queue_store,'path'):remediation_store=RemediationStore(case_queue_store.path.with_name('remediation.sqlite3'))
+    if release_service is not None and release_service.case_queue is None:
+        release_service.case_queue=case_queue_store
+    if release_service is not None:
+        release_service.workspace.remediation=remediation_store
     class Handler(BaseHTTPRequestHandler):
         def respond(self,code,value,mime='application/json; charset=utf-8'):
             body=value if isinstance(value,bytes) else (json.dumps(value,ensure_ascii=False) if isinstance(value,dict) else value).encode('utf-8')
@@ -59,7 +96,13 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
             self.send_header('Content-Security-Policy',"default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; form-action 'none'; base-uri 'none'; frame-ancestors "+os.environ.get('SOSOAT_FRAME_ANCESTORS',"'none'"))
             self.end_headers();self.wfile.write(body)
         def do_GET(self):
-            if handle_workbench(self,authorizer,analysis_mode='four_encrypted_branches' if he_backend and hasattr(he_backend,'settings') else None):return
+            if handle_workbench(self,authorizer,analysis_mode='four_encrypted_branches' if he_backend and hasattr(he_backend,'settings') else None,bundle_mode=release_service is not None):return
+            if handle_releases(self,authorizer,release_service,'GET'):return
+            if handle_bundle_workspace(self,authorizer,release_service,'GET'):return
+            if handle_remediation(self,authorizer,remediation_store,'GET',case_queue_store=case_queue_store,snapshot_store=snapshot_store):return
+            if handle_case_queue(self,authorizer,case_queue_store,'GET',snapshot_store,analysis_resources,release_service):return
+            if handle_batch_training(self,authorizer,batch_training,'GET'):return
+            if handle_labels(self,authorizer,snapshot_store,label_store,'GET'):return
             if handle_workspace(self,authorizer,snapshot_store,he_backend,reviews):return
             if handle_comparison(self,authorizer,snapshot_store,he_backend,reviews,comparisons,'GET',analysis_resources):return
             if handle_reviews(self,authorizer,snapshot_store,he_backend,reviews,'GET'):return
@@ -74,6 +117,13 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
             if path=='/status':return self.respond(200,PAGE,'text/html; charset=utf-8')
             self.respond(410,dict(error='Luồng Agent2 cũ đã được lưu trữ. API pipeline v2.1 chưa được triển khai.',mode='core_only'))
         def do_POST(self):
+            if handle_releases(self,authorizer,release_service,'POST'):return
+            if handle_bundle_workspace(self,authorizer,release_service,'POST'):return
+            if handle_pipeline_benchmark(self,authorizer,snapshot_store,batch_training,'POST',analysis_resources):return
+            if handle_remediation(self,authorizer,remediation_store,'POST',case_queue_store=case_queue_store,snapshot_store=snapshot_store):return
+            if handle_case_queue(self,authorizer,case_queue_store,'POST',snapshot_store,analysis_resources,release_service):return
+            if handle_batch_training(self,authorizer,batch_training,'POST'):return
+            if handle_labels(self,authorizer,snapshot_store,label_store,'POST'):return
             if handle_config(self,authorizer,manager,'POST'):return
             if handle_reviews(self,authorizer,snapshot_store,he_backend,reviews,'POST'):return
             if handle_comparison(self,authorizer,snapshot_store,he_backend,reviews,comparisons,'POST',analysis_resources):return
@@ -81,6 +131,7 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
             if not handle_analysis(self,authorizer,snapshot_store,'POST',analysis_resources) and not handle_validation(self,authorizer) and not handle_snapshots(self,authorizer,snapshot_store,'POST'):
                 self.respond(410,dict(error='Chưa mở ghi dữ liệu hoặc chạy job; API cũ đã được lưu trữ.',mode='validation_only'))
         def do_PUT(self):
+            if handle_labels(self,authorizer,snapshot_store,label_store,'PUT'):return
             if not handle_analysis(self,authorizer,snapshot_store,'PUT',analysis_resources) and not handle_snapshots(self,authorizer,snapshot_store,'PUT'):
                 self.respond(410,dict(error='API cũ đã được lưu trữ.'))
         def log_message(self,*args):pass
@@ -97,6 +148,8 @@ def main():
     parser.add_argument('--he-node-config',default=os.environ.get('AGENT2_HE_NODE_CONFIG'),help='Opt-in protected enterprise HE node config; embeds node locally using this server authorizer')
     parser.add_argument('--he-bindings',default=os.environ.get('AGENT2_HE_BINDINGS'),help='Backend-only HE artifact pins per tenant/company')
     parser.add_argument('--he4-config',default=os.environ.get('AGENT2_HE4_CONFIG'),help='Opt-in four-branch enterprise config, with independent Concrete worker and protected contexts')
+    parser.add_argument('--batch-training-config',default=os.environ.get('AGENT2_BATCH_TRAINING_CONFIG'),help='Opt-in multi-batch encrypted training config')
+    parser.add_argument('--release-config',default=os.environ.get('AGENT2_RELEASE_CONFIG'),help='Protected release metadata DB/key config; otherwise derived from configured enterprise HE job key')
     # Known old launcher options are accepted only for compatibility; their paths are never opened.
     for name in ('data-root','reports-root','database','ml-review-root'):parser.add_argument('--'+name,action='append')
     for name in ('qa','demo-ml-manager'):parser.add_argument('--'+name,action='store_true')
@@ -127,7 +180,13 @@ def main():
                 parser.error('HE4 must use this enterprise node protected wrapping key')
             he_backend=FourWorkbench(he_backend.node,args.he_bindings,he4)
     elif args.he4_config:parser.error('HE4 requires the existing protected HE node and company bindings')
-    server=make_server(args.port,authorizer,store,AnalysisResources(args.model_db,args.analysis_bindings),he_backend)
+    batch_mgr=BatchTrainingManager.from_config(args.batch_training_config,snapshot_store=store) if args.batch_training_config else None
+    resources=AnalysisResources(args.model_db,args.analysis_bindings)
+    release_service=None
+    if args.release_config:
+        from .pipeline_release import ReleaseService
+        release_service=ReleaseService.from_config(args.release_config,store,resources)
+    server=make_server(args.port,authorizer,store,resources,he_backend,batch_training=batch_mgr,release_service=release_service)
     print(f'Agent2 validation backend: http://127.0.0.1:{server.server_port}; pipeline_ready=false',flush=True)
     try:server.serve_forever()
     except KeyboardInterrupt:pass

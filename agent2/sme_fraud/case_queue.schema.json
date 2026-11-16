@@ -1,0 +1,311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent2.local/schemas/case_queue.schema.json",
+  "title": "Agent2 Case Coalescing, Queue Budget, Deduplication, and Backlog Schema",
+  "$defs": {
+    "non_empty_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "iso_datetime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "case_workflow_status": {
+      "type": "string",
+      "enum": ["new", "in_review", "waiting_evidence", "closed"]
+    },
+    "case_resolution": {
+      "type": ["string", "null"],
+      "enum": ["confirmed_risk", "legitimate", "inconclusive", null]
+    },
+    "alert_decision_enum": {
+      "type": "string",
+      "enum": [
+        "selected",
+        "below_threshold",
+        "need_evidence",
+        "budget_deferred",
+        "already_notified",
+        "unscorable",
+        "mandatory_route"
+      ]
+    },
+    "backlog_reason_code": {
+      "type": ["string", "null"],
+      "enum": [
+        "budget_exhausted",
+        "missing_evidence",
+        "below_admission_threshold",
+        "current_revision_already_sent",
+        "unscorable_sources",
+        "pending_business_decision",
+        "waiting_external_evidence",
+        "case_closed_no_material_change",
+        null
+      ]
+    },
+    "delivery_status": {
+      "type": "string",
+      "enum": ["pending", "sent", "failed"]
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "policy_id",
+        "policy_version",
+        "fixture_declaration",
+        "budget",
+        "scoring",
+        "material_change",
+        "backlog"
+      ],
+      "properties": {
+        "version": { "const": "case-queue-policy/1.0.0" },
+        "policy_id": { "$ref": "#/$defs/non_empty_id" },
+        "policy_version": { "$ref": "#/$defs/non_empty_id" },
+        "fixture_declaration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "is_experimental_fixture",
+            "approved_for_production",
+            "open_decision_gates",
+            "note"
+          ],
+          "properties": {
+            "is_experimental_fixture": { "type": "boolean" },
+            "approved_for_production": { "const": false },
+            "open_decision_gates": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["D-04", "D-05", "D-06", "D-07"]
+              },
+              "minItems": 1
+            },
+            "note": { "type": "string", "minLength": 1 }
+          }
+        },
+        "budget": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "case_budget_limit",
+            "period_kind",
+            "benchmark_transaction_cap_preserved",
+            "benchmark_separated"
+          ],
+          "properties": {
+            "unit": { "const": "case" },
+            "case_budget_limit": { "type": "integer", "minimum": 0, "maximum": 10000 },
+            "period_kind": { "type": "string", "enum": ["calendar_week_vn", "calendar_month_vn", "fixture_period"] },
+            "benchmark_transaction_cap_preserved": { "const": 5 },
+            "benchmark_separated": { "const": true }
+          }
+        },
+        "scoring": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "aggregation",
+            "evidence_adds_score",
+            "rule_weight",
+            "ml_weight",
+            "calibrated_weight",
+            "min_case_score",
+            "allow_hard_trigger_admission",
+            "require_sufficient_evidence",
+            "mandatory_rules"
+          ],
+          "properties": {
+            "aggregation": { "const": "max_candidate_score" },
+            "evidence_adds_score": { "const": false },
+            "rule_weight": { "type": "number", "minimum": 0 },
+            "ml_weight": { "type": "number", "minimum": 0 },
+            "calibrated_weight": { "type": "number", "minimum": 0 },
+            "min_case_score": { "type": "number", "minimum": 0 },
+            "allow_hard_trigger_admission": { "type": "boolean" },
+            "require_sufficient_evidence": { "type": "boolean" },
+            "mandatory_rules": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "material_change": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "min_score_delta",
+            "snapshot_change_only_is_material",
+            "ordering_change_only_is_material",
+            "auto_reopen_closed_on_material"
+          ],
+          "properties": {
+            "min_score_delta": { "type": "number", "minimum": 0 },
+            "snapshot_change_only_is_material": { "const": false },
+            "ordering_change_only_is_material": { "const": false },
+            "auto_reopen_closed_on_material": { "type": "boolean" }
+          }
+        },
+        "backlog": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "auto_expire_backlog",
+            "retention_without_decision_indefinite"
+          ],
+          "properties": {
+            "auto_expire_backlog": { "const": false },
+            "retention_without_decision_indefinite": { "const": true }
+          }
+        }
+      }
+    },
+    "financial_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "currency",
+        "obligation_gross_vnd",
+        "prior_evidence_allocated_vnd",
+        "candidate_amount_vnd",
+        "candidate_allocated_vnd",
+        "net_settled_vnd",
+        "related_amount_vnd",
+        "discrepancy_amount_vnd",
+        "confirmed_loss_vnd",
+        "recovered_vnd",
+        "contains_negative_adjustment"
+      ],
+      "properties": {
+        "currency": { "const": "VND" },
+        "obligation_gross_vnd": { "type": ["integer", "null"] },
+        "prior_evidence_allocated_vnd": { "type": ["integer", "null"] },
+        "candidate_amount_vnd": { "type": "integer" },
+        "candidate_allocated_vnd": { "type": ["integer", "null"] },
+        "net_settled_vnd": { "type": ["integer", "null"] },
+        "related_amount_vnd": { "type": "integer" },
+        "discrepancy_amount_vnd": { "type": ["integer", "null"] },
+        "confirmed_loss_vnd": { "type": ["integer", "null"] },
+        "recovered_vnd": { "type": ["integer", "null"] },
+        "contains_negative_adjustment": { "type": "boolean" }
+      }
+    },
+    "source_link": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["table", "record_id", "role"],
+      "properties": {
+        "table": { "type": "string", "minLength": 1 },
+        "record_id": { "type": "string", "minLength": 1 },
+        "revision": { "type": ["integer", "null"] },
+        "role": { "type": "string", "enum": ["candidate", "prior_payment_evidence", "obligation_source", "allocation_source", "supporting_document", "master_context"] }
+      }
+    },
+    "coalesced_case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_id",
+        "tenant_id",
+        "company_id",
+        "problem_family",
+        "obligation_id",
+        "grouping_key",
+        "grouping_reason",
+        "candidate_ids",
+        "candidate_revisions",
+        "evidence_tx_ids",
+        "evidence_ids",
+        "source_links",
+        "weak_graph_context",
+        "actionable_rule_ids",
+        "context_rule_ids",
+        "master_quality_rule_ids",
+        "hard_trigger",
+        "scorable",
+        "case_score",
+        "calibrated_fraud_probability",
+        "score_breakdown",
+        "evidence_sufficient",
+        "has_blocking_source_gap",
+        "source_gaps",
+        "financial_summary",
+        "first_candidate_event_at",
+        "last_candidate_event_at",
+        "snapshot_binding",
+        "method_versions",
+        "model_pins",
+        "material_fingerprint"
+      ],
+      "properties": {
+        "case_id": { "type": "string", "pattern": "^case_[a-f0-9]{32}$" },
+        "tenant_id": { "$ref": "#/$defs/non_empty_id" },
+        "company_id": { "$ref": "#/$defs/non_empty_id" },
+        "problem_family": { "$ref": "#/$defs/non_empty_id" },
+        "obligation_id": { "$ref": "#/$defs/non_empty_id" },
+        "grouping_key": { "type": "string", "minLength": 1 },
+        "grouping_reason": { "type": "string", "minLength": 1 },
+        "candidate_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/non_empty_id" },
+          "minItems": 1
+        },
+        "candidate_revisions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["record_id", "revision"],
+            "properties": {
+              "record_id": { "$ref": "#/$defs/non_empty_id" },
+              "revision": { "type": "integer", "minimum": 1 }
+            }
+          }
+        },
+        "evidence_tx_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/non_empty_id" }
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/non_empty_id" }
+        },
+        "source_links": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/source_link" }
+        },
+        "weak_graph_context": { "type": "object" },
+        "actionable_rule_ids": { "type": "array", "items": { "type": "string" } },
+        "context_rule_ids": { "type": "array", "items": { "type": "string" } },
+        "master_quality_rule_ids": { "type": "array", "items": { "type": "string" } },
+        "hard_trigger": { "type": "boolean" },
+        "scorable": { "type": "boolean" },
+        "case_score": { "type": ["number", "null"] },
+        "calibrated_fraud_probability": { "type": ["number", "null"] },
+        "score_breakdown": { "type": "object" },
+        "evidence_sufficient": { "type": "boolean" },
+        "has_blocking_source_gap": { "type": "boolean" },
+        "source_gaps": { "type": "array" },
+        "financial_summary": { "$ref": "#/$defs/financial_summary" },
+        "first_candidate_event_at": { "$ref": "#/$defs/iso_datetime" },
+        "last_candidate_event_at": { "$ref": "#/$defs/iso_datetime" },
+        "snapshot_binding": { "type": "object" },
+        "method_versions": { "type": "object" },
+        "model_pins": { "type": "object" },
+        "material_fingerprint": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    }
+  },
+  "type": "object",
+  "required": ["version"],
+  "properties": {
+    "version": { "type": "string", "enum": ["case-queue-policy/1.0.0", "case-queue-report/1.0.0"] }
+  }
+}
+

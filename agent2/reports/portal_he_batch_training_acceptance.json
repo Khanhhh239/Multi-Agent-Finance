@@ -1,0 +1,483 @@
+{
+  "version": "portal-he-batch-training-acceptance/1.0.0",
+  "verified_at": "2026-11-15T10:16:24Z",
+  "environment": {
+    "mode": "isolated_local_portal_enterprise_real_concrete_worker",
+    "concrete_fhe_worker": "real_linux_concrete_2.9.0_no_mock",
+    "browser_engine": "Playwright Chromium",
+    "tenant_id": "training-demo",
+    "build_sha256": "190e1e67c6b8cb20c5b1879b9205a50faa4b631bb47e4c7d0639e613e3e09f9e",
+    "synthetic_label_disclosure": "Nhãn dùng trong nghiệm thu là nhãn synthetic kỳ vọng (synthetic_expected), không phải kết luận gian lận nghiệp vụ thật.",
+    "cloud_secret_key_absent": true,
+    "cloud_file_count": 28
+  },
+  "scenarios": {
+    "4_lost_confirm_response": {
+      "passed": true,
+      "company_id": "C001",
+      "first_server_status": 201,
+      "first_browser_error_notice": "Failed to fetch",
+      "first_job_id": "btr_a5f7f53960d531c39955e7f9d2d289b1",
+      "retry_job_id": "btr_a5f7f53960d531c39955e7f9d2d289b1",
+      "first_dataset_id": "bds_894f4866d4e5d27863424b8c1ba4d0e3",
+      "retry_dataset_id": "bds_894f4866d4e5d27863424b8c1ba4d0e3",
+      "enterprise_session_count": 1
+    },
+    "2_reload_during_training": {
+      "passed": true,
+      "company_id": "C001",
+      "job_id": "btr_a5f7f53960d531c39955e7f9d2d289b1",
+      "before_reload_status": "Trạng thái: Đang train · Mã công việc: btr_a5f7f53960d531c39955e7f9d2d289b1",
+      "after_reload_status": "Trạng thái: Đang train · Mã công việc: btr_a5f7f53960d531c39955e7f9d2d289b1",
+      "before_reload_completed_updates": 0,
+      "after_reload_completed_updates": 0
+    },
+    "3_browser_disconnect_reconnect": {
+      "passed": true,
+      "company_id": "C001",
+      "job_id": "btr_a5f7f53960d531c39955e7f9d2d289b1",
+      "before_disconnect_completed_updates": 0,
+      "after_reconnect_completed_updates": 0,
+      "enterprise_session_count": 1
+    },
+    "5_worker_crash_and_resume": {
+      "passed": true,
+      "company_id": "C001",
+      "job_id": "btr_a5f7f53960d531c39955e7f9d2d289b1",
+      "checkpoint_before_kill": {
+        "completed_updates": 1,
+        "inflight_update": 1,
+        "status": "training"
+      },
+      "ui_interrupted_status": "Trạng thái: Bị gián đoạn · Mã công việc: btr_a5f7f53960d531c39955e7f9d2d289b1",
+      "after_resume_completed_updates": 4,
+      "after_resume_total_updates": 4,
+      "key_epoch": "key_79948863a9bb31ed540e6ed63c2f6b55",
+      "build_sha256": "190e1e67c6b8cb20c5b1879b9205a50faa4b631bb47e4c7d0639e613e3e09f9e",
+      "consent_sha256": "a5f7f53960d531c39955e7f9d2d289b1ddae5627af0aca205ef1ccf13c087d12"
+    },
+    "7_shadow_blocked_before_approval": {
+      "passed": true,
+      "company_id": "C001",
+      "ui_button_label_before_approval": "Phê duyệt dùng đối chiếu shadow",
+      "direct_shadow_http_status": 409,
+      "direct_shadow_error_code": "BATCH_MODEL_NOT_APPROVED",
+      "direct_shadow_error_message": "Model ứng viên chưa được phê duyệt để chạy đối chiếu shadow."
+    },
+    "8_shadow_after_approval": {
+      "passed": true,
+      "company_id": "C001",
+      "approval_sha256": "66163c5661e4147355a8456aab4fd78d1fe5e8dbfc7beda3d164c1502b2e5cae",
+      "pinned_model_cipher_sha256": "0b556814858303225a6b6e70b0c76eed318a266d54805891edcb86cc6a4d23fe",
+      "pinned_plan_sha256": "cbbb0e13f8a0391b8c0b52a55d4d3011ce29c4a567eca59da050d9050af84515",
+      "pinned_evaluation_sha256": "4ae02f15fc12e559c309d11a386cd89e31871d54cb939ae56f52dc8482c9062c",
+      "shadow_only": true,
+      "active_model_replaced": false,
+      "operational_queue_changed": false
+    },
+    "1_normal_full_flow": {
+      "passed": true,
+      "companies_verified": [
+        "C001",
+        "C002"
+      ],
+      "c001_weights_code": [
+        1,
+        1,
+        -1
+      ],
+      "c002_weights_code": [
+        -1,
+        -1,
+        1
+      ],
+      "c001_validation": "quantized_batch_oracle_exact",
+      "c002_validation": "quantized_batch_oracle_exact"
+    },
+    "6_company_switch_isolation": {
+      "passed": true,
+      "c002_initial_status_before_run": "Chưa có phiên huấn luyện batch nào cho doanh nghiệp này.",
+      "c001_job_id": "btr_a5f7f53960d531c39955e7f9d2d289b1",
+      "c002_job_id": "btr_e63f486e2f3c237bb1eb7afcde6cbea5",
+      "c001_weights_code": [
+        1,
+        1,
+        -1
+      ],
+      "c002_weights_code": [
+        -1,
+        -1,
+        1
+      ],
+      "cross_company_leakage": false
+    }
+  },
+  "companies": {
+    "C001": {
+      "company_id": "C001",
+      "tenant_id": "training-demo",
+      "snapshot_id": "snp_e36fa44110b547f2a776c34a98d5216d",
+      "training_window": {
+        "start": "2025-08-11T00:00:00+07:00",
+        "end": "2025-08-12T00:00:00+07:00"
+      },
+      "evaluation_window": {
+        "start": "2025-08-12T00:00:00+07:00",
+        "end": "2025-08-13T00:00:00+07:00"
+      },
+      "as_of": "2025-08-13T00:00:00+07:00",
+      "plan_sha256": "cbbb0e13f8a0391b8c0b52a55d4d3011ce29c4a567eca59da050d9050af84515",
+      "training_rows": 8,
+      "evaluation_rows": 4,
+      "training_batches": 2,
+      "evaluation_batches": 1,
+      "epochs": 2,
+      "total_updates": 4,
+      "completed_updates": 4,
+      "synthetic_label_notice": "Nhãn dùng trong nghiệm thu là nhãn synthetic kỳ vọng (synthetic_expected) để kiểm chứng kỹ thuật, không phải kết luận gian lận nghiệp vụ thật.",
+      "locked_training_packets": [
+        {
+          "lock_sha256": "a9641170b4837993110784632257720493d2a2201eb3f05b916172eb494d0074",
+          "packet_id": "lbl_fe866649380235c64fac794f630495e942b48cce78eab777742404bef1512429",
+          "revision": 6
+        },
+        {
+          "lock_sha256": "0df6b9e23e8ae2142ffe08db61c3be777dde4267184a0ecfb7eff37301fba7cc",
+          "packet_id": "lbl_e862e185a5d51219a37f34c2b1cb519bbc8b69b341b6a3a610f5cd31e32fbda5",
+          "revision": 6
+        }
+      ],
+      "locked_evaluation_packets": [
+        {
+          "lock_sha256": "1fc38a643d6cdb4a562bea9fe16b54e1529a2c3a16ad33c426061f84a21f7375",
+          "packet_id": "lbl_bc9f91ba2890081641eb9a02af31288fcd87b3c848e33f3cdc6fc3065794db67",
+          "revision": 6
+        }
+      ],
+      "browser_locked_packets": [
+        {
+          "partition": "training",
+          "batch_index": 0,
+          "packet_id": "lbl_fe866649380235c64fac794f630495e942b48cce78eab777742404bef1512429",
+          "synthetic_outcome": "verified_fraud",
+          "ui_status": "Đã khóa · 4/4 giao dịch có nhãn. Nhãn chưa rõ giữ trống và chưa dùng train."
+        },
+        {
+          "partition": "training",
+          "batch_index": 1,
+          "packet_id": "lbl_e862e185a5d51219a37f34c2b1cb519bbc8b69b341b6a3a610f5cd31e32fbda5",
+          "synthetic_outcome": "verified_non_fraud",
+          "ui_status": "Đã khóa · 4/4 giao dịch có nhãn. Nhãn chưa rõ giữ trống và chưa dùng train."
+        },
+        {
+          "partition": "evaluation",
+          "batch_index": 0,
+          "packet_id": "lbl_bc9f91ba2890081641eb9a02af31288fcd87b3c848e33f3cdc6fc3065794db67",
+          "synthetic_outcome": "verified_fraud",
+          "ui_status": "Đã khóa · 4/4 giao dịch có nhãn. Nhãn chưa rõ giữ trống và chưa dùng train."
+        }
+      ],
+      "dataset_id": "bds_894f4866d4e5d27863424b8c1ba4d0e3",
+      "job_id": "btr_a5f7f53960d531c39955e7f9d2d289b1",
+      "consent_sha256": "a5f7f53960d531c39955e7f9d2d289b1ddae5627af0aca205ef1ccf13c087d12",
+      "key_epoch": "key_79948863a9bb31ed540e6ed63c2f6b55",
+      "build_sha256": "190e1e67c6b8cb20c5b1879b9205a50faa4b631bb47e4c7d0639e613e3e09f9e",
+      "worker_job_summary": {
+        "status": "completed",
+        "completed_updates": 4,
+        "total_updates": 4,
+        "completed_epochs": 2,
+        "batch_count": 2,
+        "batch_manifest_sha256": "64f324b6949acd6e2e5c97ef72342ad8884466efe3e168ea236b09d54a9800da",
+        "training_commitment": "b5087b2815966241a4dbeb51488bb8190a577c767b4c633b1ff57da530fffaa2",
+        "evaluation_commitment": "e22f627b6b9d2d79dfd610e3e00a3acfb62c17fdfd43c1a500f4620af788d714"
+      },
+      "candidate_model": {
+        "status_label": "Model ứng viên đã nhận và kiểm tra kỹ thuật",
+        "validation": "quantized_batch_oracle_exact",
+        "model_cipher_sha256": "0b556814858303225a6b6e70b0c76eed318a266d54805891edcb86cc6a4d23fe",
+        "weights_code": [
+          1,
+          1,
+          -1
+        ],
+        "coefficients": [
+          0.5,
+          0.5
+        ],
+        "intercept": -0.5,
+        "oracle_exact_match": true,
+        "approved_for_shadow": true,
+        "operational_activation": false
+      },
+      "holdout_evaluation": {
+        "evaluation_sha256": "4ae02f15fc12e559c309d11a386cd89e31871d54cb939ae56f52dc8482c9062c",
+        "evaluation_rows": 4,
+        "held_out_from_training": true,
+        "uncalibrated": true,
+        "accuracy": null,
+        "holdout_labels": {
+          "fraud_rows": 4,
+          "labelled_rows": 4,
+          "labels_used_for_fit": false,
+          "locks": [
+            {
+              "lock_sha256": "1fc38a643d6cdb4a562bea9fe16b54e1529a2c3a16ad33c426061f84a21f7375",
+              "packet_id": "lbl_bc9f91ba2890081641eb9a02af31288fcd87b3c848e33f3cdc6fc3065794db67",
+              "revision": 6
+            }
+          ],
+          "non_fraud_rows": 0,
+          "unlabelled_rows": 0,
+          "verified": true
+        },
+        "rows": [
+          {
+            "record_id": "AUDIT_0008",
+            "batch_index": 0,
+            "score": 0.6224593312018546,
+            "verified_outcome": "verified_fraud"
+          },
+          {
+            "record_id": "AUDIT_0009",
+            "batch_index": 0,
+            "score": 0.3775406687981454,
+            "verified_outcome": "verified_fraud"
+          },
+          {
+            "record_id": "AUDIT_0010",
+            "batch_index": 0,
+            "score": 0.6224593312018546,
+            "verified_outcome": "verified_fraud"
+          },
+          {
+            "record_id": "AUDIT_0011",
+            "batch_index": 0,
+            "score": 0.3775406687981454,
+            "verified_outcome": "verified_fraud"
+          }
+        ]
+      },
+      "shadow_approval": {
+        "approval_sha256": "66163c5661e4147355a8456aab4fd78d1fe5e8dbfc7beda3d164c1502b2e5cae",
+        "actor_id": "portal-reviewer",
+        "approved_at": "2026-11-15T10:13:31.146522+00:00",
+        "reason": "Phê duyệt model ứng viên C001 chạy chế độ đối chiếu shadow sau khi kiểm tra oracle exact và tập holdout.",
+        "model_cipher_sha256": "0b556814858303225a6b6e70b0c76eed318a266d54805891edcb86cc6a4d23fe",
+        "plan_sha256": "cbbb0e13f8a0391b8c0b52a55d4d3011ce29c4a567eca59da050d9050af84515",
+        "evaluation_sha256": "4ae02f15fc12e559c309d11a386cd89e31871d54cb939ae56f52dc8482c9062c",
+        "approved_for_shadow": true,
+        "shadow_only": true,
+        "operational_activation": false
+      },
+      "shadow_scoring": {
+        "shadow_only": true,
+        "active_model_replaced": false,
+        "operational_queue_changed": false,
+        "model_cipher_sha256": "0b556814858303225a6b6e70b0c76eed318a266d54805891edcb86cc6a4d23fe",
+        "evaluation_rows": 4,
+        "rows": [
+          {
+            "record_id": "AUDIT_0008",
+            "score": 0.6224593312018546
+          },
+          {
+            "record_id": "AUDIT_0009",
+            "score": 0.3775406687981454
+          },
+          {
+            "record_id": "AUDIT_0010",
+            "score": 0.6224593312018546
+          },
+          {
+            "record_id": "AUDIT_0011",
+            "score": 0.3775406687981454
+          }
+        ]
+      }
+    },
+    "C002": {
+      "company_id": "C002",
+      "tenant_id": "training-demo",
+      "snapshot_id": "snp_ffa276bf7fea4724a15d7578f45508fb",
+      "training_window": {
+        "start": "2025-08-11T00:00:00+07:00",
+        "end": "2025-08-12T00:00:00+07:00"
+      },
+      "evaluation_window": {
+        "start": "2025-08-12T00:00:00+07:00",
+        "end": "2025-08-13T00:00:00+07:00"
+      },
+      "as_of": "2025-08-13T00:00:00+07:00",
+      "plan_sha256": "3eb147183ab6b46c39f5ed4c653e26c3be8fda0b08dc30e0efbe27cebd971fb9",
+      "training_rows": 8,
+      "evaluation_rows": 4,
+      "training_batches": 2,
+      "evaluation_batches": 1,
+      "epochs": 2,
+      "total_updates": 4,
+      "completed_updates": 4,
+      "synthetic_label_notice": "Nhãn dùng trong nghiệm thu là nhãn synthetic kỳ vọng (synthetic_expected) để kiểm chứng kỹ thuật, không phải kết luận gian lận nghiệp vụ thật.",
+      "locked_training_packets": [
+        {
+          "lock_sha256": "26caad2bcbe006565b4799d4e6445b7eae203596b1895209598b9bffdd5cfa0d",
+          "packet_id": "lbl_8d2ec547171980da7143d8a5582b93a733eac2536813dc5abb4263c1bcefd4d4",
+          "revision": 6
+        },
+        {
+          "lock_sha256": "c5872e7b9bfba893d904d3cc3a13ea628f8b87778a53ce0ee1f505c69ddfc8f0",
+          "packet_id": "lbl_2978ea0dbef14f204411aeff0b7204bc5acb8e809970cb7d9ec6c15dafb3a3fa",
+          "revision": 6
+        }
+      ],
+      "locked_evaluation_packets": [
+        {
+          "lock_sha256": "6fb780046fef8493de224b6b25332c48a37c89a8bd95a40d6af3c7e76b374f7c",
+          "packet_id": "lbl_244005f3130a2e1e123695bbca322d9ab9f9688d7e74750f9a1380b20ec7317e",
+          "revision": 6
+        }
+      ],
+      "browser_locked_packets": [
+        {
+          "partition": "training",
+          "batch_index": 0,
+          "packet_id": "lbl_8d2ec547171980da7143d8a5582b93a733eac2536813dc5abb4263c1bcefd4d4",
+          "synthetic_outcome": "verified_non_fraud",
+          "ui_status": "Đã khóa · 4/4 giao dịch có nhãn. Nhãn chưa rõ giữ trống và chưa dùng train."
+        },
+        {
+          "partition": "training",
+          "batch_index": 1,
+          "packet_id": "lbl_2978ea0dbef14f204411aeff0b7204bc5acb8e809970cb7d9ec6c15dafb3a3fa",
+          "synthetic_outcome": "verified_fraud",
+          "ui_status": "Đã khóa · 4/4 giao dịch có nhãn. Nhãn chưa rõ giữ trống và chưa dùng train."
+        },
+        {
+          "partition": "evaluation",
+          "batch_index": 0,
+          "packet_id": "lbl_244005f3130a2e1e123695bbca322d9ab9f9688d7e74750f9a1380b20ec7317e",
+          "synthetic_outcome": "verified_non_fraud",
+          "ui_status": "Đã khóa · 4/4 giao dịch có nhãn. Nhãn chưa rõ giữ trống và chưa dùng train."
+        }
+      ],
+      "dataset_id": "bds_0d705dcc2d3c1cbd5cd3187da1316272",
+      "job_id": "btr_e63f486e2f3c237bb1eb7afcde6cbea5",
+      "consent_sha256": "e63f486e2f3c237bb1eb7afcde6cbea5d271d1bcb607b574f34675974a04e5e2",
+      "key_epoch": "key_9c233a47a85f8b8791fad44ae9ade86d",
+      "build_sha256": "190e1e67c6b8cb20c5b1879b9205a50faa4b631bb47e4c7d0639e613e3e09f9e",
+      "worker_job_summary": {
+        "status": "completed",
+        "completed_updates": 4,
+        "total_updates": 4,
+        "completed_epochs": 2,
+        "batch_count": 2,
+        "batch_manifest_sha256": "3e7dc1b37beb5793b8ccb0ef249c2a4d8ac95917c550f73c1cb3f22ad96939e0",
+        "training_commitment": "876557692fc90f367f6f757edef0a286e85e487dc212d8e3298895da80dfe596",
+        "evaluation_commitment": "e1d2ed1909f28e849777e1e3f3dd8b698f0230f0953352f615fea2c115ebd8ff"
+      },
+      "candidate_model": {
+        "status_label": "Model ứng viên đã nhận và kiểm tra kỹ thuật",
+        "validation": "quantized_batch_oracle_exact",
+        "model_cipher_sha256": "a5edcc80bdb2d94151ec0f753ad47a7b027a0688951a832dca50ab81923d9063",
+        "weights_code": [
+          -1,
+          -1,
+          1
+        ],
+        "coefficients": [
+          -0.5,
+          -0.5
+        ],
+        "intercept": 0.5,
+        "oracle_exact_match": true,
+        "approved_for_shadow": true,
+        "operational_activation": false
+      },
+      "holdout_evaluation": {
+        "evaluation_sha256": "832d09ea611616ff889dd63dbfbe7bfdd8224ee5f6088a1a9d510372f6ed053b",
+        "evaluation_rows": 4,
+        "held_out_from_training": true,
+        "uncalibrated": true,
+        "accuracy": null,
+        "holdout_labels": {
+          "fraud_rows": 0,
+          "labelled_rows": 4,
+          "labels_used_for_fit": false,
+          "locks": [
+            {
+              "lock_sha256": "6fb780046fef8493de224b6b25332c48a37c89a8bd95a40d6af3c7e76b374f7c",
+              "packet_id": "lbl_244005f3130a2e1e123695bbca322d9ab9f9688d7e74750f9a1380b20ec7317e",
+              "revision": 6
+            }
+          ],
+          "non_fraud_rows": 4,
+          "unlabelled_rows": 0,
+          "verified": true
+        },
+        "rows": [
+          {
+            "record_id": "AUDIT_0008",
+            "batch_index": 0,
+            "score": 0.3775406687981454,
+            "verified_outcome": "verified_non_fraud"
+          },
+          {
+            "record_id": "AUDIT_0009",
+            "batch_index": 0,
+            "score": 0.6224593312018546,
+            "verified_outcome": "verified_non_fraud"
+          },
+          {
+            "record_id": "AUDIT_0010",
+            "batch_index": 0,
+            "score": 0.3775406687981454,
+            "verified_outcome": "verified_non_fraud"
+          },
+          {
+            "record_id": "AUDIT_0011",
+            "batch_index": 0,
+            "score": 0.6224593312018546,
+            "verified_outcome": "verified_non_fraud"
+          }
+        ]
+      },
+      "shadow_approval": {
+        "approval_sha256": "40ac9341561f20caf35df0c945d02bb7ce34a23d827cf76ddbbb22b655acb6bb",
+        "actor_id": "portal-reviewer",
+        "approved_at": "2026-11-15T10:16:21.114213+00:00",
+        "reason": "Phê duyệt model ứng viên C002 chạy chế độ đối chiếu shadow sau khi kiểm tra oracle exact và tập holdout.",
+        "model_cipher_sha256": "a5edcc80bdb2d94151ec0f753ad47a7b027a0688951a832dca50ab81923d9063",
+        "plan_sha256": "3eb147183ab6b46c39f5ed4c653e26c3be8fda0b08dc30e0efbe27cebd971fb9",
+        "evaluation_sha256": "832d09ea611616ff889dd63dbfbe7bfdd8224ee5f6088a1a9d510372f6ed053b",
+        "approved_for_shadow": true,
+        "shadow_only": true,
+        "operational_activation": false
+      },
+      "shadow_scoring": {
+        "shadow_only": true,
+        "active_model_replaced": false,
+        "operational_queue_changed": false,
+        "model_cipher_sha256": "a5edcc80bdb2d94151ec0f753ad47a7b027a0688951a832dca50ab81923d9063",
+        "evaluation_rows": 4,
+        "rows": [
+          {
+            "record_id": "AUDIT_0008",
+            "score": 0.3775406687981454
+          },
+          {
+            "record_id": "AUDIT_0009",
+            "score": 0.6224593312018546
+          },
+          {
+            "record_id": "AUDIT_0010",
+            "score": 0.3775406687981454
+          },
+          {
+            "record_id": "AUDIT_0011",
+            "score": 0.6224593312018546
+          }
+        ]
+      }
+    }
+  }
+}

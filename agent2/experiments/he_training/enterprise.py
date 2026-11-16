@@ -22,7 +22,7 @@ from .protocol import require,fields,sha,canonical,strict_json,sign,verify,atomi
 from .circuit import oracle
 
 
-def verified_labels(review,row_ids,scope,*,simulated,dataset_id,receipt_sha256,now=None):
+def verified_labels(review,row_ids,scope,*,simulated,dataset_id,receipt_sha256,now=None,require_both_classes=True):
     require('evidence.verify' in scope.permissions,'LABEL_VERIFICATION_DENIED')
     fields(review,{'target','revision','verification_mode','rows','tenant_id','company_id','dataset_id','receipt_sha256'})
     require(review['tenant_id']==scope.tenant_id and review['company_id']==next(iter(scope.company_ids)) and review['dataset_id']==dataset_id and review['receipt_sha256']==receipt_sha256,'LABEL_DATASET_BINDING')
@@ -42,7 +42,9 @@ def verified_labels(review,row_ids,scope,*,simulated,dataset_id,receipt_sha256,n
         except (ValueError,TypeError):raise ValueError('LABEL_TIME_INVALID')
         require(at.tzinfo is not None and at<=now,'LABEL_TIME_INVALID')
         rows[entry['record_id']]=1 if entry['outcome']=='verified_fraud' else 0
-    result=[rows[r] for r in row_ids];require(set(result)=={0,1},'BOTH_LABEL_CLASSES_REQUIRED');return result
+    result=[rows[r] for r in row_ids]
+    if require_both_classes:require(set(result)=={0,1},'BOTH_LABEL_CLASSES_REQUIRED')
+    return result
 
 
 class Enterprise:

@@ -1,0 +1,1121 @@
+{
+  "schema_version": "r6-staging-rollback-report/1.0.0",
+  "run_id": "r6-bundle-eval-20261116T061426Z",
+  "companies": {
+    "C001": {
+      "company_id": "C001",
+      "bundle_a_id": "rbun_de03aeaef606b43e41e8e6e7c94f99d425d2b648a0167a66fd84dcd541ef42c8",
+      "bundle_b_id": "rbun_aab52224c339722bac3d3fed2bd021168f102d2f66a891dfcf343d5d74df6b9c",
+      "snapshots": {
+        "k1_snapshot_id": "snp_26d3d13b00724e6fabe19a43b1783720",
+        "k2_snapshot_id": "snp_965a15b537e14042b0933a68e92586d7"
+      },
+      "runs": {
+        "run_a1_k1": "c001-bundle-a-k1",
+        "run_a_inflight": {
+          "run_id": "c001-inflight-a",
+          "bundle_id": "rbun_de03aeaef606b43e41e8e6e7c94f99d425d2b648a0167a66fd84dcd541ef42c8",
+          "stayed_on_bundle_a": true
+        },
+        "run_b1_k2": {
+          "run_id": "c001-bundle-b-k2",
+          "bundle_id": "rbun_aab52224c339722bac3d3fed2bd021168f102d2f66a891dfcf343d5d74df6b9c"
+        },
+        "run_a2_after_rollback": {
+          "run_id": "c001-bundle-a-after-rollback",
+          "bundle_id": "rbun_de03aeaef606b43e41e8e6e7c94f99d425d2b648a0167a66fd84dcd541ef42c8",
+          "uses_bundle_a": true
+        }
+      },
+      "pointer_revisions": {
+        "activate_b_rev": 2,
+        "rollback_a_rev": 3,
+        "current_staging_bundle_id": "rbun_de03aeaef606b43e41e8e6e7c94f99d425d2b648a0167a66fd84dcd541ef42c8"
+      },
+      "b_result_still_readable_with_source": true,
+      "preserved_entities": {
+        "a1_review_id": "rvw_0b43d614c1c2f1148d3f778112442a4726d5022889aa89caf814f5bdfa46cbe3",
+        "b1_review_id": "rvw_f193585c7d804ad1209ee0a7948d65792808772014fd97314321110ec4c436f9",
+        "b1_review_revision": 1,
+        "b1_task_id": "tsk_6af3674be7e4f32cb8ddfed0",
+        "b1_doc_id": "doc_bf0f40c8faeba33286145d6e",
+        "b1_doc_sha256_intact": true,
+        "b1_audit_events_count": 3
+      },
+      "quota_and_dedup_preserved": {
+        "budget_periods_before": [
+          {
+            "period_key": "2026-W43",
+            "budget_limit": 3,
+            "reserved_count": 3,
+            "remaining": 0
+          },
+          {
+            "period_key": "2026-W46",
+            "budget_limit": 3,
+            "reserved_count": 3,
+            "remaining": 0
+          }
+        ],
+        "budget_periods_after": [
+          {
+            "period_key": "2026-W43",
+            "budget_limit": 3,
+            "reserved_count": 3,
+            "remaining": 0
+          },
+          {
+            "period_key": "2026-W46",
+            "budget_limit": 3,
+            "reserved_count": 3,
+            "remaining": 0
+          }
+        ],
+        "total_shadow_items_after_rollback_and_restart": 6,
+        "active_queue_still_empty": true,
+        "a2_already_notified_preserved": true
+      },
+      "backlog_k2_after_reeval": {
+        "mode_namespace": "shadow",
+        "tenant_id": "demo",
+        "company_id": "C001",
+        "period_key": "2026-W46",
+        "as_of_now": "2026-11-15T12:00:00+07:00",
+        "opening_backlog_count": 16,
+        "generated_in_period_count": 10,
+        "resolved_in_period_count": 0,
+        "closing_backlog_count": 20,
+        "age_hours": {
+          "min_hours": 0.0,
+          "median_hours": 0.0,
+          "max_hours": 0.0
+        },
+        "waiting_by_reason": {
+          "below_admission_threshold": 8,
+          "budget_exhausted": 12
+        },
+        "waiting_by_period": {
+          "2026-W46": 20
+        },
+        "waiting_items": [
+          {
+            "case_id": "case_1faacc9bee1fabe5b66ccb14e5a178b2",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_4931a7f9badfc62b67bcbda3944d2b93",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_5caa8c8d5f8881efee59e1d77e2a4f25",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_8330a9f1e643666154bf75df0f0e5014",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_84d582c196c71a5abb44ef28459f9115",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_892057ceb70d4d2dae543e420eb35a02",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_8f37c265d560ed5652396371fe6da937",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_934c843387f53ee9273ef5d8a6356e35",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_95ff7273d0a7166261c95044ee39cf42",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_970550d8798867a72e3e3502b2bb9033",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_995c6431fc79009e189719137ebf5a94",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_a816777c924ed4f07c3faee878ebb300",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_be0ea40a0f84fe6860a0f946d47e402a",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_04ff8e0358302c2751f86d76f9a3e756",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          },
+          {
+            "case_id": "case_07f3d6baf94aa29901dba0649f7226b1",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          },
+          {
+            "case_id": "case_16f128265db25fbe4722fda20357690f",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          },
+          {
+            "case_id": "case_198bda6af2e89c0e2427dc22fb7fe290",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          },
+          {
+            "case_id": "case_4f25e4c1f8cebc144d63381e1857c124",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          },
+          {
+            "case_id": "case_7a079c1c1130160db357c373647cafaf",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          },
+          {
+            "case_id": "case_f3a2cd9e9dfd8967dde9743d15829d40",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          }
+        ],
+        "auto_expire": false
+      },
+      "backlog_k2_before_rollback": {
+        "mode_namespace": "shadow",
+        "tenant_id": "demo",
+        "company_id": "C001",
+        "period_key": "2026-W46",
+        "as_of_now": "2026-11-15T12:00:00+07:00",
+        "opening_backlog_count": 16,
+        "generated_in_period_count": 7,
+        "resolved_in_period_count": 0,
+        "closing_backlog_count": 20,
+        "age_hours": {
+          "min_hours": 0.0,
+          "median_hours": 0.0,
+          "max_hours": 0.0
+        },
+        "waiting_by_reason": {
+          "below_admission_threshold": 7,
+          "budget_exhausted": 13
+        },
+        "waiting_by_period": {
+          "2026-W43": 13,
+          "2026-W46": 7
+        },
+        "waiting_items": [
+          {
+            "case_id": "case_1faacc9bee1fabe5b66ccb14e5a178b2",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_4931a7f9badfc62b67bcbda3944d2b93",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_5caa8c8d5f8881efee59e1d77e2a4f25",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_8330a9f1e643666154bf75df0f0e5014",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_84d582c196c71a5abb44ef28459f9115",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_892057ceb70d4d2dae543e420eb35a02",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_8f37c265d560ed5652396371fe6da937",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_934c843387f53ee9273ef5d8a6356e35",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_95ff7273d0a7166261c95044ee39cf42",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_970550d8798867a72e3e3502b2bb9033",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_995c6431fc79009e189719137ebf5a94",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_a816777c924ed4f07c3faee878ebb300",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_be0ea40a0f84fe6860a0f946d47e402a",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:13:57.909108+00:00"
+          },
+          {
+            "case_id": "case_04ff8e0358302c2751f86d76f9a3e756",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          },
+          {
+            "case_id": "case_07f3d6baf94aa29901dba0649f7226b1",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          },
+          {
+            "case_id": "case_16f128265db25fbe4722fda20357690f",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          },
+          {
+            "case_id": "case_198bda6af2e89c0e2427dc22fb7fe290",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          },
+          {
+            "case_id": "case_4f25e4c1f8cebc144d63381e1857c124",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          },
+          {
+            "case_id": "case_7a079c1c1130160db357c373647cafaf",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          },
+          {
+            "case_id": "case_f3a2cd9e9dfd8967dde9743d15829d40",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:13.345784+00:00"
+          }
+        ],
+        "auto_expire": false
+      },
+      "reevaluate_summary": {
+        "promoted": 0,
+        "still_waiting": 20
+      },
+      "retry_reload_restart_no_duplicates": true,
+      "no_database_restore": true
+    },
+    "C002": {
+      "company_id": "C002",
+      "bundle_a_id": "rbun_0833ce63783fa7f6e25e88ea66cb8d3b132d3f949ec277add5f28ec9cc18a41c",
+      "bundle_b_id": "rbun_43c87bc96f3782306d605359138516c57b979d7e958d3dc0b467b6ee103e82f9",
+      "snapshots": {
+        "k1_snapshot_id": "snp_c0ab0ac62cf348e291093ce967884163",
+        "k2_snapshot_id": "snp_99e96a667121405cba3ead5a8547ae60"
+      },
+      "runs": {
+        "run_a1_k1": "c002-bundle-a-k1",
+        "run_a_inflight": {
+          "run_id": "c002-inflight-a",
+          "bundle_id": "rbun_0833ce63783fa7f6e25e88ea66cb8d3b132d3f949ec277add5f28ec9cc18a41c",
+          "stayed_on_bundle_a": true
+        },
+        "run_b1_k2": {
+          "run_id": "c002-bundle-b-k2",
+          "bundle_id": "rbun_43c87bc96f3782306d605359138516c57b979d7e958d3dc0b467b6ee103e82f9"
+        },
+        "run_a2_after_rollback": {
+          "run_id": "c002-bundle-a-after-rollback",
+          "bundle_id": "rbun_0833ce63783fa7f6e25e88ea66cb8d3b132d3f949ec277add5f28ec9cc18a41c",
+          "uses_bundle_a": true
+        }
+      },
+      "pointer_revisions": {
+        "activate_b_rev": 2,
+        "rollback_a_rev": 3,
+        "current_staging_bundle_id": "rbun_0833ce63783fa7f6e25e88ea66cb8d3b132d3f949ec277add5f28ec9cc18a41c"
+      },
+      "b_result_still_readable_with_source": true,
+      "preserved_entities": {
+        "a1_review_id": "rvw_8e974c5374e3a9025cc0fcd76e586ce9f3bac2a23a88cefa3724d5a6407b2ac9",
+        "b1_review_id": "rvw_ce88398afad205bcb23a29a1e19e6266cdaaff5553ed94ca50cbd713b6ff8593",
+        "b1_review_revision": 1,
+        "b1_task_id": "tsk_e06fdaa2f40a858f1e5cfac4",
+        "b1_doc_id": "doc_9cb458049cadba9a98097bba",
+        "b1_doc_sha256_intact": true,
+        "b1_audit_events_count": 3
+      },
+      "quota_and_dedup_preserved": {
+        "budget_periods_before": [
+          {
+            "period_key": "2026-W43",
+            "budget_limit": 3,
+            "reserved_count": 3,
+            "remaining": 0
+          },
+          {
+            "period_key": "2026-W46",
+            "budget_limit": 3,
+            "reserved_count": 3,
+            "remaining": 0
+          }
+        ],
+        "budget_periods_after": [
+          {
+            "period_key": "2026-W43",
+            "budget_limit": 3,
+            "reserved_count": 3,
+            "remaining": 0
+          },
+          {
+            "period_key": "2026-W46",
+            "budget_limit": 3,
+            "reserved_count": 3,
+            "remaining": 0
+          }
+        ],
+        "total_shadow_items_after_rollback_and_restart": 6,
+        "active_queue_still_empty": true,
+        "a2_already_notified_preserved": true
+      },
+      "backlog_k2_after_reeval": {
+        "mode_namespace": "shadow",
+        "tenant_id": "demo",
+        "company_id": "C002",
+        "period_key": "2026-W46",
+        "as_of_now": "2026-11-15T12:00:00+07:00",
+        "opening_backlog_count": 22,
+        "generated_in_period_count": 11,
+        "resolved_in_period_count": 0,
+        "closing_backlog_count": 27,
+        "age_hours": {
+          "min_hours": 0.0,
+          "median_hours": 0.0,
+          "max_hours": 0.0
+        },
+        "waiting_by_reason": {
+          "budget_exhausted": 24,
+          "below_admission_threshold": 3
+        },
+        "waiting_by_period": {
+          "2026-W46": 27
+        },
+        "waiting_items": [
+          {
+            "case_id": "case_085a0dffee25282c02882645fd3cff53",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_1e7a1059a70aa35fd06994699fdf1d2c",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_23544f2ca78923490187055ee553893b",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_38941191ecbbca12ab7ecb36ca8e57d6",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_3de35a69102f2ec6fc478d9fa61d4f6c",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_3f2c748a65c58841289053db19265fc8",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_7fb73ed12b4045cc73435ea5b4e66ac0",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_8449f96624a68d24c7e941a2fa0abcce",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_89adb1ea6a4c59cbe595c7d17e883a39",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_a1453a2f42eb4aef96876600c6163dbb",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_a2973346c155a4ebbc1afe7ad66919f1",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_c67e26aa3e490ba8a526e13f0c07eb9e",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_c78611342bf16e7bc0e9b9d872ac1038",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_cc54373f600cff8851872df508c20370",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_d4057d2c231e9017f538d8aecb84b084",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_e103a9a769109df5d922cec9ddab9e41",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_e26445854340d83da9789211701bcbe5",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_e277d2b9d2b85d007793af526407aadf",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_e5e20d5822b51850c5bc1d3be49c7a0c",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_12a43176b2c3dee8b2ed289a73a98ef5",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_1ebade26aa55bb23d2aad6ea783bec7f",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_2fa976ef37165e0452d23d960fb4df41",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_35c76fde59e8403051dc5e72b0cdc1e4",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_6b6394297598637be7fc1dc616cb95e9",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_c7731564877804a3f0fba4f5b4fcd03c",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_d23e91f52a116abd85e3d8059144850c",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_feb688d13e5e20449d944ad0e121005a",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          }
+        ],
+        "auto_expire": false
+      },
+      "backlog_k2_before_rollback": {
+        "mode_namespace": "shadow",
+        "tenant_id": "demo",
+        "company_id": "C002",
+        "period_key": "2026-W46",
+        "as_of_now": "2026-11-15T12:00:00+07:00",
+        "opening_backlog_count": 22,
+        "generated_in_period_count": 8,
+        "resolved_in_period_count": 0,
+        "closing_backlog_count": 27,
+        "age_hours": {
+          "min_hours": 0.0,
+          "median_hours": 0.0,
+          "max_hours": 0.0
+        },
+        "waiting_by_reason": {
+          "budget_exhausted": 26,
+          "below_admission_threshold": 1
+        },
+        "waiting_by_period": {
+          "2026-W43": 19,
+          "2026-W46": 8
+        },
+        "waiting_items": [
+          {
+            "case_id": "case_085a0dffee25282c02882645fd3cff53",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_1e7a1059a70aa35fd06994699fdf1d2c",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_23544f2ca78923490187055ee553893b",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_38941191ecbbca12ab7ecb36ca8e57d6",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_3de35a69102f2ec6fc478d9fa61d4f6c",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_3f2c748a65c58841289053db19265fc8",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "below_admission_threshold",
+            "decision": "below_threshold",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_7fb73ed12b4045cc73435ea5b4e66ac0",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_8449f96624a68d24c7e941a2fa0abcce",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_89adb1ea6a4c59cbe595c7d17e883a39",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_a1453a2f42eb4aef96876600c6163dbb",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_a2973346c155a4ebbc1afe7ad66919f1",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_c67e26aa3e490ba8a526e13f0c07eb9e",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_c78611342bf16e7bc0e9b9d872ac1038",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_cc54373f600cff8851872df508c20370",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_d4057d2c231e9017f538d8aecb84b084",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_e103a9a769109df5d922cec9ddab9e41",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_e26445854340d83da9789211701bcbe5",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_e277d2b9d2b85d007793af526407aadf",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_e5e20d5822b51850c5bc1d3be49c7a0c",
+            "origin_period_key": "2026-W43",
+            "current_period_key": "2026-W43",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:03.888153+00:00"
+          },
+          {
+            "case_id": "case_12a43176b2c3dee8b2ed289a73a98ef5",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_1ebade26aa55bb23d2aad6ea783bec7f",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_2fa976ef37165e0452d23d960fb4df41",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_35c76fde59e8403051dc5e72b0cdc1e4",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_6b6394297598637be7fc1dc616cb95e9",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_c7731564877804a3f0fba4f5b4fcd03c",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_d23e91f52a116abd85e3d8059144850c",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          },
+          {
+            "case_id": "case_feb688d13e5e20449d944ad0e121005a",
+            "origin_period_key": "2026-W46",
+            "current_period_key": "2026-W46",
+            "backlog_reason_code": "budget_exhausted",
+            "decision": "budget_deferred",
+            "age_hours": 0.0,
+            "created_at": "2026-11-16T06:14:21.819508+00:00"
+          }
+        ],
+        "auto_expire": false
+      },
+      "reevaluate_summary": {
+        "promoted": 0,
+        "still_waiting": 27
+      },
+      "retry_reload_restart_no_duplicates": true,
+      "no_database_restore": true
+    }
+  },
+  "cross_company_c001_c002_isolated": true,
+  "synthetic": true,
+  "live_deployed": false
+}

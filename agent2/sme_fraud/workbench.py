@@ -13,6 +13,15 @@ ASSETS = {'/': ('index.html', 'text/html; charset=utf-8'),
           '/assets/workspace.js': ('workspace.js','text/javascript; charset=utf-8'),
           '/assets/workspace.css': ('workspace.css','text/css; charset=utf-8'),
           '/analysis-settings': ('analysis-settings.html','text/html; charset=utf-8'),
+          '/pipeline-releases': ('pipeline-releases.html','text/html; charset=utf-8'),
+          '/pipeline-workspace': ('bundle-workspace.html','text/html; charset=utf-8'),
+          '/assets/bundle-workspace.js': ('bundle-workspace.js','text/javascript; charset=utf-8'),
+          '/assets/pipeline-releases.js': ('pipeline-releases.js','text/javascript; charset=utf-8'),
+          '/assets/pipeline-releases.css': ('pipeline-releases.css','text/css; charset=utf-8'),
+          '/label-verification': ('label-verification.html','text/html; charset=utf-8'),
+          '/assets/label-verification.js': ('label-verification.js','text/javascript; charset=utf-8'),
+          '/batch-training': ('batch-training.html','text/html; charset=utf-8'),
+          '/assets/batch-training.js': ('batch-training.js','text/javascript; charset=utf-8'),
           '/assets/analysis-settings.js': ('analysis-settings.js','text/javascript; charset=utf-8'),
           '/encrypted-analysis': ('he-analysis.html', 'text/html; charset=utf-8'),
           '/assets/he-analysis.js': ('he-analysis.js', 'text/javascript; charset=utf-8'),
@@ -22,7 +31,7 @@ ASSETS = {'/': ('index.html', 'text/html; charset=utf-8'),
 SAMPLES={'/samples/import-demo.csv':('csv','text/csv; charset=utf-8'),'/samples/import-demo.xlsx':('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')}
 
 
-def handle_workbench(handler, authorizer,*,analysis_mode=None):
+def handle_workbench(handler, authorizer,*,analysis_mode=None,bundle_mode=False):
     path = urlsplit(handler.path)
     if path.path not in ASSETS and path.path not in SAMPLES and path.path not in ('/api/v1/ui/context','/api/v1/ui/settings'):
         return False
@@ -39,6 +48,7 @@ def handle_workbench(handler, authorizer,*,analysis_mode=None):
         if path.path == '/api/v1/ui/settings':
             settings=dict(auth_mode=getattr(authorizer,'mode','local'),portal_url=getattr(authorizer,'portal_url',None))
             if analysis_mode:settings['analysis_mode']=analysis_mode
+            if bundle_mode:settings['workspace_mode']='bundle_shadow';settings['workspace_path']='pipeline-workspace'
             handler.respond(200,settings)
         elif path.path == '/api/v1/ui/context':
             values = handler.headers.get_all('Authorization', [])
@@ -51,6 +61,7 @@ def handle_workbench(handler, authorizer,*,analysis_mode=None):
         else:
             filename, mime = ASSETS[path.path]
             if path.path=='/' and analysis_mode=='four_encrypted_branches':filename='workspace.html'
+            if path.path=='/' and bundle_mode:filename='bundle-workspace.html'
             handler.respond(200, (ROOT / filename).read_bytes(), mime)
     except AuthError as error:
         respond_failure(handler, error)

@@ -1,5 +1,55 @@
 # Tiến độ spec v2.1
 
+CR-062 (16/11/2026): **READY_FOR_REVIEW kỹ thuật, Portal shadow**.
+Portal entry dùng luồng bundle chung; nhập/preview/lưu chuyển đúng snapshot,
+phạm vi 35 luật từ analysis đã lưu và giới hạn nguồn rõ. Giao task ngay trong vụ
+có bộ phận/hạn xử lý và source_binding server; retry không tạo trùng, không sinh
+nhãn/đóng vụ. 149 regression tests và 12 nhóm Portal/Chrome đã chạy; xem
+evidence/R5/portal_bundle_20261116/REPORT.md. Production/full HE/R5 toàn bộ
+chưa nghiệm thu; không restart/deploy live hoặc push.
+
+CR-061 (16/11/2026): **READY_FOR_REVIEW kỹ thuật, shadow tại DN**.
+Nối operator chọn snapshot/chạy bundle → queue → packet phiếu → feedback/report.
+Giữ snapshot/run/bundle xuyên suốt, candidate/evidence riêng, review CAS/lease/
+attachment và DTO kế toán; không nhãn gian lận tự sinh hoặc plaintext fallback
+cho yêu cầu HE. Kiểm thử và giới hạn: evidence/R6/bundle_orchestrator_20261116/REPORT.md.
+Chưa full HE bundle/production, chưa restart/deploy live hoặc DONE R0–R6.
+
+CR-060 (16/11/2026): **READY_FOR_REVIEW kỹ thuật; production BLOCKED**.
+Tiếp tục handoff release/rollback: ghim validation/model/reference/calibration/
+fallback và case policy thành bundle1.1; chạy thật tại DN đến queue shadow qua
+checkpoint+receipt, giữ quota khi retry/rollback. Không giả HE hoặc phê duyệt
+quality; chưa toàn R6/full pipeline HE. Báo cáo và kết quả kiểm thử riêng:
+evidence/R6/linked_shadow_20261116/REPORT.md. Không sửa Portal/key/model live.
+
+CR-059 (16/11/2026): **READY_FOR_REVIEW kỹ thuật — production BLOCKED**.
+Đã xây bundle/kho metadata được bảo vệ, gate detector smoke, approval staging,
+CAS/idempotency, pin mỗi lượt, rollback/audit và UI director Portal.100 test và8
+nhóm browser/API qua; chặn API tạo vụ active khi bật release service, bảo toàn
+DB/quota/task/nhãn và giao nhận cũ. Xem evidence/R6/REPORT.md và
+agent2/docs/PIPELINE_RELEASE.md. Đây là phần release infrastructure/staging,
+chưa nghiệm thu toàn R6: chưa full executor HE/ensemble/queue theo bundle,
+quality gates/owner decisions chưa đóng, monitoring drift/fallback/backlog/review
+chưa đủ. Không deploy/restart live hoặc tự chuyển R0–R6 sang DONE.
+
+CR-058 (15/11/2026): **READY_FOR_REVIEW kỹ thuật** — kiểm tra lại Portal/shadow,
+đối chiếu PDF/spec;115 test riêng biệt và9 nhóm browser/API đạt. Thêm benchmark
+chung đúng snapshot/cutoff, policy thử5 giao dịch; giữ missing/model/label rõ.
+Chưa validated ensemble, active case/budget/delivery hoặc release gate; xem
+../reports/pipeline_recheck_20261115.md. Không tự chuyển R0–R6 sang DONE.
+
+CR-057 (15/11/2026): **READY_FOR_REVIEW kỹ thuật** — train nhiều batch bản mã,
+trọng số giữ qua batch/epoch, holdout riêng; giới hạn build4 updates được giữ.
+C001/C002 mỗi DN8 train/4 evaluation, native4 cập nhật khớp oracle; C001 khôi phục
+SIGKILL từ checkpoint1, không đổi job/key/build. Xem ../reports/he_training_batches_20261115.md.
+Chỉ mô phỏng/operator CLI, chưa Portal live, accuracy/production hoặc DONE R0–R6.
+
+CR-056 (15/11/2026): **READY_FOR_REVIEW kỹ thuật** — danh sách xác minh nhãn
+snapshot/phiên bản trên web, null giữ trống, căn cứ và audit theo tài khoản;
+lock/reopen/retry không mất nhãn cũ. Xem ../reports/label_verification_20261115.md.
+Chỉ nghiệm thu mô phỏng/cô lập; chưa live rollout, consent từ bộ nhãn khóa hoặc
+xác minh danh tính từng người. Không tự chuyển gate R0–R6 sang DONE.
+
 CR-055 (15/11/2026): **READY_FOR_REVIEW kỹ thuật** — snapshot→HE training input
 read-only, binary pair hiện có, pin nguồn/selection/cutoff/mapping trước encrypt.
 28 test +2 DN native encryption/upload đạt; template nhãn null, 0 job train.

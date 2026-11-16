@@ -1,0 +1,7 @@
+main{overflow-wrap:anywhere}
+header nav{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center}
+header nav a{display:inline-block;padding:6px 0}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%}
+textarea{display:block;width:100%;font:inherit;color:var(--ink);border:1px solid #b9ceca;border-radius:8px;padding:12px;margin:8px 0 16px}
+textarea:focus{outline:3px solid #83b7a8;outline-offset:3px}
+@media(max-width:700px){header{flex-wrap:wrap;gap:12px}}

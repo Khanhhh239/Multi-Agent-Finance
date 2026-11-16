@@ -7,12 +7,14 @@
   const money=v=>{try{return BigInt(v).toLocaleString('vi-VN')+' đ';}catch{return String(v);}};
   const phase={queued:'Đã nhận',preparing:'Đang chuẩn bị',ready:'Đang chuẩn bị tính',sending:'Đang tính mã hóa',received:'Đang kiểm tra kết quả',decrypting:'Đang giải mã',waiting_authorization:'Cần đăng nhập lại',retryable:'Chờ kết nối lại',waiting_worker:'Chờ bộ xử lý',completed:'Đã phân tích xong',failed:'Gặp lỗi',expired:'Đã hết hạn'};
   const outcome={confirmed_risk:'Có vấn đề cần xử lý',legitimate:'Không phát hiện vấn đề',inconclusive:'Chưa đủ căn cứ'};
+  const remDocStatus={unknown:'Chưa có nguồn kiểm tra',missing:'Đã xác nhận thiếu',pending_verification:'Đã nhận, chưa xác minh',present:'Đã xác minh',not_applicable:'Không áp dụng',rejected:'Từ chối xác minh'};
+  const remTaskStatus={open:'Mở mới',in_progress:'Đang xử lý',waiting_external:'Chờ bổ sung bên ngoài',completed:'Đã hoàn tất',cancelled:'Đã hủy'};
   const tables={transactions:'Giao dịch',invoices:'Hóa đơn',payment_allocations:'Phân bổ thanh toán',payment_history_coverage:'Phạm vi lịch sử',companies:'Doanh nghiệp',vendors:'Nhà cung cấp',employees:'Nhân viên',approvals:'Phê duyệt',supporting_documents:'Chứng từ đối chiếu',vendor_bank_history:'Lịch sử ngân hàng'};
   let token='',portal=!!mount,identity='',actorID='',contextID='',company='',catalog=null,report=null,comparison=null,selected='',epoch=0,controller=null,poll=null,beat=null,dirty=false;
   const base=()=>'/api/v1/companies/'+encodeURIComponent(company),runPath=()=>base()+'/workspace/runs/'+report.run_id;
   function notice(text){put('ws-notice',node('span',text));show('ws-notice',!!text);}
   function stopTimers(){clearTimeout(poll);clearInterval(beat);poll=null;beat=null;}
-  function clear(){epoch++;controller?.abort();controller=new AbortController();stopTimers();catalog=null;report=null;comparison=null;selected='';dirty=false;for(const id of ['ws-runs','ws-datasets','ws-cases','ws-detail','ws-run-meta','ws-comparison'])put(id);show('ws-comparison-panel',false);show('ws-comparison-refresh',false);show('ws-comparison-export',false);show('ws-compare');$('ws-compare').disabled=false;show('ws-home',false);show('ws-run',false);show('manage-link',false);}
+  function clear(){epoch++;controller?.abort();controller=new AbortController();stopTimers();catalog=null;report=null;comparison=null;selected='';dirty=false;for(const id of ['ws-runs','ws-datasets','ws-cases','ws-detail','ws-run-meta','ws-comparison','ws-rem-tasks','ws-rem-report-metrics','ws-rem-report-finance','ws-rem-home-detail'])if($(id))put(id);if($('ws-rem-home-detail'))show('ws-rem-home-detail',false);show('ws-comparison-panel',false);show('ws-comparison-refresh',false);show('ws-comparison-export',false);show('ws-compare');$('ws-compare').disabled=false;show('ws-home',false);show('ws-run',false);show('manage-link',false);}
   function lock(text){clear();token='';identity='';actorID='';contextID='';company='';show('ws-selection',false);show('ws-login');notice(text);}
   async function api(path,body){
     const headers=portal?{'X-Platform':'1','X-Session':token}:{Authorization:'Bearer '+token};
@@ -24,19 +26,129 @@
   function failure(e){if(e.name==='AbortError')return;if(portal&&(e.status===401||e.status===403)){lock('Phiên đăng nhập hoặc quyền đã thay đổi. Đăng nhập lại từ Portal để tiếp tục.');return;}notice(e.message);}
   function remember(){
     try{if(company&&actorID){const saved={version:1,actor:actorID,context:contextID,company,page:'workspace'};if(report?.run_id)saved.run=report.run_id;sessionStorage.setItem('agent2.company.selection',JSON.stringify(saved));localStorage.setItem('agent2.workspace.company',company);}}catch{/* optional selection */}
-    for(const a of document.querySelectorAll('header a[href],#ws-selection a[href]')){const page=new URL(a.href).pathname.split('/').pop();if(['workspace','data-import','encrypted-analysis','analysis-settings'].includes(page))a.href=mount+'/'+page+(company?'#company='+encodeURIComponent(company):'');}
+    for(const a of document.querySelectorAll('header a[href],#ws-selection a[href],#ws-comparison-panel a[href]')){const page=new URL(a.href).pathname.split('/').pop();if(['workspace','data-import','encrypted-analysis','analysis-settings','pipeline-workspace'].includes(page))a.href=mount+'/'+page+(company?'#company='+encodeURIComponent(company):'');}
   }
   function route(run){const fields=new URLSearchParams({company});if(run)fields.set('run',run);if(location.hash.slice(1)===fields.toString()){run?loadRun(run):loadHome();return;}location.hash=fields.toString();}
   function selection(){const h=new URLSearchParams(location.hash.slice(1));return {company:h.get('company'),run:h.get('run')};}
   function metadata(id,items){put(id,...items.flatMap(([k,v])=>[node('dt',k),node('dd',v)]));}
   function metrics(id,items){put(id,...items.map(([label,count])=>{const n=node('div');n.className='metric';n.append(node('strong',count),node('span',label));return n;}));}
   function chooseDataset(snapshot){try{localStorage.setItem('agent2.he.selection',JSON.stringify({company,snapshot}));}catch{notice('Trình duyệt chưa cho phép lưu lựa chọn. Bật lưu trữ cho trang rồi thử lại.');return;}location.href=mount+'/encrypted-analysis';}
+  async function loadRemediationOverview(){
+    if(!company||!$('ws-rem-filter'))return;const e=epoch,filt=$('ws-rem-filter').value||'all';
+    try{
+      const [tasksRes,repRes]=await Promise.all([api(base()+'/remediation/tasks/filter/'+filt),api(base()+'/remediation/report')]);
+      if(e!==epoch)return;
+      const r=repRes,t=r.task_counts,c=r.case_counts,d=r.document_counts,am=r.amounts_vnd;
+      metrics('ws-rem-report-metrics',[['Vụ việc riêng',c.total_distinct_cases],['Công việc mở/đang xử lý',t.open+t.in_progress+t.waiting_external],['Quá hạn',t.overdue],['Sắp đến hạn',t.due_soon],['Chờ xác nhận',t.awaiting_confirmation],['Hồ sơ chưa đủ',d.incomplete_checklists]]);
+      const moneyText=(label,v)=>{const sp=node('span',label+': ');sp.append(node('strong',v==null?'Chưa xác định':money(v)));return sp;};
+      put('ws-rem-report-finance',moneyText('Tiền liên quan (khử trùng)',am.related_amount_vnd),moneyText('Chênh lệch đối chiếu',am.discrepancy_amount_vnd),moneyText('Thất thoát xác nhận',am.confirmed_loss_vnd),moneyText('Đã thu hồi',am.recovered_vnd));
+      put('ws-rem-tasks',...tasksRes.tasks.map(task=>{
+        const tr=node('tr'),caseTd=node('td',task.case_id);caseTd.append(node('small',task.obligation_id));
+        const ttl=node('td',task.title);ttl.append(node('small',task.what_to_do));
+        const who=node('td',(task.assignee.display_label||task.assignee.assignee_key)+' ('+task.assignee.assignee_kind+')');who.append(node('small','Hạn: '+date(task.due_at)));
+        const st=node('td',remTaskStatus[task.status]||task.status);st.append(node('small','rev '+task.revision));
+        const btn=node('button','Mở xử lý hồ sơ');btn.className='quiet';btn.addEventListener('click',()=>{show('ws-rem-home-detail',true);loadCaseRemediation($('ws-rem-home-detail'),task.case_id,{obligation_id:task.obligation_id});$('ws-rem-home-detail').scrollIntoView({block:'start',behavior:'smooth'});});
+        const actTd=node('td');actTd.append(btn);
+        if(task.source_binding){const a=node('a','Mở vụ nguồn');a.href=mount+'/pipeline-workspace#'+new URLSearchParams({company,run:task.source_binding.run_id});actTd.append(a);}
+        tr.append(caseTd,ttl,who,st,actTd);return tr;
+      }));
+      show('ws-rem-tasks-empty',!tasksRes.tasks.length);show('ws-remediation-overview',true);
+    }catch(err){if(e===epoch&&![404,503].includes(err.status))failure(err);}
+  }
+  async function loadCaseRemediation(container,caseKey,defaults={}){
+    const e=epoch;container.className='rem-box';container.replaceChildren(node('h3','Hồ sơ chứng từ & Công việc khắc phục'),node('p','Đang tải trạng thái hồ sơ...'));
+    try{
+      const rem=await api(base()+'/remediation/cases/'+encodeURIComponent(caseKey));
+      if(e!==epoch)return;
+      container.replaceChildren();
+      container.append(node('h3','Hồ sơ chứng từ & Công việc khắc phục · '+caseKey));
+      container.append(node('p','Ba phần độc lập: Kết luận vụ việc · Tình trạng chứng từ · Công việc khắc phục (không tự sinh nhãn ML).'));
+      if(rem.linked_case){container.append(node('p','Trạng thái vụ việc độc lập: '+rem.linked_case.case_workflow_status+(rem.linked_case.case_resolution?' ('+rem.linked_case.case_resolution+')':'')));}
+      const nextP=node('p');nextP.append(node('strong','Bước tiếp theo là gì? '),document.createTextNode(rem.next_step_vi));container.append(nextP);
+      const statusMsg=node('p','');statusMsg.className='review-message';statusMsg.hidden=true;container.append(statusMsg);
+      const setMsg=msg=>{statusMsg.textContent=msg;statusMsg.hidden=!msg;};
+
+      // 1. Checklist: Con thieu gi?
+      const chkTitle=node('h4','1. Còn thiếu gì? (Checklist chứng từ theo chính sách)');container.append(chkTitle);
+      if(rem.checklist){
+        const tbl=node('table'),hr=node('tr');for(const h of ['Chứng từ','Trạng thái','Nguồn','Chi tiết'])hr.append(node('th',h));tbl.append(hr);
+        for(const it of rem.checklist.items){
+          const tr=node('tr'),pill=node('span',remDocStatus[it.item_status]||it.item_status);
+          pill.className='rem-pill'+(it.item_status==='missing'||it.item_status==='unknown'?' bad':it.item_status==='pending_verification'?' warn':'');
+          const stTd=node('td');stTd.append(pill);
+          tr.append(node('td',it.title_vi+' ('+it.document_type+')'),stTd,node('td',it.decision_source),node('td',it.note));tbl.append(tr);
+        }
+        const sc=node('div');sc.className='table-scroll';sc.append(tbl);container.append(sc);
+      }else{
+        const evalBtn=node('button','Đánh giá checklist theo nhóm vấn đề');evalBtn.className='quiet';
+        evalBtn.addEventListener('click',async()=>{try{await api(base()+'/remediation/cases/'+encodeURIComponent(caseKey)+'/checklist',{obligation_id:defaults.obligation_id||caseKey,problem_family:defaults.problem_family||'payment_invoice',rule_ids:defaults.rule_ids||[],available_sources:defaults.available_sources||[]});await loadCaseRemediation(container,caseKey,defaults);}catch(err){setMsg(err.message);}});
+        container.append(node('p','Chưa đánh giá checklist cho vụ này.'),evalBtn);
+      }
+
+      // 2. Documents + versions + verify
+      container.append(node('h4','2. Chứng từ đã nộp & Xác minh độc lập'));
+      if(!rem.documents.length)container.append(node('p','Chưa có chứng từ đính kèm.'));
+      for(const doc of rem.documents){
+        const card=node('div');card.className='rem-task-card';
+        const pill=node('span',remDocStatus[doc.verification_status]||doc.verification_status);pill.className='rem-pill'+(doc.verification_status==='present'?'':doc.verification_status==='rejected'?' bad':' warn');
+        const head=node('div');head.append(node('strong',doc.document_type+' · v'+doc.current_version+' '),pill);card.append(head);
+        const latest=doc.versions[doc.versions.length-1];
+        card.append(node('p',latest.filename+' · SHA256 '+latest.sha256.slice(0,12)+' · nhận '+date(latest.received_at)+(doc.late_arrival_after_as_of?' · Nộp sau mốc as_of (không sửa snapshot cũ)':'')));
+        const acts=node('div');acts.className='actions';
+        const noteIn=node('input');noteIn.placeholder='Ghi chú đối chiếu chứng từ';noteIn.value='Đã đối chiếu chứng từ gốc khớp kỳ';
+        const btnOk=node('button','Xác minh đạt');btnOk.className='quiet';btnOk.addEventListener('click',async()=>{try{await api(base()+'/remediation/documents/'+doc.document_id+'/verify',{decision:'present',verification_note:noteIn.value});await loadCaseRemediation(container,caseKey,defaults);await loadRemediationOverview();}catch(err){setMsg(err.message);}});
+        const btnRej=node('button','Từ chối');btnRej.className='quiet';btnRej.addEventListener('click',async()=>{try{await api(base()+'/remediation/documents/'+doc.document_id+'/verify',{decision:'rejected',verification_note:noteIn.value||'Chứng từ không khớp'});await loadCaseRemediation(container,caseKey,defaults);await loadRemediationOverview();}catch(err){setMsg(err.message);}});
+        acts.append(noteIn,btnOk,btnRej);card.append(acts);container.append(card);
+      }
+      const upForm=node('div');upForm.className='rem-form';
+      const dtSel=node('select');for(const [k,v] of [['invoice','Hóa đơn VAT'],['payment_allocation','Phân bổ thanh toán'],['bank_transfer_receipt','Ủy nhiệm chi ngân hàng'],['credit_or_adjustment_note','Biên bản hoàn/điều chỉnh'],['supporting_transaction_voucher','Chứng từ giải trình']]){const o=node('option',v);o.value=k;dtSel.append(o);}
+      const upFile=node('input');upFile.type='file';upFile.accept='.pdf,.png,.jpg,.jpeg';
+      const upBtn=node('button','Tải chứng từ bổ sung (chưa xác minh)');upBtn.className='quiet';
+      upBtn.addEventListener('click',async()=>{const f=upFile.files[0];if(!f){setMsg('Chọn tệp PDF/PNG/JPEG trước khi tải lên.');return;}if(f.size>2*1024*1024){setMsg('Tệp vượt 2 MB.');return;}try{const b64=await new Promise((res,rej)=>{const rd=new FileReader();rd.onload=()=>res(String(rd.result).split(',')[1]);rd.onerror=rej;rd.readAsDataURL(f);});await api(base()+'/remediation/cases/'+encodeURIComponent(caseKey)+'/documents',{obligation_id:defaults.obligation_id||caseKey,document_type:dtSel.value,filename:f.name,mime:f.type||'application/pdf',content_base64:b64,idempotency_key:crypto.randomUUID()});await loadCaseRemediation(container,caseKey,defaults);await loadRemediationOverview();}catch(err){setMsg(err.message);}});
+      upForm.append(node('strong','Tải lên hoặc cập nhật phiên bản chứng từ'),dtSel,upFile,upBtn);container.append(upForm);
+
+      // 3. ActionTasks: Ai dang xu ly, han nao?
+      container.append(node('h4','3. Ai đang xử lý, hạn nào? (ActionTask)'));
+      if(!rem.tasks.length)container.append(node('p','Chưa có công việc khắc phục nào.'));
+      for(const t of rem.tasks){
+        const tc=node('div');tc.className='rem-task-card';
+        const stPill=node('span',(remTaskStatus[t.status]||t.status)+' (rev '+t.revision+')');stPill.className='rem-pill'+(t.status==='completed'?'':t.status==='cancelled'?' bad':' warn');
+        tc.append(node('strong',t.title+' '),stPill,node('p','Việc phải làm: '+t.what_to_do),node('p','Phụ trách: '+(t.assignee.display_label||t.assignee.assignee_key)+' ['+t.assignee.assignee_kind+'] · Hạn: '+date(t.due_at)));
+        if(t.submission)tc.append(node('p','Kết quả đã gửi: '+t.submission.result_summary+' ('+t.submission.submitted_by+')'));
+        const resIn=node('input');resIn.placeholder='Tóm tắt kết quả thực hiện / ghi chú xác nhận';
+        const acts=node('div');acts.className='actions';
+        if(['open','in_progress','waiting_external'].includes(t.status)){
+          const bSub=node('button','Gửi kết quả');bSub.className='quiet';bSub.addEventListener('click',async()=>{try{await api(base()+'/remediation/tasks/'+t.task_id+'/submit',{expected_revision:t.revision,result_summary:resIn.value||'Đã đối chiếu và bổ sung chứng từ',document_ids:rem.documents.map(d=>d.document_id)});await loadCaseRemediation(container,caseKey,defaults);await loadRemediationOverview();}catch(err){setMsg(err.message);}});
+          const bConf=node('button','Xác nhận hoàn tất');bConf.addEventListener('click',async()=>{try{await api(base()+'/remediation/tasks/'+t.task_id+'/decision',{expected_revision:t.revision,decision:'confirm_complete',note:resIn.value||'Đã kiểm tra đủ chứng từ xác minh'});await loadCaseRemediation(container,caseKey,defaults);await loadRemediationOverview();}catch(err){setMsg(err.message);}});
+          const bRw=node('button','Yêu cầu làm lại');bRw.className='quiet';bRw.addEventListener('click',async()=>{try{await api(base()+'/remediation/tasks/'+t.task_id+'/decision',{expected_revision:t.revision,decision:'request_rework',note:resIn.value||'Cần bổ sung thêm chứng từ hợp lệ'});await loadCaseRemediation(container,caseKey,defaults);await loadRemediationOverview();}catch(err){setMsg(err.message);}});
+          acts.append(resIn,bSub,bConf,bRw);
+        }else{
+          const bRe=node('button','Mở lại');bRe.className='quiet';bRe.addEventListener('click',async()=>{try{await api(base()+'/remediation/tasks/'+t.task_id+'/decision',{expected_revision:t.revision,decision:'reopen',note:resIn.value||'Mở lại để kiểm tra bổ sung'});await loadCaseRemediation(container,caseKey,defaults);await loadRemediationOverview();}catch(err){setMsg(err.message);}});
+          acts.append(resIn,bRe);
+        }
+        tc.append(acts);container.append(tc);
+      }
+
+      const taskForm=node('div');taskForm.className='rem-form';
+      const tTitle=node('input');tTitle.placeholder='Tiêu đề việc cần làm';tTitle.value='Kiểm tra hồ sơ & đối chiếu công nợ';
+      const tDue=node('input');tDue.placeholder='Hạn xử lý ISO kèm múi giờ (hoặc để trống), vd: 2026-11-25T17:00:00+07:00';
+      const tRole=node('select');for(const [k,v] of [['ke_toan_cong_no','Bộ phận Kế toán công nợ'],['nhan_su_tien_luong','Bộ phận Nhân sự & Lương'],['kiem_soat_noi_bo','Bộ phận Kiểm soát nội bộ'],['phe_duyet_tai_chinh','Phê duyệt tài chính']]){const o=node('option',v);o.value=k;tRole.append(o);}
+      const btnReq=node('button','Yêu cầu bổ sung');btnReq.className='quiet';
+      const btnAss=node('button','Giao việc xử lý');btnAss.className='quiet';
+      const createT=async(tType)=>{try{await api(base()+'/remediation/tasks',{case_id:caseKey,obligation_id:defaults.obligation_id||caseKey,task_type:tType,issue_type:tType==='request_documents'?'missing_document':'payment_discrepancy',title:tTitle.value,what_to_do:tTitle.value,reason:'Tạo từ không gian xử lý vụ việc',assignee_kind:'department_role',assignee_key:tRole.value,due_at:tDue.value.trim()||null,require_evidence:true,required_document_types:defaults.required_document_types||[],idempotency_key:crypto.randomUUID()});await loadCaseRemediation(container,caseKey,defaults);await loadRemediationOverview();}catch(err){setMsg(err.message);}};
+      btnReq.addEventListener('click',()=>createT('request_documents'));
+      btnAss.addEventListener('click',()=>createT('reconcile_payment'));
+      const btnBar=node('div');btnBar.className='actions';btnBar.append(btnReq,btnAss);
+      taskForm.append(node('strong','Tạo yêu cầu bổ sung hoặc giao việc xử lý'),tTitle,tRole,tDue,btnBar);container.append(taskForm);
+    }catch(err){if(e===epoch)container.replaceChildren(node('h3','Hồ sơ chứng từ & Công việc khắc phục'),node('p',err.message));}
+  }
   async function loadHome(){
     clear();remember();const e=epoch;notice('');show('ws-selection');
     try{const value=await api(base()+'/workspace');if(e!==epoch)return;catalog=value;show('ws-home');show('ws-login',false);show('manage-link',value.can_manage);show('ws-availability',!value.available);put('ws-availability',node('span',value.message||'Chưa sẵn sàng phân tích mới. Có thể nhập dữ liệu và xem kết quả đã lưu.'));
       metrics('ws-metrics',[['Bản dữ liệu đã lưu',value.summary.datasets],['Lượt đang xử lý',value.summary.active],['Lượt đã phân tích',value.summary.completed],['Lượt cần kiểm tra lỗi',value.summary.failed]]);
       put('ws-runs',...value.runs.map(r=>{const tr=node('tr'),data=node('td',r.row_count==null?'Đã lưu dữ liệu':r.row_count+' giao dịch');data.append(node('small',r.snapshot_id));const action=node('button',r.phase==='completed'?'Mở kết quả và phiếu rà':'Xem trạng thái');action.className='quiet';action.addEventListener('click',()=>route(r.job_id));const cell=node('td');cell.append(action);tr.append(node('td',date(r.created_at)),data,node('td',phase[r.phase]||'Đang xử lý'),cell);['Thời gian','Bản dữ liệu','Trạng thái','Thao tác'].forEach((label,i)=>tr.children[i].dataset.label=label);return tr;}));
       put('ws-datasets',...value.datasets.map(d=>{const tr=node('tr'),period=node('td',date(d.period_start)+' – '+date(d.period_end));if(d.simulated_records){const badge=node('span','Dữ liệu mô phỏng');badge.className='tag';period.append(badge);}const button=node('button','Phân tích bản này');button.className='quiet';button.disabled=!value.available||d.is_training_source;if(d.is_training_source)button.textContent='Lịch sử chuẩn bị phiên bản';button.addEventListener('click',()=>chooseDataset(d.snapshot_id));const action=node('td');action.append(button);tr.append(period,node('td',d.record_count),node('td',date(d.created_at)),action);['Kỳ giao dịch','Số giao dịch','Ngày lưu','Thao tác'].forEach((label,i)=>tr.children[i].dataset.label=label);return tr;}));show('ws-runs-empty',!value.runs.length);show('ws-data-empty',!value.datasets.length);
+      loadRemediationOverview();
     }catch(err){if(e===epoch)failure(err);}
   }
   async function loadRun(id,refresh=false){
@@ -101,6 +213,7 @@
     if(item.graph_links.length){const detail=node('details');detail.append(node('summary','Liên kết giữa các đối tượng'));for(const link of item.graph_links)detail.append(node('p',link.source+' ↔ '+link.target+' · '+link.relation+(link.context_only?' · Liên kết bối cảnh, cần căn cứ bổ sung':'')));detail.append(node('p','Liên kết cần được đối chiếu với hồ sơ; chưa xác nhận sai phạm.'));box.append(detail);}
     const checks=node('details');checks.append(node('summary','Tình trạng các phần phân tích'));for(const c of item.checks){const p=node('p',c.title+': '+c.message);p.className='branch-state '+c.status;checks.append(p);}box.append(checks);
     for(const limit of item.missing_sources||[]){const p=node('p',(limit.message||'')+' '+(limit.action||''));p.className='issue';box.append(p);}
+    const remPanel=node('div');box.append(remPanel);loadCaseRemediation(remPanel,item.case_id,{obligation_id:item.record_id||item.case_id,problem_family:item.payment_signal||item.payment_unavailable?'payment_invoice':'ml_anomaly'});
     const evidence=node('details');evidence.append(node('summary','Chứng từ và nguồn đối chiếu'));const refs=[];
     const addRef=(id,label,content)=>{const wrapper=node('div'),line=node('label'),check=node('input');line.className='check';check.type='checkbox';check.value=id;check.checked=state.feedback?.evidence_ids.includes(id)||false;refs.push(check);line.append(check,node('span',label));wrapper.append(line);if(content)wrapper.append(content);evidence.append(wrapper);check.addEventListener('input',()=>dirty=true);};
     for(const ev of item.evidence)addRef(ev.evidence_id,ev.record.record_id+' · Đã xem nguồn này',sourceCard(ev));box.append(evidence);
@@ -140,7 +253,7 @@
     }catch(error){failure(error);}
   }
   $('ws-company').addEventListener('change',()=>{if(dirty&&!confirm('Bỏ nội dung phiếu chưa lưu để chuyển doanh nghiệp?')){$('ws-company').value=company;return;}clear();company=$('ws-company').value;remember();route();});$('ws-refresh').addEventListener('click',()=>{if(dirty&&!confirm('Bỏ nội dung chưa lưu và tải bản mới nhất?'))return;report?loadRun(report.run_id):loadHome();});$('ws-back').addEventListener('click',()=>{if(dirty&&!confirm('Bỏ nội dung phiếu chưa lưu để về danh sách?'))return;route();});
-  for(const id of ['ws-search','ws-filter'])$(id).addEventListener('input',renderCases);$('ws-csv').addEventListener('click',()=>exportReport('csv'));$('ws-json').addEventListener('click',()=>exportReport('json'));
+  for(const id of ['ws-search','ws-filter'])$(id).addEventListener('input',renderCases);$('ws-rem-filter')?.addEventListener('change',loadRemediationOverview);$('ws-csv').addEventListener('click',()=>exportReport('csv'));$('ws-json').addEventListener('click',()=>exportReport('json'));
   $('ws-compare').addEventListener('click',()=>loadComparison(true));$('ws-comparison-refresh').addEventListener('click',()=>loadComparison(false));$('ws-comparison-export').addEventListener('click',async()=>{try{const value=await api(runPath()+'/comparison');download(new Blob([JSON.stringify(value,null,2)],{type:'application/json'}),'agent2-comparison-'+company+'-'+value.plan_id+'.json');}catch(error){failure(error);}});
   $('ws-resume').addEventListener('click',async()=>{const id=report.run_id;$('ws-resume').disabled=true;try{await api(base()+'/he/jobs/'+id+'/resume',{});await loadRun(id);}catch(error){failure(error);}finally{$('ws-resume').disabled=false;}});
   window.addEventListener('hashchange',()=>{if(!token||!identity)return;const s=selection();if(s.company&&s.company!==company){if([...$('ws-company').options].some(o=>o.value===s.company)){company=s.company;$('ws-company').value=company;remember();}else{history.replaceState(null,'',location.pathname+location.search+'#'+new URLSearchParams({company}));loadHome().then(()=>notice('Doanh nghiệp trong liên kết chưa được cấp quyền.'));return;}}if(s.run)loadRun(s.run);else loadHome();});

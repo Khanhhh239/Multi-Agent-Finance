@@ -1,0 +1,18 @@
+{
+ "$schema":"https://json-schema.org/draft/2020-12/schema",
+ "$id":"pipeline-release-gate/1.0.0",
+ "type":"object","additionalProperties":false,
+ "required":["version","bundle_id","lane","created_at","requested_by","gates","technical_ready","production_ready","scope"],
+ "properties":{
+  "version":{"const":"pipeline-release-gate/1.0.0"},
+  "bundle_id":{"type":"string","pattern":"^rbun_[a-f0-9]{64}$"},
+  "lane":{"enum":["staging","production"]},"created_at":{"type":"string","format":"date-time"},"requested_by":{"type":"string","minLength":1},
+  "technical_ready":{"type":"boolean"},"production_ready":{"const":false},"scope":{"type":"string"},
+  "gates":{"type":"array","minItems":6,"items":{
+   "type":"object","additionalProperties":false,"required":["name","expected","observed","status","evidence","approver"],
+   "properties":{"name":{"enum":["compatibility","technical","quality","operations","approval","production_policy"]},
+    "expected":{"type":"string","minLength":1},"observed":{},"status":{"enum":["pass","fail","blocked"]},
+    "evidence":{"type":"array","items":{"type":"string"}},"approver":{"type":["string","null"]}}
+  }}
+ }
+}

@@ -1,0 +1,49 @@
+{
+  "spec_version": "2.1",
+  "stage": "R6",
+  "run_id": "r6-bundle-eval-20261116T061426Z",
+  "tests": [
+    {
+      "id": "R6-01",
+      "status": "blocked",
+      "expected": "Full production readiness across R1-R5 mandatory suites and owner signoff on live portal.",
+      "observed": "Isolated staging end-to-end tests passed on synthetic fixtures; live portal deployment and real-data owner signoff remain open.",
+      "evidence_path": "Agent2_Spec_v2_1/evidence/R6/bundle_release_eval_20261116/release_readiness_decision.json"
+    },
+    {
+      "id": "R6-02",
+      "status": "pass",
+      "expected": "Locked EvaluationPlan comparing 35-rule baseline vs 35-rule + pinned ML (budget=5) on held-out snapshot with union business reviews and separate active/waiting times.",
+      "observed": "C001 added 2 (useful=1, not_useful=1, inconc=0, +109.0s, wait=1800.0s); C002 added 1 (useful=1, not_useful=0, inconc=1, +38.0s, wait=3600.0s); verified_fraud_precision=null.",
+      "evidence_path": "Agent2_Spec_v2_1/evidence/R6/bundle_release_eval_20261116/rule35_ml_comparison_report.json"
+    },
+    {
+      "id": "R6-03",
+      "status": "pass",
+      "expected": "Staging rollback A->B->A keeps in-flight A run on A, reads B outputs intact, uses A for new post-rollback runs, preserves reviews/tasks/docs/audit/quota/dedup without DB restore.",
+      "observed": "C001 & C002 rollback verified=True; no DB restore; retry/reload/restart produced 0 duplicates; C001/C002 isolated.",
+      "evidence_path": "Agent2_Spec_v2_1/evidence/R6/bundle_release_eval_20261116/staging_rollback_report.json"
+    },
+    {
+      "id": "R6-04",
+      "status": "pass",
+      "expected": "Per-company/period/bundle fallback and backlog metrics (opening/generated/resolved/closing/age) plus case budget owner proposal distinct from comparison budget=5.",
+      "observed": "Measured full availability, explicit fb_missing_unsup_rules_only_v1 fallback without 0-fill, cloud HE blocked before pin, and full K1/K2 backlog counts+ages.",
+      "evidence_path": "Agent2_Spec_v2_1/evidence/R6/bundle_release_eval_20261116/fallback_and_backlog_report.json"
+    },
+    {
+      "id": "R6-05",
+      "status": "blocked",
+      "expected": "Owner closure of D-04, D-05, D-06, D-07, D-09, D-14, D-17, D-18, D-19 and real verified fraud labels before production activation.",
+      "observed": "Production gate explicitly kept BLOCKED (approved_for_production=false); empirical effectiveness on real enterprise data unproven.",
+      "evidence_path": "Agent2_Spec_v2_1/evidence/R6/bundle_release_eval_20261116/release_readiness_decision.json"
+    },
+    {
+      "id": "R6-06",
+      "status": "blocked",
+      "expected": "Compatible full cloud HE bundle executor without plaintext fallback.",
+      "observed": "cloud_ciphertext_only failed closed (PIPELINE_HE_UNAVAILABLE) with 0 pins/plaintext execution; bundle executor stays enterprise_local_only.",
+      "evidence_path": "Agent2_Spec_v2_1/evidence/R6/bundle_release_eval_20261116/fallback_and_backlog_report.json"
+    }
+  ]
+}

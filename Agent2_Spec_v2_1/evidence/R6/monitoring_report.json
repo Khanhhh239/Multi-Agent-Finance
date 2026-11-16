@@ -1,0 +1,92 @@
+{
+  "spec_version": "2.1",
+  "status": "partial",
+  "companies": [
+    {
+      "company_id": "C001",
+      "bundle_id": "rbun_aed4cc8b60f16710632e7670891479a1258c1f773af70b8044cca6248c55370e",
+      "metrics": {
+        "elapsed_seconds": 0.04700000000048021,
+        "branches": {
+          "rules": {
+            "available": 0,
+            "total": 4,
+            "availability_rate": 0.0
+          },
+          "statistics": {
+            "available": 0,
+            "total": 4,
+            "availability_rate": 0.0
+          },
+          "graph": {
+            "available": 4,
+            "total": 4,
+            "availability_rate": 1.0
+          },
+          "ml": {
+            "available": 0,
+            "total": 4,
+            "availability_rate": 0.0
+          }
+        },
+        "fallback_rate": null,
+        "backlog": null,
+        "queue_latency_seconds": null,
+        "verified_precision": null,
+        "review_minutes": null,
+        "drift": null,
+        "missing_reason": "No ensemble fallback, delivery/backlog, verified review outcomes or approved drift reference in this executor",
+        "investigation_required": true,
+        "trigger": "branch_unavailable: investigate source/model coverage; never auto-fit or activate"
+      }
+    },
+    {
+      "company_id": "C002",
+      "bundle_id": "rbun_9bea053ce34baaa53d91318d60a772968188bedb619035a9fff27cd28efea302",
+      "metrics": {
+        "elapsed_seconds": 0.06300000000010186,
+        "branches": {
+          "rules": {
+            "available": 0,
+            "total": 4,
+            "availability_rate": 0.0
+          },
+          "statistics": {
+            "available": 0,
+            "total": 4,
+            "availability_rate": 0.0
+          },
+          "graph": {
+            "available": 4,
+            "total": 4,
+            "availability_rate": 1.0
+          },
+          "ml": {
+            "available": 0,
+            "total": 4,
+            "availability_rate": 0.0
+          }
+        },
+        "fallback_rate": null,
+        "backlog": null,
+        "queue_latency_seconds": null,
+        "verified_precision": null,
+        "review_minutes": null,
+        "drift": null,
+        "missing_reason": "No ensemble fallback, delivery/backlog, verified review outcomes or approved drift reference in this executor",
+        "investigation_required": true,
+        "trigger": "branch_unavailable: investigate source/model coverage; never auto-fit or activate"
+      }
+    }
+  ],
+  "missing": [
+    "approved drift reference and trigger policy",
+    "queue/fallback/review metric attribution to full release bundle"
+  ],
+  "auto_training": false,
+  "auto_activation": false,
+  "created_at": "2026-11-15T19:10:13.819190+00:00",
+  "synthetic": true,
+  "cloud_he_executed": false,
+  "live_deployed": false
+}

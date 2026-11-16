@@ -1,0 +1,14 @@
+{
+  "Agent2_piplinepdf.pdf": "2b2401849525e8873a37584264c7a895708878c1f3b0c14265793d9ef4bb9170",
+  "agent2/sme_fraud/pipeline_benchmark.py": "5e9d627e5ec3fae263cc49a4822038d33c254ea83d2d094b619a2e6ca2c995ef",
+  "agent2/sme_fraud/pipeline_benchmark_api.py": "386f19c56c7987c5fc736de32bca5b63eb3d6af9ce1da0d7a76439cfdffff96e",
+  "agent2/scripts/benchmark_shadow_snapshot.py": "af56e038631647569087691286a394afb65d1485b0a9dd2b7352998d91113f9f",
+  "agent2/scripts/run_he_tests.py": "b27582b382de95ec71ccbcd1b46eca02c7a9b47ec7b9b3adb1f0937231a5d26b",
+  "agent2/scripts/verify_shadow_snapshot_runs.py": "b598967f051e7068b8f5dfd20b6e8f429f66c721c12013b14427313fa07bc280",
+  "agent2/sme_fraud/rule35_comparison.py": "3735d0ef51b63bf075ebc88f122d83dfa4aab48dc15ac9ba99e5d8df393bcfef",
+  "agent2/sme_fraud/batch_training_api.py": "add4cb4047bbb3a65ba5cb419fa36e68ffd5cf91d55fa2d6f8648a64e7522292",
+  "agent2/sme_fraud/review_server.py": "7034b90b012f9de7c9e344ff5426cabbf429b2a5d784058cdf62c6a98eda3416",
+  "portal/agent2_bridge.py": "7af9d381df47be7344693ef8dde5f809ff3723cca75a56591fe47894d31044cc",
+  "agent2/tests_he/test_pipeline_benchmark.py": "76d5b97bc3eae2ecd78a16d61cd9f36c5f0ff1d6b182de45e46554029002e1f8",
+  "agent2/docs/PIPELINE_BENCHMARK.md": "ecdc3bbadc1d0d221bd8fa448b80eb139e0b991a7bbef324acd0ba2a639c50f1"
+}

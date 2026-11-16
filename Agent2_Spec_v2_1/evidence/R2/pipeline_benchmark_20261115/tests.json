@@ -1,0 +1,496 @@
+{
+  "count": 115,
+  "tests": [
+    {
+      "id": "test_batch_training_portal.BatchTrainingPortalTests.test_portal_bridge_allowlist_and_static_assets",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training_portal.BatchTrainingPortalTests.test_real_portal_proxy_batch_training_end_to_end",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training_portal.BatchTrainingPortalTests.test_seven_step_portal_workflow_interruption_recovery_and_company_isolation",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training_portal.BatchTrainingPortalTests.test_shadow_runs_on_new_snapshots_edge_cases_and_history",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_auth_revocation_after_compute_does_not_commit_or_return_model",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_batch_cli_preview_and_stale_plan_do_not_open_crypto",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_build_update_budget_and_mutated_consent_denied_before_helper",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_canonical_checkpoint_tamper_and_wrong_key_build_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_cross_company_and_ungranted_batch_access_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_multi_batch_epoch_order_encrypted_carry_and_holdout_exclusion",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_parallel_run_status_poll_and_exclusive_state_lease",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_pending_update_resume_after_reopen_keeps_committed_weights",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_plaintext_fields_swapped_order_and_cipher_hash_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_real_labels_use_vault_not_ad_hoc_review_file",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_reopened_or_superseded_label_packet_blocks_confirm_locked_batches",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_saved_signed_dataset_tamper_is_not_used_for_fit",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_shadow_approval_requires_holdout_evaluation_and_blocks_unapproved_shadow",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_single_class_per_batch_allowed_but_global_one_class_null_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_snapshot_overlap_window_and_stale_preview_fail_before_encryption",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_snapshot_time_split_locks_and_missing_labels",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_source_and_evaluation_mutations_or_overlaps_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_three_four_batches_and_sixteen_rows_respect_update_budget",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_upload_and_label_confirmation_do_not_compute",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_wrong_receipt_key_build_epoch_and_batch_label_order_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_checkpoint_restart_continues_same_encrypted_weights",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_confirm_then_run_retries_same_job_once_and_returns_ciphertext",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_consent_required_before_run",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_data_and_consent_conflicts_do_not_overwrite",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_enterprise_rechecks_permissions_and_requires_explicit_approval",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_foreign_company_actor_signature_and_revoked_grant_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_local_dataset_signature_detects_changes_after_encryption",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_only_explicit_verified_fraud_labels_are_accepted",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_plain_data_labels_unknown_fields_and_broken_cipher_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_quantized_scalar_oracle_matches_vector_equations",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_same_dataset_id_in_two_companies_has_separate_jobs",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_shadow_requires_signed_approval_for_exact_candidate",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_upload_receipt_does_not_train_or_create_model",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_wrong_receipt_context_target_or_key_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_both_profiles_map_existing_binary_features_without_scaling",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_cli_preview_and_rejection_do_not_provision_keys",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_future_coverage_claim_cannot_enable_historical_training",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_future_row_and_nonexistent_revision_are_kept_as_issues_not_dropped",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_late_approval_does_not_change_past_feature",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_missing_db_does_not_create_storage",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_no_first_four_padding_or_duplicate_transactions",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_out_of_domain_does_not_round_clip_or_recode",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_partial_source_and_missing_approver_never_imputed_zero",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_readonly_export_does_not_modify_db_or_require_evidence_verify",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_real_and_simulated_source_modes_not_silently_mixed",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_same_transaction_ids_in_companies_are_scoped",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_stale_preview_and_changed_auth_prevent_encryption",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_window_and_explicit_row_order_preserved",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_actual_parallel_writes_do_not_overwrite_each_other",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_append_only_history_and_tampered_cipher_fail_closed",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_both_source_profiles_start_null_and_preserve_evidence",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_canonical_simulated_invoice_keeps_its_source_badge",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_catalogue_is_company_scoped_and_returns_exact_source",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_complete_balanced_labels_ready_only_after_lock",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_evidence_must_be_exact_case_and_fields_not_client_identity",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_lock_cannot_edit_reopen_keeps_original_export",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_one_class_or_missing_predictor_stays_ineligible_after_verification",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_optimistic_conflict_and_same_request_retry",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_other_company_same_ids_and_other_tenant_cannot_read",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_reader_can_view_verified_without_verification_permission",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_restart_wrong_key_and_db_payload_is_sealed",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_revocation_before_commit_rolls_back",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_saving_one_keeps_unrelated_labels_and_unknown_is_null",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_shared_company_audit_records_each_authenticated_reviewer",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_simulated_evidence_does_not_verify_real_labels",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_source_time_selection_and_new_snapshot_do_not_reuse_labels",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_unknown_can_lock_but_cannot_train",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPortalTests.test_real_portal_proxy_permissions_scope_and_persistence",
+      "status": "pass"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a3_below_total_limit_and_address_only_do_not_group",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a3_below_total_limit_and_address_only_do_not_group"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a3_long_branch_remains",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a3_long_branch_remains"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a3_short_branch_and_exact_three_day_boundary",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a3_short_branch_and_exact_three_day_boundary"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a4_calendar_month_and_explicit_rolling_option",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a4_calendar_month_and_explicit_rolling_option"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a4_known_payroll_entitlement_excludes_only_budgeted_payment",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a4_known_payroll_entitlement_excludes_only_budgeted_payment"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a4_last_day_of_31_day_month_keeps_first_day",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a4_last_day_of_31_day_month_keeps_first_day"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a4_recurring_exception_is_specific_and_does_not_cover_extra_payments",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a4_recurring_exception_is_specific_and_does_not_cover_extra_payments"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a4_repeated_payroll_cannot_reuse_one_entitlement",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a4_repeated_payroll_cannot_reuse_one_entitlement"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a4_simultaneous_payments_cannot_each_reuse_same_monthly_budget",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a4_simultaneous_payments_cannot_each_reuse_same_monthly_budget"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a5_lower_tail_is_out_of_scope",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a5_lower_tail_is_out_of_scope"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_a5_upper_tail_retained_and_two_sided_rejected",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_a5_upper_tail_retained_and_two_sided_rejected"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b1_bank_institution_distinguishes_identical_account_numbers",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b1_bank_institution_distinguishes_identical_account_numbers"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b1_cccd_with_leading_zero_is_supported_only_on_outflow",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b1_cccd_with_leading_zero_is_supported_only_on_outflow"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b1_existing_vendor_is_rechecked_when_employee_becomes_observed",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b1_existing_vendor_is_rechecked_when_employee_becomes_observed"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b1_master_overlap_is_reported_without_cash_payment",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b1_master_overlap_is_reported_without_cash_payment"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b1_rent_and_selling_expenses_are_vendor_outflows",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b1_rent_and_selling_expenses_are_vendor_outflows"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b3_first_large_purchase_is_candidate",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b3_first_large_purchase_is_candidate"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b3_purchase_precedes_payment_so_payment_is_not_first_economic_entry",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b3_purchase_precedes_payment_so_payment_is_not_first_economic_entry"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_b3_same_time_entries_are_co_first_without_id_order_leakage",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_b3_same_time_entries_are_co_first_without_id_order_leakage"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_f1_authoritative_sources_override_creator_limit_and_calendar_proxy",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_f1_authoritative_sources_override_creator_limit_and_calendar_proxy"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_f1_manual_non_adjustment_entry_is_supported",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_f1_manual_non_adjustment_entry_is_supported"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_f1_materiality_equality_and_outside_close_window",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_f1_materiality_equality_and_outside_close_window"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_f1_missing_unapproved_late_or_automatic_sources_do_not_confirm",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_f1_missing_unapproved_late_or_automatic_sources_do_not_confirm"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_f1_revocation_revision_supersedes_prior_approval",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_f1_revocation_revision_supersedes_prior_approval"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_f1_unconfirmed_month_end_proxy_never_contributes",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_f1_unconfirmed_month_end_proxy_never_contributes"
+    },
+    {
+      "id": "test_spec_policy.SpecPolicyTest.test_future_evidence_does_not_rewrite_past_scores",
+      "status": "pass",
+      "testcase": "test_spec_policy.SpecPolicyTest.test_future_evidence_does_not_rewrite_past_scores"
+    },
+    {
+      "id": "test_rule35_comparison.Rule35ComparisonTests.test_01_c001_c002_full_35_rule_baseline_and_ml_fill_from_25_candidates",
+      "status": "pass",
+      "testcase": "test_rule35_comparison.Rule35ComparisonTests.test_01_c001_c002_full_35_rule_baseline_and_ml_fill_from_25_candidates"
+    },
+    {
+      "id": "test_rule35_comparison.Rule35ComparisonTests.test_02_deterministic_order_and_b5_e4_master_scope_guards",
+      "status": "pass",
+      "testcase": "test_rule35_comparison.Rule35ComparisonTests.test_02_deterministic_order_and_b5_e4_master_scope_guards"
+    },
+    {
+      "id": "test_rule35_comparison.Rule35ComparisonTests.test_03_simultaneous_group_deferral_and_budget_full_behavior",
+      "status": "pass",
+      "testcase": "test_rule35_comparison.Rule35ComparisonTests.test_03_simultaneous_group_deferral_and_budget_full_behavior"
+    },
+    {
+      "id": "test_rule35_comparison.Rule35ComparisonTests.test_04_missing_source_gap_and_ml_unavailable_semantics",
+      "status": "pass",
+      "testcase": "test_rule35_comparison.Rule35ComparisonTests.test_04_missing_source_gap_and_ml_unavailable_semantics"
+    },
+    {
+      "id": "test_rule35_comparison.Rule35ComparisonTests.test_05_store_restart_immutability_feedback_metric_update_and_http_api",
+      "status": "pass",
+      "testcase": "test_rule35_comparison.Rule35ComparisonTests.test_05_store_restart_immutability_feedback_metric_update_and_http_api"
+    },
+    {
+      "id": "test_pipeline_benchmark.PipelineBenchmarkTests.test_config_reopens_both_existing_key_derivations_without_rewriting_history",
+      "status": "pass"
+    },
+    {
+      "id": "test_pipeline_benchmark.PipelineBenchmarkTests.test_each_arm_preserves_rule_baseline_and_fill_only_unused_slots",
+      "status": "pass"
+    },
+    {
+      "id": "test_pipeline_benchmark.PipelineBenchmarkTests.test_missing_model_stays_unavailable_and_raw_scales_not_combined",
+      "status": "pass"
+    },
+    {
+      "id": "test_pipeline_benchmark.PipelineBenchmarkTests.test_multiple_real_model_pins_require_explicit_benchmark_choice",
+      "status": "pass"
+    },
+    {
+      "id": "test_pipeline_benchmark.PipelineBenchmarkTests.test_nonfinite_or_invented_unavailable_score_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_pipeline_benchmark.PipelineBenchmarkTests.test_real_engine_preserves_all_candidates_35_rules_and_method_coverage",
+      "status": "pass"
+    },
+    {
+      "id": "test_pipeline_benchmark.PipelineBenchmarkTests.test_report_checksum_is_reproducible_from_bound_results",
+      "status": "pass"
+    },
+    {
+      "id": "test_pipeline_benchmark.PipelineBenchmarkTests.test_revocation_before_read_and_before_return",
+      "status": "pass"
+    },
+    {
+      "id": "test_pipeline_benchmark.PipelineBenchmarkTests.test_saved_run_wrapper_does_not_write_snapshot_or_fit_models",
+      "status": "pass"
+    },
+    {
+      "id": "test_pipeline_benchmark.PipelineBenchmarkTests.test_seen_training_and_holdout_excluded_without_dropping_matrix_rows",
+      "status": "pass"
+    },
+    {
+      "id": "test_pipeline_benchmark.PipelineBenchmarkTests.test_snapshot_cutoff_scope_approval_and_revision_binding",
+      "status": "pass"
+    },
+    {
+      "id": "test_pipeline_benchmark.PipelineBenchmarkTests.test_unavailable_shadow_null_preserved",
+      "status": "pass"
+    }
+  ]
+}

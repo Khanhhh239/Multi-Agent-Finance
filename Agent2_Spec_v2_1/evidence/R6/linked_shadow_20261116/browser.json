@@ -1,0 +1,34 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "id": "C001-FLOW",
+      "status": "pass",
+      "observed": "Explicit plan, real validation package pins, stage approval, actual model score, coalesced shadow cases; active queue empty"
+    },
+    {
+      "id": "C001-RELOAD",
+      "status": "pass",
+      "observed": "Persisted observation and queue metrics restored; no new reservation"
+    },
+    {
+      "id": "C002-FLOW",
+      "status": "pass",
+      "observed": "Explicit plan, real validation package pins, stage approval, actual model score, coalesced shadow cases; active queue empty"
+    },
+    {
+      "id": "C002-RELOAD",
+      "status": "pass",
+      "observed": "Persisted observation and queue metrics restored; no new reservation"
+    },
+    {
+      "id": "UI-ISOLATION-MOBILE",
+      "status": "pass",
+      "observed": "Company-local plans/observations and mobile layout; no browser exception"
+    }
+  ],
+  "he_execution": false,
+  "cloud_plaintext_sent": false,
+  "synthetic": true,
+  "live_deployed": false
+}

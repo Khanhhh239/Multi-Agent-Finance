@@ -155,7 +155,7 @@ def rule35_cases_for(snapshot_store, scope, analysis, review_store, recheck=None
 
 def _resolve_ml_method(analysis, ml_method):
     pins = dict(analysis.get('bridge_provenance', {}).get('model_pins') or {})
-    candidates = sorted(m for m in pins if m != 'robust_z')
+    candidates = sorted(m for m in pins if m != 'robust_z' and pins[m] is not None)
     if ml_method is not None:
         return ml_method, pins.get(ml_method)
     if len(candidates) == 1:

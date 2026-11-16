@@ -7,6 +7,8 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(1, str(ROOT.parent))
+sys.path.insert(2, str(ROOT / 'tests'))
 
 
 class Result(unittest.TextTestResult):

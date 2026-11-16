@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Huấn luyện mã hóa nhiều batch · Agent2</title>
+  <link rel="stylesheet" href="assets/workbench.css">
+  <link rel="stylesheet" href="assets/workspace.css">
+  <script defer src="assets/batch-training.js"></script>
+</head>
+<body class="workspace">
+  <header>
+    <a class="brand" href="workspace">Sổ Soát <span>Agent2</span></a>
+    <nav aria-label="Điều hướng">
+      <a id="bt-nav-workspace" href="workspace">Công việc</a>
+      <a id="bt-nav-settings" href="analysis-settings">Cấu hình phân tích</a>
+      <a id="bt-nav-labels" href="label-verification">Xác minh nhãn</a>
+      <a href="batch-training" aria-current="page">Train HE nhiều batch</a>
+    </nav>
+  </header>
+  <main>
+    <div class="intro">
+      <p class="eyebrow">HUẤN LUYỆN MÃ HÓA TẠI DOANH NGHIỆP</p>
+      <h1>Huấn luyện mã hóa nhiều batch và đối chiếu shadow</h1>
+      <p>Thực hiện tuần tự từ chọn kế hoạch dữ liệu, xác minh nhãn, train trên bản mã đến nhận model, đánh giá tập giữ riêng và phê duyệt dùng shadow. Khóa bí mật giữ tại node doanh nghiệp.</p>
+    </div>
+
+    <div id="bt-notice" class="callout" role="alert" hidden></div>
+
+    <section id="bt-login" class="panel" hidden>
+      <h2>Đăng nhập Portal để tiếp tục</h2>
+      <p>Màn hình này sử dụng phiên đăng nhập và phân quyền doanh nghiệp từ Portal.</p>
+      <a class="primary-link" href="/#agent2" target="_top">Mở Portal</a>
+    </section>
+
+    <section class="panel">
+      <div class="grid">
+        <label>Doanh nghiệp
+          <select id="bt-company" disabled></select>
+        </label>
+        <div>
+          <p id="bt-permission" class="hint"></p>
+          <p id="bt-overall-status" role="status"></p>
+        </div>
+      </div>
+    </section>
+
+    <div id="bt-workflow" hidden>
+      <!-- Bước 1 -->
+      <section class="panel" id="bt-step-1">
+        <h2>Bước 1. Chọn dữ liệu và xem kế hoạch</h2>
+        <p class="hint">Chọn snapshot đã chốt, kỳ train (2–4 batch × 4 giao dịch) và kỳ đánh giá giữ riêng (1–4 batch × 4 giao dịch). Kỳ train phải đứng trước kỳ đánh giá và không trùng giao dịch.</p>
+        <div class="grid">
+          <label>Snapshot nguồn
+            <select id="bt-snapshot"></select>
+          </label>
+          <label>Số batch train (2–4)
+            <select id="bt-train-batch-count">
+              <option value="2">2 batch (8 giao dịch)</option>
+              <option value="3">3 batch (12 giao dịch)</option>
+              <option value="4">4 batch (16 giao dịch)</option>
+            </select>
+          </label>
+          <label>Số batch đánh giá (1–4)
+            <select id="bt-eval-batch-count">
+              <option value="1">1 batch (4 giao dịch)</option>
+              <option value="2">2 batch (8 giao dịch)</option>
+              <option value="3">3 batch (12 giao dịch)</option>
+              <option value="4">4 batch (16 giao dịch)</option>
+            </select>
+          </label>
+        </div>
+        <div class="grid">
+          <label>Bắt đầu kỳ train (ISO UTC)
+            <input id="bt-train-start" type="text" placeholder="2026-01-01T00:00:00Z">
+          </label>
+          <label>Kết thúc kỳ train (ISO UTC)
+            <input id="bt-train-end" type="text" placeholder="2026-01-20T00:00:00Z">
+          </label>
+          <label>Bắt đầu kỳ đánh giá (ISO UTC)
+            <input id="bt-eval-start" type="text" placeholder="2026-01-20T00:00:00Z">
+          </label>
+          <label>Kết thúc kỳ đánh giá (ISO UTC)
+            <input id="bt-eval-end" type="text" placeholder="2026-01-30T00:00:00Z">
+          </label>
+          <label>Thời điểm chốt nguồn as_of (ISO UTC)
+            <input id="bt-as-of" type="text" placeholder="2026-01-31T00:00:00Z">
+          </label>
+        </div>
+        <div id="bt-batch-selectors"></div>
+        <div id="bt-plan-overview"></div>
+        <div id="bt-plan-issues"></div>
+        <div class="actions">
+          <button id="bt-step1-btn">Kiểm tra và ghim kế hoạch</button>
+        </div>
+        <details>
+          <summary>Chi tiết kỹ thuật kế hoạch, hợp đồng feature và JSON request</summary>
+          <label>Chỉnh sửa trực tiếp JSON request (tùy chọn)
+            <textarea id="bt-plan-request-json" rows="8"></textarea>
+          </label>
+          <pre id="bt-step1-tech"></pre>
+        </details>
+      </section>
+
+      <!-- Bước 2 -->
+      <section class="panel" id="bt-step-2">
+        <h2>Bước 2. Xác minh nhãn</h2>
+        <p class="hint">Tạo danh sách xác minh nhãn cho các batch trong kế hoạch đã ghim, sau đó mở màn hình Xác minh nhãn để đối chiếu chứng từ và khóa từng gói nhãn. Nhãn chưa rõ để trống (null); chỉ xác nhận train khi mọi batch train đã khóa đủ 4 nhãn và tổng hợp có đủ cả 2 lớp.</p>
+        <div id="bt-label-overview"></div>
+        <div id="bt-label-packets-table"></div>
+        <div class="actions">
+          <button id="bt-step2-btn" disabled>Tạo danh sách xác minh nhãn</button>
+        </div>
+        <details>
+          <summary>Chi tiết mã gói nhãn, phiên bản và lock_sha256</summary>
+          <pre id="bt-step2-tech"></pre>
+        </details>
+      </section>
+
+      <!-- Bước 3 -->
+      <section class="panel" id="bt-step-3">
+        <h2>Bước 3. Xác nhận train</h2>
+        <p class="hint">Kiểm tra thông tin tổng hợp bên dưới trước khi mã hóa và gửi bản mã lên worker. Tổng số bước cập nhật (số batch train × số epoch) tối đa là 4.</p>
+        <dl id="bt-confirm-summary"></dl>
+        <label>Số epoch huấn luyện
+          <select id="bt-epochs">
+            <option value="1">1 epoch</option>
+            <option value="2">2 epoch</option>
+          </select>
+        </label>
+        <div id="bt-confirm-blockers"></div>
+        <div class="actions">
+          <button id="bt-step3-btn" disabled>Xác nhận và bắt đầu train mã hóa</button>
+        </div>
+        <details>
+          <summary>Chi tiết kỹ thuật gói nhãn đã khóa và tham số huấn luyện</summary>
+          <pre id="bt-step3-tech"></pre>
+        </details>
+      </section>
+
+      <!-- Bước 4 -->
+      <section class="panel" id="bt-step-4">
+        <h2>Bước 4. Theo dõi tiến độ</h2>
+        <p class="hint">Theo dõi trạng thái huấn luyện trên bản mã và số bước cập nhật hoàn tất. Nếu trang tải lại hoặc worker bị gián đoạn, bấm nút bên dưới để tiếp tục đúng yêu cầu đã lưu.</p>
+        <p id="bt-progress-status" role="status"></p>
+        <progress id="bt-progress-bar" max="4" value="0" hidden></progress>
+        <p id="bt-progress-counts" class="hint"></p>
+        <div class="actions">
+          <button id="bt-step4-btn" disabled>Cập nhật / Tiếp tục yêu cầu đã lưu</button>
+        </div>
+        <details>
+          <summary>Chi tiết kỹ thuật công việc worker và cam kết bản mã</summary>
+          <pre id="bt-step4-tech"></pre>
+        </details>
+      </section>
+
+      <!-- Bước 5 -->
+      <section class="panel" id="bt-step-5">
+        <h2>Bước 5. Nhận model</h2>
+        <p class="hint">Khi worker hoàn tất toàn bộ bước cập nhật, nhận bản mã model về node doanh nghiệp để giải mã bằng khóa bí mật và kiểm tra đối chiếu kỹ thuật với oracle lượng tử hóa.</p>
+        <p id="bt-candidate-status" role="status"></p>
+        <div class="actions">
+          <button id="bt-step5-btn" disabled>Nhận và kiểm tra kỹ thuật model</button>
+        </div>
+        <details>
+          <summary>Chi tiết kỹ thuật model ứng viên và kiểm tra đối chiếu</summary>
+          <pre id="bt-step5-tech"></pre>
+        </details>
+      </section>
+
+      <!-- Bước 6 -->
+      <section class="panel" id="bt-step-6">
+        <h2>Bước 6. Đánh giá trên tập giữ riêng</h2>
+        <p class="callout">Điểm đánh giá bên dưới là điểm chưa hiệu chỉnh xác suất (uncalibrated), tính trên tập giữ riêng không gửi cho worker train. Không coi điểm này là xác suất gian lận hay kết luận sai phạm; nhãn tập đánh giá (nếu có) không bao giờ được đưa vào bước fit.</p>
+        <div id="bt-eval-summary"></div>
+        <div id="bt-eval-table"></div>
+        <div class="actions">
+          <button id="bt-step6-btn" disabled>Đánh giá trên tập giữ riêng</button>
+        </div>
+        <details>
+          <summary>Chi tiết kỹ thuật cam kết tập giữ riêng và mã băm đánh giá</summary>
+          <pre id="bt-step6-tech"></pre>
+        </details>
+      </section>
+
+      <!-- Bước 7 -->
+      <section class="panel" id="bt-step-7">
+        <h2>Bước 7. Phê duyệt dùng shadow</h2>
+        <p class="callout">Phê duyệt chỉ cho phép dùng model ứng viên để chấm đối chiếu shadow, không tự thay model đang chạy và không thay đổi hàng đợi nghiệp vụ.</p>
+        <div id="bt-approval-summary"></div>
+        <label id="bt-reason-wrap">Lý do phê duyệt dùng đối chiếu shadow (10–1000 ký tự)
+          <textarea id="bt-approve-reason" rows="3" maxlength="1000" placeholder="Ví dụ: Đã kiểm tra kỹ thuật parity và điểm trên tập giữ riêng; phê duyệt chạy đối chiếu shadow cho doanh nghiệp."></textarea>
+        </label>
+        <div id="bt-shadow-results"></div>
+        <div class="actions">
+          <button id="bt-step7-btn" disabled>Phê duyệt dùng đối chiếu shadow</button>
+        </div>
+        <details>
+          <summary>Chi tiết kỹ thuật chữ ký phê duyệt, các mã băm gắn kết và kết quả shadow</summary>
+          <pre id="bt-step7-tech"></pre>
+        </details>
+      </section>
+
+      <!-- Bước 8 -->
+      <section class="panel" id="bt-step-8">
+        <h2>Bước 8. Chấm đối chiếu shadow trên snapshot giao dịch mới và lịch sử lần chạy</h2>
+        <div class="callout" id="bt-shadow-disclosures">
+          <strong>Nguyên tắc vận hành &amp; nơi tính toán:</strong>
+          <ul>
+            <li><strong>Nơi tính toán:</strong> Chấm điểm thực hiện tại node doanh nghiệp bằng model ứng viên đã giải mã và được phê duyệt shadow (<code>enterprise_node_decrypted_candidate</code>); không gửi dữ liệu giao dịch bản rõ lên worker đám mây và không phải suy luận HE trên cloud.</li>
+            <li><strong>Nguồn tạo feature:</strong> Backend tự trích xuất 2 biến nhị phân (<code>round_million</code>, <code>creator_equals_approver</code>) từ snapshot bất biến đã lưu tại mốc <code>as_of</code>. Không nhận feature nhập tay trên luồng nghiệp vụ và không tự điền 0 khi thiếu nguồn.</li>
+            <li><strong>Ý nghĩa điểm số &amp; phạm vi:</strong> Điểm số là điểm xếp hạng chưa hiệu chuẩn xác suất (<code>uncalibrated=true</code>), không có ngưỡng tự động kết luận gian lận, không thay thế model đang chạy (<code>active_model_replaced=false</code>) và không làm thay đổi hàng đợi nghiệp vụ (<code>operational_queue_changed=false</code>).</li>
+          </ul>
+        </div>
+
+        <div class="grid">
+          <label>Model đã phê duyệt dùng shadow (bắt buộc chọn rõ phiên bản)
+            <select id="bt-shadow-model">
+              <option value="">-- Chọn phiên bản model đã phê duyệt shadow --</option>
+            </select>
+          </label>
+          <label>Snapshot giao dịch cần chấm đối chiếu
+            <select id="bt-shadow-snapshot">
+              <option value="">-- Chọn snapshot của doanh nghiệp --</option>
+            </select>
+          </label>
+          <label>Thời điểm chốt dữ liệu (as_of, ISO-8601 UTC)
+            <input id="bt-shadow-as-of" type="text" placeholder="2026-03-31T00:00:00Z">
+          </label>
+          <label>Sắp xếp bảng kết quả giao dịch
+            <select id="bt-shadow-sort">
+              <option value="score_desc">Điểm shadow giảm dần (ưu tiên rà soát)</option>
+              <option value="row_asc">Thứ tự gốc trong snapshot</option>
+            </select>
+          </label>
+          <label>Lịch sử các lần chạy shadow đã lưu của doanh nghiệp
+            <select id="bt-shadow-history">
+              <option value="">-- Chọn lần chạy đã lưu để xem lại --</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button id="bt-shadow-check-btn" class="secondary" disabled>Kiểm tra tương thích</button>
+          <button id="bt-shadow-run-btn" disabled>Chạy chấm shadow và lưu kết quả</button>
+        </div>
+
+        <div id="bt-shadow-run-banner"></div>
+        <div id="bt-shadow-compat-banner"></div>
+        <div id="bt-shadow-summary-cards"></div>
+        <div id="bt-shadow-run-table"></div>
+
+        <details>
+          <summary>Chi tiết kỹ thuật lần chạy shadow, hợp đồng feature/mapping và mã băm gắn kết</summary>
+          <pre id="bt-step8-tech"></pre>
+        </details>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
+

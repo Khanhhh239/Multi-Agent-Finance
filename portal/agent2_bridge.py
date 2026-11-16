@@ -54,11 +54,22 @@ def identity(path, expires_at):
 
 
 PUBLIC = {'/','/workspace','/status','/data-import','/encrypted-analysis','/analysis-settings','/assets/workspace.js','/assets/workspace.css','/assets/analysis-settings.js','/assets/he-analysis.js','/assets/workbench.js','/assets/workbench.css','/samples/import-demo.json','/samples/import-demo.csv','/samples/import-demo.xlsx','/api/v1/ui/settings'}
+PUBLIC.update({'/label-verification','/assets/label-verification.js','/batch-training','/assets/batch-training.js'})
+PUBLIC.update({'/pipeline-releases','/assets/pipeline-releases.js','/assets/pipeline-releases.css'})
+PUBLIC.update({'/pipeline-workspace','/assets/bundle-workspace.js'})
 HE_API = re.compile(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/he/(?:datasets|runs|jobs(?:/herun_[a-f0-9]{32}(?:/(?:result|resume|reviews(?:/rvw_[a-f0-9]{64}/(?:start|heartbeat|save|attachments(?:/att_[a-f0-9]{64})?))?))?)?)\Z')
 API = re.compile(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/(?:imports/(?:upload|validate|imp_[a-f0-9]{32}(?:/(?:source|mapping|preview|commit|report))?)|snapshots/snp_[a-f0-9]{32}(?:/(?:data|analyze))?)\Z')
 
 
 def allowed_path(path):
+    if '..' in path or '//' in path:return False
+    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-workspace(?:/runs(?:/[A-Za-z0-9_.:-]{8,128}(?:/(?:report(?:\.csv)?|reviews/rvw_[a-f0-9]{64}/(?:start|heartbeat|save|attachments|tasks)(?:/att_[a-f0-9]{64})?))?)?)?',path):return True
+    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-releases(?:/(?:prepare|qualify|approve|switch|revoke|diff|runs|objects/(?:rbun|rgat|rapr|ract|rpin|robs)_[a-f0-9]{64}))?',path):return True
+    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-benchmarks',path):return True
+    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/remediation/(?:summary|report|tasks(?:/(?:filter/(?:all|mine_or_dept|due_soon|overdue|awaiting_confirmation|completed)|query|tsk_[a-f0-9]{24}/(?:assign|submit|decision)))?|cases/[A-Za-z0-9_.:-]{1,128}(?:/(?:checklist|documents))?|documents/doc_[a-f0-9]{24}(?:/(?:versions/[0-9]{1,4}(?:/content)?|content|verify))?)',path):return True
+    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/case-queue/(?:evaluate|recover|reevaluate-backlog|(?:active|shadow)(?:/periods/[A-Za-z0-9_.-]{1,64})?(?:/technical)?|backlog(?:/shadow)?(?:/technical)?|cases/case_[a-f0-9]{32}(?:/workflow|(?:/shadow)?(?:/technical)?))',path):return True
+    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/batch-training(?:/(?:preview|create-labels|confirm|resume|receive|evaluate|approve|shadow|shadow-runs(?:/(?:check|shrun_[0-9]+_[a-f0-9]{16}))?))?',path):return True
+    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/(?:label-sources(?:/snp_[a-f0-9]{32})?|label-packets(?:/lbl_[a-f0-9]{64}(?:/(?:save|lock|reopen|export))?)?)',path):return True
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/rules/catalogue',path):return True
     return path in PUBLIC or path == '/api/v1/ui/context' or API.fullmatch(path) is not None or HE_API.fullmatch(path) is not None or re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/workspace(?:/runs/herun_[a-f0-9]{32}(?:/(?:report|report\.csv|comparison))?)?',path) is not None or re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/analysis-config(?:/(?:draft|fit|activate))?',path) is not None
 
@@ -68,4 +79,4 @@ class NoRedirect(HTTPRedirectHandler):
 
 
 def open_backend(request):
-    return build_opener(ProxyHandler({}),NoRedirect()).open(request,timeout=120)
+    return build_opener(ProxyHandler({}),NoRedirect()).open(request,timeout=600)

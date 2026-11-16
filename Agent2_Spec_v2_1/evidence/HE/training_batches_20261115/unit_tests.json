@@ -1,0 +1,269 @@
+{
+  "count": 66,
+  "tests": [
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_auth_revocation_after_compute_does_not_commit_or_return_model",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_batch_cli_preview_and_stale_plan_do_not_open_crypto",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_build_update_budget_and_mutated_consent_denied_before_helper",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_canonical_checkpoint_tamper_and_wrong_key_build_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_cross_company_and_ungranted_batch_access_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_multi_batch_epoch_order_encrypted_carry_and_holdout_exclusion",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_parallel_run_status_poll_and_exclusive_state_lease",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_pending_update_resume_after_reopen_keeps_committed_weights",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_plaintext_fields_swapped_order_and_cipher_hash_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_real_labels_use_vault_not_ad_hoc_review_file",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_saved_signed_dataset_tamper_is_not_used_for_fit",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_single_class_per_batch_allowed_but_global_one_class_null_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_snapshot_overlap_window_and_stale_preview_fail_before_encryption",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_snapshot_time_split_locks_and_missing_labels",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_source_and_evaluation_mutations_or_overlaps_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_upload_and_label_confirmation_do_not_compute",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_wrong_receipt_key_build_epoch_and_batch_label_order_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_checkpoint_restart_continues_same_encrypted_weights",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_confirm_then_run_retries_same_job_once_and_returns_ciphertext",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_consent_required_before_run",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_data_and_consent_conflicts_do_not_overwrite",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_enterprise_rechecks_permissions_and_requires_explicit_approval",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_foreign_company_actor_signature_and_revoked_grant_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_local_dataset_signature_detects_changes_after_encryption",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_only_explicit_verified_fraud_labels_are_accepted",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_plain_data_labels_unknown_fields_and_broken_cipher_rejected",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_quantized_scalar_oracle_matches_vector_equations",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_same_dataset_id_in_two_companies_has_separate_jobs",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_shadow_requires_signed_approval_for_exact_candidate",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_upload_receipt_does_not_train_or_create_model",
+      "status": "pass"
+    },
+    {
+      "id": "test_encrypted_training.EncryptedTrainingTests.test_wrong_receipt_context_target_or_key_denied",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_both_profiles_map_existing_binary_features_without_scaling",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_cli_preview_and_rejection_do_not_provision_keys",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_future_coverage_claim_cannot_enable_historical_training",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_future_row_and_nonexistent_revision_are_kept_as_issues_not_dropped",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_late_approval_does_not_change_past_feature",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_missing_db_does_not_create_storage",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_no_first_four_padding_or_duplicate_transactions",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_out_of_domain_does_not_round_clip_or_recode",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_partial_source_and_missing_approver_never_imputed_zero",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_readonly_export_does_not_modify_db_or_require_evidence_verify",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_real_and_simulated_source_modes_not_silently_mixed",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_same_transaction_ids_in_companies_are_scoped",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_stale_preview_and_changed_auth_prevent_encryption",
+      "status": "pass"
+    },
+    {
+      "id": "test_training_snapshot_adapter.TrainingSnapshotAdapterTests.test_window_and_explicit_row_order_preserved",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_actual_parallel_writes_do_not_overwrite_each_other",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_append_only_history_and_tampered_cipher_fail_closed",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_both_source_profiles_start_null_and_preserve_evidence",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_canonical_simulated_invoice_keeps_its_source_badge",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_catalogue_is_company_scoped_and_returns_exact_source",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_complete_balanced_labels_ready_only_after_lock",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_evidence_must_be_exact_case_and_fields_not_client_identity",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_lock_cannot_edit_reopen_keeps_original_export",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_one_class_or_missing_predictor_stays_ineligible_after_verification",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_optimistic_conflict_and_same_request_retry",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_other_company_same_ids_and_other_tenant_cannot_read",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_reader_can_view_verified_without_verification_permission",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_restart_wrong_key_and_db_payload_is_sealed",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_revocation_before_commit_rolls_back",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_saving_one_keeps_unrelated_labels_and_unknown_is_null",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_shared_company_audit_records_each_authenticated_reviewer",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_simulated_evidence_does_not_verify_real_labels",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_source_time_selection_and_new_snapshot_do_not_reuse_labels",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPacketTests.test_unknown_can_lock_but_cannot_train",
+      "status": "pass"
+    },
+    {
+      "id": "test_label_packets.LabelPortalTests.test_real_portal_proxy_permissions_scope_and_persistence",
+      "status": "pass"
+    },
+    {
+      "id": "test_batch_training.BatchTrainingTests.test_three_four_batches_and_sixteen_rows_respect_update_budget",
+      "status": "pass"
+    }
+  ]
+}

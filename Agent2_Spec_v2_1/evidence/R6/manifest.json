@@ -1,0 +1,32 @@
+{
+  "version": "release-evidence-manifest/1.0.0",
+  "base_commit": "f203b39828f567171916b5b4744728ed4b63d17f",
+  "files": {
+    "agent2/sme_fraud/pipeline_release_store.py": "98681c5598d86e15cfabedb2de0d75d5ec74177d6fa2efb490974a0ac3be1253",
+    "agent2/sme_fraud/pipeline_release.py": "c0e9235f7dfdec856ea1529bfe599e411645f9a7cf3579179528c667b27ea14d",
+    "agent2/sme_fraud/pipeline_release_api.py": "d6ab3c4fa9c8ed80f095ed1ba2f66e2b3e6ba9a6b8845fc9770b402fdbc0fcf7",
+    "agent2/sme_fraud/pipeline_release.schema.json": "0323db5ad3d9d680866de2bbc98e30dfa516637590e2b2df1bc526377b30a1df",
+    "agent2/sme_fraud/review_server.py": "710ba24d120ffcb33d195e6f79481d53e3082e6615694dd218de7f78881b72b4",
+    "agent2/sme_fraud/workbench.py": "29cb49aa92c72bce626b67efdcb68ead31fc35fb90934276b05fe7c487ca7d39",
+    "agent2/sme_fraud/case_queue_api.py": "f44084386562e9584d78e4bdce032ed05d3818ebf9694f3d432c9ca262d892b6",
+    "agent2/sme_fraud/web/pipeline-releases.html": "54f565955c295c62670aca5fdeab6ec51b46147bafe469d88eeb2c949fa3de4b",
+    "agent2/sme_fraud/web/pipeline-releases.js": "818abddba453852d5aa636efaef043343e983859191ec6e00758dd250e2f7937",
+    "agent2/sme_fraud/web/pipeline-releases.css": "698793458c6f374777bdce3b4601a814efc01fcc98ea3f3d6791fd05dbb588ab",
+    "agent2/sme_fraud/web/analysis-settings.html": "a320f31334cb3cc1dd4d69fd6b10f5f751f710a4cbd0c8a4f3dc77acc62f38db",
+    "agent2/sme_fraud/web/analysis-settings.js": "c355b38bfc62709170046adf7c9371a8151958da9f97b5bd1b6e96c7503b6159",
+    "portal/agent2_bridge.py": "7031ff8c0048cdd33d8cc4a26d849911b0fd4deb7df9cb798df373a2756ee2af",
+    "agent2/tests_he/test_pipeline_release.py": "737c58dd687714f7b53d8d7e74f7382674adbb788e7e1a11e84601e7f7e14a5e",
+    "agent2/scripts/check_pipeline_release_ui.py": "7aae83caaf6aa3ff6ebed5a04a92415f3d9d9b1fc20d5e4ac2acd11874e639df",
+    "agent2/scripts/run_pipeline_release_acceptance.py": "c771b5a40e530dd0ac567ff8d78d2fe013da6abd6a110a03ccbe92d9f598fd3c",
+    "agent2/docs/PIPELINE_RELEASE.md": "c82a5de36ab41165d4d26ecc21a12d6a093cc3437fadac32f3dae6c95f9b88a3"
+  },
+  "evidence": {
+    "acceptance.json": "1cde89e1efb6fbf2ccc1de15be0390ca79921034891fdfbc6f29d10f5bef0a82",
+    "browser_report.json": "61d935f8bd11859efc7099f9c8d27aac7593211c5aa5578c839340535a4f1002",
+    "comparison_report.json": "467a8144c3b875eccb22552c9c50d629821eadd5c78cf82ea69de03721635803",
+    "monitoring_report.json": "1d3ed1c99679e20cbbb3c28b09061a8d9d53b69fcbeb11b4205c10a0b4776c39",
+    "regression_summary.json": "108f5ee13655c77701f4424062257366502e8098eba62bc487ad320407676730",
+    "release_gate.json": "99e56511451da3142524246ed41f60c374e30269f913aebda0b37fb8f16cc878",
+    "rollback_report.json": "305ebff37b2ca3569ae168ac3acf5179e094eeea018d2beb6526fa23c9c0325f"
+  }
+}

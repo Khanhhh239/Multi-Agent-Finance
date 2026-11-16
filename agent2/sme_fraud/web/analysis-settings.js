@@ -27,6 +27,9 @@
   }
   async function action(name,body){if(busy)return;const e=epoch;busy=true;controls();notice('');try{const value=await api(base()+'/'+name,body);if(e===epoch)render(value,false);}catch(error){if(e===epoch&&error.name!=='AbortError')notice(error.message);}finally{if(e===epoch){busy=false;controls();}}}
   function remember(){
+    $('label-link').href=mount+'/label-verification'+(company?'#company='+encodeURIComponent(company):'');
+    const bt=$('batch-training-link');if(bt)bt.href=mount+'/batch-training'+(company?'#company='+encodeURIComponent(company):'');
+    const release=$('release-link');if(release)release.href=mount+'/pipeline-releases'+(company?'#company='+encodeURIComponent(company):'');
     try{if(company&&actorID)sessionStorage.setItem('agent2.company.selection',JSON.stringify({version:1,actor:actorID,context:contextID,company,page:'analysis-settings'}));}catch{/* optional selection */}
     history.replaceState(null,'',location.pathname+location.search+(company?'#company='+encodeURIComponent(company):''));
     for(const a of document.querySelectorAll('header a[href]'))if(new URL(a.href).pathname.endsWith('/workspace'))a.href=mount+'/workspace'+(company?'#company='+encodeURIComponent(company):'');

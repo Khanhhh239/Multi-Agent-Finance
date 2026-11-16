@@ -1,0 +1,93 @@
+{
+  "version": "case-policy-report/1.0.0",
+  "run_id": "r3-case-queue-20261115T181143Z",
+  "approved_for_production": false,
+  "open_decisions": {
+    "D-04": {
+      "decision_id": "D-04",
+      "status": "OPEN",
+      "topic": "Ngưỡng phân rã điểm / threshold chính thức cho case admission",
+      "fixture_behavior": "min_case_score configurable trong policy fixture (approved_for_production=false)."
+    },
+    "D-05": {
+      "decision_id": "D-05",
+      "status": "OPEN",
+      "topic": "Hàm tổng hợp điểm cấp vụ từ candidate scores",
+      "fixture_behavior": "Sử dụng max_candidate_score theo baseline spec; evidence không cộng điểm."
+    },
+    "D-06": {
+      "decision_id": "D-06",
+      "status": "OPEN",
+      "topic": "Định nghĩa thay đổi trọng yếu và luật mở lại vụ đã đóng",
+      "fixture_behavior": "Thay đổi tập candidate, rule hit, trạng thái đủ nguồn, delta tài chính hoặc delta điểm >= min_score_delta."
+    },
+    "D-07": {
+      "decision_id": "D-07",
+      "status": "OPEN",
+      "topic": "Định mức ngân sách rà soát cấp vụ theo kỳ vận hành chính thức",
+      "fixture_behavior": "Ngân sách cấp vụ theo kỳ (mặc định fixture B=3 case), tách biệt khỏi BUDGET=5 của benchmark giao dịch."
+    }
+  },
+  "benchmark_transaction_cap_preserved": 5,
+  "case_queue_fixture_budget": 3,
+  "checks": {
+    "R3-01": {
+      "coalesced_hd_coal_99_candidates": [
+        "T_COAL_1",
+        "T_COAL_2",
+        "T_COAL_3"
+      ],
+      "coalesced_score": 8.4,
+      "independent_same_vendor_bank_case_count": 2
+    },
+    "R3-02": {
+      "hd78_case_id": "case_7b80132b5eba3191e7ef30c7e0b5faa5",
+      "hd78_candidate_ids": [
+        "T105"
+      ],
+      "hd78_evidence_tx_ids": [
+        "T096"
+      ],
+      "evidence_bonus_applied": 0.0,
+      "financial_summary": {
+        "candidate_allocated_vnd": 5000000,
+        "candidate_amount_vnd": 5000000,
+        "confirmed_loss_vnd": null,
+        "contains_negative_adjustment": false,
+        "currency": "VND",
+        "discrepancy_amount_vnd": 5000000,
+        "net_settled_vnd": 15000000,
+        "obligation_gross_vnd": 10000000,
+        "prior_evidence_allocated_vnd": 10000000,
+        "recovered_vnd": null,
+        "related_amount_vnd": 15000000
+      }
+    },
+    "R3-03": {
+      "budget_3_with_5_qualifying": {
+        "total_cases": 5,
+        "queued_or_reserved": 3,
+        "backlog_waiting": 2,
+        "already_notified": 0
+      },
+      "budget_3_with_0_qualifying": {
+        "total_cases": 2,
+        "queued_or_reserved": 0,
+        "backlog_waiting": 2,
+        "already_notified": 0
+      }
+    },
+    "R3-04": {
+      "concurrent_12_workers_queued": 3,
+      "concurrent_reserved_count": 3,
+      "crash_recovery_queued_items": 1,
+      "crash_recovery_unacked_outbox": 0
+    },
+    "R3-05": {
+      "shadow_queued": 2,
+      "active_queued_after_shadow": 0,
+      "c002_queued": 0,
+      "shadow_backlog_auto_expire": false
+    }
+  }
+}

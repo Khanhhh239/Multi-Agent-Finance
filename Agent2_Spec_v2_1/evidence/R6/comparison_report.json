@@ -1,0 +1,49 @@
+{
+  "spec_version": "2.1",
+  "status": "technical_only",
+  "companies": [
+    {
+      "company_id": "C001",
+      "snapshot_id": "snp_592b6420974d45f789a690c6fbbec417",
+      "as_of": "2025-08-12T00:00:00+07:00",
+      "data_sha256": "5d798ba942f14efbd280a5974257a48b97b796abab1eb279c3c0d909e9723cdb",
+      "baseline_bundle_id": "rbun_aed4cc8b60f16710632e7670891479a1258c1f773af70b8044cca6248c55370e",
+      "candidate_bundle_id": "rbun_499ba05fae87f98e85ec946e8407a7f87be4074fc86cbb178eb4ab8c8c744ecc",
+      "baseline_rows": 4,
+      "candidate_rows": 4,
+      "baseline_result_sha256": "be65e6be4421555ac8db3cf4ce6ba06fc8a9dada3490f91c8325da367e3339aa",
+      "candidate_result_sha256": "be65e6be4421555ac8db3cf4ce6ba06fc8a9dada3490f91c8325da367e3339aa",
+      "result_equal": true,
+      "comparison_kind": "metadata_only_bundle_change_same_detector_pins",
+      "review_budget": null,
+      "precision": null,
+      "recall": null,
+      "review_minutes": null,
+      "conclusion": "Configuration replay smoke only; no approved quality comparison or verified business labels"
+    },
+    {
+      "company_id": "C002",
+      "snapshot_id": "snp_ae9a5e7a04ca41c091be4a12d6e7f912",
+      "as_of": "2025-08-12T00:00:00+07:00",
+      "data_sha256": "83f5e1f0a4165ea53b1957a490a2c166b44e2b2d3cf2d0f23b9dc8ac9badf318",
+      "baseline_bundle_id": "rbun_9bea053ce34baaa53d91318d60a772968188bedb619035a9fff27cd28efea302",
+      "candidate_bundle_id": "rbun_88e9e5ebbfcdbb7fca5678167b25b26ba7f6e217b78855b4b8ce4f60206f1bff",
+      "baseline_rows": 4,
+      "candidate_rows": 4,
+      "baseline_result_sha256": "d4f434ef716c39fcfd4b6b0fcc0b81d18e85669f3e3bf0ee234fd395e4020427",
+      "candidate_result_sha256": "d4f434ef716c39fcfd4b6b0fcc0b81d18e85669f3e3bf0ee234fd395e4020427",
+      "result_equal": true,
+      "comparison_kind": "metadata_only_bundle_change_same_detector_pins",
+      "review_budget": null,
+      "precision": null,
+      "recall": null,
+      "review_minutes": null,
+      "conclusion": "Configuration replay smoke only; no approved quality comparison or verified business labels"
+    }
+  ],
+  "business_quality_status": "blocked_D09_no_independent_study",
+  "created_at": "2026-11-15T19:10:13.819190+00:00",
+  "synthetic": true,
+  "cloud_he_executed": false,
+  "live_deployed": false
+}

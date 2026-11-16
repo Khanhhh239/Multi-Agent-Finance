@@ -10,7 +10,7 @@ from .protocol import sha,canonical,require,atomic,decode,encode,strict_json
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('action',choices=['provision','encrypt-data','encrypt-labels','open-model']);p.add_argument('--root',type=Path,required=True);p.add_argument('--build',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('action',choices=['provision','encrypt-data','encrypt-labels','encrypt-batch-labels','open-model']);p.add_argument('--root',type=Path,required=True);p.add_argument('--build',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     request=strict_json(sys.stdin.buffer.read(24*1024*1024+1));key=decode(request.pop('wrapping_key'));require(len(key)==32,'WRAPPING_KEY')
     binding=request['binding'];manifest=json.loads((a.build/'manifest.json').read_bytes())
     require(manifest['files']['server.zip']==binding['build_sha256'],'BUILD_BINDING')
@@ -27,9 +27,14 @@ def main():
         if a.action=='encrypt-data':
             x=np.asarray(request['x']);require(x.shape==(4,2) and np.issubdtype(x.dtype,np.integer) and np.all((-1<=x)&(x<=1)),'FEATURE_DOMAIN')
             values=client.encrypt(x.astype(np.int64),None,None);result=dict(x_cipher=encode(values[0].serialize()),x_cipher_sha256=sha(values[0].serialize()))
-        elif a.action=='encrypt-labels':
-            y=np.asarray(request['y']);require(y.shape==(4,) and np.issubdtype(y.dtype,np.integer) and set(y.tolist())=={0,1},'LABEL_DOMAIN')
-            values=client.encrypt(None,y.astype(np.int64),np.zeros(3,dtype=np.int64));result=dict(y_cipher=encode(values[1].serialize()),y_cipher_sha256=sha(values[1].serialize()),weights_cipher=encode(values[2].serialize()),weights_cipher_sha256=sha(values[2].serialize()))
+        elif a.action in ('encrypt-labels','encrypt-batch-labels'):
+            y=np.asarray(request['y']);require(y.shape==(4,) and np.issubdtype(y.dtype,np.integer) and set(y.tolist())<={0,1},'LABEL_DOMAIN')
+            initialize=a.action=='encrypt-labels' or request.get('initialize_weights') is True
+            if a.action=='encrypt-labels':require(set(y.tolist())=={0,1},'LABEL_DOMAIN')
+            else:require(type(request.get('initialize_weights')) is bool,'INITIAL_WEIGHTS_FLAG')
+            values=client.encrypt(None,y.astype(np.int64),np.zeros(3,dtype=np.int64) if initialize else None)
+            result=dict(y_cipher=encode(values[1].serialize()),y_cipher_sha256=sha(values[1].serialize()))
+            if initialize:result.update(weights_cipher=encode(values[2].serialize()),weights_cipher_sha256=sha(values[2].serialize()))
         else:
             raw=decode(request['model_cipher']);require(sha(raw)==request['model_cipher_sha256'],'MODEL_CIPHER_HASH')
             weights=np.asarray(client.decrypt(fhe.Value.deserialize(raw)));require(weights.shape==(3,) and np.all((-2<=weights[:2])&(weights[:2]<=2)) and -4<=weights[2]<=4,'MODEL_DOMAIN')

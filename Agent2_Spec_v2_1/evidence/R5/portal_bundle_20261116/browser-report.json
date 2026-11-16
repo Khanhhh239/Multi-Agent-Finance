@@ -1,0 +1,69 @@
+{
+  "status": "pass",
+  "checks": [
+    {
+      "id": "C001-OPERATOR-RUN",
+      "status": "pass",
+      "observed": "Operator selects immutable snapshot and executes approved bundle through scoring, coalescing, shadow queue, review packet; response-loss retry creates one logical run"
+    },
+    {
+      "id": "C001-REVIEW",
+      "status": "pass",
+      "observed": "Accountant/director use business DTO, inspect source, start server timer, save inconclusive; no algorithm fields"
+    },
+    {
+      "id": "C001-CASE-TASK",
+      "status": "pass",
+      "observed": "Create department-assigned task with explicit due date from admitted case; C001 response-loss retry retains one task and immutable snapshot/run/bundle binding"
+    },
+    {
+      "id": "C001-RELOAD-EXPORT",
+      "status": "pass",
+      "observed": "Reload restores feedback and source; JSON/CSV bind same snapshot/run/bundle; metrics remain declared, not verified fraud accuracy"
+    },
+    {
+      "id": "C002-OPERATOR-RUN",
+      "status": "pass",
+      "observed": "Operator selects immutable snapshot and executes approved bundle through scoring, coalescing, shadow queue, review packet; response-loss retry creates one logical run"
+    },
+    {
+      "id": "C002-REVIEW",
+      "status": "pass",
+      "observed": "Accountant/director use business DTO, inspect source, start server timer, save inconclusive; no algorithm fields"
+    },
+    {
+      "id": "C002-CASE-TASK",
+      "status": "pass",
+      "observed": "Create department-assigned task with explicit due date from admitted case; C001 response-loss retry retains one task and immutable snapshot/run/bundle binding"
+    },
+    {
+      "id": "C002-RELOAD-EXPORT",
+      "status": "pass",
+      "observed": "Reload restores feedback and source; JSON/CSV bind same snapshot/run/bundle; metrics remain declared, not verified fraud accuracy"
+    },
+    {
+      "id": "BUSINESS-MOBILE",
+      "status": "pass",
+      "observed": "Business review page fits mobile viewport"
+    },
+    {
+      "id": "BUSINESS-COMPANY-ROUTING",
+      "status": "pass",
+      "observed": "Hash navigation keeps company isolation; old company report removed"
+    },
+    {
+      "id": "OUTER-PORTAL-RESTORE",
+      "status": "pass",
+      "observed": "Actual Portal iframe and outer reload retain C002, bundle workspace and pinned run without exposing legacy P1 comparison"
+    },
+    {
+      "id": "IMPORT-TO-BUNDLE",
+      "status": "pass",
+      "observed": "Real Portal upload/preview/confirm snapshot navigates to common bundle workspace with exact saved company/snapshot, without invoking legacy P1 scoring"
+    }
+  ],
+  "synthetic": true,
+  "he_execution": false,
+  "cloud_plaintext_sent": false,
+  "live_deployed": false
+}

@@ -3,7 +3,7 @@
   const $ = id => document.getElementById(id);
   const mount = location.pathname.startsWith('/agent2/') ? '/agent2' : '';
   let portalMode = !!mount, portalContext = '', portalSyncing = false;
-  let encryptedMode=false;
+  let encryptedMode=false,bundleMode=false;
   const state = {token:'', actor:'', company:'', epoch:0, busy:false, draft:null, preview:null,
     uploadKey:null, commitKey:null, fileHash:null, saved:null, result:null, controller:null};
   const labels = {needs_review:'Cần đối chiếu', unavailable:'Chưa đủ nguồn', no_signal:'Chưa thấy tín hiệu', not_applicable:'Không áp dụng', context_only:'Cần thêm bối cảnh'};
@@ -70,7 +70,7 @@
     show('save-panel',report.status!=='rejected');$('ack').checked=false;put('save-status','');buttons();}
   function analysisLink(){
     if(state.actor&&state.company){try{sessionStorage.setItem('agent2.company.selection',JSON.stringify({version:1,actor:state.actor,context:portalContext,company:state.company,page:'data-import'}));}catch{/* optional selection */}}
-    for(const link of document.querySelectorAll('header a[href]')){const page=new URL(link.href).pathname.split('/').pop();if(['workspace','encrypted-analysis'].includes(page))link.href=mount+'/'+page+(state.company?'#company='+encodeURIComponent(state.company):'');}
+    for(const link of document.querySelectorAll('header a[href]')){const page=new URL(link.href).pathname.split('/').pop();if(['workspace','encrypted-analysis','pipeline-workspace'].includes(page))link.href=mount+'/'+page+(state.company?'#company='+encodeURIComponent(state.company):'');}
   }
   async function acceptContext(context,epoch){current(epoch);state.actor=context.actor_id;portalContext=context.context_id||'';$('credential').value='';
     put('company',...context.companies.map(c=>{const o=node('option',c);o.value=c;return o;}));state.company=$('company').value;put('actor',node('span','Đã kết nối · '+state.actor));show('identity');show('connection',false);
@@ -122,7 +122,7 @@
   $('ack').addEventListener('change',()=>{progress($('ack').checked?3:2);buttons();});
   $('edit-source').addEventListener('click',()=>{invalidate();$('company').focus();});
   $('new-import').addEventListener('click',()=>{$('file').value='';invalidate();$('file').focus();});
-  function setSaved(snapshot,restoredAsOf){state.saved=snapshot;$('analyze').textContent=snapshot.contract_version==='agent2-rule-snapshot/1.0.0'?'Xem 35 luật tại node doanh nghiệp':'Xem kết quả kiểm tra';if(state.preview?.required_as_of)$('as-of').value=vietnamInput(state.preview.required_as_of);else if(restoredAsOf)$('as-of').value=restoredAsOf;show('analysis-panel');show('input-panel',false);show('preview-panel',false);show('save-panel',false);progress(4);put('snapshot-summary',node('span','Doanh nghiệp '+state.company+' · Bản dữ liệu '+snapshot.snapshot_id));metadata('snapshot-meta',[['Mã snapshot',snapshot.snapshot_id],['Checksum',snapshot.checksum],['Checksum dữ liệu',snapshot.data_checksum],['Hợp đồng',snapshot.contract_version]]);remember();}
+  function setSaved(snapshot,restoredAsOf){state.saved=snapshot;$('analyze').textContent=bundleMode?'Ti\u1ebfp t\u1ee5c \u0111\u1ebfn v\u1ee5 c\u1ea7n r\u00e0':snapshot.contract_version==='agent2-rule-snapshot/1.0.0'?'Xem 35 luật tại node doanh nghiệp':'Xem kết quả kiểm tra';if(state.preview?.required_as_of)$('as-of').value=vietnamInput(state.preview.required_as_of);else if(restoredAsOf)$('as-of').value=restoredAsOf;show('analysis-panel');show('input-panel',false);show('preview-panel',false);show('save-panel',false);progress(4);put('snapshot-summary',node('span','Doanh nghiệp '+state.company+' · Bản dữ liệu '+snapshot.snapshot_id));metadata('snapshot-meta',[['Mã snapshot',snapshot.snapshot_id],['Checksum',snapshot.checksum],['Checksum dữ liệu',snapshot.data_checksum],['Hợp đồng',snapshot.contract_version]]);remember();}
   $('save').addEventListener('click',()=>run(async epoch=>{if(!state.preview||!$('ack').checked)throw Error('Xem kết quả kiểm tra và xác nhận trước khi lưu.');
     const {hash}=await bytesAndHash();current(epoch);if(hash!==state.fileHash){invalidate();notify('Tệp đã thay đổi. Kiểm tra lại tệp trước khi lưu.');return;}
     if(Date.parse(state.preview.expires_at)<=Date.now()){state.preview=null;show('save-panel',false);show('preview-panel',false);show('input-panel');progress(1);throw Error('Kết quả kiểm tra đã hết hạn. Bấm Kiểm tra tệp để kiểm tra lại.');}
@@ -171,7 +171,7 @@
   }
   $('filter').addEventListener('change',renderRows);
   $('as-of').addEventListener('change',()=>{state.epoch++;state.controller?.abort();state.controller=null;state.busy=false;state.result=null;show('results',false);remember();buttons();});
-  $('analyze').addEventListener('click',()=>run(async epoch=>{if(encryptedMode&&state.saved?.contract_version!=='agent2-rule-snapshot/1.0.0'){if(!state.saved)throw Error('Lưu dữ liệu trước khi phân tích.');localStorage.setItem('agent2.he.selection',JSON.stringify({company:state.company,snapshot:state.saved.snapshot_id}));location.href=mount+'/encrypted-analysis';return;}show('results',false);state.result=null;const value=$('as-of').value;if(!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?$/.test(value))throw Error('Chọn ngày giờ phân tích hợp lệ.');
+  $('analyze').addEventListener('click',()=>run(async epoch=>{if(bundleMode){if(!state.saved)throw Error('Lưu dữ liệu trước khi phân tích.');location.href=mount+'/pipeline-workspace#'+new URLSearchParams({company:state.company,snapshot:state.saved.snapshot_id});return;}if(encryptedMode&&state.saved?.contract_version!=='agent2-rule-snapshot/1.0.0'){if(!state.saved)throw Error('Lưu dữ liệu trước khi phân tích.');localStorage.setItem('agent2.he.selection',JSON.stringify({company:state.company,snapshot:state.saved.snapshot_id}));location.href=mount+'/encrypted-analysis';return;}show('results',false);state.result=null;const value=$('as-of').value;if(!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?$/.test(value))throw Error('Chọn ngày giờ phân tích hợp lệ.');
     const result=await api(base()+'snapshots/'+state.saved.snapshot_id+'/analyze',{as_of:value+(value.length===16?':00':'')+'+07:00',view:'review'});current(epoch);renderResult(result);remember();
   }));
   // Explicit Vietnam time, independent of the computer/browser timezone.
@@ -182,7 +182,9 @@
       const response=await fetch(mount+'/api/v1/ui/settings',{cache:'no-store'});
       if(!response.ok)throw Error('Chưa đọc được cấu hình kết nối. Bật Agent2 từ Portal rồi tải lại trang.');
       const settings=await response.json();encryptedMode=settings.analysis_mode==='four_encrypted_branches';
+      bundleMode=settings.workspace_mode==='bundle_shadow';
       if(encryptedMode){$('analyze').textContent='Tiếp tục phân tích mã hóa';$('as-of').closest('label').hidden=true;const hint=$('analysis-panel').querySelector('p.hint');if(hint)hint.textContent='Tiếp tục với đúng bản dữ liệu vừa lưu. Các nhánh sẽ tính trên bản mã và giải mã tại doanh nghiệp.';}
+      if(bundleMode){$('analyze').textContent='Tiếp tục đến vụ cần rà';$('as-of').closest('label').hidden=true;const hint=$('analysis-panel').querySelector('p.hint');if(hint)hint.textContent='Chuyển đúng snapshot vừa lưu vào luồng chung. Chọn bản dữ liệu và chạy cấu hình đã được duyệt cho doanh nghiệp; phần thiếu nguồn được báo riêng.';}
       if(settings.auth_mode!=='portal'){if(mount)throw Error('Agent2 chưa chạy ở chế độ Portal. Người vận hành cần khởi động Agent2 từ Portal.');return;}
       portalMode=true;show('connection',false);$('disconnect').textContent='Về Portal';$('portal-login').href=(settings.portal_url||'')+'/#data';
       if(mount){await syncPortal();setInterval(syncPortal,15000);window.addEventListener('storage',e=>{if(e.key==='kt-session'){if(!e.newValue)clearPortal('Portal đã khóa. Đăng nhập lại để tiếp tục.');else syncPortal();}});window.addEventListener('focus',syncPortal);}

@@ -32,7 +32,7 @@ class NativeEvaluator:
         return self.server.run(*values,evaluation_keys=self.keys[owner]).serialize()
 
 
-def make_server(port,store):
+def make_server(port,store,batch_store=None):
     class Handler(BaseHTTPRequestHandler):
         def log_message(self,*_):pass
         def do_POST(self):
@@ -45,6 +45,9 @@ def make_server(port,store):
                 if self.path=='/v1/datasets':result=store.upload(packet)
                 elif self.path=='/v1/confirm':result=store.confirm(packet)
                 elif self.path=='/v1/jobs':result=store.access(packet)
+                elif self.path in ('/v2/datasets','/v2/confirm','/v2/jobs'):
+                    require(batch_store is not None,'BATCH_TRAINING_NOT_CONFIGURED')
+                    result={'/v2/datasets':batch_store.upload,'/v2/confirm':batch_store.confirm,'/v2/jobs':batch_store.access}[self.path](packet)
                 else:raise TrainingError('ROUTE_NOT_FOUND')
                 status=200
             except TrainingError as error:status=409;result=dict(error=error.code)
@@ -62,7 +65,11 @@ def main():
     key=Ed25519PrivateKey.from_private_bytes(bytes.fromhex(Path(cfg['worker_signing_key']).read_text().strip()))
     evaluator=NativeEvaluator(cfg['build'],grants)
     store=CloudStore(cfg['state'],grants,key,evaluator.manifest['files']['server.zip'],evaluator)
-    server=make_server(a.port,store);atomic(a.ready,canonical(dict(port=server.server_port,pid=os.getpid(),worker_verify_key=key.public_key().public_bytes_raw().hex())))
+    batches=None
+    if cfg.get('batch_training') is True:
+        from .batch_store import BatchCloudStore
+        batches=BatchCloudStore(Path(cfg['state'])/'batch',grants,key,evaluator.manifest['files']['server.zip'],evaluator,max_updates=evaluator.manifest['max_steps'])
+    server=make_server(a.port,store,batches);atomic(a.ready,canonical(dict(port=server.server_port,pid=os.getpid(),worker_verify_key=key.public_key().public_bytes_raw().hex())))
     print('Encrypted training worker ready',flush=True);server.serve_forever()
 
 

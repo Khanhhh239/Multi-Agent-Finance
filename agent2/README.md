@@ -1,5 +1,17 @@
 # Agent2 — pipeline v2.1 và không gian làm việc
 
+**Benchmark chung:** có [API/CLI ghép35 luật, MethodScore và supervised shadow trên cùng snapshot](docs/PIPELINE_BENCHMARK.md),
+giữ provenance/thiếu nguồn và so cùng ngân sách5 giao dịch. Đây là báo cáo kỹ thuật,
+chưa tự chọn ensemble hoặc phát hành policy/hàng đợi.
+
+**Train nhiều batch HE:** có [kế hoạch train/holdout riêng, nhãn khóa và chuỗi trọng số bản mã](docs/HE_TRAINING_BATCHES.md).
+Phiên thử dùng 8–16 dòng train, 4 dòng/batch, tối đa 4 cập nhật theo build hiện có;
+operator CLI, không tự đổi model hoặc chạy train từ Portal.
+
+**Xác minh nhãn tại DN:** có [danh sách giao dịch/căn cứ và bộ nhãn khóa theo snapshot](docs/LABEL_VERIFICATION.md)
+trên web, giữ nhãn chưa rõ là null, lưu lịch sử và chống ghi đè. Tách khỏi phiếu
+rà nghiệp vụ; không tự consent/train hoặc chuyển cảnh báo thành nhãn gian lận.
+
 **Đầu vào train HE từ snapshot:** đã có [preview → kiểm tra → mã hóa](docs/HE_TRAINING_SNAPSHOT_ADAPTER.md)
 cho hai feature binary hiện có, giữ point-in-time/tenant/revision và provenance.
 Chọn rõ 4 giao dịch, không tự cắt/điền dữ liệu hoặc train khi chưa xác minh nhãn.

@@ -1,0 +1,855 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent2.local/schemas/remediation.schema.json",
+  "title": "Agent2 R4 Document Checklist, Evidence Document, ActionTask, and Reconciliation Contracts",
+  "$defs": {
+    "non_empty_str": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nullable_str": {
+      "anyOf": [
+        {"type": "string"},
+        {"type": "null"}
+      ]
+    },
+    "iso_datetime": {
+      "type": "string",
+      "minLength": 20,
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$"
+    },
+    "nullable_iso_datetime": {
+      "anyOf": [
+        {"$ref": "#/$defs/iso_datetime"},
+        {"type": "null"}
+      ]
+    },
+    "nullable_int": {
+      "anyOf": [
+        {"type": "integer"},
+        {"type": "null"}
+      ]
+    },
+    "nullable_nonneg_int": {
+      "anyOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "null"}
+      ]
+    },
+    "issue_type": {
+      "type": "string",
+      "enum": [
+        "data_issue",
+        "missing_document",
+        "payment_discrepancy",
+        "process_exception",
+        "unexplained_anomaly"
+      ]
+    },
+    "checklist_item_status": {
+      "type": "string",
+      "enum": [
+        "present",
+        "missing",
+        "pending_verification",
+        "not_applicable",
+        "unknown"
+      ]
+    },
+    "doc_verification_status": {
+      "type": "string",
+      "enum": [
+        "pending_verification",
+        "present",
+        "rejected"
+      ]
+    },
+    "action_task_status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "in_progress",
+        "waiting_external",
+        "completed",
+        "cancelled"
+      ]
+    },
+    "reconciliation_status": {
+      "type": "string",
+      "enum": [
+        "matched",
+        "partially_paid",
+        "overpaid",
+        "unmatched",
+        "disputed",
+        "unavailable"
+      ]
+    },
+    "assignee_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assignee_kind",
+        "assignee_key",
+        "identity_verified",
+        "identity_note"
+      ],
+      "properties": {
+        "assignee_kind": {
+          "type": "string",
+          "enum": ["server_actor", "department_role"]
+        },
+        "assignee_key": {"$ref": "#/$defs/non_empty_str"},
+        "display_label": {"type": "string"},
+        "identity_verified": {"type": "boolean"},
+        "identity_note": {"$ref": "#/$defs/non_empty_str"}
+      }
+    },
+    "document_requirement_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document_type",
+        "title_vi",
+        "requirement_level",
+        "applicable_when",
+        "required_sources",
+        "requires_verification",
+        "blocks_task_completion_when_missing"
+      ],
+      "properties": {
+        "document_type": {"$ref": "#/$defs/non_empty_str"},
+        "title_vi": {"$ref": "#/$defs/non_empty_str"},
+        "requirement_level": {
+          "type": "string",
+          "enum": ["required", "conditional"]
+        },
+        "applicable_when": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "required_sources": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "requires_verification": {"type": "boolean"},
+        "blocks_task_completion_when_missing": {"type": "boolean"}
+      }
+    },
+    "family_requirement_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family_label_vi",
+        "default_issue_type",
+        "default_assignee_role",
+        "requirements"
+      ],
+      "properties": {
+        "family_label_vi": {"$ref": "#/$defs/non_empty_str"},
+        "default_issue_type": {"$ref": "#/$defs/issue_type"},
+        "default_assignee_role": {"$ref": "#/$defs/non_empty_str"},
+        "requirements": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/document_requirement_rule"}
+        }
+      }
+    },
+    "document_requirement_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "policy_id",
+        "policy_version",
+        "effective_from",
+        "approved_for_production",
+        "open_decision_gates",
+        "sla_policy",
+        "families",
+        "rule_overrides"
+      ],
+      "properties": {
+        "schema_version": {"const": "document_requirement_policy/1.0.0"},
+        "policy_id": {"$ref": "#/$defs/non_empty_str"},
+        "policy_version": {"$ref": "#/$defs/non_empty_str"},
+        "effective_from": {"$ref": "#/$defs/iso_datetime"},
+        "approved_for_production": {"type": "boolean"},
+        "open_decision_gates": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "sla_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["default_due_days", "due_at_source", "note"],
+          "properties": {
+            "default_due_days": {
+              "anyOf": [
+                {"type": "integer", "minimum": 1},
+                {"type": "null"}
+              ]
+            },
+            "due_at_source": {"$ref": "#/$defs/non_empty_str"},
+            "note": {"$ref": "#/$defs/non_empty_str"}
+          }
+        },
+        "families": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"$ref": "#/$defs/family_requirement_spec"}
+        },
+        "rule_overrides": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["additional_requirements"],
+            "properties": {
+              "additional_requirements": {
+                "type": "array",
+                "items": {"$ref": "#/$defs/document_requirement_rule"}
+              },
+              "note": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "document_checklist_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document_type",
+        "title_vi",
+        "requirement_level",
+        "applicable",
+        "applicability_reason",
+        "item_status",
+        "status_label_vi",
+        "decision_source",
+        "evidence_ids",
+        "document_ids",
+        "source_checked",
+        "required_sources",
+        "missing_sources",
+        "last_checked_at",
+        "checked_by",
+        "note"
+      ],
+      "properties": {
+        "document_type": {"$ref": "#/$defs/non_empty_str"},
+        "title_vi": {"$ref": "#/$defs/non_empty_str"},
+        "requirement_level": {
+          "type": "string",
+          "enum": ["required", "conditional"]
+        },
+        "applicable": {"type": "boolean"},
+        "applicability_reason": {"$ref": "#/$defs/non_empty_str"},
+        "item_status": {"$ref": "#/$defs/checklist_item_status"},
+        "status_label_vi": {"$ref": "#/$defs/non_empty_str"},
+        "decision_source": {
+          "type": "string",
+          "enum": ["policy_eval", "snapshot_source", "document_store", "human_verifier"]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "document_ids": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "source_checked": {"type": "boolean"},
+        "required_sources": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "missing_sources": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "last_checked_at": {"$ref": "#/$defs/iso_datetime"},
+        "checked_by": {"$ref": "#/$defs/non_empty_str"},
+        "note": {"type": "string"}
+      }
+    },
+    "document_checklist": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "checklist_id",
+        "tenant_id",
+        "company_id",
+        "case_id",
+        "obligation_id",
+        "problem_family",
+        "rule_ids",
+        "policy_id",
+        "policy_version",
+        "as_of",
+        "items",
+        "summary",
+        "revision",
+        "updated_at",
+        "updated_by"
+      ],
+      "properties": {
+        "schema_version": {"const": "document_checklist/1.0.0"},
+        "checklist_id": {"$ref": "#/$defs/non_empty_str"},
+        "tenant_id": {"$ref": "#/$defs/non_empty_str"},
+        "company_id": {"$ref": "#/$defs/non_empty_str"},
+        "case_id": {"$ref": "#/$defs/non_empty_str"},
+        "obligation_id": {"$ref": "#/$defs/non_empty_str"},
+        "problem_family": {"$ref": "#/$defs/non_empty_str"},
+        "rule_ids": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "policy_id": {"$ref": "#/$defs/non_empty_str"},
+        "policy_version": {"$ref": "#/$defs/non_empty_str"},
+        "as_of": {"$ref": "#/$defs/nullable_iso_datetime"},
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/document_checklist_item"}
+        },
+        "summary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "total_items",
+            "applicable_items",
+            "present",
+            "missing",
+            "pending_verification",
+            "unknown",
+            "not_applicable",
+            "ready_for_closure"
+          ],
+          "properties": {
+            "total_items": {"type": "integer", "minimum": 1},
+            "applicable_items": {"type": "integer", "minimum": 0},
+            "present": {"type": "integer", "minimum": 0},
+            "missing": {"type": "integer", "minimum": 0},
+            "pending_verification": {"type": "integer", "minimum": 0},
+            "unknown": {"type": "integer", "minimum": 0},
+            "not_applicable": {"type": "integer", "minimum": 0},
+            "ready_for_closure": {"type": "boolean"}
+          }
+        },
+        "revision": {"type": "integer", "minimum": 1},
+        "updated_at": {"$ref": "#/$defs/iso_datetime"},
+        "updated_by": {"$ref": "#/$defs/non_empty_str"}
+      }
+    },
+    "evidence_document_version": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "sha256",
+        "filename",
+        "mime",
+        "size",
+        "document_date",
+        "received_at",
+        "uploaded_by",
+        "uploaded_role",
+        "source_kind",
+        "note",
+        "supersedes_version",
+        "late_arrival_after_as_of",
+        "verification_status",
+        "verified_by",
+        "verified_at",
+        "verification_note"
+      ],
+      "properties": {
+        "version": {"type": "integer", "minimum": 1},
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "filename": {"$ref": "#/$defs/non_empty_str"},
+        "mime": {
+          "type": "string",
+          "enum": ["application/pdf", "image/png", "image/jpeg"]
+        },
+        "size": {"type": "integer", "minimum": 1, "maximum": 2097152},
+        "document_date": {"$ref": "#/$defs/nullable_iso_datetime"},
+        "received_at": {"$ref": "#/$defs/iso_datetime"},
+        "uploaded_by": {"$ref": "#/$defs/non_empty_str"},
+        "uploaded_role": {"$ref": "#/$defs/non_empty_str"},
+        "source_kind": {
+          "type": "string",
+          "enum": [
+            "enterprise_upload",
+            "snapshot_source",
+            "accounting_export",
+            "bank_statement",
+            "hr_record"
+          ]
+        },
+        "note": {"type": "string"},
+        "supersedes_version": {
+          "anyOf": [
+            {"type": "integer", "minimum": 1},
+            {"type": "null"}
+          ]
+        },
+        "late_arrival_after_as_of": {"type": "boolean"},
+        "verification_status": {"$ref": "#/$defs/doc_verification_status"},
+        "verified_by": {"$ref": "#/$defs/nullable_str"},
+        "verified_at": {"$ref": "#/$defs/nullable_iso_datetime"},
+        "verification_note": {"type": "string"}
+      }
+    },
+    "evidence_document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "document_id",
+        "tenant_id",
+        "company_id",
+        "case_id",
+        "obligation_id",
+        "document_type",
+        "current_version",
+        "verification_status",
+        "late_arrival_after_as_of",
+        "mutates_snapshot_or_features",
+        "versions",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "schema_version": {"const": "evidence_document/1.0.0"},
+        "document_id": {"$ref": "#/$defs/non_empty_str"},
+        "tenant_id": {"$ref": "#/$defs/non_empty_str"},
+        "company_id": {"$ref": "#/$defs/non_empty_str"},
+        "case_id": {"$ref": "#/$defs/non_empty_str"},
+        "obligation_id": {"$ref": "#/$defs/non_empty_str"},
+        "document_type": {"$ref": "#/$defs/non_empty_str"},
+        "current_version": {"type": "integer", "minimum": 1},
+        "verification_status": {"$ref": "#/$defs/doc_verification_status"},
+        "late_arrival_after_as_of": {"type": "boolean"},
+        "mutates_snapshot_or_features": {"const": false},
+        "versions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/evidence_document_version"}
+        },
+        "created_at": {"$ref": "#/$defs/iso_datetime"},
+        "updated_at": {"$ref": "#/$defs/iso_datetime"}
+      }
+    },
+    "action_task_submission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "result_summary",
+        "submitted_by",
+        "submitted_role",
+        "submitted_at",
+        "submitted_document_ids",
+        "submitted_evidence_ids"
+      ],
+      "properties": {
+        "result_summary": {"$ref": "#/$defs/non_empty_str"},
+        "submitted_by": {"$ref": "#/$defs/non_empty_str"},
+        "submitted_role": {"$ref": "#/$defs/non_empty_str"},
+        "submitted_at": {"$ref": "#/$defs/iso_datetime"},
+        "submitted_document_ids": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "submitted_evidence_ids": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "action_task_verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision",
+        "confirmed_by",
+        "confirmed_role",
+        "confirmed_at",
+        "confirmation_note",
+        "verified_document_ids"
+      ],
+      "properties": {
+        "decision": {
+          "type": "string",
+          "enum": ["confirm_complete", "request_rework", "reopen", "cancel"]
+        },
+        "confirmed_by": {"$ref": "#/$defs/non_empty_str"},
+        "confirmed_role": {"$ref": "#/$defs/non_empty_str"},
+        "confirmed_at": {"$ref": "#/$defs/iso_datetime"},
+        "confirmation_note": {"$ref": "#/$defs/non_empty_str"},
+        "verified_document_ids": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "action_task_history_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "revision",
+        "event_type",
+        "from_status",
+        "to_status",
+        "actor_id",
+        "actor_role",
+        "at",
+        "reason"
+      ],
+      "properties": {
+        "revision": {"type": "integer", "minimum": 1},
+        "event_type": {"$ref": "#/$defs/non_empty_str"},
+        "from_status": {"$ref": "#/$defs/nullable_str"},
+        "to_status": {"$ref": "#/$defs/action_task_status"},
+        "actor_id": {"$ref": "#/$defs/non_empty_str"},
+        "actor_role": {"$ref": "#/$defs/non_empty_str"},
+        "at": {"$ref": "#/$defs/iso_datetime"},
+        "reason": {"type": "string"},
+        "assignee": {"$ref": "#/$defs/assignee_ref"},
+        "due_at": {"$ref": "#/$defs/nullable_iso_datetime"},
+        "extra": {"type": "object"}
+      }
+    },
+    "action_task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "task_id",
+        "tenant_id",
+        "company_id",
+        "case_id",
+        "obligation_id",
+        "revision",
+        "task_type",
+        "issue_type",
+        "title",
+        "what_to_do",
+        "reason",
+        "assignee",
+        "due_at",
+        "status",
+        "require_evidence",
+        "required_document_types",
+        "submission",
+        "verification",
+        "reopen_reason",
+        "cancel_reason",
+        "mutates_case_status",
+        "generates_ml_label",
+        "created_by",
+        "created_at",
+        "updated_by",
+        "updated_at",
+        "history"
+      ],
+      "properties": {
+        "schema_version": {"const": "action_task/1.0.0"},
+        "source_binding": {
+          "type": "object", "additionalProperties": false,
+          "required": ["snapshot_id", "run_id", "bundle_id", "pin_id", "review_id", "case_id", "as_of"],
+          "properties": {
+            "snapshot_id": {"type": "string", "pattern": "^snp_[a-f0-9]{32}$"},
+            "run_id": {"type": "string", "pattern": "^[A-Za-z0-9_.:-]{8,128}$"},
+            "bundle_id": {"type": "string", "pattern": "^rbun_[a-f0-9]{64}$"},
+            "pin_id": {"type": "string", "pattern": "^rpin_[a-f0-9]{64}$"},
+            "review_id": {"type": "string", "pattern": "^rvw_[a-f0-9]{64}$"},
+            "case_id": {"type": "string", "minLength": 1},
+            "as_of": {"$ref": "#/$defs/iso_datetime"}
+          }
+        },
+        "task_id": {"$ref": "#/$defs/non_empty_str"},
+        "tenant_id": {"$ref": "#/$defs/non_empty_str"},
+        "company_id": {"$ref": "#/$defs/non_empty_str"},
+        "case_id": {"$ref": "#/$defs/non_empty_str"},
+        "obligation_id": {"$ref": "#/$defs/non_empty_str"},
+        "revision": {"type": "integer", "minimum": 1},
+        "task_type": {
+          "type": "string",
+          "enum": [
+            "request_documents",
+            "reconcile_payment",
+            "verify_control",
+            "remediate_issue"
+          ]
+        },
+        "issue_type": {"$ref": "#/$defs/issue_type"},
+        "title": {"$ref": "#/$defs/non_empty_str"},
+        "what_to_do": {"$ref": "#/$defs/non_empty_str"},
+        "reason": {"$ref": "#/$defs/non_empty_str"},
+        "assignee": {"$ref": "#/$defs/assignee_ref"},
+        "due_at": {"$ref": "#/$defs/nullable_iso_datetime"},
+        "status": {"$ref": "#/$defs/action_task_status"},
+        "require_evidence": {"type": "boolean"},
+        "required_document_types": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "submission": {
+          "anyOf": [
+            {"$ref": "#/$defs/action_task_submission"},
+            {"type": "null"}
+          ]
+        },
+        "verification": {
+          "anyOf": [
+            {"$ref": "#/$defs/action_task_verification"},
+            {"type": "null"}
+          ]
+        },
+        "reopen_reason": {"$ref": "#/$defs/nullable_str"},
+        "cancel_reason": {"$ref": "#/$defs/nullable_str"},
+        "mutates_case_status": {"const": false},
+        "generates_ml_label": {"const": false},
+        "created_by": {"$ref": "#/$defs/non_empty_str"},
+        "created_at": {"$ref": "#/$defs/iso_datetime"},
+        "updated_by": {"$ref": "#/$defs/non_empty_str"},
+        "updated_at": {"$ref": "#/$defs/iso_datetime"},
+        "history": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/action_task_history_entry"}
+        }
+      }
+    },
+    "reconciliation_allocation_line": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tx_id",
+        "kind",
+        "allocated_amount_vnd",
+        "signed_effect_vnd",
+        "tx_time"
+      ],
+      "properties": {
+        "tx_id": {"$ref": "#/$defs/non_empty_str"},
+        "allocation_id": {"type": "string"},
+        "kind": {
+          "type": "string",
+          "enum": ["payment", "refund", "reversal", "credit_note", "adjustment", "fee"]
+        },
+        "allocated_amount_vnd": {"type": "integer", "minimum": 0},
+        "signed_effect_vnd": {"type": "integer"},
+        "tx_time": {"$ref": "#/$defs/iso_datetime"},
+        "note": {"type": "string"}
+      }
+    },
+    "reconciliation_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "obligation_id",
+        "company_id",
+        "as_of",
+        "status",
+        "obligation_amount_vnd",
+        "gross_allocated_payment_vnd",
+        "refund_and_reversal_vnd",
+        "adjustment_signed_vnd",
+        "net_settled_vnd",
+        "remaining_due_vnd",
+        "overpaid_excess_vnd",
+        "related_amount_vnd",
+        "discrepancy_amount_vnd",
+        "confirmed_loss_vnd",
+        "recovered_vnd",
+        "allocations",
+        "deduplicated_tx_ids",
+        "notes"
+      ],
+      "properties": {
+        "schema_version": {"const": "reconciliation_report/1.0.0"},
+        "obligation_id": {"$ref": "#/$defs/non_empty_str"},
+        "company_id": {"$ref": "#/$defs/non_empty_str"},
+        "as_of": {"$ref": "#/$defs/nullable_iso_datetime"},
+        "status": {"$ref": "#/$defs/reconciliation_status"},
+        "obligation_amount_vnd": {"$ref": "#/$defs/nullable_nonneg_int"},
+        "gross_allocated_payment_vnd": {"type": "integer", "minimum": 0},
+        "refund_and_reversal_vnd": {"type": "integer", "minimum": 0},
+        "adjustment_signed_vnd": {"type": "integer"},
+        "net_settled_vnd": {"type": "integer"},
+        "remaining_due_vnd": {"$ref": "#/$defs/nullable_nonneg_int"},
+        "overpaid_excess_vnd": {"$ref": "#/$defs/nullable_nonneg_int"},
+        "related_amount_vnd": {"$ref": "#/$defs/nullable_nonneg_int"},
+        "discrepancy_amount_vnd": {"$ref": "#/$defs/nullable_nonneg_int"},
+        "confirmed_loss_vnd": {"$ref": "#/$defs/nullable_nonneg_int"},
+        "recovered_vnd": {"$ref": "#/$defs/nullable_nonneg_int"},
+        "allocations": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/reconciliation_allocation_line"}
+        },
+        "deduplicated_tx_ids": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "notes": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "remediation_business_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "tenant_id",
+        "company_id",
+        "as_of",
+        "generated_at",
+        "case_counts",
+        "task_counts",
+        "document_counts",
+        "timings",
+        "amounts_vnd",
+        "by_issue_type"
+      ],
+      "properties": {
+        "schema_version": {"const": "remediation_business_report/1.0.0"},
+        "tenant_id": {"$ref": "#/$defs/non_empty_str"},
+        "company_id": {"$ref": "#/$defs/non_empty_str"},
+        "as_of": {"$ref": "#/$defs/nullable_iso_datetime"},
+        "generated_at": {"$ref": "#/$defs/iso_datetime"},
+        "case_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["total_distinct_cases", "new", "in_review", "waiting_evidence", "closed"],
+          "properties": {
+            "total_distinct_cases": {"type": "integer", "minimum": 0},
+            "new": {"type": "integer", "minimum": 0},
+            "in_review": {"type": "integer", "minimum": 0},
+            "waiting_evidence": {"type": "integer", "minimum": 0},
+            "closed": {"type": "integer", "minimum": 0}
+          }
+        },
+        "task_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "total_tasks",
+            "open",
+            "in_progress",
+            "waiting_external",
+            "completed",
+            "cancelled",
+            "overdue",
+            "due_soon",
+            "awaiting_confirmation"
+          ],
+          "properties": {
+            "total_tasks": {"type": "integer", "minimum": 0},
+            "open": {"type": "integer", "minimum": 0},
+            "in_progress": {"type": "integer", "minimum": 0},
+            "waiting_external": {"type": "integer", "minimum": 0},
+            "completed": {"type": "integer", "minimum": 0},
+            "cancelled": {"type": "integer", "minimum": 0},
+            "overdue": {"type": "integer", "minimum": 0},
+            "due_soon": {"type": "integer", "minimum": 0},
+            "awaiting_confirmation": {"type": "integer", "minimum": 0}
+          }
+        },
+        "document_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "checklists_evaluated",
+            "incomplete_checklists",
+            "incomplete_rate",
+            "total_documents",
+            "pending_verification_docs",
+            "verified_docs",
+            "rejected_docs",
+            "missing_items",
+            "unknown_items"
+          ],
+          "properties": {
+            "checklists_evaluated": {"type": "integer", "minimum": 0},
+            "incomplete_checklists": {"type": "integer", "minimum": 0},
+            "incomplete_rate": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+            "total_documents": {"type": "integer", "minimum": 0},
+            "pending_verification_docs": {"type": "integer", "minimum": 0},
+            "verified_docs": {"type": "integer", "minimum": 0},
+            "rejected_docs": {"type": "integer", "minimum": 0},
+            "missing_items": {"type": "integer", "minimum": 0},
+            "unknown_items": {"type": "integer", "minimum": 0}
+          }
+        },
+        "timings": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "avg_task_processing_hours",
+            "avg_waiting_evidence_hours",
+            "completed_tasks_timed"
+          ],
+          "properties": {
+            "avg_task_processing_hours": {
+              "anyOf": [
+                {"type": "number", "minimum": 0.0},
+                {"type": "null"}
+              ]
+            },
+            "avg_waiting_evidence_hours": {
+              "anyOf": [
+                {"type": "number", "minimum": 0.0},
+                {"type": "null"}
+              ]
+            },
+            "completed_tasks_timed": {"type": "integer", "minimum": 0}
+          }
+        },
+        "amounts_vnd": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "related_amount_vnd",
+            "discrepancy_amount_vnd",
+            "confirmed_loss_vnd",
+            "recovered_vnd",
+            "deduplicated_obligation_count"
+          ],
+          "properties": {
+            "related_amount_vnd": {"$ref": "#/$defs/nullable_nonneg_int"},
+            "discrepancy_amount_vnd": {"$ref": "#/$defs/nullable_nonneg_int"},
+            "confirmed_loss_vnd": {"$ref": "#/$defs/nullable_nonneg_int"},
+            "recovered_vnd": {"$ref": "#/$defs/nullable_nonneg_int"},
+            "deduplicated_obligation_count": {"type": "integer", "minimum": 0}
+          }
+        },
+        "by_issue_type": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tasks", "open_tasks", "completed_tasks", "related_amount_vnd"],
+            "properties": {
+              "tasks": {"type": "integer", "minimum": 0},
+              "open_tasks": {"type": "integer", "minimum": 0},
+              "completed_tasks": {"type": "integer", "minimum": 0},
+              "related_amount_vnd": {"$ref": "#/$defs/nullable_nonneg_int"}
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

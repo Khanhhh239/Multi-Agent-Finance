@@ -1,5 +1,170 @@
 # Contracts, thuật ngữ, trạng thái và module
 
+## CR-062 — Portal và task gắn nguồn của vụ
+
+Khi có release service, entry Portal dùng pipeline-workspace; legacy HE/P1 giữ
+riêng, không đổi nhãn P1 thành 35 luật. Business baseline summary lấy từ chính
+analysis đã lưu (catalogue/row coverage), không khẳng định mọi luật đủ nguồn.
+Task trong ActionTask/1.0.0 thêm thuộc tính optional source_binding:
+snapshot_id/run_id/bundle_id/pin_id/review_id/case_id/as_of. Task cũ không đổi.
+Binding do server đọc immutable packet, không nhận client tự khai. Case key của
+task là review_id; source_binding.case_id giữ canonical coalesced case. Mọi
+revision/receipt giữ binding, retry/dedup không đổi nguồn. Tạo task không đóng
+vụ hoặc xác nhận nhãn. Chưa nối cloud HE mới, không fallback dữ liệu rõ.
+
+## CR-061 — điều phối đến phiếu và report theo bundle
+
+Giữ bundle1.1 và profile case shadow tại DN. Luồng nối tiếp queue bằng
+`bundle-review-packet/1.0.0`: tenant/company, snapshot/checksum/data_checksum,
+run_id/bundle_id/pin_id/as_of, cases[]. Review ID theo scope/pin/case; chỉ quyết
+định selected/mandatory_route tạo phiếu, không tạo lại phiếu cho already_notified.
+Packet bất biến commit cùng observation. Source records sau as_of không vào
+financial coalescing/evidence; candidate/evidence tách riêng, nguyên snapshot.
+
+`bundle-workspace-report/1.0.0` DTO nghiệp vụ có bộ ba ID, cutoff, report hash,
+queue/source-status, cases/review revisions và thống kê khai báo. Không thuật
+toán/trọng số/raw score/rule config/model feature trong DTO kế toán. Financial
+fields signed VND chính xác, unknown null, không cộng tổng qua vụ chung nghĩa vụ.
+Feedback confirmed_risk không là verified_fraud; không auto-label/train/close task.
+
+CompanyReviewStore dùng ReviewStore ở DB/khóa/owner namespace riêng, đọc phản hồi
+trong DN và CAS/audit actor; không migrate hoặc thay kho phiếu HE cá nhân cũ.
+Lease đo thời gian server, save retry bền vững; attachment chưa verified và không
+sửa dữ liệu dùng để chấm. Backend kiểm lại auth/packet/evidence trước lưu/đọc.
+
+API pipeline-workspace cho membership dữ liệu trong DN: chọn snapshot và mã run,
+không nhận config/model/score/tenant/role tự khai. Backend lấy cutoff, pin bundle
+staging đã duyệt, checkpoint/receipt trước queue, packet/report theo cùng lần chạy.
+GET list pending/completed, resume giữ run ID. Config/approve/switch vẫn director.
+
+Execution location enterprise_local_only; cloud_branches unavailable nếu bundle
+chưa có HE executor. Yêu cầu cloud_ciphertext_only bị chặn trước pin/local score,
+không fallback rõ. Đường HE cũ không đổi; chưa full HE bundle hoặc active release.
+Modules mới bundle_reviews.py/bundle_workspace_api.py, business UI pipeline-workspace.
+Xem agent2/docs/BUNDLE_ORCHESTRATOR.md và evidence/R6/bundle_orchestrator_20261116.
+
+## CR-060 — ghim validation và điều phối case shadow
+
+Bundle1.1/profile `snapshot_case_shadow/1.0.0` kế thừa component contract1.0 và
+bắt buộc thêm `validation_study`. Gói `release-shadow-plan/1.0.0` chỉ vào registry
+qua producer/CLI tin cậy tại DN, không HTTP upload scores/policy/model. Browser
+chỉ chọn artifact `plan_id` trong prepare. Kiểm scope, snapshot/checksum/cutoff,
+source runtime, feature contract, model/reference/calibrator/study và policy.
+Bundle ghim các component validation/normalization/calibration/ensemble/fallback/
+grouping/threshold/budget/mandatory/backlog; documents/HE không dùng ghi rõ.
+
+Luồng thực thi: pin → phân tích snapshot/model tại DN → selected-arm/fallback →
+gộp vụ → commit execution checkpoint → queue shadow qua receipt gắn pin →
+observation. Gate preview không có side effect queue. Hai DB nối bằng checkpoint
+bất biến + idempotency receipt, không giả distributed transaction hoặc exactly-once
+native compute. Crash sau queue commit tiếp tục đúng payload đã khóa, không
+tạo reservation mới. Case queue giữ bundle/run trong snapshot_binding cho audit.
+
+Kỳ quota không chứa bundle/policy version/run. Đổi period_kind giữa hai case
+bundle bị chặn nếu chưa migration; đổi điểm do release với cùng data_checksum và
+candidates không tự làm vụ đã gửi thành cảnh báo mới. Chính sách fixture vẫn
+explicit/unapproved, không biến budget5 giao dịch thành budget5 vụ. Toàn bộ
+case-policy validation nghiệp vụ tiếp tục chờ gate độc lập.
+
+Reference/selection/calibrator phải có trước giao dịch; dòng quá khứ giữ null/
+unavailable, không fallback vượt cutoff. Chỉ selected-arm branches được executor
+hỗ trợ; không giả supervised/HE bằng điểm từ nhánh khác. Model/calibrator thiếu
+hoặc ngoài contract không tự fit. Điểm ưu tiên và xác suất hiệu chuẩn thử riêng.
+Monitoring thêm fallback/case/deferred/quota/queue-processing theo bundle/DN;
+review/drift/latency chờ chưa đủ nguồn vẫn null. Production luôn BLOCKED theo
+quyết định mở; không đổi stage mapping hoặc tự DONE R6.
+Module thêm release_shadow_plan.py; schema gate pipeline_release_gate.schema.json.
+Evidence: evidence/R6/linked_shadow_20261116/REPORT.md.
+
+## CR-059 — release bundle, gate và rollback staging
+
+`pipeline-release-bundle/1.0.0`: scope tenant/DN, qualification snapshot/checksums,
+score_semantics=ranking_only, component refs content-addressed hoặc unused/reason.
+Slots bắt buộc: rules, graph, feature_contract, preprocess, models, reference,
+normalization, calibration, ensemble, fallback, grouping, thresholds, budget,
+mandatory_routing, backlog, documents, runtime, he. Không secret/credential/quyền
+trong bundle; API không nhận arbitrary artifact bytes, code hoặc pass flag.
+Model từ MethodStore tin cậy; checksum/feature/preprocess/reference/runtime được kiểm.
+
+Release metadata ở DB AES-GCM riêng, append-only objects/audit/receipts/pins.
+Con trỏ `(tenant,company,lane)` lane=staging/production, revision CAS; idempotency
+persist theo actor/scope/body. Chuyển phiên bản chỉ append event và đổi pointer;
+không restore business DB/key/schema, reset quota hoặc phát lại cảnh báo.
+Mỗi run ghi pin trước compute, gồm bundle/nguồn/as_of/revision; resume dùng đúng
+pin, không đọc latest pointer. Kết quả lưu riêng, retry trả bản đã commit.
+
+Gate `pipeline-release-gate/1.0.0`: compatibility/technical/quality/operations/
+approval/production_policy, expected, observed, status=pass|fail|blocked, evidence,
+approver. Gate bất biến; approval riêng đúng bundle/gate/lane/actor/hạn/lý do.
+Staging approval và gate hiệu lực kỹ thuật tối đa24h, không thay D-17/D-19.
+Rollback chỉ về bundle đã dùng cùng lane, còn gate/approval hiệu lực, không bị
+thu hồi và model/reference/feature/runtime tương thích hiện tại. Không tự deploy
+build cũ, rotate khóa, sửa các bản ghi review/nhãn/task/ledger.
+
+Executor hiện hỗ trợ `snapshot_detector_shadow/1.0.0` tại DN: native35 luật hoặc
+canonical P1/E3, graph/PIT feature và MethodStore model đã ghim; unused policy
+không được giả là đã thực thi. Không cloud raw upload, không HE/supervised-shadow/
+ensemble/queue tự nối. Production pointer không thể kích hoạt trong profile này.
+Node bật release service chặn tạo vụ active qua evaluate/reevaluate API cũ;
+đọc hồ sơ, xử lý công việc và recover giao nhận đã lưu giữ cơ chế hiện hữu.
+
+Monitoring theo DN/bundle/run: runtime và tỷ lệ khả dụng từng nhánh, numerator/
+denominator rõ; thiếu nhánh yêu cầu điều tra, không auto-fit/activate. Chưa có
+provenance cho drift/fallback/backlog/kết quả rà thì null kèm lý do, không suy0.
+D-04/05/06/07/09/17/18/19, full release executor và monitoring tương ứng tiếp tục
+BLOCKED. Không tự nâng phần release metadata acceptance thành toàn mốc R6 DONE.
+Module: pipeline_release_store.py, pipeline_release.py, pipeline_release_api.py,
+pipeline_release.schema.json; Portal/static routes theo allowlist director.
+Xem agent2/docs/PIPELINE_RELEASE.md và evidence/R6/REPORT.md.
+
+## CR-058 — agent2-pipeline-benchmark/0.1.0
+
+Benchmark readonly ghép saved shadow run đã duyệt với phân tích35 luật kỹ thuật
+cùng tenant/DN/snapshot/checksum/as_of. Ma trận giữ đầy đủ candidates và trạng
+thái từng method/graph, không biến thiếu nguồn thành0. Loại train/holdout đã thấy
+khỏi mọi phương án thử, lan loại trừ qua nhóm liên quan, vẫn giữ dòng để audit.
+Giữ rules_first_fill/1.0.0, tối đa5 giao dịch/phương án: rules-only, rules+unsup
+được ghim và rules+supervised-shadow. Không trộn raw scale, tự đặt trọng số,
+percentile, nhãn hoặc production threshold. technical_only/retrospective;
+provenance ghim code/analysis/shadow/model pins/report hash. API director/CLI
+qua Portal; không fit, không gửi raw cloud, không thay active queue.
+Sửa harness snapshot qua commit thực và test import paths; null model pins không
+tự thành nhiều model. from_config đọc bảo toàn hai key derivation batch đã dùng
+bằng xác thực ciphertext, không migrate/rotation hoặc plaintext fallback.
+
+## CR-057 — encrypted-batch-training/0.1.0
+
+Kế hoạch snapshot-he-batch-plan/0.1.0 ghim hai partition theo thời gian, ID/revision
+không trùng kể cả qua revision khác. Train 2–4 batch, mỗi batch4/two binary feature;
+holdout1–4 batch, không gửi vào worker fit. Giữ giới hạn4 cập nhật/build hiện tại;
+không tự đệm/cắt dòng, tăng max_steps hoặc đổi circuit/FeatureContract33.
+Child plan dùng adapter point-in-time cũ; mapping/mode/source phải đồng nhất.
+Nguồn thật đọc bộ nhãn khóa từ kho DN, kiểm source plan và bản khóa chính xác;
+không yêu cầu fit operator xác minh lại. Null chặn phiên, hai lớp xét toàn train.
+Consent ký ghim thứ tự/hash/nhãn/receipt/epochs/key/build và HMAC partition.
+Cloud v2 tách v1, dùng trọng số ciphertext đầu ra cho batch/epoch tiếp; một lease
+process, checkpoint SQLite atomic weights/hash/cursor, status đọc khi đang tính.
+Crash có thể tính lại lượt chưa commit, không reset weights hoặc fit job mới.
+Kết quả mã hóa chỉ giải mã tại DN sau hoàn tất, scalar batch oracle đối chiếu
+trước candidate; holdout chấm riêng, chưa calibrated accuracy/active/queue.
+Không rollout Portal live hoặc đổi worker TTL/replay HE inference cũ.
+
+## CR-056 — enterprise-label-packet/1.0.0
+
+Danh sách xác minh tại DN cho bốn giao dịch tường minh theo adapter train HE
+hiện tại. Ghim snapshot/checksum/source contract, ID/revision, as_of/window,
+mapping và source plan hash. Viewer đọc căn cứ point-in-time, không dùng score
+hoặc cảnh báo làm nhãn. Target verified-fraud/1.0.0: verified_fraud,
+verified_non_fraud hoặc null; không suy null/confirmed_risk thành 0/1.
+Nhãn xác minh cần explanation, đúng evidence IDs trong case và xác nhận đối
+chiếu; server ghi actor/time, evidence.verify cho ghi/khóa, data.import cho đọc.
+Payload AES-GCM, append-only revisions; expected_revision/request_id chống
+ghi đè và gửi trùng. Lock ghim revision/SHA, reopen giữ nhãn và bản khóa cũ.
+Export còn null/thiếu hai lớp/feature không đủ thì training_ready=false.
+Mô phỏng tách khỏi nhãn thật; Portal workspace chưa xác minh cá nhân riêng.
+Không tự nối consent/train, cloud upload/model activation hoặc nhãn phiếu cũ.
+Không thay runtime live, core33/HE circuit/model, khóa hay quyền hiện hành.
+
 ## CR-055 — snapshot-he-training-adapter/0.1.0
 
 Read-only snapshot reader reuse integrity/scope checks, canonical hoặc nguồn

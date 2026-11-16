@@ -732,11 +732,14 @@
     try { saved = JSON.parse(sessionStorage.getItem("agent2.company.selection")); } catch (e) { /* optional */ }
     try { legacy = JSON.parse(sessionStorage.getItem("agent2.workbench")); } catch (e) { /* optional */ }
     if (!saved && legacy?.actor === context.actor_id && (legacy.context === undefined || legacy.context === (context.context_id || ""))) saved = { version: 1, actor: legacy.actor, context: context.context_id || "", company: legacy.company, page: "data-import" };
-    const pages = ["workspace", "data-import", "encrypted-analysis", "analysis-settings"];
+    const pages = ["workspace", "pipeline-workspace", "data-import", "encrypted-analysis", "analysis-settings"];
     if (saved?.version !== 1 || saved.actor !== context.actor_id || saved.context !== (context.context_id || "") || !context.companies.includes(saved.company) || !pages.includes(saved.page)) return fallback;
-    const target = new URL("/agent2/" + saved.page, location.origin);
+    // Old business workspace pins an HE/P1 run. The shared bundle workspace
+    // must not reinterpret that run as a 35-rule bundle observation.
+    const page = saved.page === "workspace" ? "pipeline-workspace" : saved.page;
+    const target = new URL("/agent2/" + page, location.origin);
     const fields = new URLSearchParams({ company: saved.company });
-    if (saved.page === "workspace" && /^herun_[a-f0-9]{32}$/.test(saved.run || "")) fields.set("run", saved.run);
+    if (page === "pipeline-workspace" && saved.page === page && /^[A-Za-z0-9_.:-]{8,128}$/.test(saved.run || "")) fields.set("run", saved.run);
     target.hash = fields.toString();
     return target.href;
   }

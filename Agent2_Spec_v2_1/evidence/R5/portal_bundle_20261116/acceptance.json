@@ -1,0 +1,63 @@
+{
+  "spec_version": "2.1",
+  "stage": "R5",
+  "run_id": "CR-062-portal-bundle-20261116",
+  "tests": [
+    {
+      "id": "R5-01",
+      "status": "pass",
+      "expected": "Accountant cannot call configuration APIs directly.",
+      "observed": "Portal accountant config/release attempts denied in regression; task creation grants no management permission.",
+      "evidence_path": "REPORT.md"
+    },
+    {
+      "id": "R5-02",
+      "status": "pass",
+      "expected": "Company/case/import/file IDs do not bypass tenant scope.",
+      "observed": "Portal/current-auth regressions and bound-task tests reject cross-company/run/review IDs, extra source fields and revoked permissions.",
+      "evidence_path": "REPORT.md"
+    },
+    {
+      "id": "R5-03",
+      "status": "pass",
+      "expected": "Accountant DTO/export excludes algorithm/weights/hyperparameters.",
+      "observed": "Business report uses source/evidence/task allowlists; private-field and real UI/export checks pass.",
+      "evidence_path": "REPORT.md"
+    },
+    {
+      "id": "R5-04",
+      "status": "blocked",
+      "expected": "Both user interfaces return the same business figures for one snapshot.",
+      "observed": "Common immutable run/report is used by Portal and exports; full cross-role UI/business financial acceptance remains outside this focused task.",
+      "evidence_path": "REPORT.md"
+    },
+    {
+      "id": "R5-05",
+      "status": "blocked",
+      "expected": "Configuration draft does not alter active; label approval independent of resolution.",
+      "observed": "Regression guards remain; no production activation or complete label-approval lifecycle acceptance in this task.",
+      "evidence_path": "REPORT.md"
+    },
+    {
+      "id": "R5-06",
+      "status": "blocked",
+      "expected": "Director cannot use platform-admin privileges or obtain secret keys.",
+      "observed": "Existing scoped director/secret boundary tests pass; full platform-admin permission matrix is not requalified by this task.",
+      "evidence_path": "REPORT.md"
+    },
+    {
+      "id": "R5-07",
+      "status": "pass",
+      "expected": "Accountant feedback remains pending until independent label approval.",
+      "observed": "Review and task saves keep training_eligible=false and generate no verified labels; current label-store records unchanged.",
+      "evidence_path": "REPORT.md"
+    },
+    {
+      "id": "R5-08",
+      "status": "pass",
+      "expected": "Configuration edit/approve/activate preserves actor/reason/timestamp/revisions.",
+      "observed": "Release lifecycle regression and audit/idempotency/rollback tests pass; business task route cannot edit bundle configuration.",
+      "evidence_path": "REPORT.md"
+    }
+  ]
+}

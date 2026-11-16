@@ -1,0 +1,74 @@
+{
+  "cloud_has_holdout_rows": false,
+  "cloud_inputs_only_ciphertext_and_public_metadata": true,
+  "companies": [
+    {
+      "batch_size": 4,
+      "company_id": "C001",
+      "completed_updates": 4,
+      "encrypted_model_stable_after_restart": true,
+      "encrypted_weights_carried_across_batches": true,
+      "epochs": 2,
+      "evaluation_rows": 4,
+      "hard_crash_recovery": {
+        "committed_updates_after_restart": 1,
+        "committed_updates_before_crash": 1,
+        "injection": "SIGKILL owned worker while update 2 pending",
+        "same_build": true,
+        "same_job": true,
+        "same_key_epoch": true
+      },
+      "holdout_excluded_from_fit": true,
+      "http_training_seconds": 58.78100000000086,
+      "labels_read_without_new_verification": true,
+      "locked_labels_used": true,
+      "oracle_exact": true,
+      "status": "passed",
+      "training_batches": 2,
+      "training_rows": 8,
+      "weights_code": [
+        1,
+        1,
+        -1
+      ]
+    },
+    {
+      "batch_size": 4,
+      "company_id": "C002",
+      "completed_updates": 4,
+      "encrypted_model_stable_after_restart": true,
+      "encrypted_weights_carried_across_batches": true,
+      "epochs": 2,
+      "evaluation_rows": 4,
+      "hard_crash_recovery": null,
+      "holdout_excluded_from_fit": true,
+      "http_training_seconds": 37.0630000000001,
+      "labels_read_without_new_verification": true,
+      "locked_labels_used": true,
+      "oracle_exact": true,
+      "status": "passed",
+      "training_batches": 2,
+      "training_rows": 8,
+      "weights_code": [
+        -1,
+        -1,
+        1
+      ]
+    }
+  ],
+  "limits": [
+    "Fixed 4 rows / 2 binary predictors per batch, 4 total updates in current build.",
+    "Holdout scores are uncalibrated; no business accuracy claimed.",
+    "SIGKILL may recompute an uncommitted update; committed weights/cursor are atomic.",
+    "Same-account worker process separation is not an OS sandbox or proof against malicious computation."
+  ],
+  "live_services_changed": false,
+  "production_activated": false,
+  "real_concrete_fhe": true,
+  "real_verified_fraud_labels": 0,
+  "seconds": 418.28099999999904,
+  "status": "passed",
+  "synthetic_only": true,
+  "version": "encrypted-batch-training/0.1.0",
+  "worker_has_enterprise_keys": false
+}

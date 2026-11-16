@@ -1,0 +1,330 @@
+{
+  "version": "shadow-snapshot-runs-acceptance/1.0.0",
+  "verified_at": "2026-11-15T17:20:12.104722Z",
+  "environment": {
+    "mode": "portal_browser_and_real_enterprise_node_acceptance",
+    "browser_engine": "Playwright Chromium",
+    "tenant_id": "training-demo",
+    "execution_location": "enterprise_node_decrypted_candidate",
+    "cloud_he_inference_performed": false,
+    "manual_features_accepted_on_business_flow": false
+  },
+  "cases": {
+    "0_explicit_model_selection_no_auto_select": {
+      "passed": true,
+      "initial_selected_model": "",
+      "check_button_disabled_before_selection": true,
+      "run_button_disabled_before_selection": true
+    },
+    "1_and_2_mixed_snapshot_missing_and_post_cutoff": {
+      "passed": true,
+      "shadow_run_id": "shrun_1_c6429101cd3d25ae",
+      "snapshot_id": "snp_3b0ed4bf45234b5bb038892a37d2a680",
+      "as_of": "2025-09-02T00:00:00+07:00",
+      "model_run_id": "btrun_1_cbbb0e13f8a0391b8c0b",
+      "model_cipher_sha256": "0b556814858303225a6b6e70b0c76eed318a266d54805891edcb86cc6a4d23fe",
+      "approval_sha256": "66163c5661e4147355a8456aab4fd78d1fe5e8dbfc7beda3d164c1502b2e5cae",
+      "summary": {
+        "total_rows": 7,
+        "eligible_rows": 5,
+        "scored_rows": 5,
+        "unavailable_rows": 2,
+        "incompatible_rows": 0,
+        "post_cutoff_rows": 1,
+        "missing_feature_rows": 1,
+        "new_transaction_rows": 6,
+        "seen_in_training_rows": 1,
+        "seen_in_evaluation_rows": 0,
+        "min_score": 0.3775406687981454,
+        "max_score": 0.6224593312018546
+      },
+      "first_row_when_sorted_score_desc": "C001_NEW_11",
+      "first_row_when_sorted_row_asc": "C001_NEW_00",
+      "reloaded_shadow_run_id": "shrun_1_c6429101cd3d25ae",
+      "rows": [
+        {
+          "record_id": "C001_NEW_00",
+          "status": "scored",
+          "history_status": "new_transaction",
+          "features": {
+            "round_million": 0,
+            "creator_equals_approver": 0
+          },
+          "score": 0.3775406687981454,
+          "score_rank": 5,
+          "issue_codes": []
+        },
+        {
+          "record_id": "C001_NEW_10",
+          "status": "scored",
+          "history_status": "new_transaction",
+          "features": {
+            "round_million": 1,
+            "creator_equals_approver": 0
+          },
+          "score": 0.5,
+          "score_rank": 3,
+          "issue_codes": []
+        },
+        {
+          "record_id": "C001_NEW_01",
+          "status": "scored",
+          "history_status": "new_transaction",
+          "features": {
+            "round_million": 0,
+            "creator_equals_approver": 1
+          },
+          "score": 0.5,
+          "score_rank": 4,
+          "issue_codes": []
+        },
+        {
+          "record_id": "C001_NEW_11",
+          "status": "scored",
+          "history_status": "new_transaction",
+          "features": {
+            "round_million": 1,
+            "creator_equals_approver": 1
+          },
+          "score": 0.6224593312018546,
+          "score_rank": 1,
+          "issue_codes": []
+        },
+        {
+          "record_id": "C001_MISSING_APPROVER",
+          "status": "unavailable",
+          "history_status": "new_transaction",
+          "features": {
+            "round_million": 1,
+            "creator_equals_approver": null
+          },
+          "score": null,
+          "score_rank": null,
+          "issue_codes": [
+            "FEATURE_MISSING"
+          ]
+        },
+        {
+          "record_id": "AUDIT_0000",
+          "status": "scored",
+          "history_status": "seen_in_training",
+          "features": {
+            "round_million": 1,
+            "creator_equals_approver": 1
+          },
+          "score": 0.6224593312018546,
+          "score_rank": 2,
+          "issue_codes": []
+        },
+        {
+          "record_id": "C001_AFTER_CUTOFF",
+          "status": "unavailable",
+          "history_status": "new_transaction",
+          "features": {
+            "round_million": null,
+            "creator_equals_approver": null
+          },
+          "score": null,
+          "score_rank": null,
+          "issue_codes": [
+            "ROW_NOT_AVAILABLE_AT_AS_OF"
+          ]
+        }
+      ]
+    },
+    "3_large_snapshot_over_64_rows_chunked": {
+      "passed": true,
+      "shadow_run_id": "shrun_2_c2bd9b324f81036f",
+      "snapshot_id": "snp_0a1d8f9329484d2aaaa66023f28bae4c",
+      "batch_execution": {
+        "input_mode": "backend_snapshot_feature_builder",
+        "manual_features_accepted": false,
+        "max_rows_per_call": 64,
+        "training_four_row_limit_applied": false,
+        "truncated_to_64": false,
+        "eligible_rows": 70,
+        "scored_rows": 70,
+        "call_count": 2,
+        "chunks": [
+          {
+            "chunk_index": 0,
+            "row_count": 64,
+            "first_record_id": "C001_BULK_000",
+            "last_record_id": "C001_BULK_063"
+          },
+          {
+            "chunk_index": 1,
+            "row_count": 6,
+            "first_record_id": "C001_BULK_064",
+            "last_record_id": "C001_BULK_069"
+          }
+        ]
+      },
+      "summary": {
+        "total_rows": 70,
+        "eligible_rows": 70,
+        "scored_rows": 70,
+        "unavailable_rows": 0,
+        "incompatible_rows": 0,
+        "post_cutoff_rows": 0,
+        "missing_feature_rows": 0,
+        "new_transaction_rows": 70,
+        "seen_in_training_rows": 0,
+        "seen_in_evaluation_rows": 0,
+        "min_score": 0.3775406687981454,
+        "max_score": 0.6224593312018546
+      }
+    },
+    "4_training_and_holdout_overlap_tagging": {
+      "passed": true,
+      "shadow_run_id": "shrun_3_0a008faeeb500b65",
+      "snapshot_id": "snp_a4b2e66e922148a28a524c8b0821a249",
+      "summary": {
+        "total_rows": 12,
+        "eligible_rows": 12,
+        "scored_rows": 12,
+        "unavailable_rows": 0,
+        "incompatible_rows": 0,
+        "post_cutoff_rows": 0,
+        "missing_feature_rows": 0,
+        "new_transaction_rows": 0,
+        "seen_in_training_rows": 8,
+        "seen_in_evaluation_rows": 4,
+        "min_score": 0.3775406687981454,
+        "max_score": 0.6224593312018546
+      }
+    },
+    "6_incompatible_model_contract_detected": {
+      "passed": true,
+      "shadow_run_id": "shrun_4_b9e77f72dcfa29ad",
+      "snapshot_id": "snp_5bb891f0ec184b5c99c0dc879919e4ec",
+      "mismatches": [
+        {
+          "field": "source_contract_version",
+          "expected": "rule-snapshot-point-in-time/1.0.0",
+          "actual": "snapshot-point-in-time/1.1.0",
+          "message": "Phiên bản hợp đồng 33 feature của snapshot (snapshot-point-in-time/1.1.0) không khớp với hợp đồng khi huấn luyện model (rule-snapshot-point-in-time/1.0.0)."
+        },
+        {
+          "field": "source_contract_fingerprint",
+          "expected": "b6a7c2fcf47c905c83ed7ed542e42329742b196be91a1e356b12c6cc83edcfc5",
+          "actual": "750e47dac572ad4a07bd308526ca382acda0c90d62b5440236ed9b34c1423d6c",
+          "message": "Fingerprint hợp đồng 33 feature của snapshot không khớp với hợp đồng đã ghim của model."
+        },
+        {
+          "field": "mapping_fingerprint",
+          "expected": "d161a81d19a7255ebc8c3956732794d7fce0f6af424bae478c000542c37d5e82",
+          "actual": "fab6535f42e431769d02beba47163a2e3454ad07fa7a3170eb82f205d7444d42",
+          "message": "Mapping fingerprint của snapshot không khớp với mapping fingerprint đã ghim của model."
+        }
+      ],
+      "summary": {
+        "total_rows": 4,
+        "eligible_rows": 0,
+        "scored_rows": 0,
+        "unavailable_rows": 0,
+        "incompatible_rows": 4,
+        "post_cutoff_rows": 0,
+        "missing_feature_rows": 0,
+        "new_transaction_rows": 4,
+        "seen_in_training_rows": 0,
+        "seen_in_evaluation_rows": 0,
+        "min_score": null,
+        "max_score": null
+      }
+    },
+    "7_late_document_and_approval_invariance": {
+      "passed": true,
+      "baseline_shadow_run_id": "shrun_1_c6429101cd3d25ae",
+      "late_snapshot_shadow_run_id": "shrun_5_8f71d0f5f6a3eec1",
+      "as_of": "2025-09-02T00:00:00+07:00",
+      "all_7_rows_identical_features_and_scores": true
+    },
+    "8_idempotency_and_history_preservation": {
+      "passed": true,
+      "c001_saved_shadow_runs_count": 5,
+      "duplicate_run_created": false
+    },
+    "5_and_9_company_isolation_and_security_guards": {
+      "passed": true,
+      "c002_shadow_run_id": "shrun_6_e71b8e1202801649",
+      "c002_model_run_id": "btrun_1_3eb147183ab6b46c39f5",
+      "c002_weights_code": [
+        -1,
+        -1,
+        1
+      ],
+      "c002_summary": {
+        "total_rows": 5,
+        "eligible_rows": 4,
+        "scored_rows": 4,
+        "unavailable_rows": 1,
+        "incompatible_rows": 0,
+        "post_cutoff_rows": 0,
+        "missing_feature_rows": 1,
+        "new_transaction_rows": 5,
+        "seen_in_training_rows": 0,
+        "seen_in_evaluation_rows": 0,
+        "min_score": 0.3775406687981454,
+        "max_score": 0.6224593312018546
+      },
+      "unapproved_model_http_status": 409,
+      "unapproved_model_error_code": "BATCH_MODEL_NOT_APPROVED",
+      "cross_company_model_http_status": 404,
+      "cross_company_model_error_code": "SHADOW_MODEL_NOT_FOUND",
+      "cross_company_snapshot_http_status": 404,
+      "cross_company_snapshot_error_code": "SNAPSHOT_NOT_FOUND",
+      "manual_features_http_status": 400,
+      "manual_features_error_code": "SHADOW_MANUAL_FEATURES_FORBIDDEN"
+    },
+    "10_readonly_pipeline_benchmark": {
+      "passed": true,
+      "companies": [
+        {
+          "company_id": "C001",
+          "candidate_rows": 70,
+          "eligible_rows": 70,
+          "report_sha256": "54511c0d5e079a6522ae577fc695f93410eb96f6a8c7b43b25397c0125a60a77",
+          "arms": [
+            {
+              "name": "rules_only",
+              "selected_count": 5
+            },
+            {
+              "name": "rules_plus_unsupervised",
+              "selected_count": 5
+            },
+            {
+              "name": "rules_plus_supervised_shadow",
+              "selected_count": 5
+            }
+          ]
+        },
+        {
+          "company_id": "C002",
+          "candidate_rows": 5,
+          "eligible_rows": 5,
+          "report_sha256": "361e391cced6abf914b8b66bb0b36eed564df27d9491f7583476277cb486a060",
+          "arms": [
+            {
+              "name": "rules_only",
+              "selected_count": 0
+            },
+            {
+              "name": "rules_plus_unsupervised",
+              "selected_count": 0
+            },
+            {
+              "name": "rules_plus_supervised_shadow",
+              "selected_count": 4
+            }
+          ]
+        }
+      ],
+      "cutoff_mismatch_rejected": true,
+      "manual_scores_forbidden": true,
+      "director_only": true
+    }
+  },
+  "all_passed": true
+}

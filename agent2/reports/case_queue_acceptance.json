@@ -1,0 +1,182 @@
+{
+  "acceptance": {
+    "spec_version": "2.1",
+    "stage": "R3",
+    "run_id": "r3-case-queue-20261115T181143Z",
+    "tests": [
+      {
+        "id": "R3-01",
+        "status": "pass",
+        "expected": "Same obligation/problem family coalesces to 1 case; independent obligations with shared vendor/bank stay separate; case_id independent of snapshot/run.",
+        "observed": "3 tx on HD-COAL-99 coalesced to 1 case (score=8.4); 2 independent obligations with V_SHARED remained 2 cases.",
+        "evidence_path": "Agent2_Spec_v2_1/evidence/R3/case_policy_report.json"
+      },
+      {
+        "id": "R3-02",
+        "status": "pass",
+        "expected": "Prior/supporting evidence (e.g., T096 on HD78) remains evidence only, never enters candidate_ids, adds 0 score, and uses 0 budget; confirmed_loss_vnd=None.",
+        "observed": "Real SnapshotStore 35-rule run produced HD78 case with candidate_ids=['T105'], evidence_tx_ids=['T096'], evidence_bonus=0.0.",
+        "evidence_path": "Agent2_Spec_v2_1/evidence/R3/case_policy_report.json"
+      },
+      {
+        "id": "R3-03",
+        "status": "pass",
+        "expected": "Budget reserved in case units after grouping & eligibility; B=3 with 5 qualifying queues 3 and defers 2; 0 qualifying queues 0 (no top-B padding).",
+        "observed": "5 qualifying -> queued=3, backlog=2; 0 qualifying -> queued=0; selection_comparison.BUDGET=5 untouched.",
+        "evidence_path": "Agent2_Spec_v2_1/evidence/R3/case_policy_report.json"
+      },
+      {
+        "id": "R3-04",
+        "status": "pass",
+        "expected": "12 concurrent workers & retries yield zero duplicate deliveries and zero budget overrun; all 3 crash boundaries recover cleanly via outbox.",
+        "observed": "12 concurrent calls -> queued=3, reserved=3/3; crash recovery across 3 fault boundaries -> queued=1, unacked=0.",
+        "evidence_path": "Agent2_Spec_v2_1/evidence/R3/case_policy_report.json"
+      },
+      {
+        "id": "R3-05",
+        "status": "pass",
+        "expected": "Shadow runs stay isolated in shadow_queue with zero active deliveries/budget impact; C001/C002 isolated; backlog never auto-expires.",
+        "observed": "Shadow queued=2, active queued=0, C002 queued=0, auto_expire=False.",
+        "evidence_path": "Agent2_Spec_v2_1/evidence/R3/case_policy_report.json"
+      }
+    ]
+  },
+  "policy_fixture": {
+    "version": "case-queue-policy/1.0.0",
+    "policy_id": "fixture-case-queue-policy",
+    "policy_version": "fixture-1.0.0",
+    "fixture_declaration": {
+      "is_experimental_fixture": true,
+      "approved_for_production": false,
+      "open_decision_gates": [
+        "D-04",
+        "D-05",
+        "D-06",
+        "D-07"
+      ],
+      "note": "Cấu hình thử nghiệm/nghiệm thu R3 (approved_for_production=false). Các quyết định D-04, D-05, D-06, D-07 vẫn mở; ngân sách thử nghiệm selection_comparison.BUDGET=5 cấp giao dịch được giữ tách biệt."
+    },
+    "budget": {
+      "unit": "case",
+      "case_budget_limit": 3,
+      "period_kind": "calendar_week_vn",
+      "benchmark_transaction_cap_preserved": 5,
+      "benchmark_separated": true
+    },
+    "scoring": {
+      "aggregation": "max_candidate_score",
+      "evidence_adds_score": false,
+      "rule_weight": 1.0,
+      "ml_weight": 2.0,
+      "calibrated_weight": 0.0,
+      "min_case_score": 7.0,
+      "allow_hard_trigger_admission": true,
+      "require_sufficient_evidence": true,
+      "mandatory_rules": []
+    },
+    "material_change": {
+      "min_score_delta": 0.25,
+      "snapshot_change_only_is_material": false,
+      "ordering_change_only_is_material": false,
+      "auto_reopen_closed_on_material": true
+    },
+    "backlog": {
+      "auto_expire_backlog": false,
+      "retention_without_decision_indefinite": true
+    }
+  },
+  "policy_report": {
+    "version": "case-policy-report/1.0.0",
+    "run_id": "r3-case-queue-20261115T181143Z",
+    "approved_for_production": false,
+    "open_decisions": {
+      "D-04": {
+        "decision_id": "D-04",
+        "status": "OPEN",
+        "topic": "Ngưỡng phân rã điểm / threshold chính thức cho case admission",
+        "fixture_behavior": "min_case_score configurable trong policy fixture (approved_for_production=false)."
+      },
+      "D-05": {
+        "decision_id": "D-05",
+        "status": "OPEN",
+        "topic": "Hàm tổng hợp điểm cấp vụ từ candidate scores",
+        "fixture_behavior": "Sử dụng max_candidate_score theo baseline spec; evidence không cộng điểm."
+      },
+      "D-06": {
+        "decision_id": "D-06",
+        "status": "OPEN",
+        "topic": "Định nghĩa thay đổi trọng yếu và luật mở lại vụ đã đóng",
+        "fixture_behavior": "Thay đổi tập candidate, rule hit, trạng thái đủ nguồn, delta tài chính hoặc delta điểm >= min_score_delta."
+      },
+      "D-07": {
+        "decision_id": "D-07",
+        "status": "OPEN",
+        "topic": "Định mức ngân sách rà soát cấp vụ theo kỳ vận hành chính thức",
+        "fixture_behavior": "Ngân sách cấp vụ theo kỳ (mặc định fixture B=3 case), tách biệt khỏi BUDGET=5 của benchmark giao dịch."
+      }
+    },
+    "benchmark_transaction_cap_preserved": 5,
+    "case_queue_fixture_budget": 3,
+    "checks": {
+      "R3-01": {
+        "coalesced_hd_coal_99_candidates": [
+          "T_COAL_1",
+          "T_COAL_2",
+          "T_COAL_3"
+        ],
+        "coalesced_score": 8.4,
+        "independent_same_vendor_bank_case_count": 2
+      },
+      "R3-02": {
+        "hd78_case_id": "case_7b80132b5eba3191e7ef30c7e0b5faa5",
+        "hd78_candidate_ids": [
+          "T105"
+        ],
+        "hd78_evidence_tx_ids": [
+          "T096"
+        ],
+        "evidence_bonus_applied": 0.0,
+        "financial_summary": {
+          "candidate_allocated_vnd": 5000000,
+          "candidate_amount_vnd": 5000000,
+          "confirmed_loss_vnd": null,
+          "contains_negative_adjustment": false,
+          "currency": "VND",
+          "discrepancy_amount_vnd": 5000000,
+          "net_settled_vnd": 15000000,
+          "obligation_gross_vnd": 10000000,
+          "prior_evidence_allocated_vnd": 10000000,
+          "recovered_vnd": null,
+          "related_amount_vnd": 15000000
+        }
+      },
+      "R3-03": {
+        "budget_3_with_5_qualifying": {
+          "total_cases": 5,
+          "queued_or_reserved": 3,
+          "backlog_waiting": 2,
+          "already_notified": 0
+        },
+        "budget_3_with_0_qualifying": {
+          "total_cases": 2,
+          "queued_or_reserved": 0,
+          "backlog_waiting": 2,
+          "already_notified": 0
+        }
+      },
+      "R3-04": {
+        "concurrent_12_workers_queued": 3,
+        "concurrent_reserved_count": 3,
+        "crash_recovery_queued_items": 1,
+        "crash_recovery_unacked_outbox": 0
+      },
+      "R3-05": {
+        "shadow_queued": 2,
+        "active_queued_after_shadow": 0,
+        "c002_queued": 0,
+        "shadow_backlog_auto_expire": false
+      }
+    }
+  },
+  "isolated_runtime_dir": "D:\\agent22\\.runtime\\case-queue-acceptance-v1"
+}

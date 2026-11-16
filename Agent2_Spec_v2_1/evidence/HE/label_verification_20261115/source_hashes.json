@@ -1,0 +1,15 @@
+{
+  "agent2/sme_fraud/label_packets.py": "c0d82ba65f3404f2a619c049319bd3145f72ebb5b6c6daeffd1e733b2228b4a6",
+  "agent2/sme_fraud/label_api.py": "c3d6742b8e356364635450d97ced772995fa60f3dc89b7051b9b22de5b33b47c",
+  "agent2/sme_fraud/review_server.py": "0d7ea8d0ad4fd88e440e4fd1f9bfa17edd52cf3cd476407e3a9bcc12f97f62de",
+  "agent2/sme_fraud/workbench.py": "b40aa76bc1c983f4d72eee162d6fce1e4f2c835c26084a5f2176e5cda8db664e",
+  "agent2/sme_fraud/web/label-verification.html": "adb7ec40aa12a9147db246b6f5f458e13d3d1fcfad5710d534d10aea61b8d174",
+  "agent2/sme_fraud/web/label-verification.js": "dc54ac1ffa4fc94683b67e3ed9228b5fe053cb6beeb5c1fc187604fe6372148a",
+  "agent2/sme_fraud/web/workspace.css": "7d7e6d5837d23c3d88e6de7091935816895a4823728ff5021998e33e8998b0a2",
+  "agent2/sme_fraud/web/analysis-settings.html": "46092f64aaa03120f319656fba2e74daa1afe9b80fa1eaa2aa9571b3e1f5ea05",
+  "agent2/sme_fraud/web/analysis-settings.js": "e88dec387fdc59e23e55b6ac3385f5a8e428d45f6a2cc15ee1c4da9e76ec24b9",
+  "portal/agent2_bridge.py": "bf830776c67d39d81ff8c574a8826bf514fb52bcc25d3718254c3a4d0bceed85",
+  "agent2/tests_he/test_label_packets.py": "1b75da051f85f66e6c8ab0138b56317587d6518274410539f84f6b478a6e9bd2",
+  "agent2/scripts/check_label_verification_ui.py": "55e58ca80c467e69d58795171bf5968d3aa490750c40a7fe6bcd99d4642bbbaf",
+  "agent2/docs/LABEL_VERIFICATION.md": "ca3dc88975f1b0d375b0ecf8f0ccf49123c264087a8fe0aad657d3e1920cd8d8"
+}

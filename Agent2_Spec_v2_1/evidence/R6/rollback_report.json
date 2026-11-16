@@ -1,0 +1,105 @@
+{
+  "spec_version": "2.1",
+  "status": "technical_only",
+  "scope": "enterprise staging pointer only; not full HE/delivery release",
+  "companies": [
+    {
+      "company_id": "C001",
+      "first": {
+        "lane": "staging",
+        "revision": 1,
+        "bundle_id": "rbun_aed4cc8b60f16710632e7670891479a1258c1f773af70b8044cca6248c55370e",
+        "approval_id": "rapr_0806a124a0cd2b636267f4c8deee44e7adef4b8f6a24ad2f73679ed0d2e999ef",
+        "gate_id": "rgat_147745d9ced62b470bd07364c0a3a34a04d90c26f27b065a4282ae02188b0b8e",
+        "previous_bundle_id": null,
+        "action": "activate",
+        "reason": "Synthetic acceptance activate",
+        "actor_id": "snapshot-training-operator",
+        "at": "2026-11-15T19:10:12.122512+00:00",
+        "event_id": "ract_2cc738fefea1e1cf60b8a8859fbc4629a968d8956787975d37ed401a44d7f277"
+      },
+      "second": {
+        "lane": "staging",
+        "revision": 2,
+        "bundle_id": "rbun_499ba05fae87f98e85ec946e8407a7f87be4074fc86cbb178eb4ab8c8c744ecc",
+        "approval_id": "rapr_528db5b2276842b48cb1974a7e5e5ab4db0f44938842b60f2f8c894dd9e33372",
+        "gate_id": "rgat_52028d0b2f839c44b2748fc2e816713630afa01db74c72359c91c53a814ba02f",
+        "previous_bundle_id": "rbun_aed4cc8b60f16710632e7670891479a1258c1f773af70b8044cca6248c55370e",
+        "action": "activate",
+        "reason": "Synthetic acceptance activate",
+        "actor_id": "snapshot-training-operator",
+        "at": "2026-11-15T19:10:12.294631+00:00",
+        "event_id": "ract_cf20827cb6c8bf0552b98e8516c253929bcda06f60e35e905f289cb3996e277d"
+      },
+      "rollback": {
+        "lane": "staging",
+        "revision": 3,
+        "bundle_id": "rbun_aed4cc8b60f16710632e7670891479a1258c1f773af70b8044cca6248c55370e",
+        "approval_id": "rapr_0806a124a0cd2b636267f4c8deee44e7adef4b8f6a24ad2f73679ed0d2e999ef",
+        "gate_id": "rgat_147745d9ced62b470bd07364c0a3a34a04d90c26f27b065a4282ae02188b0b8e",
+        "previous_bundle_id": "rbun_499ba05fae87f98e85ec946e8407a7f87be4074fc86cbb178eb4ab8c8c744ecc",
+        "action": "rollback",
+        "reason": "Synthetic acceptance rollback",
+        "actor_id": "snapshot-training-operator",
+        "at": "2026-11-15T19:10:12.603190+00:00",
+        "event_id": "ract_3b2daec80b9bcd1abc6fd49049318982542242e2edd3c882fcc9cb79f4088227"
+      },
+      "old_run_unchanged": true,
+      "interrupted_run_resumed_original_bundle": true,
+      "snapshot_unchanged": true,
+      "business_store_preservation_evidence": "test_pipeline_release.ReleaseTests.test_rollback_keeps_real_queue_budget_outbox_task_and_labels",
+      "no_database_restore": true
+    },
+    {
+      "company_id": "C002",
+      "first": {
+        "lane": "staging",
+        "revision": 1,
+        "bundle_id": "rbun_9bea053ce34baaa53d91318d60a772968188bedb619035a9fff27cd28efea302",
+        "approval_id": "rapr_bd6fdf0546760a1a5a003aae9f9b0117b640189bf5efec458065f4b64a199542",
+        "gate_id": "rgat_27ee4375383e4e9a55ae42a99c7df13e64e1c6b735d0cd4db6f7a437f5ea7d33",
+        "previous_bundle_id": null,
+        "action": "activate",
+        "reason": "Synthetic acceptance activate",
+        "actor_id": "snapshot-training-operator",
+        "at": "2026-11-15T19:10:13.160498+00:00",
+        "event_id": "ract_7d1353e54aeed45b713099ae21e0d9eaa2d346839c463f580691580e2a415691"
+      },
+      "second": {
+        "lane": "staging",
+        "revision": 2,
+        "bundle_id": "rbun_88e9e5ebbfcdbb7fca5678167b25b26ba7f6e217b78855b4b8ce4f60206f1bff",
+        "approval_id": "rapr_6c362fae29b92f8e69c1dfb86c331518aae23897a187a5b935730b06fd57a7a8",
+        "gate_id": "rgat_b3a02c3666d261dfd9dcdd788d8b17f9c2f8979110f78efd55c468e0057197f7",
+        "previous_bundle_id": "rbun_9bea053ce34baaa53d91318d60a772968188bedb619035a9fff27cd28efea302",
+        "action": "activate",
+        "reason": "Synthetic acceptance activate",
+        "actor_id": "snapshot-training-operator",
+        "at": "2026-11-15T19:10:13.334443+00:00",
+        "event_id": "ract_b1c0a916e6dd1dac8603f6e5072dc9a610e39e823e3a63bb6a6661d81626b32f"
+      },
+      "rollback": {
+        "lane": "staging",
+        "revision": 3,
+        "bundle_id": "rbun_9bea053ce34baaa53d91318d60a772968188bedb619035a9fff27cd28efea302",
+        "approval_id": "rapr_bd6fdf0546760a1a5a003aae9f9b0117b640189bf5efec458065f4b64a199542",
+        "gate_id": "rgat_27ee4375383e4e9a55ae42a99c7df13e64e1c6b735d0cd4db6f7a437f5ea7d33",
+        "previous_bundle_id": "rbun_88e9e5ebbfcdbb7fca5678167b25b26ba7f6e217b78855b4b8ce4f60206f1bff",
+        "action": "rollback",
+        "reason": "Synthetic acceptance rollback",
+        "actor_id": "snapshot-training-operator",
+        "at": "2026-11-15T19:10:13.693501+00:00",
+        "event_id": "ract_f62df48545b04c6afebd42705120c5d905b13848bc1200f3850c7b9e70c8e85d"
+      },
+      "old_run_unchanged": true,
+      "interrupted_run_resumed_original_bundle": true,
+      "snapshot_unchanged": true,
+      "business_store_preservation_evidence": "test_pipeline_release.ReleaseTests.test_rollback_keeps_real_queue_budget_outbox_task_and_labels",
+      "no_database_restore": true
+    }
+  ],
+  "created_at": "2026-11-15T19:10:13.819190+00:00",
+  "synthetic": true,
+  "cloud_he_executed": false,
+  "live_deployed": false
+}

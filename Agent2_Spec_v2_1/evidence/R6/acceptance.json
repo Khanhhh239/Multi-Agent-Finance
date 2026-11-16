@@ -1,0 +1,50 @@
+{
+  "spec_version": "2.1",
+  "stage": "R6",
+  "run_id": "CR-059-release-staging-20261116",
+  "status": "READY_FOR_REVIEW_TECHNICAL_PRODUCTION_BLOCKED",
+  "tests": [
+    {
+      "id": "R6-01",
+      "status": "blocked",
+      "expected": "All mandatory R1-R5 cases pass with skip=0",
+      "observed": "100 focused regression cases pass, not a complete R1-R5 mandatory mapping",
+      "evidence_path": "regression_summary.json"
+    },
+    {
+      "id": "R6-02",
+      "status": "blocked",
+      "expected": "Approved baseline/candidate quality comparison on identical snapshot/period/budget",
+      "observed": "Metadata replay only; no verified labels or approved D-09 study; quality unknown",
+      "evidence_path": "comparison_report.json"
+    },
+    {
+      "id": "R6-03",
+      "status": "blocked",
+      "expected": "Full-pipeline rollback preserves reviews/tasks/audit, no double delivery",
+      "observed": "Staging CAS/pins/crash recovery and real business DB/outbox preservation pass; full HE/ensemble/delivery bundle not qualified",
+      "evidence_path": "rollback_report.json"
+    },
+    {
+      "id": "R6-04",
+      "status": "blocked",
+      "expected": "Measured drift/fallback/backlog metrics and verified trigger policy",
+      "observed": "Runtime/availability measured; other metrics null until bundle attribution/policy is available",
+      "evidence_path": "monitoring_report.json"
+    },
+    {
+      "id": "R6-05",
+      "status": "blocked",
+      "expected": "D-09 and related owner decisions approved before production release",
+      "observed": "Owner decisions remain open and production activation is blocked",
+      "evidence_path": "release_gate.json"
+    },
+    {
+      "id": "R6-06",
+      "status": "blocked",
+      "expected": "Real production HE profile, no raw upload on ciphertext-only path",
+      "observed": "Local enterprise shadow explicitly reports no cloud HE execution; full production HE release not qualified",
+      "evidence_path": "browser_report.json"
+    }
+  ]
+}
