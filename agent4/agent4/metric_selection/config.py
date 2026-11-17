@@ -28,6 +28,8 @@ class EmbeddingConfig(StrictModel):
     dimensions: int = Field(default=768, ge=64)
     base_url: str = Field(default="http://localhost:11434", min_length=1)
     api_key: str | None = Field(default=None, exclude=True, repr=False)
+    query_input_type: str | None = Field(default=None, min_length=1)
+    document_input_type: str | None = Field(default=None, min_length=1)
     normalize: bool = True
     timeout_s: float = Field(default=30.0, gt=0, allow_inf_nan=False)
     cache_enabled: bool = True

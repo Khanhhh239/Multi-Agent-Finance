@@ -223,12 +223,18 @@ Chạy `make test-selection` để kiểm tra contract M1. Cấu hình model, UR
 timeout nằm trong `config/selection.yaml`. Xem [quy trình đánh giá](docs/evaluation.md)
 để chạy benchmark qua adapter của từng thành phần.
 
-### Ollama và OpenAI-compatible trên Kaggle
+### Groq và OpenRouter
 
-Dùng `config/eval_kaggle_qwen3.yaml` cho cùng cặp model mặc định:
-LLM `qwen3.5:9b` và embedding `qwen3-embedding:4b` (768 chiều). Endpoint Ollama
-cần có sẵn cả hai model với đúng model ID này. Nếu dùng OpenAI-compatible API,
-đặt provider và base URL tương ứng bằng các biến môi trường bên dưới.
+Preset mặc định `config/selection.yaml` dùng LLM `qwen/qwen3.8-27b` trên Groq
+và embedding `nvidia/nemotron-3.5-embed-8b:free` trên OpenRouter (4096 chiều).
+Nemotron nhận `query` lúc truy vấn và `passage` lúc dựng index để giữ đúng
+semantics retrieval của model.
+
+Mở file `.env` ở thư mục gốc và dán hai API key vào `AGENT4_LLM_API_KEY` và
+`AGENT4_EMBED_API_KEY`. File này đã được tạo sẵn, được Git bỏ qua và được lệnh
+`make demo PYTHON=.venv/bin/python` tự nạp.
+Index embedding được tạo lần đầu khi có truy vấn và tự dựng lại nếu model,
+chiều vector hoặc catalog thay đổi.
 
 - LLM đọc `AGENT4_LLM_PROVIDER`, `AGENT4_LLM_BASE_URL`, `AGENT4_LLM_MODEL` và
   `AGENT4_LLM_API_KEY`.
@@ -253,11 +259,9 @@ Trước khi gửi câu hỏi, kiểm tra cấu hình app đang dùng:
 curl -s http://localhost:8000/health
 ```
 
-Response cần hiển thị `qwen3.5:9b`, `qwen3-embedding:4b` và retrieval mode
-`hybrid`. Nếu endpoint Ollama không ở `http://localhost:11434`, đặt
-`AGENT4_LLM_BASE_URL` và `AGENT4_EMBED_BASE_URL` trước khi dựng index và chạy
-demo. Các biến `AGENT4_LLM_MODEL`, `AGENT4_EMBED_MODEL` và
-`AGENT4_RETRIEVAL_MODE` cũng có thể override preset.
+Response cần hiển thị `qwen/qwen3.8-27b`,
+`nvidia/nemotron-3.5-embed-8b:free` và retrieval mode `hybrid`. Có thể
+override model, endpoint hoặc retrieval mode bằng các biến môi trường tương ứng.
 Lệnh `make demo` chạy ở foreground; kiểm tra `/health` từ terminal thứ hai.
 
 Khi caching được bật và backend remote sẵn sàng, hybrid/dense retrieval tự

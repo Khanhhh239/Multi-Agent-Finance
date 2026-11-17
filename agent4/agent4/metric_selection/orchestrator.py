@@ -224,6 +224,7 @@ def _retrieve(
                     "model_version": provider.model_version,
                     "normalize": True,
                 },
+                input_type="query",
                 **cache_options,
             )["vectors"][0]
             dense = dense_retrieve(

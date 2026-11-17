@@ -87,9 +87,15 @@ class EmbeddingProvider:
         }
 
     def embed(
-        self, request: dict[str, Any], *, cache_scope: dict[str, Any] | None = None
+        self,
+        request: dict[str, Any],
+        *,
+        cache_scope: dict[str, Any] | None = None,
+        input_type: str = "query",
     ) -> dict[str, Any]:
         enforce_exact_keys(request, required_keys=_REQUEST_KEYS, stage=_EMBEDDING_STAGE)
+        if input_type not in ("query", "document"):
+            raise ContractError("invalid_request", _EMBEDDING_STAGE, "Invalid embedding input type.")
         if request["model_id"] != self.model_id or request["model_version"] != self.model_version:
             raise ContractError("invalid_request", _EMBEDDING_STAGE, "Embedding model mismatch.")
         if request["normalize"] is not self.normalize:
@@ -113,13 +119,14 @@ class EmbeddingProvider:
                 "query-embedding",
                 **cache_scope,
                 normalized_question=texts[0],
+                input_type=input_type,
                 backend=self.cache_identity(),
             )
             if (cached := _QUERY_CACHE.get(key)) is not None:
                 return cached
 
         if self.config.provider in ("ollama", "openai"):
-            vectors = self._embed_remote(texts)
+            vectors = self._embed_remote(texts, input_type=input_type)
         else:
             # SHAKE supplies a deterministic byte for every requested dimension.
             digests = [
@@ -147,11 +154,18 @@ class EmbeddingProvider:
             _QUERY_CACHE.set(key, result, row_count=1)
         return result
 
-    def _embed_remote(self, texts: list[str]) -> np.ndarray:
+    def _embed_remote(self, texts: list[str], *, input_type: str) -> np.ndarray:
         payload = {"model": self.model_id, "input": texts, "dimensions": self.dimension}
         openai = self.config.provider == "openai"
         if openai:
             url = openai_endpoint(self.config.base_url, "embeddings")
+            provider_input_type = (
+                self.config.query_input_type
+                if input_type == "query"
+                else self.config.document_input_type
+            )
+            if provider_input_type is not None:
+                payload["input_type"] = provider_input_type
         else:
             url = f"{self.config.base_url.rstrip('/')}/api/embed"
             payload["truncate"] = False

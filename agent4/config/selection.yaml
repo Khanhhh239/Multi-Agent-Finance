@@ -2,12 +2,14 @@ version: "1"
 prompt_version: metric-selection-v1-e0
 
 embedding:
-  provider: ollama
-  base_url: http://localhost:11434
-  model: qwen3-embedding:4b
-  dimensions: 768
+  provider: openai
+  base_url: https://openrouter.ai/api/v1
+  model: nvidia/nemotron-3.5-embed-8b:free
+  dimensions: 4096
+  query_input_type: query
+  document_input_type: passage
   cache_enabled: true
-  cache_path: .cache/metric_selection_index_qwen3_4b.npz
+  cache_path: .cache/metric_selection_index_nemotron_3_5_embed_8b.npz
 
 retrieval:
   mode: hybrid
@@ -46,14 +48,14 @@ fewshot:
   delta: 0.25
 
 llm:
-  provider: ollama
-  base_url: http://localhost:11434
-  model: qwen3.5:9b
+  provider: openai
+  base_url: https://api.groq.com/openai/v1
+  model: qwen/qwen3.8-27b
   temperature: 0
   timeout_s: 360
   max_retries: 1
   structured_output: true
-  context_window: 8192
+  context_window: 131072
 
 evaluation:
   save_traces: true

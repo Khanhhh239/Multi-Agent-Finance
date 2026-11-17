@@ -66,7 +66,12 @@ def _index_metadata(catalog_hash: str, provider: EmbeddingProvider) -> dict[str,
         "index_version": INDEX_VERSION,
     }
     if provider.config.provider in ("ollama", "openai"):
-        endpoint = (provider.config.provider, provider.config.base_url.rstrip("/"))
+        endpoint = (
+            provider.config.provider,
+            provider.config.base_url.rstrip("/"),
+            provider.config.query_input_type,
+            provider.config.document_input_type,
+        )
         metadata["backend"] = hashlib.sha256(json.dumps(endpoint).encode()).hexdigest()
     return metadata
 
@@ -103,7 +108,8 @@ def build_index(
                 "model_id": metadata["model_id"],
                 "model_version": metadata["model_version"],
                 "normalize": metadata["normalized"],
-            }
+            },
+            input_type="document",
         )
         vectors[start : start + len(batch)] = [vector["values"] for vector in response["vectors"]]
 

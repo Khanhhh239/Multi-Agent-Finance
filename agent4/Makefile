@@ -139,4 +139,4 @@ eval:
 
 
 demo:
-	AGENT4_DEMO_MODE=1 $(PYTHON) -m uvicorn agent4.api:create_demo_app --factory --host 0.0.0.0 --port 8000
+	@set -a; if [ -f .env ]; then . ./.env; fi; set +a; AGENT4_DEMO_MODE=1 $(PYTHON) -m uvicorn agent4.api:create_demo_app --factory --host 0.0.0.0 --port 8000
