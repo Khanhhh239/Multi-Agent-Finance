@@ -43,7 +43,7 @@ class FakeEnterprise(BatchEnterprise):
             if value['initialize_weights']:result.update(weights_cipher=encode(canonical([0,0,0])),weights_cipher_sha256=sha(canonical([0,0,0])))
             return result
         w=strict_json(decode(value['model_cipher']))
-        return dict(weights_code=w,coefficients=[v/2 for v in w[:2]],intercept=w[2]/2)
+        return dict(weights_code=w,coefficients=[v/16 for v in w[:2]],intercept=w[2]/16)
     def post(self,url,path,packet,worker_key):
         self.guard();signed={'/v2/datasets':self.store.upload,'/v2/confirm':self.store.confirm,'/v2/jobs':self.store.access}[path](packet)
         return verify(signed,worker_key),signed
@@ -86,7 +86,7 @@ class BatchTrainingTests(unittest.TestCase):
         for before,after in zip(self.calls,self.calls[1:]):self.assertEqual(after[2],canonical(oracle(strict_json(before[0]),strict_json(before[1]),strict_json(before[2]))))
         self.assertEqual(len(self.calls),4)
         candidate=self.node.receive_batches('fake',self.pub)
-        self.assertEqual(candidate['weights_code'],[1,1,-1])
+        self.assertEqual(candidate['weights_code'],[13,13,-6])
         self.assertEqual(candidate['training_rows'],8);self.assertEqual(candidate['evaluation_rows'],4)
         scores=self.node.evaluate_holdout();self.assertTrue(scores['held_out_from_training']);self.assertIsNone(scores['accuracy'])
         self.assertEqual({r['record_id'] for r in scores['rows']},set(self.evaluation[0]['row_ids']))
@@ -107,7 +107,7 @@ class BatchTrainingTests(unittest.TestCase):
         self.store.close();self.store=BatchCloudStore(self.root/'cloud',self.grants,self.worker_key,'b'*64,self.evaluate);self.node.store=self.store;self.fail_on=None
         self.node.access_batches('fake',self.pub,'run')
         self.assertEqual(self.calls[2][2],committed)
-        self.assertEqual(self.node.receive_batches('fake',self.pub)['weights_code'],[1,1,-1])
+        self.assertEqual(self.node.receive_batches('fake',self.pub)['weights_code'],[13,13,-6])
         with self.store.connect() as c:self.assertEqual(c.execute('SELECT COUNT(*) FROM checkpoints WHERE job=?',(job['job_id'],)).fetchone()[0],5)
 
     def test_parallel_run_status_poll_and_exclusive_state_lease(self):
@@ -213,7 +213,7 @@ class BatchTrainingTests(unittest.TestCase):
             locks.append({k:packet[k] for k in ('packet_id','revision','lock_sha256')})
         self.node.scope=replace(self.scope,actor_id='model-operator',permissions=frozenset({'data.import','model.fit'}))
         self.node.confirm_locked_batches('fake',self.pub,labels,locks,epochs=2)
-        self.node.access_batches('fake',self.pub,'run');self.assertEqual(self.node.receive_batches('fake',self.pub)['weights_code'],[1,1,-1])
+        self.node.access_batches('fake',self.pub,'run');self.assertEqual(self.node.receive_batches('fake',self.pub)['weights_code'],[13,13,-6])
 
     def test_snapshot_overlap_window_and_stale_preview_fail_before_encryption(self):
         snapshots=SnapshotStore(self.root/'snapshots.sqlite3');data,req=native_batches();req['snapshot_id']=commit(snapshots,data,self.scope)

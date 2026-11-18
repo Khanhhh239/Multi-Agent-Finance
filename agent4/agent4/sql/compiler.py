@@ -39,6 +39,9 @@ _BUDGET_DIMENSIONS = {
     "cost_category": "cost_category",
 }
 _PERIOD_DIMENSIONS = {"month", "quarter", "year"}
+_BILATERAL_SNAPSHOT_METRICS = frozenset(
+    {"ar_balance", "ap_balance", "current_ratio", "quick_ratio", "working_capital"}
+)
 _VERIFIED_BINDINGS = MappingProxyType(
     {
         metric["metric_id"]: (metric["base_relation"], metric["sql_expr"])
@@ -135,10 +138,50 @@ def compile_sql(
         f'{expression} AS "{dimension}"'
         for expression, dimension in zip(grouping, plan.dimensions, strict=True)
     ]
-    sql = (
-        f"SELECT {', '.join([*selections, *expressions])} FROM {relation} "
-        f"WHERE {' AND '.join(predicates)}"
+    use_bilateral_cte = (
+        not is_budget
+        and plan.time.mode == "as_of"
+        and bool(_BILATERAL_SNAPSHOT_METRICS.intersection(plan.metric_ids))
     )
+    if use_bilateral_cte:
+        group_select = "".join(f"{col}, " for col in grouping)
+        partner_group = ", ".join(
+            grouping
+            if "partner_code" in grouping
+            else [*grouping, "COALESCE(partner_code, '__UNASSIGNED__')"]
+        )
+        needs_closing = any("is_closing" in expr for expr in expressions)
+        extra_cols = ", is_closing, source_module" if needs_closing else ""
+        extra_vals = (
+            ", FALSE AS is_closing, 'AR_AP_PARTNER' AS source_module" if needs_closing else ""
+        )
+        cte = (
+            f"WITH bilateral_base AS (SELECT * FROM {relation} WHERE {' AND '.join(predicates)}), "
+            f"ledger_source AS ("
+            f"SELECT {group_select}account_code, debit_amount, credit_amount{extra_cols} "
+            f"FROM bilateral_base "
+            f"WHERE NOT starts_with(account_code, '131') AND NOT starts_with(account_code, '331') "
+            f"UNION ALL "
+            f"SELECT {group_select}"
+            f"CASE WHEN bal >= 0 THEN '131' ELSE '3387_ADV' END AS account_code, "
+            f"GREATEST(bal, 0) AS debit_amount, GREATEST(-bal, 0) AS credit_amount{extra_vals} "
+            f"FROM (SELECT {group_select}SUM(debit_amount - credit_amount) AS bal "
+            f"FROM bilateral_base WHERE starts_with(account_code, '131') "
+            f"GROUP BY {partner_group}) ar_partners "
+            f"UNION ALL "
+            f"SELECT {group_select}"
+            f"CASE WHEN bal >= 0 THEN '331' ELSE '1388_ADV' END AS account_code, "
+            f"GREATEST(-bal, 0) AS debit_amount, GREATEST(bal, 0) AS credit_amount{extra_vals} "
+            f"FROM (SELECT {group_select}SUM(credit_amount - debit_amount) AS bal "
+            f"FROM bilateral_base WHERE starts_with(account_code, '331') "
+            f"GROUP BY {partner_group}) ap_partners) "
+        )
+        sql = f"{cte}SELECT {', '.join([*selections, *expressions])} FROM ledger_source"
+    else:
+        sql = (
+            f"SELECT {', '.join([*selections, *expressions])} FROM {relation} "
+            f"WHERE {' AND '.join(predicates)}"
+        )
     if grouping:
         sql += f" GROUP BY {', '.join(grouping)}"
     else:

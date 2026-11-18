@@ -1,8 +1,13 @@
 """Versioned, exact JSON file mapping for the new import/snapshot workflow."""
+from collections import OrderedDict
+from copy import deepcopy
+from functools import lru_cache
 import hashlib
 import json
 from importlib.metadata import version
 from pathlib import Path
+import re
+import threading
 
 import finance_input.json_io as json_io
 import finance_input.validation as core_validation
@@ -12,8 +17,12 @@ from . import imports
 
 PARSER_VERSION = "contract-files/1.2.0"
 PROTOCOL_VERSION = "1.0.0"
-MAX_BYTES = 10 * 1024 * 1024
-MAX_ROWS = 50000
+MAX_BYTES = 50 * 1024 * 1024
+MAX_ROWS = 100000
+_SLASH_LOCATION_RE = re.compile(r'(/[^/]+/[0-9]+)(?:/|$)')
+_DOT_LOCATION_RE = re.compile(r'(source\.(?:tables\.[^.]+\.[0-9]+|[^.\[]+\[[0-9]+\]))(?:\.|$)')
+_PARSE_CACHE_LOCK = threading.Lock()
+_PARSE_CACHE = OrderedDict()
 
 
 class ImportFailure(Exception):
@@ -34,6 +43,16 @@ def digest(value):
     return hashlib.sha256(value).hexdigest()
 
 
+@lru_cache(maxsize=8)
+def _cached_schema(ver=None):
+    return schema(ver)
+
+
+@lru_cache(maxsize=1)
+def _static_schema_hashes():
+    return {v: digest(canonical(_cached_schema(v))) for v in SUPPORTED_CONTRACT_VERSIONS}
+
+
 def mapping_contract(value):
     if isinstance(value,dict) and value.get('profile')=='rule_sources':
         from .rule_source_intake import mapping
@@ -44,7 +63,7 @@ def mapping_contract(value):
     if not isinstance(tables, dict):
         fail(422, "MAPPING_INVALID", "tables phải là đối tượng mapping theo từng bảng.", "Gửi tables: {transactions: {tên_cột_nguồn: tên_cột_chuẩn}}.")
     result = {}
-    definitions = schema()["$defs"]
+    definitions = _cached_schema()["$defs"]
     for table, columns in tables.items():
         if table not in imports.DEFINITIONS or not isinstance(columns, dict):
             fail(422, "MAPPING_TABLE", "Bảng mapping không được hỗ trợ.", "Chọn bảng của hợp đồng đã khai báo; trường P1 mới cần contract 1.1.0.")
@@ -66,10 +85,11 @@ def mapping_contract(value):
 
 def context(scope):
     # Binds a preview to executable validation and permissions, not just a label.
+    sh_hashes = dict(_static_schema_hashes())
     versions = dict(protocol_version=PROTOCOL_VERSION, parser_version=PARSER_VERSION,
-        contract_version=CONTRACT_VERSION, schema_sha256=digest(canonical(schema())),
+        contract_version=CONTRACT_VERSION, schema_sha256=sh_hashes[CONTRACT_VERSION],
         supported_contract_versions=list(SUPPORTED_CONTRACT_VERSIONS),
-        schema_hashes={v:digest(canonical(schema(v))) for v in SUPPORTED_CONTRACT_VERSIONS},
+        schema_hashes=sh_hashes,
         validator_version=imports.VALIDATOR_VERSION, profile_version=imports.PROFILE_VERSION,
         report_version=imports.REPORT_VERSION,
         parser_fingerprint=digest(Path(__file__).read_bytes()+Path(__file__).with_name('tabular_import.py').read_bytes()+Path(__file__).with_name('rule_source_intake.py').read_bytes()), jsonschema_version=version("jsonschema"),
@@ -90,7 +110,52 @@ def rejected(code, message, action, **detail):
                 errors=[error], warnings=[], counts={}, capabilities={}, analysis_limits={})
 
 
+def _attach_locations(report, locations):
+    if not locations:
+        return
+    for item in report.get('errors', []) + report.get('warnings', []):
+        path = item.get('path', '')
+        if not path:
+            continue
+        if path.startswith('/'):
+            match = _SLASH_LOCATION_RE.match(path)
+            if match and match[1] in locations:
+                item.update(locations[match[1]])
+            continue
+        if path in locations:
+            item.update(locations[path])
+            continue
+        dot_match = _DOT_LOCATION_RE.match(path)
+        if dot_match and dot_match[1] in locations:
+            prefix = dot_match[1]
+            item.update(locations[prefix])
+            tail = path[len(prefix):].lstrip('.')
+            if tail:
+                item['field'] = tail
+            continue
+        for prefix, where in locations.items():
+            if path == prefix or path.startswith(prefix + '.'):
+                item.update(where)
+                tail = path[len(prefix):].lstrip('.')
+                if tail:
+                    item['field'] = tail
+                break
+
+
 def parse_file(raw, mapping, scope, filename='input.json'):
+    cache_key = None
+    if isinstance(raw, bytes) and isinstance(mapping, dict) and hasattr(scope, 'tenant_id'):
+        try:
+            _, ctx_hash = context(scope)
+            cache_key = (digest(raw), digest(canonical(mapping)), filename, ctx_hash, MAX_ROWS)
+            with _PARSE_CACHE_LOCK:
+                if cache_key in _PARSE_CACHE:
+                    _PARSE_CACHE.move_to_end(cache_key)
+                    cached_parsed, cached_report = _PARSE_CACHE[cache_key]
+                    return cached_parsed, deepcopy(cached_report)
+        except Exception:
+            cache_key = None
+
     tabular=filename.lower().endswith(('.csv','.xlsx'));locations={}
     try:
         if mapping.get('profile')=='rule_sources':
@@ -112,7 +177,7 @@ def parse_file(raw, mapping, scope, filename='input.json'):
         return None,rejected('RULE_MAPPING_UNSUPPORTED','Profile nguồn luật cần JSON đúng tên trường.','Xuất theo profile nguồn; không đổi mapping lồng nhau bằng giá trị mặc định.')
     if isinstance(data, dict):
         if sum(len(rows) for rows in data.values() if isinstance(rows, list)) > MAX_ROWS:
-            return None, rejected("ROW_LIMIT", "Tệp vượt 50.000 bản ghi.", "Chia gói và giữ đủ các bản ghi được tham chiếu.")
+            return None, rejected("ROW_LIMIT", "Tệp vượt 100.000 bản ghi.", "Chia gói và giữ đủ các bản ghi được tham chiếu.")
         errors = []
         for table, columns in ({} if tabular or mapping.get('profile')=='rule_sources' else mapping.get("tables", {})).items():
             rows = data.get(table)
@@ -148,15 +213,14 @@ def parse_file(raw, mapping, scope, filename='input.json'):
                 message='Nguồn chưa đủ trường để chạy kiểm tra'+(': '+field if field else ' hoặc còn giá trị ngoài miền hỗ trợ')+'.',
                 action='Đối chiếu các bảng/cột với mẫu 35 luật; giữ nguyên nguồn và bổ sung dữ liệu, không tự điền 0.'))
     if tabular or mapping.get('profile')=='rule_sources':
-        import re
         report['source_format']='xlsx' if filename.lower().endswith('.xlsx') else 'csv'
-        for item in report.get('errors',[])+report.get('warnings',[]):
-            match=re.match(r'(/[^/]+/[0-9]+)(?:/|$)',item.get('path',''))
-            if match and match[1] in locations:item.update(locations[match[1]])
-            for prefix,where in locations.items():
-                if item.get('path','')==prefix or item.get('path','').startswith(prefix+'.'):
-                    item.update(where)
-                    tail=item.get('path','')[len(prefix):].lstrip('.')
-                    if tail:item['field']=tail
-                    break
-    return (canonical(data) if report["status"] != "rejected" else None), report
+        _attach_locations(report, locations)
+    parsed_bytes = canonical(data) if report["status"] != "rejected" else None
+    if parsed_bytes is not None and hasattr(scope, "tenant_id") and hasattr(scope, "company_ids"):
+        imports.mark_validated_checksum(digest(parsed_bytes), scope.tenant_id, scope.company_ids)
+    if cache_key is not None:
+        with _PARSE_CACHE_LOCK:
+            _PARSE_CACHE[cache_key] = (parsed_bytes, deepcopy(report))
+            while len(_PARSE_CACHE) > 8:
+                _PARSE_CACHE.popitem(last=False)
+    return parsed_bytes, report

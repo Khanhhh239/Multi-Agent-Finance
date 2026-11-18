@@ -70,12 +70,60 @@ def read_table(path: Path, delimiter=',') -> list[list]:
 def parse_amount(value, thousands='.', decimal=',') -> Decimal | None:
     if isinstance(value, Decimal):
         return value
-    s = re.sub(r'[^\d,.\-]', '', str(value or ''))
+    if isinstance(value, int):
+        return Decimal(value)
+    s = re.sub(r'[^\d,.\-]', '', str(value or '').strip())
     if not s or s in ('-', '.', ','):
         return None
-    s = s.replace(thousands, '').replace(decimal, '.') if thousands else s.replace(decimal, '.')
+    sign = '-' if s.startswith('-') else ''
+    body = s[1:] if sign else s
+    if not body or '-' in body:
+        raise SourceError(f'không đọc được số tiền: {value!r}')
+    if ',' in body and '.' in body:
+        if re.fullmatch(r'\d{1,3}(?:,\d{3})+\.\d+', body):
+            norm_s = body.replace(',', '')
+        elif re.fullmatch(r'\d{1,3}(?:\.\d{3})+,\d+', body):
+            norm_s = body.replace('.', '').replace(',', '.')
+        else:
+            raise SourceError(f'không đọc được số tiền: {value!r}')
+    elif ',' in body:
+        if body.count(',') >= 2:
+            if not re.fullmatch(r'[1-9]\d{0,2}(?:,\d{3}){2,}', body):
+                raise SourceError(f'không đọc được số tiền: {value!r}')
+            norm_s = body.replace(',', '')
+        else:
+            left, right = body.split(',', 1)
+            if len(right) == 3:
+                if re.fullmatch(r'[1-9]\d{0,2}', left) and right.isdigit():
+                    norm_s = left + right
+                else:
+                    raise SourceError(f'số tiền mơ hồ (3 chữ số sau dấu phẩy): {value!r}')
+            elif 1 <= len(right) <= 2 and left.isdigit() and right.isdigit() and thousands != ',':
+                norm_s = f'{left}.{right}'
+            else:
+                raise SourceError(f'không đọc được số tiền: {value!r}')
+    elif '.' in body:
+        if body.count('.') >= 2:
+            if not re.fullmatch(r'[1-9]\d{0,2}(?:\.\d{3}){2,}', body):
+                raise SourceError(f'không đọc được số tiền: {value!r}')
+            norm_s = body.replace('.', '')
+        else:
+            left, right = body.split('.', 1)
+            if len(right) == 3:
+                if re.fullmatch(r'[1-9]\d{0,2}', left) and right.isdigit() and thousands in ('.', ','):
+                    norm_s = left + right
+                else:
+                    raise SourceError(f'số tiền mơ hồ (3 chữ số sau dấu chấm): {value!r}')
+            elif 1 <= len(right) <= 2 and left.isdigit() and right.isdigit():
+                norm_s = f'{left}.{right}'
+            else:
+                raise SourceError(f'không đọc được số tiền: {value!r}')
+    elif body.isdigit():
+        norm_s = body
+    else:
+        raise SourceError(f'không đọc được số tiền: {value!r}')
     try:
-        return Decimal(s)
+        return Decimal(sign + norm_s)
     except InvalidOperation:
         raise SourceError(f'không đọc được số tiền: {value!r}')
 
@@ -180,11 +228,11 @@ def _dec(v):
         return None
 
 
-def read_invoices(folder: Path, role: str, as_of: date) -> tuple[list[InvoiceFact], list[str]]:
+def read_invoices(folder: Path, role: str, as_of: date, *, simulated: bool = False) -> tuple[list[InvoiceFact], list[str]]:
     facts, unreadable, seen = [], [], {}
     for path in sorted(Path(folder).glob('*.xml')) if Path(folder).exists() else []:
         try:
-            inv = extract(path.read_bytes(), today=as_of)
+            inv = extract(path.read_bytes(), today=as_of, simulated=simulated)
         except Exception as e:  # noqa: BLE001 - a broken file is reported, never guessed
             unreadable.append(f'{path.name}: {type(e).__name__}')
             continue
@@ -206,7 +254,7 @@ def read_invoices(folder: Path, role: str, as_of: date) -> tuple[list[InvoiceFac
             net=_dec(f['net_total']), vat=_dec(f['vat_total']), gross=_dec(f['gross_total']), payment_label=f['payment_method'],
             descriptions=tuple(r['description'].value for r in inv.items if r['description'].value and not is_note(r)),
             guard_errors=tuple(sorted({c.code for c in inv.errors})), signed=inv.fidelity_policy == FIDELITY_SIGNED, related=related,
-            source_sha256=__import__('hashlib').sha256(path.read_bytes()).hexdigest())
+            source_sha256=hashlib.sha256(path.read_bytes()).hexdigest())
         if fact.key in seen:
             fact.duplicate_of = seen[fact.key]
             fact.key = f'{fact.key}#dup:{path.name}'   # each file keeps its own identity in the report

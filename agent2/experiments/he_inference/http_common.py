@@ -114,11 +114,18 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def worker_address(url):
+    import os
     value = urlsplit(url)
-    if (value.scheme != 'http' or value.hostname not in ('127.0.0.1', 'localhost')
-            or not value.port or value.path not in ('', '/') or value.query or value.fragment or value.username):
+    configured_remote = os.environ.get('AGENT2_HE_AGGREGATOR_URL', '').strip()
+    remote_host = urlsplit(configured_remote).hostname if configured_remote else None
+    allowed_hosts = {'127.0.0.1', 'localhost'} | ({remote_host} if remote_host else set())
+    if (value.scheme not in ('http', 'https')
+            or (value.scheme == 'https' and value.hostname != remote_host)
+            or value.hostname not in allowed_hosts
+            or not (value.port or value.scheme == 'https')
+            or value.path not in ('', '/') or value.query or value.fragment or value.username):
         raise ServiceError(503, 'WORKER_URL_REQUIRES_LOOPBACK')
-    return value.hostname, value.port
+    return value.hostname, (value.port or (443 if value.scheme == 'https' else 80))
 
 
 def post(url, path, payload, *, timeout=20):

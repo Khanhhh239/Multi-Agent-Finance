@@ -36,6 +36,16 @@ INJECTION_PATTERNS = re.compile(
     r"|\b(?:password|secret|token|api_key)\s*[:=]",
     re.IGNORECASE,
 )
+_CALENDAR_SPAN = re.compile(
+    r"\b(?:"
+    r"(?:19|20)\d{2}\s*[-/]\s*(?:0?[1-9]|1[0-2])\s*[-/]\s*(?:0?[1-9]|[12]\d|3[01])"
+    r"|(?:0?[1-9]|[12]\d|3[01])\s*[-/]\s*(?:0?[1-9]|1[0-2])\s*[-/]\s*(?:19|20)\d{2}"
+    r"|[qQ][1-4]\s*[-/]\s*(?:19|20)\d{2}"
+    r"|(?:0?[1-9]|1[0-2])\s*[-/]\s*(?:19|20)\d{2}"
+    r"|(?:19|20)\d{2}\s*[-/]\s*(?:19|20)\d{2}"
+    r"|(?:19|20)\d{2}\s*[-/]\s*(?:0?[1-9]|1[0-2])"
+    r")\b"
+)
 _UNSAFE_OUTPUT = re.compile(
     r"\bselect\s+(?:\*|\d+\b|[^;]*?\bfrom\b)"
     r"|\b(?:drop|alter|create)\s+(?:(?:or replace|temp(?:orary)?)\s+)?"
@@ -48,8 +58,10 @@ _UNSAFE_OUTPUT = re.compile(
     r"|account_code|employee_code|net_pay|read_csv(?:_auto)?|read_parquet)\b"
     r"|\b(?:copy|export|install|load)\s+[^\s]+\s+(?:to|from)\b"
     r"|\b(?:tk|account)\s*\d{3,}\b"
-    r"|(?:\d|\w)\s+(?:[+*/=×÷−-])\s+(?:\d|\w)"
-    r"|\b\d+(?:\.\d+)?\s*[+*/=×÷−-]\s*\d+(?:\.\d+)?\b",
+    r"|(?:\d|\w)\s*[+*=×÷−]\s*(?:\d|\w)"
+    r"|\b[a-z]\w*_\w*\s*[-/]\s*[a-z]\w*\b"
+    r"|\b[a-z]\w*\s*[-/]\s*[a-z]\w*_\w*\b"
+    r"|\b\d+(?:\.\d+)?\s*[-/]\s*\d+(?:\.\d+)?\b",
     re.IGNORECASE,
 )
 _THINK_BLOCK = re.compile(r"<think>.*?</think>", re.IGNORECASE | re.DOTALL)
@@ -111,7 +123,9 @@ def _reject_unsafe_text(value: Any) -> None:
     if isinstance(value, str):
         text = unicodedata.normalize("NFKC", value)
         text = "".join(char for char in text if unicodedata.category(char) != "Cf")
-        if _UNSAFE_OUTPUT.search(_SQL_BLOCK_COMMENT.sub(" ", text)):
+        cleaned = _SQL_BLOCK_COMMENT.sub(" ", text)
+        cleaned = _CALENDAR_SPAN.sub(" ", cleaned)
+        if _UNSAFE_OUTPUT.search(cleaned):
             raise _invalid_draft("Selection contains prohibited content.")
 
 

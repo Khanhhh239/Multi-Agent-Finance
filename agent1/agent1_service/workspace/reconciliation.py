@@ -14,7 +14,15 @@ from agent1.adaptive.data import (SCHEMAS, IDS, MONEY_FIELDS, ACCOUNTING, effect
                                  merge_import, parse_rows, validate_dataset, vnd, _payment_links, payment_target)
 from agent1.reconciliation._thang.allocation import Config
 from agent1.reconciliation._thang.constrained import allocate
-from agent1.reconciliation._thang.matching import Config as ScoreConfig, normalize, references, score
+from agent1.reconciliation._thang.matching import (
+    Config as ScoreConfig,
+    DEFAULT_FEE_TOLERANCE_VND,
+    normalize,
+    references,
+    resolve_counterparty,
+    score,
+    within_fee_tolerance,
+)
 from agent1.reconciliation.ledger import DecisionLedger
 from agent1.reconciliation.pipeline import LINK_COLUMNS, NON_AR, day, today
 
@@ -179,18 +187,20 @@ class WorkspaceSource:
         return {r['bank_id']: r for r in self.reviews() if r['action'] == 'rejected'
                 and r['bank_hash'] == banks.get(r['bank_id'])}
 
-    def propose(self, cutoff):
+    def propose(self, cutoff, *, fee_tolerance_vnd=DEFAULT_FEE_TOLERANCE_VND, strict_same_day_equal_amount=True):
         self.validate_managed()
         view = self.view(cutoff)
         rows = view['invoices'].to_dict('records')
         invoices = [dict(tenant_id=self.firm, id=r['invoice_id'], invoice_number=r['invoice_no'],
                          party_id=r['customer_id'], side='AR', currency='VND',
-                         amount_minor=r['amount_open_minor'], issued_on=day(r['issue_date']))
+                         amount_minor=r['amount_open_minor'], issued_on=day(r['issue_date']),
+                         **({'due_on': day(r['due_date'])} if r.get('due_date') else {}))
                     for r in rows if r['amount_open_minor'] > 0 and r['closure_type'] == 'open']
         names = defaultdict(set)
         for r in rows:
-            if r.get('customer_name'):
-                names[normalize(r['customer_name'])].add(r['customer_id'])
+            for field in ('customer_name', 'buyer_name'):
+                if r.get(field):
+                    names[normalize(r[field])].add(r['customer_id'])
         used = Counter()
         for r in view['links'].to_dict('records'):
             used[r['txn_id']] += r['amount_minor']
@@ -202,24 +212,26 @@ class WorkspaceSource:
             if remaining <= 0 or bank['direction'] != 'in':
                 continue
             if bank.get('component') == 'cash_sale' or bank.get('cash_flow_class') in NON_AR:
-                ignored.append(dict(payment_id=tid, status='unmatched', reason='non_ar_bank_movement', unallocated_minor=remaining))
+                ignored.append(dict(payment_id=tid, status='unmatched', reason='non_ar_bank_movement',
+                                    unallocated_minor=remaining, fee_minor=0))
                 continue
             if tid in rejected:
                 ignored.append(dict(payment_id=tid, status='rejected', reason='rejected', unallocated_minor=remaining,
-                                    reviewed_by=rejected[tid]['reviewed_by'], note=rejected[tid]['note']))
+                                    fee_minor=0, reviewed_by=rejected[tid]['reviewed_by'], note=rejected[tid]['note']))
                 continue
             party = bank.get('customer_id', '')
-            exact = names.get(normalize(bank.get('counterparty', '')), set())
-            if not party and len(exact) == 1:
-                party = next(iter(exact))
+            if not party:
+                party = resolve_counterparty(bank.get('counterparty', ''), bank.get('memo', ''), names)
             payments.append(dict(tenant_id=self.firm, id=tid, side='AR', party_id=party, currency='VND',
                                  amount_minor=remaining, payment_on=bank['date'], reference=bank.get('memo', '')))
-        result = allocate(invoices, payments, Config(max_age_days=3650))
+        score_cfg = ScoreConfig(fee_tolerance_vnd=fee_tolerance_vnd)
+        result = allocate(invoices, payments, Config(max_age_days=3650,
+                                                     fee_tolerance_vnd=fee_tolerance_vnd,
+                                                     strict_same_day_equal_amount=strict_same_day_equal_amount))
         result['decisions'].extend(ignored)
         result.update(snapshot_hash=view['snapshot_hash'], cutoff=day(cutoff), run_id=uuid.uuid4().hex,
                       created_at=datetime.now(timezone.utc).isoformat())
-        # Reuse the existing heuristic scorer for ordering human suggestions.
-        # Scores never disambiguate a nonunique transport or become cash labels.
+        # Reuse the heuristic scorer for ordering human suggestions.
         by_id = {r['invoice_id']: r for r in rows if r['amount_open_minor'] > 0 and r['closure_type'] == 'open'}
         by_party, by_amount = defaultdict(list), defaultdict(list)
         for r in by_id.values():
@@ -237,12 +249,41 @@ class WorkspaceSource:
         for decision in result['decisions']:
             tid = decision['payment_id']
             bank = bank_by_id[tid]
+            avail = vnd(bank['amount']) - used[tid]
             party = payment_by_id.get(tid, {}).get('party_id', bank.get('customer_id', ''))
             pool = {iid: by_id[iid] for iid in sorted(edge_ids[tid])[:200] if iid in by_id}
-            for r in by_party.get(party, []) or by_amount.get(vnd(bank['amount']) - used[tid], []):
-                if len(pool) >= 200:
-                    break
-                pool[r['invoice_id']] = r
+            if party:
+                for r in by_party.get(party, []):
+                    if len(pool) >= 200:
+                        break
+                    pool[r['invoice_id']] = r
+            else:
+                for r in by_amount.get(avail, []):
+                    if len(pool) >= 200:
+                        break
+                    pool[r['invoice_id']] = r
+                if len(pool) < 200 and decision['reason'] != 'non_ar_bank_movement':
+                    b_probe = dict(reference=bank.get('memo', ''), counterparty=bank.get('counterparty', ''),
+                                   customer_id='', booked_on=bank['date'])
+                    open_candidates = [
+                        r for r in by_id.values()
+                        if r['invoice_id'] not in pool and day(r['issue_date']) <= bank['date']
+                    ]
+                    open_candidates.sort(key=lambda r: (
+                        -int(references(b_probe, dict(invoice_id=r['invoice_no'],
+                                                      customer_name=r.get('customer_name') or '',
+                                                      due_on=day(r['due_date'])))),
+                        -int(within_fee_tolerance(r['amount_open_minor'] - avail, r['amount_open_minor'], fee_tolerance_vnd)),
+                        -score(b_probe, dict(invoice_id=r['invoice_no'],
+                                             customer_name=r.get('customer_name') or '',
+                                             due_on=day(r['due_date'])), score_cfg),
+                        abs(r['amount_open_minor'] - avail),
+                        r['invoice_id'],
+                    ))
+                    for r in open_candidates:
+                        if len(pool) >= 200:
+                            break
+                        pool[r['invoice_id']] = r
             ranked = []
             for r in pool.values():
                 if day(r['issue_date']) > bank['date'] or party and party != r['customer_id']:
@@ -251,16 +292,29 @@ class WorkspaceSource:
                          customer_id=party, booked_on=bank['date'])
                 i = dict(invoice_id=r['invoice_no'], customer_name=r.get('customer_name') or '', due_on=day(r['due_date']))
                 ref = references(b, i)
-                amount_match = r['amount_open_minor'] == vnd(bank['amount']) - used[tid]
-                value = 1.0 if ref else round(.8 * score(b, i, ScoreConfig()) + .2 * int(amount_match), 4)
-                evidence = [text for flag, text in ((ref, 'Khớp số hóa đơn'), (bool(party), 'Cùng khách hàng'),
-                                                    (amount_match, 'Khớp số tiền còn lại')) if flag]
+                fee_diff = r['amount_open_minor'] - avail
+                fee_match = within_fee_tolerance(fee_diff, r['amount_open_minor'], fee_tolerance_vnd)
+                amount_match = r['amount_open_minor'] == avail
+                closeness = (
+                    1.0 if amount_match
+                    else 0.9 if fee_match
+                    else max(0.0, 1.0 - abs(fee_diff) / max(r['amount_open_minor'], avail, 1)) * 0.5
+                )
+                value = 1.0 if ref else min(0.9999, round(.8 * score(b, i, score_cfg) + .2 * closeness, 4))
+                evidence = [text for flag, text in (
+                    (ref, 'Khớp số hóa đơn'),
+                    (bool(party), 'Cùng khách hàng'),
+                    (amount_match, 'Khớp số tiền còn lại'),
+                    (fee_match, f'Khớp sau phí chuyển khoản ({fee_diff:,} VND)'),
+                ) if flag]
                 ranked.append(dict(invoice_id=r['invoice_id'], customer_id=r['customer_id'],
-                                   amount_open_minor=r['amount_open_minor'], score=value,
+                                   amount_open_minor=r['amount_open_minor'],
+                                   fee_minor=fee_diff if fee_match else 0,
+                                   score=value, _ref=ref,
                                    evidence=evidence or ['Đối chiếu ngày và nội dung chứng từ']))
-            ranked.sort(key=lambda r: (-r['score'], r['invoice_id']))
+            ranked.sort(key=lambda r: (-int(r.pop('_ref')), -r['score'], abs(r['amount_open_minor'] - avail), r['invoice_id']))
             result['cases'].append(dict(decision, bank_id=tid, account=bank['account'], date=bank['date'],
-                                        available_minor=vnd(bank['amount']) - used[tid],
+                                        available_minor=avail,
                                         memo=bank.get('memo', ''), reason_text=REASONS.get(decision['reason'], decision['reason']),
                                         candidates=ranked[:10], candidate_limit=200,
                                         allocations=allocations_by_bank[tid]))

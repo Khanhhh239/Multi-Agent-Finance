@@ -45,8 +45,12 @@ _DIMENSION_TOKEN = re.compile(
 _FILTERS = {
     "branch_code": {
         "HN": r"hà nội|ha noi",
-        "HCM": r"(?:tp\.? )?hồ chí minh|ho chi minh(?: city)?|sài gòn",
+        "HCM": r"(?:tp\.?\s*)?hồ chí minh|ho chi minh(?: city)?|tp\.?\s*hcm|sài gòn|sai gon",
         "DN": r"đà nẵng|da nang",
+        "HP": r"hải phòng|hai phong",
+        "BD": r"bình dương|binh duong",
+        "CT": r"cần thơ|can tho",
+        "NA": r"nghệ an|nghe an",
     },
     "product_line": {
         "IT": "thiết bị cntt",
@@ -55,13 +59,17 @@ _FILTERS = {
         "SVC": "dịch vụ kỹ thuật",
     },
     "department_code": {
-        "BGD": "ban giám đốc",
-        "KD": "kinh doanh|sales",
-        "MKT": "marketing",
-        "KT": "kỹ thuật|technical services",
-        "KHO": "kho vận|logistics",
-        "TCKT": "tài chính(?: -)? kế toán|finance and accounting",
-        "HCNS": "hành chính(?: -)? nhân sự|human resources",
+        "BGD": r"ban giám đốc|executive(?:\s+board)?",
+        "KD": r"kinh doanh|sales",
+        "MKT": r"marketing",
+        "KT": r"kỹ thuật(?:\s*-\s*dịch vụ)?|technical(?:\s+services)?",
+        "KHO": r"kho vận|logistics|warehouse",
+        "TCKT": r"tài chính(?:\s*-\s*)?kế toán|finance(?:\s+and\s+accounting)?",
+        "HCNS": r"(?:hành chính(?:\s*-\s*)?)?nhân sự|hcns|human resources|hr",
+        "IT": r"cntt|công nghệ(?:\s+thông tin)?|information technology",
+        "CSKH": r"chăm sóc khách hàng|cskh|customer (?:service|support|care)",
+        "MH": r"mua hàng|thu mua|cung ứng|procurement|purchasing",
+        "KSNB": r"kiểm soát nội bộ|kiểm toán nội bộ|ksnb|internal (?:control|audit)",
     },
     "cost_category": {
         "LUONG": "lương|salaries",
@@ -95,7 +103,12 @@ _FILTERS = {
 ALLOWED_DIMENSIONS = frozenset(_DIMENSIONS)
 ALLOWED_FILTER_VALUES = {field: frozenset(values) for field, values in _FILTERS.items()}
 PARTNER_CODE_PATTERN = (
-    r"(?:KH[0-9]{4,7}|KHLE-(?:HN|HCM|DN)|NCC-[A-Z0-9]{2,12}(?:-[A-Z0-9]{2,12}){0,3})"
+    r"(?:C[0-9]{6}|V[0-9]{6}|KH[0-9]{4,7}|"
+    r"KHLE-(?:HN|HCM|DN|HP|BD|CT|NA)|"
+    r"NCC-[A-Z0-9]{2,12}(?:-[A-Z0-9]{2,12}){0,3})"
+)
+_HARDWARE_HP = re.compile(
+    r"\b(?:laptop|máy\s+in|máy\s+tính|máy\s+chủ|mực(?:\s+in)?|pc)\s+hp\b", re.IGNORECASE
 )
 _SQL = re.compile(
     r"\b(?:select\b[^?]*\bfrom|select\s+\*|(?:drop|create|alter|truncate)\s+table|"
@@ -200,9 +213,19 @@ def _filters(question: str, original: str) -> tuple[list[dict], bool]:
                     break
                 rest = rest[value_match.end() + separator.end() :]
         for code, alias in vocabulary.items():
-            if (code != "IT" and re.search(rf"(?<![\w-]){code}(?![\w-])", original)) or (
-                field == "branch_code" and _has(alias, question)
-            ):
+            if code == "IT":
+                if field == "product_line" and _has(alias, question):
+                    values.append(code)
+                continue
+            if field == "branch_code" and _has(alias, question):
+                values.append(code)
+                continue
+            if code == "HP" and _HARDWARE_HP.search(original):
+                continue
+            if code == "NA":
+                if re.search(r"(?<![\w/-])NA(?![\w/-])", original):
+                    values.append(code)
+            elif re.search(rf"(?<![\w-]){code}(?![\w-])", original):
                 values.append(code)
         values = list(dict.fromkeys(values))
         if (
@@ -272,9 +295,9 @@ def _unresolved_grouping(question: str, sort_requested: bool) -> bool:
 def _supported_dimension(field: str, capability: dict[str, Any], question: str) -> bool:
     aliases = {"branch_code": ("branch",), "department_code": ("department",)}
     if field == "partner_code":
-        if _has(r"nhà cung cấp|vendors?|suppliers?|ncc-[\w-]+", question):
+        if _has(r"nhà cung cấp|vendors?|suppliers?|ncc-[\w-]+|v\d{6}", question):
             aliases[field] = ("vendor",)
-        elif _has(r"khách hàng|customers?|kh\d+|khle-\w+", question):
+        elif _has(r"khách hàng|customers?|kh\d+|khle-\w+|c\d{6}", question):
             aliases[field] = ("customer",)
     return bool({field, *aliases.get(field, ())}.intersection(capability["supported_dimensions"]))
 
@@ -334,7 +357,17 @@ def build_semantic_plan_draft(
     if len(periods) > 1:
         raise ContractError("incompatible_metrics", _STAGE, "Incompatible metric periods.")
     period_type = next(iter(periods), None)
-    time = parse_time_slot(question, locale=locale, period_type=period_type)
+    reference_date = (
+        query_context.get("reference_date")
+        or query_context.get("as_of_date")
+        or query_context.get("data_watermark")
+    )
+    time = parse_time_slot(
+        question,
+        locale=locale,
+        period_type=period_type,
+        reference_date=reference_date,
+    )
     metric_intent = _metric_ambiguity(question)
     views = requested_views
     requested_view = query_context.get("requested_view")
@@ -456,8 +489,8 @@ def detect_query_views(question: str) -> set[str]:
 
 def requests_comparison(question: str) -> bool:
     if not _has(
-        r"so sánh|so với (?:cùng kỳ|kỳ|quý|tháng|năm|tuần|ngày|nửa đầu năm|nửa cuối năm)"
-        r"|versus|vs|compare|compared (?:to|with)|year.over.year",
+        r"so sánh|so với (?:cùng kỳ|kỳ|quý|tháng|năm|tuần|ngày|nửa đầu năm|nửa cuối năm|q[1-4]|h[12]|\d{4})"
+        r"|versus|vs|compare|compared (?:to|with)|year.over.year|yoy|qoq|mom",
         question,
     ):
         return False

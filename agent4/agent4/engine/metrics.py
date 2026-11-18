@@ -303,13 +303,16 @@ M: list[MetricDef] = [
     _m(
         "admin_expenses",
         "Chi phí quản lý doanh nghiệp",
-        "Chi phí quản lý chung của doanh nghiệp (TK 6422).",
+        "Chi phí quản lý chung của doanh nghiệp (TK 6422 theo TT133, hoặc TK 642 trực tiếp).",
         "flow",
         "VND",
         "opex",
-        "Nợ 6422 − Có 6422",
-        ("6422",),
-        (Term(("6422",), 1, "net_debit"),),
+        "Nợ 6422 − Có 6422 (+ TK 642 hạch toán trực tiếp)",
+        ("6422", "642"),
+        (
+            Term(("6422",), 1, "net_debit"),
+            Term(("642",), 1, "net_debit", "account_code = '642'"),
+        ),
         synonyms=(
             "chi phí quản lý doanh nghiệp",
             "chi phí quản lý",
@@ -503,7 +506,16 @@ M: list[MetricDef] = [
         "pnl",
         "LN trước thuế + Chi phí lãi vay (635) + Khấu hao (Có 214)",
         ("511", "632", "642", "515", "635", "711", "811", "214"),
-        PL_ALL + (Term(("635",), 1, "net_debit"), DEPR),
+        PL_ALL
+        + (
+            Term(
+                ("635",),
+                1,
+                "net_debit",
+                "COALESCE(source_document_type, 'INTEREST') IN ('INTEREST', 'LOAN_INTEREST')",
+            ),
+            DEPR,
+        ),
         synonyms=("ebitda", "lợi nhuận trước lãi vay thuế và khấu hao"),
         group_bys=("month", "quarter", "year"),
         better="up",

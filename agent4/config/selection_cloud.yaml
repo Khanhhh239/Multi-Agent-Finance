@@ -1,0 +1,68 @@
+version: "1"
+prompt_version: metric-selection-v1-e0
+
+embedding:
+  provider: openai
+  base_url: https://openrouter.ai/api/v1
+  model: nvidia/nemotron-3.5-embed-8b:free
+  dimensions: 4096
+  query_input_type: query
+  document_input_type: passage
+  cache_enabled: true
+  cache_path: .cache/metric_selection_index_nemotron_3_5_embed_8b.npz
+
+retrieval:
+  mode: hybrid
+  dense_enabled: true
+  lexical_enabled: true
+  fusion_method: rrf
+  dense_top_k: 15
+  lexical_top_k: 15
+  fusion_top_k: 20
+  rrf_k: 60
+  mention_retrieval_enabled: false
+
+expansion:
+  enabled: true
+  max_hops: 1
+  max_candidates: 30
+  relationship_path: config/metric_relationships.yaml
+
+reranking:
+  metadata_enabled: true
+  cross_encoder_enabled: false
+  final_top_k: 12
+  metadata_weight: 1.0
+  cross_encoder_weight: 0.4
+
+fewshot:
+  enabled: false
+  strategy: zero
+  min_examples: 0
+  max_examples: 4
+  initial_pool_size: 15
+  example_bank_path: data/example_bank.jsonl
+  alpha: 1.0
+  beta: 0.5
+  gamma: 0.5
+  delta: 0.25
+
+llm:
+  provider: openai
+  base_url: https://api.groq.com/openai/v1
+  model: qwen/qwen3.8-27b
+  temperature: 0
+  timeout_s: 360
+  max_retries: 1
+  structured_output: true
+  context_window: 131072
+
+recovery:
+  degraded_lexical_fallback: true
+  enable_empty_candidate_fallback: true
+  enable_candidate_expansion: false
+
+evaluation:
+  save_traces: true
+  report_per_category: true
+  random_seed: 20261101

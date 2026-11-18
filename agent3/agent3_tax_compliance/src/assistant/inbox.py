@@ -45,9 +45,12 @@ def classify(path: Path, tax_code: str, pack: Pack) -> tuple[str | None, str]:
             seller, buyer, seller_name, buyer_name = _xml_parties(raw)
         except (etree.XMLSyntaxError, IntakeError) as e:
             return None, f'không đọc được XML hóa đơn: {str(e)[:120]}'
-        if seller == tax_code:
+        own_clean = (tax_code or '').replace('-', '')
+        seller_clean = (seller or '').replace('-', '')
+        buyer_clean = (buyer or '').replace('-', '')
+        if seller == tax_code or (seller_clean and seller_clean == own_clean):
             return 'sales_xml', 'người bán là doanh nghiệp này'
-        if buyer == tax_code:
+        if buyer == tax_code or (buyer_clean and buyer_clean == own_clean):
             return 'purchase_xml', 'người mua là doanh nghiệp này'
         # A wrong tax id on an invoice addressed to this company is itself a risk (R07): load it so the rule can flag it.
         if buyer_name and similarity(buyer_name, pack.legal_name) >= 0.8:
@@ -131,7 +134,7 @@ def preview(name, raw, tax_code, pack, as_of):
                     result.update(checked=True, rows=len(rows))
                 elif kind in ('purchase_xml', 'sales_xml'):
                     from ..extraction.xml_invoice import extract
-                    extract(path.read_bytes(), today=as_of)
+                    extract(path.read_bytes(), today=as_of, simulated=pack.simulated)
                     result.update(checked=True, note='Đã đọc cấu trúc; điều kiện thuế và chữ ký cần xem trong báo cáo.')
             except Exception as exc:
                 result.update(checked=False, reason=str(exc)[:300])
@@ -165,9 +168,6 @@ def ingest(ws: Path, name: str, raw: bytes, tax_code: str, pack: Pack) -> list[d
                     continue
                 folder = ws / KIND_FOLDER[kind]
                 folder.mkdir(parents=True, exist_ok=True)
-                # The same file dropped again is kept once, so a second drop does not double the data. A bank statement is the same
-                # statement whatever its name; an invoice only when the name matches too, because a copy under another name is
-                # what rule R05 (duplicate invoice) exists to report.
                 data = p.read_bytes()
                 same = _same_content(folder, data) if kind == 'bank' else (folder / n if (folder / n).exists() and (folder / n).read_bytes() == data else None)
                 if same is not None:
@@ -207,7 +207,7 @@ def file_details(ws: Path, kind: str, pack: Pack, as_of: date) -> list[dict]:
     if not folder.exists():
         return []
     if kind in ('purchase_xml', 'sales_xml'):
-        invoices, bad = read_invoices(folder, 'PURCHASE' if kind == 'purchase_xml' else 'SALE', as_of)
+        invoices, bad = read_invoices(folder, 'PURCHASE' if kind == 'purchase_xml' else 'SALE', as_of, simulated=pack.simulated)
         out = [dict(file=i.file, ok=not i.guard_errors, number=f'{i.template or ""}{i.symbol or ""}/{i.number or ""}', date=i.issue_date,
                     party=i.seller_name if kind == 'purchase_xml' else i.buyer_name, gross=i.gross, vat=i.vat,
                     errors=list(i.guard_errors), duplicate=bool(getattr(i, 'duplicate_of', None))) for i in invoices]
@@ -263,7 +263,7 @@ def preview_with(path: Path, fmt: dict, rows_wanted: int = 8) -> dict:
 def coverage(ws: Path, pack: Pack, as_of: date, threshold) -> list[dict]:
     """Concrete warnings about missing data. Each: level (warning|info), title, detail."""
     out = []
-    purchases, _ = read_invoices(ws / KIND_FOLDER['purchase_xml'], 'PURCHASE', as_of)
+    purchases, _ = read_invoices(ws / KIND_FOLDER['purchase_xml'], 'PURCHASE', as_of, simulated=pack.simulated)
     sales_files = list((ws / KIND_FOLDER['sales_xml']).glob('*.xml')) if (ws / KIND_FOLDER['sales_xml']).exists() else []
     if not purchases:
         out.append(dict(level='warning', title='Chưa có hóa đơn mua vào', detail='Đây là dữ liệu bắt buộc; thả tệp XML hoặc tệp nén vào ô Nạp nhanh.'))

@@ -3,11 +3,15 @@
 from __future__ import annotations
 
 import asyncio
+import re
+import unicodedata
 from contextlib import contextmanager
 from dataclasses import asdict, dataclass, field
 from functools import partial
 from time import perf_counter
 from typing import Any
+
+import httpx
 
 from agent4.core.cache import build_scoped_cache_key, file_revision
 from agent4.core.catalog import MetricCatalog
@@ -18,7 +22,14 @@ from .config import FewshotConfig, MetricSelectionConfig, backend_cache_identity
 from .embedding import EmbeddingProvider
 from .fewshot import EXAMPLE_BANK_VERSION, load_example_bank, retrieve_dynamic_fewshot
 from .index import MetricVectorIndex
-from .llm_selector import LLMMetricSelector, SelectionFormatError
+from .lexical import LEXICAL_INDEX_VERSION, lexical_retrieve
+from .llm_selector import (
+    INJECTION_PATTERNS,
+    LLMMetricSelector,
+    SelectionFormatError,
+    validate_llm_selection_draft,
+)
+from .mentions import retrieve_mentions
 from .orchestrator import _RETRIEVAL_SELECTION_CACHE, _cache_scope, _retrieve_with_revision
 from .validator import require_authorized_view, validate_metrics
 
@@ -74,6 +85,180 @@ def _retrieval_unavailable() -> ContractError:
     )
 
 
+class GovernedLexicalSelector:
+    """Deterministic governed fallback selector when the local LLM daemon is offline."""
+
+    _OUT_OF_DOMAIN = re.compile(
+        r"\b(?:dự báo|forecast|tỷ giá|giá cổ phiếu|bitcoin|ev/ebitda|altman)\b",
+        re.IGNORECASE,
+    )
+
+    @classmethod
+    def select_draft(
+        cls,
+        question: str,
+        locale: str,
+        candidates: list[dict[str, Any]],
+        catalog: MetricCatalog,
+    ) -> dict[str, Any]:
+        vi = locale == "vi-VN"
+        normalized = " ".join(unicodedata.normalize("NFKC", question).casefold().split())
+        if INJECTION_PATTERNS.search(normalized) or cls._OUT_OF_DOMAIN.search(normalized):
+            return validate_llm_selection_draft(
+                {
+                    "status": "unsupported",
+                    "metric_ids": [],
+                    "clarification_question": None,
+                    "unsupported_reason": (
+                        "Chỉ tiêu hoặc yêu cầu nằm ngoài phạm vi hỗ trợ."
+                        if vi
+                        else "Requested metric is outside the supported catalog."
+                    ),
+                }
+            )
+        if not candidates:
+            return validate_llm_selection_draft(
+                {
+                    "status": "unsupported",
+                    "metric_ids": [],
+                    "clarification_question": None,
+                    "unsupported_reason": (
+                        "Không tìm thấy chỉ tiêu phù hợp." if vi else "No matching metric found."
+                    ),
+                }
+            )
+
+        # Conservative ambiguity guards before lexical resolution
+        if re.search(r"\b(?:công nợ|outstanding balances?|debt)\b", normalized) and not re.search(
+            r"\b(?:phải thu|phải trả|khách hàng|nhà cung cấp|ncc|quá hạn|tuổi nợ|"
+            r"sắp đến hạn|nhân viên|sales|receivable|payable|loan|vay|debt to equity)\b",
+            normalized,
+        ):
+            return cls._ambiguous(
+                "Bạn muốn xem công nợ phải thu hay công nợ phải trả?"
+                if vi
+                else "Would you like accounts receivable or accounts payable?"
+            )
+        if not re.search(
+            r"\b(?:gộp|ròng|sau thuế|trước thuế|hoạt động|thuần|ebitda|tính thuế|chịu thuế|"
+            r"gross|net|operating|before tax|after tax)\b",
+            normalized,
+        ):
+            if re.search(r"\b(?:(?:biên|tỷ suất) lợi nhuận|margin)\b", normalized):
+                return cls._ambiguous(
+                    "Bạn muốn xem biên lợi nhuận gộp hay biên lợi nhuận ròng?"
+                    if vi
+                    else "Would you like gross margin or net profit margin?"
+                )
+            if re.search(r"\b(?:lợi nhuận|lãi|lời|profit)\b", normalized):
+                return cls._ambiguous(
+                    "Bạn muốn xem lợi nhuận gộp, lợi nhuận hoạt động hay lợi nhuận ròng?"
+                    if vi
+                    else "Would you like gross profit, operating profit, or net profit?"
+                )
+        if re.search(r"\bdòng tiền\b", normalized) and not re.search(
+            r"\b(?:thuần|biến động|theo nhóm|thu chi|cơ cấu|lưu chuyển)\b", normalized
+        ):
+            return cls._ambiguous("Bạn muốn xem số dư tiền hay dòng tiền thuần trong kỳ?")
+
+        full_candidates = [catalog.get(item["metric_id"]) or item for item in candidates]
+        mention_hits = retrieve_mentions(question, full_candidates)["hits"]
+        unique_ids = [hit["metric_id"] for hit in mention_hits if hit["score"] > 0]
+        shared_terms = {
+            term for hit in mention_hits if hit["score"] == 0 for term in hit["matched_terms"]
+        }
+        unique_terms = {
+            term for hit in mention_hits if hit["score"] > 0 for term in hit["matched_terms"]
+        }
+        if shared_terms - unique_terms:
+            return cls._ambiguous(
+                "Bạn vui lòng làm rõ chỉ tiêu tài chính cụ thể muốn tra cứu?"
+                if vi
+                else "Please clarify which specific financial metric you would like to see."
+            )
+        if unique_ids:
+            periods = {(catalog.get(mid) or {}).get("period_type") for mid in unique_ids[:8]}
+            if len(periods) > 1:
+                return validate_llm_selection_draft(
+                    {
+                        "status": "unsupported",
+                        "metric_ids": [],
+                        "clarification_question": None,
+                        "unsupported_reason": (
+                            "Không thể kết hợp chỉ tiêu dòng kỳ và số dư."
+                            if vi
+                            else "Cannot combine flow and snapshot metrics."
+                        ),
+                    }
+                )
+            return validate_llm_selection_draft(
+                {
+                    "status": "resolved",
+                    "metric_ids": unique_ids[:8],
+                    "clarification_question": None,
+                    "unsupported_reason": None,
+                }
+            )
+
+        allowed_ids = {item["metric_id"] for item in candidates}
+        lex_hits = lexical_retrieve(
+            {"query": question, "top_k": 5, "index_version": LEXICAL_INDEX_VERSION},
+            catalog,
+            allowed_metric_ids=allowed_ids,
+        )["hits"]
+        if not lex_hits or lex_hits[0]["score"] < 2.5:
+            return validate_llm_selection_draft(
+                {
+                    "status": "unsupported",
+                    "metric_ids": [],
+                    "clarification_question": None,
+                    "unsupported_reason": (
+                        "Chỉ tiêu chưa có trong danh mục hỗ trợ."
+                        if vi
+                        else "Metric is not in the supported catalog."
+                    ),
+                }
+            )
+        if len(lex_hits) == 1 and lex_hits[0]["score"] >= 3.5:
+            return validate_llm_selection_draft(
+                {
+                    "status": "resolved",
+                    "metric_ids": [lex_hits[0]["metric_id"]],
+                    "clarification_question": None,
+                    "unsupported_reason": None,
+                }
+            )
+        if (
+            len(lex_hits) >= 2
+            and lex_hits[0]["score"] >= 6.0
+            and (lex_hits[0]["score"] - lex_hits[1]["score"]) >= 2.5
+        ):
+            return validate_llm_selection_draft(
+                {
+                    "status": "resolved",
+                    "metric_ids": [lex_hits[0]["metric_id"]],
+                    "clarification_question": None,
+                    "unsupported_reason": None,
+                }
+            )
+        return cls._ambiguous(
+            "Bạn vui lòng làm rõ chỉ tiêu tài chính cụ thể muốn tra cứu?"
+            if vi
+            else "Please clarify which specific financial metric you would like to see."
+        )
+
+    @staticmethod
+    def _ambiguous(prompt: str) -> dict[str, Any]:
+        return validate_llm_selection_draft(
+            {
+                "status": "ambiguous",
+                "metric_ids": [],
+                "clarification_question": prompt,
+                "unsupported_reason": None,
+            }
+        )
+
+
 async def select_metrics_with_recovery(
     normalized_query: dict[str, Any],
     catalog: MetricCatalog,
@@ -104,7 +289,7 @@ async def select_metrics_with_recovery(
     )
     with trace.measure("retrieval_ms"):
         if (
-            provider.config.provider == "ollama"
+            provider.config.provider in ("ollama", "openai")
             and config.retrieval.mode in ("dense_only", "hybrid")
             and config.retrieval.dense_enabled
         ):
@@ -125,7 +310,7 @@ async def select_metrics_with_recovery(
                     "expansion": config.expansion.model_copy(update={"enabled": False}),
                 }
             )
-            retrieval, _ = retrieve(config=lexical_config)
+            retrieval, _ = await asyncio.to_thread(retrieve, config=lexical_config)
             if retrieval["status"] != "candidates_found":
                 raise _retrieval_unavailable()
             for candidate in retrieval["candidates"]:
@@ -156,6 +341,8 @@ async def select_metrics_with_recovery(
         fewshot=config.fewshot if config.fewshot.enabled else None,
         retry_schema=config.llm.max_retries == 1,
         expand_candidates=config.recovery.enable_candidate_expansion,
+        degraded_lexical_fallback=config.recovery.degraded_lexical_fallback,
+        llm_lexical_fallback=config.recovery.llm_lexical_fallback,
         retrieval_revision=revision,
         cache_enabled=config.cache_enabled,
     )
@@ -221,6 +408,8 @@ async def _select_from_retrieval(
     fewshot: FewshotConfig | None = None,
     retry_schema: bool = False,
     expand_candidates: bool = False,
+    degraded_lexical_fallback: bool = False,
+    llm_lexical_fallback: bool = False,
     retrieval_revision: str | None = None,
     cache_enabled: bool = True,
 ) -> dict[str, Any]:
@@ -245,6 +434,7 @@ async def _select_from_retrieval(
         "clarification_question": None,
         "unsupported_reason": None,
     }
+    degraded_llm = False
     if cached is not None:
         draft = cached.draft
         trace.selected_example_ids = cached.example_ids
@@ -266,7 +456,8 @@ async def _select_from_retrieval(
         examples = None
         if fewshot is not None:
             with trace.measure("fewshot_ms"):
-                examples = _select_examples(
+                examples = await asyncio.to_thread(
+                    _select_examples,
                     question,
                     locale,
                     trace.retrieved_metric_ids,
@@ -288,6 +479,23 @@ async def _select_from_retrieval(
                 draft, usage = await select(remind_schema=True)
                 if exc.usage is not None and usage is not None:
                     trace.usage = {key: exc.usage[key] + usage[key] for key in usage}
+            except ContractError as exc:
+                is_offline_transport = exc.__cause__ is None or isinstance(
+                    exc.__cause__, (httpx.RequestError, httpx.InvalidURL)
+                )
+                can_fallback = llm_lexical_fallback or (
+                    degraded_lexical_fallback and is_offline_transport
+                )
+                if (
+                    exc.code != "llm_unavailable"
+                    or not can_fallback
+                    or trace.recovery_reason not in (None, "retrieval_unavailable")
+                ):
+                    raise
+                if trace.recovery_reason is None:
+                    trace.recovery_reason = "llm_unavailable"
+                degraded_llm = True
+                draft = GovernedLexicalSelector.select_draft(question, locale, candidates, catalog)
 
     # Record only the schema-checked status and IDs the model was allowed to see.
     candidates = set(trace.retrieved_metric_ids)
@@ -338,7 +546,7 @@ async def _select_from_retrieval(
             trace.retrieved_metric_ids = _candidate_ids(expanded)
             trace.retrieval_result = expanded
             validated = validate_metrics(draft, expanded, catalog, auth_context, query_context)
-    if key is not None and cached is None:
+    if key is not None and cached is None and not degraded_llm:
         _RETRIEVAL_SELECTION_CACHE.set(
             key,
             _CheckedSelection(

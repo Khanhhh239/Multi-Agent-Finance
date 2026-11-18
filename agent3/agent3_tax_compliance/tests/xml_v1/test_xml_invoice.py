@@ -25,6 +25,8 @@ def _valid_tax_id(prefix='010010910'):
 
 SELLER = _valid_tax_id()
 BUYER = _valid_tax_id('030000000')
+CA_KEY = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+CA_NAME = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, 'VNPT-CA Test Issuing Authority')])
 
 BODY = f'''<HDon><DLHDon Id="ID1"><TTChung><KHMSHDon>1</KHMSHDon><KHHDon>K26TAA</KHHDon><SHDon>00000012</SHDon>
 <NLap>2026-03-01</NLap><DVTTe>VND</DVTTe><HTTToan>CK</HTTToan><THDon>Hóa đơn giá trị gia tăng</THDon></TTChung>
@@ -35,14 +37,16 @@ BODY = f'''<HDon><DLHDon Id="ID1"><TTChung><KHMSHDon>1</KHMSHDon><KHHDon>K26TAA<
 <TgTTTBChu>Hai triệu hai trăm nghìn đồng</TgTTTBChu></TToan></NDHDon></DLHDon><DSCKS><NBan/></DSCKS></HDon>'''
 
 
-def signed_invoice(body=BODY) -> bytes:
+def signed_invoice(body=BODY, *, self_signed: bool = False) -> bytes:
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, f'Cong ty A MST:{SELLER}')])
-    cert = (x509.CertificateBuilder().subject_name(name).issuer_name(name).public_key(key.public_key())
+    issuer_name = name if self_signed else CA_NAME
+    signing_key = key if self_signed else CA_KEY
+    cert = (x509.CertificateBuilder().subject_name(name).issuer_name(issuer_name).public_key(key.public_key())
             .serial_number(1).not_valid_before(dt.datetime(2025, 1, 1)).not_valid_after(dt.datetime(2027, 1, 1))
-            .sign(key, hashes.SHA256()))
+            .sign(signing_key, hashes.SHA256()))
     root = etree.fromstring(body.encode())
-    digest = base64.b64encode(hashlib.sha256(canonical(root.find('DLHDon'))).digest()).decode()
+    digest = base64.b64encode(hashlib.sha256(canonical(root.find('DLHDon'), exclusive=False)).digest()).decode()
     cert_b64 = base64.b64encode(cert.public_bytes(serialization.Encoding.DER)).decode()
     sig = etree.fromstring(f'''<ds:Signature xmlns:ds="{DS}"><ds:SignedInfo>
 <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
@@ -54,7 +58,7 @@ def signed_invoice(body=BODY) -> bytes:
     sig.find(f'.//{{{DS}}}SigningTime').text = '2026-03-01T10:00:00'
     root.find('DSCKS/NBan').append(sig)
     info = root.find(f'DSCKS/NBan/{{{DS}}}Signature/{{{DS}}}SignedInfo')
-    value = key.sign(canonical(info), padding.PKCS1v15(), hashes.SHA256())
+    value = key.sign(canonical(info, exclusive=True), padding.PKCS1v15(), hashes.SHA256())
     root.find(f'DSCKS/NBan/{{{DS}}}Signature/{{{DS}}}SignatureValue').text = base64.b64encode(value).decode()
     return etree.tostring(root, encoding='utf-8')
 
@@ -109,7 +113,7 @@ def test_doctype_and_foreign_xml_are_rejected():
 
 @pytest.mark.parametrize('text,value', [('Hai triệu hai trăm nghìn đồng', 2200000), ('Một trăm lẻ năm đồng', 105),
                                         ('Mười lăm nghìn đồng', 15000), ('Hai mươi mốt triệu đồng', 21000000),
-                                        ('Hai tỷ đồng chẵn', 2000000000)])
+                                        ('Hai tỷ đồng chẵn', 2000000000), ('Mười một triệu đồng chẵn./.', 11000000)])
 def test_words_to_int(text, value):
     assert words_to_int(text) == value
 

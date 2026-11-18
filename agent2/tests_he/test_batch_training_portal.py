@@ -424,7 +424,7 @@ class BatchTrainingPortalTests(unittest.TestCase):
         cand_c001 = st5["session"]["candidate"]
         self.assertEqual(cand_c001["status_label"], "Model ứng viên đã nhận và kiểm tra kỹ thuật")
         self.assertEqual(cand_c001["validation"], "quantized_batch_oracle_exact")
-        self.assertEqual(cand_c001["weights_code"], [1, 1, -1])
+        self.assertEqual(cand_c001["weights_code"], [13, 13, -6])
         self.assertFalse(cand_c001["approved_for_shadow"])
         self.assertFalse(cand_c001["operational_activation"])
 
@@ -559,13 +559,13 @@ class BatchTrainingPortalTests(unittest.TestCase):
             body=dict(expected_revision=c2_s3["revision"]),
         )
         self.assertEqual(code, 200)
-        self.assertEqual(c2_s5["session"]["candidate"]["weights_code"], [-1, -1, 1])
+        self.assertEqual(c2_s5["session"]["candidate"]["weights_code"], [-13, -13, 6])
 
         # Verify C001 state is completely untouched by C002
         code, c1_final = self._http("GET", "/api/v1/companies/C001/batch-training", token="viewer-c001")
         self.assertEqual(code, 200)
         self.assertEqual(c1_final["session"]["job_id"], job_id_c001)
-        self.assertEqual(c1_final["session"]["candidate"]["weights_code"], [1, 1, -1])
+        self.assertEqual(c1_final["session"]["candidate"]["weights_code"], [13, 13, -6])
         self.assertEqual(c1_final["session"]["phase"], "shadow_approved")
 
     def test_real_portal_proxy_batch_training_end_to_end(self):
@@ -902,7 +902,7 @@ class BatchTrainingPortalTests(unittest.TestCase):
         )
         self.assertEqual(code, 201, s7)
         model_c001 = s7["approved_models"][0]
-        self.assertEqual(model_c001["weights_code"], [1, 1, -1])
+        self.assertEqual(model_c001["weights_code"], [13, 13, -6])
 
         req_c002, model_c002 = self._train_and_approve_company_model(
             "C002",
@@ -910,7 +910,7 @@ class BatchTrainingPortalTests(unittest.TestCase):
             batch0_outcome="verified_non_fraud",
             batch1_outcome="verified_fraud",
         )
-        self.assertEqual(model_c002["weights_code"], [-1, -1, 1])
+        self.assertEqual(model_c002["weights_code"], [-13, -13, 6])
 
         # 2. Cross-company model & snapshot isolation
         code, err = self._http(

@@ -173,8 +173,8 @@ def parse_rows(
         raise ValueError("Bảng không được hỗ trợ")
     if date_format not in ["%d/%m/%Y", "%Y-%m-%d", "%d-%m-%y"]:
         raise ValueError("Chọn ngày dd-mm-yy, dd/mm/yyyy hoặc yyyy-mm-dd")
-    if number_format not in ["vi-VN", "plain"]:
-        raise ValueError("Chọn định dạng số tiền")
+    if number_format not in ["vi-VN", "plain", "en-US"]:
+        raise ValueError("Chọn định dạng số tiền (vi-VN, plain hoặc en-US)")
     missing = [
         c for c in REQUIRED[kind] if not mapping.get(c) or mapping[c] not in raw.columns
     ]
@@ -215,9 +215,19 @@ def parse_rows(
                 if field in MONEY_FIELDS:
                     if isinstance(value, str):
                         value = value.strip().replace(" ", "")
+                        if number_format == "vi-VN" and "." not in value and re.fullmatch(
+                            r"-?\d{1,3}(?:,\d{3})+", value
+                        ):
+                            raise ValueError(
+                                "Số tiền dùng dấu phẩy phân tách hàng nghìn trong chế độ vi-VN "
+                                "(nguy cơ lệch 1.000 lần); hãy dùng dấu chấm phân tách nghìn "
+                                "hoặc chọn định dạng plain/en-US"
+                            )
                         pattern = (
                             r"(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?"
                             if number_format == "vi-VN"
+                            else r"(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?"
+                            if number_format == "en-US"
                             else r"\d+(?:\.\d+)?"
                         )
                         if (
@@ -229,6 +239,8 @@ def parse_rows(
                             raise ValueError()
                         if number_format == "vi-VN":
                             value = value.replace(".", "").replace(",", ".")
+                        elif number_format == "en-US":
+                            value = value.replace(",", "")
                     value = vnd(value)
                     if field == "amount" and (
                         value == 0 or (value < 0 and not adjustment)
@@ -256,12 +268,17 @@ def parse_rows(
                 else:
                     value = str(value).strip()
                 row[field] = value
-            except (ValueError, TypeError, OverflowError):
+            except (ValueError, TypeError, OverflowError) as exc:
+                specific = (
+                    str(exc)
+                    if isinstance(exc, ValueError) and "lệch 1.000 lần" in str(exc)
+                    else "Giá trị không hợp lệ; kiểm tra định dạng đã chọn"
+                )
                 errors.append(
                     dict(
                         row=int(index) + 2,
                         column=field,
-                        message="Giá trị không hợp lệ; kiểm tra định dạng đã chọn",
+                        message=specific,
                     )
                 )
                 bad = True

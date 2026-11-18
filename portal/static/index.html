@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="page-type" content="software">
 <meta name="site-kind" content="software">
-<title>Văn phòng kế toán số</title>
+<title>Sổ Son — Phòng Kế Toán Số</title>
 <link rel="icon" type="image/png" sizes="32x32" href="/brand/favicon-32.png?v=2">
 <link rel="stylesheet" href="/design/platform-theme.css">
 <link rel="stylesheet" href="/app.css">
@@ -101,6 +101,30 @@
         </div>
       </header>
 
+      <!-- 1b. Executive Summary Strip (Live System & Accounting Governance) -->
+      <div class="exec-summary-grid" id="exec-summary-grid" aria-label="Tóm tắt điều hành phòng kế toán số">
+        <a href="#agent-grid" class="exec-kpi-card">
+          <span class="exec-kpi-kicker">HỆ THỐNG ĐA TÁC TỬ</span>
+          <strong class="exec-kpi-val" id="exec-agents-val">—/4 sẵn sàng</strong>
+          <span class="exec-kpi-sub" id="exec-agents-sub">Đang kiểm tra 4 phân hệ AI…</span>
+        </a>
+        <a href="#config" class="exec-kpi-card">
+          <span class="exec-kpi-kicker">CHẾ ĐỘ THUẾ &amp; KỲ SỔ</span>
+          <strong class="exec-kpi-val" id="exec-regime-val">Chưa cấu hình</strong>
+          <span class="exec-kpi-sub" id="exec-regime-sub">Khai báo MST &amp; kỳ kế toán</span>
+        </a>
+        <a href="#data" class="exec-kpi-card">
+          <span class="exec-kpi-kicker">CHỨNG TỪ &amp; NIÊM PHONG</span>
+          <strong class="exec-kpi-val" id="exec-pkg-val">Chưa niêm phong</strong>
+          <span class="exec-kpi-sub" id="exec-pkg-sub">Nạp sao kê, hóa đơn XML &amp; sổ</span>
+        </a>
+        <a href="#data" class="exec-kpi-card">
+          <span class="exec-kpi-kicker">AN NINH &amp; SINH TRẮC HỌC</span>
+          <strong class="exec-kpi-val" id="exec-sec-val">Khóa bảo vệ</strong>
+          <span class="exec-kpi-sub" id="exec-sec-sub">FaceID 3 khung · Chuỗi SHA-256</span>
+        </a>
+      </div>
+
       <!-- 2. Pure Aesthetic Central Vietnam Gallery (Chỉ trang trí nghệ thuật, không gắn với Agent) -->
       <section class="heritage-showcase" aria-label="Bộ ảnh di sản miền Trung">
         <div class="showcase-header">
@@ -134,19 +158,19 @@
 
       <!-- 3. Sleek Minimalist Agent Cards (4 Trạm Nghiệp vụ — Gọn, Ít chữ) -->
       <div class="workstations-header">
-        <h2 class="workstations-title">Phân hệ Nghiệp vụ</h2>
-        <span class="workstations-hint">Chọn phân hệ để làm việc</span>
+        <h2 class="workstations-title">Phân hệ Nghiệp vụ Sổ Son</h2>
+        <span class="workstations-hint">Dự báo dòng tiền · Kiểm soát gian lận &amp; FHE · Rà soát thuế &amp; HĐĐT · Hỏi đáp CFO hai sổ</span>
       </div>
       <div class="agents workstations-grid" id="agent-grid"></div>
 
-      <!-- 4. Compact 3-Step Setup Strip -->
+      <!-- 4. Compact 3-Step Setup Strip & Quick-Start Demo Guide -->
       <div class="setup-progress-card">
         <div class="setup-card-header">
-          <h3 class="setup-title">Thiết lập nhanh</h3>
+          <h3 class="setup-title">Thiết lập nhanh &amp; Lộ trình trải nghiệm</h3>
           <div class="setup-progress-meter">
             <span class="meter-label" id="setup-progress-text">3/3 hoàn tất</span>
             <div class="meter-track">
-              <div class="meter-bar" id="meter-bar"></div>
+              <div class="meter-bar" id="meter-bar" data-done="0"></div>
             </div>
           </div>
         </div>
@@ -176,6 +200,27 @@
             <a href="#data" class="step-action-link">Nạp</a>
           </li>
         </ol>
+        <details class="demo-guide-details" id="demo-guide">
+          <summary>Hướng dẫn thao tác nhanh cho Kế toán trưởng &amp; Ban giám khảo (60 giây)</summary>
+          <div class="demo-guide-grid">
+            <div class="demo-guide-item">
+              <strong>01 · Định danh &amp; FaceID 3 khung</strong>
+              <p>Kiểm tra MST, kỳ thuế tại <a href="#config">Hồ sơ doanh nghiệp</a> và mở khóa bằng mật khẩu hoặc quét 3 khung hình FaceID liên tiếp tại <a href="#data">Nạp dữ liệu</a>.</p>
+            </div>
+            <div class="demo-guide-item">
+              <strong>02 · Nạp một cửa &amp; Niêm phong</strong>
+              <p>Thả sao kê CSV, hóa đơn XML/ZIP hoặc sổ bút toán để Portal tự phân luồng cho Agent 1–3 và đóng dấu chuỗi băm SHA-256.</p>
+            </div>
+            <div class="demo-guide-item">
+              <strong>03 · Dòng tiền · Gian lận FHE · Thuế</strong>
+              <p>Chuyển mượt giữa <a href="#agent1">Dự báo dòng tiền</a>, <a href="#agent2">Kiểm soát gian lận &amp; FHE</a> và <a href="#agent3">Rà soát thuế &amp; HĐĐT</a>.</p>
+            </div>
+            <div class="demo-guide-item">
+              <strong>04 · Hỏi đáp CFO hai sổ đa lượt</strong>
+              <p>Mở <a href="#agent4">Hỏi đáp CFO hai sổ</a> để truy vấn tiếng Việt trên Sổ quản trị (<code>v_mgmt</code>) &amp; Sổ thuế (<code>v_tax</code>) kèm bằng chứng SQL tất định.</p>
+            </div>
+          </div>
+        </details>
       </div>
 
       <!-- Hidden container for workspace-stats to maintain backward compatibility -->
@@ -614,7 +659,7 @@
             <div class="agent-headings">
               <div class="agent-name-row">
                 <h1 id="agent-name">Agent 3</h1>
-                <span class="agent-subtag" id="agent-subtag">Tuân thủ thuế GTGT</span>
+                <span class="agent-subtag" id="agent-subtag">Rà soát thuế &amp; HĐĐT</span>
                 <span class="status status-pill" id="agent-status"></span>
               </div>
               <div class="agent-source-wrap">
@@ -626,6 +671,7 @@
             </div>
           </div>
         </div>
+        <nav class="agent-quick-switch" id="agent-quick-switch" aria-label="Chuyển nhanh giữa 4 phân hệ"></nav>
         <div class="agent-actions">
           <a class="btn btn-ghost" id="agent-back" href="#overview" title="Quay lại trang tổng quan">
             <svg class="btn-icon" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -685,7 +731,7 @@
       <div class="face-hud" aria-hidden="true">
         <div class="face-hud-top">
           <span class="face-hud-pill" id="face-hud-status">KHỞI ĐỘNG ỐNG KÍNH</span>
-          <span class="face-hud-counter" id="face-hud-frames">0 / 2 MẪU</span>
+          <span class="face-hud-counter" id="face-hud-frames">0 / 3 KHUNG</span>
         </div>
         <div class="face-reticle">
           <span class="face-corner tl"></span>
@@ -712,7 +758,7 @@
         <span class="face-step" id="face-step-3">03. Đối soát 128-D</span>
       </div>
       <div class="face-progress-track">
-        <div class="face-progress-fill" id="face-progress-bar"></div>
+        <div class="face-progress-fill" id="face-progress-bar" data-pct="15"></div>
       </div>
     </div>
 

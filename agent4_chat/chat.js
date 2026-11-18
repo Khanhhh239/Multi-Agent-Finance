@@ -1,185 +1,939 @@
 "use strict";
-// Agent 4 chat. Talks only to the portal (/api/agent4/...); the portal adds Agent 4's key, so the page never holds it.
+// Sổ Son — Agent 4 CFO Two-Book Chat.
+// Talks only to the portal (/api/agent4/...); exact BigInt/Decimal VND formatting; zero inline styles.
 (() => {
   const $ = (id) => document.getElementById(id);
+  const SESSION_STORAGE_KEY = "soson.agent4.session_id";
+
   const SUGGESTIONS = [
     "Doanh thu thuần quý 3 năm 2026 là bao nhiêu?",
-    "Lợi nhuận sau thuế tháng 8 năm 2026?",
-    "Công nợ phải thu hiện tại?",
+    "Lợi nhuận sau thuế quý 3 năm 2026 theo sổ quản trị?",
     "Tiền mặt cuối tháng 8 năm 2026?",
+    "Công nợ phải thu hiện tại?",
     "Doanh thu thuần theo tháng năm 2026",
+    "Doanh thu thuần là bao nhiêu?",
   ];
+
+  const FOLLOWUP_SUGGESTIONS = [
+    "Còn theo sổ thuế thì sao?",
+    "So sánh hai sổ quản trị và thuế trong cùng kỳ?",
+    "Chi tiết theo từng chi nhánh?",
+  ];
+
   const STATUS = {
-    ready: "Đã trả lời", needs_clarification: "Cần nói rõ hơn", unsupported: "Chưa hỗ trợ", forbidden: "Không có quyền",
-    no_data: "Không có số liệu", temporarily_unavailable: "Tạm thời không trả lời được", error: "Lỗi",
+    ready: "Đã trả lời",
+    needs_clarification: "Cần làm rõ thêm",
+    clarification_needed: "Cần làm rõ thêm",
+    unsupported: "Chưa hỗ trợ",
+    forbidden: "Ngoài phạm vi quyền",
+    no_data: "Không có số liệu",
+    temporarily_unavailable: "Tạm thời gián đoạn",
+    error: "Lỗi truy vấn",
+  };
+
+  const LABELS = {
+    net_revenue: "Doanh thu thuần",
+    gross_revenue: "Doanh thu gộp",
+    revenue: "Doanh thu",
+    net_profit: "Lợi nhuận sau thuế",
+    profit_before_tax: "Lợi nhuận trước thuế",
+    gross_profit: "Lợi nhuận gộp",
+    gross_margin: "Biên lợi nhuận gộp",
+    gross_margin_pct: "Biên lợi nhuận gộp (%)",
+    net_margin_pct: "Biên lợi nhuận ròng (%)",
+    ebitda: "EBITDA",
+    cash: "Tiền và tương đương tiền",
+    cash_end: "Tiền mặt cuối kỳ",
+    cash_balance: "Số dư tiền",
+    accounts_receivable: "Công nợ phải thu",
+    ar_balance: "Phải thu khách hàng",
+    accounts_payable: "Công nợ phải trả",
+    ap_balance: "Phải trả nhà cung cấp",
+    selling_expenses: "Chi phí bán hàng",
+    admin_expenses: "Chi phí quản lý doanh nghiệp",
+    operating_expenses: "Chi phí hoạt động",
+    expense: "Chi phí",
+    cogs: "Giá vốn hàng bán",
+    vat_position: "Vị thế thuế GTGT",
+    cit_expense: "Chi phí thuế TNDN",
+    branch_code: "Chi nhánh",
+    branch: "Chi nhánh",
+    department_code: "Phòng ban",
+    department: "Phòng ban",
+    partner_code: "Đối tác",
+    customer: "Khách hàng",
+    vendor: "Nhà cung cấp",
+    product_line: "Dòng sản phẩm",
+    cost_category: "Khoản mục chi phí",
+    month: "Tháng",
+    period: "Kỳ",
+    quarter: "Quý",
+    year: "Năm",
+    value: "Giá trị",
+    amount: "Số tiền",
+    mgmt_value: "Sổ quản trị (v_mgmt)",
+    tax_value: "Sổ thuế (v_tax)",
+    delta: "Chênh lệch",
+    diff: "Chênh lệch",
+    variance: "Chênh lệch",
+    as_of: "Tại ngày",
+    date: "Ngày",
+  };
+
+  const metricNames = {};
+  const label = (key) => LABELS[key] || metricNames[key] || String(key).replace(/_/g, " ");
+
+  const WARNINGS = [
+    [/DEMO DATA\s*[—-]\s*NOT REAL FINANCIAL RESULTS/i, "Dữ liệu kho doanh nghiệp mô phỏng để kiểm thử nghiệp vụ."],
+  ];
+
+  const ERROR_TEXT = {
+    unsupported_metric: "Chưa có chỉ tiêu nào khớp với câu hỏi này. Hãy hỏi về doanh thu, lợi nhuận, công nợ, tiền mặt, thuế hoặc chi phí.",
+    unsupported_comparison: "Hiện chưa hỗ trợ gộp hai kỳ khác nhau trong một câu đơn. Bạn có thể hỏi từng kỳ hoặc hỏi nối tiếp ở lượt sau.",
+    forbidden: "Tài khoản hiện tại không có quyền truy cập chỉ tiêu hoặc phạm vi này.",
+    forbidden_metric: "Tài khoản hiện tại không có quyền xem chỉ tiêu này.",
+    retrieval_unavailable: "Dịch vụ truy hồi chỉ tiêu tạm thời bận. Hãy thử lại sau ít giây.",
+    invalid_request: "Câu hỏi cần diễn đạt rõ hơn về chỉ tiêu và kỳ báo cáo (ví dụ: Quý 3/2026 hoặc Tháng 08/2026).",
   };
 
   function el(tag, attrs = {}, ...children) {
     const node = document.createElement(tag);
     for (const [k, v] of Object.entries(attrs)) {
+      if (v === null || v === undefined || v === false) continue;
       if (k === "class") node.className = v;
-      else if (k.startsWith("on")) node.addEventListener(k.slice(2), v);
-      else node.setAttribute(k, v);
+      else if (k.startsWith("on") && typeof v === "function") node.addEventListener(k.slice(2), v);
+      else node.setAttribute(k, v === true ? "" : String(v));
     }
-    for (const c of children.flat(Infinity)) if (c !== null && c !== undefined && c !== false) node.append(c.nodeType ? c : String(c));
+    for (const c of children.flat(Infinity)) {
+      if (c !== null && c !== undefined && c !== false) {
+        node.append(c.nodeType ? c : String(c));
+      }
+    }
     return node;
   }
 
-  const vnd = new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 2 });
-  const dec1 = new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 1 });
-  // Large amounts are hard to read as 13 digits: give the short reading an accountant says aloud.
-  function shortVnd(n) {
-    const a = Math.abs(n);
-    if (a >= 1e12) return dec1.format(n / 1e12) + " nghìn tỷ đồng";
-    if (a >= 1e9) return dec1.format(n / 1e9) + " tỷ đồng";
-    if (a >= 1e6) return dec1.format(n / 1e6) + " triệu đồng";
-    return "";
+  // ------------------------------------------------------------------ Exact Decimal VND Arithmetic
+  function groupDigitsVi(bigIntVal) {
+    const s = (bigIntVal < 0n ? -bigIntVal : bigIntVal).toString();
+    return s.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
-  // Column keys are internal identifiers; the metric catalog supplies the Vietnamese name when it is loaded.
-  const LABELS = {
-    net_revenue: "Doanh thu thuần", gross_revenue: "Doanh thu gộp", revenue: "Doanh thu", net_profit: "Lợi nhuận sau thuế",
-    gross_profit: "Lợi nhuận gộp", cash: "Tiền mặt", cash_end: "Tiền mặt cuối kỳ", accounts_receivable: "Công nợ phải thu",
-    accounts_payable: "Công nợ phải trả", expense: "Chi phí", cogs: "Giá vốn", month: "Tháng", period: "Kỳ", quarter: "Quý", year: "Năm",
-    value: "Giá trị", amount: "Số tiền", as_of: "Tại ngày", date: "Ngày",
-  };
-  const metricNames = {};
-  const label = (key) => LABELS[key] || metricNames[key] || String(key).replace(/_/g, " ");
-  const WARNINGS = [
-    [/DEMO DATA\s*[—-]\s*NOT REAL FINANCIAL RESULTS/i, "Dữ liệu mô phỏng, không phải kết quả tài chính thật."],
-  ];
-  function cell(value, column) {
-    if (value === null || value === undefined) return "";
-    if (column.type === "decimal" || column.type === "integer") {
-      const n = Number(value);
-      if (!Number.isFinite(n)) return value;
-      const text = vnd.format(n) + (column.unit && column.unit !== "count" ? " " + column.unit : "");
-      const short = column.unit === "VND" ? shortVnd(n) : "";
-      return short ? [text, el("small", { class: "short" }, short)] : text;
+
+  function parseExactDecimal(raw) {
+    if (raw === null || raw === undefined || raw === "") return null;
+    let str;
+    if (typeof raw === "bigint") {
+      str = raw.toString();
+    } else if (typeof raw === "number") {
+      if (!Number.isFinite(raw)) return null;
+      // Avoid scientific notation for large VND numbers within safe integer range
+      str = Number.isInteger(raw) ? raw.toFixed(0) : raw.toFixed(4);
+    } else {
+      str = String(raw).trim();
     }
-    return value;
+    if (!str) return null;
+    str = str.replace(/\u2212/g, "-").replace(/\s+/g, "");
+    const match = /^([+-])?(\d+)(?:\.(\d+))?$/.exec(str);
+    if (!match) return null;
+
+    let negative = match[1] === "-";
+    let whole = BigInt(match[2]);
+    const fracRaw = (match[3] || "").padEnd(3, "0");
+    let cents = Number(fracRaw.slice(0, 2));
+    const thirdDigit = Number(fracRaw[2] || "0");
+    if (thirdDigit >= 5) {
+      cents += 1;
+      if (cents >= 100) {
+        whole += 1n;
+        cents = 0;
+      }
+    }
+    if (whole === 0n && cents === 0) negative = false;
+    return { negative, whole, cents };
+  }
+
+  function formatVnd(raw, options = {}) {
+    const parsed = parseExactDecimal(raw);
+    if (!parsed) return String(raw ?? "");
+    let { negative, whole, cents } = parsed;
+    if (options.roundToInt) {
+      if (cents >= 50) whole += 1n;
+      cents = 0;
+      if (whole === 0n) negative = false;
+    }
+    const sign = negative ? "-" : "";
+    const intPart = groupDigitsVi(whole);
+    const fracPart = !options.roundToInt && cents > 0
+      ? "," + String(cents).padStart(2, "0").replace(/0+$/, "")
+      : "";
+    const unitSuffix = options.withUnit ? " đồng" : "";
+    return sign + intPart + fracPart + unitSuffix;
+  }
+
+  // Short spoken Vietnamese summary: preserves negative sign explicitly ("âm 666,4 triệu đồng").
+  function approxVnd(raw) {
+    const parsed = parseExactDecimal(raw);
+    if (!parsed) return "";
+    const absVnd = parsed.whole + (parsed.cents >= 50 ? 1n : 0n);
+    if (absVnd < 1000000n) return "";
+
+    let tenths;
+    let unit;
+    if (absVnd >= 1000000000000n) {
+      tenths = (absVnd * 10n + 500000000000n) / 1000000000000n;
+      unit = "nghìn tỷ đồng";
+    } else if (absVnd >= 1000000000n) {
+      tenths = (absVnd * 10n + 500000000n) / 1000000000n;
+      unit = "tỷ đồng";
+      if (tenths >= 10000n) {
+        tenths = (tenths + 500n) / 1000n;
+        unit = "nghìn tỷ đồng";
+      }
+    } else {
+      tenths = (absVnd * 10n + 500000n) / 1000000n;
+      unit = "triệu đồng";
+      if (tenths >= 10000n) {
+        tenths = (tenths + 500n) / 1000n;
+        unit = "tỷ đồng";
+      }
+    }
+
+    const wholePart = groupDigitsVi(tenths / 10n);
+    const rem = tenths % 10n;
+    const numStr = rem === 0n ? wholePart : wholePart + "," + rem.toString();
+    const prefix = parsed.negative ? "âm " : "";
+    return prefix + numStr + " " + unit;
+  }
+  const shortVnd = approxVnd;
+
+  const nonVndDec = new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 2 });
+
+  function readable(text) {
+    return String(text ?? "")
+      .replace(/([+-−]?\d+(?:\.\d+)?)\s*(?:VND|VNĐ)\b/g, (_, rawNum) =>
+        formatVnd(rawNum, { withUnit: true, roundToInt: true })
+      )
+      .replace(
+        /(?:(\bâm\s+)|([−-]))?(\d{1,3}(?:\.\d{3}){2,}(?:,\d+)?)\s*đồng(?!\s*\(khoảng\b)/gi,
+        (match, amWord, minusSign, groupedDigits) => {
+          const isNeg = Boolean(amWord || minusSign);
+          const normalized = (isNeg ? "-" : "") + groupedDigits.replace(/\./g, "").replace(",", ".");
+          const shortText = approxVnd(normalized);
+          return shortText ? match + " (khoảng " + shortText + ")" : match;
+        }
+      )
+      .replace(/\bkhung mgmt\b/gi, "Sổ quản trị (v_mgmt)")
+      .replace(/\bkhung tax\b/gi, "Sổ thuế (v_tax)")
+      .replace(/(\d{4})-(\d{2})-(\d{2})/g, "$3/$2/$1")
+      .replace(/(\d{2}\/\d{2}\/\d{4})\s*–\s*(\d{2}\/\d{2}\/\d{4})/g, "$1 đến $2");
+  }
+
+  // ------------------------------------------------------------------ Session Management
+  function generateSessionId() {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return crypto.randomUUID().replace(/-/g, "").toLowerCase();
+    }
+    const bytes = new Uint8Array(16);
+    if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+      crypto.getRandomValues(bytes);
+    } else {
+      for (let i = 0; i < 16; i++) bytes[i] = Math.floor(Math.random() * 256);
+    }
+    return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  function loadOrCreateSessionId() {
+    try {
+      const existing = sessionStorage.getItem(SESSION_STORAGE_KEY);
+      if (existing && /^[0-9a-z_-]{8,64}$/i.test(existing)) return existing;
+    } catch (e) { /* private mode */ }
+    const created = generateSessionId();
+    saveSessionId(created);
+    return created;
+  }
+
+  function saveSessionId(id) {
+    try {
+      sessionStorage.setItem(SESSION_STORAGE_KEY, id);
+    } catch (e) { /* private mode */ }
+  }
+
+  let sessionId = loadOrCreateSessionId();
+  let activeClarification = null;
+
+  function renderSessionHeader() {
+    const badge = $("session-badge");
+    if (badge) {
+      const shortId = String(sessionId).replace(/[^0-9a-z]/gi, "").slice(0, 6);
+      badge.textContent = "Phiên #" + (shortId || "mới");
+      badge.dataset.sessionId = sessionId;
+    }
+    const bar = $("clarification-bar");
+    if (bar) {
+      bar.hidden = !activeClarification;
+    }
+  }
+
+  function clearActiveClarification() {
+    activeClarification = null;
+    renderSessionHeader();
+  }
+
+  function buildIntroElement() {
+    return el("li", { class: "intro", id: "chat-intro" },
+      el("div", { class: "intro-badges" },
+        el("span", { class: "data-badge" }, "Một sổ cái · Hai góc nhìn"),
+        el("span", { class: "data-badge gov" }, "SQL tất định chỉ đọc")
+      ),
+      el("h1", {}, "Hỏi đáp CFO hai sổ"),
+      el("p", {},
+        "Đặt câu hỏi bằng tiếng Việt về doanh thu, lợi nhuận, công nợ, dòng tiền hay chi phí theo ",
+        el("strong", {}, "Sổ quản trị (v_mgmt)"),
+        " hoặc ",
+        el("strong", {}, "Sổ thuế (v_tax)"),
+        ". Hỗ trợ hỏi nối tiếp trong cùng phiên (ví dụ: ",
+        el("em", {}, "“Còn theo sổ thuế thì sao?”"),
+        ", ",
+        el("em", {}, "“Chi tiết theo từng chi nhánh?”"),
+        ") kèm bằng chứng đối chiếu minh bạch."
+      )
+    );
+  }
+
+  function resetConversation() {
+    sessionId = generateSessionId();
+    saveSessionId(sessionId);
+    activeClarification = null;
+    renderSessionHeader();
+    const thread = $("thread");
+    if (thread) {
+      thread.replaceChildren(buildIntroElement());
+    }
+    const box = $("question");
+    if (box) {
+      box.value = "";
+      syncComposerRows(box);
+      box.focus();
+    }
+  }
+
+  // ------------------------------------------------------------------ Governance & Provenance Detection
+  function detectAccountingView(res) {
+    const interp = res?.interpretation || {};
+    const prov = res?.provenance || {};
+    const cols = (res?.data?.columns || []).map((c) => String(c.key || "").toLowerCase());
+    const rawViews = Array.isArray(interp.views)
+      ? interp.views
+      : Array.isArray(prov.views)
+        ? prov.views
+        : [];
+    const viewStr = String(interp.view || res?.view || res?.accounting_view || prov.view || prov.source || "").toLowerCase();
+
+    const hasDualCols = cols.some((k) => k.includes("mgmt")) && cols.some((k) => k.includes("tax"));
+    const hasBothViews = (rawViews.includes("mgmt") && rawViews.includes("tax"))
+      || /\b(both|dual|compare|mgmt_vs_tax|two_book|hai_so)\b/.test(viewStr)
+      || (viewStr.includes("mgmt") && viewStr.includes("tax"))
+      || hasDualCols;
+
+    if (hasBothViews) {
+      return { key: "dual", label: "So sánh hai sổ (v_mgmt & v_tax)", css: "view-dual" };
+    }
+    if (viewStr === "tax" || viewStr === "v_tax" || rawViews[0] === "tax") {
+      return { key: "tax", label: "Sổ thuế (v_tax)", css: "view-tax" };
+    }
+    if (viewStr === "mgmt" || viewStr === "v_mgmt" || rawViews[0] === "mgmt") {
+      return { key: "mgmt", label: "Sổ quản trị (v_mgmt)", css: "view-mgmt" };
+    }
+    return null;
+  }
+
+  function detectProvenanceMode(res) {
+    const prov = res?.provenance || {};
+    const warnings = (res?.warnings || []).map((w) => String(w));
+    const modeStr = String(
+      prov.mode || prov.execution_mode || prov.retrieval_mode || res?.execution_mode || ""
+    ).toLowerCase();
+    const sourceStr = String(prov.source || "").toLowerCase();
+
+    const isLexicalDegraded = Boolean(prov.degraded || res?.degraded)
+      || /lexical|degraded|fallback|offline|regex/.test(modeStr)
+      || (sourceStr === "synthetic_duckdb" && !prov.query_fingerprint)
+      || warnings.some((w) => /lexical|degraded|fallback|offline/i.test(w))
+      || Boolean(res?.demo_evidence?.recovery_reason);
+
+    if (isLexicalDegraded) {
+      return {
+        key: "lexical",
+        label: "Chế độ từ vựng dự phòng (Lexical)",
+        css: "prov-lexical",
+        detail: "Khớp từ vựng / danh mục cục bộ (không qua LLM)",
+      };
+    }
+    if (prov.query_fingerprint || res?.demo_evidence?.sql || res?.evidence || (res?.status === "ready" && (prov.catalog_hash || prov.source))) {
+      const fp = prov.query_fingerprint ? " · #" + String(prov.query_fingerprint).slice(0, 8) : "";
+      return {
+        key: "sql",
+        label: "SQL tất định đóng dấu",
+        css: "prov-sql",
+        detail: "Biên dịch & kiểm duyệt an toàn chỉ đọc" + fp,
+      };
+    }
+    return null;
+  }
+
+  // ------------------------------------------------------------------ KPI Cards & Table Rendering
+  function isDeltaKey(key) {
+    return /(delta|diff|variance|chenh_lech|tang_giam|change|gap)/i.test(String(key || ""));
+  }
+
+  function isProfitOrCashKey(key) {
+    return /(profit|loss|margin|ebit|cash|income|loi_nhuan|dong_tien|tien_mat|vat_position)/i.test(String(key || ""));
+  }
+
+  function formatColumnValue(value, column) {
+    if (value === null || value === undefined) return { text: "—", short: "", negative: false };
+    const unit = column.unit || "";
+    const parsed = parseExactDecimal(value);
+    if (parsed) {
+      const isVnd = unit === "VND" || unit === "VNĐ";
+      const numText = isVnd
+        ? formatVnd(value, { roundToInt: parsed.cents === 0 })
+        : nonVndDec.format(Number(value));
+      const unitSuffix = unit && unit !== "count" ? " " + (unit === "VND" ? "VNĐ" : unit) : "";
+      return {
+        text: numText + unitSuffix,
+        short: isVnd ? approxVnd(value) : "",
+        negative: parsed.negative,
+      };
+    }
+    const n = Number(value);
+    if (Number.isFinite(n)) {
+      const unitSuffix = unit && unit !== "count" ? " " + unit : "";
+      return {
+        text: nonVndDec.format(n) + unitSuffix,
+        short: unit === "VND" ? approxVnd(n) : "",
+        negative: n < 0,
+      };
+    }
+    return { text: String(value), short: "", negative: false };
+  }
+
+  function renderMetricCards(data) {
+    if (!data || !Array.isArray(data.rows) || data.rows.length !== 1) return null;
+    const cols = (data.columns || []).filter((c) => c.type === "decimal" || c.type === "integer");
+    if (!cols.length) return null;
+    const row = data.rows[0];
+    const cards = cols.map((col) => {
+      const raw = row[col.key];
+      if (raw === null || raw === undefined) return null;
+      const formatted = formatColumnValue(raw, col);
+      const showDelta = isDeltaKey(col.key);
+      const showProfitCash = isProfitOrCashKey(col.key);
+      let badge = null;
+      if (formatted.negative && (showDelta || showProfitCash || col.unit === "VND")) {
+        const badgeText = showDelta ? "▼ Chênh lệch âm" : "▼ Số âm / Lỗ kỳ";
+        badge = el("span", { class: "delta-badge is-negative" }, badgeText);
+      } else if (!formatted.negative && showDelta && parseExactDecimal(raw)?.whole > 0n) {
+        badge = el("span", { class: "delta-badge is-positive" }, "▲ Chênh lệch dương");
+      }
+
+      const cardClass = "kpi-card" + (formatted.negative ? " is-negative" : showDelta ? " is-positive" : "");
+      return el("div", { class: cardClass },
+        el("span", { class: "kpi-label" }, label(col.key)),
+        el("strong", { class: "kpi-value" + (formatted.negative ? " is-negative" : "") }, formatted.text),
+        (formatted.short || badge)
+          ? el("div", { class: "kpi-sub-row" },
+              badge,
+              formatted.short
+                ? el("span", { class: "kpi-approx" + (formatted.negative ? " is-negative" : "") }, formatted.short)
+                : null
+            )
+          : null
+      );
+    }).filter(Boolean);
+
+    return cards.length ? el("div", { class: "kpi-strip" }, cards) : null;
+  }
+
+  function cell(value, column) {
+    if (value === null || value === undefined) return { content: "", negative: false };
+    if (column.type === "decimal" || column.type === "integer") {
+      const formatted = formatColumnValue(value, column);
+      const mainSpan = el("span", { class: "cell-num" + (formatted.negative ? " is-negative" : "") }, formatted.text);
+      const deltaBadge = isDeltaKey(column.key) && formatted.text !== "—"
+        ? el("span", { class: "delta-badge " + (formatted.negative ? "is-negative" : "is-positive") }, formatted.negative ? "▼" : "▲")
+        : null;
+      const shortNode = formatted.short
+        ? el("small", { class: "short" + (formatted.negative ? " is-negative" : "") }, formatted.short)
+        : null;
+      return {
+        content: [deltaBadge ? [deltaBadge, " "] : null, mainSpan, shortNode],
+        negative: formatted.negative,
+      };
+    }
+    return { content: String(value), negative: false };
   }
 
   function table(data) {
     if (!data || !data.rows || !data.rows.length) return null;
-    const cols = data.columns;
+    const cols = data.columns || [];
     return el("div", { class: "result" },
       el("table", {},
-        el("thead", {}, el("tr", {}, cols.map((c) => el("th", { class: c.type === "decimal" || c.type === "integer" ? "num" : "" }, label(c.key))))),
+        el("thead", {}, el("tr", {}, cols.map((c) =>
+          el("th", { class: c.type === "decimal" || c.type === "integer" ? "num" : "" }, label(c.key))
+        ))),
         el("tbody", {}, data.rows.slice(0, 50).map((r) =>
-          el("tr", {}, cols.map((c) => el("td", { class: c.type === "decimal" || c.type === "integer" ? "num" : "" }, cell(r[c.key], c))))))));
+          el("tr", {}, cols.map((c) => {
+            const isNum = c.type === "decimal" || c.type === "integer";
+            const rendered = cell(r[c.key], c);
+            const cls = (isNum ? "num" : "") + (rendered.negative ? " is-negative" : "");
+            return el("td", { class: cls.trim() }, rendered.content);
+          }))
+        ))
+      )
+    );
   }
 
   function source(res) {
     const p = res.provenance;
     const i = res.interpretation;
-    if (!p && !i) return null;
+    const sqlText = res.demo_evidence?.sql || p?.sql || null;
+    if (!p && !i && !sqlText) return null;
+
+    const viewBadge = detectAccountingView(res);
+    const provBadge = detectProvenanceMode(res);
     const rows = [];
+
     if (i) {
-      rows.push(["Chỉ tiêu", i.metric_ids.map(label).join(", ")]);
-      if (i.dimensions.length) rows.push(["Chiều", i.dimensions.map(label).join(", ")]);
-      if (i.time) rows.push(["Thời gian", i.time.mode === "range" ? i.time.start + " đến " + i.time.end : i.time.as_of || "không giới hạn"]);
-      if (i.view) rows.push(["Khung số liệu", i.view === "tax" ? "thuế" : "quản trị"]);
+      if (Array.isArray(i.metric_ids) && i.metric_ids.length) {
+        rows.push(["Chỉ tiêu", i.metric_ids.map(label).join(", ")]);
+      }
+      if (Array.isArray(i.dimensions) && i.dimensions.length) {
+        rows.push(["Chiều phân tích", i.dimensions.map(label).join(", ")]);
+      }
+      if (i.time) {
+        const timeStr = i.time.mode === "range"
+          ? readable(i.time.start + "–" + i.time.end)
+          : readable(i.time.as_of || "Không giới hạn");
+        rows.push(["Kỳ số liệu", timeStr]);
+      }
+    }
+    if (viewBadge) {
+      rows.push(["Khung sổ kế toán", viewBadge.label]);
+    }
+    if (provBadge) {
+      rows.push(["Cơ chế thực thi", provBadge.detail]);
     }
     if (p) {
-      rows.push(["Nguồn", ({ mgmt: "Sổ quản trị", tax: "Sổ thuế", synthetic_duckdb: "Kho DuckDB mô phỏng" })[p.source] || String(p.source).replace(/_/g, " ")]);
-      if (p.data_watermark) rows.push(["Dữ liệu đến", p.data_watermark]);
-      rows.push(["Danh mục", p.catalog_hash.slice(0, 12)]);
+      const srcMap = {
+        mgmt: "Sổ quản trị (v_mgmt)",
+        v_mgmt: "Sổ quản trị (v_mgmt)",
+        tax: "Sổ thuế (v_tax)",
+        v_tax: "Sổ thuế (v_tax)",
+        synthetic_duckdb: "Kho DuckDB doanh nghiệp",
+      };
+      if (p.source) {
+        rows.push(["Nguồn truy vấn", srcMap[p.source] || String(p.source).replace(/_/g, " ")]);
+      }
+      if (p.data_watermark) rows.push(["Dữ liệu cập nhật đến", readable(p.data_watermark)]);
+      if (p.query_fingerprint) rows.push(["Dấu vân tay SQL", String(p.query_fingerprint).slice(0, 16)]);
+      if (p.catalog_hash) rows.push(["Mã băm danh mục", String(p.catalog_hash).slice(0, 12)]);
     }
-    return el("details", { class: "source" }, el("summary", {}, "Kiểm tra nguồn"),
-      el("dl", {}, rows.map(([k, v]) => [el("dt", {}, k), el("dd", {}, v)])));
+
+    return el("details", { class: "source" },
+      el("summary", {}, "Kiểm tra nguồn & truy vết quản trị"),
+      el("dl", {}, rows.map(([k, v]) => [el("dt", {}, k), el("dd", {}, v)])),
+      sqlText ? el("pre", { class: "sql-preview" }, sqlText) : null
+    );
   }
 
-  // Agent 4 writes raw amounts ("55792824000.00 VND", "khung mgmt"); show them the way an accountant reads them.
-  // Error codes of the governed pipeline, in words a user can act on.
-  const ERROR_TEXT = {
-    unsupported_metric: "Chưa có chỉ tiêu nào phù hợp với câu hỏi này. Hãy hỏi về doanh thu, lợi nhuận, công nợ, tiền mặt hoặc chi phí.",
-    forbidden: "Bạn không có quyền xem chỉ tiêu này.",
-    retrieval_unavailable: "Dịch vụ tìm chỉ tiêu tạm thời chưa sẵn sàng. Hãy thử lại sau ít giây.",
-  };
+  // ------------------------------------------------------------------ Interactive Clarification & Follow-up Chips
+  function normalizeChipItem(item, isGuidedSlot = false) {
+    if (!item) return null;
+    if (typeof item === "string") {
+      const trimmed = item.trim();
+      return trimmed ? { label: trimmed, sendValue: trimmed, displayText: trimmed, isGuidedSlot } : null;
+    }
+    if (typeof item === "object") {
+      const choiceId = item.choice_id ?? item.id ?? item.value ?? null;
+      const sendValue = String(item.value ?? item.query ?? item.question ?? item.id ?? item.label ?? "").trim();
+      const chipLabel = String(item.label ?? item.title ?? item.text ?? sendValue).trim();
+      if (!sendValue || !chipLabel) return null;
+      return {
+        label: chipLabel,
+        sendValue,
+        displayText: chipLabel,
+        choiceId: choiceId !== null ? String(choiceId) : null,
+        isGuidedSlot,
+      };
+    }
+    return null;
+  }
+
+  function extractClarificationSpec(res, lastQuestion) {
+    const isClarifyStatus = res?.status === "needs_clarification" || res?.status === "clarification_needed";
+    const clar = res?.clarification;
+    const guidedSessionId = typeof clar?.session_id === "string" && clar.session_id ? clar.session_id : null;
+    const items = [];
+    let promptTitle = "Chọn nhanh thông tin cần làm rõ:";
+
+    if (Array.isArray(clar?.slot_prompts) && clar.slot_prompts.length) {
+      const firstSlot = clar.slot_prompts[0];
+      if (firstSlot.prompt) promptTitle = firstSlot.prompt;
+      for (const c of firstSlot.choices || []) {
+        const norm = normalizeChipItem(c, Boolean(guidedSessionId));
+        if (norm) items.push(norm);
+      }
+    }
+
+    const directChoices = clar?.choices || clar?.options || res?.choices || res?.clarification_options || res?.options;
+    if (!items.length && Array.isArray(directChoices)) {
+      for (const c of directChoices) {
+        const norm = normalizeChipItem(c, Boolean(guidedSessionId));
+        if (norm) items.push(norm);
+      }
+    }
+
+    // Smart fallback chips when backend asks for clarification in prose without a choices array
+    if (isClarifyStatus && !items.length) {
+      const text = String(res?.answer || clar?.question_for_user || "").toLowerCase();
+      const slots = Array.isArray(clar?.unresolved_slots) ? clar.unresolved_slots : [];
+      const baseQ = String(lastQuestion || "").replace(/[?.!]+$/, "").trim();
+
+      if (slots.includes("view") || /quản trị|sổ thuế|góc nhìn|khung/.test(text)) {
+        items.push(
+          { label: "Sổ quản trị (v_mgmt)", sendValue: guidedSessionId ? "mgmt" : (baseQ ? baseQ + " theo sổ quản trị" : "Theo sổ quản trị"), displayText: "Theo Sổ quản trị (v_mgmt)", isGuidedSlot: Boolean(guidedSessionId) },
+          { label: "Sổ thuế (v_tax)", sendValue: guidedSessionId ? "tax" : (baseQ ? baseQ + " theo sổ thuế" : "Theo sổ thuế"), displayText: "Theo Sổ thuế (v_tax)", isGuidedSlot: Boolean(guidedSessionId) }
+        );
+      } else if (slots.includes("metric") && /lợi nhuận|profit/.test(text + " " + baseQ.toLowerCase())) {
+        items.push(
+          { label: "Lợi nhuận sau thuế", sendValue: guidedSessionId ? "net_profit" : "Lợi nhuận sau thuế quý 3 năm 2026?", displayText: "Lợi nhuận sau thuế", isGuidedSlot: Boolean(guidedSessionId) },
+          { label: "Lợi nhuận gộp", sendValue: guidedSessionId ? "gross_profit" : "Lợi nhuận gộp quý 3 năm 2026?", displayText: "Lợi nhuận gộp", isGuidedSlot: Boolean(guidedSessionId) }
+        );
+      } else if (slots.includes("time") || /kỳ|thời gian|tháng|quý|năm|ngày/.test(text)) {
+        const periods = [
+          ["Tháng 08/2026", "2026-08", "tháng 08/2026"],
+          ["Quý 3/2026", "Q3 2026", "quý 3 năm 2026"],
+          ["Năm 2026", "2026", "năm 2026"],
+          ["Năm 2025", "2025", "năm 2025"],
+        ];
+        for (const [lbl, slotVal, suffix] of periods) {
+          items.push({
+            label: lbl,
+            sendValue: guidedSessionId ? slotVal : (baseQ ? baseQ + " " + suffix + "?" : lbl),
+            displayText: guidedSessionId ? lbl : (baseQ ? baseQ + " " + suffix + "?" : lbl),
+            isGuidedSlot: Boolean(guidedSessionId),
+          });
+        }
+      }
+    }
+
+    if (!isClarifyStatus && !items.length) return null;
+    return { guidedSessionId, promptTitle, items };
+  }
+
+  function extractFollowUpItems(res) {
+    const rawList = res?.follow_up_suggestions || res?.follow_ups || res?.suggested_questions;
+    if (Array.isArray(rawList) && rawList.length) {
+      return rawList.map((item) => normalizeChipItem(item, false)).filter(Boolean);
+    }
+    if (res?.status !== "ready") return [];
+    const viewInfo = detectAccountingView(res);
+    const dims = res?.interpretation?.dimensions || [];
+    const contextual = [];
+    if (viewInfo?.key === "mgmt") {
+      contextual.push("Còn theo sổ thuế thì sao?");
+    } else if (viewInfo?.key === "tax") {
+      contextual.push("Còn theo sổ quản trị thì sao?");
+    }
+    if (!dims.includes("branch_code") && !dims.includes("branch")) {
+      contextual.push("Chi tiết theo từng chi nhánh?");
+    }
+    return contextual.slice(0, 3).map((q) => normalizeChipItem(q, false)).filter(Boolean);
+  }
+
+  function renderChipsPanel(res, lastQuestion) {
+    const clarSpec = extractClarificationSpec(res, lastQuestion);
+    if (clarSpec && clarSpec.items.length) {
+      return el("div", { class: "chip-panel is-clarification", role: "group", "aria-label": "Tùy chọn làm rõ câu hỏi" },
+        el("p", { class: "chip-panel-title" }, clarSpec.promptTitle),
+        el("div", { class: "chip-row" },
+          clarSpec.items.map((item) =>
+            el("button", {
+              type: "button",
+              class: "quick-chip is-clarify",
+              onclick: () => {
+                ask(item.sendValue, {
+                  displayQuestion: item.displayText,
+                  clarificationSessionId: clarSpec.guidedSessionId,
+                  selectedChoiceId: item.choiceId || null,
+                });
+              },
+            }, item.label)
+          )
+        )
+      );
+    }
+
+    const followUps = extractFollowUpItems(res);
+    if (followUps.length) {
+      return el("div", { class: "chip-panel", role: "group", "aria-label": "Gợi ý hỏi tiếp" },
+        el("p", { class: "chip-panel-title" }, "Hỏi tiếp nhanh trong cùng phiên:"),
+        el("div", { class: "chip-row" },
+          followUps.map((item) =>
+            el("button", {
+              type: "button",
+              class: "quick-chip",
+              onclick: () => ask(item.sendValue, { displayQuestion: item.displayText }),
+            }, item.label)
+          )
+        )
+      );
+    }
+    return null;
+  }
+
   function errorText(error) {
     if (!error) return "";
     if (typeof error === "string") return error;
     if (ERROR_TEXT[error.code]) return ERROR_TEXT[error.code];
-    if (error.stage === "llm_metric_selection") return "Mô hình chưa chọn được chỉ tiêu cho câu này. Hãy diễn đạt lại, ví dụ nêu rõ chỉ tiêu và kỳ.";
-    return error.message || "Không trả lời được.";
-  }
-  function readable(text) {
-    return String(text)
-      .replace(/(\d+(?:\.\d+)?) VND/g, (_, n) => vnd.format(Math.round(Number(n))) + " đồng")
-      .replace(/(\d{1,3}(?:\.\d{3}){2,}) đồng/g, (m, g) => { const s = shortVnd(Number(g.replace(/\./g, ""))); return s ? m + " (khoảng " + s + ")" : m; })
-      .replace(/khung mgmt/g, "khung quản trị").replace(/khung tax/g, "khung thuế")
-      .replace(/(\d{4})-(\d{2})-(\d{2})/g, "$3/$2/$1").replace(/–/g, " đến ");
+    if (error.stage === "llm_metric_selection") {
+      return "Mô hình chưa chọn được chỉ tiêu phù hợp. Hãy nêu rõ tên chỉ tiêu và kỳ báo cáo.";
+    }
+    return error.message || "Không trả lời được câu hỏi này.";
   }
 
-  function botMessage(res) {
+  function botMessage(res, lastQuestion) {
     const warnings = (res.warnings || []).filter(Boolean);
+    const statusKey = res.status || "error";
+    const viewBadge = detectAccountingView(res);
+    const provBadge = detectProvenanceMode(res);
+
+    const metaBar = el("div", { class: "msg-meta-bar" },
+      el("span", { class: "tag " + statusKey }, STATUS[statusKey] || statusKey),
+      viewBadge ? el("span", { class: "gov-badge " + viewBadge.css }, viewBadge.label) : null,
+      provBadge ? el("span", { class: "gov-badge " + provBadge.css, title: provBadge.detail }, provBadge.label) : null
+    );
+
+    const answerStr = res.answer || res.clarification?.question_for_user || errorText(res.error) || "Không có câu trả lời.";
+
     return [
-      el("span", { class: "tag " + res.status }, STATUS[res.status] || res.status),
-      el("div", { class: "answer" }, readable(res.answer || errorText(res.error) || "Không có câu trả lời.")),
+      metaBar,
+      el("div", { class: "answer" }, readable(answerStr)),
+      renderMetricCards(res.data),
       table(res.data),
-      res.data && res.data.truncated ? el("p", { class: "source" }, "Chỉ hiện 50 dòng đầu.") : null,
+      res.data && res.data.truncated ? el("p", { class: "source" }, "Chỉ hiển thị 50 dòng đầu tiên.") : null,
+      renderChipsPanel(res, lastQuestion),
       source(res),
-      warnings.length ? el("ul", { class: "warnings" }, warnings.map((w) => el("li", {}, ({ partial_data_watermark: "Kỳ báo cáo chưa hoàn tất, số liệu có thể thay đổi." })[w] || WARNINGS.reduce((t, [re, vi]) => t.replace(re, vi), String(w))))) : null,
-    ];
+      warnings.length
+        ? el("ul", { class: "warnings" }, warnings.map((w) =>
+            el("li", {},
+              ({
+                partial_data_watermark: "Kỳ báo cáo chưa khóa sổ hoàn tất; số liệu có thể cập nhật thêm.",
+                ratio_undefined: "Không tính được tỷ lệ do mẫu số bằng 0 hoặc chưa phát sinh dữ liệu.",
+              })[w] || WARNINGS.reduce((t, [re, vi]) => t.replace(re, vi), String(w))
+            )
+          ))
+        : null,
+    ].filter(Boolean);
   }
 
-  async function ask(question) {
+  // ------------------------------------------------------------------ Query Execution
+  async function postAgent4Query(question, targetSessionId, isClarificationTurn, selectedChoiceId = null) {
+    const body = {
+      question,
+      ...(targetSessionId ? { session_id: targetSessionId } : {}),
+      ...(selectedChoiceId ? { selected_choice_id: selectedChoiceId } : {}),
+      options: {
+        include_table: true,
+        explain_metrics: true,
+        ...(isClarificationTurn ? {} : { clarification_mode: "guided" }),
+      },
+    };
+    const r = await fetch("/api/agent4/query", {
+      method: "POST",
+      cache: "no-store",
+      headers: { "Content-Type": "application/json", "X-Platform": "1" },
+      body: JSON.stringify(body),
+    });
+    const res = await r.json().catch(() => ({ status: "error", error: "Phản hồi JSON không hợp lệ." }));
+    return { ok: r.ok, statusHttp: r.status, res };
+  }
+
+  async function ask(question, opts = {}) {
+    const trimmed = String(question || "").trim();
+    if (!trimmed) return;
+    const sendBtn = $("send");
+    if (sendBtn && sendBtn.disabled) return;
+
+    const displayQuestion = opts.displayQuestion || trimmed;
+    const isClarificationTurn = Boolean(opts.clarificationSessionId || activeClarification);
+    const effectiveSessionId = opts.clarificationSessionId || activeClarification?.sessionId || sessionId;
+
     const thread = $("thread");
-    thread.append(el("li", { class: "msg user" }, question));
-    const bot = el("li", { class: "msg bot pending" }, el("div", { class: "answer" }, "Đang tra số liệu"));
-    thread.append(bot);
-    bot.scrollIntoView({ block: "end" });
-    $("send").disabled = true;
+    if (thread) {
+      thread.append(el("li", { class: "msg user" }, displayQuestion));
+    }
+    const bot = el("li", { class: "msg bot pending" }, el("div", { class: "answer" }, "Đang tra cứu sổ cái và kiểm duyệt SQL…"));
+    if (thread) {
+      thread.append(bot);
+      bot.scrollIntoView({ block: "end" });
+    }
+    if (sendBtn) sendBtn.disabled = true;
+
     try {
-      const r = await fetch("/api/agent4/query", {
-        method: "POST", cache: "no-store",
-        headers: { "Content-Type": "application/json", "X-Platform": "1" },
-        body: JSON.stringify({ question }),
-      });
-      const res = await r.json();
-      bot.replaceChildren(...botMessage(r.ok ? res : { status: "error", answer: res.error }).filter(Boolean));
+      let { ok, res } = await postAgent4Query(trimmed, effectiveSessionId, isClarificationTurn, opts.selectedChoiceId || null);
+
+      // Resilient fallback if an un-upgraded backend treats session_id strictly as single-use clarification token
+      if (
+        !isClarificationTurn &&
+        effectiveSessionId &&
+        res?.error?.stage === "clarification" &&
+        res?.error?.code === "invalid_request"
+      ) {
+        const retry = await postAgent4Query(trimmed, null, false, null);
+        ok = retry.ok;
+        res = retry.res;
+      }
+
+      if (typeof res?.session_id === "string" && res.session_id) {
+        sessionId = res.session_id;
+        saveSessionId(sessionId);
+      }
+
+      const isClarifyNeeded = res?.status === "needs_clarification" || res?.status === "clarification_needed";
+      if (isClarifyNeeded && res?.clarification?.session_id) {
+        activeClarification = {
+          sessionId: res.clarification.session_id,
+          originalQuestion: activeClarification?.originalQuestion || displayQuestion,
+        };
+      } else {
+        activeClarification = null;
+      }
+      renderSessionHeader();
+
+      const payloadToRender = ok || res?.api_version === "v1"
+        ? res
+        : { status: "error", answer: errorText(res?.error) || "Yêu cầu không thành công." };
+      bot.replaceChildren(...botMessage(payloadToRender, displayQuestion));
     } catch (err) {
-      bot.replaceChildren(...botMessage({ status: "error", answer: "Không kết nối được portal: " + err.message }).filter(Boolean));
+      bot.replaceChildren(...botMessage({ status: "error", answer: "Không kết nối được máy chủ Portal: " + err.message }, displayQuestion));
     } finally {
       bot.classList.remove("pending");
-      $("send").disabled = false;
+      if (sendBtn) sendBtn.disabled = false;
       bot.scrollIntoView({ block: "end" });
     }
   }
 
   async function loadMetrics() {
+    const countEl = $("metric-count");
+    const listEl = $("metrics");
+    if (!countEl || !listEl) return;
     try {
       const res = await fetch("/api/agent4/metrics", { cache: "no-store" }).then((r) => r.json());
       const list = Array.isArray(res) ? res : res.items || res.metrics || [];
       if (!list.length) throw new Error(res.error || "Danh mục trống.");
-      for (const m of list) { const id = m.metric_id || m.id; const name = m.name_vi || m.label || m.name; if (id && name && name !== id) metricNames[id] = name; }
-      $("metric-count").textContent = list.length + " chỉ tiêu.";
-      $("metrics").replaceChildren(...list.slice(0, 40).map((m) =>
-        el("li", {}, m.name_vi || m.label || m.name || m.metric_id || m.id, m.unit ? el("span", {}, " (" + m.unit + ")") : null)));
+      for (const m of list) {
+        const id = m.metric_id || m.id;
+        const name = m.name_vi || m.label || m.name;
+        if (id && name && name !== id) metricNames[id] = name;
+      }
+      countEl.textContent = list.length + " chỉ tiêu được cấp quyền.";
+      listEl.replaceChildren(...list.slice(0, 50).map((m) => {
+        const name = m.name_vi || m.label || m.name || m.metric_id || m.id;
+        const snapshot = m.period_type === "snapshot";
+        const sampleQ = snapshot
+          ? name + " tính đến 30/09/2026 là bao nhiêu?"
+          : name + " quý 3 năm 2026 là bao nhiêu?";
+        return el("li", {},
+          el("button", {
+            type: "button",
+            class: "metric-pick",
+            title: "Nhấn để điền câu hỏi mẫu cho chỉ tiêu này",
+            onclick: () => {
+              const box = $("question");
+              if (!box) return;
+              clearActiveClarification();
+              box.value = sampleQ;
+              syncComposerRows(box);
+              box.focus();
+            },
+          },
+            name,
+            m.unit ? el("span", {}, " (" + (m.unit === "VND" ? "VNĐ" : m.unit) + ")") : null
+          )
+        );
+      }));
     } catch (err) {
-      $("metric-count").textContent = "Chưa đọc được danh mục: " + err.message;
+      countEl.textContent = "Chưa đọc được danh mục: " + err.message;
     }
   }
 
-  $("suggest").replaceChildren(...SUGGESTIONS.map((q) => el("li", {}, el("button", { type: "button", onclick: () => ask(q) }, q))));
+  // Zero-inline-style textarea auto-sizing (strict CSP safe)
+  function syncComposerRows(box) {
+    if (!box) return;
+    const text = box.value || "";
+    const lineBreaks = text.split("\n").length;
+    const wrappedLines = Math.ceil(text.length / 72);
+    const rows = Math.min(5, Math.max(1, Math.max(lineBreaks, wrappedLines)));
+    box.rows = rows;
+  }
+
+  // Expose pure utilities for automated regression verification
+  if (typeof window !== "undefined") {
+    window.__SOSON_CHAT_UTILS__ = Object.freeze({
+      parseExactDecimal,
+      formatVnd,
+      approxVnd,
+      shortVnd,
+      readable,
+      detectAccountingView,
+      detectProvenanceMode,
+      extractClarificationSpec,
+      generateSessionId,
+    });
+  }
+
+  // Wire up DOM
+  if ($("suggest")) {
+    $("suggest").replaceChildren(
+      ...SUGGESTIONS.map((q) =>
+        el("li", {}, el("button", { type: "button", onclick: () => { clearActiveClarification(); ask(q); } }, q))
+      )
+    );
+  }
+  if ($("suggest-followup")) {
+    $("suggest-followup").replaceChildren(
+      ...FOLLOWUP_SUGGESTIONS.map((q) =>
+        el("li", {}, el("button", { type: "button", onclick: () => ask(q) }, q))
+      )
+    );
+  }
+  $("reset-session")?.addEventListener("click", resetConversation);
+  $("cancel-clarification")?.addEventListener("click", () => {
+    clearActiveClarification();
+    $("question")?.focus();
+  });
+
   const box = $("question");
-  box.addEventListener("input", () => {
-    box.style.height = "auto";
-    box.style.height = Math.min(box.scrollHeight, 160) + "px";
-  });
-  box.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      $("composer").requestSubmit();
-    }
-  });
-  $("composer").addEventListener("submit", (e) => {
+  if (box) {
+    box.addEventListener("input", () => syncComposerRows(box));
+    box.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        $("composer")?.requestSubmit();
+      }
+    });
+  }
+  $("composer")?.addEventListener("submit", (e) => {
     e.preventDefault();
+    if (!box) return;
     const q = box.value.trim();
-    if (!q || $("send").disabled) return;
+    if (!q || $("send")?.disabled) return;
     box.value = "";
-    box.style.height = "auto";
+    syncComposerRows(box);
     ask(q);
   });
+
+  renderSessionHeader();
   loadMetrics();
 })();

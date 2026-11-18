@@ -3,17 +3,41 @@ import numpy as np
 from sklearn.covariance import OAS
 from sklearn.linear_model import Ridge
 
+from .method_preprocess import infer_missing_indicator_layout
+
 
 class RobustZ:
-    """Sum of the largest robust z-scores (median/MAD with a floor), a simple probabilistic rule layer."""
-    def fit(self, x):
+    """Sum of the largest robust z-scores (median/MAD with a floor).
+
+    Excludes `missing:<col>` indicator columns and zero-MAD binary flags from
+    MAD-z scoring so missing optional source fields never trigger `1 / 1e-3 -> 10.0`
+    (`50.0` top-5 ceiling) false-fraud spikes, while preserving `med_` and `scale_`
+    shape `(width,)` for 2-column HE4 `statistics` circuit compatibility.
+    """
+
+    def __init__(self, *, feature_names=None):
+        self.feature_names = tuple(feature_names) if feature_names is not None else None
+
+    def fit(self, x, *, feature_names=None):
+        x = np.asarray(x, dtype=float)
+        names = feature_names if feature_names is not None else getattr(self, 'feature_names', None)
         self.med_ = np.median(x, axis=0)
         mad = np.median(np.abs(x - self.med_), axis=0) * 1.4826
-        self.scale_ = np.maximum(mad, np.maximum(.1 * x.std(axis=0), 1e-3))
+        std = x.std(axis=0)
+        self.scale_ = np.maximum(mad, np.maximum(0.1 * std, 1e-3))
+
+        missing_mask, _ = infer_missing_indicator_layout(x, feature_names=names)
+        is_binary = np.all((x == 0.0) | (x == 1.0), axis=0)
+        zero_mad_binary = is_binary & (mad <= 1e-12)
+        self.active_mask_ = ~(missing_mask | zero_mad_binary)
         return self
 
     def score(self, x):
-        z = np.minimum(np.abs(x - self.med_) / self.scale_, 10.)
+        x = np.asarray(x, dtype=float)
+        z = np.minimum(np.abs(x - self.med_) / self.scale_, 10.0)
+        active = getattr(self, 'active_mask_', None)
+        if active is not None:
+            z = np.where(active, z, 0.0)
         return np.sort(z, axis=1)[:, -5:].sum(axis=1)
 
 

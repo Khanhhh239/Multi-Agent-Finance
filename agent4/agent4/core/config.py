@@ -17,6 +17,14 @@ def _env_int(name: str, default: int) -> int:
     return int(os.getenv(name, str(default)))
 
 
+def _selection_config_path() -> Path:
+    return Path(
+        os.getenv("AGENT4_SELECTION_CONFIG")
+        or os.getenv("AGENT4_METRIC_SELECTION_CONFIG")
+        or "config/selection.yaml"
+    )
+
+
 @dataclass(frozen=True)
 class AppConfig:
     """Server-owned configuration shared by deterministic pipeline stages."""
@@ -29,6 +37,7 @@ class AppConfig:
             "AGENT4_GROUND_TRUTH", str(_WAREHOUSE_DIR / "warehouse_ground_truth.json")
         )
     )
+    selection_config_path: Path = field(default_factory=_selection_config_path)
     qwen_base_url: str = field(
         default_factory=lambda: os.getenv("AGENT4_LLM_BASE_URL", "http://localhost:11434/api/chat")
     )

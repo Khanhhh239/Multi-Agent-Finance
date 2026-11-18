@@ -118,22 +118,49 @@ def evaluate_plan(data, plan, asof, accounts):
     return rows
 
 
-def calibrate_bands(plan, previous, data):
-    """Past prospective base plans only; one non-overlapping origin per forecast horizon."""
+def _collect_oos_scores(plan, candidates, data, *, min_stride_weeks: int):
     scores = []
     last = None
+    horizon_weeks = len(plan["weeks"])
+    for old in candidates:
+        old_cutoff = date.fromisoformat(old["cutoff"])
+        end = old_cutoff + timedelta(weeks=horizon_weeks)
+        if str(end) > plan["cutoff"]:
+            continue
+        if last is not None and (last - old_cutoff) < timedelta(weeks=min_stride_weeks):
+            continue
+        rows = evaluate_plan(data, old, plan["cutoff"], plan["accounts"])
+        if not all(r["balance_available"] for r in rows):
+            continue
+        scores.append(
+            [
+                max(
+                    w.get("raw_low", w["low"]) - r["actual_balance"],
+                    r["actual_balance"] - w.get("raw_high", w["high"]),
+                    0.0,
+                )
+                for w, r in zip(old["weeks"], rows)
+            ]
+        )
+        last = old_cutoff
+    return scores
+
+
+def calibrate_bands(plan, previous, data, *, minimum_origins: int = 4):
+    """Past prospective base plans only; adapts stride for SME 6-12m histories.
+
+    Prefers strictly non-overlapping horizons when >=12 exist; otherwise admits
+    matured prospective origins spaced >= min(horizon_weeks, 4) weeks once n >= 4
+    (where finite-sample split-conformal ceil(0.8 * (n + 1)) <= n is exact).
+    """
+    horizon_weeks = len(plan["weeks"])
+    eligible_past = []
     for old in sorted(
         (p for p in previous if p), key=lambda p: p["cutoff"], reverse=True
     ):
-        if len(old["weeks"]) != len(plan["weeks"]):
+        if len(old["weeks"]) != horizon_weeks:
             continue
-        end = date.fromisoformat(old["cutoff"]) + timedelta(weeks=len(old["weeks"]))
-        if str(end) > plan["cutoff"] or (last and end > last):
-            continue
-        if (
-            not created_prospectively(old)
-            or old.get("accounts") != plan["accounts"]
-        ):
+        if not created_prospectively(old) or old.get("accounts") != plan["accounts"]:
             continue
         # Older operating fits/plans without a persisted fit ID cannot prove
         # compatibility. Keep them readable, but do not pool their errors.
@@ -158,31 +185,33 @@ def calibrate_bands(plan, previous, data):
             )
         ):
             continue
-        rows = evaluate_plan(data, old, plan["cutoff"], plan["accounts"])
-        if not all(r["balance_available"] for r in rows):
-            continue
-        scores.append(
-            [
-                max(
-                    w.get("raw_low", w["low"]) - r["actual_balance"],
-                    r["actual_balance"] - w.get("raw_high", w["high"]),
-                    0.0,
-                )
-                for w, r in zip(old["weeks"], rows)
-            ]
+        eligible_past.append(old)
+
+    scores = _collect_oos_scores(
+        plan, eligible_past, data, min_stride_weeks=horizon_weeks
+    )
+    stride_note = "không chồng lấn"
+    if len(scores) < 12 and horizon_weeks > 4:
+        monthly_scores = _collect_oos_scores(
+            plan, eligible_past, data, min_stride_weeks=4
         )
-        last = date.fromisoformat(old["cutoff"])
+        if len(monthly_scores) > len(scores):
+            scores = monthly_scores
+            stride_note = "đã đáo hạn (cách nhau >= 4 tuần)"
+
     n = len(scores)
     plan["calibration_origins"] = n
     plan["band_status"] = "insufficient_out_of_sample_errors"
-    if n < 12:
+    req = max(4, int(minimum_origins))
+    if n < req:
         return
-    delta = np.sort(scores, axis=0)[int(np.ceil((n + 1) * 0.8)) - 1]
+    rank = min(n, int(np.ceil((n + 1) * 0.8))) - 1
+    delta = np.sort(scores, axis=0)[rank]
     for w, extra in zip(plan["weeks"], delta):
         w.update(raw_low=w["low"], raw_high=w["high"])
         w["low"] -= float(extra)
         w["high"] += float(extra)
     plan["band_status"] = "calibrated_out_of_sample"
     plan["assumptions"].append(
-        f"Dải số dư điều chỉnh bằng sai số tại {n} gốc lịch sử không chồng lấn; xác suất cảnh báo vẫn là mô phỏng."
+        f"Dải số dư điều chỉnh bằng sai số Conformal tại {n} gốc lịch sử {stride_note}; xác suất cảnh báo vẫn là mô phỏng."
     )

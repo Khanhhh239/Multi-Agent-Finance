@@ -218,17 +218,22 @@ class CompactT1:
     def prepare_state(targets, context, clock):
         return prepare_features(targets, context, clock)
 
-    def distribution(self, frame, ages=None, horizon=13):
-        return self.distribution_from_features(self.prepare(frame, ages), horizon=horizon)
+    def distribution(self, frame, ages=None, horizon=13, *, tail_extrapolation=False):
+        return self.distribution_from_features(
+            self.prepare(frame, ages),
+            horizon=horizon,
+            tail_extrapolation=tail_extrapolation,
+        )
 
-    def distribution_from_features(self, x, ages=None, horizon=13):
+    def distribution_from_features(self, x, ages=None, horizon=13, *, tail_extrapolation=False):
         if not 1 <= horizon <= 52:
             raise ValueError("Horizon outside supported T1 range")
         x = np.asarray(x, float)
         if x.ndim != 2 or x.shape[1] != len(self.feature_names) or not np.isfinite(x).all():
             raise ValueError("Compact feature schema mismatch")
-        # Learned support is 13 weeks. Additional weeks retain the unresolved
-        # tail, rather than extrapolating a hazard beyond the training contract.
+        # Learned support is 13 weeks. By default, additional weeks retain the
+        # unresolved tail; when tail_extrapolation=True, geometric tail decay
+        # smoothly allocates post-13w survival mass while conserving sum(p) == 1.
         weeks = min(horizon, HORIZON)
         rows = np.repeat(x[:, self.active], weeks, axis=0)
         offsets = np.tile(np.arange(1, weeks+1), len(x))
@@ -238,7 +243,14 @@ class CompactT1:
         mass = np.column_stack((np.ones(len(x)), survival[:, :-1]))*h
         p = np.zeros((len(x), horizon+1))
         p[:, :weeks] = mass
-        p[:, -1] = survival[:, -1]
+        if tail_extrapolation and horizon > HORIZON:
+            extra = horizon - HORIZON
+            tail_h = np.clip(h[:, -4:].mean(axis=1, keepdims=True), 1e-4, 0.5)
+            extra_surv_prev = survival[:, -1:] * np.power(1.0 - tail_h, np.arange(extra)[None, :])
+            p[:, HORIZON:horizon] = extra_surv_prev * tail_h
+            p[:, -1] = survival[:, -1] * np.power(1.0 - tail_h[:, 0], extra)
+        else:
+            p[:, -1] = survival[:, -1]
         return p
 
     def predict_hazard(self, rows):

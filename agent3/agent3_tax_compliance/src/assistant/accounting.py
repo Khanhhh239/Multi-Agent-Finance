@@ -123,7 +123,9 @@ def totals(rep, ruleset, as_of):
         entry = series.setdefault(month, dict(k=month, AT_RISK=ZERO, REVIEW=ZERO, total=ZERO))
         entry[group] += amount
         entry['total'] += abs(amount)
-    rate, basis = param(ruleset, 'UNDERDECLARATION_PENALTY_RATE', as_of)
+    pen = param(ruleset, 'UNDERDECLARATION_PENALTY_RATE', as_of)
+    rate = Decimal(str(pen[0])) if pen is not None else None
+    basis = pen[1] if pen is not None else ''
     items = rep['items']
     for entry in series.values():
         entry['total'] = abs(entry['AT_RISK']) + abs(entry['REVIEW'])
@@ -134,8 +136,8 @@ def totals(rep, ruleset, as_of):
                 open_findings=sum(i['status'] in ('AT_RISK', 'REVIEW') for i in items),
                 review_transactions=len({t for i in items if i['status'] == 'REVIEW' for t in i.get('txn_ids', [])}),
                 opportunity_vat=sum((Decimal(str(i['amount'])) for i in items if i['status'] == 'OPPORTUNITY'), ZERO),
-                penalty_rate=Decimal(rate), penalty_basis=basis,
-                penalty_estimate=(max(ZERO, amounts['AT_RISK']) * Decimal(rate)).quantize(Decimal(1)) if not missing['AT_RISK'] else None,
+                penalty_rate=rate, penalty_basis=basis,
+                penalty_estimate=(max(ZERO, amounts['AT_RISK']) * rate).quantize(Decimal(1)) if (not missing['AT_RISK'] and rate is not None) else None,
                 series=[series[k] for k in sorted(series)],
                 by_code={c: sum(i['code'] == c for i in items) for c in sorted({i['code'] for i in items})})
 
@@ -146,7 +148,9 @@ def exposure(rep, ruleset):
     as_of = date.fromisoformat(str(rep['meta']['as_of']))
     kind = rep['meta'].get('filing_period', 'MONTH')
     dues = {c['period_key']: date.fromisoformat(str(c['due'])) for c in rep['calendar'] if c.get('obligation') == 'VAT'}
-    rate, basis = param(ruleset, 'UNDERDECLARATION_PENALTY_RATE', as_of)
+    pen = param(ruleset, 'UNDERDECLARATION_PENALTY_RATE', as_of)
+    rate = Decimal(str(pen[0])) if pen is not None else None
+    basis = pen[1] if pen is not None else ''
     late = param(ruleset, 'LATE_PAYMENT_RATE_PER_DAY', as_of)
     invs = {i['key']: i for i in rep['invoices']}
     groups = buckets(rep)
@@ -163,8 +167,8 @@ def exposure(rep, ruleset):
         out[n] = dict(invoice_key=inv['key'], finding_id=it['finding_id'], amount=amount, due=due,
                       days_late=days, overdue=as_of > due if due else None, declared=None,
                       filing_status='UNKNOWN', scenario=True,
-                      interest=(amount * Decimal(late[0]) * days).quantize(Decimal(1)) if amount is not None and amount >= 0 and days is not None and late else None,
-                      penalty=(amount * Decimal(rate)).quantize(Decimal(1)) if amount is not None and amount >= 0 else None,
+                      interest=(amount * Decimal(str(late[0])) * days).quantize(Decimal(1)) if amount is not None and amount >= 0 and days is not None and late else None,
+                      penalty=(amount * rate).quantize(Decimal(1)) if amount is not None and amount >= 0 and rate is not None else None,
                       basis=[basis, late[1] if late else ''],
                       note='Kịch bản giả định khoản thuế này đã được khấu trừ và phát sinh thiếu thuế; chưa xác nhận đã kê khai/nộp. Không phải kết luận xử phạt.')
     return out

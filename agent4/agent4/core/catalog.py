@@ -232,27 +232,23 @@ def _query_metric(metric_id: str) -> dict[str, Any]:
     }
 
 
-_OPERATING_PROFIT = (*REGISTRY["gross_profit"].terms, Term(("641", "642"), -1))
-_PROFIT_BEFORE_TAX = (
-    *_OPERATING_PROFIT,
-    Term(("711",), measure="net_credit"),
-    Term(("811", "635"), -1),
-)
-_INVENTORY = ("152", "155", "156")
-_QUICK_ASSETS = ("111", "112", "131")
-_CURRENT_LIABILITIES = (Term(("331", "333", "334", "34111"), measure="net_credit"),)
-_TOTAL_LIABILITIES = (Term(("331", "333", "334", "341"), measure="net_credit"),)
+_OPERATING_PROFIT = REGISTRY["operating_profit"].terms
+_PROFIT_BEFORE_TAX = REGISTRY["profit_before_tax"].terms
+_INVENTORY = ("151", "152", "153", "154", "155", "156", "157")
+_QUICK_ASSETS = ("111", "112", "113", "121", "128", "131", "133", "136", "138", "141", "229")
+_CURRENT_LIABILITIES = (Term(("331", "333", "334", "335", "338", "34111"), measure="net_credit"),)
+_TOTAL_LIABILITIES = (Term(("331", "333", "334", "335", "338", "341"), measure="net_credit"),)
 _TOTAL_EQUITY = (
-    Term(("411", "421"), measure="net_credit"),
+    Term(("4",), measure="net_credit", where="NOT COALESCE(is_closing, FALSE)"),
     Term(
-        ("511", "711"),
+        ("511", "515", "711"),
         measure="net_credit",
-        where="NOT is_closing AND source_module IS DISTINCT FROM 'OPENING'",
+        where="NOT COALESCE(is_closing, FALSE) AND source_module IS DISTINCT FROM 'OPENING'",
     ),
     Term(
         ("521", "632", "641", "642", "635", "811", "821"),
         -1,
-        where="NOT is_closing AND source_module IS DISTINCT FROM 'OPENING'",
+        where="NOT COALESCE(is_closing, FALSE) AND source_module IS DISTINCT FROM 'OPENING'",
     ),
 )
 
@@ -507,35 +503,35 @@ _NEW_EXECUTABLE_DEFINITIONS = [
     _warehouse_metric(
         "admin_expenses",
         "Administrative Expenses",
-        "Chi phí quản lý doanh nghiệp (TK 642)",
+        "Chi phí quản lý doanh nghiệp (TK 6422 theo TT133, hoặc TK 642 trực tiếp)",
         _EXPENSE_DIMENSIONS,
-        _amount((Term(("642",)),)),
+        _amount(REGISTRY["admin_expenses"].terms),
     ),
     _warehouse_metric(
         "selling_expenses",
         "Selling Expenses",
-        "Chi phí bán hàng (TK 641)",
+        "Chi phí bán hàng (TK 6421 theo TT133, TK 641 theo TT200)",
         _EXPENSE_DIMENSIONS,
-        _amount((Term(("641",)),)),
+        _amount(REGISTRY["selling_expenses"].terms),
     ),
     _warehouse_metric(
         "salary_expense",
         "Salary Expense",
-        "Chi phí lương (TK 641, 642, 154, khoản mục LUONG)",
+        "Chi phí lương và thưởng (TK 641, 642, 154, khoản mục LUONG, THUONG)",
         _EXPENSE_DIMENSIONS[:-1],
-        _amount((Term(("641", "642", "154"), where="cost_category = 'LUONG'"),)),
+        _amount(REGISTRY["salary_expense"].terms),
     ),
     _warehouse_metric(
         "operating_profit",
         "Operating Profit",
-        "Doanh thu thuần trừ giá vốn và chi phí hoạt động",
+        "Lợi nhuận thuần từ hoạt động kinh doanh (LN gộp + TK 515 − TK 635 − CP BH & QLDN)",
         _PROFIT_DIMENSIONS,
         _amount(_OPERATING_PROFIT),
     ),
     _warehouse_metric(
         "profit_before_tax",
         "Profit Before Tax",
-        "Lợi nhuận hoạt động cộng thu nhập khác, trừ chi phí khác và chi phí tài chính",
+        "Lợi nhuận trước thuế (LN thuần HĐKD + thu nhập khác TK 711 − chi phí khác TK 811)",
         _PROFIT_DIMENSIONS,
         _amount(_PROFIT_BEFORE_TAX),
     ),
@@ -596,7 +592,10 @@ _REGISTRY_LEDGER_DEFINITIONS = [
         expression=_amount(
             (
                 *_PROFIT_BEFORE_TAX,
-                Term(("635",), where="source_document_type IN ('INTEREST', 'LOAN_INTEREST')"),
+                Term(
+                    ("635",),
+                    where="COALESCE(source_document_type, 'INTEREST') IN ('INTEREST', 'LOAN_INTEREST')",
+                ),
                 *REGISTRY["depreciation_expense"].terms,
             )
         ),

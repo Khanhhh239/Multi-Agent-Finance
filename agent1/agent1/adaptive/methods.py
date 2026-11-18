@@ -9,13 +9,21 @@ from .t10_explanations import T6_VERSION
 
 
 def train(data, asof, progress=lambda x: None, names=None, *, incumbent=None, catalog=None, policy=None,
-          try_deep_cash=False):
+          try_deep_cash=False, reconciled_through=None):
     """Train the serving bundle: audited T1, risk and optional operating cash."""
     from .t1_update import train_update
 
     if names is not None:
         raise ValueError("T1 mới chỉ chọn global Neural/LightGBM/XGBoost và các bản học tiếp; names của catalog local cũ không còn được dùng.")
-    result = train_update(data, asof, progress, incumbent=incumbent, catalog=catalog, policy=policy)
+    result = train_update(
+        data,
+        asof,
+        progress,
+        incumbent=incumbent,
+        catalog=catalog,
+        policy=policy,
+        reconciled_through=reconciled_through,
+    )
     from .risk import train_risk
 
     progress("Đang kiểm định rủi ro và chính sách thu hồi độc lập với T1")
@@ -267,7 +275,8 @@ def forecast(
         if not operating.get("accounts") or set(operating["accounts"]) != set(account_scope(data, cutoff)):
             raise ValueError("Phạm vi tài khoản của phiên bản hoạt động khác dữ liệu hiện tại; cập nhật phiên bản trước khi bật dự báo hoạt động.")
         series, gap = available_history(data, cutoff, operating["accounts"])
-        if len(series) < 52:
+        min_weeks = 8 if operating.get("adaptive_short") else int(operating.get("min_history_weeks", 52))
+        if len(series) < min_weeks:
             raise ValueError("Thiếu tuần sao kê đã đối chiếu đến ngày dự báo.")
         estimate = predict_candidate(
             operating["name"], operating["model"], series, gap
@@ -314,12 +323,17 @@ def forecast(
     cash_events = np.zeros((simulation_paths, receipt_horizon))
     for i, invoice_paths in enumerate(iter_cash_paths(
             raw_payment_times, opened, partial, amounts, rng, simulation_paths,
-            shared_customer=shared_customer_risk)):
+            shared_customer="copula" if shared_customer_risk else False)):
         weeks_shift = invoice_shifts[i]
         if weeks_shift < receipt_horizon:
             cash_events[:, weeks_shift:] += invoice_paths.receipts[:, :receipt_horizon - weeks_shift]
     paths += np.cumsum(cash_events[:, :horizon], axis=1)
     low, median, high = np.quantile(paths, [0.1, 0.5, 0.9], axis=0)
+    skew_outside_weeks = [
+        int(i + 1)
+        for i in range(horizon)
+        if expected[i] < low[i] - 1e-6 or expected[i] > high[i] + 1e-6
+    ]
     from .risk import predict_risk
 
     risk_values = predict_risk(bundle.get("risk") if bundle else None, opened)
@@ -480,7 +494,7 @@ def forecast(
             else "Chưa gồm thu từ hóa đơn bán chịu chưa phát hành.",
             f"Adapter xét trả từng phần cho toàn bộ {len(opened)} khoản mở, gồm khoản chưa từng thu; {partial_n} khoản có tiền kỳ vọng thay đổi so với chỉ dự báo tất toán.",
             (
-                "Kịch bản căng thẳng: hóa đơn cùng khách chịu chung một cú sốc."
+                "Kịch bản căng thẳng: hóa đơn cùng khách chịu chung cú sốc tương quan (Gaussian copula)."
                 if shared_customer_risk
                 else "Mô phỏng thời điểm trả độc lập."
             )
@@ -488,6 +502,13 @@ def forecast(
             "Danh sách thu hồi xếp theo phương án đã kiểm định hoặc theo dư nợ khi dùng mốc.",
             "T5 chỉ dự báo phần nghĩa vụ còn lại sau thanh toán đã ghi nhận. Khoản chi đến/quá hạn chưa trả chuyển sang ngày làm việc kế tiếp; số dư đầu đã gồm giao dịch thực tế đến ngày chốt.",
             "Khoản hoàn đã duyệt nhưng quá ngày dự kiến nhận cần ngày dự kiến mới; không tự coi là tiền sẽ về ngay.",
+            *(
+                [
+                    f"Phân phối lệch mạnh tại tuần {', '.join(map(str, skew_outside_weeks))}: số dư kỳ vọng nằm ngoài dải [P10, P90] do công nợ lớn có xác suất thu thấp; nên điều hành theo trung vị (median_balance / P50) và dải [P10, P90]."
+                ]
+                if skew_outside_weeks
+                else []
+            ),
         ],
         pilot_ready=False,
     )

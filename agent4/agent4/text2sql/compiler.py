@@ -26,7 +26,12 @@ DIMENSIONS: dict[str, tuple[str, str]] = {
 }
 
 WHERE_PREDICATES = {
+    "account_code = '642'": ("account_code = ?", ("642",)),
     "source_document_type = 'DEPRECIATION'": ("source_document_type = ?", ("DEPRECIATION",)),
+    "COALESCE(source_document_type, 'INTEREST') IN ('INTEREST', 'LOAN_INTEREST')": (
+        "COALESCE(source_document_type, ?) IN (?, ?)",
+        ("INTEREST", "INTEREST", "LOAN_INTEREST"),
+    ),
     "cost_category IN ('LUONG','THUONG')": (
         "cost_category IN (?, ?)",
         ("LUONG", "THUONG"),
@@ -36,6 +41,9 @@ WHERE_PREDICATES = {
         ("LUONG", "THUONG", "BAOHIEM"),
     ),
 }
+_BILATERAL_SNAPSHOT_METRICS = frozenset(
+    {"ar_balance", "ap_balance", "current_ratio", "quick_ratio", "working_capital"}
+)
 APPROVED_RELATIONS = frozenset(
     {
         "v_mgmt",
@@ -50,13 +58,138 @@ APPROVED_RELATIONS = frozenset(
     }
 )
 
+_SQL_TOKEN_RE = re.compile(r'"(?:""|[^"])*"|`[^`]*`|\[[^\]]*\]|[A-Za-z_][A-Za-z0-9_$]*|[(),.]|\S')
+_CLAUSE_BOUNDARIES = frozenset(
+    {
+        "WHERE",
+        "GROUP",
+        "HAVING",
+        "ORDER",
+        "LIMIT",
+        "UNION",
+        "EXCEPT",
+        "INTERSECT",
+        "WINDOW",
+        "QUALIFY",
+        "FETCH",
+        "OFFSET",
+    }
+)
+_UNSAFE_FUNC_RE = re.compile(
+    r"\b(?:READ_\w+|CSV_SCAN|PARQUET_\w+|JSON_SCAN|ICEBERG_\w+|DELTA_SCAN|"
+    r"SQLITE_\w+|POSTGRES_\w+|MYSQL_\w+|EXCEL\w*|ST_READ\w*|GLOB|"
+    r"PRAGMA_\w*|DUCKDB_\w*|CURRENT_SETTING)\s*\(",
+    re.IGNORECASE,
+)
+
+
+def _unquote_ident(token: str) -> tuple[str, bool]:
+    if token.startswith('"') and token.endswith('"') and len(token) >= 2:
+        return token[1:-1].replace('""', '"'), True
+    if token.startswith("`") and token.endswith("`") and len(token) >= 2:
+        return token[1:-1], True
+    if token.startswith("[") and token.endswith("]") and len(token) >= 2:
+        return token[1:-1], True
+    return token, False
+
+
+def _is_ident_token(token: str) -> bool:
+    if token.startswith(('"', "`", "[")):
+        name, _ = _unquote_ident(token)
+        return bool(name.strip())
+    return bool(re.fullmatch(r"[A-Za-z_][A-Za-z0-9_$]*", token))
+
+
+def _inspect_tokens(tokens: list[str], ctes: set[str]) -> None:
+    depth = 0
+    idx = 0
+    total = len(tokens)
+    while idx < total:
+        tok = tokens[idx]
+        upper = tok.upper()
+        if tok == "(":
+            depth += 1
+            idx += 1
+            continue
+        if tok == ")":
+            depth -= 1
+            if depth < 0:
+                raise UnsafeQuery("unbalanced parentheses in SQL")
+            idx += 1
+            continue
+        prev_upper = tokens[idx - 1].upper() if idx > 0 else ""
+        if upper in ("FROM", "JOIN") and prev_upper != "DISTINCT":
+            is_from = upper == "FROM"
+            from_depth = depth
+            idx += 1
+            if idx >= total:
+                raise UnsafeQuery("incomplete FROM/JOIN clause")
+            target = tokens[idx]
+            if target == "(":
+                sub_start = idx + 1
+                sub_depth = 1
+                idx += 1
+                while idx < total and sub_depth > 0:
+                    if tokens[idx] == "(":
+                        sub_depth += 1
+                    elif tokens[idx] == ")":
+                        sub_depth -= 1
+                    idx += 1
+                if sub_depth != 0:
+                    raise UnsafeQuery("unclosed subquery in FROM/JOIN")
+                _inspect_tokens(tokens[sub_start : idx - 1], ctes)
+            else:
+                if not _is_ident_token(target):
+                    raise UnsafeQuery("invalid relation in FROM/JOIN")
+                next_tok = tokens[idx + 1] if idx + 1 < total else ""
+                if next_tok == ".":
+                    raise UnsafeQuery("schema-qualified relations are forbidden")
+                if next_tok == "(":
+                    raise UnsafeQuery("table-valued functions in FROM/JOIN are forbidden")
+                rel_name, was_quoted = _unquote_ident(target)
+                folded = rel_name.casefold()
+                if was_quoted or (folded not in APPROVED_RELATIONS and folded not in ctes):
+                    raise UnsafeQuery("query references a non-approved relation")
+                idx += 1
+            if is_from:
+                scan_idx = idx
+                scan_depth = from_depth
+                while scan_idx < total:
+                    st = tokens[scan_idx]
+                    st_up = st.upper()
+                    if st == "(":
+                        scan_depth += 1
+                    elif st == ")":
+                        if scan_depth == from_depth:
+                            break
+                        scan_depth -= 1
+                    elif scan_depth == from_depth:
+                        if st == ",":
+                            raise UnsafeQuery("comma-joins are forbidden")
+                        if st_up in _CLAUSE_BOUNDARIES:
+                            break
+                    scan_idx += 1
+            continue
+        idx += 1
+    if depth != 0:
+        raise UnsafeQuery("unbalanced parentheses in SQL")
+
+
+def _inspect_relations(unquoted_sql: str, ctes: set[str]) -> None:
+    _inspect_tokens(_SQL_TOKEN_RE.findall(unquoted_sql), ctes)
+
 
 def assert_safe_select(sql: str) -> None:
-    normalized = re.sub(r"\s+", " ", sql.strip()).upper()
-    if not normalized.startswith(("SELECT ", "WITH ")):
-        raise UnsafeQuery("compiler output is not a SELECT")
+    if not isinstance(sql, str) or not sql.strip():
+        raise UnsafeQuery("compiler output is empty")
     if ";" in sql:
         raise UnsafeQuery("multiple statements are forbidden")
+    unquoted = re.sub(r"'(?:''|[^'])*'", "'__STR__'", sql)
+    if "--" in unquoted or "/*" in unquoted or "*/" in unquoted:
+        raise UnsafeQuery("SQL comments are forbidden")
+    normalized = re.sub(r"\s+", " ", unquoted.strip()).upper()
+    if not normalized.startswith(("SELECT ", "WITH ")):
+        raise UnsafeQuery("compiler output is not a SELECT")
     for token in (
         " INSERT ",
         " UPDATE ",
@@ -65,6 +198,7 @@ def assert_safe_select(sql: str) -> None:
         " ALTER ",
         " COPY ",
         " ATTACH ",
+        " DETACH ",
         " PRAGMA ",
         " CREATE ",
         " REPLACE ",
@@ -75,35 +209,48 @@ def assert_safe_select(sql: str) -> None:
         " IMPORT ",
         " INSTALL ",
         " LOAD ",
+        " GRANT ",
+        " REVOKE ",
+        " VACUUM ",
+        " EXECUTE ",
+        " PREPARE ",
     ):
         if token in f" {normalized} ":
             raise UnsafeQuery(f"forbidden SQL token: {token.strip()}")
-    unsafe_functions = (
-        "READ_CSV",
-        "READ_JSON",
-        "READ_PARQUET",
-        "READ_TEXT",
-        "READ_BLOB",
-        "GLOB(",
-        "HTTPFS",
-        "SQLITE_SCAN",
-        "POSTGRES_SCAN",
-    )
-    if any(function in normalized for function in unsafe_functions):
-        raise UnsafeQuery("external-access SQL function is forbidden")
+    if _UNSAFE_FUNC_RE.search(unquoted) or any(
+        forbidden in normalized
+        for forbidden in (
+            "HTTPFS",
+            "INFORMATION_SCHEMA",
+            "PG_CATALOG",
+            "SQLITE_MASTER",
+            "SQLITE_SCHEMA",
+            "DUCKDB_",
+            "PRAGMA_",
+        )
+    ):
+        raise UnsafeQuery("external-access or system catalog SQL function is forbidden")
+    if re.search(r"\b(?:CROSS|NATURAL|POSITIONAL|ASOF)\s+JOIN\b|\bLATERAL\b", normalized):
+        raise UnsafeQuery("unauthorized JOIN type is forbidden")
     ctes = {
         match.casefold()
         for match in re.findall(
-            r"(?:WITH|,)\s*([A-Za-z_][A-Za-z0-9_]*)\s+AS\s*\(", sql, re.IGNORECASE
+            r"(?:WITH|,)\s*([A-Za-z_][A-Za-z0-9_]*)\s+AS\s*\(", unquoted, re.IGNORECASE
         )
     }
-    relations = {
-        match.casefold()
-        for match in re.findall(r"\b(?:FROM|JOIN)\s+([A-Za-z_][A-Za-z0-9_]*)", sql, re.IGNORECASE)
+    allowed_ctes = {
+        "aggregated",
+        "paid",
+        "adjusted",
+        "open_invoice",
+        "bilateral_base",
+        "ledger_source",
     }
-    unexpected = relations.difference(APPROVED_RELATIONS, ctes)
-    if unexpected:
-        raise UnsafeQuery("query references a non-approved relation")
+    if (ctes - allowed_ctes) and any(
+        name not in APPROVED_RELATIONS and name in {"ground_truth", "company_info"} for name in ctes
+    ):
+        raise UnsafeQuery("unauthorized CTE name")
+    _inspect_relations(unquoted, ctes)
 
 
 class SQLCompiler:
@@ -270,7 +417,47 @@ class SQLCompiler:
             if dimension_selects
             else ""
         )
-        cte = f"SELECT {selected} FROM {relation} WHERE {' AND '.join(clauses)}{group_by}"
+        period_type = self.catalog.get(plan.metric_ids[0]).period_type
+        use_bilateral = period_type == "snapshot" and bool(
+            _BILATERAL_SNAPSHOT_METRICS.intersection(plan.metric_ids)
+        )
+        if use_bilateral:
+            dim_cols = [DIMENSIONS[d][0] for d in plan.dimensions]
+            group_select = "".join(f"{col}, " for col in dim_cols)
+            partner_group = ", ".join(
+                dim_cols
+                if "partner_code" in dim_cols
+                else [*dim_cols, "COALESCE(partner_code, '__UNASSIGNED__')"]
+            )
+            bilateral_prefix = (
+                f"WITH bilateral_base AS (SELECT * FROM {relation} WHERE {' AND '.join(clauses)}), "
+                f"ledger_source AS ("
+                f"SELECT {group_select}account_code, debit_amount, credit_amount "
+                f"FROM bilateral_base "
+                f"WHERE NOT starts_with(account_code, '131') AND NOT starts_with(account_code, '331') "
+                f"UNION ALL "
+                f"SELECT {group_select}"
+                f"CASE WHEN bal >= 0 THEN '131' ELSE '3387_ADV' END AS account_code, "
+                f"GREATEST(bal, 0) AS debit_amount, GREATEST(-bal, 0) AS credit_amount "
+                f"FROM (SELECT {group_select}SUM(debit_amount - credit_amount) AS bal "
+                f"FROM bilateral_base WHERE starts_with(account_code, '131') "
+                f"GROUP BY {partner_group}) ar_partners "
+                f"UNION ALL "
+                f"SELECT {group_select}"
+                f"CASE WHEN bal >= 0 THEN '331' ELSE '1388_ADV' END AS account_code, "
+                f"GREATEST(-bal, 0) AS debit_amount, GREATEST(bal, 0) AS credit_amount "
+                f"FROM (SELECT {group_select}SUM(credit_amount - debit_amount) AS bal "
+                f"FROM bilateral_base WHERE starts_with(account_code, '331') "
+                f"GROUP BY {partner_group}) ap_partners), "
+                f"aggregated AS (SELECT {selected} FROM ledger_source{group_by})"
+            )
+            bound_params = [*where_params, *expression_params]
+        else:
+            bilateral_prefix = (
+                f"WITH aggregated AS (SELECT {selected} FROM {relation} "
+                f"WHERE {' AND '.join(clauses)}{group_by})"
+            )
+            bound_params = [*expression_params, *where_params]
         final_select = ", ".join([*dimension_aliases, *final_metrics])
         ordering = ""
         if plan.sort:
@@ -278,11 +465,38 @@ class SQLCompiler:
         elif dimension_aliases:
             ordering = f" ORDER BY {', '.join(dimension_aliases)}"
         limit = min(plan.top_k or self.row_cap, self.row_cap)
-        sql = f"WITH aggregated AS ({cte}) SELECT {final_select} FROM aggregated{ordering} LIMIT {limit + 1}"
-        units = {metric_id: self.catalog.get(metric_id).unit for metric_id in plan.metric_ids}
-        return self._bound(
-            sql, [*expression_params, *where_params], plan, units, tuple(dimension_aliases)
+        sql = (
+            f"{bilateral_prefix} SELECT {final_select} FROM aggregated{ordering} LIMIT {limit + 1}"
         )
+        units = {metric_id: self.catalog.get(metric_id).unit for metric_id in plan.metric_ids}
+        return self._bound(sql, bound_params, plan, units, tuple(dimension_aliases))
+
+    @staticmethod
+    def _custom_filter_clauses(
+        plan: ValidatedPlan, mapping: dict[str, str]
+    ) -> tuple[str, list[object]]:
+        if not plan.filters:
+            return "", []
+        clauses: list[str] = []
+        params: list[object] = []
+        for item in plan.filters:
+            if item.field not in mapping:
+                raise PlanRejected(
+                    "unsupported_filter", f"Filter {item.field} is not supported here"
+                )
+            col = mapping[item.field]
+            if item.operator == "eq":
+                clauses.append(f"{col} = ?")
+                params.append(item.values[0])
+            elif item.operator == "neq":
+                clauses.append(f"{col} <> ?")
+                params.append(item.values[0])
+            elif item.operator == "in":
+                clauses.append(f"{col} IN ({', '.join('?' for _ in item.values)})")
+                params.extend(item.values)
+            else:
+                raise PlanRejected("unsupported_filter", "Filter operator is not compiler-approved")
+        return " AND " + " AND ".join(clauses), params
 
     def _compile_custom(self, plan: ValidatedPlan, metric_id: str) -> BoundQuery:
         assert plan.time.as_of or plan.time.start
@@ -290,6 +504,7 @@ class SQLCompiler:
         dimensions: tuple[str, ...] = ()
         if metric_id == "ar_aging":
             assert plan.time.as_of
+            flt_sql, flt_params = self._custom_filter_clauses(plan, {"customer": "i.customer_code"})
             customer_select = "customer_code, " if "customer" in plan.dimensions else ""
             group_by = "1, 2" if customer_select else "1"
             ordering = (
@@ -311,28 +526,37 @@ class SQLCompiler:
                          ELSE 'over_90' END AS aging_bucket,
                     i.total_amount - COALESCE(p.paid, 0) - COALESCE(a.adjusted, 0) AS ar_aging
                   FROM ar_invoice i LEFT JOIN paid p USING(invoice_id) LEFT JOIN adjusted a USING(invoice_id)
-                  WHERE i.issue_date <= ?
+                  WHERE i.issue_date <= ?{flt_sql}
                 )
                 SELECT {customer_select}aging_bucket, SUM(ar_aging) AS ar_aging FROM open_invoice
                 WHERE ar_aging > 0 GROUP BY {group_by} ORDER BY
                   {ordering}WHEN 'not_due' THEN 0 WHEN '1_30' THEN 1 WHEN '31_60' THEN 2 WHEN '61_90' THEN 3 ELSE 4 END
                 LIMIT 1001
             """
-            params = [plan.time.as_of] * 7
+            params = [*([plan.time.as_of] * 7), *flt_params]
             dimensions = (("customer_code",) if customer_select else ()) + ("aging_bucket",)
         elif metric_id == "overdue_receivables":
             assert plan.time.as_of
             min_days = 30
-            sql = """
+            flt_sql, flt_params = self._custom_filter_clauses(plan, {"customer": "i.customer_code"})
+            sql = f"""
                 WITH paid AS (SELECT invoice_id, SUM(amount) paid FROM ar_receipt WHERE receipt_date <= ? GROUP BY 1),
                 adjusted AS (SELECT invoice_id, SUM(total_amount) adjusted FROM ar_adjustment WHERE adjustment_date <= ? GROUP BY 1)
                 SELECT SUM(i.total_amount - COALESCE(p.paid,0) - COALESCE(a.adjusted,0)) AS overdue_receivables
                 FROM ar_invoice i LEFT JOIN paid p USING(invoice_id) LEFT JOIN adjusted a USING(invoice_id)
-                WHERE i.issue_date <= ? AND i.due_date < ? - CAST(? AS INTEGER)
+                WHERE i.issue_date <= ? AND i.due_date < ? - CAST(? AS INTEGER){flt_sql}
                   AND i.total_amount - COALESCE(p.paid,0) - COALESCE(a.adjusted,0) > 0 LIMIT 2
             """
-            params = [plan.time.as_of, plan.time.as_of, plan.time.as_of, plan.time.as_of, min_days]
+            params = [
+                plan.time.as_of,
+                plan.time.as_of,
+                plan.time.as_of,
+                plan.time.as_of,
+                min_days,
+                *flt_params,
+            ]
         elif metric_id == "dso_actual":
+            self._custom_filter_clauses(plan, {})
             assert plan.time.start and plan.time.end
             sql = """
                 SELECT CASE WHEN SUM(r.amount)=0 THEN NULL ELSE
@@ -342,6 +566,7 @@ class SQLCompiler:
             """
             params = [plan.time.start, plan.time.end + timedelta(days=1)]
         elif metric_id == "ap_due_soon":
+            self._custom_filter_clauses(plan, {})
             assert plan.time.start and plan.time.end
             sql = """
                 WITH paid AS (SELECT bill_id, SUM(amount) paid FROM ap_payment WHERE payment_date <= ? GROUP BY 1)
@@ -354,6 +579,7 @@ class SQLCompiler:
             # range end is the due-date horizon and already-overdue items remain.
             params = [plan.time.start, plan.time.start, plan.time.end]
         elif metric_id == "unbalanced_journals":
+            self._custom_filter_clauses(plan, {})
             assert plan.time.start and plan.time.end
             sql = """
                 SELECT COUNT(*) AS unbalanced_journals FROM (
@@ -364,17 +590,19 @@ class SQLCompiler:
             params = [plan.time.start, plan.time.end + timedelta(days=1)]
         elif metric_id == "top_sales_transactions":
             assert plan.time.start and plan.time.end
+            flt_sql, flt_params = self._custom_filter_clauses(plan, {"customer": "customer_code"})
             limit = min(plan.top_k or 10, 100)
             sql = f"""
                 SELECT invoice_id, einvoice_no, customer_code, subtotal AS top_sales_transactions
-                FROM ar_invoice WHERE issue_date >= ? AND issue_date < ? AND NOT is_opening
+                FROM ar_invoice WHERE issue_date >= ? AND issue_date < ? AND NOT is_opening{flt_sql}
                 ORDER BY subtotal DESC, invoice_id LIMIT {limit + 1}
             """
-            params = [plan.time.start, plan.time.end + timedelta(days=1)]
+            params = [plan.time.start, plan.time.end + timedelta(days=1), *flt_params]
             dimensions = ("invoice_id", "einvoice_no", "customer_code")
         elif metric_id == "payroll_summary":
             assert plan.time.start and plan.time.end
             mapped = {"branch": "branch_code", "department": "department_code"}
+            flt_sql, flt_params = self._custom_filter_clauses(plan, mapped)
             columns = [mapped[d] for d in plan.dimensions]
             dims = ", ".join(columns)
             select_dims = f"{dims}, " if dims else ""
@@ -383,12 +611,17 @@ class SQLCompiler:
             )
             sql = (
                 f"SELECT {select_dims}SUM(gross_salary + bonus + employer_contribution) AS payroll_summary "
-                f"FROM payroll WHERE year_month >= ? AND year_month <= ?{group} "
+                f"FROM payroll WHERE year_month >= ? AND year_month <= ?{flt_sql}{group} "
                 f"ORDER BY {dims or 'payroll_summary'} LIMIT {self.row_cap + 1}"
             )
-            params = [plan.time.start.strftime("%Y-%m"), plan.time.end.strftime("%Y-%m")]
+            params = [
+                plan.time.start.strftime("%Y-%m"),
+                plan.time.end.strftime("%Y-%m"),
+                *flt_params,
+            ]
             dimensions = tuple(plan.dimensions)
         elif metric_id == "cit_estimate":
+            self._custom_filter_clauses(plan, {})
             if plan.view != "tax":
                 raise PlanRejected("unsupported_view", "Ước tính CIT chỉ dùng khung thuế")
             assert plan.time.start and plan.time.end
@@ -408,6 +641,7 @@ class SQLCompiler:
                 plan.time.end + timedelta(days=1),
             ]
         elif metric_id == "mgmt_vs_tax_gap":
+            self._custom_filter_clauses(plan, {})
             assert plan.time.start and plan.time.end
             sql = """
                 SELECT SUM(CASE WHEN account_code LIKE '6%' OR account_code LIKE '8%'
@@ -417,6 +651,7 @@ class SQLCompiler:
             """
             params = [plan.time.start, plan.time.end + timedelta(days=1)]
         elif metric_id == "vat_position":
+            self._custom_filter_clauses(plan, {})
             assert plan.time.start and plan.time.end
             sql = """
                 SELECT CASE WHEN SUM(CASE WHEN account_code LIKE '33311%' OR account_code LIKE '1331%'
@@ -425,7 +660,9 @@ class SQLCompiler:
                            WHEN account_code LIKE '1331%' THEN -(debit_amount-credit_amount) ELSE 0 END)
                   END AS vat_position
                 FROM v_tax WHERE posting_date >= ? AND posting_date < ?
-                  AND COALESCE(is_closing,FALSE)=FALSE AND source_document_type <> 'OPENING' LIMIT 2
+                  AND COALESCE(is_closing,FALSE)=FALSE
+                  AND COALESCE(source_document_type, '') NOT IN ('OPENING', 'VAT_OFFSET', 'VAT_PAYMENT', 'TAX_PAYMENT')
+                LIMIT 2
             """
             params = [plan.time.start, plan.time.end + timedelta(days=1)]
         else:

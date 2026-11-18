@@ -32,8 +32,18 @@ from pathlib import Path
 PAGE=(Path(__file__).with_name('web')/'status.html').read_text('utf-8')
 
 
+def default_workspace_dir():
+    configured = os.environ.get('AGENT2_WORKSPACE_DIR')
+    base = Path(configured) if configured else (Path(__file__).resolve().parents[1] / '.runtime' / 'default-workspace')
+    base.mkdir(parents=True, exist_ok=True)
+    return base
+
+
 def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources=None,he_backend=None,review_store=None,comparison_store=None,label_store=None,batch_training=None,case_queue_store=None,remediation_store=None,release_service=None):
     authorizer=authorizer or FileAuthorizer(None)
+    if snapshot_store is None:
+        ws_dir = default_workspace_dir()
+        snapshot_store = SnapshotStore(ws_dir / 'snapshots-v2.sqlite3')
     if he_backend and he_backend.node.auth is not authorizer:
         raise ValueError('HE must use the same current authorizer as the web server')
     reviews=review_store
@@ -119,6 +129,11 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
             if path=='/api/health':return self.respond(200,dict(status='ok',mode='import_snapshots' if snapshot_store else 'validation_only',milestone='R1',pipeline_ready=False,work_area_ready=snapshot_store is not None and authorizer.configured,analysis_configured=he_backend is not None,release_gate='full_spec_not_approved',active_delivery=False,validation_auth_configured=authorizer.configured,snapshot_storage_configured=snapshot_store is not None))
             if path=='/status':return self.respond(200,PAGE,'text/html; charset=utf-8')
             self.respond(410,dict(error='Luồng Agent2 cũ đã được lưu trữ. API pipeline v2.1 chưa được triển khai.',mode='core_only'))
+        def _drain_small_body(self):
+            try:
+                length=int(self.headers.get('Content-Length') or 0)
+                if 0<length<=65536:self.rfile.read(length)
+            except (ValueError,OSError):pass
         def do_POST(self):
             if handle_releases(self,authorizer,release_service,'POST'):return
             if handle_bundle_workspace(self,authorizer,release_service,'POST'):return
@@ -132,10 +147,12 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
             if handle_comparison(self,authorizer,snapshot_store,he_backend,reviews,comparisons,'POST',analysis_resources):return
             if handle_he_workbench(self,authorizer,he_backend,'POST'):return
             if not handle_analysis(self,authorizer,snapshot_store,'POST',analysis_resources) and not handle_validation(self,authorizer) and not handle_snapshots(self,authorizer,snapshot_store,'POST'):
+                self._drain_small_body()
                 self.respond(410,dict(error='Chưa mở ghi dữ liệu hoặc chạy job; API cũ đã được lưu trữ.',mode='validation_only'))
         def do_PUT(self):
             if handle_labels(self,authorizer,snapshot_store,label_store,'PUT'):return
             if not handle_analysis(self,authorizer,snapshot_store,'PUT',analysis_resources) and not handle_snapshots(self,authorizer,snapshot_store,'PUT'):
+                self._drain_small_body()
                 self.respond(410,dict(error='API cũ đã được lưu trữ.'))
         def log_message(self,*args):pass
     return ThreadingHTTPServer(('127.0.0.1',port),Handler)
@@ -156,7 +173,13 @@ def main():
     # Known old launcher options are accepted only for compatibility; their paths are never opened.
     for name in ('data-root','reports-root','database','ml-review-root'):parser.add_argument('--'+name,action='append')
     for name in ('qa','demo-ml-manager'):parser.add_argument('--'+name,action='store_true')
-    args=parser.parse_args();store=SnapshotStore(args.snapshot_db) if args.snapshot_db else None
+    args=parser.parse_args()
+    if not args.snapshot_db:
+        ws_dir=default_workspace_dir()
+        args.snapshot_db=str(ws_dir/'snapshots-v2.sqlite3')
+        args.model_db=args.model_db or str(ws_dir/'models-v2.sqlite3')
+        args.analysis_bindings=args.analysis_bindings or str(ws_dir/'analysis-bindings.json')
+    store=SnapshotStore(args.snapshot_db)
     authorizer=PortalAuthorizer(args.portal_url,os.environ.get('AGENT2_PORTAL_BRIDGE_SECRET')) if args.portal_url else FileAuthorizer(args.auth_file)
     if args.portal_url and args.snapshot_db:
         from pathlib import Path

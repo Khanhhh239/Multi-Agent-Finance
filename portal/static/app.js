@@ -2,7 +2,12 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const AGENT_LABEL = { agent1: "Agent 1", agent2: "Agent 2", agent3: "Agent 3", agent4: "Agent 4" };
-  const WORKSPACE_LABEL = { agent1: "Dòng tiền", agent2: "Kiểm soát", agent3: "Thuế", agent4: "Hỏi đáp" };
+  const WORKSPACE_LABEL = {
+    agent1: "Dự báo dòng tiền",
+    agent2: "Kiểm soát gian lận & FHE",
+    agent3: "Rà soát thuế & HĐĐT",
+    agent4: "Hỏi đáp CFO hai sổ"
+  };
   const STATE_TEXT = { running: "Đang chạy", starting: "Đang khởi động", stopped: "Đang tắt", "busy-port": "Cổng bị chiếm" };
   const CHECK_TEXT = { checking: "Đang kiểm tra", ready: "Sẵn sàng ghi", error: "Có lỗi", offline: "Agent tắt", done: "Đã ghi", skipped: "Bỏ qua", stale: "Chờ kiểm tra lại" };
   let state = null;
@@ -249,12 +254,16 @@
     );
   }
 
+  function isProfileProtected() {
+    return (Boolean(state?.package) || Boolean(state?.intake?.has_biometric)) && !state?.intake?.unlocked;
+  }
+
   function renderConfig() {
     const c = state.company;
     const form = $("company-form");
     if (!form.dataset.dirty) for (const [k, v] of Object.entries(c)) if (form.elements[k]) form.elements[k].value = v ?? "";
     profileText("saved-at", c.updated_at ? "Lưu lần cuối " + c.updated_at : "Chưa có lần lưu nào");
-    const locked = Boolean(state.package) && !state.intake.unlocked;
+    const locked = isProfileProtected();
     $("config-lock").hidden = !locked;
     for (const input of form.elements) if (input.name) input.disabled = locked || profileSaving;
     form.querySelector("button[type=submit]").disabled = locked || profileSaving;
@@ -383,23 +392,23 @@
 
   const WORKSTATION_INFO = {
     agent1: {
-      title: "Quản trị Dòng tiền",
-      desc: "Dự báo dòng tiền & công nợ 13 tuần",
+      title: "Dự báo dòng tiền",
+      desc: "Dự báo thanh khoản 13 tuần, đối soát sao kê & công nợ phải thu",
       icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`
     },
     agent2: {
-      title: "Soát xét Giao dịch",
-      desc: "Phát hiện giao dịch & chứng từ bất thường",
+      title: "Kiểm soát gian lận & FHE",
+      desc: "35 luật kiểm toán nội bộ, đồ thị liên kết & mã hóa đồng cấu FHE",
       icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>`
     },
     agent3: {
-      title: "Tuân thủ Thuế GTGT",
-      desc: "Đối soát hóa đơn XML & tờ khai thuế",
+      title: "Rà soát thuế & HĐĐT",
+      desc: "Thẩm định hóa đơn điện tử XML, chữ ký số & luật thuế GTGT",
       icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`
     },
     agent4: {
-      title: "Trợ lý CFO & Sổ cái",
-      desc: "Hỏi đáp số liệu & truy vấn sổ cái",
+      title: "Hỏi đáp CFO hai sổ",
+      desc: "Truy vấn Sổ quản trị (v_mgmt) & Sổ thuế (v_tax) bằng SQL tất định",
       icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/></svg>`
     }
   };
@@ -458,6 +467,64 @@
     if ($("start-all")) {
       $("start-all").disabled = state.agents.every((a) => a.state !== "stopped");
       $("start-all").innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${runningCount === state.agents.length ? "Đang chạy" : "Bật tất cả"}</span>`;
+    }
+
+    // 1b. Executive Summary KPI Strip (100% live state data)
+    if ($("exec-agents-val")) {
+      $("exec-agents-val").textContent = runningCount + " / " + state.agents.length + " phân hệ sẵn sàng";
+      $("exec-agents-val").parentElement?.classList.toggle("is-ready", runningCount === state.agents.length);
+      $("exec-agents-val").parentElement?.classList.toggle("is-warn", runningCount < state.agents.length);
+    }
+    if ($("exec-agents-sub")) {
+      const startingCount = state.agents.filter((a) => a.state === "starting").length;
+      $("exec-agents-sub").textContent = runningCount === state.agents.length
+        ? "A1 Dòng tiền · A2 FHE · A3 Thuế · A4 CFO"
+        : startingCount > 0
+          ? startingCount + " phân hệ đang khởi động…"
+          : "Nhấn 'Bật tất cả' để khởi chạy toàn bộ";
+    }
+    if ($("exec-regime-val")) {
+      const configured = Boolean(c.legal_name && c.code);
+      $("exec-regime-val").textContent = configured
+        ? (c.vat_method === "DIRECT" ? "GTGT Trực tiếp" : "GTGT Khấu trừ") + " · " + (c.filing_period === "MONTH" ? "Kỳ tháng" : "Kỳ quý")
+        : "Chưa khai báo hồ sơ";
+      $("exec-regime-val").parentElement?.classList.toggle("is-ready", configured);
+    }
+    if ($("exec-regime-sub")) {
+      $("exec-regime-sub").textContent = c.tax_code
+        ? "MST " + c.tax_code + " · Năm TC T" + (c.fiscal_year_end_month || "12")
+        : c.code ? "Mã đơn vị " + c.code : "Mở Hồ sơ doanh nghiệp để thiết lập";
+    }
+    if ($("exec-pkg-val")) {
+      const pkg = state.package;
+      $("exec-pkg-val").textContent = pkg
+        ? "Gói v" + pkg.version + " · " + pkg.files + " chứng từ"
+        : state.pending.length
+          ? state.pending.length + " tệp chờ niêm phong"
+          : "Chưa niêm phong";
+      $("exec-pkg-val").parentElement?.classList.toggle("is-ready", Boolean(pkg));
+    }
+    if ($("exec-pkg-sub")) {
+      const sealedSlots = (state.slots || []).filter((s) => s.state === "sealed").length;
+      const totalSlots = (state.slots || []).length;
+      $("exec-pkg-sub").textContent = state.package
+        ? "Mã băm #" + String(state.package.manifest || "").slice(0, 8) + " · " + sealedSlots + "/" + totalSlots + " khay"
+        : "Sao kê CSV, Hóa đơn XML/ZIP & Sổ nghiệp vụ";
+    }
+    if ($("exec-sec-val")) {
+      const intake = state.intake || {};
+      $("exec-sec-val").textContent = !intake.configured
+        ? "Chờ đặt mật khẩu"
+        : intake.unlocked
+          ? "Phiên đang mở khóa"
+          : "Đã khóa bảo vệ";
+      $("exec-sec-val").parentElement?.classList.toggle("is-ready", Boolean(intake.configured));
+    }
+    if ($("exec-sec-sub")) {
+      const intake = state.intake || {};
+      $("exec-sec-sub").textContent = intake.has_biometric
+        ? "FaceID 3 khung sẵn sàng · SHA-256 Chain"
+        : "Hỗ trợ FaceID 3 khung 128-D · SHA-256 Chain";
     }
 
     // 2. Sleek Minimalist Agent Cards (Ít chữ, hiện đại)
@@ -533,9 +600,8 @@
     const step2Done = state.agents.every((a) => a.state === "running");
     const step3Done = Boolean(state.package);
     const doneCount = (step1Done ? 1 : 0) + (step2Done ? 1 : 0) + (step3Done ? 1 : 0);
-    const pct = Math.round((doneCount / 3) * 100);
 
-    if ($("meter-bar")) $("meter-bar").style.width = pct + "%";
+    if ($("meter-bar")) $("meter-bar").dataset.done = String(doneCount);
     if ($("setup-progress-text")) {
       $("setup-progress-text").textContent = doneCount + "/3 hoàn tất";
     }
@@ -757,10 +823,10 @@
   }
 
   const AGENT_SUBTAGS = {
-    agent1: "Quản lý Bán hàng & Hóa đơn",
-    agent2: "Ngân hàng & Sổ cái",
-    agent3: "Tuân thủ thuế GTGT & Hóa đơn",
-    agent4: "Mô phỏng & Hỏi đáp thông minh"
+    agent1: "Dự báo dòng tiền 13 tuần & Đối soát công nợ",
+    agent2: "Kiểm soát gian lận nội bộ, Đồ thị & FHE",
+    agent3: "Rà soát thuế GTGT, Chữ ký số & HĐĐT",
+    agent4: "Hỏi đáp CFO hai sổ (v_mgmt & v_tax)"
   };
   async function agent2ResumeUrl(fallback) {
     // Browser preferences never authorize a company. Recheck the current
@@ -801,9 +867,27 @@
       noEl.setAttribute("data-agent", a.id);
     }
     const nameEl = $("agent-name");
-    if (nameEl) nameEl.textContent = a.id === "agent4" ? "Agent 4 · Hỏi đáp" : a.name;
+    if (nameEl) nameEl.textContent = WORKSPACE_LABEL[a.id] || a.name;
     const subtagEl = $("agent-subtag");
     if (subtagEl) subtagEl.textContent = AGENT_SUBTAGS[a.id] || "Không gian làm việc chuyên biệt";
+
+    const quickSwitch = $("agent-quick-switch");
+    if (quickSwitch) {
+      quickSwitch.replaceChildren(
+        ...state.agents.map((item) =>
+          el("a", {
+            href: "#" + item.id,
+            class: "agent-switch-pill",
+            "aria-current": item.id === a.id ? "page" : false,
+            title: AGENT_LABEL[item.id] + " · " + WORKSPACE_LABEL[item.id] + " (" + STATE_TEXT[item.state] + ")"
+          },
+            el("span", { class: "dot " + item.state, "aria-hidden": "true" }),
+            el("strong", {}, "A" + item.number),
+            el("span", { class: "switch-label-full" }, WORKSPACE_LABEL[item.id])
+          )
+        )
+      );
+    }
 
     const statusEl = $("agent-status");
     if (statusEl) {
@@ -982,7 +1066,7 @@
     if (sidebarMedia.matches) setSidebarOpen(false, $("sidebar").contains(document.activeElement));
     if (state) render();
     markCurrent();
-    document.title = (isAgent && state ? AGENT_LABEL[view] + " " + agentById(view).name : TITLES[view] || "") + " | Văn phòng kế toán số";
+    document.title = (isAgent && state ? AGENT_LABEL[view] + " · " + WORKSPACE_LABEL[view] : TITLES[view] || "") + " | Sổ Son — Phòng Kế Toán Số";
   }
 
   // ------------------------------------------------------------------ actions
@@ -1110,16 +1194,72 @@
     return true;
   }
 
+  const FACE_FRAME_COUNT = 3;
+  const FACE_FRAME_INTERVAL_MS = 120;
+
   let faceModelsLoaded = false;
   let faceStream = null;
   let faceAnimationId = null;
   let isFaceCompleted = false;
 
-  function updateFaceHud({ step = 1, pct = 12, status = "", framesText = "", scanState = "scanning" }) {
+  function isValidFaceDescriptor(vec) {
+    return Array.isArray(vec) && vec.length === 128 && vec.every((v) => typeof v === "number" && Number.isFinite(v));
+  }
+
+  function averageFaceDescriptors(descriptors) {
+    if (!Array.isArray(descriptors) || !descriptors.length) return [];
+    const dim = descriptors[0].length;
+    if (dim !== 128) return [];
+    const sums = new Array(dim).fill(0);
+    for (const desc of descriptors) {
+      if (!isValidFaceDescriptor(desc)) return [];
+      for (let i = 0; i < dim; i++) {
+        sums[i] += desc[i];
+      }
+    }
+    return sums.map((s) => Number((s / descriptors.length).toFixed(8)));
+  }
+
+  function approxVndPortal(raw) {
+    if (raw === null || raw === undefined || raw === "") return "";
+    let str = typeof raw === "bigint"
+      ? raw.toString()
+      : typeof raw === "number"
+        ? (Number.isFinite(raw) ? (Number.isInteger(raw) ? raw.toFixed(0) : raw.toFixed(4)) : "")
+        : String(raw).trim();
+    str = str.replace(/\u2212/g, "-").replace(/\s+/g, "");
+    const m = /^([+-])?(\d+)(?:\.(\d+))?$/.exec(str);
+    if (!m) return "";
+    let neg = m[1] === "-";
+    let absVnd = BigInt(m[2]) + (Number((m[3] || "0")[0] || "0") >= 5 ? 1n : 0n);
+    if (absVnd === 0n) neg = false;
+    if (absVnd < 1000000n) return "";
+    let tenths, unit;
+    if (absVnd >= 1000000000000n) {
+      tenths = (absVnd * 10n + 500000000000n) / 1000000000000n;
+      unit = "nghìn tỷ đồng";
+    } else if (absVnd >= 1000000000n) {
+      tenths = (absVnd * 10n + 500000000n) / 1000000000n;
+      unit = "tỷ đồng";
+      if (tenths >= 10000n) { tenths = (tenths + 500n) / 1000n; unit = "nghìn tỷ đồng"; }
+    } else {
+      tenths = (absVnd * 10n + 500000n) / 1000000n;
+      unit = "triệu đồng";
+      if (tenths >= 10000n) { tenths = (tenths + 500n) / 1000n; unit = "tỷ đồng"; }
+    }
+    const w = (tenths / 10n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    const r = tenths % 10n;
+    return (neg ? "âm " : "") + (r === 0n ? w : w + "," + r.toString()) + " " + unit;
+  }
+
+  function updateFaceHud({ step = 1, pct = 15, status = "", framesText = "", scanState = "scanning" }) {
     const viewport = $("face-viewport");
     if (viewport) viewport.dataset.scanState = scanState;
     const bar = $("face-progress-bar");
-    if (bar) bar.style.width = Math.max(0, Math.min(100, pct)) + "%";
+    if (bar) {
+      const clamped = Math.max(0, Math.min(100, pct));
+      bar.dataset.pct = String(Math.round(clamped / 5) * 5);
+    }
     const statusEl = $("face-hud-status");
     if (statusEl && status) statusEl.textContent = status;
     const framesEl = $("face-hud-frames");
@@ -1220,22 +1360,22 @@
     const modeBadge = $("face-mode-badge");
     const feedback = $("face-feedback");
     const reticle = document.querySelector(".face-reticle");
-    const targetFrames = mode === "register" ? 3 : 2;
+    const targetFrames = FACE_FRAME_COUNT;
 
     modal.hidden = false;
     isFaceCompleted = false;
     if (modeBadge) {
-      modeBadge.textContent = mode === "register" ? "ĐĂNG KÝ MẪU SINH TRẮC HỌC MỚI" : "XÁC THỰC MỞ KHÓA BẰNG KHUÔN MẶT";
+      modeBadge.textContent = mode === "register" ? "ĐĂNG KÝ SINH TRẮC HỌC · 3 KHUNG LIÊN TIẾP" : "XÁC THỰC FACEID · 3 KHUNG LIÊN TIẾP";
     }
     titleEl.textContent = mode === "register" ? "Thiết lập Khuôn mặt Quản trị" : "Quét Khuôn mặt để Mở khóa";
     feedback.className = "face-feedback";
-    feedback.textContent = "Đang khởi tạo ống kính và mạng nơ-ron AI...";
+    feedback.textContent = "Đang khởi tạo ống kính và mạng nơ-ron nhận diện 128 chiều...";
     if (reticle) reticle.classList.remove("active", "verified", "err");
     updateFaceHud({
       step: 1,
       pct: 15,
       status: "KHỞI ĐỘNG ỐNG KÍNH",
-      framesText: "0 / " + targetFrames + " MẪU",
+      framesText: "0 / " + targetFrames + " KHUNG",
       scanState: "scanning"
     });
 
@@ -1251,19 +1391,20 @@
       canvas.height = video.videoHeight || 480;
 
       // Allow camera auto-exposure & white-balance to stabilize on first open
-      await new Promise((resolve) => setTimeout(resolve, 260));
+      await new Promise((resolve) => setTimeout(resolve, 240));
       if (!faceStream || modal.hidden || isFaceCompleted) return;
 
       updateFaceHud({
         step: 2,
-        pct: 32,
+        pct: 30,
         status: "ĐANG TÌM KHUÔN MẶT",
-        framesText: "0 / " + targetFrames + " MẪU",
+        framesText: "0 / " + targetFrames + " KHUNG",
         scanState: "scanning"
       });
-      feedback.textContent = "Nhìn thẳng vào khung ngắm để định vị 68 điểm mốc...";
+      feedback.textContent = "Nhìn thẳng vào khung ngắm để thu 3 khung hình liên tiếp (~120ms/khung)...";
 
-      let consecutiveMatches = 0;
+      let capturedDescriptors = [];
+      let lastCaptureAt = 0;
       let verifyRetries = 0;
       const maxVerifyRetries = 3;
       let isProcessing = false;
@@ -1290,39 +1431,65 @@
                 reticle.classList.remove("err");
                 reticle.classList.add("active");
               }
-              consecutiveMatches++;
-              const stepPct = Math.min(88, 35 + Math.round((consecutiveMatches / targetFrames) * 50));
-              updateFaceHud({
-                step: consecutiveMatches >= targetFrames ? 3 : 2,
-                pct: stepPct,
-                status: consecutiveMatches >= targetFrames ? "ĐỐI SOÁT VECTOR 128-D" : "ĐÃ KHÓA MỤC TIÊU",
-                framesText: Math.min(consecutiveMatches, targetFrames) + " / " + targetFrames + " MẪU",
-                scanState: "locked"
-              });
-              feedback.className = "face-feedback ok";
 
-              if (mode === "register") {
-                feedback.textContent = "Đã định vị 68 điểm mốc! Giữ ổn định... (" + consecutiveMatches + "/" + targetFrames + ")";
-                if (consecutiveMatches >= targetFrames) {
+              const now = performance.now();
+              if (capturedDescriptors.length === 0 || now - lastCaptureAt >= FACE_FRAME_INTERVAL_MS) {
+                const frameDesc = Array.from(detection.descriptor, (x) => Number(x));
+                if (!isValidFaceDescriptor(frameDesc)) {
+                  capturedDescriptors = [];
+                  lastCaptureAt = 0;
+                  throw new Error("Vector đặc trưng khung hình không hợp lệ, đang thu lại...");
+                }
+                capturedDescriptors.push(frameDesc);
+                lastCaptureAt = now;
+
+                const capturedCount = capturedDescriptors.length;
+                const stepPct = Math.min(90, 35 + Math.round((capturedCount / targetFrames) * 55));
+                updateFaceHud({
+                  step: capturedCount >= targetFrames ? 3 : 2,
+                  pct: stepPct,
+                  status: capturedCount >= targetFrames ? "TỔNG HỢP 3 KHUNG · 128-D" : "THU KHUNG " + capturedCount + "/" + targetFrames,
+                  framesText: capturedCount + " / " + targetFrames + " KHUNG",
+                  scanState: "locked"
+                });
+                feedback.className = "face-feedback ok";
+                feedback.textContent = capturedCount < targetFrames
+                  ? "Đã chụp khung hình " + capturedCount + "/" + targetFrames + " · Giữ ổn định khuôn mặt..."
+                  : "Đã thu đủ 3/3 khung hình liên tiếp · Đang tổng hợp vector 128 chiều...";
+              }
+
+              if (capturedDescriptors.length >= targetFrames) {
+                const descriptors = capturedDescriptors.slice(0, targetFrames);
+                const averagedDescriptor = averageFaceDescriptors(descriptors);
+                if (!isValidFaceDescriptor(averagedDescriptor)) {
+                  capturedDescriptors = [];
+                  lastCaptureAt = 0;
+                  throw new Error("Không tổng hợp được vector 128 chiều hợp lệ.");
+                }
+
+                if (mode === "register") {
                   isFaceCompleted = true;
                   updateFaceHud({
                     step: 3,
                     pct: 95,
-                    status: "MÃ HÓA & LƯU TRỮ",
-                    framesText: targetFrames + " / " + targetFrames + " MẪU",
+                    status: "MÃ HÓA & NIÊM PHONG",
+                    framesText: targetFrames + " / " + targetFrames + " KHUNG",
                     scanState: "locked"
                   });
-                  feedback.textContent = "Đang mã hóa và niêm phong vector sinh trắc học 128 chiều...";
-                  const descArray = Array.from(detection.descriptor);
+                  feedback.textContent = "Đang lưu 3 mẫu khung hình và trung bình hóa vector 128 chiều...";
                   const res = await api("/api/intake/face/register", {
                     method: "POST",
-                    json: { descriptor: descArray, password: password }
+                    json: {
+                      descriptor: averagedDescriptor,
+                      descriptors,
+                      password: password
+                    }
                   });
                   updateFaceHud({
                     step: 4,
                     pct: 100,
                     status: "HOÀN TẤT ĐĂNG KÝ",
-                    framesText: targetFrames + " / " + targetFrames + " MẪU",
+                    framesText: targetFrames + " / " + targetFrames + " KHUNG",
                     scanState: "verified"
                   });
                   if (reticle) reticle.classList.add("verified");
@@ -1334,26 +1501,25 @@
                     render();
                   }
                   stopFaceCamera();
-                  toast("Đã đăng ký FaceID và mở khóa thành công!");
+                  toast("Đã đăng ký FaceID (3 khung hình) và mở khóa thành công!");
                   await refresh();
                   return;
-                }
-              } else {
-                feedback.textContent = "Đang lấy mẫu ổn định... (" + Math.min(consecutiveMatches, targetFrames) + "/" + targetFrames + ")";
-                if (consecutiveMatches >= targetFrames) {
-                  feedback.textContent = "Đang đối soát vector khuôn mặt 128 chiều...";
-                  const descArray = Array.from(detection.descriptor);
+                } else {
+                  feedback.textContent = "Đang đối soát 3 khung hình khuôn mặt 128 chiều...";
                   try {
                     const res = await api("/api/intake/face/verify", {
                       method: "POST",
-                      json: { descriptor: descArray }
+                      json: {
+                        descriptor: averagedDescriptor,
+                        descriptors
+                      }
                     });
                     isFaceCompleted = true;
                     updateFaceHud({
                       step: 4,
                       pct: 100,
                       status: "MỞ KHÓA THÀNH CÔNG",
-                      framesText: targetFrames + " / " + targetFrames + " MẪU",
+                      framesText: targetFrames + " / " + targetFrames + " KHUNG",
                       scanState: "verified"
                     });
                     if (reticle) reticle.classList.add("verified");
@@ -1364,22 +1530,23 @@
                       render();
                     }
                     stopFaceCamera();
-                    toast("Nhận diện FaceID chính xác! Đã mở khóa.");
+                    toast("Đối soát FaceID 3 khung hình chính xác! Đã mở khóa.");
                     await refresh();
                     return;
                   } catch (verifyErr) {
                     verifyRetries++;
-                    consecutiveMatches = 0;
+                    capturedDescriptors = [];
+                    lastCaptureAt = 0;
                     if (verifyRetries < maxVerifyRetries) {
                       updateFaceHud({
                         step: 2,
                         pct: 40,
-                        status: "LẤY NÉT LẠI (" + verifyRetries + "/" + maxVerifyRetries + ")",
-                        framesText: "0 / " + targetFrames + " MẪU",
+                        status: "QUÉT LẠI (" + verifyRetries + "/" + maxVerifyRetries + ")",
+                        framesText: "0 / " + targetFrames + " KHUNG",
                         scanState: "scanning"
                       });
                       feedback.className = "face-feedback";
-                      feedback.textContent = "Khung hình đầu chưa rõ, đang tự động quét lại (" + verifyRetries + "/" + maxVerifyRetries + ")...";
+                      feedback.textContent = "Chưa khớp mẫu ổn định, đang thu lại 3 khung hình (" + verifyRetries + "/" + maxVerifyRetries + ")...";
                     } else {
                       isFaceCompleted = true;
                       if (reticle) {
@@ -1394,24 +1561,25 @@
                         scanState: "error"
                       });
                       feedback.className = "face-feedback err";
-                      feedback.textContent = verifyErr.message || "Khuôn mặt không khớp. Vui lòng thử lại hoặc dùng mật khẩu.";
+                      feedback.textContent = verifyErr.message || "Khuôn mặt không khớp sau 3 lần đối soát. Vui lòng thử lại hoặc dùng mật khẩu.";
                       return;
                     }
                   }
                 }
               }
             } else {
-              consecutiveMatches = 0;
+              capturedDescriptors = [];
+              lastCaptureAt = 0;
               if (reticle) reticle.classList.remove("active");
               updateFaceHud({
                 step: 2,
-                pct: 28,
+                pct: 25,
                 status: "ĐANG TÌM KHUÔN MẶT",
-                framesText: "0 / " + targetFrames + " MẪU",
+                framesText: "0 / " + targetFrames + " KHUNG",
                 scanState: "scanning"
               });
               feedback.className = "face-feedback";
-              feedback.textContent = "Vui lòng đặt khuôn mặt vào chính giữa khung ngắm...";
+              feedback.textContent = "Vui lòng giữ khuôn mặt nằm gọn trong khung ngắm để chụp đủ 3 khung hình liên tiếp...";
             }
           } catch (err) {
             if (!isFaceCompleted) {
@@ -1587,7 +1755,7 @@
   async function saveCompany(event) {
     event.preventDefault();
     const form = event.target;
-    if (profileSaving || (state.package && !state.intake.unlocked)) return;
+    if (profileSaving || isProfileProtected()) return;
     const body = Object.fromEntries(new FormData(form).entries());
     const errors = validateProfile(body);
     showProfileErrors(errors, "", Boolean(Object.keys(errors).length));
@@ -1670,7 +1838,7 @@
     if (!input) return;
     const group = input.closest("[data-section-group]");
     if (group && group.hidden) applyProfileTabFilter("all", false);
-    const locked = Boolean(state?.package) && !state?.intake.unlocked;
+    const locked = isProfileProtected();
     if (locked) {
       spotlightNode($("config-lock"));
       $("config-lock")?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -1683,7 +1851,7 @@
     input.focus({ preventScroll: true });
   });
   $("profile-fill-demo")?.addEventListener("click", () => {
-    const locked = Boolean(state?.package) && !state?.intake.unlocked;
+    const locked = isProfileProtected();
     if (locked || profileSaving) return;
     const form = $("company-form");
     const defaults = {
@@ -1782,6 +1950,16 @@
     e.preventDefault();
     if (e.dataTransfer.files.length) upload([...e.dataTransfer.files]);
   });
+
+  if (typeof window !== "undefined") {
+    window.__SOSON_PORTAL_UTILS__ = Object.freeze({
+      FACE_FRAME_COUNT,
+      FACE_FRAME_INTERVAL_MS,
+      isValidFaceDescriptor,
+      averageFaceDescriptors,
+      approxVndPortal,
+    });
+  }
 
   renderSidebar();
   for (const input of $("company-form").elements) if (input.name || input.tagName === "BUTTON") input.disabled = true;

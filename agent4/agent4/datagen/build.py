@@ -7,8 +7,10 @@ Run::
 The warehouse is a star schema (``gl_entry`` fact + dimensions) extended with
 the sub-ledgers a real ERP has (AR invoices/receipts, AP bills/payments,
 inventory movements, payroll, fixed assets, loans, budgets) and two governed
-views — ``v_mgmt`` (management: every transaction) and ``v_tax`` (tax: only
-CIT-deductible lines) — that the semantic metric layer reads from.
+views — ``v_mgmt`` (management: every transaction) and ``v_tax`` (tax: balanced
+statutory double-entry ledger reclassifying CIT B4 non-deductible expenses and
+non-creditable VAT out of deductible P&L / 1331 into equity adjustment 4219) —
+that the semantic metric layer reads from.
 """
 
 from __future__ import annotations
@@ -113,8 +115,196 @@ ORDER BY g.posting_date, g.entry_id;
 CREATE OR REPLACE VIEW v_gl AS SELECT * FROM gl_wide;
 -- Management view: 100% of real transactions (closing entries flagged, not removed).
 CREATE OR REPLACE VIEW v_mgmt AS SELECT * FROM v_gl;
--- Tax view: only CIT-deductible lines (non-deductible expenses removed).
-CREATE OR REPLACE VIEW v_tax AS SELECT * FROM v_gl WHERE tax_deductible;
+-- Pure internal management-only memo/accrual journals where ALL legs have tax_deductible = FALSE.
+CREATE OR REPLACE TABLE gl_mgmt_only_journal AS
+SELECT journal_id
+FROM gl_wide
+WHERE NOT COALESCE(is_closing, FALSE)
+  AND source_module IS DISTINCT FROM 'OPENING'
+GROUP BY journal_id
+HAVING NOT BOOL_OR(COALESCE(tax_deductible, TRUE));
+-- Balanced closing alignment for closed periods on v_tax so that:
+-- 1) closed-period P&L accounts (5..8) zero out cleanly after closing,
+-- 2) statutory B4 equity bridge (4219) closes to zero in closed periods while 4212 holds retained earnings once,
+-- 3) pure mgmt_only closed-period P&L impacts are reversed out of 4212.
+CREATE OR REPLACE TABLE gl_tax_b4_closing AS
+WITH closed_months AS (
+    SELECT year_month,
+           MAX(posting_date) AS posting_date,
+           MAX(period_key) AS period_key,
+           MAX(year_no) AS year_no,
+           MAX(quarter_no) AS quarter_no,
+           MAX(month_no) AS month_no,
+           MIN(branch_code) AS close_branch,
+           MIN(department_code) AS close_dept,
+           MIN(created_by) AS close_by,
+           MAX(created_at) AS close_at
+    FROM gl_wide
+    WHERE COALESCE(is_closing, FALSE)
+      AND account_type IN ('REVENUE', 'EXPENSE')
+    GROUP BY year_month
+),
+disallowed_pnl AS (
+    SELECT w.year_month,
+           w.account_code,
+           w.account_name,
+           w.account_type,
+           (m.journal_id IS NOT NULL) AS is_mgmt_only,
+           SUM(w.net_debit) AS b4_net_debit
+    FROM gl_wide w
+    JOIN closed_months cm USING (year_month)
+    LEFT JOIN gl_mgmt_only_journal m USING (journal_id)
+    WHERE NOT COALESCE(w.is_closing, FALSE)
+      AND w.source_module IS DISTINCT FROM 'OPENING'
+      AND NOT COALESCE(w.tax_deductible, TRUE)
+      AND w.account_type IN ('REVENUE', 'EXPENSE')
+    GROUP BY 1, 2, 3, 4, 5
+),
+raw_legs AS (
+    SELECT year_month,
+           account_code,
+           account_name,
+           account_type,
+           SUM(b4_net_debit) AS leg_net_debit
+    FROM disallowed_pnl
+    GROUP BY 1, 2, 3, 4
+    HAVING SUM(b4_net_debit) <> 0
+    UNION ALL
+    SELECT year_month,
+           '4219' AS account_code,
+           'Điều chỉnh chi phí không được trừ & GTGT không khấu trừ (Chỉ tiêu B4 - 03/TNDN)' AS account_name,
+           'EQUITY' AS account_type,
+           -SUM(b4_net_debit) AS leg_net_debit
+    FROM disallowed_pnl
+    WHERE NOT is_mgmt_only
+    GROUP BY 1
+    HAVING SUM(b4_net_debit) <> 0
+    UNION ALL
+    SELECT year_month,
+           '4212' AS account_code,
+           'LNST chưa phân phối năm nay' AS account_name,
+           'EQUITY' AS account_type,
+           -SUM(b4_net_debit) AS leg_net_debit
+    FROM disallowed_pnl
+    WHERE is_mgmt_only
+    GROUP BY 1
+    HAVING SUM(b4_net_debit) <> 0
+),
+max_id AS (
+    SELECT COALESCE(MAX(entry_id), 0) AS base_id FROM gl_wide
+)
+SELECT CAST(max_id.base_id + ROW_NUMBER() OVER (ORDER BY cm.posting_date, rl.year_month, rl.account_code) AS BIGINT) AS entry_id,
+       CAST('KC-B4-' || rl.year_month AS VARCHAR) AS journal_id,
+       CAST(ROW_NUMBER() OVER (PARTITION BY rl.year_month ORDER BY rl.account_code) AS INTEGER) AS entry_no,
+       cm.posting_date,
+       cm.period_key,
+       rl.year_month,
+       cm.year_no,
+       cm.quarter_no,
+       cm.month_no,
+       CAST(rl.account_code AS VARCHAR) AS account_code,
+       CAST(rl.account_name AS VARCHAR) AS account_name,
+       CAST(rl.account_type AS VARCHAR) AS account_type,
+       CAST(NULL AS VARCHAR) AS partner_code,
+       CAST(NULL AS VARCHAR) AS partner_name,
+       CAST(NULL AS VARCHAR) AS partner_type,
+       CAST(NULL AS VARCHAR) AS segment,
+       CAST(NULL AS VARCHAR) AS item_code,
+       CAST(NULL AS VARCHAR) AS item_name,
+       CAST(NULL AS VARCHAR) AS product_line,
+       CAST(NULL AS VARCHAR) AS cost_category,
+       cm.close_branch AS branch_code,
+       cm.close_dept AS department_code,
+       CAST(NULL AS VARCHAR) AS employee_code,
+       CAST(NULL AS VARCHAR) AS employee_name,
+       CAST('Kết chuyển điều chỉnh chi phí không được trừ (Chỉ tiêu B4) kỳ ' || rl.year_month AS VARCHAR) AS description,
+       CAST(GREATEST(rl.leg_net_debit, 0) AS DECIMAL(18, 2)) AS debit_amount,
+       CAST(GREATEST(-rl.leg_net_debit, 0) AS DECIMAL(18, 2)) AS credit_amount,
+       CAST(rl.leg_net_debit AS DECIMAL(18, 2)) AS net_debit,
+       CAST('CLOSING' AS VARCHAR) AS source_document_type,
+       CAST('KC-B4-' || rl.year_month AS VARCHAR) AS source_document_no,
+       CAST('CLOSING' AS VARCHAR) AS source_module,
+       TRUE AS is_closing,
+       TRUE AS tax_deductible,
+       CAST('CIT_B4_CLOSING_ALIGNMENT' AS VARCHAR) AS tax_note,
+       cm.close_by AS created_by,
+       cm.close_at AS created_at
+FROM raw_legs rl
+JOIN closed_months cm USING (year_month)
+CROSS JOIN max_id
+ORDER BY cm.posting_date, entry_id;
+-- Tax view (TT133/200 & Tờ khai 03/TNDN Chỉ tiêu B4):
+-- Preserves double-entry balance (SUM(debit) == SUM(credit)) and real cash/AR/AP balances while
+-- reclassifying statutory non-deductible expenses & non-creditable input VAT into equity bridge 4219.
+CREATE OR REPLACE VIEW v_tax AS
+SELECT w.entry_id,
+       w.journal_id,
+       w.entry_no,
+       w.posting_date,
+       w.period_key,
+       w.year_month,
+       w.year_no,
+       w.quarter_no,
+       w.month_no,
+       CASE
+           WHEN COALESCE(w.tax_deductible, TRUE) OR COALESCE(w.is_closing, FALSE) OR w.source_module = 'OPENING'
+               THEN w.account_code
+           ELSE '4219'
+       END AS account_code,
+       CASE
+           WHEN COALESCE(w.tax_deductible, TRUE) OR COALESCE(w.is_closing, FALSE) OR w.source_module = 'OPENING'
+               THEN w.account_name
+           ELSE 'Điều chỉnh chi phí không được trừ & GTGT không khấu trừ (Chỉ tiêu B4 - 03/TNDN)'
+       END AS account_name,
+       CASE
+           WHEN COALESCE(w.tax_deductible, TRUE) OR COALESCE(w.is_closing, FALSE) OR w.source_module = 'OPENING'
+               THEN w.account_type
+           ELSE 'EQUITY'
+       END AS account_type,
+       w.partner_code,
+       w.partner_name,
+       w.partner_type,
+       w.segment,
+       CASE
+           WHEN COALESCE(w.tax_deductible, TRUE) OR COALESCE(w.is_closing, FALSE) OR w.source_module = 'OPENING'
+               THEN w.item_code
+           ELSE NULL
+       END AS item_code,
+       CASE
+           WHEN COALESCE(w.tax_deductible, TRUE) OR COALESCE(w.is_closing, FALSE) OR w.source_module = 'OPENING'
+               THEN w.item_name
+           ELSE NULL
+       END AS item_name,
+       CASE
+           WHEN COALESCE(w.tax_deductible, TRUE) OR COALESCE(w.is_closing, FALSE) OR w.source_module = 'OPENING'
+               THEN w.product_line
+           ELSE NULL
+       END AS product_line,
+       CASE
+           WHEN COALESCE(w.tax_deductible, TRUE) OR COALESCE(w.is_closing, FALSE) OR w.source_module = 'OPENING'
+               THEN w.cost_category
+           ELSE NULL
+       END AS cost_category,
+       w.branch_code,
+       w.department_code,
+       w.employee_code,
+       w.employee_name,
+       w.description,
+       w.debit_amount,
+       w.credit_amount,
+       w.net_debit,
+       w.source_document_type,
+       w.source_document_no,
+       w.source_module,
+       w.is_closing,
+       w.tax_deductible,
+       w.tax_note,
+       w.created_by,
+       w.created_at
+FROM gl_wide w
+WHERE w.journal_id NOT IN (SELECT journal_id FROM gl_mgmt_only_journal)
+UNION ALL
+SELECT * FROM gl_tax_b4_closing;
 """
 
 
@@ -693,6 +883,12 @@ def _validate(con: duckdb.DuckDBPyConnection, quiet: bool = False) -> dict:
         "ap_bills": q("SELECT COUNT(*) FROM ap_bill"),
         "unbalanced_journals": q(
             "SELECT COUNT(*) FROM (SELECT journal_id FROM gl_entry GROUP BY 1 HAVING SUM(debit_amount) <> SUM(credit_amount))"
+        ),
+        "unbalanced_journals_v_mgmt": q(
+            "SELECT COUNT(*) FROM (SELECT journal_id FROM v_mgmt GROUP BY 1 HAVING SUM(debit_amount) <> SUM(credit_amount))"
+        ),
+        "unbalanced_journals_v_tax": q(
+            "SELECT COUNT(*) FROM (SELECT journal_id FROM v_tax GROUP BY 1 HAVING SUM(debit_amount) <> SUM(credit_amount))"
         ),
         "revenue_2025": float(
             q(

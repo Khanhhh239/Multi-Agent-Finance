@@ -115,6 +115,24 @@ class SemanticValidator:
                 raise PlanRejected("invalid_filter", "Bộ lọc between cần đúng hai giá trị.")
             if item.operator not in {"eq", "neq", "in"}:
                 raise PlanRejected("unsupported_filter", "Toán tử bộ lọc chưa được hỗ trợ.")
+            if any(item.field not in m.group_bys for m in metrics):
+                raise PlanRejected(
+                    "unsupported_filter",
+                    f"Chỉ số đã chọn chưa hỗ trợ lọc theo {item.field}.",
+                )
+            for m in metrics:
+                if m.kind == "custom":
+                    allowed_custom = {
+                        "payroll_summary": {"branch", "department"},
+                        "ar_aging": {"customer"},
+                        "overdue_receivables": {"customer"},
+                        "top_sales_transactions": {"customer"},
+                    }.get(m.id, set())
+                    if item.field not in allowed_custom:
+                        raise PlanRejected(
+                            "unsupported_filter",
+                            f"Chỉ số {m.label} chưa hỗ trợ lọc theo {item.field}.",
+                        )
 
         periods = {m.period_type for m in metrics}
         if len(periods) != 1:

@@ -101,18 +101,37 @@ def path_of(value, default):
     return p if p.is_absolute() else (ROOT / p)
 
 
+_FILE_IO_LOCK = threading.RLock()
+
+
 def read_json(path, default):
     try:
-        return json.loads(Path(path).read_text(encoding='utf-8'))
+        with _FILE_IO_LOCK:
+            raw = Path(path).read_text(encoding='utf-8')
+        return json.loads(raw)
     except (OSError, ValueError):
         return default
 
 
 def write_json(path, data):
     path = Path(path)
-    tmp = path.with_suffix('.tmp')
-    tmp.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding='utf-8')
-    tmp.replace(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.parent / f'{path.name}.{os.getpid()}.{uuid.uuid4().hex}.tmp'
+    payload = json.dumps(data, ensure_ascii=False, indent=1)
+    try:
+        tmp.write_text(payload, encoding='utf-8')
+        for attempt in range(8):
+            try:
+                with _FILE_IO_LOCK:
+                    os.replace(tmp, path)
+                break
+            except PermissionError:
+                if os.name != 'nt' or attempt == 7:
+                    raise
+                time.sleep(0.005 * (attempt + 1))
+    except Exception:
+        tmp.unlink(missing_ok=True)
+        raise
 
 
 
@@ -266,9 +285,13 @@ def launch_spec(aid):
         # Governed pipeline (metric selection, planner, compiled SQL, read-only DuckDB). Demo mode gives the two server-owned
         # synthetic personas; the old text2sql slice stays in the repo but is no longer started here.
         cmd = ['-m', 'uvicorn', 'agent4.api:create_demo_app', '--factory', '--host', HOST, '--port', str(port)]
+        sel_cfg = (os.environ.get('AGENT4_SELECTION_CONFIG')
+                   or os.environ.get('AGENT4_METRIC_SELECTION_CONFIG')
+                   or 'config/eval_governed_lexical.yaml')
         env.update(AGENT4_DEMO_MODE='1', AGENT4_DEMO_TOKEN=AGENT4_TOKEN,
-                   AGENT4_SELECTION_CONFIG='config/eval_governed_lexical.yaml',
-                   AGENT4_LLM_MODEL='qwen3:4b-instruct-2507-q4_K_M')
+                   AGENT4_SELECTION_CONFIG=sel_cfg,
+                   AGENT4_METRIC_SELECTION_CONFIG=sel_cfg,
+                   AGENT4_LLM_MODEL=os.environ.get('AGENT4_LLM_MODEL', 'qwen3:4b-instruct-2507-q4_K_M'))
         for db_candidate in (
             WORK / 'datasets/enterprise-x10-v3-full/warehouse.duckdb',
             WORK / 'datasets/enterprise-x10-v3-candidate02/warehouse.duckdb',
@@ -281,6 +304,12 @@ def launch_spec(aid):
                 break
     env.update({k: str(path_of(v, v)) if k.endswith(('_DIR', '_STORE', 'WORKSPACES', '_PATH', '_DB', '_FILE')) else str(v)
                 for k, v in agent_cfg(aid).get('env', {}).items()})
+    if aid == 'agent4':
+        cfg_env = agent_cfg('agent4').get('env', {})
+        if 'AGENT4_SELECTION_CONFIG' in cfg_env and 'AGENT4_METRIC_SELECTION_CONFIG' not in cfg_env:
+            env['AGENT4_METRIC_SELECTION_CONFIG'] = env['AGENT4_SELECTION_CONFIG']
+        elif 'AGENT4_METRIC_SELECTION_CONFIG' in cfg_env and 'AGENT4_SELECTION_CONFIG' not in cfg_env:
+            env['AGENT4_SELECTION_CONFIG'] = env['AGENT4_METRIC_SELECTION_CONFIG']
     if aid == 'agent4' and env.get('AGENT4_DB_PATH') and not Path(env['AGENT4_DB_PATH']).is_file():
         for db_candidate in (
             WORK / 'datasets/enterprise-x10-v3-full/warehouse.duckdb',
@@ -438,6 +467,15 @@ def stop_agent(aid):
         except subprocess.TimeoutExpired:
             proc.kill()
         return agent_state(aid)
+
+
+def restart_agent(aid):
+    with LOCK:
+        try:
+            stop_agent(aid)
+        except ValueError:
+            pass
+        return start_agent(aid)
 
 
 def stop_all():
@@ -729,50 +767,61 @@ def unlock(password):
 
 
 def _sync_sessions_to_disk():
-    sec = read_json(SECURITY_FILE, None)
-    if isinstance(sec, dict):
-        now = time.time()
-        sec['sessions'] = {k: v for k, v in SESSIONS.items() if v > now}
-        write_json(SECURITY_FILE, sec)
+    with LOCK:
+        sec = read_json(SECURITY_FILE, None)
+        if isinstance(sec, dict):
+            now = time.time()
+            sec['sessions'] = {k: v for k, v in SESSIONS.items() if v > now}
+            write_json(SECURITY_FILE, sec)
 
 
 def new_session():
-    token = secrets.token_urlsafe(24)
-    SESSIONS[token] = time.time() + SESSION_TTL
-    _sync_sessions_to_disk()
-    return token
+    with LOCK:
+        token = secrets.token_urlsafe(24)
+        SESSIONS[token] = time.time() + SESSION_TTL
+        _sync_sessions_to_disk()
+        return token
 
 
 def lock_session(token):
-    SESSIONS.pop(token, None)
-    _sync_sessions_to_disk()
+    with LOCK:
+        existed = SESSIONS.pop(token, None) is not None
+        _sync_sessions_to_disk()
+        return existed
 
 
 def session_left(token, touch=True):
     if not token:
         return 0
-    now = time.time()
-    until = SESSIONS.get(token)
-    if until is None:
-        sec = read_json(SECURITY_FILE, None)
-        if isinstance(sec, dict) and isinstance(sec.get('sessions'), dict):
-            disk_until = sec['sessions'].get(token)
-            if isinstance(disk_until, (int, float)) and disk_until > now:
-                until = float(disk_until)
-                SESSIONS[token] = until
-    if until is None or until < now:
-        if token in SESSIONS:
-            SESSIONS.pop(token, None)
+    with LOCK:
+        now = time.time()
+        until = SESSIONS.get(token)
+        if until is None:
+            sec = read_json(SECURITY_FILE, None)
+            if isinstance(sec, dict) and isinstance(sec.get('sessions'), dict):
+                disk_until = sec['sessions'].get(token)
+                if isinstance(disk_until, (int, float)) and not isinstance(disk_until, bool) and math.isfinite(disk_until) and disk_until > now:
+                    until = float(disk_until)
+                    SESSIONS[token] = until
+        if until is None or until < now:
+            if token in SESSIONS:
+                SESSIONS.pop(token, None)
+                _sync_sessions_to_disk()
+            return 0
+        if touch:
+            SESSIONS[token] = now + SESSION_TTL
+            until = SESSIONS[token]
             _sync_sessions_to_disk()
-        return 0
-    if touch:
-        SESSIONS[token] = now + SESSION_TTL
-        until = SESSIONS[token]
-        _sync_sessions_to_disk()
-    return int(until - now)
+        return int(until - now)
 
 
 BIOMETRIC_CHALLENGES: dict[str, float] = {}
+FACE_DIM = 128
+FACE_THRESHOLD = 0.48
+FACE_INTERFRAME_MAX_DIST = 0.48
+FACE_MIN_NORM = 1e-6
+FACE_MAX_NORM = 1e4
+FACE_MAX_FRAMES = 16
 
 
 def b64_decode(data: str) -> bytes:
@@ -791,7 +840,68 @@ def has_biometric() -> bool:
     if not configured():
         return False
     sec = read_json(SECURITY_FILE, {})
-    return bool(sec and (sec.get('ai_face_descriptor') or sec.get('biometric')))
+    if not isinstance(sec, dict):
+        return False
+    return bool(sec.get('ai_face_descriptor') or sec.get('biometric') or sec.get('face_users'))
+
+
+def _validate_single_descriptor(vec) -> list[float]:
+    if not isinstance(vec, (list, tuple)) or len(vec) != FACE_DIM:
+        raise ValueError(f'Vector đặc trưng khuôn mặt không hợp lệ (cần {FACE_DIM} chiều).')
+    out: list[float] = []
+    for x in vec:
+        if isinstance(x, bool) or not isinstance(x, (int, float)):
+            raise ValueError('Vector đặc trưng khuôn mặt chứa kiểu dữ liệu không hợp lệ.')
+        xf = float(x)
+        if not math.isfinite(xf):
+            raise ValueError('Vector đặc trưng khuôn mặt chứa giá trị không hữu hạn (NaN/Inf).')
+        out.append(xf)
+    norm = math.hypot(*out)
+    if not (math.isfinite(norm) and FACE_MIN_NORM < norm < FACE_MAX_NORM):
+        raise ValueError('Chuẩn L2 của vector khuôn mặt nằm ngoài ngưỡng hợp lệ.')
+    return out
+
+
+def _euclidean_distance(vec_a: list[float], vec_b: list[float]) -> float:
+    return math.hypot(*(a - b for a, b in zip(vec_a, vec_b)))
+
+
+def _resolve_face_descriptor(descriptor=None, descriptors=None) -> tuple[list[float], int]:
+    """Validate single or multi-frame 128-D descriptors, enforce inter-frame consistency, and average."""
+    frames_raw = None
+    single_raw = None
+    if descriptors is not None and descriptors != []:
+        frames_raw = descriptors
+        if descriptor is not None and descriptor != []:
+            single_raw = descriptor
+    elif isinstance(descriptor, (list, tuple)) and descriptor and isinstance(descriptor[0], (list, tuple)):
+        frames_raw = descriptor
+    else:
+        single_raw = descriptor
+
+    if frames_raw is not None:
+        if not isinstance(frames_raw, (list, tuple)) or not (1 <= len(frames_raw) <= FACE_MAX_FRAMES):
+            raise ValueError(f'Danh sách khung hình khuôn mặt cần từ 1 đến {FACE_MAX_FRAMES} mẫu.')
+        frames = [_validate_single_descriptor(f) for f in frames_raw]
+        if len(frames) > 1:
+            for i in range(len(frames)):
+                for j in range(i + 1, len(frames)):
+                    d = _euclidean_distance(frames[i], frames[j])
+                    if not (math.isfinite(d) and d <= FACE_INTERFRAME_MAX_DIST):
+                        raise ValueError('Các khung hình khuôn mặt không đồng nhất (chuyển động bất thường hoặc đổi khuôn mặt).')
+            avg = [sum(f[col] for f in frames) / len(frames) for col in range(FACE_DIM)]
+            result = _validate_single_descriptor(avg)
+        else:
+            result = frames[0]
+        if single_raw is not None:
+            single_vec = _validate_single_descriptor(single_raw)
+            d_single = _euclidean_distance(result, single_vec)
+            if not (math.isfinite(d_single) and d_single <= FACE_INTERFRAME_MAX_DIST):
+                raise ValueError('Vector khuôn mặt đại diện không khớp các khung hình đã quét.')
+        return result, len(frames)
+
+    vec = _validate_single_descriptor(single_raw)
+    return vec, 1
 
 
 def create_biometric_challenge() -> str:
@@ -868,51 +978,145 @@ def register_biometric(credential_id: str, public_key_der_b64: str = '', attesta
     audit('biometric_registered', dict(credential_id=credential_id[:16] + '...'))
 
 
-def save_face_descriptor(descriptor: list[float]):
+def save_face_descriptor(descriptor=None, *, descriptors=None):
     if not configured():
         raise ValueError('Chưa đặt mật khẩu nạp dữ liệu.')
-    if not isinstance(descriptor, list) or len(descriptor) != 128:
-        raise ValueError('Vector đặc trưng khuôn mặt không hợp lệ (cần 128 chiều).')
+    vec, frame_count = _resolve_face_descriptor(descriptor, descriptors)
+    with LOCK:
+        sec = read_json(SECURITY_FILE, {})
+        sec['ai_face_descriptor'] = vec
+        sec['ai_face_enrolled_at'] = time.strftime('%Y-%m-%d %H:%M:%S')
+        sec['ai_face_frames'] = frame_count
+        write_json(SECURITY_FILE, sec)
+    audit('ai_face_enrolled', {'frames': frame_count})
+
+
+def list_face_users() -> list[dict]:
     sec = read_json(SECURITY_FILE, {})
-    sec['ai_face_descriptor'] = [float(x) for x in descriptor]
-    sec['ai_face_enrolled_at'] = time.strftime('%Y-%m-%d %H:%M:%S')
-    write_json(SECURITY_FILE, sec)
-    audit('ai_face_enrolled', {})
+    if not isinstance(sec, dict):
+        return []
+    users = []
+    for u in (sec.get('face_users') or []):
+        if isinstance(u, dict) and u.get('id'):
+            users.append({
+                'id': u['id'],
+                'name': u.get('name', 'Quản trị viên'),
+                'role': u.get('role', 'admin'),
+                'enrolled_at': u.get('enrolled_at', ''),
+                'frames': u.get('frames', 1),
+            })
+    if not users and sec.get('ai_face_descriptor'):
+        users.append({
+            'id': 'primary',
+            'name': 'Quản trị viên',
+            'role': 'admin',
+            'enrolled_at': sec.get('ai_face_enrolled_at', ''),
+            'frames': sec.get('ai_face_frames', 1),
+        })
+    return users
 
 
-def verify_face_descriptor(probe_descriptor: list[float], threshold: float = 0.55) -> str:
+def add_face_user(name: str, role: str = 'admin', descriptor=None, descriptors=None) -> dict:
+    clean_name = str(name or 'Quản trị viên').strip()[:120] or 'Quản trị viên'
+    clean_role = str(role or 'admin').strip()[:64] or 'admin'
+    vec, frame_count = _resolve_face_descriptor(descriptor, descriptors)
+    uid = uuid.uuid4().hex[:12]
+    enrolled_at = time.strftime('%Y-%m-%d %H:%M:%S')
+    entry = dict(id=uid, name=clean_name, role=clean_role, descriptor=vec, enrolled_at=enrolled_at, frames=frame_count)
+    with LOCK:
+        sec = read_json(SECURITY_FILE, {})
+        if not isinstance(sec, dict):
+            sec = {}
+        users = [u for u in (sec.get('face_users') or []) if isinstance(u, dict) and u.get('id')]
+        users.append(entry)
+        sec['face_users'] = users
+        if not sec.get('ai_face_descriptor'):
+            sec['ai_face_descriptor'] = vec
+            sec['ai_face_enrolled_at'] = enrolled_at
+            sec['ai_face_frames'] = frame_count
+        write_json(SECURITY_FILE, sec)
+    audit('ai_face_user_added', {'user_id': uid, 'name': clean_name, 'frames': frame_count})
+    return {k: entry[k] for k in ('id', 'name', 'role', 'enrolled_at', 'frames')}
+
+
+def delete_face_user(user_id: str) -> bool:
+    uid = str(user_id or '').strip()
+    if not uid:
+        raise ValueError('Thiếu mã người dùng FaceID.')
+    with LOCK:
+        sec = read_json(SECURITY_FILE, None)
+        if not isinstance(sec, dict):
+            return False
+        if uid == 'primary' and not sec.get('face_users') and sec.get('ai_face_descriptor'):
+            sec.pop('ai_face_descriptor', None)
+            sec.pop('ai_face_enrolled_at', None)
+            sec.pop('ai_face_frames', None)
+            write_json(SECURITY_FILE, sec)
+            audit('biometric_removed', {'user_id': 'primary'})
+            return True
+        before = [u for u in (sec.get('face_users') or []) if isinstance(u, dict)]
+        after = [u for u in before if u.get('id') != uid]
+        if len(after) == len(before):
+            raise KeyError('Không tìm thấy người dùng FaceID.')
+        sec['face_users'] = after
+        if not after:
+            sec.pop('face_users', None)
+            sec.pop('ai_face_descriptor', None)
+            sec.pop('ai_face_enrolled_at', None)
+            sec.pop('ai_face_frames', None)
+        else:
+            sec['ai_face_descriptor'] = after[0]['descriptor']
+        write_json(SECURITY_FILE, sec)
+    audit('ai_face_user_removed', {'user_id': uid})
+    return True
+
+
+def verify_face_descriptor(probe_descriptor=None, threshold: float = FACE_THRESHOLD, *, descriptors=None) -> str:
     now = time.time()
     if FAILS['until'] > now:
         raise ValueError(f'Nhập sai nhiều lần. Thử lại sau {int(FAILS["until"] - now) + 1} giây.')
+    if isinstance(threshold, bool) or not isinstance(threshold, (int, float)) or not math.isfinite(threshold) or not (0.0 < float(threshold) <= 1.0):
+        raise ValueError('Ngưỡng đối sánh sinh trắc học không hợp lệ.')
     sec = read_json(SECURITY_FILE, None)
-    if not sec or not sec.get('ai_face_descriptor'):
+    if not isinstance(sec, dict):
         raise ValueError('Chưa đăng ký khuôn mặt FaceID.')
-    if not isinstance(probe_descriptor, list) or len(probe_descriptor) != 128:
-        raise ValueError('Dữ liệu quét khuôn mặt không hợp lệ.')
+    candidates: list[list[float]] = []
+    if sec.get('ai_face_descriptor'):
+        candidates.append(_validate_single_descriptor(sec['ai_face_descriptor']))
+    for u in (sec.get('face_users') or []):
+        if isinstance(u, dict) and u.get('descriptor'):
+            candidates.append(_validate_single_descriptor(u['descriptor']))
+    if not candidates:
+        raise ValueError('Chưa đăng ký khuôn mặt FaceID.')
 
-    enrolled = sec['ai_face_descriptor']
-    # Calculate Euclidean distance
-    dist = math.sqrt(sum((float(a) - float(b)) ** 2 for a, b in zip(enrolled, probe_descriptor)))
-    if dist > threshold:
-        FAILS['n'] += 1
-        audit('ai_face_unlock_failed', {'dist': round(dist, 4), 'n': FAILS['n']})
-        if FAILS['n'] >= 5:
-            FAILS.update(n=0, until=now + 60)
+    probe_vec, frame_count = _resolve_face_descriptor(probe_descriptor, descriptors)
+    dist = min(_euclidean_distance(enrolled, probe_vec) for enrolled in candidates)
+    if not (math.isfinite(dist) and dist <= float(threshold)):
+        with LOCK:
+            FAILS['n'] += 1
+            n_fails = FAILS['n']
+            if n_fails >= 5:
+                FAILS.update(n=0, until=now + 60)
+        audit('ai_face_unlock_failed', {'dist': round(dist, 4) if math.isfinite(dist) else 'invalid', 'n': n_fails})
         raise ValueError(f'Khuôn mặt không khớp (độ sai biệt: {dist:.2f} > {threshold}).')
 
-    FAILS.update(n=0, until=0.0)
-    audit('ai_face_unlock', {'dist': round(dist, 4)})
+    with LOCK:
+        FAILS.update(n=0, until=0.0)
+    audit('ai_face_unlock', {'dist': round(dist, 4), 'frames': frame_count})
     return new_session()
 
 
 def remove_biometric():
-    sec = read_json(SECURITY_FILE, None)
-    if sec:
-        sec.pop('biometric', None)
-        sec.pop('ai_face_descriptor', None)
-        sec.pop('ai_face_enrolled_at', None)
-        write_json(SECURITY_FILE, sec)
-        audit('biometric_removed', {})
+    with LOCK:
+        sec = read_json(SECURITY_FILE, None)
+        if sec:
+            sec.pop('biometric', None)
+            sec.pop('ai_face_descriptor', None)
+            sec.pop('ai_face_enrolled_at', None)
+            sec.pop('ai_face_frames', None)
+            sec.pop('face_users', None)
+            write_json(SECURITY_FILE, sec)
+    audit('biometric_removed', {})
 
 
 def verify_biometric(credential_id: str, client_data_b64: str, auth_data_b64: str, signature_b64: str) -> str:
@@ -1098,9 +1302,17 @@ def period_of(name, raw, kind):
         days = []
         if ext in ('.csv', '.txt') and kind != 'unknown':
             text = raw.decode('utf-8-sig', 'replace')
-            lines = text.splitlines()
-            delimiter = max((',', ';', '\t'), key=lines[0].count)
-            rows = csv.reader(lines, delimiter=delimiter)
+            buf = io.StringIO(text, newline='')
+            first_line = ''
+            while candidate := buf.readline():
+                if candidate.strip():
+                    first_line = candidate
+                    break
+            if not first_line:
+                return None
+            buf.seek(0)
+            delimiter = max((',', ';', '\t'), key=first_line.count)
+            rows = csv.reader(buf, delimiter=delimiter)
             header = [plain(c) for c in next(rows)]
             col = next((header.index(c) for c in DATE_COLUMNS if c in header), None)
             if col is None:
@@ -1473,10 +1685,29 @@ def commit(fids, reason=''):
 
 
 # ----------------------------------------------------------------------------------------------------------- agent 4
-def agent4_query(question):
-    body = dict(api_version='v1', question=question, locale='vi-VN', session_id=None,
-                options=dict(include_table=True, explain_metrics=True))
-    status, res = call('POST', agent_url('agent4', '/v1/query'), body, {'Authorization': f'Bearer {AGENT4_TOKEN}'}, timeout=60)
+def agent4_query(question, *, session_id=None, selected_choice_id=None, context=None, locale='vi-VN', options=None):
+    opts = dict(include_table=True, explain_metrics=True)
+    if isinstance(options, dict):
+        opts.update(options)
+    sid = str(session_id).strip() if isinstance(session_id, str) and session_id.strip() else None
+    body = dict(api_version='v1', question=question, locale=str(locale or 'vi-VN'), session_id=sid, options=opts)
+    if selected_choice_id is not None:
+        body['selected_choice_id'] = selected_choice_id
+    if context is not None:
+        body['context'] = context
+    headers = {'Authorization': f'Bearer {AGENT4_TOKEN}'}
+    status, res = call('POST', agent_url('agent4', '/v1/query'), body, headers, timeout=60)
+    if status == 400 and ('selected_choice_id' in body or 'context' in body):
+        err_obj = (res.get('error') if isinstance(res, dict) and isinstance(res.get('error'), dict) else None)
+        if err_obj is None and isinstance(res, dict) and isinstance(res.get('error'), str):
+            try:
+                err_obj = json.loads(res['error'])
+            except ValueError:
+                err_obj = None
+        if isinstance(err_obj, dict) and err_obj.get('stage') == 'query_intake' and err_obj.get('code') == 'invalid_request':
+            strict_q = str(selected_choice_id).strip()[:2000] if selected_choice_id is not None and str(selected_choice_id).strip() else question
+            strict_body = dict(api_version='v1', question=strict_q, locale=body['locale'], session_id=sid, options=opts)
+            status, res = call('POST', agent_url('agent4', '/v1/query'), strict_body, headers, timeout=60)
     if isinstance(res, dict) and 'status' in res and 'api_version' in res:
         return res          # the governed pipeline answers every outcome (refused, needs clarification, error) in one shape
     if status != 200:
@@ -1553,12 +1784,36 @@ class Handler(BaseHTTPRequestHandler):
         if self.headers.get('X-Platform') != '1':
             raise PermissionError('Thiếu tiêu đề X-Platform.')
 
+    def guard_read(self):
+        """Prevent cross-origin sites from reading sensitive GET endpoints."""
+        origin = self.headers.get('Origin')
+        if origin and origin not in ORIGINS:
+            raise PermissionError('Yêu cầu không đến từ trang portal.')
+        if self.headers.get('Sec-Fetch-Site') == 'cross-site':
+            raise PermissionError('Yêu cầu liên trang bị từ chối.')
+
     def token(self):
-        return self.headers.get('X-Session', '')
+        t = self.headers.get('X-Session', '').strip()
+        if t:
+            return t
+        auth = self.headers.get('Authorization', '').strip()
+        if auth.lower().startswith('bearer '):
+            return auth[7:].strip()
+        cookie = self.headers.get('Cookie', '')
+        if cookie:
+            m = re.search(r'(?:^|;\s*)(?:kt_session|portal_session)=([A-Za-z0-9_-]+)', cookie)
+            if m:
+                return m.group(1)
+        return ''
 
     def need_session(self):
         if not session_left(self.token()):
-            raise AuthError('Cần mở khóa nạp dữ liệu bằng mật khẩu.')
+            raise AuthError('Cần mở khóa nạp dữ liệu bằng mật khẩu hoặc FaceID.')
+
+    def require_auth_if_enrolled(self):
+        """Enforce session authentication whenever FaceID/biometric enrollment is active."""
+        if has_biometric():
+            self.need_session()
 
     def agent2_host(self):
         port = self.server.server_port
@@ -1642,12 +1897,22 @@ class Handler(BaseHTTPRequestHandler):
                                            package=package_summary(), slots=slots_state(recs), pending=recs,
                                            batches=list(reversed(current_batches()))[:30] if left else []))
             if path == '/api/intake/audit':
+                self.guard_read()
                 self.need_session()
                 return self.send(200, audit_check())
+            if path == '/api/auth/users':
+                self.guard_read()
+                if configured() or has_biometric():
+                    self.need_session()
+                return self.send(200, dict(users=list_face_users(), enrolled=has_biometric()))
             if path == '/api/agents/agent1/key':
+                self.guard_read()
+                self.require_auth_if_enrolled()
                 return self.send(200, dict(key=agent1_key()))
             m = re.fullmatch(r'/api/agents/(agent[1-4])/log', path)
             if m:
+                self.guard_read()
+                self.require_auth_if_enrolled()
                 return self.send(200, dict(log=log_tail(m.group(1))))
             if path == '/api/agent4/metrics':
                 return self.send(200, agent4_metrics())
@@ -1664,6 +1929,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.static(STATIC, path.lstrip('/') if '.' in path.rsplit('/', 1)[-1] else '')
         self.guard()
         if method == 'POST' and path == '/api/agents/agent1/connect-link':
+            self.require_auth_if_enrolled()
             body = self.json_body()
             return self.send(200, agent1_connect_link(body.get('company'), self.headers.get('Origin') or ORIGIN))
         if method == 'POST' and path == '/api/intake/setup':
@@ -1674,34 +1940,50 @@ class Handler(BaseHTTPRequestHandler):
         if method == 'POST' and path == '/api/intake/face/register':
             b = self.json_body()
             pw = str(b.get('password', ''))
-            descriptor = b.get('descriptor', [])
+            descriptor = b.get('descriptor')
+            descriptors = b.get('descriptors')
             if pw:
                 unlock(pw)
             else:
                 self.need_session()
-            save_face_descriptor(descriptor)
+            save_face_descriptor(descriptor, descriptors=descriptors)
             token = new_session()
             audit('ai_face_unlock', {'action': 'initial_registration'})
             return self.send(200, dict(ok=True, token=token))
         if method == 'POST' and path == '/api/intake/face/verify':
             b = self.json_body()
-            descriptor = b.get('descriptor', [])
-            token = verify_face_descriptor(descriptor)
+            token = verify_face_descriptor(b.get('descriptor'), descriptors=b.get('descriptors'))
             return self.send(200, dict(token=token))
         if method == 'POST' and path in ('/api/intake/face/remove', '/api/intake/biometric/remove'):
             self.need_session()
             remove_biometric()
             return self.send(200, dict(ok=True))
+        if method == 'POST' and path == '/api/auth/users':
+            b = self.json_body()
+            pw = str(b.get('password', ''))
+            if pw:
+                unlock(pw)
+            elif configured() or has_biometric():
+                self.need_session()
+            user = add_face_user(b.get('name', ''), b.get('role', 'admin'),
+                                 descriptor=b.get('descriptor'), descriptors=b.get('descriptors'))
+            return self.send(200, dict(ok=True, user=user, token=new_session()))
+        m_user = re.fullmatch(r'/api/auth/users/([A-Za-z0-9_-]{1,64})(?:/delete)?', path)
+        if m_user and method in ('DELETE', 'POST'):
+            if configured() or has_biometric():
+                self.need_session()
+            delete_face_user(m_user.group(1))
+            return self.send(200, dict(ok=True))
         if method == 'POST' and path == '/api/intake/lock':
-            lock_session(self.token())
-            audit('lock', {})
+            if lock_session(self.token()):
+                audit('lock', {})
             return self.send(200, dict(ok=True))
         if method == 'PUT' and path == '/api/company':
-            if current_batches():
+            if current_batches() or has_biometric():
                 try:
                     self.need_session()
                 except AuthError:
-                    raise AuthError('Gói dữ liệu đã niêm phong nên cấu hình bị khóa. Mở khóa ở trang Nạp dữ liệu rồi sửa.') from None
+                    raise AuthError('Hồ sơ đang được bảo vệ. Mở khóa phiên làm việc ở trang Nạp dữ liệu rồi sửa.') from None
             data, code_changed = save_company(self.json_body())
             audit('company_saved', dict(code=data['code'], tax_code=data['tax_code']))
             sync = dict(agent3=ensure_agent3_workspace() if health('agent3') else dict(state='offline', message='Agent 3 chưa bật.'))
@@ -1711,6 +1993,7 @@ class Handler(BaseHTTPRequestHandler):
                 sync['agent1'] = dict(state='ok', message='Đã khởi động lại Agent 1 với mã doanh nghiệp mới.')
             return self.send(200, dict(company=data, sync=sync))
         if method == 'POST' and path == '/api/agent3/workspace':
+            self.require_auth_if_enrolled()
             password = str(self.json_body().get('password', ''))
             if not password:
                 raise ValueError('Nhập mật khẩu quản trị Agent 3.')
@@ -1718,10 +2001,12 @@ class Handler(BaseHTTPRequestHandler):
         if method=='POST' and path=='/api/agents/agent2/recover':
             self.need_session()
             return self.send(200,start_agent('agent2'))
-        m = re.fullmatch(r'/api/agents/(agent[1-4])/(start|stop)', path)
+        m = re.fullmatch(r'/api/agents/(agent[1-4])/(start|stop|restart)', path)
         if method == 'POST' and m:
+            self.require_auth_if_enrolled()
             aid, action = m.groups()
-            return self.send(200, start_agent(aid) if action == 'start' else stop_agent(aid))
+            result = start_agent(aid) if action == 'start' else stop_agent(aid) if action == 'stop' else restart_agent(aid)
+            return self.send(200, result)
         if method == 'POST' and path == '/api/inbox':
             self.need_session()
             name = query.get('name', '')
@@ -1749,10 +2034,24 @@ class Handler(BaseHTTPRequestHandler):
             ids = [i for i in b.get('ids', []) if re.fullmatch(r'[0-9a-f]{12}', str(i))]
             return self.send(200, dict(batch=commit(ids, str(b.get('reason', '')))))
         if method == 'POST' and path == '/api/agent4/query':
-            question = str(self.json_body().get('question', '')).strip()[:2000]
+            b = self.json_body()
+            if not isinstance(b, dict):
+                raise ValueError('Nội dung truy vấn không hợp lệ.')
+            selected_choice_id = b.get('selected_choice_id')
+            raw_question = b.get('question')
+            if (raw_question is None or not str(raw_question).strip()) and selected_choice_id is not None:
+                raw_question = str(selected_choice_id)
+            question = str(raw_question or '').strip()[:2000]
             if not question:
                 raise ValueError('Nhập câu hỏi.')
-            return self.send(200, agent4_query(question))
+            return self.send(200, agent4_query(
+                question,
+                session_id=b.get('session_id'),
+                selected_choice_id=selected_choice_id,
+                context=b.get('context'),
+                locale=str(b.get('locale') or 'vi-VN'),
+                options=b.get('options') if isinstance(b.get('options'), dict) else None,
+            ))
         self.send(404, {'error': 'Không có địa chỉ này.'})
 
     def handle_one(self, method):
@@ -1788,6 +2087,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_PUT(self):
         self.handle_one('PUT')
+
+    def do_DELETE(self):
+        self.handle_one('DELETE')
 
 
 def main():

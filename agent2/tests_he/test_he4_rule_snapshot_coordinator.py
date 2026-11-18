@@ -46,6 +46,32 @@ from test_snapshots import commit_fields
 from test_validation_backend import policy_for
 
 BUILDS = Path(r'D:\agent22\.runtime\he4')
+if not (BUILDS / 'build-rules-difference-v1' / 'manifest.json').exists():
+    from experiments.he4.blob_store import BlobStore
+    _SYNTHETIC_BUILDS_TMP = tempfile.TemporaryDirectory()
+    BUILDS = Path(_SYNTHETIC_BUILDS_TMP.name)
+    for _prof, _dir_name in (
+        ('rules', 'build-rules-difference-v1'),
+        ('c3', 'build-c3-v1'),
+        ('graph', 'build-graph-difference-v1'),
+        ('statistics', 'build-statistics-v1'),
+    ):
+        _bdir = BUILDS / _dir_name
+        _bdir.mkdir(parents=True, exist_ok=True)
+        (_bdir / 'server.zip').write_bytes(f'synthetic-server-{_prof}'.encode())
+        (_bdir / 'client.specs.json').write_bytes(canonical({'profile': _prof, 'specs': 'synthetic'}))
+        (_bdir / 'manifest.json').write_bytes(
+            canonical(
+                {
+                    'version': 'he4-circuit-build/0.1.0',
+                    'profile': _prof,
+                    'files': {
+                        'server.zip': BlobStore.digest(_bdir / 'server.zip'),
+                        'client.specs.json': BlobStore.digest(_bdir / 'client.specs.json'),
+                    },
+                }
+            )
+        )
 BUILD_PATHS = {
     'rules': str(BUILDS / 'build-rules-difference-v1'),
     'c3': str(BUILDS / 'build-c3-v1'),

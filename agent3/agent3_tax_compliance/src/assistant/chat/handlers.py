@@ -161,6 +161,9 @@ def top_risks(ctx, p, q):
 
 def by_issue(ctx, p, q):
     rep = ctx.report
+    if not p.issue and '181/2025/NĐ-CP' in getattr(p, 'law_refs', ()):
+        p.issue = ['R01_PAYMENT_EVIDENCE', 'R02_SAME_DAY_CUMULATIVE']
+        p.issue_name = 'Chứng từ thanh toán không dùng tiền mặt (ngưỡng 5 triệu đồng theo Nghị định 181/2025/NĐ-CP)'
     if not p.issue:
         names = '; '.join(it['name'] for it in ctx.catalog.get('issues', []))
         return ChatAnswer('by_issue', f'Chưa xác định được loại vấn đề trong câu hỏi. Các loại có thể hỏi: {names}.', branch='HELP')
@@ -341,7 +344,8 @@ def bank_matching(ctx, p, q):
         return ChatAnswer('bank_matching', 'Chưa nạp sao kê ngân hàng nên chưa đối chiếu được thanh toán. Nạp sao kê (Excel, CSV hoặc MT940) trước.',
                           links=[('Nạp dữ liệu', '#/nap')])
     rs = load_ruleset(ctx.ruleset_path)
-    thr = Decimal(str(param(rs, 'NON_CASH_THRESHOLD', ctx.as_of)[0]))
+    p_thr = param(rs, 'NON_CASH_THRESHOLD', ctx.as_of)
+    thr = Decimal(str(p_thr[0])) if p_thr else Decimal(5_000_000)
     invs = [i for i in _invoices(rep, 'PURCHASE', p.period) if (i.gross or 0) >= thr]
     keys = {i.key for i in invs}
     matched = {k for m in rep.matches if m.status == 'MATCHED' for k in m.invoice_keys} & keys
@@ -526,7 +530,7 @@ def law_updates(ctx, p, q):
 
 def judgment(ctx, p, q):
     rs = load_ruleset(ctx.ruleset_path)
-    thr = param(rs, 'NON_CASH_THRESHOLD', ctx.as_of)
+    thr = param(rs, 'NON_CASH_THRESHOLD', ctx.as_of) or ('5000000', '')
     refs = ctx.law(q)
     ok = refs is not None and refs.mode != 'ABSTAIN'
     text = ('Câu này cần người có chuyên môn kết luận theo hồ sơ thực tế; trợ lý không kết luận được hay không được. Các điều kiện thường phải xét: '

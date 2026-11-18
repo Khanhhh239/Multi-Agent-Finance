@@ -130,14 +130,48 @@ def csv_report(report):
     return ('\ufeff'+output.getvalue()).encode('utf-8')
 
 
+def _ensure_default_snapshots():
+    import os
+    from pathlib import Path
+    from .snapshots import SnapshotStore
+    configured = os.environ.get('AGENT2_WORKSPACE_DIR')
+    ws_dir = Path(configured) if configured else (Path(__file__).resolve().parents[1] / '.runtime' / 'default-workspace')
+    ws_dir.mkdir(parents=True, exist_ok=True)
+    return SnapshotStore(ws_dir / 'snapshots-v2.sqlite3')
+
+
 def handle_workspace(handler,authorizer,snapshots,backend,reviews):
     parsed=urlsplit(handler.path);match=ROUTE.fullmatch(parsed.path)
     if not match:return False
     try:
         company,job,export=match.groups();scope,recheck=authorize_request(handler,authorizer,company)
         if parsed.query:fail(400,'QUERY_NOT_SUPPORTED','Đường dẫn không hợp lệ.','Mở lại từ màn hình làm việc.')
-        if snapshots is None or backend is None:fail(503,'WORKSPACE_NOT_CONFIGURED','Phân tích chưa được cấu hình.','Bật Agent2 từ Portal hoặc liên hệ người quản lý.')
+        if snapshots is None:
+            snapshots=_ensure_default_snapshots()
         header=handler.headers.get_all('Authorization',[None])[0]
+        if backend is None:
+            if job:
+                fail(404,'RUN_NOT_FOUND','Không tìm thấy lượt phân tích mã hóa trong không gian làm việc hiện tại.','Dùng phân tích trực tiếp trên snapshot hoặc bật cấu hình HE tùy chọn.')
+            can_manage=False
+            try:can_manage=hasattr(authorizer,'authorize_director') and authorizer.authorize_director(header,company)==scope
+            except AuthError:pass
+            raw_datasets=snapshots.list_snapshots(scope,recheck) if hasattr(snapshots,'list_snapshots') else []
+            datasets=[dict(d,is_training_source=False) for d in raw_datasets]
+            value=dict(
+                version='agent2-workspace/1.0.0',
+                company_id=company,
+                datasets=datasets,
+                available=False,
+                workspace_mode='local_canonical',
+                message='Không gian làm việc mặc định đã sẵn sàng. Có thể nhập dữ liệu, lưu snapshot và chạy phân tích luật – đồ thị – thống kê – bất thường trực tiếp.',
+                can_manage=can_manage,
+                runs=[],
+                history_limit=100,
+                summary=dict(datasets=len(datasets),completed=0,active=0,failed=0),
+            )
+            if recheck()!=scope:fail(409,'AUTH_CONTEXT_CHANGED','Quyền truy cập đã thay đổi.','Mở lại từ Portal.')
+            handler.respond(200,value,'application/json; charset=utf-8')
+            return True
         if not job:
             catalog=backend.datasets(scope,recheck);runs=saved_runs(backend.node.jobs,scope)['runs'][:100]
             training_snapshot=None

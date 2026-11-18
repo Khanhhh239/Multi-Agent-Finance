@@ -50,6 +50,11 @@ def create_app(
     sessions = ClarificationSessionStore()
     targets = dict(warehouses) if warehouses is not None else None
     catalog = MetricCatalog(canonical=True)
+    selection_config = selection_config or load_config(
+        os.getenv("AGENT4_SELECTION_CONFIG")
+        or os.getenv("AGENT4_METRIC_SELECTION_CONFIG")
+        or "config/selection.yaml"
+    )
 
     @app.get("/healthz")
     async def liveness() -> dict:
@@ -59,11 +64,6 @@ def create_app(
         demo_path = Path(os.getenv("AGENT4_DB_PATH", "data/cfo_warehouse.duckdb"))
         targets = targets if targets is not None else {}
         targets.setdefault(_DEMO_TENANT, demo_path)
-        selection_config = selection_config or load_config(
-            os.getenv("AGENT4_SELECTION_CONFIG")
-            or os.getenv("AGENT4_METRIC_SELECTION_CONFIG")
-            or "config/selection.yaml"
-        )
         demo_metrics = [metric["metric_id"] for metric in catalog.list_metrics()] + list(
             LEGACY_METRIC_IDS
         )

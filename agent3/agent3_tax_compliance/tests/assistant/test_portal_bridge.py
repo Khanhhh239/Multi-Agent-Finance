@@ -66,8 +66,8 @@ def test_shared_bank_commit_retries_with_real_managed_agent3(tmp_path, monkeypat
     spec = importlib.util.spec_from_file_location('isolated_bank_intake', module_path)
     bank_intake = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(bank_intake)
-    rows = [('TEST-001', '000012345678', '2026-10-01', 'in', '12000000', '2026-10-01', 'sales', 'Thu tiền', '000011112222', 'Đối tác'),
-            ('TEST-002', '000012345678', '2026-10-02', 'out', '8500000', '2026-10-02', 'suppliers', 'Thanh toán', '000033334444', 'Nhà cung cấp')]
+    rows = [('TEST-001', '000012345678', '2026-10-01', 'in', '12000000', '2026-10-01', 'sales', 'Thu tiền', '000011112222', 'Đối tác', '', ''),
+            ('TEST-002', '000012345678', '2026-10-02', 'out', '8500000', '2026-10-02', 'suppliers', 'Thanh toán', '000033334444', 'Nhà cung cấp', '', '')]
     pending = tmp_path / 'pending'
     pending.mkdir()
     raw = b'original bank export'
@@ -114,7 +114,7 @@ def test_shared_bank_commit_retries_with_real_managed_agent3(tmp_path, monkeypat
                shared_bank_rows=lambda rec, content: rows, check=lambda *args, **kwargs: {'state': 'ready', 'preview': 'test'},
                agent1_key=lambda: 'mock-key', call=call, agent_url=lambda aid, path: '/' + aid + path,
                write_json=write_json, audit=lambda *args: None, remove_file=removed.append, pending=lambda: [],
-               AGENT3_TOKEN=bridge.token)
+               AGENT3_TOKEN=bridge.token, AGENT1_IMPORT_TIMEOUT=120)
     isolated_function('ensure_agent3_workspace', env)
     commit = isolated_function('commit', env)
     first = commit(['test'])

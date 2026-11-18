@@ -86,6 +86,106 @@ _RANGE_PAIR = re.compile(r"\s+(?:and|và|with|với|vs\.?|versus)\s+")
 _SHARED_YEAR_START = re.compile(rf"\bfrom (?P<month>{_MONTH_NAMES})\.? (?:to|through)\s+$")
 _MONTH_LIST = re.compile(r"\s*\(tháng (\d{1,2}(?:,\s*\d{1,2})+)\)")
 _GRAIN_ORDER = ("day", "month", "quarter", "year")
+_RELATIVE_PERIOD = re.compile(
+    rf"(?<![\w/.-])(?:"
+    rf"(?P<ytd>(?:lũy kế )?(?:từ )?đầu năm(?: nay)? đến nay|ytd|year[- ]to[- ]date)"
+    rf"|(?P<qtd>(?:từ )?đầu quý(?: này)? đến nay|qtd|quarter[- ]to[- ]date)"
+    rf"|(?P<mtd>(?:từ )?đầu tháng(?: này)? đến nay|mtd|month[- ]to[- ]date)"
+    rf"|(?P<rel_first_months>(?:{_COUNT}) tháng đầu năm(?:\s+nay)?(?!\s+{_YEAR}))"
+    rf"|(?P<rel_half>(?:(?:6|sáu) tháng (?:đầu|cuối)(?: năm)?(?:\s+nay)?|nửa (?:đầu|cuối) năm(?:\s+nay)?)(?!\s+{_YEAR}))"
+    rf"|(?P<same_period_month>tháng\s*(?:1[0-2]|0?[1-9])\s+cùng kỳ(?:\s+năm\s+(?:ngoái|trước))?)"
+    rf"|(?P<same_period_quarter>quý\s*[1-4]\s+cùng kỳ(?:\s+năm\s+(?:ngoái|trước))?)"
+    rf"|(?P<this_month>tháng này)"
+    rf"|(?P<last_month>tháng trước)"
+    rf"|(?P<this_quarter>quý này)"
+    rf"|(?P<last_quarter>quý trước)"
+    rf"|(?P<this_year>năm nay)"
+    rf"|(?P<last_year>năm ngoái|năm trước)"
+    rf"|(?P<same_period>cùng kỳ(?:\s+năm\s+(?:ngoái|trước))?)"
+    r")(?![\w/-]|\.\d)"
+)
+
+
+def _coerce_reference_date(reference_date: date | str | None) -> date | None:
+    if reference_date is None:
+        return None
+    if isinstance(reference_date, date):
+        return reference_date
+    if isinstance(reference_date, str) and reference_date.strip():
+        return date.fromisoformat(reference_date.strip()[:10])
+    raise ValueError("Invalid reference_date")
+
+
+def _relative_period(kind: str, text: str, ref: date) -> tuple[TimeDraft, bool]:
+    """Return (TimeDraft, caps_snapshot_at_ref)."""
+    y, m = ref.year, ref.month
+    q = (m - 1) // 3 + 1
+    if kind == "ytd":
+        return TimeDraft.range(date(y, 1, 1), ref, "month"), True
+    if kind == "qtd":
+        return TimeDraft.range(date(y, 3 * q - 2, 1), ref, "month"), True
+    if kind == "mtd":
+        return TimeDraft.range(date(y, m, 1), ref, "day"), True
+    if kind == "rel_first_months":
+        head = text.split(" tháng", 1)[0].strip()
+        end_m = _MONTH_COUNTS[head] if head in _MONTH_COUNTS else int(re.findall(r"\d+", head)[0])
+        if not 1 <= end_m <= 12:
+            raise ValueError("Invalid month count")
+        end = date(y, end_m, monthrange(y, end_m)[1])
+        return TimeDraft.range(date(y, 1, 1), end, "month"), False
+    if kind == "rel_half":
+        second = "cuối" in text
+        start_m, end_m = (7, 12) if second else (1, 6)
+        end = date(y, end_m, monthrange(y, end_m)[1])
+        return TimeDraft.range(date(y, start_m, 1), end, "month"), False
+    if kind == "same_period_month":
+        target_m = int(re.findall(r"\d+", text)[0])
+        prev_y = y - 1
+        return (
+            TimeDraft.range(
+                date(prev_y, target_m, 1),
+                date(prev_y, target_m, monthrange(prev_y, target_m)[1]),
+                "month",
+            ),
+            False,
+        )
+    if kind == "same_period_quarter":
+        target_q = int(re.findall(r"\d+", text)[0])
+        prev_y = y - 1
+        end_m = 3 * target_q
+        return (
+            TimeDraft.range(
+                date(prev_y, 3 * target_q - 2, 1),
+                date(prev_y, end_m, monthrange(prev_y, end_m)[1]),
+                "quarter",
+            ),
+            False,
+        )
+    if kind == "this_month":
+        end = date(y, m, monthrange(y, m)[1])
+        return TimeDraft.range(date(y, m, 1), end, "month"), True
+    if kind == "last_month":
+        py, pm = (y - 1, 12) if m == 1 else (y, m - 1)
+        end = date(py, pm, monthrange(py, pm)[1])
+        return TimeDraft.range(date(py, pm, 1), end, "month"), False
+    if kind == "this_quarter":
+        end_m = 3 * q
+        end = date(y, end_m, monthrange(y, end_m)[1])
+        return TimeDraft.range(date(y, 3 * q - 2, 1), end, "quarter"), True
+    if kind == "last_quarter":
+        py, pq = (y - 1, 4) if q == 1 else (y, q - 1)
+        end_m = 3 * pq
+        end = date(py, end_m, monthrange(py, end_m)[1])
+        return TimeDraft.range(date(py, 3 * pq - 2, 1), end, "quarter"), False
+    if kind == "this_year":
+        return TimeDraft.range(date(y, 1, 1), date(y, 12, 31), "year"), True
+    if kind == "last_year":
+        py = y - 1
+        return TimeDraft.range(date(py, 1, 1), date(py, 12, 31), "year"), False
+    # same_period (bare "cùng kỳ" / "cùng kỳ năm ngoái")
+    py = y - 1
+    end = date(py, m, monthrange(py, m)[1])
+    return TimeDraft.range(date(py, m, 1), end, "month"), False
 
 
 def _calendar_year_question(question: str) -> str:
@@ -202,10 +302,14 @@ def _month_list(parent: TimeDraft, text: str) -> TimeDraft:
     return TimeDraft.range(first, last, "month")
 
 
-def _parse_time(question: str, locale: str, period_type: str | None) -> TimeDraft:
+def _parse_time(
+    question: str,
+    locale: str,
+    period_type: str | None,
+    reference_date: date | None = None,
+) -> TimeDraft:
     question = _calendar_year_question(question)
-    periods = []
-    spans = []
+    entries: list[tuple[int, int, TimeDraft, bool, bool]] = []
     snapshot_cue = False
     for match in _PERIOD.finditer(question):
         kind, value = match.lastgroup, match[0]
@@ -236,8 +340,21 @@ def _parse_time(question: str, locale: str, period_type: str | None) -> TimeDraf
             if parsed.mode == "none":
                 return parsed
             end = months.end()
-        periods.append(parsed)
-        spans.append((start, end))
+        entries.append((start, end, parsed, False, False))
+
+    if reference_date is not None:
+        for match in _RELATIVE_PERIOD.finditer(question):
+            start, end = match.span()
+            if any(start < ex_end and ex_start < end for ex_start, ex_end, _, _, _ in entries):
+                continue
+            before = question[:start]
+            snapshot_cue |= bool(_AS_OF.search(before))
+            parsed, caps_at_ref = _relative_period(match.lastgroup, match[0], reference_date)
+            entries.append((start, end, parsed, True, caps_at_ref))
+
+    entries.sort(key=lambda item: item[0])
+    periods = [item[2] for item in entries]
+    spans = [(item[0], item[1]) for item in entries]
 
     remainder = question
     for start, end in reversed(spans):
@@ -245,8 +362,22 @@ def _parse_time(question: str, locale: str, period_type: str | None) -> TimeDraf
     if not periods or _INCOMPLETE_PERIOD.search(remainder):
         return TimeDraft.none()
     if period_type == "snapshot" or (
-        period_type is None and (snapshot_cue or any(item.grain == "day" for item in periods))
+        period_type is None
+        and (
+            snapshot_cue
+            or any(item.grain == "day" and not is_rel for _, _, item, is_rel, _ in entries)
+        )
     ):
+        if len(entries) == 1 and entries[0][3] and reference_date is not None:
+            s_idx, _, rel_period, _, caps_at_ref = entries[0]
+            prefix = question[:s_idx]
+            if _YEAR_START.search(prefix) and rel_period.grain == "year":
+                return TimeDraft.as_of_date(rel_period.start)
+            if _PERIOD_END.search(prefix):
+                return TimeDraft.as_of_date(rel_period.end)
+            if caps_at_ref:
+                return TimeDraft.as_of_date(min(rel_period.end, reference_date))
+            return TimeDraft.as_of_date(rel_period.end)
         return _snapshot(question, periods, spans)
     if snapshot_cue or (len(periods) == 1 and _YEAR_START.search(question[: spans[0][0]])):
         return TimeDraft.none()
@@ -254,12 +385,17 @@ def _parse_time(question: str, locale: str, period_type: str | None) -> TimeDraf
 
 
 def parse_time_slot(
-    question: str, *, locale: str = "vi-VN", period_type: str | None = None
+    question: str,
+    *,
+    locale: str = "vi-VN",
+    period_type: str | None = None,
+    reference_date: date | str | None = None,
 ) -> dict[str, Any]:
     """Return a canonical time object or mode 'none' for unresolved time."""
     question = " ".join(question.casefold().split())
     try:
-        parsed = _parse_time(question, locale, period_type)
+        ref = _coerce_reference_date(reference_date)
+        parsed = _parse_time(question, locale, period_type, ref)
     except ValueError:
         parsed = TimeDraft.none()
     return parsed.model_dump(mode="json")

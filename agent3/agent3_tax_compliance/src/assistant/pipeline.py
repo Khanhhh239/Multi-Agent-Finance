@@ -55,18 +55,18 @@ def analysis_signature(ws, ruleset_path, as_of):
     return h.hexdigest()
 
 
-
-
 def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
     periods = sorted({(i.issue_date.year, i.issue_date.month) for i in invoices if i.issue_date})
     out = []
     if pack.filing_period == 'MONTH':
-        day, basis = param(ruleset, 'VAT_RETURN_DUE_MONTHLY_DAY', as_of)
+        m_due = param(ruleset, 'VAT_RETURN_DUE_MONTHLY_DAY', as_of)
+        day, basis = (int(m_due[0]), m_due[1]) if m_due else (20, '')
         for y, m in periods:
             ny, nm = (y + 1, 1) if m == 12 else (y, m + 1)
-            out.append(dict(period=f'Tháng {m:02d}/{y}', due=date(ny, nm, int(day)), basis=basis))
+            out.append(dict(period=f'Tháng {m:02d}/{y}', due=date(ny, nm, day), basis=basis))
     else:
-        _, basis = param(ruleset, 'VAT_RETURN_DUE_QUARTERLY', as_of)
+        q_due = param(ruleset, 'VAT_RETURN_DUE_QUARTERLY', as_of)
+        basis = q_due[1] if q_due else ''
         for y, q in sorted({(y, (m - 1) // 3 + 1) for y, m in periods}):
             ny, first = (y + 1, 1) if q == 4 else (y, q * 3 + 1)
             out.append(dict(period=f'Quý {q}/{y}', due=date(ny, first, cal.monthrange(ny, first)[1]), basis=basis))
@@ -75,8 +75,8 @@ def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
     for e, (y, m) in zip(out, periods if pack.filing_period == 'MONTH' else sorted({(y, (m - 1) // 3 + 1) for y, m in periods})):
         e.update(obligation='VAT', period_key=f'{y}-{m:02d}' if pack.filing_period == 'MONTH' else f'{y}-Q{m}')
     # Corporate income tax: quarterly provisional payment and the annual finalization (calendar-year fiscal period assumed).
-    prov = param(ruleset, 'CIT_PROVISIONAL_DUE', as_of) if 'CIT_PROVISIONAL_DUE' in ruleset['parameters'] else None
-    fin = param(ruleset, 'CIT_FINALIZATION_DUE', as_of) if 'CIT_FINALIZATION_DUE' in ruleset['parameters'] else None
+    prov = param(ruleset, 'CIT_PROVISIONAL_DUE', as_of) if 'CIT_PROVISIONAL_DUE' in ruleset.get('parameters', {}) else None
+    fin = param(ruleset, 'CIT_FINALIZATION_DUE', as_of) if 'CIT_FINALIZATION_DUE' in ruleset.get('parameters', {}) else None
     if prov:
         for y, q in sorted({(y, (m - 1) // 3 + 1) for y, m in periods}):
             ny, first = (y + 1, 1) if q == 4 else (y, q * 3 + 1)
@@ -94,7 +94,7 @@ def filing_calendar(pack, invoices, ruleset, as_of: date) -> list[dict]:
             dy, dm = (y + (dm - 1) // 12, (dm - 1) % 12 + 1)
             label = f'năm {y}' if fy_end == 12 else f'năm tài chính kết thúc {last:%d/%m/%Y}'
             out.append(dict(period=f'Quyết toán thuế TNDN {label}', due=date(dy, dm, cal.monthrange(dy, dm)[1]), basis=fin[1], obligation='CIT_FINAL', period_key=f'FY-{y}-{fy_end:02d}'))
-    shift = param(ruleset, 'DEADLINE_DAY_OFF_SHIFT', as_of) if 'DEADLINE_DAY_OFF_SHIFT' in ruleset['parameters'] else None
+    shift = param(ruleset, 'DEADLINE_DAY_OFF_SHIFT', as_of) if 'DEADLINE_DAY_OFF_SHIFT' in ruleset.get('parameters', {}) else None
     from .catalog import days_off
     fixed_off, dated_off = days_off()                     # shared holiday catalog (admin page), plus the enterprise's own days off
     extra_days_off = dated_off | {date.fromisoformat(d) for d in getattr(pack, 'days_off', ())}
@@ -190,8 +190,8 @@ def run(workspace: Path, ruleset_path: Path = DEFAULT_RULESET, as_of: date | Non
     ruleset = load_ruleset(ruleset_path)
     decisions = load_decisions(ws / 'decisions.json')
     decisions.update(extra_decisions or {})
-    purchases, bad1 = read_invoices(ws / 'invoices' / 'purchase', 'PURCHASE', as_of)
-    sales, bad2 = read_invoices(ws / 'invoices' / 'sales', 'SALE', as_of)
+    purchases, bad1 = read_invoices(ws / 'invoices' / 'purchase', 'PURCHASE', as_of, simulated=pack.simulated)
+    sales, bad2 = read_invoices(ws / 'invoices' / 'sales', 'SALE', as_of, simulated=pack.simulated)
     invoices = purchases + sales
     txns = []
     for p in sorted((ws / 'bank').glob('*')) if (ws / 'bank').exists() else []:
@@ -213,6 +213,7 @@ def run(workspace: Path, ruleset_path: Path = DEFAULT_RULESET, as_of: date | Non
     items.sort(key=lambda it: (STATUS_ORDER[it.status], -it.amount, it.code, it.invoice_keys))
     dates = [i.issue_date for i in invoices if i.issue_date]
     meta = dict(workspace=ws.name, company=pack.legal_name, tax_code=pack.tax_code, simulated=pack.simulated, as_of=as_of,
+                cert_policy='SIMULATED_SELF_SIGNED' if pack.simulated else 'STRICT_PRODUCTION',
                 schema_version=2, report_revision=analysis_signature(ws, ruleset_path, as_of),
                 analysis_signature=analysis_signature(ws, ruleset_path, as_of), filing_period=pack.filing_period, vat_method=pack.vat_method,
                 not_claimed_keys=[k for k, d in decisions.items() if (d.get('_scopes', {}).get('deduction') or d).get('action') == 'NOT_CLAIMED'],

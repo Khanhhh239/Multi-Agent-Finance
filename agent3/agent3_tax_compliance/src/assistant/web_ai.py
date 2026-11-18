@@ -301,7 +301,7 @@ async def risk_list(wid: str, name: str, as_of: str, request: Request, source: s
     except ValueError:
         raise HTTPException(422, 'ngày của danh sách không hợp lệ (YYYY-MM-DD)')
     text = (await request.body()).decode('utf-8-sig', 'replace')
-    found = list(dict.fromkeys(re.findall(r'(?<!\d)(\d{10}(?:-\d{3})?)(?!\d)', text)))
+    found = list(dict.fromkeys(re.findall(r'(?<!\d)(\d{10}-\d{3}|\d{13}|\d{12}|\d{10})(?!\d)', text)))
     good = [t for t in found if mst_checksum_ok(t)]
     if not good:
         raise HTTPException(422, 'không thấy mã số thuế hợp lệ nào trong tệp')
@@ -352,9 +352,12 @@ async def decisions_bulk(wid: str, request: Request):
     return await _web.save_decisions(wid, request)
 
 
-def _remember_confirmed(ws: Path, keys: list, action: str):
-    """C3: a line a reviewer confirmed as business use is not flagged by the AI again, on any invoice."""
+def _remember_confirmed(ws: Path, keys: list, action: str, finding_codes: list[str] | None = None):
+    """C3: a line a reviewer confirmed as business use on R12* is not flagged by the AI again, on any invoice.
+    Never whitelists items from statutory hard rules (R01, R02, R04, R07, R08)."""
     if action != 'CONFIRMED_OK':
+        return
+    if finding_codes is not None and not all(str(c).startswith('R12') for c in finding_codes):
         return
     labels = _read(ws / 'ai' / 'line_labels.json', {})
     lines = {h['line'] for k in keys for h in ai_mod.flagged(labels.get(k, {}).get('labels', []))}

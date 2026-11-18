@@ -9,11 +9,14 @@ import tempfile
 import time
 
 import numpy as np
-import tenseal as ts
+try:
+    import tenseal as ts
+except ImportError:  # pragma: no cover - optional wheel on Windows Python 3.12+
+    ts = None
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from .enterprise import EnterpriseSession
-from .protocol import (ABS_TOLERANCE, REL_TOLERANCE, canonical, public_hex,
+from .protocol import (ABS_TOLERANCE, HEUnavailable, REL_TOLERANCE, canonical, public_hex,
                        sha, unb64, MAX_CONTEXT, MAX_CIPHER)
 
 
@@ -56,6 +59,8 @@ def worker_process(packet, policy, key, folder):
 
 
 def run(output):
+    if ts is None:
+        raise HEUnavailable('tenseal_unavailable')
     output = Path(output)
     if output.exists() and any(output.iterdir()):
         raise ValueError('Use a new empty output directory')

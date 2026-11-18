@@ -15,7 +15,7 @@ from . import CONTRACT_VERSION
 from ._thang.allocation import Config
 from ._thang.constrained import allocate
 from ._thang.data import fingerprint, iso_date
-from ._thang.matching import normalize
+from ._thang.matching import DEFAULT_FEE_TOLERANCE_VND, normalize, resolve_counterparty
 from .ledger import DecisionLedger
 
 
@@ -322,7 +322,8 @@ class ObservedSource:
             view[kind]=frame
         return view
 
-    def propose(self, cutoff, *, max_age_days=3650):
+    def propose(self, cutoff, *, max_age_days=3650, fee_tolerance_vnd=DEFAULT_FEE_TOLERANCE_VND,
+                strict_same_day_equal_amount=True):
         view = self.view(cutoff)
         invoices = view['invoices'].to_dict('records')
         customers = self.task_records(cutoff)['customers']
@@ -330,16 +331,24 @@ class ObservedSource:
         for customer in customers:
             if customer.get('available_on', '0001-01-01') > day(cutoff):
                 continue
-            name_ids.setdefault(normalize(customer.get('short', '')), set()).add(customer['customer_id'])
+            for field in ('short', 'name'):
+                if customer.get(field):
+                    name_ids.setdefault(normalize(customer[field]), set()).add(customer['customer_id'])
+        for r in invoices:
+            for field in ('buyer_name', 'customer_name'):
+                if r.get(field) and pd.notna(r.get(field)):
+                    name_ids.setdefault(normalize(str(r[field])), set()).add(r['customer_id'])
         used = view['links'].groupby('txn_id').amount_minor.sum().to_dict() if len(view['links']) else {}
         inv = [dict(tenant_id=self.firm, id=r['invoice_id'], invoice_number=str(r['invoice_no']),
                     party_id=r['customer_id'], side='AR', currency='VND', amount_minor=r['amount_open_minor'],
-                    issued_on=day(r['issue_date'])) for r in invoices if r['amount_open_minor'] > 0]
+                    issued_on=day(r['issue_date']),
+                    **({'due_on': day(r['due_date'])} if r.get('due_date') is not None and pd.notna(r.get('due_date')) else {}))
+               for r in invoices if r['amount_open_minor'] > 0]
         payments, ignored = [], []
         for row in view['bank']:
             tid = row['txn_id']
             if row.get('direction', 'in') != 'in' or row.get('cash_flow_class') in NON_AR:
-                ignored.append(dict(payment_id=tid, status='unmatched', reason='non_ar_bank_movement'))
+                ignored.append(dict(payment_id=tid, status='unmatched', reason='non_ar_bank_movement', fee_minor=0))
                 continue
             amount = money(row) - int(used.get(tid, 0))
             if amount < 0:
@@ -347,13 +356,14 @@ class ObservedSource:
             if amount == 0:
                 continue
             party = row.get('customer_id', '')
-            exact_names = name_ids.get(normalize(row.get('counterparty', '')), set())
-            if not party and len(exact_names) == 1:
-                party = next(iter(exact_names))
+            if not party:
+                party = resolve_counterparty(str(row.get('counterparty', '')), str(row.get('memo', '')), name_ids)
             payments.append(dict(tenant_id=self.firm, id=tid, side='AR', party_id=party,
                                  currency='VND', amount_minor=amount, payment_on=day(row['value_date']),
                                  reference=str(row.get('memo', '')), **({'remittance': row['remittance']} if 'remittance' in row else {})))
-        result = allocate(inv, payments, Config(max_age_days=max_age_days))
+        result = allocate(inv, payments, Config(max_age_days=max_age_days,
+                                                fee_tolerance_vnd=fee_tolerance_vnd,
+                                                strict_same_day_equal_amount=strict_same_day_equal_amount))
         result['decisions'].extend(ignored)
         result.update(snapshot_hash=view['snapshot_hash'], cutoff=day(cutoff), contract_version=CONTRACT_VERSION)
         return result

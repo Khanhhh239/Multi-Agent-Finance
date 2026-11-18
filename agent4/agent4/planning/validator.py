@@ -380,7 +380,9 @@ def _validate_compatibility(
             continue
         if item.field == "partner_code":
             codes = (item.value,) if isinstance(item.value, str) else item.value
-            required = {"vendor" if code.startswith("NCC-") else "customer" for code in codes}
+            required = {
+                "vendor" if code.startswith(("NCC-", "V")) else "customer" for code in codes
+            }
             if required <= common_dimensions:
                 continue
         raise _unsupported("unsupported_metric", "Plan filter is incompatible with a metric.")
