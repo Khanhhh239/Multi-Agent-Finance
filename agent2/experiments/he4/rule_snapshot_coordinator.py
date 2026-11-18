@@ -142,7 +142,8 @@ def _row_evidence_refs(tx: dict | None, visible_txs: dict[str, dict], tables: di
 
     for doc in tables.get('transaction_documents', []):
         if doc.get('transaction_id') == tx['transaction_id'] and doc.get('observed_at', '') <= cutoff:
-            add('transaction_documents', doc['document_id'], doc['observed_at'])
+            doc_id = str(doc.get('document_id') or doc.get('record_id') or digest(canonical(doc)))
+            add('transaction_documents', doc_id, doc['observed_at'])
 
     visible_vendors = sorted(
         (
@@ -192,11 +193,13 @@ def _row_evidence_refs(tx: dict | None, visible_txs: dict[str, dict], tables: di
         elif not cov:
             for cov_row in tables.get('approval_authority_coverage', []):
                 if cov_row.get('company_id') == cid and cov_row.get('observed_at', '') <= auth_time:
-                    add('approval_authority_coverage', cov_row['coverage_id'], cov_row['observed_at'])
+                    cid_ref = str(cov_row.get('coverage_id') or cov_row.get('record_id') or digest(canonical(cov_row)))
+                    add('approval_authority_coverage', cid_ref, cov_row['observed_at'])
         approver = latest_staff.get(tx.get('approver_id', ''))
         if approver:
             for _, rule_rec in _metadata_authority_candidates(authority, tx, tx.get('approver_id', ''), approver, auth_time):
-                add('approval_authorities', rule_rec['authority_id'], rule_rec['observed_at'])
+                aid_ref = str(rule_rec.get('authority_id') or rule_rec.get('record_id') or digest(canonical(rule_rec)))
+                add('approval_authorities', aid_ref, rule_rec['observed_at'])
 
     return [dict(table=t, record_id=rid, observed_at=obs) for t, rid, obs in refs]
 

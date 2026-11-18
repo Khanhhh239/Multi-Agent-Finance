@@ -55,7 +55,7 @@ from sme_fraud.bundle_release_acceptance import (
     commit_snapshot,
     make_auth_policy_file,
 )
-from sme_fraud.case_queue_policy import default_fixture_policy as default_cq_policy
+from sme_fraud.case_queue_policy import approved_pilot_policy, default_fixture_policy as default_cq_policy
 from sme_fraud.case_queue_store import CaseQueueStore
 from sme_fraud.he_workbench import HEWorkbench
 from sme_fraud.import_files import canonical, digest
@@ -88,12 +88,13 @@ def _sha256(path: Path) -> str:
 
 
 def _live_demo_4_specs(company: str) -> list[dict]:
-    """Compact 4-candidate snapshot (2026-W45) runnable quickly in BOTH Local Shadow and Real Concrete FHE."""
+    """Compact 5-candidate snapshot (2026-W45) runnable quickly in BOTH Local and Real Concrete FHE (P1, A6, C2, B1 + 2-col RobustZ)."""
     return [
         {"id": f"{company}_DEMO_01_P1A", "pattern": "p1_pair_a", "day_offset": 1, "hour_offset": 9, "inv": f"INV_{company}_LIVE_P1"},
         {"id": f"{company}_DEMO_02_P1B", "pattern": "p1_pair_b", "day_offset": 1, "hour_offset": 14, "inv": f"INV_{company}_LIVE_P1"},
-        {"id": f"{company}_DEMO_03_B1", "pattern": "b1_bank", "day_offset": 2, "hour_offset": 10},
-        {"id": f"{company}_DEMO_04_ML", "pattern": "ml_outlier_high", "day_offset": 3, "hour_offset": 11, "amount": 95_400_000, "imbalance": 12_500_000},
+        {"id": f"{company}_DEMO_03_A6", "pattern": "a6_rounded", "day_offset": 2, "hour_offset": 9},
+        {"id": f"{company}_DEMO_04_C2", "pattern": "c2_self", "day_offset": 2, "hour_offset": 14, "amount": 16_000_000},
+        {"id": f"{company}_DEMO_05_B1", "pattern": "b1_bank", "day_offset": 3, "hour_offset": 10},
     ]
 
 
@@ -235,13 +236,19 @@ def sync_live_runtime(*, allow_running: bool = False) -> dict:
             for company, ml_method in COMPANY_METHODS.items():
                 scope_dir = op_auth.authorize_director(dir_header, company)
 
-                # Fit split (Jul 2 - Aug 24)
+                # Fit split (Jul 2 - Aug 24) with realistic spread (1M..45M) so 2-col RobustZ stays inside 15-bit Concrete FHE domain
                 fit_as_of = datetime(2026, 8, 24, 23, 59, 59, tzinfo=TZ)
-                fit_raw, _ = _build_split_snapshot(company, f"SYNCFIT_{stamp}", datetime(2026, 7, 2, 10, 0, tzinfo=TZ), fit_as_of, [])
+                fit_scale = 3 if company == "C002" else 1
+                fit_spread = [
+                    {"id": f"{company}_SFIT_SP_{i:02d}", "pattern": "clean", "day_offset": 1 + (i * 3) % 35, "amount": (2_500_000 + i * 3_800_000) * fit_scale}
+                    for i in range(1, 11)
+                ]
+                fit_raw, _ = _build_split_snapshot(company, f"SYNCFIT_{stamp}", datetime(2026, 7, 2, 10, 0, tzinfo=TZ), fit_as_of, fit_spread)
+                # Keep all fit rows as history/reference before evaluation_start
                 fit_man = commit_snapshot(snapshots, scope_dir, fit_raw, f"sync-fit-{company}-{stamp}")
 
                 def _fcfg(m: str) -> dict:
-                    return dict(
+                    base_cfg = dict(
                         fit_config(fit_man["snapshot_id"], m),
                         minimum_history=10,
                         history_end="2026-08-15T23:59:59+07:00",
@@ -249,6 +256,12 @@ def sync_live_runtime(*, allow_running: bool = False) -> dict:
                         reference_end=fit_as_of.isoformat(),
                         evaluation_start="2026-08-25T00:00:00+07:00",
                     )
+                    if m == "robust_z":
+                        base_cfg.update(
+                            missing_policy="strict",
+                            selected_columns=["log_abs_amount", "round_million"],
+                        )
+                    return base_cfg
 
                 rz_job = run_fit_job(snapshots, models, op_auth, dir_header, company, _fcfg("robust_z"), f"sync-rz-{company}-{stamp}")
                 ml_job = run_fit_job(snapshots, models, op_auth, dir_header, company, _fcfg(ml_method), f"sync-{ml_method}-{company}-{stamp}")
@@ -474,7 +487,12 @@ def sync_live_runtime(*, allow_running: bool = False) -> dict:
                                 "labels_blinded_before_lock": True,
                             }
                         )
-                        verif_dict = {"company_id": company, "records": {}}
+                        k1_records = {}
+                        for sp in ev1_specs:
+                            pat = sp.get("pattern", "clean")
+                            is_pos = pat in ("p1_pair_a", "p1_pair_b", "c2_self", "a6_rounded", "b1_bank", "b2_contact", "e2_term_payroll", "ml_outlier_high")
+                            k1_records[(sp["id"], 1)] = {"outcome": "verified_fraud" if is_pos else "verified_non_fraud", "company_id": company}
+                        verif_dict = {"company_id": company, "records": k1_records}
                     split_bundles[sname] = {
                         "rows": s_rows,
                         "groups": s_groups,
@@ -594,8 +612,24 @@ def sync_live_runtime(*, allow_running: bool = False) -> dict:
                     fallback_order=["fb_missing_unsup_rules_only_v1", "fb_incompatible_contract_v1"],
                     label_packets=None,
                 )
+                pilot_pkg = make_package(
+                    scope_dir,
+                    model_selection={"version": BINDINGS_VERSION, **comp_bind},
+                    contract=fc_now,
+                    plan=plan,
+                    snapshot_manifests=manifests,
+                    model_artifacts=model_pins,
+                    references=refs_map,
+                    split_bundles=split_bundles,
+                    case_policy=approved_pilot_policy(),
+                    ml_candidate_min_score=0.55,
+                    fallback_order=["fb_missing_unsup_rules_only_v1", "fb_incompatible_contract_v1"],
+                    label_packets=None,
+                    pilot_governance=True,
+                )
                 per_company_prep[company] = {
                     "package": pkg,
+                    "pilot_package": pilot_pkg,
                     "k1_man": ev1_man,
                     "k1_as_of": ev1_end.isoformat(),
                     "demo_man": demo_man,
@@ -676,6 +710,42 @@ def sync_live_runtime(*, allow_running: bool = False) -> dict:
                     f"sync-sw-he-{company}-{stamp}",
                 )
 
+                # Bundle 3: Owner-Approved Pilot Active (D-04..D-07 + Pilot D-09, Local + Cloud HE) on 'production' lane!
+                prod_rev = release_store.current(scope_dir, "production")["revision"]
+                reg_pilot = release_svc.register_plan(scope_dir, info["pilot_package"], f"sync-pilot-plan-{company}-{stamp}")
+                assert reg_pilot["production_ready"] is True, reg_pilot
+                b_pilot = release_svc.prepare(
+                    scope_dir,
+                    info["demo_man"]["snapshot_id"],
+                    f"Pilot Active Local + Cloud HE ({company})",
+                    f"sync-prep-pilot-{company}-{stamp}",
+                    plan_id=reg_pilot["plan_id"],
+                    execution_mode="cloud_ciphertext_only",
+                )
+                g_pilot = release_svc.qualify(scope_dir, b_pilot["bundle_id"], "production", key=f"sync-qual-pilot-{company}-{stamp}")
+                assert g_pilot["production_ready"] is True and g_pilot["technical_ready"] is True, g_pilot
+                a_pilot = release_svc.approve(
+                    scope_dir,
+                    b_pilot["bundle_id"],
+                    g_pilot["gate_id"],
+                    "production",
+                    f"Owner-approved Pilot Active (D-04..D-07, Pilot D-09) sync {stamp}",
+                    key=f"sync-appr-pilot-{company}-{stamp}",
+                )
+                sw_pilot = release_svc.switch(
+                    scope_dir,
+                    {
+                        "bundle_id": b_pilot["bundle_id"],
+                        "gate_id": g_pilot["gate_id"],
+                        "approval_id": a_pilot["approval_id"],
+                        "lane": "production",
+                        "expected_revision": prod_rev,
+                        "reason": f"Activate Owner-approved Pilot Active bundle {stamp}",
+                        "action": "activate",
+                    },
+                    f"sync-sw-pilot-{company}-{stamp}",
+                )
+
                 # Execute one ready-to-browse shadow run on K1 (2026-W43), leaving top K_LIVE_DEMO (2026-W45) fresh!
                 init_run_id = f"{company.lower()}-staging-ready-{stamp.lower()}"
                 obs = release_svc.run(
@@ -688,19 +758,23 @@ def sync_live_runtime(*, allow_running: bool = False) -> dict:
                     require_case_profile=True,
                 )
                 ws_list = release_svc.workspace.list_runs(scope_dir)
-                assert ws_list["can_run"] is True and "cloud_ciphertext_only" in ws_list["execution_modes"], ws_list
+                assert ws_list["can_run"] is True and ws_list["can_run_active"] is True and "cloud_ciphertext_only" in ws_list["execution_modes"], ws_list
 
                 company_summary[company] = {
                     "statistics_artifact_id": info["binding"]["statistics_artifact_id"],
                     "ml_artifacts": info["binding"]["ml_artifacts"],
                     "plan_id": reg["plan_id"],
+                    "pilot_plan_id": reg_pilot["plan_id"],
                     "local_bundle_id": b_local["bundle_id"],
                     "active_he_bundle_id": b_he["bundle_id"],
+                    "active_pilot_production_bundle_id": b_pilot["bundle_id"],
                     "staging_revision": sw_he["revision"],
+                    "production_revision": sw_pilot["revision"],
                     "top_demo_snapshot_id": info["demo_man"]["snapshot_id"],
                     "k1_snapshot_id": info["k1_man"]["snapshot_id"],
                     "initial_ready_run_id": init_run_id,
                     "initial_admitted_cases": obs["result"]["pipeline"]["queue"]["counts"]["queued_or_reserved"],
+                    "available_lanes": ws_list["available_lanes"],
                     "execution_modes": ws_list["execution_modes"],
                     "he_provisioned_now": provisioned_profiles[company],
                     "he_previously_provisioned": existing_profiles[company],

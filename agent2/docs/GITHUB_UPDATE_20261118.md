@@ -18,3 +18,19 @@ Development snapshot on `platform-Khanh`, based on `40ac9b80bae38cbe19fc3369972d
 - Staged whitespace and scope checks pass. Runtime databases, models, secret/evaluation keys and test ciphertext are excluded.
 
 Earlier HE reports remain historical evidence for their recorded versions/profiles. They do not prove acceptance of these new extensions, full 35-rule/33-feature HE, fraud-detection effectiveness or production readiness.
+
+
+## Follow-up after fdb9b9d (2026-11-18)
+
+Latest source updates include HE evidence reference identifiers, C2 adapter behavior, suppression metadata, extended regression scenarios, runtime sync tooling and related documentation. No runtime sync or live deployment is executed by this publication.
+
+Scoped regression rerun: 13/15 pass, 2 failures, 0 errors. Receipt: `../../Agent2_Spec_v2_1/evidence/R6/github_update_20261118/latest_tests.json`. These tests use synthetic circuit transport; they do not certify native FHE performance or full-catalogue support.
+
+Open checks:
+
+- `test_cloud_dispatch_to_common_queue_review_and_replay_no_clear_executor (test_bundle_he.BundleHETests.test_cloud_dispatch_to_common_queue_review_and_replay_no_clear_executor)`
+- `test_extended_he_covers_a6_c2_and_2col_robust_z_statistics (test_bundle_he.BundleHETests.test_extended_he_covers_a6_c2_and_2col_robust_z_statistics)`
+
+This remains a development snapshot, not an accepted production release.
+
+Python compilation, staged whitespace and publication scope checks pass. The previous 145-test receipt remains historical; the full suite was not rerun for this follow-up.

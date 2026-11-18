@@ -144,7 +144,7 @@ def adapt(scope,manifest,data,values,result):
                     hard_trigger=code in ('P1','C2') or bool(check.get('hard_trigger')),suppressed_reason=None,
                     evidence=deepcopy(check),related_transaction_ids=[])]
             entries.append(dict(rule_id=code,name=name,status=status,available=ready,matched=check.get('matched') if ready else None,
-                score=check.get('score') if ready else None,hits=hits,
+                score=check.get('score') if ready else None,hits=hits,suppressed_by=check.get('suppressed_by') if check else None,
                 reason=check.get('reason') if known and check else 'transaction_not_known_at_cutoff' if not known else 'he_rule_unsupported',
                 gaps=deepcopy(check.get('gaps',[])) if check else [],scope_result_ref=code if code in SCOPE_RULES else None))
         p1=row['groups']['p1']

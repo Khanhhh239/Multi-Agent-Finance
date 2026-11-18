@@ -457,34 +457,22 @@ def plan_c2_from_rule_snapshot(
             continue
 
         employee = authority.employee_at(company_id, maker, at)
-        if coverage is None:
-            if enforce_source_guards:
-                rows_plan.append(
-                    dict(
-                        record_id=cid,
-                        transaction_id=cid,
-                        available=False,
-                        status='unavailable',
-                        reason='authority_not_covered_or_ambiguous_at_action',
-                        requests=[],
-                    )
+        if not employee or employee.get('company_id') != company_id:
+            rows_plan.append(
+                dict(
+                    record_id=cid,
+                    transaction_id=cid,
+                    available=False,
+                    status='unavailable',
+                    reason='authority_not_covered_or_ambiguous_at_action',
+                    requests=[],
                 )
-                continue
+            )
+            continue
+        if coverage is None:
             mode_legacy = 1
             candidates = []
         else:
-            if not employee or employee.get('company_id') != company_id:
-                rows_plan.append(
-                    dict(
-                        record_id=cid,
-                        transaction_id=cid,
-                        available=False,
-                        status='unavailable',
-                        reason='authority_not_covered_or_ambiguous_at_action',
-                        requests=[],
-                    )
-                )
-                continue
             mode_legacy = 0
             candidates = _metadata_self_approval_candidates(authority, tx, maker, employee, at)
 

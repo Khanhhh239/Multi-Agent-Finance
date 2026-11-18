@@ -4,7 +4,7 @@ Luồng mới nối bộ điều phối chung với `FourJobs` và worker Concre
 
 **Snapshot đã khóa → lập đầu vào tại DN → mã hóa tại DN → worker tính bản mã
 → nhận bản mã → giải mã tại DN → áp chính sách bundle → gộp vụ → xét ngân sách
-→ hàng đợi shadow → phiếu rà → báo cáo.**
+→ hàng đợi shadow / Pilot Active → phiếu rà → báo cáo.**
 
 Dữ liệu rõ, khóa bí mật, xử lý nguồn, giải mã và nghiệp vụ sau giải mã ở node
 doanh nghiệp. Cloud worker chỉ nhận bản mã, evaluation key công khai và metadata
@@ -12,17 +12,20 @@ giao thức (định tuyến DN, build, phiên, nonce, checksum, chữ ký). Vi�
 cấp ngân sách và lưu phiếu **không chạy trên cloud**. Không có fallback chấm rõ
 cho yêu cầu `cloud_ciphertext_only`.
 
-## Phạm vi hiện nối
+## Phạm vi hiện nối (`bundle-he4-native/1.1.0`)
 
 | Phần | Trạng thái trong bundle HE native |
 | --- | --- |
-| P1 | Mạch thanh toán hóa đơn hiện có, gồm đối chiếu khoản riêng và nhóm đồng thời |
-| C3 | Mạch thời gian phê duyệt/thẩm quyền hiện có |
-| B1 | Mạch định danh NCC/nhân viên hiện có |
-| B5/E4 | Mạch liên kết định danh, giữ vai trò chất lượng master; không cộng đôi điểm giao dịch |
-| 30 luật còn lại | `unavailable`; D1–D6/F4 ở kết quả cấp tập nguồn, không giả thành cảnh báo từng giao dịch |
-| Thống kê/ML contract 33 feature | `unavailable`; không lấy model ECOD/RobustZ local hoặc model canonical khác để giả là HE native |
-| Chính sách/gộp vụ/ngân sách/phiếu/báo cáo | Chạy tại DN sau giải mã, dùng chính sách đã ghim, chỉ hàng đợi shadow |
+| P1 | Mạch thanh toán hóa đơn (`build-rules-v1`), gồm đối chiếu khoản riêng và nhóm đồng thời |
+| A6 | Mạch làm tròn vượt hóa đơn gốc kết hợp `build-rules-v1` (`amount > gross + 1` + `excess_vnd`) và `build-c3-v1` (`gross % 1000 != 0` & `amount % 1000 == 0`) |
+| C2 | Mạch tự duyệt vượt quyền được cấp (`build-c3-v1`): kiểm tra `self_approved`, khớp dải thẩm quyền `self_approve` theo thứ tự ưu tiên đặc thù, phát hiện xung đột, `self_approval_allowed` và `amount > self_approval_limit_vnd` |
+| C3 | Mạch thời gian phê duyệt dưới 60 giây ở cấp thẩm quyền cao (`build-c3-v1`) |
+| B1 | Mạch định danh NCC/nhân viên (`build-graph-v1`) |
+| B5/E4 | Mạch liên kết định danh (`build-graph-v1`), giữ vai trò chất lượng master; không cộng đôi điểm giao dịch |
+| Nhánh thống kê (`statistics`) | Mạch `RobustZ` 2 cột (`build-statistics-v1`, lượng tử 15-bit `STAT_QUANTUM=1024`, `abs/clip/sum`) khi model `robust_z` ghim trên contract `rule-snapshot-point-in-time/1.0.0` có đúng 2 biến đầu ra; quy đổi phân vị thực nghiệm (`empirical_rank`) tại DN sau giải mã |
+| 28 luật còn lại | `unavailable`; D1–D6/F4 ở kết quả cấp tập nguồn, không giả thành cảnh báo từng giao dịch |
+| ML không nhãn / có nhãn 33 feature | `unavailable`; không lấy model ECOD/IF local hoặc model canonical khác để giả là HE native |
+| Chính sách/gộp vụ/ngân sách/phiếu/báo cáo | Chạy tại DN sau giải mã, dùng chính sách đã ghim (hàng đợi `shadow` cho lane `staging`, hoặc `active_queue` kèm cảnh báo nguồn mô phỏng cho lane `production` đã đạt quản trị Pilot `D-04..D-09`) |
 
 Mỗi phần còn phụ thuộc nguồn, thời điểm, miền số và khóa đã cấp. Giữ các giới
 hạn của mạch hiện có (ví dụ tổng P1 tối đa 4 dòng, đồ thị tối đa 4 đối tượng);

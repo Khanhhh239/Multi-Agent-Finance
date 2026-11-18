@@ -250,22 +250,28 @@ class BundleHETests(unittest.TestCase):
         pkg=deepcopy(release_support.ShadowPlanTests.packages['C001'])
         pkg['model_selection']['statistics_artifact_id']=rz_job['job']['artifact_id']
 
-        # 2. Build evaluation snapshot with A6 hit, A6 non-rounded no-hit, C2 hit, and C2 suppressed by C3
+        # 2. Build evaluation snapshot with A6 hit, A6 non-rounded no-hit, C2 hit, C2 permitted (suppressed), and C3 fast-approval hit
         ev_start=datetime(2028,9,2,9,0,tzinfo=TZ);ev_end=datetime(2028,9,10,23,59,59,tzinfo=TZ)
         specs=[
             dict(id='HE_A6_HIT',pattern='a6_rounded',day_offset=1,hour_offset=9),
             dict(id='HE_A6_NOHIT',pattern='clean',day_offset=1,hour_offset=11,amount=7_500_125),
             dict(id='HE_C2_HIT',pattern='c2_self',day_offset=2,hour_offset=10,amount=16_000_000),
-            dict(id='HE_C2_SUPP_C3',pattern='c2_self',day_offset=3,hour_offset=10,amount=16_000_000),
+            dict(id='HE_C2_PERM',pattern='c2_self',day_offset=3,hour_offset=10,amount=500_000),
+            dict(id='HE_C3_HIT',pattern='clean',day_offset=4,hour_offset=10,amount=55_000_000),
         ]
         ev_raw,_=_build_split_snapshot('C001','HE4_EXT_EVAL',ev_start,ev_end,specs)
-        # Adjust HE_A6_NOHIT invoice gross (non-round) and HE_C2_SUPP_C3 approved_at < created_at (C3 pre-approval)
+        for cov_rec in ev_raw['source']['tables'].get('approval_authority_coverage',[]):
+            cov_rec['covered_through']='2029-12-31'
+        for auth_rec in ev_raw['source']['tables'].get('approval_authorities',[]):
+            auth_rec['effective_to']='2029-12-31'
+        director_id=next(e['employee_id'] for e in ev_raw['source']['tables']['employees'] if e.get('role')=='director')
         for tx in ev_raw['source']['tables']['transactions']:
             if tx['transaction_id']=='HE_A6_NOHIT':
                 tx['invoice_gross_vnd']=7_489_123
-            elif tx['transaction_id']=='HE_C2_SUPP_C3':
-                tx['created_at']='2028-09-05T10:30:00+07:00'
-                tx['approved_at']='2028-09-05T10:10:00+07:00'
+            elif tx['transaction_id']=='HE_C3_HIT':
+                tx['approver_id']=director_id
+                tx['created_at']='2028-09-06T10:10:00+07:00'
+                tx['approved_at']='2028-09-06T10:10:15+07:00'
         for doc in ev_raw['source']['tables']['transaction_documents']:
             if doc['transaction_id']=='HE_A6_NOHIT':
                 doc['invoice_gross_vnd']=7_489_123
@@ -293,22 +299,30 @@ class BundleHETests(unittest.TestCase):
         self.assertTrue(he_res['execution']['cloud_branches']['statistics']['available'])
         he_by_id={r['transaction_id']:r for r in he_res['rows']}
 
-        # Verify A6 & C2 exact parity with clear 35-rule engine + 2-col RobustZ statistics availability and rank parity
-        for tid in ('HE_A6_HIT','HE_A6_NOHIT','HE_C2_HIT','HE_C2_SUPP_C3'):
+        # Verify all 7 covered rules (P1, A6, C2, C3, B1, B5, E4) + 2-col RobustZ statistics exact parity with clear 35-rule engine
+        for tid in ('HE_A6_HIT','HE_A6_NOHIT','HE_C2_HIT','HE_C2_PERM','HE_C3_HIT'):
             hr=he_by_id[tid];cr=clear_by_id[tid]
-            self.assertTrue(hr['branches']['statistics']['available'],hr['branches']['statistics'])
-            self.assertAlmostEqual(hr['branches']['statistics']['score'],cr['branches']['statistics']['score'],places=4)
+            if tid!='HE_C3_HIT':
+                self.assertTrue(hr['branches']['statistics']['available'],hr['branches']['statistics'])
+                self.assertTrue(hr['methods']['robust_z']['available'],hr['methods']['robust_z'])
+                self.assertAlmostEqual(hr['methods']['robust_z']['score'],cr['methods']['robust_z']['score'],places=3)
+                self.assertAlmostEqual(hr['methods']['robust_z']['raw_score'],cr['methods']['robust_z']['raw_score'],places=2)
+            else:
+                # 55M on tight 1.05M-1.55M history exceeds 15-bit quantized |z|*1024 <= 16383 -> fails closed cleanly
+                self.assertFalse(hr['branches']['statistics']['available'])
+                self.assertEqual(hr['branches']['statistics']['reason']['code'],'he_statistics_out_of_domain')
             h_rules={x['rule_id']:x for x in hr['rule_coverage']['rules']}
             c_rules={x['rule_id']:x for x in cr['rule_coverage']['rules']}
             for rid in ('P1','A6','C2','C3','B1','B5','E4'):
                 self.assertEqual(h_rules[rid]['status'],c_rules[rid]['status'],(tid,rid,h_rules[rid],c_rules[rid]))
+                self.assertEqual(h_rules[rid]['matched'],c_rules[rid]['matched'],(tid,rid))
                 self.assertEqual(h_rules[rid]['score'],c_rules[rid]['score'],(tid,rid))
-                self.assertEqual(h_rules[rid]['suppressed_by'],c_rules[rid]['suppressed_by'],(tid,rid))
         self.assertEqual(next(x for x in he_by_id['HE_A6_HIT']['rule_coverage']['rules'] if x['rule_id']=='A6')['status'],'evaluated_hit')
         self.assertEqual(next(x for x in he_by_id['HE_A6_NOHIT']['rule_coverage']['rules'] if x['rule_id']=='A6')['status'],'evaluated_no_hit')
         self.assertEqual(next(x for x in he_by_id['HE_C2_HIT']['rule_coverage']['rules'] if x['rule_id']=='C2')['status'],'evaluated_hit')
-        c2_supp=next(x for x in he_by_id['HE_C2_SUPP_C3']['rule_coverage']['rules'] if x['rule_id']=='C2')
-        self.assertEqual(c2_supp['status'],'evaluated_no_hit');self.assertEqual(c2_supp['suppressed_by'],'C3')
+        self.assertEqual(next(x for x in he_by_id['HE_C2_HIT']['rule_coverage']['rules'] if x['rule_id']=='C2')['score'],20)
+        self.assertEqual(next(x for x in he_by_id['HE_C2_PERM']['rule_coverage']['rules'] if x['rule_id']=='C2')['status'],'evaluated_no_hit')
+        self.assertEqual(next(x for x in he_by_id['HE_C3_HIT']['rule_coverage']['rules'] if x['rule_id']=='C3')['status'],'evaluated_hit')
 
 
 if __name__=='__main__':unittest.main()
