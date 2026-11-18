@@ -724,6 +724,21 @@
     agent3: "Tuân thủ thuế GTGT & Hóa đơn",
     agent4: "Mô phỏng & Hỏi đáp thông minh"
   };
+  function latestPortalAgent2Snapshot(companyCode) {
+    if (!state?.batches || !companyCode) return "";
+    const batches = state.batches.filter((b) => b.company === state.company?.code);
+    for (let i = batches.length - 1; i >= 0; i--) {
+      const files = batches[i].files || [];
+      for (let j = files.length - 1; j >= 0; j--) {
+        const r = files[j].results?.agent2;
+        if (r?.state === "done" && r.snapshot_id && (!r.company_id || r.company_id === companyCode)) {
+          return r.snapshot_id;
+        }
+      }
+    }
+    return "";
+  }
+
   async function agent2ResumeUrl(fallback) {
     // Browser preferences never authorize a company. Recheck the current
     // Portal identity and grants before restoring a page in the iframe.
@@ -732,6 +747,12 @@
     let saved, legacy;
     try { saved = JSON.parse(sessionStorage.getItem("agent2.company.selection")); } catch (e) { /* optional */ }
     try { legacy = JSON.parse(sessionStorage.getItem("agent2.workbench")); } catch (e) { /* optional */ }
+    const portalSnap = portalCompany ? latestPortalAgent2Snapshot(portalCompany) : "";
+    if (portalSnap && context.companies.includes(portalCompany) && (!legacy || legacy.company !== portalCompany || legacy.actor !== context.actor_id || legacy.context !== (context.context_id || ""))) {
+      const defaultAsOf = new Date(Date.now() + 7 * 3600 * 1000).toISOString().slice(0, 19);
+      legacy = { actor: context.actor_id, context: context.context_id || "", company: portalCompany, snapshot: portalSnap, asOf: defaultAsOf };
+      try { sessionStorage.setItem("agent2.workbench", JSON.stringify(legacy)); } catch (e) { /* optional */ }
+    }
     if (!saved && legacy?.actor === context.actor_id && (legacy.context === undefined || legacy.context === (context.context_id || ""))) saved = { version: 1, actor: legacy.actor, context: legacy.context_id || context.context_id || "", company: legacy.company, page: "data-import" };
     const pages = ["workspace", "pipeline-workspace", "data-import", "encrypted-analysis", "analysis-settings"];
     const validSaved = saved?.version === 1 && saved.actor === context.actor_id && saved.context === (context.context_id || "") && context.companies.includes(saved.company) && pages.includes(saved.page);
@@ -1482,6 +1503,14 @@
     button.textContent = "Đang ghi";
     try {
       const res = await api("/api/inbox/commit", { method: "POST", json: { ids, reason } });
+      if ((res.batch?.files || []).some((f) => f.results?.agent2?.snapshot_id)) {
+        try {
+          sessionStorage.removeItem("agent2.workbench");
+          sessionStorage.removeItem("agent2.company.selection");
+        } catch (e) { /* optional */ }
+        const a2Frame = $("agent-frame-agent2");
+        if (a2Frame) { a2Frame.removeAttribute("src"); delete a2Frame.dataset.src; }
+      }
       $("reason").value = "";
       intakeStage = "history";
       toast("Đã niêm phong gói phiên bản " + res.batch.version + " với " + res.batch.files.length + " tệp.");

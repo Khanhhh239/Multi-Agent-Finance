@@ -376,6 +376,9 @@ def main() -> int:
     warehouse = ensure_dataset(args.mode)
     sync_portal_files(warehouse)
     ensure_agent2_models()
+    test_pack_script = ROOT / 'data_pipeline/build_test_pack.py'
+    if test_pack_script.is_file() and not (ROOT / 'DATA_TEST_SAN_SANG/01_Goi_Chuan_Nap_Chung_4_Agent_MPX10/01_hoa_don_ban_A1.csv').is_file():
+        subprocess.run([sys.executable, str(test_pack_script)], cwd=ROOT, check=False)
     print(f'[ok] Đã đồng bộ cấu hình & dữ liệu. Kho Agent 4: {warehouse.relative_to(ROOT)}', flush=True)
     return 0
 

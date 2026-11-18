@@ -1332,7 +1332,8 @@ def commit(fids, reason=''):
                 try:
                     snap = agent2_intake.commit(call, lambda path: agent_url('agent2', path), getattr(SESSION_CTX, 'token', ''),
                                                 agent2_company(), chk['preview'])
-                    outcome[aid] = dict(state='done', message=f'Đã lưu snapshot {str(snap.get("snapshot_id", ""))[:18]} cho Agent 2.')
+                    outcome[aid] = dict(state='done', snapshot_id=snap.get('snapshot_id', ''), company_id=agent2_company(),
+                                        message=f'Đã lưu snapshot {str(snap.get("snapshot_id", ""))[:18]} cho Agent 2.')
                 except agent2_intake.IntakeError as e:
                     outcome[aid] = dict(state='error', message=str(e))
             elif aid == 'agent3':

@@ -40,8 +40,11 @@ Sinh mới từ đầu toàn bộ kho dữ liệu doanh nghiệp **Minh Phát (M
 .\create_data.ps1 -Full
 ```
 
-Sau khi chạy xong, gói 4 tệp chứng từ đồng bộ để nạp thử qua Web nằm sẵn tại:
-`portal\workspace\mpx10-demo-input-full\`
+Sau khi chạy xong, bộ chứng từ chuẩn để kiểm thử toàn bộ tính năng nằm sẵn tại:
+- `DATA_TEST_SAN_SANG\` (9 tệp chuẩn nạp chung 4 Agent + 2 tệp bổ sung kỳ mới + 3 tệp chuyên sâu Agent 2/3)
+- `portal\workspace\mpx10-demo-input-full\`
+
+> **Đặt lại trạng thái nạp chứng từ về ban đầu (mật khẩu chuẩn `SoSon@2026`):** Chạy `.\reset_data_intake.ps1`.
 
 ---
 
