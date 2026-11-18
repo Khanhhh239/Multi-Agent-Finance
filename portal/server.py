@@ -489,6 +489,9 @@ def log_tail(aid, lines=60):
 
 
 # ----------------------------------------------------------------------------------------------------------- http client
+AGENT1_IMPORT_TIMEOUT = 600
+
+
 def call(method, url, body=None, headers=None, timeout=120):
     data = body if isinstance(body, (bytes, type(None))) else json.dumps(body, ensure_ascii=False).encode('utf-8')
     head = dict(headers or {})
@@ -506,7 +509,11 @@ def call(method, url, body=None, headers=None, timeout=120):
         except ValueError:
             detail = raw.decode('utf-8', 'replace')[:300]
         return e.code, {'error': detail if isinstance(detail, str) else json.dumps(detail, ensure_ascii=False)[:400]}
+    except TimeoutError:
+        return 0, {'error': f'Chưa nhận được phản hồi sau {timeout} giây. Tác vụ có thể vẫn đang xử lý; kiểm tra trạng thái trước khi thử lại.'}
     except (URLError, OSError) as e:
+        if isinstance(getattr(e, 'reason', None), TimeoutError):
+            return 0, {'error': f'Chưa nhận được phản hồi sau {timeout} giây. Tác vụ có thể vẫn đang xử lý; kiểm tra trạng thái trước khi thử lại.'}
         return 0, {'error': f'Không kết nối được agent ({e}). Bật agent ở trang Tổng quan rồi thử lại.'}
 
 
@@ -534,6 +541,9 @@ A1_TABLES = {   # column names and aliases as Agent 1 accepts them (agent1/adapt
                                  'amount': ['so tien', 'tong thanh toan', 'amount gross']}),
     'payments': ('Tiền khách trả', {'payment id': ['ma thanh toan', 'ma giao dich', 'txn id'], 'invoice id': ['ma hoa don', 'so hoa don'],
                                     'payment date': ['ngay thanh toan', 'ngay tien ve', 'value date'], 'amount': ['so tien']}),
+    'expense_payments': ('Thực trả nghĩa vụ T5', {'settlement id': ['ma thanh toan nghia vu'], 'expense id': ['ma khoan chi', 'obligation id'],
+                                                'bank id': ['ma dong sao ke'], 'payment date': ['ngay thanh toan'],
+                                                'amount': ['so tien'], 'known at': ['ngay ghi nhan', 'available on']}),
     'outflows': ('Lịch cố định T5', {'expense id': ['ma khoan chi'], 'date': ['ngay chi'], 'amount': ['so tien'],
                                'category': ['loai chi'], 'known at': ['ngay ghi nhan']}),
     'bank': ('Dòng sao kê (dòng tiền)', {'bank id': ['ma dong sao ke'], 'account': ['tai khoan'], 'date': ['ngay giao dich'],
@@ -987,6 +997,7 @@ def package_summary():
 
 SLOTS = [
     ('agent1', 'invoices', 'Hóa đơn bán'), ('agent1', 'payments', 'Tiền khách trả'), ('agent1', 'outflows', 'Lịch cố định T5'),
+    ('agent1', 'expense_payments', 'Thực trả nghĩa vụ T5'),
     ('agent1', 'bank', 'Dòng sao kê'), ('agent1', 'statements', 'Kỳ sao kê'), ('agent1', 'actions', 'Hứa trả và nhắc nợ'),
     ('agent2', 'transactions', 'Sổ giao dịch'),
     ('agent3', 'xml', 'Hóa đơn XML hoặc ZIP'), ('agent3', 'list', 'Sao kê hoặc bảng kê'),
@@ -1020,12 +1031,23 @@ def slots_state(pending_records):
 
 
 # ----------------------------------------------------------------------------------------------------------- inbox
+CHECKING: set[str] = set()
+
+
 def intake_context():
     c = company()
     return {key: c[key] for key in ('code', 'agent2_company', 'tax_code', 'date_format', 'number_format')}
 
 
 def pending():
+    # Read the file and test its running state in the same critical section.
+    # Otherwise a poll can read "checking", wait for a completed check's lock,
+    # then overwrite the newly saved READY result with an interruption error.
+    with LOCK:
+        return _pending_locked()
+
+
+def _pending_locked():
     context = intake_context()
     out = []
     for meta in sorted(PENDING.glob('*.json')):
@@ -1038,6 +1060,11 @@ def pending():
         if bound != context:
             record['checks'] = {aid: dict(state='stale', message='Cần kiểm tra lại với hồ sơ hiện tại.')
                                 for aid in record['targets']}
+        with LOCK:
+            if record['id'] not in CHECKING and any(c.get('state') == 'checking' for c in record.get('checks', {}).values()):
+                record['checks'] = {aid: record.get('applied', {}).get(aid) or dict(
+                    state='error', message='Lần kiểm tra trước bị gián đoạn. Bấm Kiểm tra lại.') for aid in record['targets']}
+                write_json(meta, record)
         out.append(record)
     return sorted(out, key=lambda r: r['added_at'])
 
@@ -1111,50 +1138,87 @@ def add_file(name, raw):
     clean = re.sub(r'[^\w.\-]', '_', Path(name).name)[:120] or 'tep'
     classification = classify(clean, raw)
     digest = hashlib.sha256(raw).hexdigest()
-    if classification['kind'] == 'shared_bank':
-        for existing in pending():
-            if existing.get('sha256') == digest and existing.get('intake_context') == context:
-                return existing
-        received = {aid: result for batch in current_batches() for item in batch['files']
-                    if item.get('kind') == 'shared_bank' and item.get('sha256') == digest
-                    and item.get('intake_context') == context
-                    for aid, result in item.get('results', {}).items() if result.get('state') == 'done'}
-        if set(received) >= set(classification['targets']):
-            raise ValueError('Sao kê này đã được ghi vào cả Agent 1 và Agent 3 cho doanh nghiệp đang chọn.')
-    fid = uuid.uuid4().hex[:12]
-    (PENDING / f'{fid}.bin').write_bytes(raw)
-    record = dict(id=fid, name=clean, size=len(raw), added_at=time.strftime('%Y-%m-%d %H:%M:%S'),
-                  intake_context=context, **classification)
-    record['slot'] = slot_of(record['kind'])
-    record['period'] = period_of(clean, raw, record['kind'])
-    record['sha256'] = digest
-    if classification['kind'] == 'shared_bank' and received:
-        record['applied'] = received
-    record['checks'] = preview_file(record, raw)
-    write_json(PENDING / f'{fid}.json', record)
-    return record
+    with LOCK:
+        if context != intake_context():
+            raise ValueError('Doanh nghiệp đã đổi. Tải lại trang trước khi nạp tệp.')
+        if classification['kind'] == 'shared_bank' or classification['kind'].startswith('a1:'):
+            for existing in pending():
+                if existing.get('sha256') == digest and existing.get('intake_context') == context:
+                    return existing
+        if classification['kind'] == 'shared_bank':
+            received = {aid: result for batch in current_batches() for item in batch['files']
+                        if item.get('kind') == 'shared_bank' and item.get('sha256') == digest
+                        and item.get('intake_context') == context
+                        for aid, result in item.get('results', {}).items() if result.get('state') == 'done'}
+            if set(received) >= set(classification['targets']):
+                raise ValueError('Sao kê này đã được ghi vào cả Agent 1 và Agent 3 cho doanh nghiệp đang chọn.')
+        fid = uuid.uuid4().hex[:12]
+        (PENDING / f'{fid}.bin').write_bytes(raw)
+        record = dict(id=fid, name=clean, size=len(raw), added_at=time.strftime('%Y-%m-%d %H:%M:%S'),
+                      intake_context=context, **classification)
+        record['slot'] = slot_of(record['kind'])
+        record['period'] = period_of(clean, raw, record['kind'])
+        record['sha256'] = digest
+        if classification['kind'] == 'shared_bank' and received:
+            record['applied'] = received
+        _begin_check(record)
+    return _finish_check(record, raw)
+
+
+def _begin_check(record):
+    """Publish the pending item before the long agent call; caller owns LOCK."""
+    CHECKING.add(record['id'])
+    record['check_started_at'] = time.time()
+    record['checks'] = {aid: record.get('applied', {}).get(aid) or dict(
+        state='checking', message='Đang chờ kết quả kiểm tra tệp.') for aid in record['targets']}
+    write_json(PENDING / (record['id'] + '.json'), record)
+
+
+def _finish_check(record, raw):
+    try:
+        checks = preview_file(record, raw)
+        with LOCK:
+            record['checks'] = checks
+            write_json(PENDING / (record['id'] + '.json'), record)
+        return record
+    except Exception as exc:
+        with LOCK:
+            record['checks'] = {aid: record.get('applied', {}).get(aid) or dict(
+                state='error', message=str(exc)) for aid in record['targets']}
+            write_json(PENDING / (record['id'] + '.json'), record)
+        raise
+    finally:
+        with LOCK:
+            CHECKING.discard(record['id'])
 
 
 def recheck(fid):
     context = intake_context()
     if not context['code']:
         raise ValueError('Lưu hồ sơ doanh nghiệp trước khi kiểm tra tệp.')
-    record = pending_file(fid, context)
-    raw = (PENDING / f'{fid}.bin').read_bytes()
-    if record.get('applied') and record.get('intake_context') != context:
-        raise ValueError('Tệp đã ghi một phần với cấu hình cũ. Giữ nguyên hồ sơ để ghi tiếp.')
-    if not record.get('applied'):
-        record.update(classify(record['name'], raw))
-        record['slot'] = slot_of(record['kind'])
-    record['intake_context'] = context
-    record['checks'] = preview_file(record, raw)
-    write_json(PENDING / f'{fid}.json', record)
-    return record
+    with LOCK:
+        if context != intake_context():
+            raise ValueError('Doanh nghiệp đã đổi. Tải lại trang trước khi kiểm tra tệp.')
+        record = pending_file(fid, context)
+        if fid in CHECKING:
+            return record
+        raw = (PENDING / f'{fid}.bin').read_bytes()
+        if record.get('applied') and record.get('intake_context') != context:
+            raise ValueError('Tệp đã ghi một phần với cấu hình cũ. Giữ nguyên hồ sơ để ghi tiếp.')
+        if not record.get('applied'):
+            record.update(classify(record['name'], raw))
+            record['slot'] = slot_of(record['kind'])
+        record['intake_context'] = context
+        _begin_check(record)
+    return _finish_check(record, raw)
 
 
 def remove_file(fid):
-    for suffix in ('.json', '.bin'):
-        (PENDING / f'{fid}{suffix}').unlink(missing_ok=True)
+    with LOCK:
+        if fid in CHECKING:
+            raise ValueError('Tệp đang được kiểm tra. Chờ kết quả trước khi bỏ tệp.')
+        for suffix in ('.json', '.bin'):
+            (PENDING / f'{fid}{suffix}').unlink(missing_ok=True)
 
 
 def agent2_session():
@@ -1209,6 +1273,7 @@ def check(aid, record, raw, *, bank_rows=None):
         key = agent1_key()
         shared = bank_rows is not None
         kind = 'bank' if shared else record['kind'].split(':', 1)[1]
+        content = bank_intake.project(bank_rows, aid, date_format=c['date_format'], number_format=c['number_format']) if shared else raw
         mapping = json.dumps({field: field for field in ('bank_id', 'account', 'date', 'direction', 'amount', 'known_at',
                                                         'component', 'memo', 'counterparty', 'customer_id',
                                                         'cash_flow_class')}) if shared else '{}'
@@ -1216,13 +1281,14 @@ def check(aid, record, raw, *, bank_rows=None):
                                      date_format='%Y-%m-%d' if c['date_format'] == 'iso' else '%d/%m/%Y',
                                      number_format=c['number_format']), 'file',
                                 'sao_ke_chung.csv' if shared else record['name'],
-                                bank_intake.project(bank_rows, aid, date_format=c['date_format'], number_format=c['number_format']) if shared else raw)
+                                content)
         status, res = call('POST', agent_url('agent1', '/v1/imports/preview'), body,
-                           {'Authorization': f'Bearer {key}', 'Content-Type': ctype})
+                           {'Authorization': f'Bearer {key}', 'Content-Type': ctype}, timeout=AGENT1_IMPORT_TIMEOUT)
         if status != 200:
             return dict(state='error', message=res.get('error', f'Lỗi {status}'))
         ok = res.get('can_commit')
         return dict(state='ready' if ok else 'error', preview=res.get('id'), rows=res.get('valid_rows'),
+                    source_sha256=hashlib.sha256(content).hexdigest(), import_kind=kind,
                     errors=res.get('error_count', 0),
                     message=f'{res.get("valid_rows", 0)} dòng hợp lệ' + (f', {res.get("error_count")} lỗi' if res.get('error_count') else ''),
                     detail=[f'Dòng {e.get("row")}, cột {e.get("column")}: {e.get("message")}' for e in res.get('errors', [])[:5]])
@@ -1293,6 +1359,8 @@ def commit(fids, reason=''):
     for record in records:
         fid = record['id']
         raw = (PENDING / f'{fid}.bin').read_bytes()
+        if record.get('sha256') and hashlib.sha256(raw).hexdigest() != record['sha256']:
+            raise ValueError('Nội dung tệp nguồn đã thay đổi: ' + record['name'] + '. Nạp lại tệp để kiểm tra trước khi ghi.')
         shared = record['kind'] == 'shared_bank'
         bank_rows = None
         applied = record.get('applied', {})
@@ -1316,7 +1384,15 @@ def commit(fids, reason=''):
                 outcome[aid] = dict(state='skipped', message='Chưa qua kiểm tra nên không ghi.')
                 continue
             if aid == 'agent1':
-                chk = check('agent1', record, raw, bank_rows=bank_rows)  # fresh preview after earlier writes
+                # Agent 1's commit verifies the preview's dataset hash and
+                # company profile under its lock. Reuse the checked parse only
+                # for the same kind and exact bytes projected to that agent.
+                content = bank_intake.project(bank_rows, aid, date_format=context['date_format'], number_format=context['number_format']) if shared else raw
+                import_kind = 'bank' if shared else record['kind'].split(':', 1)[1]
+                cached = bool(chk.get('preview') and chk.get('import_kind') == import_kind
+                              and chk.get('source_sha256') == hashlib.sha256(content).hexdigest())
+                if not cached:
+                    chk = check('agent1', record, raw, bank_rows=bank_rows)
                 if chk.get('state') != 'ready':
                     outcome[aid] = dict(state='error', message=chk.get('message', 'Kiểm tra lại không đạt.'))
                     if shared:
@@ -1325,7 +1401,16 @@ def commit(fids, reason=''):
                         break
                     continue
                 status, res = call('POST', agent_url('agent1', f'/v1/imports/{chk["preview"]}/commit'), b'',
-                                   {'Authorization': f'Bearer {agent1_key()}'})
+                                   {'Authorization': f'Bearer {agent1_key()}'}, timeout=AGENT1_IMPORT_TIMEOUT)
+                if cached and status in (409, 422):
+                    # Stale/deleted previews must be rebuilt against the
+                    # current dataset; never bypass the agent's commit guard.
+                    chk = check('agent1', record, raw, bank_rows=bank_rows)
+                    if chk.get('state') == 'ready':
+                        status, res = call('POST', agent_url('agent1', f'/v1/imports/{chk["preview"]}/commit'), b'',
+                                           {'Authorization': f'Bearer {agent1_key()}'}, timeout=AGENT1_IMPORT_TIMEOUT)
+                    else:
+                        status, res = 422, {'error': chk.get('message', 'Kiểm tra lại không đạt.')}
                 outcome[aid] = (dict(state='done', message=f'Đã ghi {res.get("accepted")} dòng.') if status == 200
                                 else dict(state='error', message=res.get('error', f'Lỗi {status}')))
             elif aid == 'agent2':
@@ -1673,8 +1758,12 @@ class Handler(BaseHTTPRequestHandler):
     def handle_one(self, method):
         try:
             path = urlsplit(self.path).path
-            if method != 'GET' and (path in ('/api/company', '/api/agent3/workspace', '/api/agents/agent1/connect-link') or path.startswith('/api/inbox')):
+            checking_route = method == 'POST' and (path == '/api/inbox' or
+                             re.fullmatch(r'/api/inbox/[0-9a-f]{12}/check', path))
+            if method != 'GET' and not checking_route and (path in ('/api/company', '/api/agent3/workspace', '/api/agents/agent1/connect-link') or path.startswith('/api/inbox')):
                 with LOCK:
+                    if CHECKING and path in ('/api/company', '/api/agent3/workspace', '/api/agents/agent1/connect-link', '/api/inbox/commit'):
+                        raise ValueError('Đang kiểm tra tệp. Chờ kết quả trước khi đổi hồ sơ hoặc ghi dữ liệu.')
                     self.route(method)
             else:
                 self.route(method)

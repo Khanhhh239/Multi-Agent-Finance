@@ -214,6 +214,7 @@ test("manual allocation sends VND text without rounding through a JavaScript num
     reconciliationReviewer: () => "Kế toán thử", notice() {},
     api: async (url, options) => calls.push([url, JSON.parse(options.body)]) };
   vm.createContext(scope);
+  vm.runInContext(section(agentSource, "  let reconciliationProposalRefresh =", "  async function loadReconciliation("), scope);
   vm.runInContext(section(agentSource, '  $("allocate-form").onsubmit =', '  $("saved-plans").onclick ='), scope);
   $("allocate-form").onsubmit({ preventDefault() {} });
   await pending;
@@ -255,6 +256,7 @@ function reviewUI(stale = false) {
     action: work => { pending = work(); }, api: async (url, options) => { calls.push([url, JSON.parse(options.body)]); },
     refresh: async () => {}, loadReconciliation: async () => {}, notice() {} };
   vm.createContext(scope);
+  vm.runInContext(section(agentSource, "  let reconciliationProposalRefresh =", "  async function loadReconciliation("), scope);
   vm.runInContext(section(agentSource, "  function renderReconciliationCases(", "  function renderReconciliationHistory("), scope);
   scope.renderReconciliationCases(proposal);
   const all = object => [object, ...(object.children || []).flatMap(all)];

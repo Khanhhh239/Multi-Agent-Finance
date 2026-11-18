@@ -2640,3 +2640,11 @@ button.primary:hover,.btn.primary:hover { background:var(--kt-accent-strong); }
     grid-template-columns: 1fr;
   }
 }
+/* Keep long intake requests visible independently of short notification toasts. */
+.intake-progress { display:flex; align-items:center; gap:16px; margin:16px 0; padding:18px; border:1px solid #d4b4b9; border-left:4px solid #8f0b24; border-radius:8px; background:#fff8f1; }
+.intake-progress[hidden] { display:none; }
+.intake-progress progress { width:100px; flex-shrink:0; accent-color:#8f0b24; }
+.intake-progress strong { display:block; color:#8f0b24; }
+.intake-progress p { margin:4px 0 0; color:#6d6062; font-size:14px; }
+#intake-progress-time { margin-left:auto; white-space:nowrap; font-variant-numeric:tabular-nums; }
+@media (max-width:700px) { .intake-progress { flex-wrap:wrap; } #intake-progress-time { margin-left:0; } }

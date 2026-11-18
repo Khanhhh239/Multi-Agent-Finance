@@ -4,7 +4,7 @@
   const AGENT_LABEL = { agent1: "Agent 1", agent2: "Agent 2", agent3: "Agent 3", agent4: "Agent 4" };
   const WORKSPACE_LABEL = { agent1: "Dòng tiền", agent2: "Kiểm soát", agent3: "Thuế", agent4: "Hỏi đáp" };
   const STATE_TEXT = { running: "Đang chạy", starting: "Đang khởi động", stopped: "Đang tắt", "busy-port": "Cổng bị chiếm" };
-  const CHECK_TEXT = { ready: "Sẵn sàng ghi", error: "Có lỗi", offline: "Agent tắt", done: "Đã ghi", skipped: "Bỏ qua", stale: "Chờ kiểm tra lại" };
+  const CHECK_TEXT = { checking: "Đang kiểm tra", ready: "Sẵn sàng ghi", error: "Có lỗi", offline: "Agent tắt", done: "Đã ghi", skipped: "Bỏ qua", stale: "Chờ kiểm tra lại" };
   let state = null;
   let profileSaving = false;
   let profileVersion = 0;
@@ -12,6 +12,7 @@
   let currentAgent = null;
   const offlineFailures = { agent1: 0, agent2: 0, agent3: 0, agent4: 0 };
   let intakeStage = "choose";
+  let intakeActivity = null;
   let token = "";
   let authVersion = 0;
   let agent2RouteEpoch = 0;
@@ -74,13 +75,48 @@
     return node;
   }
 
-  function toast(message, error = false) {
+  function toast(message, error = false, persistent = false) {
     const t = $("toast");
     t.textContent = message;
     t.className = "toast" + (error ? " error" : "");
     t.hidden = false;
     clearTimeout(toast.timer);
-    toast.timer = setTimeout(() => (t.hidden = true), error ? 7000 : 3500);
+    if (!persistent) toast.timer = setTimeout(() => (t.hidden = true), error ? 7000 : 3500);
+  }
+
+  function pendingCheck() {
+    return state?.pending?.find((r) => Object.values(r.checks || {}).some((c) => c.state === "checking"));
+  }
+
+  function renderIntakeProgress() {
+    const panel = $("intake-progress");
+    if (!panel) return;
+    const pending = pendingCheck();
+    const activity = intakeActivity || (pending && {
+      title: "Đang kiểm tra tệp", file: pending.name,
+      started: pending.check_started_at * 1000, kind: "check",
+    });
+    panel.hidden = !activity;
+    if (!activity) return;
+    $("intake-progress-title").textContent = activity.title;
+    $("intake-progress-file").textContent = activity.file;
+    $("intake-progress-detail").textContent = activity.kind === "commit"
+      ? "Đang lưu dữ liệu và gửi tới các nghiệp vụ đã chọn. Giữ trang mở và chờ kết quả."
+      : "Đang chờ kết quả kiểm tra dữ liệu và liên kết. Tệp lịch sử lớn có thể mất vài phút.";
+    const seconds = Math.max(0, Math.floor((Date.now() - (activity.started || Date.now())) / 1000));
+    $("intake-progress-time").textContent = "Đã chờ " + String(Math.floor(seconds / 60)).padStart(2, "0") + ":" + String(seconds % 60).padStart(2, "0");
+  }
+
+  function startIntakeActivity(title, file, kind = "check") {
+    intakeActivity = { title, file, kind, started: Date.now() };
+    renderData();
+    renderIntakeProgress();
+  }
+
+  function endIntakeActivity() {
+    intakeActivity = null;
+    if (state) renderData();
+    renderIntakeProgress();
   }
 
   let activeLoadingCount = 0;
@@ -590,8 +626,8 @@
         el("td", { role: "cell", class: "sub", "data-label": "Kỳ dữ liệu" }, periodText(r.period)),
         el("td", { role: "cell" }, checkLines(r)),
         el("td", { role: "cell", class: "right" }, el("div", { class: "queue-actions" },
-          el("button", { type: "button", class: "link", onclick: () => recheck(r.id) }, "Kiểm tra lại"),
-          el("button", { type: "button", class: "link", onclick: () => dropFile(r.id) }, "Bỏ")))));
+          el("button", { type: "button", class: "link", disabled: Boolean(intakeActivity || pendingCheck()), onclick: () => recheck(r.id) }, "Kiểm tra lại"),
+          el("button", { type: "button", class: "link", disabled: Boolean(intakeActivity || pendingCheck()), onclick: () => dropFile(r.id) }, "Bỏ")))));
     $("queue").tBodies[0].replaceChildren(...rows);
     $("queue-empty").hidden = rows.length > 0;
     const tabPending = $("intake-tab-pending");
@@ -605,11 +641,12 @@
     $("intake-summary-agents").textContent = targets.size
       ? "Nghiệp vụ nhận tệp: " + [...targets].map((aid) => AGENT_LABEL[aid]).join(", ")
       : "Chưa có tệp sẵn sàng để phân phối.";
-    $("intake-next").disabled = !ready.length;
+    $("intake-next").disabled = !ready.length || Boolean(intakeActivity || pendingCheck());
     $("reason-field").hidden = !state.package;
     const button = $("commit");
-    button.disabled = !ready.length;
-    if (button.dataset.confirm !== "1") button.textContent = ready.length && ready.length < rows.length ? "Ghi " + ready.length + " tệp sẵn sàng" : "Ghi toàn bộ dữ liệu";
+    button.disabled = !ready.length || Boolean(intakeActivity || pendingCheck());
+    if (intakeActivity?.kind === "commit") button.textContent = "Đang ghi dữ liệu…";
+    else if (button.dataset.confirm !== "1") button.textContent = ready.length && ready.length < rows.length ? "Ghi " + ready.length + " tệp sẵn sàng" : "Ghi toàn bộ dữ liệu";
 
     const mine = state.batches.filter((b) => b.company === state.company.code);
     const hist = mine.map((b) =>
@@ -711,11 +748,12 @@
     $("intake-company").replaceChildren(c.code
       ? el("strong", {}, c.legal_name + " · Mã " + c.code + (c.tax_code ? " · MST " + c.tax_code : ""))
       : el("a", { href: "#config" }, "Lưu hồ sơ doanh nghiệp để nạp tệp"));
-    $("file-input").disabled = !c.code;
+    $("file-input").disabled = !c.code || Boolean(intakeActivity || pendingCheck());
     $("drop").hidden = !c.code;
     renderSlots();
     renderQueue();
     showIntakeStage(intakeStage);
+    renderIntakeProgress();
   }
 
   const AGENT_SUBTAGS = {
@@ -878,7 +916,13 @@
     renderAgentView();
   }
 
-  async function refresh() {
+  let refreshInFlight = null;
+  function refresh() {
+    if (!refreshInFlight) refreshInFlight = fetchState().finally(() => { refreshInFlight = null; });
+    return refreshInFlight;
+  }
+
+  async function fetchState() {
     const version = profileVersion;
     const reqAuthVersion = authVersion;
     const reqToken = token;
@@ -1426,31 +1470,52 @@
     }
   }
 
+  let intakeUploadBusy = false;
   async function upload(files) {
+    if (intakeUploadBusy || intakeActivity || pendingCheck()) { toast("Đang xử lý tệp đã chọn. Hãy chờ kết quả trước khi chọn thêm.", false, true); return; }
     const code = state?.company.code;
     if (!code) return;
+    intakeUploadBusy = true;
     let uploaded = 0;
     const failures = [];
-    for (const file of files) {
-      toast("Đang nhận dạng và kiểm tra " + file.name);
-      try {
-        const query = new URLSearchParams({ name: file.name, company: code });
-        await api("/api/inbox?" + query, { method: "POST", body: file, headers: { "Content-Type": "application/octet-stream" } });
-        uploaded++;
-      } catch (err) {
-        failures.push(file.name + " — " + err.message);
-        if (err.locked) break;
+    try {
+      for (const file of files) {
+        startIntakeActivity("Đang kiểm tra tệp", file.name);
+        toast("Đang kiểm tra " + file.name + ". Tệp lịch sử lớn có thể mất vài phút; hãy chờ kết quả.", false, true);
+        try {
+          const query = new URLSearchParams({ name: file.name, company: code });
+          await api("/api/inbox?" + query, { method: "POST", body: file, headers: { "Content-Type": "application/octet-stream" } });
+          uploaded++;
+        } catch (err) {
+          failures.push(file.name + " — " + err.message);
+          if (err.locked) break;
+        }
       }
+      await refresh();
+      toast(failures.length ? "Đã nhận " + uploaded + " tệp. " + failures.join(". ")
+        : "Đã kiểm tra " + uploaded + " tệp. Xem kết quả trước khi niêm phong.", failures.length > 0);
+      if (uploaded && state.intake.unlocked && location.hash === "#data") showIntakeStage("review", true);
+    } finally {
+      intakeUploadBusy = false;
+      endIntakeActivity();
     }
-    await refresh();
-    toast(failures.length ? "Đã nhận " + uploaded + " tệp. " + failures.join(". ")
-      : "Đã kiểm tra " + uploaded + " tệp. Xem kết quả trước khi niêm phong.", failures.length > 0);
-    if (uploaded && state.intake.unlocked && location.hash === "#data") showIntakeStage("review", true);
   }
 
   async function recheck(id) {
-    try { await api("/api/inbox/" + id + "/check", { method: "POST" }); } catch (err) { toast(err.message, true); }
-    refresh();
+    if (intakeUploadBusy || intakeActivity || pendingCheck()) { toast("Đang xử lý tệp đã chọn. Hãy chờ kết quả.", false, true); return; }
+    intakeUploadBusy = true;
+    startIntakeActivity("Đang kiểm tra lại tệp", state.pending.find((r) => r.id === id)?.name || "Tệp đã chọn");
+    toast("Đang kiểm tra lại tệp. Tệp lịch sử lớn có thể mất vài phút; hãy chờ kết quả.", false, true);
+    try {
+      await api("/api/inbox/" + id + "/check", { method: "POST" });
+      await refresh();
+      toast("Đã kiểm tra lại. Xem kết quả của tệp trước khi xác nhận nạp.");
+    } catch (err) {
+      toast(err.message, true);
+    } finally {
+      intakeUploadBusy = false;
+      endIntakeActivity();
+    }
   }
 
   async function dropFile(id) {
@@ -1465,6 +1530,7 @@
   }
 
   async function commitAll() {
+    if (intakeActivity || pendingCheck()) { toast("Chờ tác vụ đang xử lý hoàn tất trước khi ghi.", false, true); return; }
     const ready = state.pending.filter(canWrite);
     const ids = ready.map((r) => r.id);
     const replaces = ready.some((r) => r.checks.agent2 && r.checks.agent2.state === "ready");
@@ -1478,6 +1544,7 @@
       return;
     }
     delete button.dataset.confirm;
+    startIntakeActivity("Đang ghi dữ liệu", ready.map((r) => r.name).join(", "), "commit");
     button.disabled = true;
     button.textContent = "Đang ghi";
     try {
@@ -1486,6 +1553,7 @@
       intakeStage = "history";
       toast("Đã niêm phong gói phiên bản " + res.batch.version + " với " + res.batch.files.length + " tệp.");
     } catch (err) { toast(err.message, true); }
+    finally { endIntakeActivity(); }
     refresh();
   }
 
@@ -1720,4 +1788,5 @@
   show();
   refresh().then(show);
   setInterval(() => document.visibilityState === "visible" && refresh(), 4000);
+  setInterval(() => document.visibilityState === "visible" && renderIntakeProgress(), 1000);
 })();
