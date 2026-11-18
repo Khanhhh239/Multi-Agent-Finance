@@ -52,10 +52,12 @@ from xml.etree import ElementTree
 if __package__:
     from . import bank_intake
     from . import agent2_bridge
+    from . import agent2_intake
     from .agent2_runtime import Runtime as Agent2Runtime, stop_owned
 else:
     import bank_intake
     import agent2_bridge
+    import agent2_intake
     from agent2_runtime import Runtime as Agent2Runtime, stop_owned
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -86,6 +88,7 @@ LOGS = WORK / 'logs'
 for folder in (PENDING, LOGS):
     folder.mkdir(parents=True, exist_ok=True)
 LOCK = threading.RLock()
+SESSION_CTX = threading.local()                    # the operator's portal session, forwarded to Agent 2 during intake
 AGENT4_TOKEN = secrets.token_urlsafe(24)          # lives only as long as this shell; the chat never sees it
 AGENT3_TOKEN = secrets.token_urlsafe(32)          # backend bridge only; never returned in portal state
 AGENT2_TOKEN = secrets.token_urlsafe(32)          # introspection channel only, never a user credential
@@ -1119,6 +1122,14 @@ def agent2_session():
     return {'X-CSRF-Token': meta['csrf_token']}
 
 
+def agent2_tenant():
+    access = path_of(agent_cfg('agent2').get('access_file'), WORK / 'agent2_access.json')
+    try:
+        return json.loads(Path(access).read_text(encoding='utf-8'))['tenant_id']
+    except (OSError, ValueError, KeyError):
+        return 'demo'
+
+
 def agent2_company():
     c = company()
     return c.get('agent2_company') or c['code']
@@ -1174,29 +1185,19 @@ def check(aid, record, raw, *, bank_rows=None):
                     message=f'{res.get("valid_rows", 0)} dòng hợp lệ' + (f', {res.get("error_count")} lỗi' if res.get('error_count') else ''),
                     detail=[f'Dòng {e.get("row")}, cột {e.get("column")}: {e.get("message")}' for e in res.get('errors', [])[:5]])
     if aid == 'agent2':
+        token = getattr(SESSION_CTX, 'token', '')
+        if not token:
+            return dict(state='error', message='Cần mở khóa nạp dữ liệu rồi kiểm tra lại.')
         try:
-            head = agent2_session()
-        except ConnectionError as e:
+            result = agent2_intake.preview(call, lambda path: agent_url('agent2', path), token, agent2_tenant(), agent2_company(),
+                                           c.get('legal_name') or agent2_company(), record['name'], raw)
+        except agent2_intake.IntakeError as e:
             return dict(state='error', message=str(e))
-        company_id = agent2_company()
-        status, ctx = call('GET', agent_url('agent2', f'/api/data-import/context?company={quote(company_id)}'), headers=head)
-        if status != 200:
-            return dict(state='error', message=f'Agent 2 không có doanh nghiệp "{company_id}": {ctx.get("error", status)}. '
-                                               'Đặt "Mã doanh nghiệp ở Agent 2" trong Cấu hình.')
-        revision = ((ctx.get('status') or {}).get('data') or {}).get('revision')
-        status, res = call('POST', agent_url('agent2', '/api/data-import/preview'),
-                           dict(company_id=company_id, filename=record['name'], content_base64=b64encode(raw).decode(),
-                                expected_revision=revision, date_order='iso' if c['date_format'] == 'iso' else 'dmy'), head)
-        if status != 200:
-            return dict(state='error', message=res.get('error', f'Lỗi {status}'))
-        summary = res.get('summary') or {}
-        issues = res.get('issues') or res.get('errors') or []
-        ok = bool(res.get('token')) and not issues
-        return dict(state='ready' if ok else 'error', preview=res.get('token'), rows=summary.get('rows'),
-                    message=(f'{summary.get("rows", "?")} giao dịch, thay cho {summary.get("previous_rows", 0)} giao dịch đang có'
-                             if ok else f'{len(issues)} lỗi cần sửa'),
-                    detail=[f'Dòng {i.get("row")}, {i.get("column")}: {i.get("message")}' for i in issues[:5] if isinstance(i, dict)],
-                    warning='Agent 2 thay toàn bộ giao dịch của doanh nghiệp bằng tệp này.')
+        s = result['summary']
+        return dict(state='ready', preview=result, rows=s['rows'],
+                    message=f'{s["rows"]} giao dịch chuyển tiền ngân hàng ({s["first"][:10]} đến {s["last"][:10]})'
+                            + (f'; bỏ {s["skipped"]} bút toán không phải dòng tiền' if s['skipped'] else ''),
+                    warning='Agent 2 lưu thành bản dữ liệu cố định mới (snapshot), không ghi đè các bản cũ. Phân tích đồng bộ giới hạn 200 giao dịch mỗi lần.')
     if aid == 'agent3':
         wid = agent3_workspace()
         if not wid:
@@ -1285,13 +1286,11 @@ def commit(fids, reason=''):
                                 else dict(state='error', message=res.get('error', f'Lỗi {status}')))
             elif aid == 'agent2':
                 try:
-                    head = agent2_session()
-                    status, res = call('POST', agent_url('agent2', '/api/data-import/commit'),
-                                       dict(company_id=agent2_company(), token=chk['preview'], acknowledge=True), head)
-                except ConnectionError as e:
-                    status, res = 0, {'error': str(e)}
-                outcome[aid] = (dict(state='done', message='Đã thay dữ liệu giao dịch.') if status == 200
-                                else dict(state='error', message=res.get('error', f'Lỗi {status}')))
+                    snap = agent2_intake.commit(call, lambda path: agent_url('agent2', path), getattr(SESSION_CTX, 'token', ''),
+                                                agent2_company(), chk['preview'])
+                    outcome[aid] = dict(state='done', message=f'Đã lưu snapshot {str(snap.get("snapshot_id", ""))[:18]} cho Agent 2.')
+                except agent2_intake.IntakeError as e:
+                    outcome[aid] = dict(state='error', message=str(e))
             elif aid == 'agent3':
                 ws = ensure_agent3_workspace()
                 if ws['state'] == 'ok' and intake_context() != context:
@@ -1447,9 +1446,10 @@ class Handler(BaseHTTPRequestHandler):
         if not isinstance(body,dict) or set(body)!={'session'} or not isinstance(body['session'],str) or not re.fullmatch(r'[A-Za-z0-9_-]{32,128}',body['session']):
             raise AuthError('Phiên Portal không hợp lệ.')
         token = body['session']
-        with LOCK:
-            if not session_left(token,touch=False):raise AuthError('Phiên Portal đã khóa hoặc hết hạn.')
-            expires_at = SESSIONS[token]
+        # No LOCK here: an intake request holds it while it calls Agent 2, and Agent 2 calls back to this endpoint.
+        if not session_left(token,touch=False):raise AuthError('Phiên Portal đã khóa hoặc hết hạn.')
+        expires_at = SESSIONS.get(token)
+        if expires_at is None:raise AuthError('Phiên Portal đã khóa hoặc hết hạn.')
         access = path_of(agent_cfg('agent2').get('access_file'),WORK/'agent2_access.json')
         return self.send(200,agent2_bridge.identity(access,expires_at))
 
@@ -1492,6 +1492,7 @@ class Handler(BaseHTTPRequestHandler):
         return self.send(status,content,mime)
 
     def route(self, method):
+        SESSION_CTX.token = self.token()
         url = urlsplit(self.path)
         path, query = url.path, {k: v[-1] for k, v in parse_qs(url.query).items()}
         if path == '/api/internal/agent2/identity':
