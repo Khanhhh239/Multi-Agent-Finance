@@ -927,6 +927,7 @@
 
     const page = new URL(a.url, location.href);
     if (a.id !== "agent2") page.searchParams.set("portal", location.origin);
+    if (a.id === "agent1") page.searchParams.set("company", state.company.code || "SME");
     const pageUrl = page.href;
     const newtab = $("agent-newtab");
     if (newtab) newtab.href = pageUrl;

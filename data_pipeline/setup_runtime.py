@@ -174,6 +174,8 @@ def sync_portal_files(warehouse_db: Path) -> None:
     (a1_prof_dir / f'{code}.json').write_text(
         json.dumps({
             'code': code,
+            'legal_name': company_data.get('legal_name', ''),
+            'tax_code': company_data.get('tax_code', ''),
             'date_format': company_data.get('date_format', 'iso'),
             'number_format': company_data.get('number_format', 'plain'),
         }, ensure_ascii=False, indent=2) + '\n',

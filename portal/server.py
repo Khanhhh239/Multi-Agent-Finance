@@ -165,7 +165,7 @@ def company():
 
 def agent1_profile_file(data):
     """Publish only the company settings Agent 1 consumes, separately for each firm."""
-    profile = {key: data[key] for key in ('code', 'date_format', 'number_format')}
+    profile = {key: data[key] for key in ('code', 'date_format', 'number_format', 'legal_name', 'tax_code')}
     profile['code'] = profile['code'] or 'SME'
     path = WORK / 'agent1_profiles' / (profile['code'] + '.json')
     path.parent.mkdir(parents=True, exist_ok=True)

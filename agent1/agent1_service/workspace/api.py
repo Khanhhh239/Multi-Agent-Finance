@@ -373,7 +373,7 @@ def install(app, store, authorize, firm_id, *, bank_registry=None, bank_accounts
         )
         return dict(
             company=firm,
-            company_profile=company_profile(firm),
+            company_profile=company_profile(firm, include_identity=True),
             synthetic_sandbox=demo_training_allowed(firm),
             counts=counts,
             dataset_hash=dataset_hash,
