@@ -61,7 +61,7 @@ class PeriodPayments:
             self.totals[self.key(row)] += int(row['amount_vnd'])
 
 
-def manual_close_evidence(row, audits, closings, policies, staff, now, days):
+def manual_close_evidence(row, audits, closings, policies, staff, now, days, *, signed_amounts=False):
     """No adjustment/month-end/approval-limit proxy can establish this predicate."""
     cid = row['company_id']
     audits = [r for r in audits if r.get('transaction_id') == row['transaction_id'] and
@@ -83,7 +83,8 @@ def manual_close_evidence(row, audits, closings, policies, staff, now, days):
     if not closing or not policy:
         return None
     distance = (parse(closing['closing_at']) - parse(audit['entered_at'])).total_seconds() / 86400
-    if not 0 <= distance <= days or int(row['amount_vnd']) <= int(policy['materiality_vnd']):
+    comparison_amount = abs(int(row['amount_vnd'])) if signed_amounts else int(row['amount_vnd'])
+    if not 0 <= distance <= days or comparison_amount <= int(policy['materiality_vnd']):
         return None
     return dict(manual_proxy=None, evidence_status='confirmed_sources', audit_id=audit['audit_id'],
                 entered_at=audit['entered_at'], closing_id=closing['closing_id'], closing_at=closing['closing_at'],

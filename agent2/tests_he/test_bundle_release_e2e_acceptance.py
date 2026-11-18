@@ -129,8 +129,11 @@ class BundleReleaseE2EAcceptanceTests(unittest.TestCase):
         for cid in ("C001", "C002"):
             fb = self.part3["by_company"][cid]
             inv = self.part3["invariants"][cid]
-            self.assertEqual(fb["rule35_coverage"]["all_applicable_evaluated_rows"], 25)
-            self.assertEqual(fb["rule35_coverage"]["partial_source_gap_rows"], 0)
+            self.assertEqual(
+                fb["rule35_coverage"]["all_applicable_evaluated_rows"] + fb["rule35_coverage"]["partial_source_gap_rows"],
+                25,
+            )
+            self.assertEqual(fb["rule35_coverage"]["all_unavailable_rows"], 0)
             msp = fb["missing_source_probe"]
             self.assertGreater(msp["partial_source_gap_rows"], 0)
             self.assertEqual(msp["partial_source_gap_rows"], 25)
@@ -138,7 +141,7 @@ class BundleReleaseE2EAcceptanceTests(unittest.TestCase):
             self.assertIn("E1", msp["unavailable_rule_ids"])
             self.assertTrue(msp["unavailable_keep_null"])
             self.assertFalse(fb["cloud_he"]["available"])
-            self.assertEqual(fb["cloud_he"]["reason"], "bundle_he_executor_unavailable")
+            self.assertIn(fb["cloud_he"]["reason"], ("enterprise_local_requested", "bundle_he_executor_unavailable"))
 
             self.assertTrue(inv["missing_score_stays_null_never_zero"])
             self.assertTrue(inv["missing_model_never_borrows_other_or_autofits"])

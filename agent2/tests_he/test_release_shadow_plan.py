@@ -226,5 +226,67 @@ svc.run(scope,'hard-queue-process-crash','staging',i['sid'],i['as_of'])
         self.denied('RELEASE_BUDGET_PERIOD_MIGRATION',lambda:self.switch(b,1))
         self.assertEqual(self.store.current(self.scope,'staging')['bundle_id'],a['bundle_id'])
 
+    def test_owner_approved_pilot_active_policy_and_production_lane_gate(self):
+        from sme_fraud.case_queue_policy import approved_pilot_policy
+        from sme_fraud.release_shadow_plan import make_pilot_governance
+        pol=approved_pilot_policy()
+        self.assertEqual(pol['budget']['case_budget_limit'],5)
+        self.assertEqual(pol['scoring']['min_case_score'],5.0)
+        self.assertEqual(pol['scoring']['rule_weight'],1.0)
+        self.assertEqual(pol['scoring']['ml_weight'],2.0)
+        self.assertEqual(pol['scoring']['mandatory_rules'],['P1'])
+        self.assertTrue(pol['fixture_declaration']['approved_for_production'])
+        self.assertEqual(pol['fixture_declaration']['open_decision_gates'],[])
+
+        # Without pilot_governance certificate, approved_for_production=True is rejected
+        no_cert=deepcopy(self.package);no_cert['case_policy']=deepcopy(pol)
+        self.denied('RELEASE_PRODUCTION_BLOCKED',lambda:self.svc.register_plan(self.scope,no_cert,'pilot-missing-cert'))
+
+        # Tampered policy_sha256 in pilot_governance is rejected
+        bad_cert=deepcopy(no_cert);bad_cert['pilot_governance']=make_pilot_governance(bad_cert['study'],pol)
+        bad_cert['pilot_governance']['policy_sha256']='0'*64
+        self.denied('RELEASE_PILOT_GOVERNANCE_INVALID',lambda:self.svc.register_plan(self.scope,bad_cert,'pilot-bad-cert'))
+
+        # Strict unreachable D-09 criteria fails production gate and blocks approval
+        strict_pkg=deepcopy(no_cert)
+        strict_pkg['pilot_governance']=make_pilot_governance(strict_pkg['study'],pol,min_labeled_test_rows=99)
+        strict_reg=self.svc.register_plan(self.scope,strict_pkg,'pilot-strict-d09')
+        strict_bun=self.svc.prepare(self.scope,self.sid,'Pilot strict fail','prep-pilot-strict',plan_id=strict_reg['plan_id'])
+        strict_gate=self.svc.qualify(self.scope,strict_bun['bundle_id'],'production')
+        self.assertFalse(strict_gate['production_ready']);self.assertFalse(strict_gate['technical_ready'])
+        self.denied('RELEASE_PRODUCTION_BLOCKED',lambda:self.svc.approve(self.scope,strict_bun['bundle_id'],strict_gate['gate_id'],'production','Should block when D-09 fails'))
+
+        # Valid Owner-Approved Pilot Active package passes production gate, activates, and routes to active_queue with simulated warning
+        pilot_pkg=deepcopy(no_cert)
+        pilot_pkg['pilot_governance']=make_pilot_governance(pilot_pkg['study'],pol,min_labeled_test_rows=2,min_precision_resolved=0.5,max_false_alerts_per_period=3)
+        reg=self.svc.register_plan(self.scope,pilot_pkg,'pilot-valid-d09')
+        self.assertTrue(reg['production_ready'])
+        bun=self.svc.prepare(self.scope,self.sid,'Pilot Active Release','prep-pilot-valid',plan_id=reg['plan_id'])
+        gate=self.svc.qualify(self.scope,bun['bundle_id'],'production')
+        self.assertTrue(gate['production_ready'],gate);self.assertTrue(gate['technical_ready'])
+        by_name={g['name']:g for g in gate['gates']}
+        self.assertEqual(by_name['quality']['status'],'pass')
+        self.assertTrue(by_name['quality']['observed']['simulated_source_warning'])
+        self.assertEqual(by_name['production_policy']['status'],'pass')
+        self.assertEqual(by_name['production_policy']['observed']['closed_decisions'],['D-04','D-05','D-06','D-07'])
+        app=self.svc.approve(self.scope,bun['bundle_id'],gate['gate_id'],'production','Owner approved Pilot Active release with simulated warning')
+        self.assertEqual(app['scope'],'pilot_active_production')
+        sw=self.svc.switch(self.scope,dict(bundle_id=bun['bundle_id'],gate_id=gate['gate_id'],approval_id=app['approval_id'],
+                           lane='production',expected_revision=0,reason='Activate Pilot Active bundle',action='activate'),'switch-pilot-prod')
+        self.assertEqual(sw['revision'],1);self.assertTrue(self.svc.overview(self.scope)['production_ready'])
+        run_res=self.svc.run(self.scope,'pilot-active-run-1','production',self.sid,self.cutoff)
+        pipe=run_res['result']['pipeline']
+        self.assertEqual(pipe['queue_mode'],'active')
+        self.assertEqual(pipe['queue']['mode_namespace'],'active')
+        self.assertEqual(pipe['queue']['queue_target'],'active_queue')
+        self.assertTrue(pipe['queue']['policy_summary']['approved_for_production'])
+        self.assertEqual(pipe['queue']['budget_status']['budget_limit'],5)
+        self.assertTrue(pipe.get('simulated_source_warning'))
+        self.assertTrue(any(d['decision']=='mandatory_route' for d in pipe['queue']['decisions']))
+        self.assertEqual(self.queue.get_queue_state(self.scope,mode='shadow')['items'],[])
+        self.assertGreater(len(self.queue.get_queue_state(self.scope,mode='active')['items']),0)
+        # Legacy unpinned active delivery endpoint remains blocked
+        self.denied('RELEASE_PRODUCTION_BLOCKED',lambda:self.svc.require_new_delivery(self.scope))
+
 
 if __name__=='__main__':unittest.main()

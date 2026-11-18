@@ -1,12 +1,12 @@
-# Luồng bundle trên Portal, phiếu rà và công việc — CR-061/062
+# Luồng bundle trên Portal, phiếu rà và công việc — CR-061..CR-064
 
-Trạng thái: **READY_FOR_REVIEW kỹ thuật, shadow tại doanh nghiệp**.
-Production/toàn R6 và full HE theo bundle tiếp tục BLOCKED.
+Trạng thái: **READY_FOR_REVIEW kỹ thuật (Staging Shadow + Pilot Active nội bộ có cảnh báo nguồn mô phỏng)**.
+Rollout thương mại đa tổ chức (`D-17, D-18, D-19`) và full HE toàn bộ 35 luật / ML 33 feature tiếp tục tách cổng riêng.
 
 Luồng đã nối:
 
-`Snapshot → feature PIT → các nhánh khả dụng → selected arm/fallback đã ghim →
-gộp vụ → policy/ngân sách cấp vụ → queue shadow → review packet → báo cáo`.
+`Snapshot → feature PIT → các nhánh khả dụng (Local hoặc Cloud Concrete FHE 7 luật + RobustZ 2 cột) → selected arm/fallback đã ghim →
+gộp vụ → policy/ngân sách cấp vụ (D-04..D-07) → queue shadow hoặc Pilot Active (D-09) → review packet → báo cáo`.
 
 Tái sử dụng detector, validation và CaseQueueStore từ CR-060. Không fit trong
 request, không tự chọn model mới nhất, không đổi trọng số/ngưỡng live. B=3 case
@@ -28,7 +28,14 @@ execution/queue receipt giữ cùng snapshot/run/bundle dù active pointer đã 
 Không nhận model, score, policy, role hoặc ngưỡng từ body của thao tác chạy.
 
 Sau nhập → kiểm tra → xác nhận lưu, bấm **Tiếp tục đến vụ cần rà** để chuyển đúng
-DN/snapshot vào màn chung. Snapshot chưa có source profile đầy đủ vẫn xuất hiện
+DN/snapshot vào màn chung. Thanh điều hướng trên màn **Vụ cần rà** cũng nối trực tiếp
+tới **Xác minh nhãn** (`/agent2/label-verification#company=...`) và **Train HE nhiều batch**
+(`/agent2/batch-training#company=...`) kèm liên kết quay lại **Vụ cần rà** giữ nguyên ngữ cảnh
+doanh nghiệp. Phần **Hàng đợi chờ xét (Backlog shadow)** hiển thị các vụ tạm hoãn do hết
+ngân sách kỳ hiện tại (`budget_deferred`) hoặc dưới ngưỡng tiếp nhận (`below_threshold`,
+không tự hết hạn) và cho phép bấm **Xét lại vụ chờ sang kỳ mới** để tiếp nhận các vụ đủ
+điều kiện vào kỳ ngân sách tiếp theo kèm packet phiếu rà tương ứng. Snapshot chưa có
+source profile đầy đủ vẫn xuất hiện
 với lý do không chạy được; không chuyển ngầm sang P1. Nếu chưa có bundle staging
 tương thích, người quản lý phải chuẩn bị/kiểm định/duyệt cấu hình trước.
 
@@ -115,8 +122,10 @@ Sau `/api/v1/companies/{DN}/pipeline-workspace`:
 
 | Route | Chức năng |
 |---|---|
-| `GET /` hoặc `GET /runs` | Snapshot được đọc, phiên bản sẵn sàng và các lượt completed/pending |
-| `POST /runs` | Body run_id + snapshot_id; chạy/tiếp tục bundle staging đã duyệt |
+| `GET /` hoặc `GET /runs` | Snapshot được đọc, các lane khả dụng (`staging`, `production`), `execution_modes` theo từng lane và các lượt completed/pending |
+| `POST /runs` | Body `run_id` + `snapshot_id` (+ `execution_mode`, `lane`); chạy/tiếp tục bundle `staging` (shadow) hoặc `production` (Pilot Active) đã kích hoạt |
+| `GET /backlog` / `GET /backlog/active` | Danh sách và thống kê vụ chờ (`backlog_waiting`) trong hàng đợi `shadow` hoặc `active` (Pilot Active), đã ẩn trường thuật toán/điểm ML theo RULE-UI-01 |
+| `POST /backlog/reevaluate` | Body `target_period_key` + `request_id` (+ `mode`); xét lại vụ chờ sang kỳ ngân sách mới bằng `case_policy` ghim trên bundle hiện hành của lane tương ứng, tạo lượt rà cho các vụ vừa được tiếp nhận |
 | `GET /runs/{run}` | Báo cáo nghiệp vụ và phiếu từ observation đã hoàn tất |
 | `GET /runs/{run}/report[.csv]` | Xuất JSON hoặc CSV nghiệp vụ |
 | `POST /runs/{run}/reviews/{review}/start` | Lease đồng hồ |
@@ -133,17 +142,29 @@ trong transaction trước commit. Người dùng không được tự tạo phi
 
 ## Ràng buộc HE
 
-Profile hiện tại tuyên bố enterprise_local_only, he_execution=false và không có
-network gửi raw cloud. Không đổi kết quả ECOD local thành kết quả HE. Mỗi nhánh
-cloud trong execution capability mang status=unavailable khi bundle chưa ghim
-executor HE tương thích. Nếu request đòi cloud_ciphertext_only, backend trả
-PIPELINE_HE_UNAVAILABLE **trước** tạo run/pin hoặc gọi bộ chấm local.
+Mặc định bundle chạy `enterprise_local_only` (`he_execution=false`) tại doanh nghiệp
+và không gửi dữ liệu rõ lên cloud. Khi chuẩn bị bundle với
+`execution_mode=cloud_ciphertext_only`, `BundleHE` (`bundle-he4-native/1.1.0`) ghim
+build (`rules`, `c3`, `graph`, `statistics`), cấu hình worker, binding doanh nghiệp và các epoch
+khóa đã cấp vào slot `he` của bundle:
 
-Đường HE hiện hữu vẫn độc lập, giữ worker/khóa/build và unsupported semantics cũ.
-Lượt này chưa nối full HE/supervised-shadow vào bundle executor và chưa chạy HE
-thật cho bằng chứng mới; không được quảng bá thành full ciphertext pipeline.
-Production gate, quyết định chất lượng và các yêu cầu chưa chốt vẫn bị chặn.
-Không restart/deploy Portal live hoặc đổi model/key/phiên/quyền live.
+- Cloud worker chỉ nhận bản mã và evaluation key công khai cho 7 luật (`P1`, `A6`, `C2`, `C3`, `B1`, `B5/E4`)
+  và nhánh thống kê `RobustZ` 2 cột (`build-statistics-v1`, khi model ghim có đúng 2 biến đầu ra) trên snapshot nguồn 35 luật.
+- 28 luật còn lại và nhánh ML không nhãn/có nhãn 33 feature trả `unavailable`
+  (`complete_catalogue=false`, `native_33_feature_he_unsupported`); không lấy điểm
+  ECOD/IF local để giả làm kết quả HE.
+- Giải mã, áp chính sách đã ghim (`D-04..D-07`), gộp vụ, cấp ngân sách, ghi hàng đợi `shadow` hoặc `active_queue` (Pilot `D-09`),
+  tạo packet phiếu rà, xử lý task và xuất báo cáo vẫn chạy tại node doanh nghiệp. Khi dữ liệu nguồn mang cờ `is_simulated=true`,
+  lượt chạy vào hàng đợi Active bắt buộc gắn `simulated_source_warning` rõ trên báo cáo và giao diện.
+- Nếu node chưa cấu hình `BundleHE` hoặc bundle đang kích hoạt là bản local không
+  ghim slot `he`, yêu cầu `cloud_ciphertext_only` bị từ chối bằng
+  `PIPELINE_HE_UNAVAILABLE` **trước** khi tạo job hay gọi bộ chấm rõ.
+
+Chi tiết cấu hình, giao nhận/khôi phục và phạm vi HE theo bundle xem tại
+`agent2/docs/BUNDLE_HE.md` và bằng chứng nghiệm thu tại
+`Agent2_Spec_v2_1/evidence/R6/bundle_he_20261118/REPORT.md`. Production gate,
+quyết định chất lượng và các yêu cầu chưa chốt vẫn bị chặn. Không restart/deploy
+Portal live hoặc đổi model/key/phiên/quyền live.
 
 ## Kiểm thử
 

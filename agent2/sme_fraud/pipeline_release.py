@@ -1,8 +1,7 @@
-"""Pinned release qualification and staging execution; no production-policy defaults.
+"""Pinned staging bundles: local shadow or bounded ciphertext-only HE detectors.
 
-The supported executor is an enterprise, read-only detector shadow. It is NOT
-the HE cloud executor or a case-delivery pipeline. Open governance decisions
-and that missing production executor deliberately block production activation.
+Source preparation/decryption/policy/case workflow stay at the enterprise.
+Production approval and full HE catalogue/model support remain separate gates.
 """
 from datetime import datetime,timedelta,timezone
 from pathlib import Path
@@ -32,7 +31,9 @@ def runtime_signature():
     shared=Path(finance_input.__file__).parent
     shared_code={p.relative_to(shared).as_posix():digest(p.read_bytes()) for p in sorted(shared.rglob('*')) if p.suffix in ('.py','.json')}
     schemas={p.name:digest(p.read_bytes()) for p in sorted(ROOT.glob('*.schema.json'))}
-    return dict(profile=PROFILE,code=code,schemas=schemas,shared_input=shared_code,method_runtime=_versions(),
+    he_root=ROOT.parent/'experiments'
+    he_code={p.relative_to(he_root).as_posix():digest(p.read_bytes()) for name in ('he4','he_inference') for p in sorted((he_root/name).glob('*.py'))}
+    return dict(profile=PROFILE,code=code,schemas=schemas,shared_input=shared_code,he_code=he_code,method_runtime=_versions(),
                 metadata_runtime=dict(cryptography=version('cryptography'),sqlite=sqlite3.sqlite_version),
                 key_requirement='none: enterprise clear shadow; no key or HE fallback',
                 state_migrations='none; release store is separate from business stores')
@@ -67,6 +68,7 @@ class ReleaseService:
         self.store=store;self.snapshots=snapshots;self.resources=resources or AnalysisResources();self.case_queue=case_queue
         from .bundle_reviews import BundleWorkspace
         self.workspace=BundleWorkspace(self)
+        self.he_executor=None
 
     def register_plan(self,scope,package,key,recheck=None):
         """Trusted enterprise producer/CLI only. No HTTP upload of scores or policies."""
@@ -89,7 +91,7 @@ class ReleaseService:
             prior=self.store.receipt(c,scope,key,request_hash)
             if prior:return prior
             oid=self.store.put(c,scope,'artifact',dict(slot='validation_study',value=package))
-            value=dict(plan_id=oid,study_result_sha256=package['study']['study_result_sha256'],production_ready=False)
+            value=dict(plan_id=oid,study_result_sha256=package['study']['study_result_sha256'],production_ready=bool('pilot_governance' in package))
             self.store.receipt(c,scope,key,request_hash,value)
         return value
 
@@ -141,9 +143,12 @@ class ReleaseService:
             reference[method]={k:m[k] for k in ('reference_version','reference_binding','reference_start','reference_end')}
         return models,preprocess,reference
 
-    def prepare(self,scope,snapshot_id,name,key,recheck=None,*,plan_id=None):
+    def prepare(self,scope,snapshot_id,name,key,recheck=None,*,plan_id=None,execution_mode='enterprise_local_only'):
+        ensure(execution_mode in ('enterprise_local_only','cloud_ciphertext_only'),'PIPELINE_EXECUTION_MODE','Chế độ chạy không hợp lệ.',400)
         ensure(isinstance(name,str) and 1<=len(name.strip())<=160,'RELEASE_NAME','Tên phiên bản dài tối đa 160 ký tự.',400)
-        request_hash=digest(canonical(dict(action='prepare',snapshot_id=snapshot_id,name=name,plan_id=plan_id)))
+        request_data=dict(action='prepare',snapshot_id=snapshot_id,name=name,plan_id=plan_id)
+        if execution_mode!='enterprise_local_only':request_data['execution_mode']=execution_mode
+        request_hash=digest(canonical(request_data))
         # Resolve only trusted snapshots/MethodStore, never accept arbitrary binaries,
         # paths, executable configuration, secrets or caller asserted gate results.
         with self.store.tx(scope,recheck) as c:
@@ -183,6 +188,9 @@ class ReleaseService:
         if package is not None:
             compiled=shadow_plan.compile_values(package);values.update(compiled)
             reasons={k:v for k,v in reasons.items() if k not in compiled}
+        if execution_mode=='cloud_ciphertext_only':
+            ensure(native and self.he_executor is not None,'PIPELINE_HE_UNAVAILABLE','Chưa cấu hình HE snapshot nguồn cho bộ điều phối bundle.',503)
+            values['he']=self.he_executor.capture(scope);reasons.pop('he',None)
         with self.store.tx(scope,recheck) as c:
             prior=self.store.receipt(c,scope,key,request_hash)
             if prior:return dict(bundle_id=prior['bundle_id'],bundle=self.store.read(c,scope,prior['bundle_id'],'bundle'))
@@ -230,6 +238,9 @@ class ReleaseService:
             shadow_plan.validate_package(values['validation_study'],scope,models,contract)
             for slot,value in shadow_plan.compile_values(values['validation_study']).items():
                 ensure(values.get(slot)==value,'RELEASE_PLAN_BINDING','Policy/validation component không khớp gói đã khóa.')
+        if 'he' in values:
+            ensure(self.he_executor is not None,'PIPELINE_HE_UNAVAILABLE','Node chưa kết nối executor HE đã ghim trong bundle.',503)
+            self.he_executor.check(scope,values['he'])
         return bundle,values
 
     def _execute(self,scope,bundle,values,snapshot_id,as_of,recheck=None):
@@ -274,11 +285,12 @@ class ReleaseService:
                 if error.status in (403,404):raise
                 add('compatibility','Exact code, feature, model, reference and component checksums',error.code,'fail')
         if compatible:add('compatibility','Exact code, feature, model, reference and component checksums','All configured pins match','pass',[bundle_id])
-        technical=None;elapsed=None
+        technical=None;elapsed=None;is_sim=True
         if compatible:
             try:
                 sid=bundle['qualification_snapshot']['snapshot_id'];manifest,data=self._snapshot(scope,sid,recheck)
                 ensure(all(manifest[k]==v for k,v in bundle['qualification_snapshot'].items()),'RELEASE_SOURCE_CHANGED','Snapshot qualification không khớp.')
+                is_sim=bool(data['source']['is_simulated']) if 'source' in data else all(r['source']['is_simulated'] for r in data.get('transactions',[]))
                 # Canonical snapshot cutoff is explicitly taken from supplied source
                 # records. This is a smoke check, not an out-of-time quality study.
                 as_of=data['source']['as_of'] if 'source' in data else max(r['observed_at'] for r in data['transactions'])
@@ -290,24 +302,56 @@ class ReleaseService:
             except ImportFailure as error:add('technical','Real enterprise detector smoke',error.code,'fail')
         else:add('technical','Compatible immutable bundle','Compatibility failed','blocked')
         study=values.get('validation_study',{}).get('study') if values else None
-        add('quality','Approved D-09 study: same snapshot/period/budget, verified outcomes and uncertainty',
-            dict(status='unapproved_study_linked' if study else 'unknown',precision=None,recall=None,useful_increment=None,review_minutes=None,
-                 study_result_sha256=study['study_result_sha256'] if study else None,
-                 selected_arm=study['detector_validation']['selected_arm_id'] if study else None,
-                 measured_shadow_comparison=study['sealed_future_test']['selected_arm_summary'] if study else None,
-                 reason='Linked study is not a production approval; synthetic outcomes do not prove business effectiveness'), 'blocked',
-            [bundle['components']['validation_study']['artifact_id']] if study else [])
-        add('operations','Restart-safe release metadata; full delivery/recovery/HE evidence required for production',
-            dict(release_store='AES-GCM; durable SQLite CAS/receipts/pins',
-                 full_pipeline_recovery='not_qualified',he_executor='not_used',scope='release_metadata_only'),
-            ('pass' if not study or self.case_queue is not None else 'fail') if lane=='staging' else 'blocked')
-        add('approval','Explicit unexpired director approval of exact bundle, lane and gate',
-            'Approval must be created separately; shared workspace login does not identify a named reviewer','blocked')
-        add('production_policy','Closed D-04/05/06/07/09/17/18/19 and approved full production executor',
-            dict(open_decisions=list(OPEN_DECISIONS),executor=bundle['profile'] if bundle else PROFILE,production_executor=False), 'blocked')
+        pilot_gov=values.get('validation_study',{}).get('pilot_governance') if values else None
+        if pilot_gov is not None and study is not None:
+            vm=study['sealed_future_test']['selected_arm_summary']['verified_label_metrics']
+            crit=pilot_gov['pilot_d09_criteria']
+            resolved_n=int(vm['resolved_count']);prec=vm['resolved_precision']['value'];false_n=int(vm['verified_non_fraud_count'])
+            d09_ok=(resolved_n>=crit['min_labeled_test_rows'] and prec is not None and prec>=crit['min_precision_resolved'] and false_n<=crit['max_false_alerts_per_period'])
+            sim_warn=('Dữ liệu nguồn đánh giá mang cờ mô phỏng (is_simulated=true); cho phép vận hành Pilot nội bộ kèm cảnh báo hiển thị rõ.' if is_sim else None)
+            add('quality','Approved Pilot D-09 study: verified outcomes meet pilot criteria on sealed future test',
+                dict(status='pilot_d09_verified' if d09_ok else 'pilot_d09_failed',precision=prec,recall=None,useful_increment=None,review_minutes=None,
+                     resolved_selected_rows=resolved_n,verified_false_alerts=false_n,criteria=crit,simulated_source_warning=sim_warn,
+                     study_result_sha256=study['study_result_sha256'],selected_arm=study['detector_validation']['selected_arm_id'],
+                     measured_shadow_comparison=study['sealed_future_test']['selected_arm_summary']),
+                'pass' if d09_ok else 'fail',[bundle['components']['validation_study']['artifact_id']])
+            add('operations','Restart-safe release metadata, ACID case queue outbox, and pinned executor',
+                dict(release_store='AES-GCM; durable SQLite CAS/receipts/pins',full_pipeline_recovery='checkpoint_plus_queue_outbox_idempotent',
+                     he_executor='build_and_epoch_pinned_pilot_ready' if 'he' in values else 'not_used',scope='internal_pilot_active'),
+                'pass' if (self.case_queue is not None and compatible) else 'fail')
+            add('approval','Explicit unexpired director approval of exact bundle, lane and gate',
+                'Approval must be created separately; shared workspace login does not identify a named reviewer','blocked')
+            add('production_policy','Closed D-04/05/06/07 + Pilot D-09 gate for internal Pilot Active queue',
+                dict(closed_decisions=list(pilot_gov['closed_decisions']),pilot_gate=pilot_gov['pilot_gate'],open_decisions=['D-17','D-18','D-19'],
+                     executor=bundle['profile'],production_executor=True,pilot_scope=pilot_gov['pilot_scope'],simulated_warning_enforced=True),'pass')
+            if lane=='production':
+                prod_ok=all(g['status']=='pass' for g in gates if g['name'] in ('compatibility','technical','quality','operations','production_policy'))
+                tech_ready=prod_ok;prod_ready=prod_ok
+                rep_scope='internal_pilot_active_with_simulated_warning' if prod_ok else 'enterprise_detector_staging_only'
+            else:
+                tech_ready=all(g['status']=='pass' for g in gates if g['name'] in ('compatibility','technical','operations'))
+                prod_ready=False;rep_scope='enterprise_detector_staging_only'
+        else:
+            add('quality','Approved D-09 study: same snapshot/period/budget, verified outcomes and uncertainty',
+                dict(status='unapproved_study_linked' if study else 'unknown',precision=None,recall=None,useful_increment=None,review_minutes=None,
+                     study_result_sha256=study['study_result_sha256'] if study else None,
+                     selected_arm=study['detector_validation']['selected_arm_id'] if study else None,
+                     measured_shadow_comparison=study['sealed_future_test']['selected_arm_summary'] if study else None,
+                     reason='Linked study is not a production approval; synthetic outcomes do not prove business effectiveness'), 'blocked',
+                [bundle['components']['validation_study']['artifact_id']] if study else [])
+            add('operations','Restart-safe release metadata; full delivery/recovery/HE evidence required for production',
+                dict(release_store='AES-GCM; durable SQLite CAS/receipts/pins',
+                     full_pipeline_recovery='not_qualified',he_executor='build_and_epoch_pinned_not_he_quality_qualified' if values and 'he' in values else 'not_used',scope='release_metadata_only'),
+                ('pass' if not study or self.case_queue is not None else 'fail') if lane=='staging' else 'blocked')
+            add('approval','Explicit unexpired director approval of exact bundle, lane and gate',
+                'Approval must be created separately; shared workspace login does not identify a named reviewer','blocked')
+            add('production_policy','Closed D-04/05/06/07/09/17/18/19 and approved full production executor',
+                dict(open_decisions=list(OPEN_DECISIONS),executor=bundle['profile'] if bundle else PROFILE,production_executor=False), 'blocked')
+            tech_ready=all(g['status']=='pass' for g in gates if g['name'] in ('compatibility','technical','operations'))
+            prod_ready=False;rep_scope='enterprise_detector_staging_only'
         report=dict(version='pipeline-release-gate/1.0.0',bundle_id=bundle_id,lane=lane,created_at=self.store.now(),
-                    requested_by=scope.actor_id,gates=gates,technical_ready=all(g['status']=='pass' for g in gates if g['name'] in ('compatibility','technical','operations')),
-                    production_ready=False,scope='enterprise_detector_staging_only')
+                    requested_by=scope.actor_id,gates=gates,technical_ready=tech_ready,
+                    production_ready=prod_ready,scope=rep_scope)
         with self.store.tx(scope,recheck) as c:
             if key is not None:
                 prior=self.store.receipt(c,scope,key,receipt_hash)
@@ -317,14 +361,18 @@ class ReleaseService:
         return dict(gate_id=oid,**report)
 
     def approve(self,scope,bundle_id,gate_id,lane,reason,recheck=None,*,key=None):
-        ensure(lane=='staging','RELEASE_PRODUCTION_BLOCKED','Chưa có gate/policy đủ để duyệt production.')
+        ensure(lane in ('staging','production'),'RELEASE_LANE','Chọn staging hoặc production.',400)
         ensure(isinstance(reason,str) and 10<=len(reason.strip())<=1000,'RELEASE_REASON','Cần lý do phê duyệt rõ ràng.',400)
         receipt_hash=digest(canonical(dict(action='approve',bundle_id=bundle_id,gate_id=gate_id,lane=lane,reason=reason)))
         with self.store.tx(scope,recheck) as c:
             if key is not None:
                 prior=self.store.receipt(c,scope,key,receipt_hash)
                 if prior:return dict(approval_id=prior['approval_id'],**self.store.read(c,scope,prior['approval_id'],'approval'))
-            self._compatible(c,scope,bundle_id,recheck);gate=self.store.read(c,scope,gate_id,'gate')
+            gate=self.store.read(c,scope,gate_id,'gate')
+            if lane=='production':
+                ensure(gate['bundle_id']==bundle_id and gate['lane']=='production' and gate.get('production_ready') is True,
+                       'RELEASE_PRODUCTION_BLOCKED','Chưa có gate/policy đủ để duyệt production.')
+            self._compatible(c,scope,bundle_id,recheck)
             ensure(gate['bundle_id']==bundle_id and gate['lane']==lane and gate['technical_ready'],
                    'RELEASE_GATE_BLOCKED','Gate không đạt hoặc không thuộc đúng bundle/lane.')
             self._revocation(c,scope,[gate_id])
@@ -332,16 +380,20 @@ class ReleaseService:
             ensure(now-datetime.fromisoformat(gate['created_at'])<=timedelta(hours=24),'RELEASE_GATE_EXPIRED','Gate quá 24 giờ; cần kiểm lại.')
             value=dict(bundle_id=bundle_id,gate_id=gate_id,lane=lane,actor_id=scope.actor_id,reason=reason,
                        created_at=now.isoformat(),expires_at=(now+timedelta(hours=24)).isoformat(),
-                       identity_assurance='server_authorized_director; may be shared workspace',scope='technical_staging_only')
+                       identity_assurance='server_authorized_director; may be shared workspace',
+                       scope='pilot_active_production' if lane=='production' else 'technical_staging_only')
             oid=self.store.put(c,scope,'approval',value)
             if key is not None:self.store.receipt(c,scope,key,receipt_hash,dict(approval_id=oid))
         return dict(approval_id=oid,**value)
 
     def switch(self,scope,body,key,recheck=None):
         lane=body['lane'];bundle_id=body['bundle_id'];gate_id=body['gate_id'];approval_id=body['approval_id']
+        ensure(lane in ('staging','production'),'RELEASE_LANE','Chọn staging hoặc production.',400)
         def guard(c):
-            ensure(lane=='staging','RELEASE_PRODUCTION_BLOCKED','Production còn thiếu gate nghiệp vụ và executor đầy đủ.')
             target,target_values=self._compatible(c,scope,bundle_id,recheck)
+            if lane=='production':
+                ensure(target['profile']==shadow_plan.PROFILE and 'pilot_governance' in target_values.get('validation_study',{}),
+                       'RELEASE_PRODUCTION_BLOCKED','Production còn thiếu gate nghiệp vụ và executor đầy đủ.')
             active=self.store.pointer(c,scope,lane)
             if active.get('bundle_id'):
                 previous,previous_values=self._values(c,scope,active['bundle_id'])
@@ -350,6 +402,8 @@ class ReleaseService:
                            'RELEASE_BUDGET_PERIOD_MIGRATION','Đổi loại kỳ ngân sách cần kế hoạch chuyển kỳ riêng; không được reset quota bằng release/rollback.')
             self._revocation(c,scope,[gate_id,approval_id])
             gate=self.store.read(c,scope,gate_id,'gate');approval=self.store.read(c,scope,approval_id,'approval')
+            if lane=='production':
+                ensure(gate.get('production_ready') is True,'RELEASE_PRODUCTION_BLOCKED','Production còn thiếu gate nghiệp vụ và executor đầy đủ.')
             ensure(gate['bundle_id']==bundle_id and gate['lane']==lane and gate['technical_ready'] and
                    all(approval[k]==v for k,v in dict(bundle_id=bundle_id,gate_id=gate_id,lane=lane).items()),
                    'RELEASE_APPROVAL_MISMATCH','Phê duyệt/gate không khớp bundle/lane.')
@@ -359,14 +413,15 @@ class ReleaseService:
                    'RELEASE_APPROVAL_EXPIRED','Phê duyệt hoặc gate hết hạn; cần kiểm lại và duyệt mới.')
         return self.store.switch(scope,lane,bundle_id,approval_id,gate_id,body['expected_revision'],body['reason'],key,body['action'],guard,recheck)
 
-    def run(self,scope,run_id,lane,snapshot_id,as_of,recheck=None,*,execution_mode='enterprise_local_only',require_case_profile=False):
-        ensure(lane=='staging','RELEASE_PRODUCTION_BLOCKED','Executor này chỉ chạy shadow tại doanh nghiệp.')
-        # This bundle executor is explicitly local. Cloud HE remains a separate
-        # authenticated, build-pinned runtime until a compatible bundle adapter
-        # exists; never route a ciphertext request into analyze_snapshot/joblib.
-        ensure(execution_mode=='enterprise_local_only','PIPELINE_HE_UNAVAILABLE',
+    def run(self,scope,run_id,lane,snapshot_id,as_of,recheck=None,*,execution_mode='enterprise_local_only',require_case_profile=False,he_header=None):
+        ensure(lane in ('staging','production'),'RELEASE_LANE','Chọn staging hoặc production.',400)
+        # An unconfigured node keeps failing closed. Ciphertext requests never
+        # enter the clear analyze_snapshot/joblib executor.
+        ensure(execution_mode in ('enterprise_local_only','cloud_ciphertext_only'),'PIPELINE_EXECUTION_MODE','Chế độ chạy không hợp lệ.',400)
+        ensure(execution_mode=='enterprise_local_only' or self.he_executor is not None,'PIPELINE_HE_UNAVAILABLE',
                'Bundle này chưa có executor HE tương thích; không chấm dữ liệu rõ thay cho yêu cầu cloud mã hóa.')
         request=dict(snapshot_id=snapshot_id,as_of=as_of)
+        if execution_mode=='cloud_ciphertext_only':request['execution_mode']=execution_mode
         pin=self.store.pin(scope,run_id,lane,request,recheck)
         # A successful retry returns the exact stored result, never recomputes with
         # a new pointer or creates delivery/budget side effects.
@@ -376,7 +431,11 @@ class ReleaseService:
                 value=self.store.read(c,scope,row['object_id'],'observation')
                 if value['pin_id']==pin['pin_id']:return dict(observation_id=row['object_id'],**value)
             bundle,values=self._compatible(c,scope,pin['bundle_id'],recheck)
+            if lane=='production':
+                ensure(bundle['profile']==shadow_plan.PROFILE and 'pilot_governance' in values.get('validation_study',{}),
+                       'RELEASE_PRODUCTION_BLOCKED','Bundle chưa đạt quản trị Pilot Active.')
             ensure(not require_case_profile or bundle['profile']==shadow_plan.PROFILE,'PIPELINE_CASE_PROFILE_REQUIRED','Phiên bản đang chọn chưa có luồng gộp vụ và phiếu rà.')
+            ensure(execution_mode!='cloud_ciphertext_only' or 'he' in values,'PIPELINE_HE_UNAVAILABLE','Bundle chưa ghim worker/build/khóa HE. Cần chuẩn bị và duyệt bundle HE mới.')
         # Commit deterministic execution BEFORE any queue reservation. This bridges
         # two SQLite stores using immutable checkpoint + queue idempotency receipt.
         execution=None
@@ -385,7 +444,13 @@ class ReleaseService:
                 saved=self.store.read(c,scope,row['object_id'],'execution')
                 if saved['pin_id']==pin['pin_id']:execution=saved;break
         if execution is None:
-            started=time.monotonic();result=self._execute(scope,bundle,values,snapshot_id,as_of,recheck)
+            started=time.monotonic()
+            if execution_mode=='cloud_ciphertext_only':
+                manifest,data=self._snapshot(scope,snapshot_id,recheck)
+                result=self.he_executor.execute(self,scope,pin,values,manifest,data,as_of,he_header,recheck)
+                if bundle['profile']==shadow_plan.PROFILE:
+                    result['pipeline']=shadow_plan.score_and_coalesce(scope,result,manifest,data,values['validation_study'],pin['bundle_id'])
+            else:result=self._execute(scope,bundle,values,snapshot_id,as_of,recheck)
             execution=dict(pin_id=pin['pin_id'],result=result,elapsed_seconds=time.monotonic()-started)
             with self.store.tx(scope,recheck) as c:
                 self._compatible(c,scope,pin['bundle_id'],recheck)
@@ -394,14 +459,17 @@ class ReleaseService:
                     if saved['pin_id']==pin['pin_id']:execution=saved;break
                 else:self.store.put(c,scope,'execution',execution)
         result=loads(canonical(execution['result']));elapsed=execution['elapsed_seconds']
-        result['execution']=dict(location=execution_mode,cloud_he=dict(available=False,reason='bundle_he_executor_unavailable'),
-            cloud_branches={name:dict(available=False,status='unavailable',reason='bundle_he_executor_unavailable') for name in ('rules','statistics','graph','ml')},
-            plaintext_cloud_upload=False)
+        if execution_mode=='enterprise_local_only':
+            result['execution']=dict(location=execution_mode,cloud_he=dict(available=False,reason='enterprise_local_requested'),
+                cloud_branches={name:dict(available=False,status='unavailable',reason='enterprise_local_requested') for name in ('rules','statistics','graph','ml')},
+                plaintext_cloud_upload=False)
+        q_mode='active' if lane=='production' else 'shadow'
         if 'pipeline' in result:
             ensure(self.case_queue is not None,'RELEASE_QUEUE_UNAVAILABLE','Chưa cấu hình kho case shadow.',503)
             with self.store.tx(scope,recheck,write=False) as c:self._compatible(c,scope,pin['bundle_id'],recheck)
             pipeline=result['pipeline'];pipeline['case_bundle']['snapshot_binding'].update(run_id=run_id);queue_started=time.monotonic()
-            pipeline['queue']=self.case_queue.evaluate_and_enqueue(scope,pipeline['case_bundle'],mode='shadow',period_key=pipeline['period_key'],
+            pipeline['queue_mode']=q_mode
+            pipeline['queue']=self.case_queue.evaluate_and_enqueue(scope,pipeline['case_bundle'],mode=q_mode,period_key=pipeline['period_key'],
                 policy=pipeline['case_policy'],idempotency_key='release-'+pin['pin_id'],recheck=recheck)
             pipeline['queue_processing_seconds']=time.monotonic()-queue_started
         # Recheck pinned artifacts, not the active pointer, before committing result.
@@ -410,6 +478,8 @@ class ReleaseService:
             if 'pipeline' in result:
                 from .bundle_reviews import build_packet
                 manifest,data=self._snapshot(scope,snapshot_id,recheck)
+                if lane=='production' and data.get('source',{}).get('is_simulated'):
+                    result['pipeline']['simulated_source_warning']='CẢNH BÁO PILOT: Bản dữ liệu nguồn đang mang cờ mô phỏng (is_simulated=true); kết quả tại hàng đợi Active chỉ phục vụ vận hành Pilot nội bộ, bắt buộc đối chiếu chứng từ gốc trước khi kết luận.'
                 packet=build_packet(scope,pin,result,manifest,data)
                 result['pipeline']['review_packet_id']=self.store.put(c,scope,'review_packet',packet)
             metrics=self.metrics(result,elapsed)
@@ -486,11 +556,13 @@ class ReleaseService:
         pending=[dict(pin_id=p['id'],**{k:p['value'][k] for k in ('run_id','lane','bundle_id','request','at')})
                  for p in self.store.list(scope,'pin',recheck) if p['id'] not in completed]
         plans=[dict(plan_id=r['id'],study_sha256=r['value']['value']['study']['study_result_sha256'],selected_arm_id=r['value']['value']['study']['detector_validation']['selected_arm_id'],
+                    pilot_approved=bool('pilot_governance' in r['value']['value']),
                     execution_location='enterprise_local_only') for r in self.store.list(scope,'artifact',recheck) if r['value']['slot']=='validation_study']
-        return dict(version=VERSION,profile=PROFILE,production_ready=False,open_decisions=list(OPEN_DECISIONS),plans=plans,
+        pointers={lane:self.store.current(scope,lane,recheck) for lane in ('staging','production')}
+        return dict(version=VERSION,profile=PROFILE,production_ready=bool(pointers['production'].get('bundle_id')),open_decisions=list(OPEN_DECISIONS),plans=plans,
                     datasets=datasets,dataset_limit=100,
-                    pending_runs=pending,
-                    pointers={lane:self.store.current(scope,lane,recheck) for lane in ('staging','production')},
+                    pending_runs=pending,he_configured=self.he_executor is not None,
+                    pointers=pointers,
                     bundles=self.store.list(scope,'bundle',recheck),gates=self.store.list(scope,'gate',recheck),
                     approvals=self.store.list(scope,'approval',recheck),history=self.store.list(scope,'activation',recheck),
                     revocations=self.store.list(scope,'revocation',recheck),

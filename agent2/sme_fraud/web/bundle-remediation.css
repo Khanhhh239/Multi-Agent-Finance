@@ -1,0 +1,10 @@
+.bw-document,.bw-task{border:1px solid var(--line,#cbdad8);border-radius:12px;padding:1rem;margin:1rem 0;overflow-wrap:anywhere}
+.bw-document h4,.bw-task h4{margin-top:0}
+#bw-task-list fieldset{border:0;padding:.5rem 0;margin:0;min-width:0}
+#bw-task-list fieldset legend{font-weight:700;padding-top:1rem}
+#bw-task-list label{display:flex;flex-direction:column;gap:.4rem;margin:.7rem 0}
+#bw-task-list .check{flex-direction:row;align-items:center}
+#bw-task-list input:not([type=checkbox]),#bw-task-list select,#bw-task-list textarea{max-width:100%;box-sizing:border-box}
+#bw-task-list button{margin:.25rem .5rem .25rem 0;white-space:normal}
+#bw-task-list ul{padding-left:1.4rem}
+#bw-workflow-summary{margin:.7rem 0;overflow-wrap:anywhere}

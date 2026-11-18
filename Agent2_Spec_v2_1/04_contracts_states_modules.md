@@ -1,5 +1,37 @@
 # Contracts, thuật ngữ, trạng thái và module
 
+## CR-063 — nối HE thật vào bộ điều phối bundle chung
+
+Bundle1.1/profile `snapshot_case_shadow/1.0.0` hỗ trợ chuẩn bị và chạy với
+`execution_mode=cloud_ciphertext_only` thông qua `BundleHE` (`bundle-he4-native/1.0.0`)
+khi node doanh nghiệp được gắn `FourJobs` (`he4-enterprise/1.1.0`) và có ít nhất
+một profile đã cấp khóa (`rules`, `c3`, `graph`). Slot `he` của bundle ghim
+`source_contract=agent2-rule-snapshot/1.0.0`, `context` (bindings DN, worker URL,
+worker verify key, `implementation_sha256`, checksums `server.zip` và
+`client.specs.json`) và `key_contexts` (epoch và hash evaluation key theo từng
+profile đã cấp khóa; profile chưa cấp khóa giữ `null`, không tự sinh khóa khi chấm).
+
+Khi chạy `cloud_ciphertext_only`, `ReleaseStore.pin` ghim cả `execution_mode`;
+đổi sang chạy rõ với cùng `run_id` trả `RELEASE_RUN_CONFLICT`. `ReleaseStore` lưu
+đối tượng `he_job` (`rhej_`) gắn `pin_id`, `job_id` và `bundle_binding` (tenant,
+company, `run_id`, `pin_id`, `bundle_id`, `snapshot_id`, checksums, `as_of`,
+`he_component_sha256`); không lưu bearer token. Child job trong `FourJobs` dùng
+idempotency key `bundle:<pin_id>` nên crash giữa lúc tạo job và lưu `he_job`
+không tạo job thứ hai. Yêu cầu đang chạy trả `409 PIPELINE_RUN_PENDING`; chỉ
+`actor_id` đã gửi được tiếp tục job đang chạy, còn kết quả đã hoàn tất tuân theo
+quyền đọc chung của DN.
+
+Cloud worker chỉ nhận bản mã và evaluation key công khai cho các nhóm hỗ trợ
+(`P1`, `C3`, `B1`, `B5/E4`). Trước khi đưa kết quả vào `score_and_coalesce`,
+`BundleHE` kiểm lại snapshot/cutoff, đủ định danh giao dịch, `bundle_binding`,
+build/implementation checksums và key epochs. 30 luật còn lại và nhánh thống kê/ML
+33 feature giữ `unavailable` (`complete_catalogue=false`,
+`native_33_feature_he_unsupported`); không lấy điểm ECOD/RobustZ local giả làm HE.
+Giải mã, áp chính sách, gộp vụ, cấp ngân sách, ghi hàng đợi shadow, tạo packet
+phiếu, xử lý task và báo cáo chạy tại DN. Bundle local cũ hoặc node chưa cấu hình
+HE vẫn chặn `cloud_ciphertext_only` bằng `PIPELINE_HE_UNAVAILABLE` trước khi chấm rõ.
+Xem `agent2/docs/BUNDLE_HE.md` và `evidence/R6/bundle_he_20261118/REPORT.md`.
+
 ## CR-062 — Portal và task gắn nguồn của vụ
 
 Khi có release service, entry Portal dùng pipeline-workspace; legacy HE/P1 giữ

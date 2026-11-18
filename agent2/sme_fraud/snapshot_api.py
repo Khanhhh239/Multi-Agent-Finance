@@ -10,7 +10,7 @@ from .validation_api import authorize_request, read_body, read_json, respond_fai
 
 PREFIX = r"/api/v1/companies/([A-Za-z0-9_.:-]{1,128})/"
 UPLOAD = re.compile(PREFIX+r"imports/upload\Z")
-IMPORT = re.compile(PREFIX+r"imports/(imp_[a-f0-9]{32})(?:/(source|mapping|preview|commit|report))?\Z")
+IMPORT = re.compile(PREFIX+r"imports/(imp_[a-f0-9]{32})(?:/(source|mapping|inspect|preview|commit|report))?\Z")
 SNAPSHOT = re.compile(PREFIX+r"snapshots/(snp_[a-f0-9]{32})(/data)?\Z")
 
 
@@ -67,6 +67,9 @@ def handle_snapshots(handler, authorizer, store, method):
             elif method == "PUT" and action == "mapping":
                 key = _key(handler); body = _fields(read_json(handler), {"expected_revision", "mapping"})
                 handler.respond(200, store.revise(scope, import_id, body["expected_revision"], key, mapping=body["mapping"], recheck=recheck))
+            elif method == 'POST' and action == 'inspect':
+                body=_fields(read_json(handler),{'expected_revision'})
+                handler.respond(200,store.inspect_sources(scope,import_id,body['expected_revision'],recheck))
             elif method == "POST" and action == "preview":
                 body = _fields(read_json(handler), {"expected_revision"})
                 value = store.preview(scope, import_id, body["expected_revision"], recheck)

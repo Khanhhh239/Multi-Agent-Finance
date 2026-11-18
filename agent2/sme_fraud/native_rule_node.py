@@ -126,8 +126,8 @@ def validate_bundle(bundle,scope):
                 if f.endswith('_vnd') and v not in ('',None) and (type(v) is not int or abs(v)>999999999999999999):issue(path+'.'+f,'Tiền VND phải là số nguyên, tối đa 18 chữ số; không lấy trị tuyệt đối hoặc điền 0.')
                 if isinstance(v,float) and not math.isfinite(v):issue(path+'.'+f,'Không nhận NaN hoặc vô cực.')
             if 'recorded_at' in row and row['recorded_at']!=row['observed_at']:issue(path+'.recorded_at','Profile native cần recorded_at khớp observed_at; không tự dời lịch sử master.')
-            if name in ('transactions','journal_documents','journal_lines') and isinstance(row.get('posted_at'),str) and row['posted_at']<row['observed_at']:
-                issue(path+'.observed_at','Nguồn ghi nhận sau ngày ghi sổ cần adapter bitemporal riêng; bản native này không được dùng nó để sửa quá khứ.')
+            if name=='journal_lines' and row.get('debit_vnd') and row.get('credit_vnd'):
+                issue(path+'.credit_vnd','Một dòng sổ cái chỉ có Nợ hoặc Có; giữ dấu số tiền và tách đúng dòng nguồn.')
             id_field={'transactions':'transaction_id','companies':'company_id','employees':'employee_id','vendors':'vendor_id','customers':'customer_id'}.get(name)
             if id_field and id_field in row:
                 if not isinstance(row[id_field],str) or not row[id_field].strip():issue(path+'.'+id_field,'Mã nguồn phải là chuỗi không rỗng.');continue
@@ -154,7 +154,7 @@ def validate_bundle(bundle,scope):
                 issue(f'transactions[{i+1}].{field}','Bản ghi tham chiếu chưa được biết tại thời điểm thao tác; cần lịch sử nguồn phù hợp.')
     if not errors:
         try:
-            normalized=validated_tables(tables)
+            normalized=validated_tables(tables,signed_amounts=True)
             ApprovalAuthority(normalized)
         except (ValueError,KeyError,TypeError) as error:issue('tables',str(error))
     return dict(status='rejected' if errors else 'accepted',errors=errors)
@@ -169,7 +169,7 @@ def _gaps(bundle,rule):
         elif claim['status']!='complete':gaps.append(dict(table=name,reason='source_coverage_incomplete'))
         elif rule in HISTORY_RULES and name=='transactions' and claim['history_basis']!='since_inception':gaps.append(dict(table=name,reason='history_before_window_unknown'))
     for row in bundle['tables'].get('transactions',[]):
-        if row.get('posted_at','')>bundle['as_of']:continue
+        if row.get('posted_at','')>bundle['as_of'] or row['observed_at']>bundle['as_of']:continue
         if rule in ('P1','A6') and row.get('txn_type')=='vendor_payment' and not row.get('invoice_gross_vnd'):
             gaps.append(dict(table='transactions',record_id=row['transaction_id'],reason='invoice_value_unavailable'))
         if rule in ('A1','A2','A3','B1') and row.get('txn_type')=='vendor_payment' and row.get('recipient_account') and not row.get('recipient_bank_code'):
@@ -177,16 +177,7 @@ def _gaps(bundle,rule):
     return gaps
 
 
-def evaluate_bundle(bundle,scope):
-    checked=validate_bundle(bundle,scope)
-    if checked['status']!='accepted':fail(422,'NATIVE_RULE_SOURCE_INVALID',json_message(checked['errors']),'Sửa dòng/trường được nêu rồi xuất lại nguồn và manifest.')
-    tables={name:[deepcopy(r) for r in bundle['tables'].get(name,[]) if r['observed_at']<=bundle['as_of'] and (name!='transactions' or r['posted_at']<=bundle['as_of'])] for name in TABLES}
-    if not tables['companies'] or not tables['employees'] or not tables['transactions']:
-        fail(422,'NATIVE_RULE_CORE_MISSING','Cần doanh nghiệp, nhân viên và giao dịch nhìn thấy tại as_of.','Bổ sung nguồn lõi; không tạo người lập hoặc doanh nghiệp giả.')
-    # Empty optional sources are only an engine transport detail. Every affected
-    # rule is explicitly unavailable below, and no aggregate risk score is exposed.
-    reference=score_rules(tables,config=deepcopy(DEFAULT_CONFIG))
-    diagnostics=[r for r in monthly_diagnostics(tables,'phase4') if r['cutoff_at']<=bundle['as_of']]
+def _rule_results(bundle,reference,diagnostics):
     outputs=[]
     for rule,name in RULE_NAMES.items():
         gaps=_gaps(bundle,rule);hits=[dict(deepcopy(h),rule_id=rule,source_rule_id=h['rule_id']) for h in reference['hits'] if h['rule_id']==rule or rule in h.get('aliases',[])]
@@ -206,12 +197,52 @@ def evaluate_bundle(bundle,scope):
         outputs.append(dict(rule_id=rule,name=name,scope=scope_kind,available=available,status='evaluated_hit' if available and signal else 'evaluated_no_hit' if available else 'unavailable',matched=bool(signal) if available else None,
             evaluated_subscopes=sum(d['status']=='evaluated' for d in statistical),unavailable_subscopes=sum(d['status']!='evaluated' for d in statistical),
             score=None,reason=None if available else 'source_or_scope_unavailable',gaps=gaps,hits=usable if available else [],groups=groups if available else [],findings=findings,statistics=statistical))
-    return dict(version='native-rule-node-result/1.0.0',execution='plaintext_at_enterprise_node_only',he_execution=False,canonical_snapshot_adapter=False,tenant_id=scope.tenant_id,company_id=bundle['company_id'],as_of=bundle['as_of'],
+    return outputs
+
+
+def evaluate_bundle(bundle,scope,*,candidate_transaction_ids=None):
+    checked=validate_bundle(bundle,scope)
+    if checked['status']!='accepted':fail(422,'NATIVE_RULE_SOURCE_INVALID',json_message(checked['errors']),'Sửa dòng/trường được nêu rồi xuất lại nguồn và manifest.')
+    tables={name:[deepcopy(r) for r in bundle['tables'].get(name,[]) if r['observed_at']<=bundle['as_of'] and (name!='transactions' or r['posted_at']<=bundle['as_of'])] for name in TABLES}
+    if not tables['companies'] or not tables['employees'] or not tables['transactions']:
+        fail(422,'NATIVE_RULE_CORE_MISSING','Cần doanh nghiệp, nhân viên và giao dịch nhìn thấy tại as_of.','Bổ sung nguồn lõi; không tạo người lập hoặc doanh nghiệp giả.')
+    from .native_rule_execution import requires_replay,replay,monthly_point_in_time,_row_gaps
+    row_rules={};execution_provenance=None
+    if requires_replay(tables):
+        reference,row_rules,execution_provenance=replay(bundle,tables,candidate_transaction_ids)
+    else:
+        reference=score_rules(tables,config=deepcopy(DEFAULT_CONFIG))
+        requested=(set(candidate_transaction_ids) if candidate_transaction_ids is not None
+                   else {r['transaction_id'] for r in tables['transactions']} if len(tables['transactions'])<=200 else set())
+        for tx in tables['transactions']:
+            if tx['transaction_id'] not in requested:continue
+            row_bundle=dict(bundle,tables=dict(bundle['tables'],transactions=[tx]))
+            row_reference=dict(reference,hits=[h for h in reference['hits'] if h['transaction_id']==tx['transaction_id']])
+            entries=_rule_results(row_bundle,row_reference,[])
+            gaps=_row_gaps(bundle,tx,tables,[])
+            for entry in entries:
+                extra=gaps[entry['rule_id']]
+                if extra and not entry['rule_id'].startswith('D') and entry['rule_id']!='F4':
+                    entry.update(available=False,status='unavailable',matched=None,score=None,
+                                 reason='source_or_domain_unavailable',gaps=entry['gaps']+extra,hits=[],groups=[])
+            row_rules[tx['transaction_id']]=entries
+    diagnostics=monthly_point_in_time(tables,bundle['as_of'])
+    outputs=_rule_results(bundle,reference,diagnostics)
+    # A source-scope no-hit is not complete when one requested row could not
+    # be evaluated. Other candidates retain their own independent availability.
+    for entry in outputs:
+        missing=[r for rules in row_rules.values() for r in rules if r['rule_id']==entry['rule_id'] and r['status']=='unavailable'
+                 and not r['rule_id'].startswith('D') and r['rule_id']!='F4']
+        if missing:
+            entry.update(available=False,status='unavailable',matched=None,hits=[],groups=[],
+                         reason='candidate_source_or_domain_unavailable',
+                         gaps=entry['gaps']+[g for r in missing for g in r['gaps']])
+    return dict(version='native-rule-node-result/1.1.0',execution='plaintext_at_enterprise_node_only',he_execution=False,canonical_snapshot_adapter=False,tenant_id=scope.tenant_id,company_id=bundle['company_id'],as_of=bundle['as_of'],
         source_sha256=digest(canonical(bundle)),profile_config_sha256=digest(canonical(DEFAULT_CONFIG)),status='technical_only',is_simulated=bundle['is_simulated'],
         row_count=len(bundle['tables'].get('transactions',[])),processed_row_count=len(tables['transactions']),record_ids=[r['transaction_id'] for r in bundle['tables'].get('transactions',[])],
         unavailable_transactions=[dict(record_id=r['transaction_id'],reason='not_known_or_posted_after_as_of') for r in bundle['tables'].get('transactions',[]) if r['observed_at']>bundle['as_of'] or r['posted_at']>bundle['as_of']],rules=outputs,
-        native_reference_sha256=digest(canonical(reference)),aggregate_available=False,aggregate_score=None,model_fit_performed=False,accuracy=None,
-        limitations=['Source completeness is an export declaration, not external verification.','Separate native profile; does not activate missing rules in canonical snapshot/HE Portal.','Source/aggregate/master findings are not counts of fraud cases.','Late-posted native transaction/ledger rows require a separate bitemporal adapter; no retroactive zero fallback.'])
+        native_reference_sha256=digest(canonical(reference)),row_rules=row_rules,execution_provenance=execution_provenance,aggregate_available=False,aggregate_score=None,model_fit_performed=False,accuracy=None,
+        limitations=['Source completeness is an export declaration, not external verification.','Separate native profile; does not activate missing rules in canonical snapshot/HE Portal.','Source/aggregate/master findings are not counts of fraud cases.','Signed domains without an approved predicate remain unavailable per rule. Master revisions still require recorded_at=observed_at.'])
 
 
 def json_message(errors):

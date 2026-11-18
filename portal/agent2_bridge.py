@@ -6,6 +6,7 @@ Changing its company profile cannot change these memberships.
 from datetime import datetime, timezone
 import json
 import re
+import time
 from pathlib import Path
 from urllib.request import build_opener, HTTPRedirectHandler, ProxyHandler
 
@@ -19,6 +20,29 @@ class BridgeError(Exception):
     def __init__(self, status, message):
         self.status = status
         super().__init__(message)
+
+
+def discard_rejected_body(handler):
+    """Bounded transport-only drain so a 401 survives Windows TCP close.
+
+    Authorization has already failed. Never parse/store/forward this body, and
+    never wait for an unbounded or malformed upload merely to send a denial.
+    """
+    if handler.command not in ('POST','PUT') or handler.headers.get_all('Transfer-Encoding',[]):return
+    sizes=handler.headers.get_all('Content-Length',[])
+    if len(sizes)!=1 or not re.fullmatch(r'[0-9]{1,12}',sizes[0]):return
+    remaining=int(sizes[0])
+    if not 0<remaining<=10*1024*1024:return
+    previous=handler.connection.gettimeout();deadline=time.monotonic()+.25
+    try:
+        handler.connection.settimeout(.1)
+        while remaining and time.monotonic()<deadline:
+            chunk=handler.rfile.read1(min(8192,remaining))
+            if not chunk:break
+            remaining-=len(chunk)
+    except OSError:
+        pass
+    finally:handler.connection.settimeout(previous)
 
 
 def _unique(pairs):
@@ -57,12 +81,16 @@ PUBLIC = {'/','/workspace','/status','/data-import','/encrypted-analysis','/anal
 PUBLIC.update({'/label-verification','/assets/label-verification.js','/batch-training','/assets/batch-training.js'})
 PUBLIC.update({'/pipeline-releases','/assets/pipeline-releases.js','/assets/pipeline-releases.css'})
 PUBLIC.update({'/pipeline-workspace','/assets/bundle-workspace.js'})
+PUBLIC.update({'/assets/bundle-remediation.js','/assets/bundle-remediation.css'})
+PUBLIC.update({'/assets/rule-source-intake.js','/samples/rule-sources.xlsx'})
 HE_API = re.compile(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/he/(?:datasets|runs|jobs(?:/herun_[a-f0-9]{32}(?:/(?:result|resume|reviews(?:/rvw_[a-f0-9]{64}/(?:start|heartbeat|save|attachments(?:/att_[a-f0-9]{64})?))?))?)?)\Z')
-API = re.compile(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/(?:imports/(?:upload|validate|imp_[a-f0-9]{32}(?:/(?:source|mapping|preview|commit|report))?)|snapshots/snp_[a-f0-9]{32}(?:/(?:data|analyze))?)\Z')
+API = re.compile(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/(?:imports/(?:upload|validate|imp_[a-f0-9]{32}(?:/(?:source|mapping|inspect|preview|commit|report))?)|snapshots/snp_[a-f0-9]{32}(?:/(?:data|analyze))?)\Z')
 
 
 def allowed_path(path):
     if '..' in path or '//' in path:return False
+    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-workspace/backlog(?:/(?:reevaluate|active|shadow))?',path):return True
+    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-workspace/runs/[A-Za-z0-9_.:-]{8,128}/reviews/rvw_[a-f0-9]{64}/remediation(?:/documents/doc_[a-f0-9]{24}/versions/[1-9][0-9]{0,3})?',path):return True
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-workspace(?:/runs(?:/[A-Za-z0-9_.:-]{8,128}(?:/(?:report(?:\.csv)?|reviews/rvw_[a-f0-9]{64}/(?:start|heartbeat|save|attachments|tasks)(?:/att_[a-f0-9]{64})?))?)?)?',path):return True
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-releases(?:/(?:prepare|qualify|approve|switch|revoke|diff|runs|objects/(?:rbun|rgat|rapr|ract|rpin|robs)_[a-f0-9]{64}))?',path):return True
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-benchmarks',path):return True

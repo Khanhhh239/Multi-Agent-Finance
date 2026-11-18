@@ -184,6 +184,7 @@ class RemediationStore:
         self.path = Path(path)
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self._lock = threading.RLock()
+        self._command_tx = threading.local()
         self._init_db()
 
     def _connect(self) -> sqlite3.Connection:
@@ -430,6 +431,10 @@ class RemediationStore:
 
     @contextmanager
     def _write_tx(self):
+        active=getattr(self._command_tx,'connection',None)
+        if active is not None:
+            yield active
+            return
         with self._lock:
             last_err = None
             for attempt in range(8):
@@ -460,11 +465,40 @@ class RemediationStore:
 
     @contextmanager
     def _read_conn(self):
+        active=getattr(self._command_tx,'connection',None)
+        if active is not None:
+            yield active
+            return
         conn = self._connect()
         try:
             yield conn
         finally:
             conn.close()
+
+    def bound_command(self,scope,*,operation,request_id,binding,payload,invoke,recheck=None):
+        """One existing R4 mutation + receipt, with authorization recheck at commit.
+
+        Only the server's bundle adapter supplies the binding and callback. The
+        nested store method uses this same transaction; a failed recheck rolls
+        back both mutation and receipt. No policy or permission is overridden.
+        """
+        tenant,company,actor=_require_read_scope(scope,recheck)
+        receipt_key='bundle-'+digest(canonical([actor,binding['review_id'],request_id]))
+        fingerprint=digest(canonical([binding,payload]))
+        with self._write_tx() as conn:
+            cached=self._check_idempotency(conn,tenant_id=tenant,company_id=company,operation=operation,
+                idempotency_key=receipt_key,payload_hash=fingerprint)
+            if cached is not None:
+                _require_read_scope(scope,recheck)
+                return cached
+            previous=getattr(self._command_tx,'connection',None)
+            self._command_tx.connection=conn
+            try:value=invoke()
+            finally:self._command_tx.connection=previous
+            self._save_receipt(conn,tenant_id=tenant,company_id=company,operation=operation,
+                idempotency_key=receipt_key,payload_hash=fingerprint,response=value,created_at=_utc_now())
+            _require_read_scope(scope,recheck)
+            return value
 
     def schema_versions(self) -> list[dict[str, Any]]:
         with self._read_conn() as conn:

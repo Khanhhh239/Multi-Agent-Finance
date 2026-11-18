@@ -71,9 +71,10 @@ class NativeRuleNode(unittest.TestCase):
         a=next(r for r in future['rules'] if r['rule_id']=='B7');b=next(r for r in past['rules'] if r['rule_id']=='B7')
         self.assertEqual(a,b);self.assertFalse(a['matched'])
 
-    def test_late_posted_source_rejected_without_rewriting_observation_time(self):
+    def test_late_posted_source_accepted_without_rewriting_observation_time(self):
         bundle,_=scenario('A1',True);row=bundle['tables']['transactions'][0];row['observed_at']='2025-09-01T10:00:00+07:00';rehash(bundle,'transactions');before=canonical(bundle)
-        result=validate_bundle(bundle,scope());self.assertEqual(result['status'],'rejected');self.assertTrue(any('bitemporal' in e['message'] for e in result['errors']));self.assertEqual(before,canonical(bundle))
+        result=validate_bundle(bundle,scope());self.assertEqual(result['status'],'accepted');self.assertEqual(before,canonical(bundle))
+        r=evaluate_bundle(bundle,scope());self.assertIn(row['transaction_id'],[x['record_id'] for x in r['unavailable_transactions']]);self.assertEqual(before,canonical(bundle))
 
     def test_labels_features_and_expected_results_never_enter_input(self):
         for kind in ('labels','features','expected_signal'):
@@ -94,7 +95,7 @@ class NativeRuleNode(unittest.TestCase):
 
     def test_negative_native_amount_is_not_silently_abs_or_zero(self):
         bundle,_=scenario('F1',True);row=bundle['tables']['transactions'][0];row['amount_vnd']=-1000;rehash(bundle,'transactions')
-        report=validate_bundle(bundle,scope());self.assertEqual(report['status'],'rejected');self.assertEqual(row['amount_vnd'],-1000)
+        report=validate_bundle(bundle,scope());self.assertEqual(report['status'],'accepted');self.assertEqual(row['amount_vnd'],-1000)
 
     def test_missing_invoice_value_and_bank_identity_are_not_no_hit(self):
         for code,field,value,reason in [('P1','invoice_gross_vnd',0,'invoice_value_unavailable'),('B1','recipient_bank_code','','recipient_bank_identity_incomplete')]:

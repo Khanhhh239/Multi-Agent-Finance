@@ -1,0 +1,159 @@
+{
+  "status": "pass",
+  "actual_fhe": true,
+  "authenticated_http": true,
+  "synthetic": true,
+  "live_deployed": false,
+  "companies": [
+    {
+      "company": "C001",
+      "snapshot_id": "snp_63d43f802e8343cdbfdfed14d99cfe21",
+      "run_id": "bundle-he-test",
+      "bundle_id": "rbun_a024f55f4a532ec17fb07746e3831391bad4585c69f395475d6c8733f10038e6",
+      "he_job_id": "herun_2e4c6fd391f74359b726820a17ef7099",
+      "p1_status": "evaluated_hit",
+      "p1_score": 20,
+      "rows": 3,
+      "queue_cases": {
+        "total_cases": 2,
+        "queued_or_reserved": 1,
+        "backlog_waiting": 1,
+        "already_notified": 0
+      },
+      "review_cases": 1,
+      "restart_reuses_exact_observation": true,
+      "pending_polls": 45
+    },
+    {
+      "company": "C002",
+      "snapshot_id": "snp_e319d31030e741bbae949954bff01006",
+      "run_id": "bundle-he-test",
+      "bundle_id": "rbun_931f888feadda1ef53cf23e1c03246d7747d66da73343a23b2510931739ad921",
+      "he_job_id": "herun_2712dcce2d994f5c8a61a7038bc73f6c",
+      "p1_status": "evaluated_no_hit",
+      "p1_score": 0,
+      "rows": 3,
+      "queue_cases": {
+        "total_cases": 1,
+        "queued_or_reserved": 0,
+        "backlog_waiting": 1,
+        "already_notified": 0
+      },
+      "review_cases": 0,
+      "restart_reuses_exact_observation": true,
+      "pending_polls": 44
+    }
+  ],
+  "profiles_executed": [
+    "rules"
+  ],
+  "other_profile_keys_not_provisioned": true,
+  "response_loss_after_worker_commit_recovered": true,
+  "enterprise_restart_exact_observation": true,
+  "plaintext_cloud_upload": false,
+  "transport_uploads": [
+    {
+      "company": "C001",
+      "kind": "public_evaluation_keys",
+      "sha256": "74beb9670d858cbca1343ee182173076b19cf32f972ad5432239a91990c1ded1",
+      "bytes": 1394657872
+    },
+    {
+      "company": "C001",
+      "kind": "ciphertext",
+      "sha256": "154b05e6767c11cd7b77f4dc0bf49cc044818b3c91364dc1dbb54156ff718c3c",
+      "bytes": 2098440
+    },
+    {
+      "company": "C001",
+      "kind": "ciphertext",
+      "sha256": "4f4b615b7d71922823324fd245d46cfcf5d811ea303b9c64b6da887239d0f44a",
+      "bytes": 2098440
+    },
+    {
+      "company": "C001",
+      "kind": "ciphertext",
+      "sha256": "958d9b54d1724c3628322fbcbca5fa6a4d53c4a70181aa667511ddb14fbf26b0",
+      "bytes": 2098440
+    },
+    {
+      "company": "C001",
+      "kind": "ciphertext",
+      "sha256": "7145f59c656cda3f5c0155abc26c08c59ede97faf558a994511029652804ea12",
+      "bytes": 49432
+    },
+    {
+      "company": "C001",
+      "kind": "ciphertext",
+      "sha256": "44b42b2c788a61213989f20721bfb3352ae269292d678b763daf71e47ade953a",
+      "bytes": 393720
+    },
+    {
+      "company": "C001",
+      "kind": "ciphertext",
+      "sha256": "4ab28ded3fc67c5e1c7b47ff60f26b35845612227008d6d3a52d6a3aa9ad41d2",
+      "bytes": 12536
+    },
+    {
+      "company": "C002",
+      "kind": "public_evaluation_keys",
+      "sha256": "6228a22abfd3555dc22113f7b9e80e79e09c61c13d94f08644604490c2e91947",
+      "bytes": 1394657872
+    },
+    {
+      "company": "C002",
+      "kind": "ciphertext",
+      "sha256": "08fec86b13d939fea20c706f04a2df2aec4bf9ec604e63a690673b0d68ba1914",
+      "bytes": 2098440
+    },
+    {
+      "company": "C002",
+      "kind": "ciphertext",
+      "sha256": "742fb23c7c2e141e04b3c0b23426f40d1c788cffa74c171312b3e6074080254c",
+      "bytes": 2098440
+    },
+    {
+      "company": "C002",
+      "kind": "ciphertext",
+      "sha256": "2ce119b8fad5168034ca83e97dfdf1c16725c76d35237ba170f0b90a349d9494",
+      "bytes": 2098440
+    },
+    {
+      "company": "C002",
+      "kind": "ciphertext",
+      "sha256": "eaf2cd6ac7d7d26f958e836a180380d57bb73dcfd0084a6aa8c8e8df096659ea",
+      "bytes": 49432
+    },
+    {
+      "company": "C002",
+      "kind": "ciphertext",
+      "sha256": "5e528028d9069fca715437cbc7b90321b64e3a5c7e4d6f87d2671f3bf164ccf6",
+      "bytes": 393720
+    },
+    {
+      "company": "C002",
+      "kind": "ciphertext",
+      "sha256": "2d2d3abfc7e711bead790a68b10ffe9da8fcd64a44f12321f10147646e11d43c",
+      "bytes": 12536
+    }
+  ],
+  "transport_routes": [
+    {
+      "route": "/v1/evaluate",
+      "company": "C001"
+    },
+    {
+      "route": "/v1/results",
+      "company": "C001"
+    },
+    {
+      "route": "/v1/evaluate",
+      "company": "C002"
+    }
+  ],
+  "cloud_boundary": "ciphertext and public evaluation keys only; source/decrypt/policy/cases stay enterprise",
+  "complete_35_rule_he": false,
+  "native_33_feature_he": false,
+  "production_approved": false,
+  "seconds": 861.468
+}

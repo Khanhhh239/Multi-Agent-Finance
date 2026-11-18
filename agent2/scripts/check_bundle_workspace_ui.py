@@ -23,6 +23,8 @@ def run(output):
     try:
         f=support.ShadowPlanTests.fixture
         with PortalHarness() as h,sync_playwright() as p:
+            # Isolated test-only grant: no changes to the live access policy.
+            h.policy['memberships'][1]['permissions'].append('evidence.verify');h.write_policy()
             svc=ReleaseService(ReleaseStore(h.root/'releases.db',b'w'*32),f.snapshots,AnalysisResources(f.models.path),CaseQueueStore(h.root/'cases.db'))
             runs={};datasets={};bundles={}
             for company in ('C001','C002'):
@@ -63,13 +65,30 @@ def run(output):
                     for key in ('snapshot_id','run_id','bundle_id'):expect(page.locator('#bw-meta')).to_contain_text(runs[company][key])
                     assert 'ecod' not in page.locator('body').inner_text().lower()
                     page.locator('#bw-cases button').first.click();expect(page.locator('#bw-detail')).to_be_visible()
+                    attachment=output/'synthetic-only.pdf';attachment.write_bytes(b'%PDF-1.4 synthetic UI attachment, not an original invoice')
+                    page.locator('#bw-upload').set_input_files(attachment)
+                    page.locator('#bw-document-type').select_option('invoice')
+                    if company=='C001':
+                        page.route('**/reviews/*/remediation',lambda route: lose_response(route) if route.request.method=='POST' else route.continue_())
+                    page.locator('#bw-document-save').click()
+                    if company=='C001':
+                        expect(page.locator('#bw-task-list')).to_contain_text('Mất kết nối',timeout=15000)
+                        page.unroute('**/reviews/*/remediation')
+                        page.reload();expect(page.locator('#bw-report')).to_be_visible(timeout=30000)
+                        page.locator('#bw-cases button').first.click()
+                        expect(page.locator('#bw-document-resume-file')).to_be_visible(timeout=15000)
+                        wrong=output/'wrong.pdf';wrong.write_bytes(b'%PDF-1.4 different evidence')
+                        page.locator('#bw-document-resume-file').set_input_files(wrong)
+                        expect(page.locator('#bw-task-list')).to_contain_text('Tệp khác với yêu cầu cũ',timeout=10000)
+                        page.locator('#bw-document-resume-file').set_input_files(attachment)
+                        expect(page.locator('#bw-task-list')).to_contain_text('Đúng tệp đã gửi',timeout=10000)
+                        page.locator('[data-action=retry]').click()
+                        expect(page.locator('[data-action=retry]')).to_be_hidden(timeout=15000)
+                    expect(page.locator('#bw-documents [data-document]')).to_have_count(1,timeout=15000)
+                    expect(page.locator('#bw-documents')).to_contain_text('Đã nhận, chờ xác minh')
                     page.locator('#bw-start').click();expect(page.locator('#bw-save')).to_be_enabled(timeout=10000)
                     page.locator('#bw-outcome').select_option('inconclusive');page.locator('#bw-explanation').fill('Nguồn mô phỏng; đã xem bản ghi, chưa có chứng từ gốc.')
                     page.locator('#bw-action').fill('Yêu cầu kế toán bổ sung bản gốc để đối chiếu.');page.locator('#bw-missing').fill('Thiếu hóa đơn gốc và xác nhận ngân hàng.')
-                    if company=='C001':
-                        attachment=output/'synthetic-only.pdf';attachment.write_bytes(b'%PDF-1.4 synthetic UI attachment, not an original invoice')
-                        page.locator('#bw-upload').set_input_files(attachment)
-                        expect(page.locator('#bw-detail')).to_contain_text('synthetic-only.pdf',timeout=10000)
                     page.locator('#bw-save').click();expect(page.locator('#bw-detail')).to_contain_text('phiên bản 1',timeout=20000)
                     checks.append(dict(id=company+'-REVIEW',status='pass',observed='Accountant/director use business DTO, inspect source, start server timer, save inconclusive; no algorithm fields'))
                     expect(page.locator('#bw-task-create')).to_be_enabled(timeout=10000)
@@ -86,15 +105,60 @@ def run(output):
                     page.locator('#bw-task-create').click()
                     expect(page.locator('#bw-task-list [data-task]')).to_have_count(1,timeout=15000)
                     checks.append(dict(id=company+'-CASE-TASK',status='pass',observed='Create department-assigned task with explicit due date from admitted case; C001 response-loss retry retains one task and immutable snapshot/run/bundle binding'))
+                    task_card=page.locator('#bw-task-list [data-task]').first
+                    task_card.locator('textarea[data-draft-key$=":result"]').fill('Đã đối chiếu dữ liệu mô phỏng và bổ sung tài liệu thử nghiệm.')
+                    task_card.locator('input[data-draft-key*=":doc:"]').check()
+                    if company=='C001':
+                        page.route('**/reviews/*/remediation',lambda route: lose_response(route) if route.request.method=='POST' else route.continue_())
+                        task_card.locator('[data-action=submit]').click()
+                        expect(page.locator('#bw-task-list')).to_contain_text('Mất kết nối',timeout=15000)
+                        page.unroute('**/reviews/*/remediation')
+                        # Pending non-file command survives a real page reload.
+                        page.reload();expect(page.locator('#bw-report')).to_be_visible(timeout=30000)
+                        page.locator('#bw-cases button').first.click()
+                        page.locator('[data-action=retry]').click()
+                        expect(page.locator('[data-action=retry]')).to_be_hidden(timeout=15000)
+                        expect(task_card).to_contain_text('Kết quả đã gửi:',timeout=15000)
+                        expect(page.locator('[data-action=verify]')).to_have_count(0)
+                        expect(page.locator('[data-action=complete]')).to_have_count(0)
+                        checks.append(dict(id='OPERATOR-RETRY-RELOAD',status='pass',observed='Upload retry and persisted submit retry after page reload create one version/submission; operator cannot verify or complete'))
+                    else:
+                        task_card.locator('[data-action=submit]').click()
+                        expect(task_card.locator('[data-action=complete]')).to_be_disabled(timeout=10000)
+                        doc_card=page.locator('#bw-documents [data-document]').first
+                        doc_card.locator('textarea').fill('Tài liệu mô phỏng khớp bản ghi dùng kiểm thử luồng.')
+                        doc_card.locator('[data-action=verify]').click()
+                        expect(task_card.locator('[data-action=complete]')).to_be_enabled(timeout=15000)
+                        task_card.locator('textarea[data-draft-key$=":decision"]').fill('Đã nhận và xác minh chứng từ thử nghiệm, đủ hoàn tất công việc.')
+                        task_card.locator('[data-action=complete]').click()
+                        expect(task_card).to_have_attribute('data-status','completed',timeout=15000)
+                        task_card.locator('textarea[data-draft-key$=":decision"]').fill('Cần đối chiếu thêm tài liệu mới, mở lại công việc.')
+                        task_card.locator('[data-action=reopen]').click()
+                        expect(task_card.locator('[data-action=complete]')).to_be_disabled(timeout=15000)
+                        expect(task_card).to_contain_text('Cần gửi kết quả mới',timeout=10000)
+                        task_card.locator('textarea[data-draft-key$=":result"]').fill('Đã hoàn tất đối chiếu bổ sung sau khi mở lại.')
+                        task_card.locator('[data-action=submit]').click()
+                        expect(task_card.locator('[data-action=complete]')).to_be_enabled(timeout=15000)
+                        task_card.locator('textarea[data-draft-key$=":decision"]').fill('Chấp thuận kết quả bổ sung sau mở lại.')
+                        task_card.locator('[data-action=complete]').click()
+                        expect(task_card).to_have_attribute('data-status','completed',timeout=15000)
+                        expect(page.locator('[data-action=retry]')).to_be_hidden(timeout=15000)
+                        checks.append(dict(id='VERIFIER-FULL-LIFECYCLE',status='pass',observed='Same main case view: submit -> verification -> complete -> reopen -> fresh submission -> complete, with server permissions and history'))
                     page.reload();expect(page.locator('#bw-report')).to_be_visible(timeout=30000);page.locator('#bw-cases button').first.click()
                     expect(page.locator('#bw-outcome')).to_have_value('inconclusive');expect(page.locator('#bw-explanation')).to_have_value('Nguồn mô phỏng; đã xem bản ghi, chưa có chứng từ gốc.')
                     expect(page.locator('#bw-missing')).to_have_value('Thiếu hóa đơn gốc và xác nhận ngân hàng.')
                     expect(page.locator('#bw-task-list [data-task]')).to_have_count(1,timeout=15000)
+                    expect(page.locator('[data-action=retry]')).to_be_hidden(timeout=15000)
+                    expect(page.locator('#bw-document-save')).to_be_enabled(timeout=15000)
                     with page.expect_download() as dl:page.locator('#bw-json').click()
                     dest=output/(company+'-business-report.json');dl.value.save_as(str(dest));saved=json.loads(dest.read_bytes())
                     assert all(saved[k]==runs[company][k] for k in ('snapshot_id','run_id','bundle_id'))
                     assert saved['summary']['reviewed_cases']==1 and saved['summary']['verified_fraud_precision'] is None and saved['training_eligible'] is False
                     task=saved['cases'][0]['tasks'][0]
+                    assert len(saved['cases'][0]['documents'])==1
+                    assert len(saved['cases'][0]['documents'][0]['versions'])==1
+                    assert saved['document_counts']['present' if company=='C002' else 'pending_verification']==1
+                    assert task['revision']==(6 if company=='C002' else 2),task['revision']
                     assert all(task['source_binding'][k]==saved[k] for k in ('snapshot_id','run_id','bundle_id'))
                     assert task['generates_ml_label'] is False and task['mutates_case_status'] is False
                     # Export exact server bytes: JSON parse/stringify in JS can
@@ -126,6 +190,54 @@ def run(output):
                 expect(frame.locator('#bw-company')).to_have_value('C002',timeout=30000)
                 expect(frame.locator('#bw-meta')).to_contain_text(runs['C002']['bundle_id'],timeout=30000)
                 checks.append(dict(id='OUTER-PORTAL-RESTORE',status='pass',observed='Actual Portal iframe and outer reload retain C002, bundle workspace and pinned run without exposing legacy P1 comparison'))
+                # Quick navigation links from Vụ cần rà <-> Xác minh nhãn & Train HE nhiều batch preserve company
+                page.set_viewport_size(dict(width=1440,height=1050))
+                page.goto(h.portal_url+'/agent2/pipeline-workspace#company=C002&run='+runs['C002']['run_id'])
+                expect(page.locator('#bw-company')).to_have_value('C002',timeout=20000)
+                expect(page.locator('#bw-labels')).to_have_attribute('href','/agent2/label-verification#company=C002')
+                expect(page.locator('#bw-batch')).to_have_attribute('href','/agent2/batch-training#company=C002')
+                page.locator('#bw-labels').click()
+                expect(page.locator('#lv-company')).to_have_value('C002',timeout=20000)
+                expect(page.locator('#lv-bundle-link')).to_have_attribute('href','pipeline-workspace#company=C002')
+                page.locator('#lv-bundle-link').click()
+                expect(page.locator('#bw-company')).to_have_value('C002',timeout=20000)
+                page.locator('#bw-batch').click()
+                expect(page.locator('#bt-company')).to_have_value('C002',timeout=20000)
+                expect(page.locator('#bt-nav-bundle')).to_have_attribute('href','pipeline-workspace#company=C002')
+                page.locator('#bt-nav-bundle').click()
+                expect(page.locator('#bw-company')).to_have_value('C002',timeout=20000)
+                checks.append(dict(id='QUICK-NAV-LABELS-AND-BATCH',status='pass',observed='Header quick links navigate cleanly between Vụ cần rà, Xác minh nhãn, and Train HE nhiều batch while keeping exact company context'))
+                # Backlog shadow view, filter, response-loss retry, and promotion into reviewable shadow run
+                page.goto(h.portal_url+'/agent2/pipeline-workspace#company=C001&run='+runs['C001']['run_id'])
+                expect(page.locator('#bw-backlog-panel')).to_be_visible(timeout=20000)
+                waiting_before=page.locator('#bw-backlog-list [data-backlog-case]').count();assert waiting_before>=1
+                expect(page.locator('#bw-backlog-panel')).to_contain_text('Chờ kỳ ngân sách tiếp theo')
+                page.locator('#bw-backlog-filter').select_option('below_threshold')
+                below_cnt=page.locator('#bw-backlog-list [data-backlog-case]').count()
+                page.locator('#bw-backlog-filter').select_option('other')
+                other_cnt=page.locator('#bw-backlog-list [data-backlog-case]').count()
+                page.locator('#bw-backlog-filter').select_option('budget_deferred')
+                def_cnt=page.locator('#bw-backlog-list [data-backlog-case]').count()
+                assert def_cnt>=1 and def_cnt+below_cnt+other_cnt==waiting_before,(def_cnt,below_cnt,other_cnt,waiting_before)
+                page.locator('#bw-backlog-filter').select_option('all')
+                expect(page.locator('#bw-backlog-list [data-backlog-case]')).to_have_count(waiting_before)
+                target_period=page.locator('#bw-backlog-period').input_value();assert target_period
+                page.route('**/pipeline-workspace/backlog/reevaluate',lose_response)
+                page.locator('#bw-backlog-reeval').click()
+                expect(page.locator('#bw-backlog-status')).to_contain_text('Mất kết nối',timeout=20000)
+                page.unroute('**/pipeline-workspace/backlog/reevaluate',lose_response)
+                page.reload();expect(page.locator('#bw-backlog-panel')).to_be_visible(timeout=20000)
+                expect(page.locator('#bw-backlog-reeval')).to_contain_text('Tiếp tục xét lại kỳ '+target_period)
+                page.locator('#bw-backlog-reeval').click()
+                expect(page.locator('#bw-backlog-status')).to_contain_text('Đã xét lại kỳ '+target_period,timeout=20000)
+                promo_rid=page.locator('#bw-run').input_value();assert promo_rid.startswith('backlog-'),promo_rid
+                expect(page.locator('#bw-cases button')).not_to_have_count(0,timeout=15000)
+                page.locator('#bw-cases button').first.click();expect(page.locator('#bw-detail')).to_be_visible()
+                assert 'ecod' not in page.locator('body').inner_text().lower()
+                page.set_viewport_size(dict(width=390,height=844))
+                assert not page.evaluate('document.documentElement.scrollWidth>innerWidth+2')
+                page.set_viewport_size(dict(width=1440,height=1050))
+                checks.append(dict(id='BACKLOG-SHADOW-REEVALUATE',status='pass',observed='Backlog panel shows waiting shadow cases with business redaction, recovers from response loss across reload without duplicate promotion, opens reviewable promoted shadow run, and fits 390px mobile'))
                 page.goto(h.portal_url+'/agent2/data-import#company=C001')
                 expect(page.locator('#company')).to_have_value('C001',timeout=20000)
                 page.locator('#file').set_input_files(dict(name='native-source.json',mimeType='application/json',buffer=f.snapshots.get_snapshot(f.company_ctx['C001']['scope'],datasets['C001'],data=True)))
@@ -142,7 +254,7 @@ def run(output):
                 assert not errors,errors
                 report=dict(status='pass',checks=checks,synthetic=True,he_execution=False,cloud_plaintext_sent=False,live_deployed=False)
             except Exception as error:
-                report=dict(status='fail',checks=checks,error=str(error),browser_errors=errors);page.screenshot(path=str(output/'failure.png'),full_page=True);raise
+                report=dict(status='fail',checks=checks,error=str(error),browser_errors=errors,url=page.url);page.screenshot(path=str(output/'failure.png'),full_page=True);raise
             finally:
                 (output/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8');browser.close()
     finally:support.ShadowPlanTests.tearDownClass()

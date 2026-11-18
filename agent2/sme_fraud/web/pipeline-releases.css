@@ -4,4 +4,10 @@ header nav a{display:inline-block;padding:6px 0}
 pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%}
 textarea{display:block;width:100%;font:inherit;color:var(--ink);border:1px solid #b9ceca;border-radius:8px;padding:12px;margin:8px 0 16px}
 textarea:focus{outline:3px solid #83b7a8;outline-offset:3px}
+.bw-backlog-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px;margin:12px 0}
+.bw-backlog-controls label{display:flex;flex-direction:column;gap:6px}
+.bw-backlog-controls input,.bw-backlog-controls select{width:100%;max-width:100%;box-sizing:border-box;font:inherit;padding:10px 12px;border:1px solid #b9ceca;border-radius:8px;background:#fff;color:var(--ink)}
+.bw-backlog-item{border:1px solid var(--line,#cbdad8);border-radius:12px;padding:14px 16px;margin:10px 0;overflow-wrap:anywhere;background:#fbfdfc}
+.bw-backlog-item h3{margin:0 0 6px;font-size:1rem}
+.bw-backlog-item p{margin:4px 0;font-size:.94rem}
 @media(max-width:700px){header{flex-wrap:wrap;gap:12px}}

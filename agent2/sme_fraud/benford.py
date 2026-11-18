@@ -63,7 +63,7 @@ def digits_test(amounts, kind, min_rows=300):
     return result
 
 
-def monthly_diagnostics(tables, definition_policy='legacy'):
+def monthly_diagnostics(tables, definition_policy='legacy', *, point_in_time=False):
     """Only records posted strictly before each calendar-month cutoff participate.
 
     First/second digit tests use one positive scored financial disbursement per
@@ -84,7 +84,8 @@ def monthly_diagnostics(tables, definition_policy='legacy'):
     results = []
     for year, month in cutoffs:
         cutoff = datetime(year, month, 1, tzinfo=parse(rows[0]['posted_at']).tzinfo)
-        prior = [r for r in payments if parse(r['posted_at']) < cutoff]
+        prior = [r for r in payments if parse(r['posted_at']) < cutoff
+                 and (not point_in_time or parse(r['observed_at']) < cutoff)]
         window = [r for r in prior if (cutoff - parse(r['posted_at'])).total_seconds() <= 90 * 86400]
         period_results = []
         for cid in companies:

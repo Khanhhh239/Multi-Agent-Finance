@@ -1,5 +1,52 @@
 # Tiến độ spec v2.1
 
+CR-063 (18/11/2026) — **READY_FOR_REVIEW kỹ thuật nối HE thật vào bộ điều phối bundle**.
+Nối `BundleHE` (`bundle-he4-native/1.0.0`) với `FourJobs` và worker Concrete hiện có
+(`P1`, `C3`, `B1`, `B5/E4`) trên snapshot nguồn 35 luật: chuẩn bị bundle ghim
+build/worker/binding/epoch khóa, pin chế độ `cloud_ciphertext_only`, liên kết bền
+vững `he_job` (`bundle:<pin_id>`), tiếp tục cùng job sau reload/mất phản hồi,
+giải mã tại DN rồi đi qua cùng luồng chính sách → gộp vụ → ngân sách → hàng đợi
+shadow → phiếu rà → xử lý task → báo cáo JSON/CSV. 30 luật còn lại và thống kê/ML
+33 feature giữ `unavailable`; không fallback chấm rõ. 82 kiểm thử backend, 5 nhóm
+UI Portal HE, 14 nhóm UI bundle local, 8 nhóm UI release và lượt Concrete FHE thật
+qua HTTP cho cả `C001`/`C002` (kèm khôi phục mất phản hồi `/v1/evaluate` → `/v1/results`
+và đọc lại sau restart DN) đều đạt. Xem [hướng dẫn](../agent2/docs/BUNDLE_HE.md) và
+[nghiệm thu](evidence/R6/bundle_he_20261118/REPORT.md). Chưa deploy/restart Portal
+live, không push GitHub, không phê duyệt production hoặc tự chuyển R0–R6 sang DONE.
+
+Cập nhật 18/11/2026 — **READY_FOR_REVIEW xử lý vụ ngay trên màn hình bundle**.
+Nối bổ sung chứng từ có phiên bản, xác minh đúng phiên bản, gửi kết quả thực
+hiện, đổi phân công/hạn, hoàn tất/làm lại/mở lại task vào vụ cần rà. Giữ nguồn
+snapshot/run/bundle, quyền hiện hành và transaction thao tác + biên nhận;
+retry/reload không tự tạo thao tác khác. Chứng từ chưa xác minh không đủ hoàn
+tất; sau mở lại cần gửi kết quả mới. Không sửa snapshot/feature, tự đóng vụ hoặc
+sinh nhãn. Xem [hướng dẫn](../agent2/docs/BUNDLE_CASE_WORKSPACE.md) và
+[nghiệm thu](evidence/R4/bundle_case_workspace_20261118/REPORT.md).
+Chưa deploy/restart live, không đổi quyền live/model/khóa hoặc mở rộng HE;
+không tự chuyển R0–R6 sang DONE.
+
+Cập nhật 18/11/2026 — **READY_FOR_REVIEW luồng nhập nhiều nguồn 35 luật**.
+Nhập một Excel nhiều sheet/các CSV, ánh xạ bảng/cột, khai báo và rút lại phạm
+vi nguồn, preview mức sẵn sàng từng kiểm tra rồi lưu snapshot bất biến. Không
+tự điền 0, suy coverage complete hoặc cắt lịch sử để chọn ứng viên. UI mới
+10 nhóm qua; UI nhập chuẩn cũ 19 ca và tabular chuẩn 4 nhóm qua. Sửa trả 401
+cho session Agent2 bị thu hồi khi còn request body trên Windows; giữ quyền và
+không forward/lưu body bị từ chối. [Hướng dẫn có hình](../agent2/docs/MULTI_SOURCE_IMPORT.md)
+và [báo cáo/receipt kiểm thử](evidence/R1/multi_source_import_20261118/REPORT.md).
+Lượt hồi quy cuối 202 test qua, gồm 29 test mới cho nhập nguồn/quyền/transport.
+Chưa deploy/restart live, không đổi DB/model/khóa/bundle, không tự chuyển
+R0–R6 sang DONE hoặc mở rộng HE/production.
+
+Cập nhật 17/11/2026 — **READY_FOR_REVIEW kỹ thuật đầu vào có dấu/đến muộn**.
+Native snapshot nhận tiền giao dịch âm và nguồn giao dịch/sổ cái đến muộn mà
+không sửa nguồn. Replay hai mốc, P1 tổng có dấu, F1 so độ lớn với mức trọng
+yếu có bằng chứng; missing theo từng ứng viên/luật, không tự đặt chính sách
+số âm cho các predicate chưa hỗ trợ. 284 backend regression tests qua, gồm
+15 ca mới; xem [báo cáo](../agent2/reports/native_signed_bitemporal_20261117.md).
+Bridge/runtime thay fingerprint cần fit/qualification lại trước triển khai.
+Không deploy/restart Portal, đổi model/khóa/phiên hoặc mở rộng HE/production;
+không chuyển R0–R6 sang DONE. Lịch sử master hai mốc khác nhau còn giới hạn.
+
 CR-062 (16/11/2026): **READY_FOR_REVIEW kỹ thuật, Portal shadow**.
 Portal entry dùng luồng bundle chung; nhập/preview/lưu chuyển đúng snapshot,
 phạm vi 35 luật từ analysis đã lưu và giới hạn nguồn rõ. Giao task ngay trong vụ

@@ -1,5 +1,45 @@
 # Decision log — nguồn chuẩn cho quyết định
 
+### CR-064 — mở rộng độ phủ BundleHE (7 luật + RobustZ 2 cột) & chốt cổng Pilot Active (D-04..D-07, Pilot D-09)
+
+18/11/2026: chủ sở hữu xác nhận 3 quyết định cho Ưu tiên 1–3:
+1. **Độ phủ HE trong `BundleHE` (`bundle-he4-native/1.1.0`)**: mở rộng từ 5 luật lên **7 luật FHE (`P1, A6, C2, C3, B1, B5, E4`) + nhánh thống kê `RobustZ` 2 cột (`build-statistics-v1`)** trên snapshot nguồn 35 luật (`agent2-rule-snapshot/1.0.0`), tận dụng các mạch Concrete đã biên dịch (`rules`, `c3`, `graph`, `statistics`) và khóa DPAPI riêng theo DN. Không so sánh số học trên bản rõ và không fallback chấm rõ khi yêu cầu `cloud_ciphertext_only`; 28 luật còn lại cùng ML 33 feature giữ `unavailable`. Endpoint `/he/jobs` độc lập giữ nguyên 5 luật cũ để bảo toàn tương thích ngược.
+2. **Chốt tham số chính sách cấp vụ (`D-04, D-05, D-06, D-07`)**:
+   - `D-06`: ngân sách **5 vụ/tuần** lịch Việt Nam (`calendar_week_vn`), ngưỡng thay đổi trọng yếu `min_score_delta = 0.25`, vụ chờ backlog không tự hết hạn (`auto_expire_backlog = false`), tách biệt với cap benchmark 5 giao dịch/phương án.
+   - `D-05`: gộp điểm ứng viên theo `max_candidate_score`, giao dịch lịch sử làm bằng chứng không cộng điểm (`evidence_adds_score = false`).
+   - `D-04`: `rule_weight = 1.0`, `ml_weight = 2.0`, `calibrated_weight = 0.0`, ngưỡng tiếp nhận `min_case_score = 5.0`, thứ tự fallback tường minh (`fb_missing_unsup_rules_only_v1` → `fb_incompatible_contract_v1`).
+   - `D-07`: luật bắt buộc ưu tiên tiếp nhận `mandatory_rules = ['P1']`.
+3. **Cổng Pilot Active (`Pilot D-09`)**: cho phép kiểm định, phê duyệt director 24h, kích hoạt/rollback trên lane `production` và đưa vụ vào `active_queue` (kèm xem/xét lại Backlog Active) khi gói `release-shadow-plan/1.0.0` đính kèm chứng nhận `pilot_governance` (`pilot-active-governance/1.0.0`) đạt tiêu chí nhãn xác minh trên `sealed_future_test`. Khi snapshot nguồn mang cờ `is_simulated = true`, hệ thống bắt buộc gắn `simulated_source_warning` rõ trên packet/báo cáo/UI. Các gói fixture không có `pilot_governance` và các API legacy không ghim bundle (`/case-queue/evaluate` `mode=active`) tiếp tục bị chặn bằng `RELEASE_PRODUCTION_BLOCKED`. Các cổng hạ tầng đa tổ chức (`D-17, D-18, D-19`: định danh cá nhân độc lập ngoài workspace chung, cloud multi-tenant SLA, giám sát drift dài hạn) giữ mở.
+
+Đã đồng bộ thư mục runtime live của `portal/config.local.json` (có sao lưu SHA-256 đầy đủ trước khi nâng cấp) với đủ 8 kho khóa Concrete DPAPI (`c3, graph, rules, statistics` cho `C001, C002`), kích hoạt sẵn cả bundle `staging` (Shadow) lẫn `production` (Pilot Active, hỗ trợ cả Local & Cloud HE) mà không bật ngầm tiến trình nền hoặc push git.
+
+### CR-063 — nối HE thật vào bộ điều phối bundle chung
+
+18/11/2026: người dùng giao nối các worker HE vào bộ điều phối bundle chung thay
+vì chỉ chạy shadow tại doanh nghiệp; nhánh chưa hỗ trợ trả `unavailable`, kết quả
+truy về cùng `snapshot_id`, `run_id`, `bundle_id` và có bằng chứng Concrete FHE
+thật tách biệt khỏi bài test mô phỏng giao thức.
+
+Triển khai `BundleHE` (`bundle-he4-native/1.0.0`) nối `ReleaseService` với
+`FourJobs` (`he4-enterprise/1.1.0`) và `CryptoBridge`: khi prepare bundle với
+`execution_mode=cloud_ciphertext_only`, ghim build (`rules`, `c3`, `graph`),
+worker, binding DN và các epoch/hash evaluation key đã cấp (profile thiếu khóa
+giữ `null`, không sinh khóa ngầm). `ReleaseStore.pin` ghim chế độ chạy; `he_job`
+(`rhej_`) gắn `pin_id` với job bền vững `bundle:<pin_id>` không lưu bearer token.
+Khi job đang chạy trả `409 PIPELINE_RUN_PENDING`, UI cho reload và bấm **Tiếp tục
+yêu cầu đã lưu** trên cùng `run_id`/`job_id`; đổi sang chạy rõ cùng `run_id` bị
+chặn bởi `RELEASE_RUN_CONFLICT`.
+
+Cloud chỉ nhận bản mã và evaluation key công khai cho `P1`, `C3`, `B1`, `B5/E4`.
+30 luật còn lại và thống kê/ML 33 feature giữ `unavailable` (`complete_catalogue=false`,
+`native_33_feature_he_unsupported`); không lấy model local giả làm HE. Giải mã,
+chính sách, gộp vụ, cấp ngân sách, hàng đợi shadow, phiếu rà, task và báo cáo
+chạy tại DN. C001/C002 đã chạy qua Concrete FHE thật trên HTTP xác thực, gồm ca
+mất phản hồi sau khi worker tính xong khôi phục qua `/v1/results` và đọc lại
+observation sau restart DN; 82 backend test và các bài UI Portal đạt. Không
+deploy/restart live, không push, không chốt D-04/05/06/07/09/17/18/19 hoặc DONE R6.
+Xem `agent2/docs/BUNDLE_HE.md` và `evidence/R6/bundle_he_20261118/REPORT.md`.
+
 ### CR-062 — Portal dùng luồng bundle chung
 
 16/11/2026: người dùng giao chọn DN/snapshot/chạy, xem vụ, ghi rà và giao task

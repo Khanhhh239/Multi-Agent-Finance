@@ -35,6 +35,9 @@ def digest(value):
 
 
 def mapping_contract(value):
+    if isinstance(value,dict) and value.get('profile')=='rule_sources':
+        from .rule_source_intake import mapping
+        return mapping(value)
     if not isinstance(value, dict) or set(value) - {"tables","date_format"}:
         fail(422, "MAPPING_INVALID", "Mapping chỉ nhận đối tượng tables đổi tên cột.", "Không dùng biểu thức, giá trị mặc định hoặc quyền trong mapping.")
     tables = value.get("tables", {})
@@ -69,13 +72,13 @@ def context(scope):
         schema_hashes={v:digest(canonical(schema(v))) for v in SUPPORTED_CONTRACT_VERSIONS},
         validator_version=imports.VALIDATOR_VERSION, profile_version=imports.PROFILE_VERSION,
         report_version=imports.REPORT_VERSION,
-        parser_fingerprint=digest(Path(__file__).read_bytes()+Path(__file__).with_name('tabular_import.py').read_bytes()), jsonschema_version=version("jsonschema"),
+        parser_fingerprint=digest(Path(__file__).read_bytes()+Path(__file__).with_name('tabular_import.py').read_bytes()+Path(__file__).with_name('rule_source_intake.py').read_bytes()), jsonschema_version=version("jsonschema"),
         validator_fingerprint=digest(b"\n".join(Path(module.__file__).read_bytes()
             for module in (imports, imports.p1_inputs, core_validation, json_io))))
     identity = dict(tenant_id=scope.tenant_id, company_ids=sorted(scope.company_ids),
                     actor_id=scope.actor_id, permissions=sorted(scope.permissions))
     versions['agent2_rule_profile']='agent2-rule-snapshot/1.0.0'
-    versions['agent2_rule_validator_sha256']=digest(Path(__file__).with_name('rule_snapshot.py').read_bytes()+Path(__file__).with_name('native_rule_node.py').read_bytes()+Path(__file__).with_name('rule_snapshot.schema.json').read_bytes())
+    versions['agent2_rule_validator_sha256']=digest(b''.join(Path(__file__).with_name(name).read_bytes() for name in ('rule_snapshot.py','native_rule_node.py','native_rule_execution.py','exception_validation.py','rule_snapshot.schema.json')))
     return versions, digest(canonical(dict(versions=versions, identity=identity)))
 
 
@@ -90,7 +93,12 @@ def rejected(code, message, action, **detail):
 def parse_file(raw, mapping, scope, filename='input.json'):
     tabular=filename.lower().endswith(('.csv','.xlsx'));locations={}
     try:
-        if tabular:
+        if mapping.get('profile')=='rule_sources':
+            from .rule_source_intake import parse
+            from .tabular_import import TabularError
+            try:data,locations=parse(raw,filename,mapping,scope)
+            except TabularError as error:return None,rejected(error.code,error.message,error.action,**error.detail)
+        elif tabular:
             from .tabular_import import parse,TabularError
             try:data,locations=parse(raw,filename,mapping)
             except TabularError as error:
@@ -100,13 +108,13 @@ def parse_file(raw, mapping, scope, filename='input.json'):
         return None, rejected("INVALID_JSON", "Cú pháp tệp JSON không hợp lệ.", "Sửa cú pháp tại dòng/cột JSON rồi tải lại tệp.", json_line=error.lineno, json_column=error.colno)
     except (ValueError, UnicodeError, RecursionError, OverflowError):
         return None, rejected("INVALID_JSON", "Tệp phải là JSON UTF-8, không khóa lặp hoặc số không hữu hạn.", "Xuất lại tệp đúng hợp đồng rồi tải lại; không tự bỏ dòng lỗi.")
-    if isinstance(data,dict) and data.get('contract_version')=='agent2-rule-snapshot/1.0.0' and mapping:
+    if isinstance(data,dict) and data.get('contract_version')=='agent2-rule-snapshot/1.0.0' and mapping and mapping.get('profile')!='rule_sources':
         return None,rejected('RULE_MAPPING_UNSUPPORTED','Profile nguồn luật cần JSON đúng tên trường.','Xuất theo profile nguồn; không đổi mapping lồng nhau bằng giá trị mặc định.')
     if isinstance(data, dict):
         if sum(len(rows) for rows in data.values() if isinstance(rows, list)) > MAX_ROWS:
             return None, rejected("ROW_LIMIT", "Tệp vượt 50.000 bản ghi.", "Chia gói và giữ đủ các bản ghi được tham chiếu.")
         errors = []
-        for table, columns in ({} if tabular else mapping.get("tables", {})).items():
+        for table, columns in ({} if tabular or mapping.get('profile')=='rule_sources' else mapping.get("tables", {})).items():
             rows = data.get(table)
             if not isinstance(rows, list):
                 continue  # canonical validator supplies the required/table error
@@ -130,10 +138,25 @@ def parse_file(raw, mapping, scope, filename='input.json'):
         report = imports.validate_input(data, scope)
     except (RecursionError, OverflowError):
         return None, rejected("INPUT_STRUCTURE", "Cấu trúc dữ liệu quá sâu hoặc không hợp lệ.", "Xuất lại theo schema 1.0.0.")
-    if tabular:
+    if mapping.get('profile')=='rule_sources' and report['status']!='rejected':
+        from .rule_source_intake import readiness
+        try:report['rule_readiness']=readiness(data,scope)
+        except (KeyError,ValueError,ZeroDivisionError) as error:
+            field=str(error.args[0]) if isinstance(error,KeyError) else None
+            report['status']='rejected'
+            report['errors'].append(dict(code='RULE_EXECUTION_INPUT',path='source.tables',table=None,row=None,field=field,
+                message='Nguồn chưa đủ trường để chạy kiểm tra'+(': '+field if field else ' hoặc còn giá trị ngoài miền hỗ trợ')+'.',
+                action='Đối chiếu các bảng/cột với mẫu 35 luật; giữ nguyên nguồn và bổ sung dữ liệu, không tự điền 0.'))
+    if tabular or mapping.get('profile')=='rule_sources':
         import re
         report['source_format']='xlsx' if filename.lower().endswith('.xlsx') else 'csv'
         for item in report.get('errors',[])+report.get('warnings',[]):
             match=re.match(r'(/[^/]+/[0-9]+)(?:/|$)',item.get('path',''))
             if match and match[1] in locations:item.update(locations[match[1]])
+            for prefix,where in locations.items():
+                if item.get('path','')==prefix or item.get('path','').startswith(prefix+'.'):
+                    item.update(where)
+                    tail=item.get('path','')[len(prefix):].lstrip('.')
+                    if tail:item['field']=tail
+                    break
     return (canonical(data) if report["status"] != "rejected" else None), report

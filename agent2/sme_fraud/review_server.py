@@ -86,6 +86,9 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
         release_service.case_queue=case_queue_store
     if release_service is not None:
         release_service.workspace.remediation=remediation_store
+        if he_backend is not None and hasattr(he_backend.node.jobs,'submit_bound'):
+            from .bundle_he import BundleHE
+            release_service.he_executor=BundleHE(he_backend)
     class Handler(BaseHTTPRequestHandler):
         def respond(self,code,value,mime='application/json; charset=utf-8'):
             body=value if isinstance(value,bytes) else (json.dumps(value,ensure_ascii=False) if isinstance(value,dict) else value).encode('utf-8')

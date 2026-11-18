@@ -494,7 +494,7 @@ class RuleSnapshotMLBridgeTests(unittest.TestCase):
         for col in ('prior_type_history_log_count', 'log_abs_deviation_from_history', 'abs_amount_history_z'):
             self.assertIsNone(b_frame['features'][0][COLUMNS.index(col)])
 
-        # Zero amount supported; negative amount rejected by native validator without abs() or date rewrite.
+        # Signed amounts keep their sign indicator and original evidence amount.
         zero_ok = copy.deepcopy(base)
         for tx in zero_ok['source']['tables']['transactions']:
             if tx['transaction_id'] == 'CAND_00':
@@ -509,9 +509,11 @@ class RuleSnapshotMLBridgeTests(unittest.TestCase):
         neg = copy.deepcopy(base)
         neg['source']['tables']['transactions'][-1]['amount_vnd'] = -500_000
         _rehash(neg['source'])
-        self.assertEqual(validate_rule_snapshot(neg, self._scope())['status'], 'rejected')
-        with self.assertRaises(ImportFailure):
-            build_rule_feature_rows(neg, self._scope(), as_of, candidates_only=True)
+        self.assertEqual(validate_rule_snapshot(neg, self._scope())['status'], 'accepted_with_warnings')
+        negative_frame=build_rule_feature_rows(neg,self._scope(),as_of,candidates_only=True)
+        negative_rows=[(f,e) for f,e in zip(negative_frame['features'],negative_frame['evidence']) if e['signed_amount_vnd']==-500_000]
+        self.assertEqual(len(negative_rows),1)
+        self.assertEqual(negative_rows[0][0][COLUMNS.index('amount_negative')],1)
 
     # Acceptance 5 & 6: Negative ML gates, strict/median_flags, batch outlier invariance, ID rename invariance.
     def test_negative_gates_strict_vs_median_flags_outlier_and_id_invariance(self):

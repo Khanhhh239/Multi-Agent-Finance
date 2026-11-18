@@ -26,7 +26,7 @@ def known_at(row):
     return max(timestamp(row['posted_at']), timestamp(row.get('observed_at') or row['posted_at']))
 
 
-def extract_observations(tables):
+def extract_observations(tables, *, signed_amounts=False):
     """One debit measurement per document/account, plus separate cash outflows.
 
     Ledger debits retain exact expense/cost subaccounts and exclude VAT/assets.
@@ -47,12 +47,18 @@ def extract_observations(tables):
             raise ValueError('Conflicting journal document in dynamic source')
         documents[key] = row
     groups, seen_lines = {}, set()
+    signed_documents={(r['company_id'],r['document_id']) for r in tables.get('journal_lines',[])
+                      if signed_amounts and (r.get('debit_vnd',0)<0 or r.get('credit_vnd',0)<0)}
     for line in tables.get('journal_lines', []):
         company, document = line['company_id'], line['document_id']
         account = account_code(line['account_code'])
-        debit, credit = integer(line.get('debit_vnd', 0), 'debit_vnd'), integer(line.get('credit_vnd', 0), 'credit_vnd')
+        debit, credit = (integer(line.get(field, 0), field, -999999999999999999 if signed_amounts else 0)
+                         for field in ('debit_vnd', 'credit_vnd'))
         if debit and credit:
             raise ValueError('A dynamic journal line cannot contain both debit and credit')
+        if (company,document) in signed_documents:
+            gaps.append(dict(company_id=company, document_id=document, reason='signed_ledger_outside_positive_upper_tail_domain'))
+            continue
         if not debit or not expense_account(account):
             continue
         line_key = (company, document, line.get('line_id') or digest(line))
@@ -92,7 +98,10 @@ def extract_observations(tables):
     for key, row in sorted(transactions.items()):
         if not int(row['is_financial_entry']):
             continue
-        amount = integer(row['amount_vnd'], 'amount_vnd')
+        amount = integer(row['amount_vnd'], 'amount_vnd', -999999999999999999 if signed_amounts else 0)
+        if amount < 0:
+            gaps.append(dict(company_id=key[0], transaction_id=key[1], reason='signed_transaction_outside_positive_upper_tail_domain'))
+            continue
         if not amount:
             continue
         if row.get('currency', 'VND') != 'VND':
