@@ -299,10 +299,51 @@
     );
   }
 
+  // ------------------------------------------------------------------ Follow-up context
+  // The governed pipeline answers each question on its own: a session only carries a pending clarification.
+  // A short follow-up ("Còn theo sổ thuế thì sao?", "Chi tiết theo từng chi nhánh?") is therefore rewritten here
+  // into a complete question from the last answered one before it is sent.
+  let lastAnswered = null;
+  const FOLLOW_RE = /^(?:vậy |thế )?(?:còn|nếu)\s+(.+?)(?:\s+thì sao)?\s*\??$/i;
+  const DETAIL_RE = /^(?:chi tiết|tách|phân)\s+(?:theo\s+)?(.+?)\s*\??$/i;
+  const COMPARE_RE = /^so sánh hai sổ/i;
+  const MODIFIER_RE = /(sổ|chi nhánh|tháng|quý|năm|khu vực|sản phẩm|đối tác|phân khúc|kênh)/i;
+
+  function baseQuestion(q) {
+    return String(q || "")
+      .replace(/\s*\((?:theo\s+)?sổ\s+(?:thuế|quản trị)\)/gi, "")
+      .replace(/\s+theo\s+(?:sổ\s+)?(?:thuế|quản trị)(?:\s*\(v_\w+\))?/gi, "")
+      .replace(/\s+theo\s+(?:từng\s+)?(?:chi nhánh|tháng|quý|khu vực|dòng sản phẩm|sản phẩm|đối tác|phân khúc)/gi, "")
+      .replace(/\s*(?:là\s+)?bao nhiêu\s*\??\s*$/i, "")
+      .replace(/\s*\?+\s*$/, "")
+      .trim();
+  }
+
+  function composeFollowUp(q) {
+    if (!lastAnswered) return null;
+    const base = baseQuestion(lastAnswered.question);
+    if (!base) return null;
+    if (COMPARE_RE.test(q)) {
+      return { pair: [base + " theo sổ quản trị là bao nhiêu?", base + " theo sổ thuế là bao nhiêu?"] };
+    }
+    let m = q.match(FOLLOW_RE);
+    if (m && MODIFIER_RE.test(m[1])) {
+      const mod = /^theo\b/i.test(m[1].trim()) ? m[1].trim() : "theo " + m[1].trim();
+      return { text: base + " " + mod + " là bao nhiêu?" };
+    }
+    m = q.match(DETAIL_RE);
+    if (m && MODIFIER_RE.test(m[1])) {
+      const view = (String(lastAnswered.question).match(/theo\s+sổ\s+(?:thuế|quản trị)/i) || [""])[0];
+      return { text: (base + " theo " + m[1].trim().replace(/^theo\s+/i, "") + (view ? " " + view : "")).trim() };
+    }
+    return null;
+  }
+
   function resetConversation() {
     sessionId = generateSessionId();
     saveSessionId(sessionId);
     activeClarification = null;
+    lastAnswered = null;
     renderSessionHeader();
     const thread = $("thread");
     if (thread) {
@@ -769,6 +810,15 @@
     const isClarificationTurn = Boolean(opts.clarificationSessionId || activeClarification);
     const effectiveSessionId = opts.clarificationSessionId || activeClarification?.sessionId || sessionId;
 
+    const followUp = isClarificationTurn || opts.composed ? null : composeFollowUp(trimmed);
+    if (followUp?.pair) {
+      await ask(followUp.pair[0], { displayQuestion: displayQuestion + " (Sổ quản trị)", composed: true });
+      await ask(followUp.pair[1], { displayQuestion: displayQuestion + " (Sổ thuế)", composed: true });
+      return;
+    }
+    const sendText = followUp?.text || trimmed;
+    const originalQuestion = activeClarification?.originalQuestion || null;
+
     const thread = $("thread");
     if (thread) {
       thread.append(el("li", { class: "msg user" }, displayQuestion));
@@ -781,7 +831,7 @@
     if (sendBtn) sendBtn.disabled = true;
 
     try {
-      let { ok, res } = await postAgent4Query(trimmed, effectiveSessionId, isClarificationTurn, opts.selectedChoiceId || null);
+      let { ok, res } = await postAgent4Query(sendText, effectiveSessionId, isClarificationTurn, opts.selectedChoiceId || null);
 
       // Resilient fallback if an un-upgraded backend treats session_id strictly as single-use clarification token
       if (
@@ -790,7 +840,7 @@
         res?.error?.stage === "clarification" &&
         res?.error?.code === "invalid_request"
       ) {
-        const retry = await postAgent4Query(trimmed, null, false, null);
+        const retry = await postAgent4Query(sendText, null, false, null);
         ok = retry.ok;
         res = retry.res;
       }
@@ -815,6 +865,13 @@
         ? res
         : { status: "error", answer: errorText(res?.error) || "Yêu cầu không thành công." };
       bot.replaceChildren(...botMessage(payloadToRender, displayQuestion));
+      if (followUp?.text) {
+        bot.prepend(el("div", { class: "followup-note" }, "Hiểu theo ngữ cảnh: “" + sendText + "”"));
+      }
+      if (res?.status === "ready") {
+        const answered = isClarificationTurn ? originalQuestion : sendText;
+        if (answered) lastAnswered = { question: answered };
+      }
     } catch (err) {
       bot.replaceChildren(...botMessage({ status: "error", answer: "Không kết nối được máy chủ Portal: " + err.message }, displayQuestion));
     } finally {

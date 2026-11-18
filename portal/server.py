@@ -206,9 +206,9 @@ AGENTS = {
     'agent1': dict(name='Dòng tiền', summary='Dự báo thu chi theo tuần, kịch bản thu chậm, xuất Excel.',
                    default_root='agent1', port=8011, health='/health', page='/workspace'),
     'agent2': dict(name='Soát giao dịch', summary='Luật cứng, ngưỡng xác suất, đồ thị quan hệ và túi phương pháp ML.',
-                   default_root='agent2', port=8766, health='/api/health', page='/'),
+                   default_root='agent2', port=8766, health='/health', page='/'),
     'agent3': dict(name='Thuế GTGT', summary='Đọc hóa đơn XML, đối chiếu sao kê và bảng kê, căn cứ điều luật.',
-                   default_root='agent3/agent3_tax_compliance', port=8640, health='/api/schema', page='/'),
+                   default_root='agent3/agent3_tax_compliance', port=8640, health='/health', page='/'),
     'agent4': dict(name='Hỏi đáp số liệu', summary='Hỏi chỉ tiêu tài chính bằng tiếng Việt, trả lời có nguồn.',
                    default_root='agent4', port=8040, health='/health', page=None),
 }

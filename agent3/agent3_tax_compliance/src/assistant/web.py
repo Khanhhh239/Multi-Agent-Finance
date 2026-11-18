@@ -190,6 +190,11 @@ def schema():
     return guide()
 
 
+@app.get('/health')
+def health():
+    return {'status': 'ok', 'service': 'agent3'}
+
+
 @app.get('/api/workspaces')
 def list_workspaces():
     context = bridge.context()
