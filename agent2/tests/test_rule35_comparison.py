@@ -290,9 +290,12 @@ class Rule35ComparisonTests(unittest.TestCase):
             gap_cases = rule35_cases_for(self.snapshots, scope, gap_ana, reviews, raw_data=gap_data)
             gap_plan = make_rule35_plan(gap_ana, gap_cases, gap_snap, ml_method='isolation_forest', raw_data=gap_data)
             gap_report = rule35_report_for(gap_plan, gap_cases)
-            self.assertEqual(gap_report['ml_addition_summary']['added_with_partial_rule_source_gap'], 2)
-            self.assertEqual(gap_report['ml_addition_summary']['added_after_all_applicable_rules_no_hit'], 0)
-            self.assertIn('B1', gap_report['added'][0]['unavailable_rule_ids'])
+            # Per-transaction rule availability (native_rule_node): only C1_EV_08_ML_SECOND lacks recipient_bank_code -> B1 unavailable on it alone.
+            self.assertEqual(gap_report['ml_addition_summary']['added_with_partial_rule_source_gap'], 1)
+            self.assertEqual(gap_report['ml_addition_summary']['added_after_all_applicable_rules_no_hit'], 1)
+            by_added_id = {item['record_id']: item for item in gap_report['added']}
+            self.assertIn('B1', by_added_id['C1_EV_08_ML_SECOND']['unavailable_rule_ids'])
+            self.assertEqual(by_added_id['C1_EV_07_ML_CLEAN']['unavailable_rule_ids'], [])
 
             # Variant with ML unpinned (AnalysisResources()) -> ml_unavailable keeps baseline rules intact.
             no_ml_ana = analyze_rule_snapshot(self.snapshots, scope, self.eval_manifest['C001']['snapshot_id'], EVAL_AS_OF,

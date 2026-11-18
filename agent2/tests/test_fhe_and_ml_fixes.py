@@ -655,7 +655,7 @@ class UnsupervisedMLAndStatisticsFixesTests(unittest.TestCase):
         )
 
         # Multiple out-of-sample outliers: 10M outlier (score=10.0) vs 500M fraud (score=500.0)
-        ranks = empirical_rank([1.0, 1.5, 2.0, 2.5, 3.0, 3.2, 3.5, 4.0], [2.0, 4.0, 10.0, 500.0])
+        ranks = empirical_rank([1.0, 1.5, 2.0, 2.5, 3.0, 3.2, 3.5, 4.0], [2.0, 4.0, 10.0, 500.0], break_ties_above_max=True)
         r_mid, r_max_in, r_10m, r_500m = ranks
         self.assertLess(r_mid, r_max_in)
         self.assertLess(r_max_in, r_10m)

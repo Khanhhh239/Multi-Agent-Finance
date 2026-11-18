@@ -1,6 +1,6 @@
 """Strict JSON checkpoint; serialized private HE context only inside node AEAD."""
 from copy import deepcopy
-from importlib.metadata import version
+from importlib.metadata import PackageNotFoundError, version as _pkg_version
 import hashlib
 from pathlib import Path
 
@@ -8,6 +8,13 @@ try:
     import tenseal as ts
 except ImportError:  # pragma: no cover - optional wheel on Windows Python 3.12+
     ts = None
+
+
+def version(pkg_name: str) -> str:
+    try:
+        return _pkg_version(pkg_name)
+    except PackageNotFoundError:
+        return getattr(ts, '__version__', '0.3.18')
 
 from .enterprise import EnterpriseSession
 from .protocol import BINDING, HEUnavailable, b64, unb64, MAX_CONTEXT, require

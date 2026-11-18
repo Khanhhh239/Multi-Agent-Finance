@@ -458,7 +458,7 @@ def transform_with_reference(
             finite_keys.append(key)
             finite_vals.append(float(val))
     if finite_vals:
-        ranked = empirical_rank(frozen, np.asarray(finite_vals, dtype=float))
+        ranked = empirical_rank(frozen, np.asarray(finite_vals, dtype=float), break_ties_above_max=True)
         for key, rk in zip(finite_keys, ranked):
             mapped[key] = round(float(rk), 10)
     return mapped

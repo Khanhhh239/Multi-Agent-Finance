@@ -129,7 +129,7 @@ class CompanyEstimator:
             non_missing_cols = np.arange(self.width_, dtype=int)
         self.active_cols_ = non_missing_cols
 
-        x_eff = x[:, self.active_cols_] if self.algorithm in {'autoencoder', 'lof', 'isolation_forest'} else x
+        x_eff = x[:, self.active_cols_] if self.algorithm == 'autoencoder' else x
         self.scaler_ = StandardScaler().fit(x_eff) if self.algorithm in {'autoencoder', 'lof'} else None
         z = self.scaler_.transform(x_eff) if self.scaler_ is not None else x_eff
 
@@ -193,10 +193,8 @@ class CompanyEstimator:
         x = matrix(x)
         if x.shape[1] != self.width_:
             raise ValueError('Số feature không khớp phiên bản ML.')
-        active_cols = getattr(self, 'active_cols_', np.arange(self.width_, dtype=int))
         if self.algorithm in {'isolation_forest', 'lof'}:
-            x_eff = x[:, active_cols]
-            z = self.scaler_.transform(x_eff) if self.scaler_ is not None else x_eff
+            z = self.scaler_.transform(x) if self.scaler_ is not None else x
             scores = -self.model_.score_samples(z)
         elif self.algorithm == 'autoencoder':
             scores, _ = self._autoencoder_squared_errors(x)
