@@ -214,6 +214,18 @@ class SnapshotStore:
         with self._transaction(scope, recheck) as conn:
             return self._info(conn, self._draft(conn, scope, import_id))
 
+    def inspect_sources(self,scope,import_id,expected,recheck=None):
+        from .rule_source_intake import inspect
+        from .tabular_import import TabularError
+        with self._transaction(scope,recheck) as conn:
+            draft=self._draft(conn,scope,import_id);self._expected(draft,expected)
+            revision=self._revision(conn,draft)
+            try:value=inspect(self._source(conn,revision),revision['filename'])
+            except TabularError as error:
+                from .import_files import ImportFailure
+                failure=ImportFailure(422,error.code,error.message,error.action);failure.detail=error.detail;raise failure
+            return dict(value,revision=draft['revision'],import_id=import_id)
+
     def _verified_report(self, row):
         if row is None:
             fail(409, "PREVIEW_REQUIRED", "Chưa có kết quả kiểm tra hiện hành.", "Chạy bước xem kết quả kiểm tra trước khi xác nhận lưu.")

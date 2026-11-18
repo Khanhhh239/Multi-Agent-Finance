@@ -34,7 +34,7 @@ def run(output):
             expect(page.locator('#intake')).to_be_visible(timeout=20000)
 
             def frame():
-                return page.frame_locator('#agent-frame-agent2, #agent-frame')
+                return page.frame_locator('#agent-frame')
 
             def workspace(company):
                 expect(frame().locator('#ws-company')).to_have_value(company, timeout=30000)
@@ -182,7 +182,7 @@ def run(output):
             select_memory('C002', 'https://invalid.example/steal')
             page.reload()
             workspace('C002')
-            assert page.locator('#agent-frame-agent2, #agent-frame').get_attribute('src').startswith(f.h.portal_url + '/agent2/')
+            assert page.locator('#agent-frame').get_attribute('src').startswith(f.h.portal_url + '/agent2/')
             checks.append('Stored arbitrary page cannot navigate iframe outside allowlisted Agent2 pages')
             page.evaluate('sessionStorage.setItem("agent2.company.selection","{broken")')
             page.reload()
@@ -201,7 +201,7 @@ def run(output):
             page.goto(f.h.portal_url + '/#agent2')
             expect(page.locator('#view-overview')).to_be_visible(timeout=30000)
             assert held.is_set()
-            expect(page.locator('#agent-frame-agent2, #agent-frame')).not_to_have_attribute('src', timeout=30000)
+            expect(page.locator('#agent-frame')).not_to_have_attribute('src', timeout=30000)
             checks.append('Late context response after leaving Agent2 cannot reopen the old iframe')
             assert not errors, errors
             report = dict(status='passed', count=len(checks), checks=checks, browser_errors=errors,
@@ -215,7 +215,7 @@ def run(output):
         except Exception as error:
             page.screenshot(path=str(output / 'failure.png'), full_page=True)
             debug = dict(frames=[dict(url=x.url, text=x.locator('body').inner_text()[:800]) for x in page.frames],
-                         iframe=page.locator('#agent-frame-agent2, #agent-frame').evaluate('(e)=>({src:e.getAttribute("src"), marker:e.dataset.src,hidden:e.hidden})'))
+                         iframe=page.locator('#agent-frame').evaluate('(e)=>({src:e.getAttribute("src"), marker:e.dataset.src,hidden:e.hidden})'))
             (output / 'failure.json').write_text(json.dumps(dict(checks=checks, error=str(error), browser_errors=errors, debug=debug), indent=2), encoding='utf-8')
             raise
         finally:

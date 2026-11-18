@@ -1,5 +1,9 @@
 # Quản lý hồ sơ/chứng từ và công việc khắc phục sau rà soát (R4)
 
+**Cập nhật 18/11/2026:** quy trình chứng từ/task đã nối vào màn hình
+**Vụ cần rà** theo bundle; không cần chuyển sang workspace cũ để xác minh,
+hoàn tất hoặc mở lại việc. Xem [hướng dẫn màn hình chính](BUNDLE_CASE_WORKSPACE.md).
+
 ## 1. Phạm vi và nguyên tắc thiết kế
 
 Luồng R4 bổ sung vòng đời xử lý hậu kiểm sau khi mở vụ việc:

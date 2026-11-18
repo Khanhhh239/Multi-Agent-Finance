@@ -181,7 +181,7 @@ def _value(value, kind):
     return value
 
 
-def validated_record(name, record):
+def validated_record(name, record, *, signed_amounts=False):
     spec = PROFILES[name]
     if not isinstance(record, dict):
         raise ValueError(f'Invalid {name}: expected a record')
@@ -201,7 +201,11 @@ def validated_record(name, record):
         if field not in row:
             continue
         try:
-            row[field] = _value(row[field], kind)
+            if signed_amounts and name == 'transactions' and field == 'amount_vnd':
+                if type(row[field]) is not int or abs(row[field]) > 999999999999999999:
+                    raise ValueError('expected signed integer VND within 18 digits')
+            else:
+                row[field] = _value(row[field], kind)
         except (ValueError, TypeError, OverflowError) as error:
             fail(field, str(error))
     # IDs and untyped required labels remain strings (including leading zeros).
@@ -236,13 +240,13 @@ def validated_record(name, record):
     return row
 
 
-def validated_rows(name, rows):
-    return [validated_record(name, row) for row in rows]
+def validated_rows(name, rows, *, signed_amounts=False):
+    return [validated_record(name, row, signed_amounts=signed_amounts) for row in rows]
 
 
-def validated_tables(tables, names=None):
+def validated_tables(tables, names=None, *, signed_amounts=False):
     result = tables.copy()  # preserve defaultdict behavior for absent optional sources
     for name in (PROFILES if names is None else names):
         if name in tables:
-            result[name] = validated_rows(name, tables[name])
+            result[name] = validated_rows(name, tables[name], signed_amounts=signed_amounts)
     return result

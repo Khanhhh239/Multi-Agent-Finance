@@ -259,16 +259,37 @@ class RuleSnapshotP1Tests(unittest.TestCase):
 
     def test_negative_amount_vnd_rejected_without_abs_coerce(self):
         from sme_fraud.rule_snapshot import validate as validate_rule_snapshot
+        from experiments.he4 import inputs as he_inputs
 
+        # 1. Signed negative adjustment is accepted without abs() coercion; nonpositive-only prior stays unavailable in HE P1
         src, info = scenario('P1', False, 'C001')
         src['tables']['transactions'][-1]['amount_vnd'] = -500_000
         _rehash(src)
         data = _wrap(src, [info['target_transaction_id']])
         report = validate_rule_snapshot(data, _scope('C001'), committed=True)
-        self.assertEqual(report['status'], 'rejected')
-        self.assertTrue(any('amount_vnd' in err.get('message', '') for err in report['errors']))
+        self.assertEqual(report['status'], 'accepted_with_warnings')
+        plan = plan_p1_from_rule_snapshot(data, _scope('C001'))
+        self.assertTrue(plan['rows'][0]['available'])
+        abs_encoded = he_inputs.payment([6_000_000], [500_000], [10_000_000], ['payment'], tolerance=1, group=False)[1].tolist()
+        self.assertNotEqual(plan['rows'][0]['requests'][0]['values'][1], abs_encoded)
+
+        # Nonpositive prior payment cannot be coerced to positive prior in Concrete P1
+        src_np, info_np = scenario('P1', False, 'C001')
+        src_np['tables']['transactions'][0]['amount_vnd'] = -500_000
+        _rehash(src_np)
+        plan_np = plan_p1_from_rule_snapshot(_wrap(src_np, [info_np['target_transaction_id']]), _scope('C001'))
+        self.assertFalse(plan_np['rows'][0]['available'])
+        self.assertEqual(plan_np['rows'][0]['reason'], 'he_p1_nonpositive_prior_unsupported')
+
+        # 2. Out-of-domain negative (>18 digits) is rejected by validator and planner
+        src_bad, info_bad = scenario('P1', False, 'C001')
+        src_bad['tables']['transactions'][-1]['amount_vnd'] = -(10**19)
+        _rehash(src_bad)
+        bad_data = _wrap(src_bad, [info_bad['target_transaction_id']])
+        bad_report = validate_rule_snapshot(bad_data, _scope('C001'), committed=True)
+        self.assertEqual(bad_report['status'], 'rejected')
         with self.assertRaises(ImportFailure):
-            plan_p1_from_rule_snapshot(data, _scope('C001'))
+            plan_p1_from_rule_snapshot(bad_data, _scope('C001'))
 
 
 if __name__ == '__main__':

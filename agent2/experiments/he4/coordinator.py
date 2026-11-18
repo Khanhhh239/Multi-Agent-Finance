@@ -61,10 +61,11 @@ class Settings:
         pinned=[__file__,snapshot_adapter.__file__,inputs.__file__,p1_evaluation.__file__,p1_inputs.__file__,rule_sources.__file__,snapshot_features.__file__,
                 Path(__file__).with_name('enterprise_helper.py'),Path(__file__).with_name('windows_bridge.py')]
         if self.supports_rule_snapshot:
-            from . import c3_circuit,rule_snapshot_adapter,rule_snapshot_c3_adapter,rule_snapshot_identity_adapter,rule_snapshot_coordinator
-            from sme_fraud import authority_policy,native_rule_node,rule_snapshot
+            from . import c3_circuit,rule_snapshot_adapter,rule_snapshot_c3_adapter,rule_snapshot_identity_adapter,rule_snapshot_extended_adapter,rule_snapshot_coordinator
+            from sme_fraud import authority_policy,native_rule_node,rule_snapshot,rule_snapshot_features
             pinned.extend([c3_circuit.__file__,rule_snapshot_adapter.__file__,rule_snapshot_c3_adapter.__file__,rule_snapshot_identity_adapter.__file__,
-                           rule_snapshot_coordinator.__file__,authority_policy.__file__,native_rule_node.__file__,rule_snapshot.__file__])
+                           rule_snapshot_extended_adapter.__file__,rule_snapshot_coordinator.__file__,authority_policy.__file__,native_rule_node.__file__,
+                           rule_snapshot.__file__,rule_snapshot_features.__file__])
         return dict(binding=found,programs=programs,worker_url=c['worker_url'],worker_verify_key=c['worker_verify_key'],
                     implementation_sha256=digest(b''.join(Path(p).read_bytes() for p in pinned)))
 
@@ -105,6 +106,13 @@ class FourJobs(Jobs):
             return self.legacy.resume(company,header,job_id)
 
     def submit(self,company,header,key,body):
+        return self._submit(company,header,key,body)
+
+    def submit_bound(self,company,header,key,body,*,expected_context,bundle_binding,key_contexts):
+        """Trusted enterprise adapter; not accepted by the public HTTP schema."""
+        return self._submit(company,header,key,body,bound=dict(context=expected_context,binding=bundle_binding,keys=key_contexts))
+
+    def _submit(self,company,header,key,body,bound=None):
         import re
         scope=self._scope(header,company)
         if not isinstance(body,dict) or set(body)!={'artifact_id','snapshot_id','as_of'} or not isinstance(key,str) or not re.fullmatch('[A-Za-z0-9_.:-]{8,128}',key):raise ServiceError(400,'HE4_REQUEST_FIELDS')
@@ -114,6 +122,7 @@ class FourJobs(Jobs):
         # between the pending-run check and the atomic model binding switch.
         with self.settings.mutation_lock:
             context=self.settings.capture(scope)
+            if bound is not None and context!=bound['context']:raise ServiceError(409,'HE4_BUNDLE_CONTEXT_CHANGED')
             if getattr(self.settings,'supports_rule_snapshot',False):
                 snap=ReadOnlySnapshots(self.node.snapshot_db)
                 manifest=snap.get_snapshot(scope,body['snapshot_id'],lambda:self._scope(header,company))
@@ -123,11 +132,15 @@ class FourJobs(Jobs):
                     source_as_of=source_data['source']['as_of']
                     if utc(body['as_of'])!=utc(source_as_of):raise ServiceError(409,'HE4_AS_OF_MISMATCH')
                     request=dict(body,as_of=source_as_of,snapshot_contract='agent2-rule-snapshot/1.0.0',he4_context=context)
+                    if bound is not None:
+                        request.update(bundle_binding=deepcopy(bound['binding']),bundle_key_contexts=deepcopy(bound['keys']))
+                        self._check_bundle_keys(scope,request)
                     job=self.store.create(scope,key,request)
                     self.schedule(scope,header,job)
                     return self.status(company,header,job)
             if context['binding'].get('ml_artifact_id',body['artifact_id'])!=body['artifact_id']:raise ServiceError(409,'HE4_MODEL_SELECTION_CHANGED')
             request=dict(body,as_of=utc(body['as_of']).isoformat(),he4_context=context)
+            if bound is not None:raise ServiceError(422,'HE4_BUNDLE_SOURCE_UNSUPPORTED')
             job=self.store.create(scope,key,request)
         self.schedule(scope,header,job)
         return self.status(company,header,job)
@@ -135,12 +148,21 @@ class FourJobs(Jobs):
     def _save(self,scope,job,data,phase,reason=None):
         self.guard(job,scope);self.store.save(scope,job,data,phase,reason)
 
+    def _check_bundle_keys(self,scope,request):
+        for profile,expected in request.get('bundle_key_contexts',{}).items():
+            try:actual=self.bridge.public_context(scope,request['he4_context']['programs'][profile]['path'])
+            except HEUnavailable as error:
+                if error.code!='he4_key_not_provisioned':raise
+                actual=None
+            if actual!=expected:raise HEUnavailable('he4_bundle_key_changed')
+
     def _process(self,scope,job):
         row,data=self.store.get(scope,job)
         if row['phase'] in TERMINAL:return False
         try:
             _,header=self.guard(job,scope);r=data['request'];context=r['he4_context'];company=next(iter(scope.company_ids))
             if context!=self.settings.capture(scope):raise HEUnavailable('he4_configuration_changed')
+            self._check_bundle_keys(scope,r)
             data['attempts']+=1
             if r['artifact_id'] is None:pass  # independent branch absence, never implicit fit
             elif data.get('legacy_job') is None:
@@ -155,8 +177,11 @@ class FourJobs(Jobs):
             if data['pending'] is None:
                 if is_rule_snapshot:
                     from .rule_snapshot_coordinator import prepare_rule_snapshot_he_plan
+                    is_bound='bundle_binding' in r
+                    stat_art=(r.get('bundle_binding') or {}).get('statistics_artifact_id') if is_bound else None
                     prepared=prepare_rule_snapshot_he_plan(ReadOnlySnapshots(self.node.snapshot_db),scope,r['snapshot_id'],r['as_of'],
-                        context['programs'],recheck=lambda:self.guard(job,scope)[0])
+                        context['programs'],extended=is_bound,model_db=self.node.model_db if is_bound else None,
+                        statistics_artifact=stat_art,recheck=lambda:self.guard(job,scope)[0])
                     data['pending']=dict(plan=prepared['plan'],tasks=prepared['tasks'],cursor=0)
                 else:
                     plan=prepare_snapshot(ReadOnlySnapshots(self.node.snapshot_db),scope,r['snapshot_id'],r['as_of'],model_db=self.node.model_db,
@@ -174,6 +199,7 @@ class FourJobs(Jobs):
                 self._save(scope,job,data,'ready')
             pending=data['pending'];tasks=pending['tasks']
             for index in range(pending['cursor'],len(tasks)):
+                self._check_bundle_keys(scope,r)
                 self.guard(job,scope);task=tasks[index];profile=task['profile'];program=context['programs'][profile]
                 root=self.operations/job/str(index);root.mkdir(parents=True,exist_ok=True)
                 try:
@@ -221,7 +247,10 @@ class FourJobs(Jobs):
                 pending['cursor']=index+1;self._save(scope,job,data,'ready')
             if is_rule_snapshot:
                 from .rule_snapshot_coordinator import assemble_rule_snapshot_he_result
-                data['result']=assemble_rule_snapshot_he_result(job,r,pending,context);data['pending']=None
+                self._check_bundle_keys(scope,r)
+                data['result']=assemble_rule_snapshot_he_result(job,r,pending,context)
+                if 'bundle_binding' in r:data['result']['bundle_binding']=deepcopy(r['bundle_binding'])
+                data['pending']=None
                 self._save(scope,job,data,'completed');return False
             if r['artifact_id'] is None:
                 status,legacy=200,dict(company_id=company,rows=[dict(record_id=row['record_id'],revision=row['revision'],available=False,status='unavailable',reason='artifact_missing',score=None,raw_score=None) for row in pending['plan']['rows']])

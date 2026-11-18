@@ -93,11 +93,11 @@ class Stream:
             yield row
 
 
-def build_features(tables):
+def build_features(tables, *, signed_amounts=False):
     """All histories are past-only; simultaneous transactions update after their batch."""
     import calendar
     from .exception_validation import validated_tables
-    tables = validated_tables(tables)
+    tables = validated_tables(tables, signed_amounts=signed_amounts)
     transactions = sorted(tables["transactions"], key=lambda r:(r["posted_at"],r["transaction_id"]))
     employee_stream = Stream(master_versions(tables['employees'], 'employee_id'), 'recorded_at')
     vendor_stream = Stream(master_versions(tables['vendors'], 'vendor_id'), 'recorded_at')
@@ -178,7 +178,7 @@ def build_features(tables):
             user = employees[creator]
             created = parse(r["created_at"])
             amount, limit = int(r["amount_vnd"]), int(r["approval_limit_vnd"])
-            log_amount = math.log1p(amount)
+            log_amount = math.log1p(abs(amount) if signed_amounts else amount)
             is_payment = r["txn_type"]=="vendor_payment"
             available = evidence.snapshot(r, now)
             key = (cid, vid, available['invoice_number']) if available['invoice_known'] and available['invoice_number'] else None
@@ -289,7 +289,7 @@ def build_features(tables):
                     recipient_history[(cid, recipient_identity)].append((now, amount))
                 creator_history[(cid,r["creator_id"])].append((now,amount,recipient_identity,int(.8<=amount/limit<1)))
             h = history[(cid,r["txn_type"])]
-            log_amount = math.log1p(amount)
+            log_amount = math.log1p(abs(amount) if signed_amounts else amount)
             h[0] += 1
             delta = log_amount-h[1]
             h[1] += delta/h[0]

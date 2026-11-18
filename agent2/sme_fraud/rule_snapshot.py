@@ -46,7 +46,7 @@ def validate(data,scope,*,committed=False):
     def error(path,message,code='RULE_SOURCE_INVALID'):
         return dict(code=code,path=path,table=None,row=None,field=None,message=message,
             action='Bổ sung đúng nguồn theo profile, xuất lại checksum rồi kiểm tra; không điền giá trị giả.')
-    result=dict(contract_version=CONTRACT,validator_version='rule-snapshot-validator/1.0.0',profile_version=CONTRACT,
+    result=dict(contract_version=CONTRACT,validator_version='rule-snapshot-validator/1.1.0',profile_version=CONTRACT,
         report_version='1.2.0',status='rejected',errors=[],warnings=[],counts={},capabilities={},analysis_limits={})
     if not isinstance(scope,AccessScope) or len(scope.company_ids)!=1 or 'data.import' not in scope.permissions or not scope.actor_id:
         result['errors']=[error('$','Không có quyền đọc/nhập nguồn doanh nghiệp.','ACCESS_DENIED')];return result
@@ -87,7 +87,7 @@ def validate(data,scope,*,committed=False):
     if result['errors']:return result
     result['status']='accepted_with_warnings';result['required_as_of']=source['as_of'];result['counts']={'transactions':len(ids),'source_records':sum(len(r) for r in source['tables'].values())}
     result['capabilities']={company:dict(rule_catalogue=dict(implemented=35,execution='enterprise_local_only',he=False))}
-    result['warnings']=[error('source','Profile chạy luật tại node doanh nghiệp; thiếu bảng/coverage làm luật tương ứng unavailable. Chưa có ML feature bridge hoặc full-catalog HE.','RULE_PROFILE_LIMITS')]
+    result['warnings']=[error('source','Profile chạy luật và bridge 33 feature tại node doanh nghiệp. Thiếu nguồn hoặc chính sách cho miền số âm làm kiểm tra tương ứng unavailable; chưa có full-catalog HE.','RULE_PROFILE_LIMITS')]
     result['analysis_limits']={company:[]};return result
 
 
@@ -161,7 +161,7 @@ def analyze(store,scope,snapshot_id,as_of,*,technical=False,recheck=None,resourc
     source=data['source']
     if utc(as_of)!=utc(source['as_of']):fail(422,'RULE_CUTOFF_MISMATCH','Mốc phân tích phải khớp phạm vi nguồn đã khóa.','Dùng đúng as_of trong nguồn hoặc tạo snapshot mới có coverage phù hợp.')
     if recheck is not None and recheck()!=scope:fail(409,'AUTH_CONTEXT_CHANGED','Quyền đã thay đổi.','Đăng nhập lại.')
-    try:native=source_guards(data,evaluate_bundle(source,scope))
+    try:native=source_guards(data,evaluate_bundle(source,scope,candidate_transaction_ids=data['candidate_transaction_ids']))
     except ImportFailure as error:
         if error.code!='NATIVE_RULE_CORE_MISSING':raise
         native=unavailable_native(source)
@@ -179,6 +179,10 @@ def analyze(store,scope,snapshot_id,as_of,*,technical=False,recheck=None,resourc
     revision_by_id={r['record_id']:r['revision'] for r in frame['rows']}
     review_count=0;rule_summary={s:sum(r['status']==s for r in native['rules']) for s in ('evaluated_hit','evaluated_no_hit','unavailable','not_applicable')}
     by_id={r['transaction_id']:r for r in source['tables']['transactions']};raw_rules={r['rule_id']:r for r in native['rules']};scope_checks=[]
+    row_entries={}
+    for identity,entries in native.get('row_rules',{}).items():
+        row_data=dict(data,candidate_transaction_ids=[identity])
+        row_entries[identity]=source_guards(row_data,dict(rules=deepcopy(entries)))['rules']
     known=lambda r:visible(r,source['as_of'])
     def check(entry,transaction=None):
         scope_rule=entry['rule_id'] in SCOPE_RULES
@@ -205,7 +209,8 @@ def analyze(store,scope,snapshot_id,as_of,*,technical=False,recheck=None,resourc
                 for record in versions.values():
                         ref=_public_ref(table,record);ref['source_kind']='simulated' if source['is_simulated'] else 'source_export'
                         if ref not in refs:refs.append(ref)
-        missing=[dict(source='Nguồn '+g.get('table','liên quan'),action='Bổ sung nguồn/coverage đúng thời điểm; không tự điền 0.') for g in entry['gaps']]
+        missing=[dict(source='Chính sách cho số âm' if g.get('reason') in ('signed_amount_policy_not_supported','signed_history_policy_not_supported') else 'Nguồn '+g.get('table','liên quan'),
+                      action='Quản lý cần xác nhận cách áp dụng kiểm tra cho số âm; giữ chưa khả dụng cho đến khi có chính sách và kiểm thử.' if g.get('reason') in ('signed_amount_policy_not_supported','signed_history_policy_not_supported') else 'Bổ sung nguồn/coverage đúng thời điểm; không tự điền 0.') for g in entry['gaps']]
         if not applicable:missing=[]
         reason='Chưa đủ nguồn hoặc phạm vi lịch sử để kiểm tra.' if not ready else 'Dấu hiệu theo tập dữ liệu/danh mục; không phải điểm hay kết luận của riêng giao dịch.' if contextual and matched else 'Có căn cứ cần đối chiếu chứng từ gốc.' if needed else 'Không thấy tín hiệu trong phần nguồn đã cung cấp; không khẳng định giao dịch hợp lệ.'
         if not row_known:reason=VISIBILITY_MESSAGE;refs=[];missing=[dict(source='Giao dịch tại mốc phân tích',action='Dùng snapshot mới có nguồn phù hợp khi giao dịch đã phát sinh và được biết.')]
@@ -230,7 +235,7 @@ def analyze(store,scope,snapshot_id,as_of,*,technical=False,recheck=None,resourc
         if code not in SCOPE_RULES:continue
         scope_checks.append(check(raw_rules[code]))
     for identity in data['candidate_transaction_ids']:
-        tx=by_id[identity];checks={f'check_{i+1}':check(r,tx) for i,r in enumerate(native['rules']) if r['rule_id'] not in SCOPE_RULES}
+        tx=by_id[identity];transaction_rules=row_entries.get(identity,native['rules']);checks={f'check_{i+1}':check(r,tx) for i,r in enumerate(transaction_rules) if r['rule_id'] not in SCOPE_RULES}
         review_count+=any(c['needs_review'] for c in checks.values())
         if known(tx):scored_row=scored_by_id[identity];row_ev=evidence_by_id[identity];row_rev=revision_by_id[identity]
         else:
@@ -241,6 +246,9 @@ def analyze(store,scope,snapshot_id,as_of,*,technical=False,recheck=None,resourc
         if not known(tx):ml_branch['message']=VISIBILITY_MESSAGE
         elif not ml_items and loaded['binding']['error']:ml_branch['message']=REASONS[loaded['binding']['error']]
         rule_branch_entry=dict(name='Luật nghiệp vụ',status='partial',available=False,evaluated_count=35-rule_summary['unavailable']-rule_summary['not_applicable'],unavailable_count=rule_summary['unavailable'],not_applicable_count=rule_summary['not_applicable'],total_count=35,message='Đã gọi đủ 35 evaluator; giữ riêng chẩn đoán nhóm và phần thiếu nguồn. Chưa có điểm tổng.')
+        if identity in row_entries:
+            own_summary={s:sum(r['status']==s for r in transaction_rules) for s in ('evaluated_hit','evaluated_no_hit','unavailable','not_applicable')}
+            rule_branch_entry.update(evaluated_count=own_summary['evaluated_hit']+own_summary['evaluated_no_hit'],unavailable_count=own_summary['unavailable'],not_applicable_count=own_summary['not_applicable'])
         if not known(tx):rule_branch_entry.update(status='unavailable',evaluated_count=0,unavailable_count=35,not_applicable_count=0,message=VISIBILITY_MESSAGE)
         branches=dict(rules=rule_branch_entry,statistics=quantitative_branch('statistics',[scored_row['methods']['robust_z']]),graph=graph_branch(scored_row['graph'],_public_ref),ml=ml_branch)
         if not known(tx):branches['graph']['message']=VISIBILITY_MESSAGE
@@ -248,7 +256,7 @@ def analyze(store,scope,snapshot_id,as_of,*,technical=False,recheck=None,resourc
         if not known(tx):item['availability']=dict(available=False,reason=dict(code=VISIBILITY_REASON,message=VISIBILITY_MESSAGE))
         if technical:
             entries=[]
-            for r in native['rules']:
+            for r in transaction_rules:
                 hits=[deepcopy(h) for h in r['hits'] if h.get('transaction_id')==identity];is_scope=r['rule_id'] in SCOPE_RULES;applicable=r['status']!='not_applicable' and (r['rule_id'] not in ROW_KINDS or tx['txn_type'] in ROW_KINDS[r['rule_id']]);ready=r['available'] and known(tx) and not is_scope and applicable
                 matched=any(not h.get('suppressed_reason') for h in hits) if ready else None
                 entries.append(dict(rule_id=r['rule_id'],name=r['name'],scope=r['scope'],status='unavailable' if not known(tx) else 'not_applicable' if is_scope or not applicable else 'unavailable' if not ready else 'evaluated_hit' if matched else 'evaluated_no_hit',available=ready,matched=matched,
@@ -261,7 +269,7 @@ def analyze(store,scope,snapshot_id,as_of,*,technical=False,recheck=None,resourc
             item['graph']=deepcopy(scored_row['graph'])
         else:item['checks']=checks
         rows.append(item)
-    implementation={n:digest(Path(__file__).with_name(n).read_bytes()) for n in ('rule_snapshot.py','rule_snapshot_visibility.py','native_rule_node.py','rules.py','benford.py','noise_policy.py','rule_snapshot_features.py')}
+    implementation={n:digest(Path(__file__).with_name(n).read_bytes()) for n in ('rule_snapshot.py','rule_snapshot_visibility.py','native_rule_node.py','native_rule_execution.py','exception_validation.py','features.py','threshold_sources.py','spec_policy.py','rules.py','benford.py','noise_policy.py','rule_snapshot_features.py')}
     binding={k:manifest[k] for k in ('snapshot_id','company_id','checksum','data_checksum','contract_version')}
     versions=method_versions()
     model_pins={m:getattr(loaded['artifacts'].get(m),'artifact_id',None) for m in loaded['methods']}
@@ -275,7 +283,7 @@ def analyze(store,scope,snapshot_id,as_of,*,technical=False,recheck=None,resourc
         scoped=[];candidates=set(data['candidate_transaction_ids'])
         for entry in native['rules']:
             item=deepcopy(entry);item['evaluation_unit']='source_scope';item['source_hit_count']=len(entry['hits']);item['hits']=[h for h in item['hits'] if h.get('transaction_id') in candidates];scoped.append(item)
-        result.update(catalogue=catalogue(),catalogue_results=scoped,scope_results=[r for r in scoped if r['rule_id'] in SCOPE_RULES],native_reference_sha256=native['native_reference_sha256'],native_source_sha256=native['source_sha256'],implementation=implementation,feature_contract=frame['contract'],bridge_provenance=dict(frame['manifest'],method_versions=versions,model_pins=model_pins),aggregate=dict(available=False,score=None),he_execution=False)
+        result.update(catalogue=catalogue(),catalogue_results=scoped,scope_results=[r for r in scoped if r['rule_id'] in SCOPE_RULES],native_reference_sha256=native['native_reference_sha256'],native_source_sha256=native['source_sha256'],rule_execution_provenance=native.get('execution_provenance'),implementation=implementation,feature_contract=frame['contract'],bridge_provenance=dict(frame['manifest'],method_versions=versions,model_pins=model_pins),aggregate=dict(available=False,score=None),he_execution=False)
     resources.recheck(scope,loaded)
     if recheck is not None and recheck()!=scope:fail(409,'AUTH_CONTEXT_CHANGED','Quyền đã thay đổi trong lúc chấm.','Chạy lại theo quyền hiện hành.')
     return result

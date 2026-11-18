@@ -68,27 +68,71 @@
         "policy_id": { "$ref": "#/$defs/non_empty_id" },
         "policy_version": { "$ref": "#/$defs/non_empty_id" },
         "fixture_declaration": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": [
-            "is_experimental_fixture",
-            "approved_for_production",
-            "open_decision_gates",
-            "note"
-          ],
-          "properties": {
-            "is_experimental_fixture": { "type": "boolean" },
-            "approved_for_production": { "const": false },
-            "open_decision_gates": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "enum": ["D-04", "D-05", "D-06", "D-07"]
-              },
-              "minItems": 1
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "is_experimental_fixture",
+                "approved_for_production",
+                "open_decision_gates",
+                "note"
+              ],
+              "properties": {
+                "is_experimental_fixture": { "const": true },
+                "approved_for_production": { "const": false },
+                "open_decision_gates": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["D-04", "D-05", "D-06", "D-07"]
+                  },
+                  "minItems": 1
+                },
+                "note": { "type": "string", "minLength": 1 }
+              }
             },
-            "note": { "type": "string", "minLength": 1 }
-          }
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "is_experimental_fixture",
+                "approved_for_production",
+                "open_decision_gates",
+                "owner_governance",
+                "note"
+              ],
+              "properties": {
+                "is_experimental_fixture": { "const": false },
+                "approved_for_production": { "const": true },
+                "open_decision_gates": {
+                  "type": "array",
+                  "maxItems": 0
+                },
+                "owner_governance": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["decided_at", "scope", "closed_decisions", "pilot_gate"],
+                  "properties": {
+                    "decided_at": { "type": "string", "minLength": 10 },
+                    "scope": { "const": "internal_pilot_active" },
+                    "closed_decisions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": ["D-04", "D-05", "D-06", "D-07"]
+                      },
+                      "minItems": 4,
+                      "maxItems": 4,
+                      "uniqueItems": true
+                    },
+                    "pilot_gate": { "const": "D-09-pilot-v1" }
+                  }
+                },
+                "note": { "type": "string", "minLength": 1 }
+              }
+            }
+          ]
         },
         "budget": {
           "type": "object",

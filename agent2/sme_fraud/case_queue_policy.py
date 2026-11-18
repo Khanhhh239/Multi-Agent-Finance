@@ -162,11 +162,98 @@ def default_fixture_policy(
     return policy
 
 
+def approved_pilot_policy(
+    *,
+    budget_limit: int = 5,
+    min_case_score: float = 5.0,
+    min_score_delta: float = 0.25,
+    mandatory_rules: tuple[str, ...] | list[str] = ("P1",),
+    require_sufficient_evidence: bool = True,
+    rule_weight: float = 1.0,
+    ml_weight: float = 2.0,
+    calibrated_weight: float = 0.0,
+    allow_hard_trigger_admission: bool = True,
+    auto_reopen_closed_on_material: bool = True,
+    policy_id: str = "owner-pilot-active-policy-v1",
+    policy_version: str = "pilot-1.0.0",
+    period_kind: str = "calendar_week_vn",
+    decided_at: str = "2026-11-18",
+) -> dict:
+    """Construct the owner-approved Pilot Active case policy (D-04, D-05, D-06, D-07 locked 2026-11-18)."""
+    policy = {
+        "version": POLICY_VERSION,
+        "policy_id": str(policy_id),
+        "policy_version": str(policy_version),
+        "fixture_declaration": {
+            "is_experimental_fixture": False,
+            "approved_for_production": True,
+            "open_decision_gates": [],
+            "owner_governance": {
+                "decided_at": str(decided_at),
+                "scope": "internal_pilot_active",
+                "closed_decisions": ["D-04", "D-05", "D-06", "D-07"],
+                "pilot_gate": "D-09-pilot-v1",
+            },
+            "note": (
+                "Chính sách cấp vụ Pilot Active đã chốt chủ sở hữu (D-04: rule_weight=1.0, ml_weight=2.0, "
+                "min_case_score=5.0; D-05: max_candidate_score không cộng điểm bằng chứng; D-06: B=5 vụ/tuần lịch VN, "
+                "backlog không tự hết hạn; D-07: mandatory_rules=['P1']). Tách biệt khỏi BUDGET=5 của benchmark kỹ thuật."
+            ),
+        },
+        "budget": {
+            "unit": "case",
+            "case_budget_limit": int(budget_limit),
+            "period_kind": str(period_kind),
+            "benchmark_transaction_cap_preserved": BENCHMARK_TRANSACTION_CAP,
+            "benchmark_separated": True,
+        },
+        "scoring": {
+            "aggregation": "max_candidate_score",
+            "evidence_adds_score": False,
+            "rule_weight": float(rule_weight),
+            "ml_weight": float(ml_weight),
+            "calibrated_weight": float(calibrated_weight),
+            "min_case_score": float(min_case_score),
+            "allow_hard_trigger_admission": bool(allow_hard_trigger_admission),
+            "require_sufficient_evidence": bool(require_sufficient_evidence),
+            "mandatory_rules": sorted({str(r) for r in mandatory_rules if str(r).strip()}),
+        },
+        "material_change": {
+            "min_score_delta": float(min_score_delta),
+            "snapshot_change_only_is_material": False,
+            "ordering_change_only_is_material": False,
+            "auto_reopen_closed_on_material": bool(auto_reopen_closed_on_material),
+        },
+        "backlog": {
+            "auto_expire_backlog": False,
+            "retention_without_decision_indefinite": True,
+        },
+    }
+    validate_policy(policy)
+    return policy
+
+
 def validate_policy(policy: dict) -> dict:
     if not isinstance(policy, dict):
-        fail(422, "POLICY_INVALID", "Policy phải là JSON object.", "Dùng default_fixture_policy().")
+        fail(422, "POLICY_INVALID", "Policy phải là JSON object.", "Dùng default_fixture_policy() hoặc approved_pilot_policy().")
     validate_against_schema(policy, "policy")
-    if policy["fixture_declaration"]["approved_for_production"] is not False:
+    decl = policy["fixture_declaration"]
+    if decl["approved_for_production"] is True:
+        gov = decl.get("owner_governance") or {}
+        if (
+            decl.get("is_experimental_fixture") is not False
+            or decl.get("open_decision_gates") != []
+            or sorted(gov.get("closed_decisions") or []) != ["D-04", "D-05", "D-06", "D-07"]
+            or gov.get("scope") != "internal_pilot_active"
+            or gov.get("pilot_gate") != "D-09-pilot-v1"
+        ):
+            fail(
+                422,
+                "POLICY_GOVERNANCE_LOCKED",
+                "Policy active bắt buộc đính kèm chứng nhận quản trị chủ sở hữu đầy đủ cho D-04..D-07 và D-09 pilot.",
+                "Dùng approved_pilot_policy() hoặc giữ approved_for_production=false cho fixture.",
+            )
+    elif decl["approved_for_production"] is not False:
         fail(
             422,
             "POLICY_GOVERNANCE_LOCKED",

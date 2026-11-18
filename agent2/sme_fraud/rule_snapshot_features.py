@@ -58,7 +58,7 @@ UNMAPPED_COLUMNS = {
 
 COLUMN_SPECS = {
     'log_abs_amount': 'log1p(abs(transactions.amount_vnd)); signed VND kept separate in evidence',
-    'amount_negative': '1 if transactions.amount_vnd < 0 else 0 (native validator blocks < 0)',
+    'amount_negative': '1 if transactions.amount_vnd < 0 else 0; signed source amount retained in evidence',
     'amount_zero': '1 if transactions.amount_vnd == 0 else 0',
     'round_million': '1 if transactions.amount_vnd % 1_000_000 == 0 else 0',
     'event_hour_sin': 'sin(2pi * vn_hour / 24) from transactions.posted_at (+07:00)',

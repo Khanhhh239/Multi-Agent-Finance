@@ -1188,7 +1188,7 @@ class CaseQueueStore:
                         "policy_id": effective_policy["policy_id"],
                         "policy_version": pol_ver,
                         "policy_hash": pol_hash,
-                        "approved_for_production": False,
+                        "approved_for_production": bool(effective_policy["fixture_declaration"]["approved_for_production"]),
                         "open_decision_gates": list(effective_policy["fixture_declaration"]["open_decision_gates"]),
                         "benchmark_transaction_cap_preserved": 5,
                     },

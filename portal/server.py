@@ -1447,8 +1447,12 @@ class Handler(BaseHTTPRequestHandler):
         headers = {}
         if not public:
             self.guard()
-            if len(self.headers.get_all('X-Session',[]))!=1:raise AuthError('Cần đăng nhập Portal để mở Agent2.')
-            if not session_left(self.token(),touch=method!='GET'):raise AuthError('Cần đăng nhập Portal để mở Agent2.')
+            try:
+                if len(self.headers.get_all('X-Session',[]))!=1:raise AuthError('Cần đăng nhập Portal để mở Agent2.')
+                if not session_left(self.token(),touch=method!='GET'):raise AuthError('Cần đăng nhập Portal để mở Agent2.')
+            except AuthError:
+                agent2_bridge.discard_rejected_body(self)
+                raise
             # Strip browser Authorization/role/tenant assertions. Only the validated Portal session is forwarded.
             headers['Authorization'] = 'Bearer '+self.token()
         raw = None

@@ -62,6 +62,8 @@ def _eval_plain(profile: str, values: list):
         return c3_circuit.c3(*arrs).tolist()
     if profile == 'graph':
         return circuits.graph(*arrs).tolist()
+    if profile == 'statistics':
+        return int(circuits.robust_z(*arrs))
     raise ValueError(profile)
 
 

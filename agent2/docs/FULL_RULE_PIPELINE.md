@@ -24,6 +24,11 @@ Một tệp canonical ít cột không tự trở thành nguồn đủ cho 35 lu
 trở thành false/0. Dùng đúng profile và bảng/trường được yêu cầu, không sửa
 giả các cột cho qua validation.
 
+Cập nhật 18/11/2026: trên **Nhập dữ liệu**, chọn **Nhiều nguồn cho 35 luật**
+để nhập Excel nhiều sheet hoặc các CSV, ánh xạ bảng/cột, khai báo phạm vi và
+xem mức sẵn sàng từng kiểm tra trước khi lưu. [Hướng dẫn thao tác](MULTI_SOURCE_IMPORT.md).
+Backend chuẩn hóa về cùng profile dưới đây; JSON nguồn có sẵn vẫn dùng được.
+
 ## Định dạng nguồn mới
 
 ```json
@@ -73,7 +78,8 @@ GET /api/v1/companies/C001/rules/catalogue
 Trả đủ 35 luật, bảng nguồn cần, profile chạy và giới hạn HE. Quyền quản lý
 được kiểm server; tài khoản rà thông thường không đọc chi tiết thuật toán.
 
-1. Mở màn hình **Nhập dữ liệu** tại node doanh nghiệp, chọn đúng DN và tệp JSON.
+1. Mở màn hình **Nhập dữ liệu** tại node doanh nghiệp, chọn đúng DN. Dùng
+   **Nhiều nguồn cho 35 luật** cho Excel/CSV, hoặc **Tệp chuẩn đã có** cho JSON.
 2. Kiểm tra lỗi/giới hạn rồi xác nhận lưu; checksum và phiên bản được khóa.
 3. Với profile mới, nút ghi **Xem 35 luật tại node doanh nghiệp**. Thời điểm
    phân tích lấy từ phạm vi nguồn đã khóa. Muốn đổi mốc cần snapshot nguồn mới.
@@ -122,11 +128,38 @@ chứng với engine giữ lại. Nhóm D dùng tập 3.001 dòng để kiểm m
 không chứng minh accuracy trên doanh nghiệp thật. Xem [báo cáo](../../Agent2_Spec_v2_1/evidence/R2/full_rule_pipeline_20261114/REPORT.md).
 
 Tối đa 10 MB/tệp, 200 ứng viên và 30.000 bản ghi nguồn ở profile này; API
-đồng bộ còn có giới hạn output. Native kernel chưa xử lý đầy đủ số âm và
-nguồn giao dịch/sổ cái ghi nhận muộn: từ chối rõ, không abs/zero/retime.
-Canonical P1 có dấu vẫn giữ nguyên. Cần adapter miền có dấu/bitemporal tiếp
-theo cho các nguồn đó, không che giới hạn dưới nhãn “đã đủ nguồn”.
+đồng bộ còn có giới hạn output. Từ bản cập nhật 2026-11-17, giao dịch âm và
+giao dịch/sổ cái ghi nhận muộn được nhận mà không sửa nguồn. Adapter
+`native-signed-bitemporal/1.0.0` replay tối đa 200 nhóm thời điểm ứng viên,
+giữ toàn bộ lịch sử được cung cấp. Không cắt lịch sử để vừa giới hạn.
 
-33 feature/ML bridge và kết hợp bốn nhánh trên loại nguồn mới chưa được
-triển khai; ba nhánh độc lập hiển thị chưa khả dụng. Mô hình/cấu hình/khóa và
-luồng HE đang có không bị thay. Chưa deploy/restart Portal live trong lượt này.
+- Số tiền giao dịch là số nguyên VND có dấu, tối đa 18 chữ số. Không mở rộng
+  số âm sang hạn mức, tổng hóa đơn hay các trường chính sách vốn không âm.
+- Mỗi ứng viên có ngày nghiệp vụ `posted_at` và mốc được biết `observed_at`.
+  Chỉ hiện ứng viên khi cả hai không sau `as_of`. Lịch sử phải được biết tại
+  `max(posted_at, observed_at)` của ứng viên và có ngày nghiệp vụ trước nó;
+  giao dịch cùng ngày/giờ ghi sổ vẫn được xử lý theo batch riêng.
+- Quyền, ngoại lệ và chứng từ của luật vẫn phải được biết ở thời điểm nghiệp
+  vụ/thao tác mà luật kiểm tra. Không dùng chứng từ đến muộn để hợp thức hóa
+  quá khứ. Thiếu chứng từ ràng buộc cần thiết trả `unavailable`, độc lập từng
+  luật/ứng viên; chẩn đoán tháng giữ tập đã biết trước mốc khóa tháng.
+- P1 dùng tổng thanh toán có dấu trên cùng định danh hóa đơn; không `abs`
+  hoặc điền 0. F1 so độ lớn khoản điều chỉnh với mức trọng yếu đã duyệt,
+  đồng thời giữ số tiền có dấu trong bằng chứng. Đây là tín hiệu cần rà,
+  không chứng minh bút toán điều chỉnh sai hoặc gian lận.
+- Các chính sách số âm chưa được định nghĩa cho A1–A6, B3/B6, C2/C3,
+  E1/E2, F2, P2, T1/T2 giữ `unavailable` khi giao dịch âm thuộc phạm vi luật.
+  Lịch sử thanh toán âm có liên quan cũng chưa được tự diễn giải cho luật
+  chia nhỏ/cận hạn mức hoặc NCC mới/ngủ đông. Quy tắc ngoài loại giao dịch
+  vẫn là `not_applicable`. A5 upper-tail chưa áp dụng cho sổ cái có dấu.
+- Phiên bản master vẫn cần `recorded_at == observed_at`; chưa hỗ trợ sửa
+  lịch sử master bằng một ngày hiệu lực cũ và ngày được biết khác nhau.
+
+View technical có `rule_execution_provenance` với hash nguồn, hai mốc thời
+gian, hash context, số dòng và hash định danh lịch sử theo nhóm replay.
+Snapshot gốc và các kết quả đã lưu không bị cập nhật ngược.
+
+Bridge 33 feature và các nhánh local đã được nối; thiếu model hoặc model sai
+contract giữ `unavailable`. Thay đổi bridge/runtime cần fit/qualification mới,
+không sửa ghim của model/bundle cũ để bỏ qua kiểm tra tương thích. Full-catalog
+HE chưa được triển khai. Bản sửa đầu vào này chưa deploy/restart Portal.

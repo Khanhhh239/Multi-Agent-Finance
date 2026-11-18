@@ -235,9 +235,9 @@ def rule_coverage():
             for code, name in RULE_NAMES.items()]
 
 
-def score_rules(tables, config=None, features=None):
+def score_rules(tables, config=None, features=None, *, signed_amounts=False):
     from .case_admission import admission, SPLIT_PATTERN_POLICY
-    tables = validated_tables(tables)
+    tables = validated_tables(tables, signed_amounts=signed_amounts)
     if set(config or {}) - set(DEFAULT_CONFIG):
         raise ValueError(f'Unknown rule config keys: {set(config) - set(DEFAULT_CONFIG)}')
     cfg = {**DEFAULT_CONFIG, **(config or {})}
@@ -266,7 +266,7 @@ def score_rules(tables, config=None, features=None):
     if not 0 < cfg['near_low'] <= cfg['near_high'] < 1:
         raise ValueError('Invalid near-limit range')
     rows = sorted(tables['transactions'], key=lambda r: (r['posted_at'], r['transaction_id']))
-    features = build_features(tables) if features is None else features
+    features = build_features(tables, signed_amounts=signed_amounts) if features is None else features
     feature_map = {r['transaction_id']: r for r in features}
     if len(feature_map) != len(features) or set(feature_map) != {r['transaction_id'] for r in rows}:
         raise ValueError('Causal features must map one-to-one to observations')
@@ -305,7 +305,7 @@ def score_rules(tables, config=None, features=None):
         upper = threshold_timestamp(rows[-1]['posted_at']) if rows else ''
         for name in ('journal_documents', 'journal_lines'):
             dynamic_tables[name] = [r for r in tables.get(name, []) if threshold_timestamp(r['posted_at']) <= upper]
-        observations, dynamic_sources = extract_observations(dynamic_tables)
+        observations, dynamic_sources = extract_observations(dynamic_tables, signed_amounts=signed_amounts)
         dynamic = DynamicThresholds(observations, dynamic_policy)
     staff, vendors = {}, {}
     fuzzy_matches = defaultdict(dict)
@@ -404,7 +404,7 @@ def score_rules(tables, config=None, features=None):
             tid, cid = row['transaction_id'], row['company_id']
             vid, eid, maker = row['vendor_id'], row['employee_id'], row['creator_id']
             amount, limit = int(row['amount_vnd']), int(row['approval_limit_vnd'])
-            if amount < 0 or limit <= 0:
+            if (amount < 0 and not signed_amounts) or limit <= 0:
                 raise ValueError(f'Invalid amount/approval limit: {tid}')
             feature = feature_map[tid]
             v, user = vendors.get(vid), staff.get(maker)
@@ -588,6 +588,8 @@ def score_rules(tables, config=None, features=None):
                 diagnostics = {}
                 amount_signal, amount_evidence = dynamic.evaluate_transaction(row, diagnostics=diagnostics)
                 a5_evaluations.append(transaction_record(row, amount_signal, amount_evidence, diagnostics, dynamic_policy))
+            elif signed_amounts and amount < 0:
+                amount_signal, amount_evidence = False, dict(method='positive_upper_tail', status='not_applicable')
             elif phase2 and cfg['amount_baseline'] == 'log_mad':
                 amount_signal, amount_evidence = robust_amounts.evaluate(row, cfg['baseline_min'], cfg['robust_z'])
             else:
@@ -744,7 +746,7 @@ def score_rules(tables, config=None, features=None):
             close_distance = calendar.monthrange(at.year, at.month)[1] - at.day
             materiality = int(cfg['materiality_vnd_by_company'].get(cid, limit))
             confirmed_close = manual_close_evidence(row, journal_audits.records(cid, maker), closing_periods.records(cid, None),
-                materiality_policies.records(cid, None), employee_history, now, cfg['close_days']) if phase3 and financial else None
+                materiality_policies.records(cid, None), employee_history, now, cfg['close_days'], signed_amounts=signed_amounts) if phase3 and financial else None
             if confirmed_close:
                 emit('F1', confirmed_close)
             elif row['txn_type'] == 'adjustment' and close_distance < cfg['close_days'] and amount > materiality:
@@ -838,7 +840,8 @@ def score_rules(tables, config=None, features=None):
                     contract_payments[(cid, vid, row['contract_id'])].append(row)
                 vendor_amounts[(cid, vid)].append((now, amount))
             if int(row['is_financial_entry']):
-                robust_amounts.commit(row)
+                if not signed_amounts or amount >= 0:
+                    robust_amounts.commit(row)
                 for key in {(cid, row['txn_type'], vid), (cid, row['txn_type'], '')}:
                     moment = moments[key]
                     moment[0] += 1

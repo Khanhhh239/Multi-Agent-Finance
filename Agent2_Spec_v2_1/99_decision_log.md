@@ -1,5 +1,32 @@
 # Decision log — nguồn chuẩn cho quyết định
 
+### CR-063 — nối HE thật vào bộ điều phối bundle chung
+
+18/11/2026: người dùng giao nối các worker HE vào bộ điều phối bundle chung thay
+vì chỉ chạy shadow tại doanh nghiệp; nhánh chưa hỗ trợ trả `unavailable`, kết quả
+truy về cùng `snapshot_id`, `run_id`, `bundle_id` và có bằng chứng Concrete FHE
+thật tách biệt khỏi bài test mô phỏng giao thức.
+
+Triển khai `BundleHE` (`bundle-he4-native/1.0.0`) nối `ReleaseService` với
+`FourJobs` (`he4-enterprise/1.1.0`) và `CryptoBridge`: khi prepare bundle với
+`execution_mode=cloud_ciphertext_only`, ghim build (`rules`, `c3`, `graph`),
+worker, binding DN và các epoch/hash evaluation key đã cấp (profile thiếu khóa
+giữ `null`, không sinh khóa ngầm). `ReleaseStore.pin` ghim chế độ chạy; `he_job`
+(`rhej_`) gắn `pin_id` với job bền vững `bundle:<pin_id>` không lưu bearer token.
+Khi job đang chạy trả `409 PIPELINE_RUN_PENDING`, UI cho reload và bấm **Tiếp tục
+yêu cầu đã lưu** trên cùng `run_id`/`job_id`; đổi sang chạy rõ cùng `run_id` bị
+chặn bởi `RELEASE_RUN_CONFLICT`.
+
+Cloud chỉ nhận bản mã và evaluation key công khai cho `P1`, `C3`, `B1`, `B5/E4`.
+30 luật còn lại và thống kê/ML 33 feature giữ `unavailable` (`complete_catalogue=false`,
+`native_33_feature_he_unsupported`); không lấy model local giả làm HE. Giải mã,
+chính sách, gộp vụ, cấp ngân sách, hàng đợi shadow, phiếu rà, task và báo cáo
+chạy tại DN. C001/C002 đã chạy qua Concrete FHE thật trên HTTP xác thực, gồm ca
+mất phản hồi sau khi worker tính xong khôi phục qua `/v1/results` và đọc lại
+observation sau restart DN; 82 backend test và các bài UI Portal đạt. Không
+deploy/restart live, không push, không chốt D-04/05/06/07/09/17/18/19 hoặc DONE R6.
+Xem `agent2/docs/BUNDLE_HE.md` và `evidence/R6/bundle_he_20261118/REPORT.md`.
+
 ### CR-062 — Portal dùng luồng bundle chung
 
 16/11/2026: người dùng giao chọn DN/snapshot/chạy, xem vụ, ghi rà và giao task

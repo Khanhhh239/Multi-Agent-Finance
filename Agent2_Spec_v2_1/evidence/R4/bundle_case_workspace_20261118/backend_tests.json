@@ -1,0 +1,28 @@
+{
+  "status": "pass",
+  "modules": [
+    "test_bundle_remediation",
+    "test_bundle_workspace",
+    "test_remediation"
+  ],
+  "tests": 32,
+  "failures": 0,
+  "errors": 0,
+  "elapsed_seconds": 121.125,
+  "synthetic": true,
+  "live_deployed": false,
+  "sha256": {
+    "agent2/sme_fraud/bundle_remediation.py": "8bb7d80958dac23e60f3d43f2762aa5479f2826e7e64b01104762f57f073e0b4",
+    "agent2/sme_fraud/bundle_workspace_api.py": "e5b94689479938fd62c3b55985d8496881e457594df1e5cf37961ac65df00742",
+    "agent2/sme_fraud/bundle_reviews.py": "e10d7ce6cbd325b1ab089c4d2036681717da438cd1b66ae3953c49aa936f961f",
+    "agent2/sme_fraud/remediation_store.py": "b837cdaa736eed12cc64ca496ef92c3b1c70463279da3fd09f2d34ea8123f4bc",
+    "agent2/sme_fraud/workbench.py": "43843d863fdf8f62e70e737fff153da3ab55b7824287fe5bea79815ce4c68b80",
+    "portal/agent2_bridge.py": "4b9ea59756eaf6943b4226f40505720b1bb18f613cd186b09c0b3a55774b6ebe",
+    "agent2/sme_fraud/web/bundle-remediation.js": "0bf63b17fd16037a795046409f5cc27916af23c9602e06599aaa3e0e54794a61",
+    "agent2/sme_fraud/web/bundle-remediation.css": "2412cab6d063e8c2e78bb9a01f2e146970ecc226d671f0f90f42c2cbc5e7b6aa",
+    "agent2/sme_fraud/web/bundle-workspace.js": "613900c2efdbc473afdd3c30c890997b0991efc75dc3e4b75ea2f02d562c4f03",
+    "agent2/sme_fraud/web/bundle-workspace.html": "56b233733abd7eabaa9451893d5cd7dc414f0eeb908fce36c1abfe9e447681b8",
+    "agent2/tests_he/test_bundle_remediation.py": "1fac447700fba20e57fac849922a057d03adc1d29386f4b3ed236fd81260da87",
+    "agent2/scripts/check_bundle_workspace_ui.py": "a4d5242faad91a748f5944a1aa4fa2c0b40468393739bc6c2b63973ad285cc55"
+  }
+}

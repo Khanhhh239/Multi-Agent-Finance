@@ -1,0 +1,43 @@
+{
+  "status": "pass",
+  "tests": 89,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "seconds": 374.643,
+  "synthetic": true,
+  "actual_fhe": false,
+  "live_deployed": false,
+  "modules": [
+    "test_bundle_he",
+    "test_bundle_workspace",
+    "test_bundle_remediation",
+    "test_pipeline_release",
+    "test_release_shadow_plan",
+    "test_he4_coordinator",
+    "test_he4_rule_snapshot_coordinator",
+    "test_bundle_release_e2e_acceptance"
+  ],
+  "sha256": {
+    "agent2/docs/BUNDLE_HE.md": "4562f2409a0732428fe136a0322b0f5025e65721e0f94c88f021be9059edaa44",
+    "agent2/docs/BUNDLE_ORCHESTRATOR.md": "edd72101320e4041be79eff7dc693d43abfde90aff8b1c0f42b1fcd7ef483edc",
+    "agent2/sme_fraud/bundle_he.py": "a2f2fa25e1b353ec2e131153cdbb490925c00d1de0f1f382edb344359abef4cc",
+    "agent2/sme_fraud/pipeline_release.py": "641f859a8533a231499bbd83179aa3105a89e66b3a56062b5fa9bd3f21aab3dd",
+    "agent2/sme_fraud/pipeline_release_store.py": "2b297244c6a76d9035afb5a4a729983f5124c5bcdba4b42d4ff8816c67a98b11",
+    "agent2/sme_fraud/release_shadow_plan.py": "6ce1dd1eefbb02f4d5ba9d0d427779bb819de08e4f022fa4e74ae4a43e2fabf9",
+    "agent2/sme_fraud/bundle_reviews.py": "ce5e71d8c58d5f332ac1c45c6edb5ecd388fb342bbf1a1b99a3aaec5ff0c0c25",
+    "agent2/sme_fraud/bundle_workspace_api.py": "9c07368a50da62774b1c014f56a2d68b2544d52a767bbb253e379292a020b0ba",
+    "agent2/sme_fraud/pipeline_release_api.py": "5071b9f22245182c72eda5c3d7adc1e640667c0ddbc0e88b33c2d547f5953d38",
+    "agent2/sme_fraud/review_server.py": "1c3e519fa0d70c10b53651344a7c0b42949d36e9f94bc957dbb88510a71ac8d4",
+    "agent2/experiments/he4/coordinator.py": "fb70a1cae6f1dfafde8f8b21fd0fddd00dc4a736e090ee88a47aa6681c9dd899",
+    "agent2/experiments/he4/windows_bridge.py": "42494c6be05a73e755267c857cc12e7611bf3a4395e25c79c2f04bf06c56c6a6",
+    "agent2/sme_fraud/web/bundle-workspace.js": "667e5acd103a12c539b922822e7a9fb44b52a68ef9cbf93afe5885299b43e5fb",
+    "agent2/sme_fraud/web/bundle-workspace.html": "641c14d78a1967c77099ca7257e92780cebd76c2891f0674eb741160e60f14ff",
+    "agent2/sme_fraud/web/pipeline-releases.js": "f8dfec30b31c3d9cef5cfcfbc30c4b44269554cd20a8124c129bd1a91a34a771",
+    "agent2/sme_fraud/web/pipeline-releases.html": "6cd3b89ac81b5606ad2c9062c6a7d57d8f60323beb8a9cedeb29b66543bda17e",
+    "agent2/tests_he/test_bundle_he.py": "54f9fbb9aef6fa2d221d8d61b55d9593ad058e2e4fbc4537c1e8bdf1dd4747d5",
+    "agent2/tests_he/test_bundle_release_e2e_acceptance.py": "dcda808e537434ebe9ec7b939939f4a070dd23789f359456ab357175ca90b773",
+    "agent2/scripts/check_bundle_he_native.py": "e0de18bd7698a7e1005c96fbcb71f8d90ca487c08c47f739f22b56e33d616e01",
+    "agent2/scripts/check_bundle_he_ui.py": "b8adcc0c18ffb1f8b37090b51ac5fdc9878be131fb6cfcab21ca3e939a3e130b"
+  }
+}

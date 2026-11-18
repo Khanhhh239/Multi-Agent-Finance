@@ -1,0 +1,13 @@
+{
+  "status": "pass",
+  "checks": [
+    "Operator starts pinned HE mode and receives durable pending run",
+    "Reload/resume retains HE mode/job and enters common queue/report",
+    "HE result opens same case evidence/review/task workspace and exports pinned report",
+    "Mobile layout does not overflow",
+    "C002 cannot see C001 HE run or select an unpinned HE bundle"
+  ],
+  "synthetic_transport": true,
+  "actual_fhe": false,
+  "live_deployed": false
+}

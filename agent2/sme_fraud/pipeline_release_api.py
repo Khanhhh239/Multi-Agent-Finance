@@ -30,18 +30,18 @@ def handle_releases(handler,authorizer,service,method):
             oid=action.split('/')[1];value=dict(id=oid,value=service.store.get(scope,oid,recheck=recheck))
         elif method=='POST' and action in FIELDS:
             body=read_json(handler)
-            allowed=FIELDS[action]|({'plan_id'} if action=='prepare' else {'execution_mode'} if action=='runs' else set())
+            allowed=FIELDS[action]|({'plan_id','execution_mode'} if action=='prepare' else {'execution_mode'} if action=='runs' else set())
             if not isinstance(body,dict) or not FIELDS[action]<=set(body) or set(body)-allowed:
                 fail(400,'RELEASE_FIELDS','Nội dung thao tác không đúng schema.','Chỉ gửi các trường của thao tác; không gửi khóa, model, policy hoặc kết quả gate tự khai.')
             if any(not isinstance(v,str) or len(v)>1000 for k,v in body.items() if k!='expected_revision'):
                 fail(400,'RELEASE_FIELDS','Các mã và lý do phải là chuỗi hợp lệ.','Dùng đúng mã trả về từ server.')
-            if action=='prepare':value=service.prepare(scope,body['snapshot_id'],body['name'],_key(handler),recheck,plan_id=body.get('plan_id'))
+            if action=='prepare':value=service.prepare(scope,body['snapshot_id'],body['name'],_key(handler),recheck,plan_id=body.get('plan_id'),execution_mode=body.get('execution_mode','enterprise_local_only'))
             elif action=='qualify':value=service.qualify(scope,**body,recheck=recheck,key=_key(handler))
             elif action=='approve':value=service.approve(scope,**body,recheck=recheck,key=_key(handler))
             elif action=='switch':value=service.switch(scope,body,_key(handler),recheck)
             elif action=='revoke':value=service.store.revoke(scope,body['id'],body['reason'],recheck)
             elif action=='diff':value=service.diff(scope,**body,recheck=recheck)
-            else:value=service.run(scope,**body,recheck=recheck)
+            else:value=service.run(scope,**body,recheck=recheck,he_header=header)
         else:fail(405,'METHOD_NOT_ALLOWED','Thao tác release không hợp lệ.','Dùng GET xem trạng thái và POST cho thao tác có schema.')
         if recheck()!=scope:fail(409,'AUTH_CONTEXT_CHANGED','Quyền đã thay đổi.','Đăng nhập lại trước khi tiếp tục.')
         handler.respond(200,value)

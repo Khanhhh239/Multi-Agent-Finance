@@ -13,32 +13,49 @@ from .validation_study import (validate_evaluation_plan,ValidationStudyError,ext
     _resolve_arm_ml_scores,apply_calibrator)
 
 VERSION='release-shadow-plan/1.0.0'
+PILOT_GOVERNANCE_VERSION='pilot-active-governance/1.0.0'
 PROFILE='snapshot_case_shadow/1.0.0'
 SUPPORTED={'rules_35','robust_z','ecod','isolation_forest','lof','autoencoder'}
 FIELDS={'version','scope','feature_contract_fingerprint','model_selection','evaluation_plan','study','references',
         'case_policy','ml_candidate_min_score','fallback_order','execution_location','source_runtime'}
 
 
+def make_pilot_governance(study,case_policy,*,min_labeled_test_rows=2,min_precision_resolved=0.5,max_false_alerts_per_period=3,decided_at='2026-11-18'):
+    policy=validate_policy(case_policy)
+    ensure(policy['fixture_declaration']['approved_for_production'] is True,'RELEASE_PILOT_POLICY_REQUIRED',
+           'Pilot Active yêu cầu case_policy đã chốt D-04, D-05, D-06, D-07.')
+    return dict(version=PILOT_GOVERNANCE_VERSION,decided_at=str(decided_at),pilot_scope='internal_pilot_active',
+        closed_decisions=['D-04','D-05','D-06','D-07'],pilot_gate='D-09-pilot-v1',
+        pilot_d09_criteria=dict(min_labeled_test_rows=int(min_labeled_test_rows),min_precision_resolved=float(min_precision_resolved),
+                                max_false_alerts_per_period=int(max_false_alerts_per_period),allow_simulated_pilot_with_warning=True),
+        study_result_sha256=study['study_result_sha256'],policy_sha256=digest(canonical(policy)))
+
+
 def make_package(scope,*,model_selection,contract,plan,snapshot_manifests,model_artifacts,references,split_bundles,
-                 case_policy,ml_candidate_min_score,fallback_order,label_packets=None):
-    """Trusted validation producer hook; compute study, never approve or activate."""
+                 case_policy,ml_candidate_min_score,fallback_order,label_packets=None,pilot_governance=None):
+    """Trusted validation producer hook; compute study, optionally bind owner Pilot governance."""
     from .validation_study import run_validation_study
     from .pipeline_release import runtime_signature
     before=runtime_signature()
     report=run_validation_study(plan,snapshot_manifests=snapshot_manifests,model_artifacts=model_artifacts,
         reference_artifacts=references,split_bundles=split_bundles,label_packets=label_packets)
     ensure(before==runtime_signature(),'RELEASE_STUDY_RUNTIME','Code/runtime đổi trong lúc validation; cần chạy lại.')
-    return dict(version=VERSION,scope=dict(tenant_id=scope.tenant_id,company_id=next(iter(scope.company_ids))),
+    out=dict(version=VERSION,scope=dict(tenant_id=scope.tenant_id,company_id=next(iter(scope.company_ids))),
         feature_contract_fingerprint=contract['fingerprint'],model_selection=deepcopy(model_selection),evaluation_plan=deepcopy(plan),study=report,
         references=deepcopy(references),case_policy=deepcopy(case_policy),ml_candidate_min_score=ml_candidate_min_score,
         fallback_order=list(fallback_order),execution_location='enterprise_local_only',source_runtime=before)
+    if pilot_governance is True:
+        out['pilot_governance']=make_pilot_governance(report,case_policy)
+    elif isinstance(pilot_governance,dict):
+        out['pilot_governance']=deepcopy(pilot_governance)
+    return out
 
 
 def without(value,*keys):return {k:v for k,v in value.items() if k not in keys}
 
 
 def validate_package(package,scope,models,contract):
-    ensure(isinstance(package,dict) and set(package)==FIELDS and package['version']==VERSION,
+    ensure(isinstance(package,dict) and set(package) in (FIELDS,FIELDS|{'pilot_governance'}) and package['version']==VERSION,
            'RELEASE_PLAN_CONTRACT','Gói validation/policy không đúng contract.')
     ensure(package['scope']==dict(tenant_id=scope.tenant_id,company_id=next(iter(scope.company_ids))),
            'RELEASE_SCOPE','Gói validation/policy ngoài doanh nghiệp.',403)
@@ -90,6 +107,21 @@ def validate_package(package,scope,models,contract):
     ensure(isinstance(order,list) and len(order)==len(set(order)) and all(f in fb for f in order),
            'RELEASE_FALLBACK_CONTRACT','Thứ tự fallback phải chỉ định rõ các cấu hình trong plan.')
     policy=validate_policy(package['case_policy']);score=package['ml_candidate_min_score']
+    if 'pilot_governance' in package:
+        pg=package['pilot_governance']
+        ensure(policy['fixture_declaration']['approved_for_production'] is True,'RELEASE_PILOT_POLICY_REQUIRED',
+               'Gói Pilot Active yêu cầu case_policy đã chốt D-04, D-05, D-06, D-07.')
+        crit=pg.get('pilot_d09_criteria') if isinstance(pg,dict) else None
+        ensure(isinstance(pg,dict) and pg.get('version')==PILOT_GOVERNANCE_VERSION and pg.get('pilot_scope')=='internal_pilot_active' and
+               sorted(pg.get('closed_decisions') or [])==['D-04','D-05','D-06','D-07'] and pg.get('pilot_gate')=='D-09-pilot-v1' and
+               isinstance(crit,dict) and type(crit.get('min_labeled_test_rows')) is int and crit['min_labeled_test_rows']>=1 and
+               type(crit.get('min_precision_resolved')) in (int,float) and 0.0<=float(crit['min_precision_resolved'])<=1.0 and
+               type(crit.get('max_false_alerts_per_period')) is int and crit['max_false_alerts_per_period']>=0 and
+               pg.get('study_result_sha256')==study['study_result_sha256'] and pg.get('policy_sha256')==digest(canonical(policy)),
+               'RELEASE_PILOT_GOVERNANCE_INVALID','Chứng nhận quản trị Pilot D-04..D-09 không hợp lệ hoặc không khớp study/policy.')
+    else:
+        ensure(policy['fixture_declaration']['approved_for_production'] is False,'RELEASE_PRODUCTION_BLOCKED',
+               'Gói shadow chưa đính kèm chứng nhận quản trị Pilot D-04..D-09.')
     ensure(policy['scoring']['calibrated_weight']==0 or calibrator['target_branch'] in arm['branches'],
            'RELEASE_CALIBRATOR_TARGET','Case policy không được lấy xác suất từ model ngoài phương án đã chọn.')
     ensure(type(score) in (int,float) and 0<=score<=1,'RELEASE_PLAN_THRESHOLD','Ngưỡng ứng viên ML thử phải là số 0–1 được khai báo rõ.')
@@ -120,6 +152,7 @@ def score_and_coalesce(scope,analysis,manifest,data,package,bundle_id):
     from .case_coalescing import build_case_bundle_from_rule_analysis,coalesce_cases
     from .validation_study import _row_key
     plan=package['evaluation_plan'];study=package['study'];arm=study['detector_validation']['selected_arm']
+    he_requested=analysis.get('execution_mode')=='cloud_ciphertext_only'
     rows,_=extract_split_rows('release_shadow',scope,manifest,analysis,raw_data=data)
     bindings={r['reference_id']:r for r in plan['versions']['reference_bindings']}
     refs=package['references'];company=next(iter(scope.company_ids))
@@ -159,8 +192,9 @@ def score_and_coalesce(scope,analysis,manifest,data,package,bundle_id):
         extras[key[0]]=dict(ml_normalized_score=result['ml_score'] if result['available'] else None,
                            calibrated_fraud_probability=probability,calibration_status='experimental_calibrated' if probability is not None else 'unavailable')
         chosen.append(dict(record_id=key[0],revision=key[1],available=result['available'],priority_score=result['priority_score'] if result['available'] else None,
-                           fallback_id=fallback_id,is_selected_arm_complete=fallback_id is None and result['available'],
-                           is_full_ensemble=fallback_id is None and result['available'] and arm['kind'] in ('percentile_ensemble','rules_plus_percentile_ensemble'),reason=result.get('reason'),
+                           fallback_id=fallback_id,is_selected_arm_complete=fallback_id is None and result['available'] and not he_requested,
+                           is_full_ensemble=fallback_id is None and result['available'] and not he_requested and arm['kind'] in ('percentile_ensemble','rules_plus_percentile_ensemble'),reason=result.get('reason'),
+                           coverage_limitation='he_partial_catalogue_and_unsupported_models' if he_requested else None,
                            experimental_calibrated_probability=probability,
                            calibration_status='experimental_only' if probability is not None else 'target_unavailable_or_calibrator_blocked'))
     # Case accounting and review evidence must obey the job's immutable cutoff as
@@ -186,7 +220,10 @@ def score_and_coalesce(scope,analysis,manifest,data,package,bundle_id):
     return dict(version='release-shadow-execution/1.0.0',bundle_id=bundle_id,selected_arm_id=arm['arm_id'],
                 plan_sha256=study['plan_lock']['plan_sha256'],study_result_sha256=study['study_result_sha256'],rows=chosen,
                 case_bundle=case_bundle,cases=cases,case_policy=policy,period_key=period_key(analysis['as_of'],policy),
-                he_execution=False,execution_location='enterprise_local_only',quality_approved=False,
+                he_execution=bool(analysis.get('he_execution')),execution_location='cloud_ciphertext_only' if he_requested else 'enterprise_local_only',
+                quality_approved=bool('pilot_governance' in package),
                 fallback_counts=dict(Counter(r['fallback_id'] for r in chosen if r['fallback_id'])),
-                limitations=['Local enterprise shadow; no cloud upload or HE fallback',
+                limitations=['HE detector slices; enterprise decryption/policy/coalescing only; unsupported rules/models unavailable; local validation is not HE quality approval' if he_requested else 'Local enterprise shadow; no cloud upload or HE fallback',
+                             'Owner-approved Pilot Active case policy (D-04..D-07, Pilot D-09); simulated source warning enforced when snapshot is simulated'
+                             if 'pilot_governance' in package else
                              'Case scoring/admission policy is an explicit experimental fixture; transaction budget comparison does not approve case policy'])

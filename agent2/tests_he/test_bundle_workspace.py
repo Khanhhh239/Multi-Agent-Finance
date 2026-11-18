@@ -248,9 +248,122 @@ class BundleWorkspaceTests(unittest.TestCase):
             self.assertEqual(new_report['run_id'],request['run_id']);self.assertEqual(new_report['cases'],[])
             self.assertEqual(h.request(root+'/runs',dict(request,raw_scores=[1,2,3]))[0],400)
             self.assertEqual(h.request(root+'/runs',dict(request,run_id='cloud-no-clear-request',execution_mode='cloud_ciphertext_only'))[0],409)
-            for p in ('/pipeline-workspace','/assets/bundle-workspace.js'):
+            for p in ('/pipeline-workspace','/assets/bundle-workspace.js','/label-verification','/batch-training'):
                 self.assertTrue(allowed_path(p));self.assertEqual(h.request('/agent2'+p)[0],200)
+            for p in ('/api/v1/companies/C001/pipeline-workspace/backlog','/api/v1/companies/C001/pipeline-workspace/backlog/reevaluate'):
+                self.assertTrue(allowed_path(p))
             self.assertFalse(allowed_path('/api/v1/companies/C001/pipeline-workspace/runs/../private'))
+            status,bkl=h.request(root+'/backlog');self.assertEqual(status,200,bkl)
+            self.assertTrue(bkl['available']);self.assertGreater(bkl['summary']['budget_deferred_count'],0)
+            for private in ('ecod','selected_arm','rule_weight','model_selection','rule_coverage','calibrated_fraud_probability','material_fingerprint','policy_hash'):
+                self.assertNotIn(private,json.dumps(bkl))
+            self.assertEqual(h.request(root+'/backlog',token=False)[0],401)
+            status,bkl_c2=h.request(h.url('pipeline-workspace/backlog','C002'));self.assertEqual(status,200,bkl_c2)
+            self.assertEqual(bkl_c2['items'],[])
+            self.assertEqual(h.request(root+'/backlog/reevaluate',dict(target_period_key=bkl['suggested_next_period_key'],request_id='http-bkl-forged',policy={}))[0],400)
+            self.assertEqual(h.request(root+'/backlog/reevaluate',dict(target_period_key='2026-W99',request_id='http-bkl-badwk'))[0],422)
+            status,reeval=h.request(root+'/backlog/reevaluate',dict(target_period_key=bkl['suggested_next_period_key'],request_id='http-bkl-promote-1'))
+            self.assertEqual(status,200,reeval);self.assertGreater(reeval['promoted_count'],0)
+            self.assertEqual(len(reeval['created_runs']),1)
+            status,promo_rep=h.request(root+'/runs/'+reeval['created_runs'][0]);self.assertEqual(status,200,promo_rep)
+            self.assertEqual(len(promo_rep['cases']),reeval['promoted_count'])
+
+    def test_backlog_dto_redaction_and_period_reevaluation_creates_reviewable_run(self):
+        # Activate a tighter threshold/budget bundle on a second snapshot run or check existing backlog first,
+        # plus verify below_threshold stays waiting while budget_deferred promotes cleanly.
+        bkl=self.work.backlog(self.scope)
+        self.assertTrue(bkl['available']);self.assertTrue(bkl['can_reevaluate']);self.assertFalse(bkl['auto_expire'])
+        self.assertGreater(bkl['summary']['waiting_count'],0)
+        self.assertGreater(bkl['summary']['budget_deferred_count'],0)
+        for private in ('ecod','selected_arm','rule_weight','model_selection','rule_coverage','calibrated_fraud_probability','material_fingerprint','policy_hash'):
+            self.assertNotIn(private,json.dumps(bkl))
+        for item in bkl['items']:
+            self.assertEqual(item['snapshot_id'],self.h.sid)
+            self.assertEqual(item['origin_run_id'],self.run_id)
+            self.assertFalse(set(item['candidate_ids'])&set(item['evidence_transaction_ids']))
+            self.assertTrue(item['question']);self.assertTrue(item['reason_label_vi'])
+        next_period=bkl['suggested_next_period_key']
+        self.denied('PIPELINE_BACKLOG_FIELDS',lambda:self.work.reevaluate_backlog(self.scope,dict(target_period_key=next_period,request_id='bkl-forged-001',policy={})))
+        self.denied('PIPELINE_BACKLOG_PERIOD',lambda:self.work.reevaluate_backlog(self.scope,dict(target_period_key='2026-W99',request_id='bkl-badfmt-001')))
+        self.denied('PIPELINE_BACKLOG_PERIOD',lambda:self.work.reevaluate_backlog(self.scope,dict(target_period_key='2020-W01',request_id='bkl-retro-001')))
+        res=self.work.reevaluate_backlog(self.scope,dict(target_period_key=next_period,request_id='bkl-valid-001'))
+        self.assertGreater(res['promoted_count'],0);self.assertEqual(len(res['created_runs']),1)
+        self.assertFalse(res['idempotent_replay'])
+        for private in ('ecod','selected_arm','rule_weight','model_selection','rule_coverage','calibrated_fraud_probability','material_fingerprint','policy_hash'):
+            self.assertNotIn(private,json.dumps(res))
+        self.assertEqual(self.h.queue.get_queue_state(self.scope,mode='active')['items'],[])
+        replay=self.work.reevaluate_backlog(self.scope,dict(target_period_key=next_period,request_id='bkl-valid-001'))
+        self.assertTrue(replay['idempotent_replay'])
+        self.assertEqual(replay['created_runs'],res['created_runs'])
+        self.assertEqual(replay['budget_status'],res['budget_status'])
+        self.denied('RELEASE_IDEMPOTENCY_CONFLICT',lambda:self.work.reevaluate_backlog(self.scope,dict(target_period_key='2027-W01',request_id='bkl-valid-001')))
+        promo_run=res['created_runs'][0]
+        listed=next(r for r in self.work.list_runs(self.scope)['runs'] if r['run_id']==promo_run)
+        self.assertEqual(listed['origin'],'backlog_reevaluation');self.assertEqual(listed['period_key'],next_period)
+        promo_report=self.work.report(self.scope,promo_run)
+        self.assertEqual(len(promo_report['cases']),res['promoted_count'])
+        self.assertFalse(promo_report['training_eligible'])
+        saved_copy=deepcopy(promo_report);checksum=saved_copy.pop('report_sha256')
+        self.assertEqual(checksum,digest(canonical(saved_copy)))
+        p_case=promo_report['cases'][0]
+        lease=self.work.action(self.scope,promo_run,p_case['review_id'],'start',{})['lease'];self.clock[0]+=3
+        saved_rev=self.work.action(self.scope,promo_run,p_case['review_id'],'save',
+            dict(expected_revision=0,lease=lease,request_id='bkl-promo-save-1',feedback=self.feedback()))
+        self.assertEqual(saved_rev['revision'],1)
+        # Switch to a higher-threshold bundle so remaining/new low-score cases stay below_threshold on rollover
+        pkg_high=deepcopy(self.h.package);pkg_high['case_policy']['scoring']['min_case_score']=999.0
+        c_high=self.h.candidate('High threshold candidate',pkg_high);self.h.switch(c_high,revision=1)
+        if res['backlog']['summary']['waiting_count']>0:
+            after_period=res['backlog']['suggested_next_period_key']
+            blocked_res=self.work.reevaluate_backlog(self.scope,dict(target_period_key=after_period,request_id='bkl-high-threshold-1'))
+            self.assertEqual(blocked_res['promoted_count'],0)
+            self.assertEqual(blocked_res['created_runs'],[])
+            self.assertTrue(all(w['decision']=='below_threshold' for w in blocked_res['still_waiting']))
+
+    def test_pilot_active_workspace_submit_warning_and_active_backlog_rollover(self):
+        from sme_fraud.case_queue_policy import approved_pilot_policy
+        from sme_fraud.release_shadow_plan import make_pilot_governance
+        from test_portal_auth import PortalHarness,portal
+        from sme_fraud.review_server import make_server
+        # Activate a Pilot Active bundle on production with budget_limit=1 so 1 case enters active_queue and remaining qualifying cases enter active backlog
+        pol=approved_pilot_policy(budget_limit=1,min_case_score=5.0)
+        pilot_pkg=deepcopy(self.h.package);pilot_pkg['case_policy']=pol
+        pilot_pkg['pilot_governance']=make_pilot_governance(pilot_pkg['study'],pol,min_labeled_test_rows=2,min_precision_resolved=0.5,max_false_alerts_per_period=3)
+        reg=self.svc.register_plan(self.scope,pilot_pkg,'ws-pilot-reg')
+        bun=self.svc.prepare(self.scope,self.h.sid,'WS Pilot Active','ws-pilot-prep',plan_id=reg['plan_id'])
+        gate=self.svc.qualify(self.scope,bun['bundle_id'],'production');self.assertTrue(gate['production_ready'],gate)
+        app=self.svc.approve(self.scope,bun['bundle_id'],gate['gate_id'],'production','Approve Pilot Active for workspace HTTP test')
+        self.svc.switch(self.scope,dict(bundle_id=bun['bundle_id'],gate_id=gate['gate_id'],approval_id=app['approval_id'],
+                        lane='production',expected_revision=0,reason='Activate Pilot Active for workspace HTTP test',action='activate'),'ws-pilot-act')
+
+        with PortalHarness() as h:
+            h.agent.shutdown();h.agent.server_close()
+            h.agent=make_server(0,h.authorizer,self.h.fixture.snapshots,self.svc.resources,case_queue_store=self.h.queue,release_service=self.svc)
+            portal.CFG['agents']['agent2']['port']=h.agent.server_port
+            t=threading.Thread(target=h.agent.serve_forever,daemon=True);t.start();h.threads.append(t)
+            root=h.url('pipeline-workspace')
+            status,listing=h.request(root);self.assertEqual(status,200,listing)
+            self.assertTrue(listing['can_run_active']);self.assertIn('production',listing['available_lanes'])
+            status,act_rep=h.request(root+'/runs',dict(run_id='http-pilot-active-run-1',snapshot_id=self.h.sid,lane='production'))
+            self.assertEqual(status,200,act_rep)
+            self.assertEqual(act_rep['lane'],'production');self.assertEqual(act_rep['queue_mode'],'active')
+            self.assertTrue(act_rep.get('simulated_source_warning'))
+            self.assertEqual(len(act_rep['cases']),1)
+            for private in ('ecod','selected_arm','rule_weight','model_selection','rule_coverage','calibrated_fraud_probability','material_fingerprint','policy_hash'):
+                self.assertNotIn(private,json.dumps(act_rep))
+            status,act_bkl=h.request(root+'/backlog/active');self.assertEqual(status,200,act_bkl)
+            self.assertEqual(act_bkl['queue_mode'],'active')
+            self.assertGreater(act_bkl['summary']['budget_deferred_count'],0)
+            status,act_reeval=h.request(root+'/backlog/reevaluate',
+                dict(target_period_key=act_bkl['suggested_next_period_key'],request_id='http-act-bkl-roll-1',mode='active'))
+            self.assertEqual(status,200,act_reeval)
+            self.assertEqual(act_reeval['queue_mode'],'active');self.assertEqual(act_reeval['promoted_count'],1)
+            self.assertEqual(len(act_reeval['created_runs']),1)
+            status,promo_act_rep=h.request(root+'/runs/'+act_reeval['created_runs'][0])
+            self.assertEqual(status,200,promo_act_rep)
+            self.assertEqual(promo_act_rep['queue_mode'],'active')
+            self.assertTrue(promo_act_rep.get('simulated_source_warning'))
+            self.assertEqual(len(promo_act_rep['cases']),1)
 
 
 if __name__=='__main__':unittest.main()

@@ -2,7 +2,7 @@
 (() => {
   const $ = id => document.getElementById(id);
   const mount = location.pathname.startsWith('/agent2/') ? '/agent2' : '';
-  let token = '', actorID = '', company = '', epoch = 0, controller = null, busy = false, pollTimer = null;
+  let token = '', actorID = '', contextID = '', company = '', epoch = 0, controller = null, busy = false, pollTimer = null;
   let state = null, snapshots = [], approvedModels = [], shadowRuns = [], currentShadowView = null, currentShadowMode = '', customJsonEdited = false;
   const idemKeys = new Map();
 
@@ -869,12 +869,13 @@
   function updateNavLinks() {
     const q = company ? '#company=' + encodeURIComponent(company) : '';
     if ($('bt-nav-workspace')) $('bt-nav-workspace').href = 'workspace' + q;
+    if ($('bt-nav-bundle')) $('bt-nav-bundle').href = 'pipeline-workspace' + q;
     if ($('bt-nav-settings')) $('bt-nav-settings').href = 'analysis-settings' + q;
     if ($('bt-nav-labels')) $('bt-nav-labels').href = 'label-verification' + q;
     history.replaceState(null, '', location.pathname + q);
     try {
       if (company && actorID) {
-        sessionStorage.setItem('agent2.company.selection', JSON.stringify({ version: 1, actor: actorID, company, page: 'batch-training' }));
+        sessionStorage.setItem('agent2.company.selection', JSON.stringify({ version: 1, actor: actorID, context: contextID, company, page: 'batch-training' }));
       }
     } catch {
       /* optional */
@@ -1177,6 +1178,7 @@
       }
       const context = await api('/api/v1/ui/context');
       actorID = context.actor_id || '';
+      contextID = context.context_id || '';
       $('bt-login').hidden = true;
       $('bt-company').replaceChildren(...(context.companies || []).map(c => {
         const o = node('option', c);
@@ -1184,9 +1186,14 @@
         return o;
       }));
       $('bt-company').disabled = !(context.companies || []).length;
+      let shared;
+      try { shared = JSON.parse(sessionStorage.getItem('agent2.company.selection')); } catch {}
+      const remembered = shared?.version === 1 && shared.actor === actorID && shared.context === contextID && context.companies?.includes(shared.company) ? shared.company : '';
       const desired = new URLSearchParams(location.hash.slice(1)).get('company');
       if (context.companies?.includes(desired)) {
         $('bt-company').value = desired;
+      } else if (remembered) {
+        $('bt-company').value = remembered;
       }
       await switchCompany();
     } catch (err) {

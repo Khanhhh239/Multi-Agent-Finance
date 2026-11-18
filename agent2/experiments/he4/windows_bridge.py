@@ -80,3 +80,16 @@ class CryptoBridge:
         return json.loads(open_private(output,key,dict(binding,purpose='opened-result',ciphertext_sha256=cipher_sha256)))['value']
 
     def public_key(self,scope,bundle):return self.context(scope,bundle)[1]/'evaluation.keys'
+
+    def public_context(self,scope,bundle):
+        """Inspect a provisioned epoch without generating/exporting secret keys."""
+        _,vault,binding,_=self.context(scope,bundle)
+        if not any((vault/name).exists() for name in ('context.json','context.sealed','evaluation.keys')):
+            raise HEUnavailable('he4_key_not_provisioned')
+        try:
+            meta=json.loads((vault/'context.json').read_bytes())
+            if (not (vault/'context.sealed').is_file() or meta['binding']!=binding or
+                not re.fullmatch('key_[a-f0-9]{64}',meta['key_epoch']) or
+                BlobStore.digest(vault/'evaluation.keys')!=meta['evaluation_keys_sha256']):raise ValueError()
+            return meta
+        except (OSError,ValueError,KeyError):raise HEUnavailable('he4_key_context_integrity') from None

@@ -18,6 +18,7 @@ from .snapshots import SnapshotStore
 VERSION='pipeline-release-store/1.0.0'
 APP_ID=1093817149
 PREFIX={'artifact':'rart_','bundle':'rbun_','gate':'rgat_','approval':'rapr_','activation':'ract_','pin':'rpin_','observation':'robs_','revocation':'rrev_','execution':'rexe_','review_packet':'rpkt_'}
+PREFIX['he_job']='rhej_'
 
 
 def ensure(ok,code,message,status=409):
