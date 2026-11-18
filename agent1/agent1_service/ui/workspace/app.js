@@ -387,10 +387,14 @@
   function switchView(route, { updateHash = true, load = true } = {}) {
     let [view, section] = route.split("/");
     if (!Object.hasOwn(titles, view)) return;
-    if (view === "data" && portalPage("data")) {
+    // When embedded in portal, redirect data view to portal's centralized intake
+    const inPortal = window.parent !== window && portalPage("data");
+    if (view === "data" && inPortal) {
       view = route = "reconciliation";
       history.replaceState(null, "", "#" + route);
     }
+    // Hide "data" view completely when in portal; keep it for standalone mode
+    $("view-data").hidden = inPortal || (view !== "data");
     if (view !== currentView) $("notice").hidden = true;
     currentView = view;
     document
