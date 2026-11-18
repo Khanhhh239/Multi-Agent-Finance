@@ -24,7 +24,6 @@ function ui() {
   scope.clearFormErrors = () => {};
   scope.setDate = (id, iso) => { scope.$(id).value = iso; scope.$(id).dataset.iso = iso; };
   scope.presets = {base:[0,0,false], delay14:[14,0,false], delay28:[28,0,false], cost25:[0,25,false], stress:[0,0,true]};
-  vm.runInContext(section("  function restoreForecastInputs(", '  $("forecast-form").onsubmit ='), scope);
   return scope;
 }
 
@@ -64,39 +63,10 @@ test("API field locations become actionable Vietnamese errors", () => {
   assert.ok(expense.message.includes("không vượt quá 200"));
 });
 
-test("opening a saved plan restores all exposed assumptions without pre-confirming coverage", () => {
-  const scope = ui();
-  scope.$("forecast-complete").checked = true;
-  scope.restoreForecastInputs({cutoff:"2026-11-11",opening_balance:250000000,cash_floor:100000000,horizon_weeks:4,
-    confirmed_weeks:[1,3],operating_included:true,
-    scenario:{delay_days:8,expense_multiplier:1.125,delay_customer:"C1",shared_customer_risk:true}});
-  for (const [id,value] of Object.entries({"forecast-cutoff":"2026-11-11","opening-balance":250000000,
-    "cash-floor":100000000,"horizon-weeks":4,"confirmed-weeks":"1,3","delay-days":8,
-    "expense-change":12.5,"delay-customer":"C1","scenario-preset":"custom"}))
-    assert.equal(scope.$(id).value,value,id);
-  assert.equal(scope.$("include-operating").checked,true);
-  assert.equal(scope.$("common-risk").checked,true);
-  assert.equal(scope.$("forecast-complete").checked,false);
-  assert.equal(scope.$("forecast-input-context").hidden,false);
-  const multiplier = 1.0000000000001;
-  scope.restoreForecastInputs({scenario:{expense_multiplier:multiplier}});
-  assert.equal(scope.$("scenario-preset").value,"custom");
-  assert.equal(1+scope.$("expense-change").value/100,multiplier);
-});
-
-test("saved preset scenarios and missing legacy parameters do not keep stale form values", () => {
-  const scope = ui();
-  for (const [preset,[delay,expense,shared]] of Object.entries(scope.presets)) {
-    scope.restoreForecastInputs({cutoff:"2026-11-11",opening_balance:0,cash_floor:0,weeks:[{}],confirmed_weeks:[],
-      scenario:{delay_days:delay,expense_multiplier:1+expense/100,shared_customer_risk:shared}});
-    assert.equal(scope.$("scenario-preset").value,preset);
-    assert.equal(scope.$("cash-floor").value,0);
-  }
-  scope.restoreForecastInputs({weeks:[{},{}]});
-  assert.equal(scope.$("opening-balance").value,"");
-  assert.equal(scope.$("cash-floor").value,"");
-  assert.equal(scope.$("horizon-weeks").value,2);
-  assert.equal(scope.$("forecast-cutoff").value,"");
-  assert.equal(scope.$("forecast-cutoff").dataset.iso,undefined);
-  assert.ok(scope.$("forecast-input-context").textContent.includes("chưa có đủ tham số"));
+test("saved plan browsing and restore controls are removed from the workspace", () => {
+  const html = fs.readFileSync(path.resolve(__dirname, "../../agent1_service/ui/workspace/index.html"), "utf8");
+  assert.equal(html.includes('id="saved-plans"'),false);
+  assert.equal(source.includes('$("saved-plans").onclick'),false);
+  assert.equal(source.includes('function restoreForecastInputs('),false);
+  assert.ok(html.includes('id="forecast-form"'),"New forecasts remain available");
 });

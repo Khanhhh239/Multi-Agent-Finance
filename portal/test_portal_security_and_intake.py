@@ -246,6 +246,25 @@ class TestFaceIDSecurity:
 
 
 class TestRouteAuthAndAtomicWrite:
+    def test_profile_details_require_the_shared_unlock_session(self, live_portal):
+        port, _ = live_portal
+        profile = dict(server.COMPANY_FIELDS, code='MPX10', legal_name='Minh Phat',
+                       tax_code='0999999905', registered_address='Private address', industry='Private industry')
+        server.write_json(server.COMPANY_FILE, profile)
+        token = server.set_password('AdminSecret123!', 'AdminSecret123!')
+        with patch.object(server, 'agent_state', return_value={'id': 'agent1', 'state': 'stopped'}):
+            status, locked = _http_call(port, 'GET', '/api/state')
+            assert status == 200
+            assert locked['company']['legal_name'] == profile['legal_name']
+            for key in ('tax_code', 'registered_address', 'industry', 'vat_method', 'date_format'):
+                assert locked['company'][key] == ''
+            status, opened = _http_call(port, 'GET', '/api/state', headers={'X-Session': token})
+            assert status == 200 and opened['company']['tax_code'] == profile['tax_code']
+            assert opened['company']['registered_address'] == profile['registered_address']
+            assert _http_call(port, 'PUT', '/api/company', profile, {'X-Platform': '1'})[0] == 401
+            server.lock_session(token)
+            assert _http_call(port, 'GET', '/api/state', headers={'X-Session': token})[1]['company']['tax_code'] == ''
+
     def test_demo_mode_without_enrollment_vs_strict_auth_when_faceid_enrolled(self, live_portal):
         port, _ = live_portal
         with patch.object(server, 'agent1_key', return_value='secret-agent1-bearer'), \

@@ -602,18 +602,27 @@ export async function pageLaw() {
     e.preventDefault();
     const q = $('#lq').value.trim();
     if (!q) return;
+    const submit = e.target.querySelector('button[type=submit]'); submit.disabled = true;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
+    onPageLeave(() => controller.abort());
     $('#lres').innerHTML = loading('Đang tìm');
     try {
-      const rows = await api(`/api/law/search?q=${encodeURIComponent(q)}&as_of=${$('#lasof').value}`);
+      const rows = await api(`/api/law/search?q=${encodeURIComponent(q)}&as_of=${$('#lasof').value}`, {signal: controller.signal});
       $('#lres').innerHTML = rows.length ? rows.map((r) => `<div class="panel"><h3><a href="#/luat?doc=${esc(r.doc_id)}">${esc(r.path)}</a></h3>
         <div class="muted small">${esc(r.status || 'không ghi tình trạng')}, hiệu lực từ ${dmy(r.eff_from) || 'không ghi'}</div><p>${esc(r.text.slice(0, 900))}${r.text.length > 900 ? '...' : ''}</p></div>`).join('')
         : '<div class="empty">Không tìm thấy điều khoản phù hợp tại ngày này.</div>';
-    } catch (err) { $('#lres').innerHTML = notice('error', 'Không tìm được', err.message); }
+    } catch (err) { if ($('#lres')) $('#lres').innerHTML = notice('error', 'Không tìm được', err.name === 'AbortError' ? 'Tra cứu quá thời gian. Hãy thử từ khóa ngắn hơn.' : err.message); }
+    finally { clearTimeout(timer); if (submit.isConnected) submit.disabled = false; }
   };
   try {
     const docs = await api('/api/law/docs');
-    $('#ldocs').innerHTML = table(['Văn bản', 'Ban hành', 'Hiệu lực', 'Tình trạng', { label: 'Điều khoản', num: true }], docs.map((d) => `<tr class="clickable" data-go="#/luat?doc=${esc(d.doc_id)}">
+    let shown = 5;
+    const paintDocs = () => { $('#ldocs').innerHTML = table(['Văn bản', 'Ban hành', 'Hiệu lực', 'Tình trạng', { label: 'Điều khoản', num: true }], docs.slice(0, shown).map((d) => `<tr class="clickable" data-go="#/luat?doc=${esc(d.doc_id)}">
       <td><span class="cell-title">${esc(d.doc_type)} ${esc(d.doc_num)}</span><div class="muted small">${esc((d.title || '').slice(0, 140))}</div></td><td>${dmy(d.issue_date)}</td><td>${dmy(d.eff_from)}</td>
-      <td>${d.ended_on ? `Hết hiệu lực từ ${dmy(d.ended_on)} theo ${esc(d.ended_by)}` : esc(d.status_name || '')}${d.structure === 'none' ? '<div class="muted small">chưa có toàn văn</div>' : ''}${d.indexed ? '' : '<div class="muted small">không dùng để trả lời</div>'}</td><td class="num">${d.n_provisions}</td></tr>`), 'Kho trống. Bấm Đồng bộ kho luật.');
+      <td>${d.ended_on ? `Hết hiệu lực từ ${dmy(d.ended_on)} theo ${esc(d.ended_by)}` : esc(d.status_name || '')}${d.structure === 'none' ? '<div class="muted small">chưa có toàn văn</div>' : ''}${d.indexed ? '' : '<div class="muted small">không dùng để trả lời</div>'}</td><td class="num">${d.n_provisions}</td></tr>`), 'Kho trống. Bấm Đồng bộ kho luật.') + (docs.length > shown ? `<div class="bar">${button('Xem thêm 5 văn bản', 'tertiary', 'id="laws-more"')}<span class="muted">Đang hiện ${shown} / ${docs.length}</span></div>` : '');
+      const more = $('#laws-more'); if (more) more.onclick = () => { shown += 5; paintDocs(); };
+    };
+    paintDocs();
   } catch { $('#ldocs').innerHTML = '<div class="empty">Kho trống. Bấm Đồng bộ kho luật.</div>'; }
 }

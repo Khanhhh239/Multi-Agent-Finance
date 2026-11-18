@@ -169,7 +169,7 @@
     skip.className = 'a2-skip'; skip.href = '#' + main.id; skip.textContent = 'Đến nội dung chính';
     document.body.prepend(skip);
     const brand = header.querySelector('.brand');
-    if (brand) { brand.textContent = 'Agent 2 · Kiểm tra giao dịch'; brand.classList.add('a2-brand'); }
+    if (brand) { brand.textContent = 'Trợ lý Giám sát'; brand.classList.add('a2-brand'); }
     let nav = header.querySelector('nav');
     if (!nav) { nav = document.createElement('nav'); header.append(nav); }
     nav.classList.add('a2-nav'); nav.id = 'a2-navigation'; nav.setAttribute('aria-label', 'Chức năng Agent 2');
@@ -177,10 +177,11 @@
     const page = a => new URL(a.href, location.href).pathname.replace(/\/+$/, '').split('/').pop();
     const here = location.pathname.replace(/\/+$/, '').split('/').pop() ||
       (document.getElementById('bw-company') ? 'pipeline-workspace' : 'data-import');
-    const primary = [['pipeline-workspace', 'Việc cần kiểm tra'], ['data-import', 'Nhập dữ liệu'], ['workspace', 'Kết quả và công việc']];
+    const primary = [['data-import', 'Nhập dữ liệu'], ['workspace', 'Kết quả và công việc']];
     const extras = { 'status': 'T\u00ecnh tr\u1ea1ng h\u1ec7 th\u1ed1ng', 'encrypted-analysis': 'Phân tích bảo mật', 'label-verification': 'Xác nhận kết quả giao dịch',
       'batch-training': 'Hướng dẫn hệ thống học', 'pipeline-releases': 'Quản lý phiên bản phân tích', 'analysis-settings': 'Thiết lập phân tích' };
     if (extras[here] && ![...nav.querySelectorAll('a[href]')].some(a => page(a) === here)) { const self = document.createElement('a'); self.href = here + location.hash; self.textContent = extras[here]; nav.append(self); }
+    for (const link of nav.querySelectorAll('a[href]')) if (page(link) === 'pipeline-workspace') link.remove();
     let previous = null;
     for (const [route, label] of primary) {
       let link = [...nav.querySelectorAll('a[href]')].find(a => page(a) === route);

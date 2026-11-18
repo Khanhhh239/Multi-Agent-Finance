@@ -4815,3 +4815,15 @@ html.in-platform[data-agent="3"] .side .cds--side-nav__link[href="#/quan-tri"][a
     transition-duration: 0s !important;
   }
 }
+
+/* Consistent compact headings and tab baselines. */
+[data-agent="3"] .a3-company-line{display:block;margin:10px 0 0;line-height:1.5;font-size:16px;font-weight:500;overflow-wrap:anywhere}
+[data-agent="3"] .cds--side-nav__items{align-items:stretch}
+[data-agent="3"] .cds--side-nav__link{height:48px;box-sizing:border-box;align-items:center}
+.in-platform[data-agent="3"] .cds--header{display:none!important}
+.in-platform[data-agent="3"] .side{top:0!important}
+.in-platform[data-agent="3"] .app{margin-top:0!important;padding-top:20px!important}
+[data-agent="3"] .son-illustrated::after,[data-agent="3"] .son-illustrated::before{display:none!important}
+
+[data-agent="3"] .kpi-footer-v2{min-height:64px;margin-top:auto;align-items:center}
+[data-agent="3"] .kpi-arrow-action{white-space:nowrap;flex-shrink:0}

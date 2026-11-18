@@ -682,3 +682,5 @@ html.in-platform[data-agent="2"] body.a2-product .a2-main { margin: 0; padding-t
   [data-agent="2"] .a2-product .metric { padding: 14px; }
   [data-agent="2"] .a2-product .actions > button { flex: 1 1 auto; }
 }
+
+.in-platform[data-agent="2"] .a2-brand,.in-platform[data-agent="2"] .a2-header>.kt-portal-return{display:none!important}

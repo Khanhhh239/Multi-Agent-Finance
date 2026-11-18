@@ -460,7 +460,7 @@
         $("connect-top").hidden = true;
         $("logout").hidden = false;
         switchView("forecast");
-        $("saved-plans").click();
+        notice("Phiên chỉ đọc. Kế toán phụ trách có thể xuất và gửi kết quả dự báo mới.");
       } else await refresh();
       $("token-input").value = "";
       $("connect-dialog").close();
@@ -642,17 +642,6 @@
         return el;
       }),
     );
-    if (state.needs_retraining) {
-      $("next-title").textContent = "Dữ liệu mới đã sẵn sàng.";
-      $("next-copy").textContent =
-        "Phiên bản đang dùng được học trên dữ liệu trước. Hãy kiểm định lại để cập nhật.";
-    } else if (state.counts.invoices) {
-      $("next-title").textContent =
-        "Sổ của bạn đã có " + fmt.format(state.counts.invoices) + " hóa đơn.";
-      $("next-copy").textContent = state.active_version
-        ? "Phiên bản đã chọn sẵn sàng. Nhập số dư thực tế để lập kế hoạch."
-        : "Tiếp tục nạp thanh toán, kiểm định hoặc lập dự báo theo lịch sử hiện có.";
-    }
     renderVersions();
     renderT1Updates();
     renderJobs();
@@ -1410,35 +1399,6 @@
     $("source-correction-status").textContent = "Đã sửa nguồn và đảo " + result.reversed_count + " quyết định. Tìm đề xuất đối soát để duyệt lại các khoản cần phân bổ.";
     notice("Đã lưu phiên bản sửa; lịch sử và các kế hoạch đã lưu được giữ.");
   }, $("commit-source-correction"));
-  $("saved-plans").onclick = () =>
-    action(async () => {
-      const plans = await api("/forecasts");
-      $("plans-list").replaceChildren(
-        ...plans.map((x) => {
-          const btn = node(
-            "button",
-            displayDate(x.cutoff) +
-              " · " +
-              (x.created_at
-                ? displayDate(x.created_at) + " " + new Date(x.created_at).toLocaleTimeString("vi-VN", {hour:"2-digit", minute:"2-digit"})
-                : "Bản lưu cũ") +
-              " · số dư thấp nhất " +
-              short(x.minimum_balance),
-            "button",
-          );
-          btn.onclick = () =>
-            action(async () => {
-              lastForecast = await api("/forecasts/" + x.id);
-              $("saved-plans").closest("details").open = false;
-              restoreForecastInputs(lastForecast);
-              renderForecast();
-            });
-          return btn;
-        }),
-      );
-      if (!plans.length) notice("Chưa có kế hoạch đã lưu.");
-    });
-
   $("date-format").onchange = $("number-format").onchange = invalidateImportPreview;
   $("imported-by").addEventListener("input", invalidateImportPreview);
   $("xml-known-at").value = localDate;
@@ -1952,33 +1912,6 @@
     $("scenario-custom").disabled = !custom;
   };
   $("scenario-preset").onchange();
-  function restoreForecastInputs(plan) {
-    clearFormErrors($("forecast-form"));
-    if (plan.cutoff) setDate("forecast-cutoff", plan.cutoff);
-    else { $("forecast-cutoff").value = ""; delete $("forecast-cutoff").dataset.iso; }
-    $("opening-balance").value = plan.opening_balance ?? "";
-    $("cash-floor").value = plan.cash_floor ?? "";
-    $("horizon-weeks").value = plan.horizon_weeks ?? plan.weeks?.length ?? 13;
-    $("confirmed-weeks").value = (plan.confirmed_weeks || []).join(",");
-    $("include-operating").checked = Boolean(plan.operating_included);
-    const scenario = plan.scenario || {};
-    const delay = scenario.delay_days ?? 0, multiplier = scenario.expense_multiplier ?? 1;
-    const shared = Boolean(scenario.shared_customer_risk);
-    const customer = scenario.delay_customer || "";
-    const preset = !customer && Object.entries(presets).find(([, [d, expense, risk]]) =>
-      d === delay && 1 + expense / 100 === multiplier && risk === shared);
-    $("delay-days").value = delay;
-    $("expense-change").value = Number(((multiplier - 1) * 100).toPrecision(15));
-    $("delay-customer").value = customer;
-    $("common-risk").checked = shared;
-    $("scenario-preset").value = preset ? preset[0] : "custom";
-    $("scenario-preset").onchange();
-    $("forecast-complete").checked = false;
-    const missing = ["opening_balance", "cash_floor", "scenario", "confirmed_weeks"].some(key => plan[key] == null);
-    $("forecast-input-context").textContent = (missing ? "Bản lưu chưa có đủ tham số; kiểm tra lại các ô trước khi lập mới. " : "Đã điền tham số từ kế hoạch đã lưu. ") +
-      "Xác nhận lại phạm vi thanh toán trước khi lập dự báo mới bằng dữ liệu và phiên bản hiện tại. Kết quả đang xem vẫn là bản đã lưu.";
-    $("forecast-input-context").hidden = false;
-  }
   $("forecast-form").onsubmit = (event) => {
     event.preventDefault();
     action(async () => {

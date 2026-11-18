@@ -2842,3 +2842,29 @@ button.primary:hover,.btn.primary:hover { background:var(--kt-accent-strong); }
     justify-content: space-between;
   }
 }
+
+/* Compact workspace shell, shared across all four assistants. */
+:root { --top: 0px; }
+body > .menu-toggle { position: fixed; z-index: 30; left: 16px; bottom: 16px; background: var(--kt-accent); color: white; box-shadow: 0 3px 14px #0002; }
+.content { padding-top: 28px; }
+.sidebar { top: 0; height: 100dvh; padding-bottom: 76px; }
+.agent-view { height: calc(100dvh - 26px); }
+.exec-summary-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.overview-header { margin-bottom: 24px; }
+.overview-header h1 { overflow-wrap: anywhere; line-height: 1.35; }
+.config-layout { display: block; max-width: 1040px; }
+#company-form { max-width: none; border: 1px solid var(--kt-line); border-radius: 12px; padding: 26px; background: var(--kt-surface); }
+#company-form[hidden] { display: none; }
+#company-form .profile-section { border: 0; padding: 0; margin: 0 0 22px; background: transparent; box-shadow: none; }
+#company-form .profile-section legend { font-size: 16px; margin-bottom: 14px; }
+.intake-choose { display: block; }
+.routing > summary { font-size: 20px; font-weight: 700; padding: 12px 0; }
+.routing .table td { vertical-align: top; overflow-wrap: anywhere; }
+.routing small { display: block; color: var(--kt-muted); }
+#queue td { overflow-wrap: anywhere; white-space: normal; min-width: 100px; vertical-align: top; }
+#queue td:first-child { max-width: 280px; }
+#queue .file-main { display: block; overflow-wrap: anywhere; }
+#queue .file-sub { display: block; margin-top: 6px; }
+#history td { overflow-wrap: anywhere; }
+.workstation-card .ws-card-top { min-height: 44px; }
+@media(max-width:700px) { #company-form { padding: 18px; } .exec-summary-grid { grid-template-columns:1fr; } .sidebar { top:0; } }

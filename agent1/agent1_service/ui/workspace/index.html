@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="color-scheme" content="light" />
-    <title>Agent1 · Sổ điều hành dòng tiền</title>
+    <title>Trợ lý Dòng tiền</title>
     <link rel="icon" href="/workspace-assets/vendor/chart-line.svg" />
     <link rel="stylesheet" href="/workspace-assets/vendor/uPlot.min.css" />
     <link rel="stylesheet" href="/workspace-assets/style.css" />
@@ -18,7 +18,7 @@
     <header class="topbar cds--header" aria-label="Agent 1">
       <div class="workspace-heading">
         <a id="portal-return" class="kt-portal-return" data-portal-return target="_top" aria-label="Quay về trang chung" title="Quay về trang chung" hidden><span aria-hidden="true">←</span><span class="kt-return-label">Trang chung</span></a>
-        <button class="header-brand" type="button" data-view="overview" aria-label="Agent 1 · Tổng quan dòng tiền"><span class="brandmark" aria-hidden="true">A1</span><span>Agent 1 · Dòng tiền</span></button>
+        <button class="header-brand" type="button" data-view="overview" aria-label="Agent 1 · Tổng quan dòng tiền"><span class="brandmark" aria-hidden="true">A1</span><span>Trợ lý Dòng tiền</span></button>
       </div>
       <div class="top-actions">
         <div class="ws-picker">
@@ -39,7 +39,6 @@
           <div class="nav-group-title">VẬN HÀNH</div>
           <button data-view="overview">Tổng quan</button>
           <button data-view="forecast"><img src="/workspace-assets/vendor/chart-line.svg" alt="">Dự báo dòng tiền</button>
-          <button data-view="forecast" data-sub="scenarios"><img src="/workspace-assets/vendor/chart-line.svg" alt="">Kịch bản thu hồi</button>
         </div>
         <div class="nav-group">
           <div class="nav-group-title">SỔ SÁCH</div>
@@ -51,7 +50,6 @@
         <div class="nav-group">
           <div class="nav-group-title">DỮ LIỆU & HỆ THỐNG</div>
           <button data-view="records"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Sổ dữ liệu</button>
-          <button data-view="data" class="reconciliation-nav"><img src="/workspace-assets/vendor/database-import.svg" alt="">Nạp dữ liệu tập trung</button>
           <button data-view="training"><img src="/workspace-assets/vendor/refresh.svg" alt="">Cập nhật mô hình</button>
           <button data-view="guide"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Hướng dẫn</button>
         </div>
@@ -82,13 +80,6 @@
 
             </div>
           </div>
-          <details class="entry-help">
-          <summary>Hướng dẫn bắt đầu và dữ liệu xem thử</summary>
-          <div class="entry-choice">
-            <article><h2>Bắt đầu với doanh nghiệp của bạn</h2><p>Dùng sổ công nợ, các khoản đã thu và lịch chi của doanh nghiệp để lập kế hoạch dòng tiền.</p><button class="button primary" data-view="data">Thiết lập doanh nghiệp của tôi</button></article>
-            <article><h2>Xem thử trước</h2><p>Khám phá Đại Phát: 12.780 hóa đơn, 120 khách hàng, sổ ngân hàng và bốn kịch bản dòng tiền có sẵn.</p><a class="button" href="/workspace-assets/dai-phat.html">Xem thử với dữ liệu mô phỏng →</a></article>
-          </div>
-          </details>
           <div class="metrics">
             <div>
               <span>CÔNG NỢ ĐANG MỞ</span><strong id="kpi-outstanding">—</strong
@@ -138,48 +129,8 @@
                 Loại dải số dư và phạm vi hiệu chỉnh sẽ hiển thị cùng kế hoạch.
               </p>
             </article>
-            <aside class="onboarding">
-              <span class="eyebrow">BẮT ĐẦU CÙNG AGENT1</span>
-              <h2>Nạp dữ liệu.<br />Chủ động thu chi.</h2>
-              <ol>
-                <li>
-                  <span>01</span>
-                  <div>
-                    <b>Nạp sổ của doanh nghiệp</b>
-                    <p>CSV hoặc Excel. Ghép cột ngay trên màn hình.</p>
-                  </div>
-                </li>
-                <li>
-                  <span>02</span>
-                  <div>
-                    <b>Kiểm tra dự báo trên lịch sử</b>
-                    <p>Chỉ đổi phiên bản khi có đủ bằng chứng tốt hơn.</p>
-                  </div>
-                </li>
-                <li>
-                  <span>03</span>
-                  <div>
-                    <b>Chủ động kế hoạch thu chi</b>
-                    <p>Xem dự báo, thử tình huống và cập nhật dữ liệu mới.</p>
-                  </div>
-                </li>
-              </ol>
-              <button data-view="guide">
-                Xem hướng dẫn 5 phút <span>↗</span>
-              </button>
-            </aside>
+
           </div>
-          <article class="paper next-step">
-            <span class="number-stamp">01—03</span>
-            <div>
-              <h3 id="next-title">Dữ liệu đúng là khởi đầu tốt nhất.</h3>
-              <p id="next-copy">
-                Nạp sổ hóa đơn và các khoản đã thu. Lịch chi đã biết là phần bổ sung khi lập dòng tiền.
-                Không cần biết lập trình.
-              </p>
-            </div>
-            <button class="button" data-view="guide">Xem mẫu dữ liệu →</button>
-          </article>
         </section>
 
         <section class="view" id="view-records" hidden>
@@ -558,13 +509,6 @@
           <div class="page-heading compact forecast-toolbar">
             <h1>Kế hoạch dòng tiền</h1>
             <div class="forecast-actions">
-              <details class="history-menu">
-                <summary class="button">Kế hoạch đã lưu</summary>
-                <div class="history-list">
-                  <button class="button" id="saved-plans">Tải danh sách</button>
-                  <div id="plans-list"></div>
-                </div>
-              </details>
               <button class="button" id="export-forecast" disabled>Xuất Excel ↓</button>
             </div>
           </div>
