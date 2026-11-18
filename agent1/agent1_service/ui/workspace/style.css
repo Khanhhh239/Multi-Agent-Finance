@@ -1725,11 +1725,11 @@ main { max-width: 1580px; padding: 24px 24px 0; }
 .forecast-toolbar { align-items: center; gap: 10px; }
 .forecast-toolbar h1 { margin: 0; }
 .forecast-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.history-menu { position: relative; margin: 0; }
+.history-menu { position: relative; margin: 0; z-index: 100; }
 .history-menu summary { cursor: pointer; }
 .history-list {
   position: absolute;
-  z-index: 6;
+  z-index: 100;
   right: 0;
   width: min(390px, 85vw);
   max-height: 330px;

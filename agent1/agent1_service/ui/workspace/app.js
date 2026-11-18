@@ -2219,11 +2219,14 @@
       return panel;
     }
     const excluded = policy.eligibility || {};
+    const rules = node("details");
+    rules.append(node("summary", "Cách tính điểm và kiểm định"),
+      node("p", "Điểm = " + policy.formula + "."),
+      node("p", policy.selection.message, "muted"));
     panel.append(node("p", "Chính sách: " + policy.label + " · Hiển thị " + policy.displayed_count +
       "/" + policy.eligible_count + " khoản đủ điều kiện."),
-      node("p", "Điểm = " + policy.formula + ". " + policy.selection.message, "muted"),
       node("p", "Loại khỏi danh sách: " + (excluded.writeoff_excluded || 0) + " khoản đã xóa nợ; " +
-        (excluded.recent_contact_or_skip_excluded || 0) + " khoản vừa liên hệ hoặc tạm bỏ qua chưa đủ 7 ngày.", "muted"));
+        (excluded.recent_contact_or_skip_excluded || 0) + " khoản vừa liên hệ hoặc tạm bỏ qua chưa đủ 7 ngày.", "muted"), rules);
     return panel;
   }
   function renderRankingExplanation(invoice, plan) {
@@ -2541,7 +2544,9 @@
     } else {
       message = `Chưa có cảnh báo dưới ngưỡng trong kỳ. Số dư kỳ vọng thấp nhất ở tuần ${f.week} (${displayDate(f.date)}).`;
     }
-    risk.append(node("h3", "Vì sao cần chú ý tuần " + f.week + "?"), node("p", message));
+    const riskHeading = f.trigger === "expected_shortfall" || f.trigger === "simulation_only"
+      ? "Cảnh báo tuần " + f.week : "Mốc số dư kỳ vọng thấp nhất";
+    risk.append(node("h3", riskHeading), node("p", message));
     const bridge = node("div", undefined, "cash-bridge");
     [["Số dư đầu", f.opening_balance], ["+ Thu đến tuần " + f.week, f.cumulative_cash_in],
       ["− Chi đến tuần " + f.week, f.cumulative_cash_out], ["= Số dư tuần " + f.week, f.balance]].forEach(([label, value]) => {
@@ -2550,7 +2555,7 @@
     risk.append(bridge);
     const customers = f.largest_unreceived_customers.filter(row => row.unreceived > 0.000001);
     if (customers.length) risk.append(node("p", "Dư nợ chưa dự thu đến hết tuần này: " + money(f.unreceived_ar) + ". Các khách có phần chưa thu lớn nhất: " +
-      customers.map(row => row.customer_id + " · " + money(row.unreceived)).join("; ") + ". Kế hoạch còn phụ thuộc vào việc thu các khoản này."));
+      customers.map(row => row.customer_id + " · " + money(row.unreceived)).join("; ") + "."));
     if (f.largest_scheduled_outflows.length) risk.append(node("p", "Các khoản chi đã biết lớn nhất đến tuần này: " +
       f.largest_scheduled_outflows.map(row => row.expense_id + " · " + displayDate(row.date) + " · " + money(row.amount)).join("; ") + "."));
     if (f.unknown_outflow_weeks.length) risk.append(node("p", "Chưa xác nhận đủ lịch chi ở tuần " + f.unknown_outflow_weeks.join(", ") + "; số dư có thể thiếu các khoản chi chưa nạp.", "warning-box"));
@@ -2569,11 +2574,20 @@
     const summary = node("p"), receipts = node("div"), expenses = node("div");
     const expenseDetails = node("details", undefined, "cash-details");
     expenseDetails.append(node("summary", "Lịch chi đã biết và số tiền sau kịch bản"), expenses);
+    const hasAmount = field => d.weeks.some(row => Boolean(row[field]));
+    const incomeSources = [["ar_in", "Công nợ mở"]];
+    if (plan.operating_included || hasAmount("cash_sale_in")) incomeSources.push(["cash_sale_in", "Bán thu ngay"]);
+    if (plan.new_credit_included || hasAmount("new_credit_in")) incomeSources.push(["new_credit_in", "Bán chịu mới"]);
+    if (d.inflows?.length || hasAmount("obligation_in")) incomeSources.push(["obligation_in", "Hoàn theo hồ sơ"]);
+    const expenseSources = [["scheduled_out", "Lịch chi đã biết"]];
+    if (plan.operating_included || hasAmount("variable_cost_topup")) expenseSources.push(["variable_cost_topup", "Chi biến đổi bổ sung"]);
     const renderRows = () => {
       const week = weekSelect.value === "all" ? null : Number(weekSelect.value);
       const selected = week ? [d.weeks[week - 1]] : d.weeks;
       const sum = field => selected.reduce((total, row) => total + (row[field] || 0), 0);
-      summary.textContent = "Dự thu " + money(sum("cash_in")) + " = công nợ mở " + money(sum("ar_in")) + " + bán thu ngay " + money(sum("cash_sale_in")) + " + bán chịu mới " + money(sum("new_credit_in")) + " + hoàn theo hồ sơ " + money(sum("obligation_in")) + ". Dự chi " + money(sum("cash_out")) + " = lịch đã biết " + money(sum("scheduled_out")) + " + chi biến đổi bổ sung " + money(sum("variable_cost_topup")) + ".";
+      const breakdown = sources => sources.map(([field, label]) => label + " " + money(sum(field))).join(" + ");
+      summary.textContent = "Dự thu " + money(sum("cash_in")) + " (" + breakdown(incomeSources) + "). Dự chi " +
+        money(sum("cash_out")) + " (" + breakdown(expenseSources) + ").";
       const byCustomer = group.value === "customers", query = search.value.trim().toLocaleLowerCase("vi");
       const source = (byCustomer ? d.customers : d.invoices).filter(row =>
         ((row.invoice_id || "") + " " + row.customer_id).toLocaleLowerCase("vi").includes(query));
@@ -2590,7 +2604,7 @@
     };
     weekSelect.value = "all"; group.value = "invoices"; search.value = "";
     weekSelect.onchange = group.onchange = search.oninput = renderRows;
-    panel.append(filters, summary, receipts, node("p", "Số tiền là kỳ vọng phân bổ theo tuần, không phải cam kết thu hoặc xác suất tất toán 4 tuần. Thu hoạt động và hóa đơn chưa phát hành nằm ở nhóm riêng.", "muted"), expenseDetails);
+    panel.append(filters, summary, receipts, node("p", "Bảng hiển thị số tiền kỳ vọng thu từ công nợ đang mở tại ngày chốt.", "muted"), expenseDetails);
     renderRows();
     if (d.inflows?.length) {
       const refunds = node("details", undefined, "cash-details"), content = node("div");
@@ -2601,8 +2615,11 @@
     }
     const weekly = node("details", undefined, "cash-details"), weeklyScroll = node("div", undefined, "table-scroll");
     weekly.append(node("summary", "Đối chiếu thu, chi và thay đổi số dư từng tuần"), weeklyScroll);
-    weeklyScroll.append(cashDetailTable(["Tuần", "Số dư đầu tuần", "+ Công nợ mở", "+ Bán thu ngay", "+ Bán chịu mới", "+ Hoàn theo hồ sơ", "− Lịch chi", "− Chi biến đổi bổ sung", "Thay đổi số dư", "Số dư cuối tuần"],
-      d.weeks.map(w => [w.week, ...[w.opening_balance, w.ar_in, w.cash_sale_in, w.new_credit_in, w.obligation_in || 0, w.scheduled_out, w.variable_cost_topup, w.net_change, w.balance].map(money)])));
+    const components = [...incomeSources, ...expenseSources];
+    weeklyScroll.append(cashDetailTable(["Tuần", "Số dư đầu tuần",
+      ...incomeSources.map(([, label]) => "+ " + label), ...expenseSources.map(([, label]) => "− " + label),
+      "Thay đổi số dư", "Số dư cuối tuần"],
+      d.weeks.map(w => [w.week, ...[w.opening_balance, ...components.map(([field]) => w[field] || 0), w.net_change, w.balance].map(money)])));
     panel.append(weekly);
     panel.append(renderT10Evidence(plan), renderT10Scenarios(plan));
     const assumptions = node("details", undefined, "cash-details");
@@ -2758,6 +2775,10 @@
     charts.get(target.id)?.destroy();
     target.replaceChildren();
     const weeks = lastForecast.weeks;
+    const dates = weeks.map(w => Date.parse(w.date + "T00:00:00Z") / 1000);
+    const labelCount = Math.min(dates.length, Math.max(2, Math.floor((target.clientWidth - 80) / 75) + 1));
+    const dateTicks = labelCount <= 1 ? dates : Array.from({length: labelCount}, (_, index) =>
+      dates[Math.round(index * (dates.length - 1) / (labelCount - 1))]);
     const theme = getComputedStyle(target);
     const color = (token, fallback) => theme.getPropertyValue(token).trim() || fallback;
     const axisFont = "11px " + theme.fontFamily;
@@ -2818,6 +2839,7 @@
             ticks: { show: false },
             font: axisFont,
             space: 70,
+            splits: (_u, _axis, min, max) => dateTicks.filter(date => date >= min && date <= max),
             values: (_u, ticks) =>
               ticks.map((t) => displayDate(new Date(t * 1000).toISOString())),
           },
@@ -2834,7 +2856,7 @@
         cursor: { drag: { x: false, y: false } },
       },
       [
-        weeks.map((w) => Date.parse(w.date + "T00:00:00Z") / 1000),
+        dates,
         weeks.map((w) => w.balance),
         weeks.map((w) => w.low),
         weeks.map((w) => w.high),

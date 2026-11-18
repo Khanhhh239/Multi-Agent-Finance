@@ -511,6 +511,14 @@ def test_browser_cash_breakdown_filters_groups_and_compares_on_desktop_and_mobil
                 page = browser.new_page(viewport={"width": 1500, "height": 1000})
                 errors = []
                 page.on("pageerror", lambda error: errors.append(str(error)))
+                page.add_init_script(r"""
+                    window.forecastAxisDates = [];
+                    const drawText = CanvasRenderingContext2D.prototype.fillText;
+                    CanvasRenderingContext2D.prototype.fillText = function (text, ...args) {
+                        if (/^\d{2}-\d{2}-\d{2}$/.test(text)) window.forecastAxisDates.push(text);
+                        return drawText.call(this, text, ...args);
+                    };
+                """)
                 page.route("**/*", client_proxy(client))
                 page.goto("http://testserver/workspace#forecast")
                 playwright.expect(page.locator("#connection-state")).to_contain_text(
@@ -523,6 +531,18 @@ def test_browser_cash_breakdown_filters_groups_and_compares_on_desktop_and_mobil
                 playwright.expect(panel).to_contain_text("Vì sao dự kiến thu được tiền?")
                 playwright.expect(panel).to_contain_text("Nếu khách trả chậm hoặc dời khoản chi?")
                 playwright.expect(panel).to_contain_text("không giới hạn 30")
+                playwright.expect(panel).to_contain_text("Bảng hiển thị số tiền kỳ vọng thu từ công nợ đang mở tại ngày chốt.")
+                playwright.expect(panel.get_by_text("Bán chịu mới", exact=False)).to_have_count(0)
+                audit = page.locator("#collection-policy details")
+                assert audit.get_attribute("open") is None
+                audit.locator("summary").click()
+                playwright.expect(audit).to_contain_text("Điểm =")
+                expected_dates = {
+                    week["date"][8:10] + "-" + week["date"][5:7] + "-" + week["date"][2:4]
+                    for week in response.json()["weeks"]
+                }
+                page.wait_for_function("() => window.forecastAxisDates.length > 0")
+                assert set(page.evaluate("window.forecastAxisDates")) == expected_dates
                 contributions = panel.locator(".table-scroll").first
                 playwright.expect(contributions.locator("tbody tr")).to_have_count(3)
                 page.get_by_label("Nhóm đóng góp dự thu").select_option("customers")
