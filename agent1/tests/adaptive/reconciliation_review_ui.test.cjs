@@ -14,6 +14,9 @@ class Element {
   constructor(tag, text) { this.tag = tag; this.textContent = text || ""; this.children = []; this.value = ""; }
   append(...children) { this.children.push(...children); }
   replaceChildren(...children) { this.children = children; }
+  setAttribute() {}
+  showModal() { this.open = true; }
+  close() { this.open = false; }
 }
 function descendants(element, predicate) {
   return [...(predicate(element) ? [element] : []), ...element.children.flatMap(child => descendants(child, predicate))];
@@ -75,7 +78,8 @@ test("approving GOP sends only its bank ID and refreshes remaining proposals wit
     scope.renderReconciliationCases(next);
   };
   scope.renderReconciliationCases(current);
-  const form = descendants(target, element => element.tag === "form")[0];
+  descendants(target, element => element.textContent === "Mở đối soát")[0].onclick();
+  const form = descendants(scope.$("reconciliation-drawer"), element => element.tag === "form")[0];
   form.onsubmit({preventDefault(){}, submitter:{value:"accept"}});
   await scope.pendingAction;
   assert.deepEqual(calls.map(call => call.url), ["/reconciliation/accept", "/reconciliation/run"]);
@@ -84,7 +88,7 @@ test("approving GOP sends only its bank ID and refreshes remaining proposals wit
   assert.ok(notices[0].text.includes("Đã duyệt riêng DP-B-GOP"));
   assert.ok(!content(target).includes("DP-B-GOP"));
   assert.ok(content(target).includes("DP-B-MOTPHAN"));
-  assert.ok(descendants(target, element => element.tag === "button").some(button => button.value === "accept"));
+  assert.ok(descendants(target, element => element.tag === "button").some(button => button.textContent === "Mở đối soát"));
 });
 
 test("a refresh failure reports the saved decision and never resubmits acceptance", async () => {
@@ -153,7 +157,7 @@ test("outside-AR history cannot crowd actionable proposals out of the first 100 
   current.cases = [...outside, ...current.cases];
   scope.renderReconciliationCases(current);
   assert.ok(content(target).includes("DP-B-GOP"));
-  assert.equal(descendants(target, element => element.tag === "form").length, 1);
+  assert.equal(descendants(target, element => element.textContent === "Mở đối soát").length, 1);
   const group = descendants(target, element => element.id === "reconciliation-outside-ar")[0];
   assert.ok(!group.open);
   assert.ok(content(group).includes("625 giao dịch"));

@@ -105,13 +105,14 @@ test("ticket is removed from the address before authentication while portal cont
   assert.equal(cleanUrl.includes("synthetic-ticket"), false);
 });
 
-function redeem(ok) {
+function redeem(ok, fromPortal = false) {
   const nodes = new Map(), calls = [], notices = [];
   const submit = { disabled: false };
   const $ = id => { if (!nodes.has(id)) nodes.set(id, { disabled: false, querySelector: () => submit }); return nodes.get(id); };
   let openedDialog = false;
   const scope = {
     $, notice: (text, error) => notices.push([text, error]), connect: () => { openedDialog = true; },
+    showCompanySyncError: message => { if (fromPortal) notices.push([message, true]); return fromPortal; },
     connectWithKey: async (key, company) => calls.push(["authenticate", key, company]),
     fetch: async (url, options) => { calls.push(["redeem", url, options]); assert.equal(submit.disabled, true); return { ok, json: async () => ok ? { key: "synthetic-key", company: "TEST_A" } : { detail: "Ticket expired" } }; },
   };
@@ -132,11 +133,11 @@ test("Agent 1 redeems with a POST and authenticates the expected company", async
   assert.equal(r.openedDialog(), false);
 });
 
-test("expired ticket preserves the manual connection fallback", async () => {
-  const r = redeem(false);
+test("an expired Portal ticket shows recovery guidance without opening the key form", async () => {
+  const r = redeem(false, true);
   await r.scope.redeemPortalTicket("expired-ticket");
-  assert.equal(r.openedDialog(), true);
-  assert.equal(r.$("connect-error").textContent, "Ticket expired");
+  assert.equal(r.openedDialog(), false);
+  assert.deepEqual(r.notices.at(-1), ["Ticket expired", true]);
   assert.equal(r.submit.disabled, false);
   assert.equal(r.calls.length, 1);
 });
@@ -157,7 +158,7 @@ function sessionUI(embedded = false) {
   const calls = [], elements = new Map();
   const $ = id => { if (!elements.has(id)) elements.set(id, {value:"", close() { this.closed = true; }}); return elements.get(id); };
   const window = {}; window.parent = embedded ? {} : window;
-  const scope = {window, $, token:"", connected:false, notice() {},
+  const scope = {window, $, token:"", connected:false, expectedPortalCompany:null, notice() {}, showCompanySyncError:() => false,
     api:async (path, options) => { calls.push([path, options]); return {company:"TEST_A", role:"accountant"}; },
     refresh:async () => calls.push(["refresh"])};
   vm.createContext(scope);
@@ -203,6 +204,44 @@ test("an expired browser session does not fabricate a connected workspace", asyn
   assert.equal(ui.calls.length, 0);
 });
 
+test("moving from Agent 1 to shared intake leaves its current view intact", () => {
+  const link = "http://127.0.0.1:8800/#data";
+  const calls = [];
+  const scope = {portalPage: () => link, window: {top: {location: {}}}, switchView: view => calls.push(view)};
+  vm.createContext(scope);
+  vm.runInContext(section(agentSource, "  function openIntake(", '  document.querySelectorAll("[data-view]").forEach'), scope);
+  assert.equal(scope.openIntake(), true);
+  assert.equal(scope.window.top.location.href, link);
+  assert.deepEqual(calls, []);
+  scope.portalPage = () => null;
+  assert.equal(scope.openIntake(), false);
+  assert.deepEqual(calls, ["data"]);
+});
+
+test("a record shortcut selects its own menu item and URL", () => {
+  function button(view, table) {
+    return {dataset:{view, table}, classList:{toggle() {}},
+      setAttribute(name, value) { this[name] = value; }, removeAttribute(name) { delete this[name]; }};
+  }
+  const buttons = [button("records"), button("records", "bank"), button("records", "outflows")];
+  const kind = {value:"invoices", options:[{value:"bank"}, {value:"outflows"}]};
+  const location = {hash:"#overview"};
+  let resets = 0;
+  const scope = {Object, location, currentView:"overview", titles:{records:"Sổ dữ liệu"}, token:"", connected:false,
+    document:{querySelectorAll: selector => selector === ".view" ? [] : buttons},
+    $: id => id === "records-kind" ? kind : {}, history:{pushState(_state, _title, url) { location.hash = url; }},
+    drawVisibleChart() {}, updateRecordLinks() {}, resetRecordFilters() { resets++; }, window:{scrollTo() {}}};
+  vm.createContext(scope);
+  vm.runInContext(section(agentSource, "  function switchView(", "  function openIntake("), scope);
+  for (const [index, table] of [[1, "bank"], [2, "outflows"]]) {
+    scope.switchView("records/" + table);
+    assert.equal(location.hash, "#records/" + table);
+    assert.equal(kind.value, table);
+    assert.deepEqual(buttons.map(item => item["aria-current"]), buttons.map((_, i) => i === index ? "page" : undefined));
+  }
+  assert.equal(resets, 2);
+});
+
 test("manual allocation sends VND text without rounding through a JavaScript number", async () => {
   const nodes = new Map(), calls = [];
   const $ = id => {
@@ -244,14 +283,18 @@ test("T9 review requires an identified accountant", () => {
 
 function reviewUI(stale = false) {
   const calls = [], target = { children: [], replaceChildren() { this.children = []; }, append(...items) { this.children.push(...items); } };
+  const drawer = { open:false, replaceChildren:target.replaceChildren, append:target.append,
+    showModal() { this.open = true; }, close() { this.open = false; } };
   function node(tag, text) {
-    return { tag, textContent: text, value: "", children: [], append(...items) { this.children.push(...items); }, focus() { this.focused = true; } };
+    return { tag, textContent: text, value: "", children: [], setAttribute() {},
+      append(...items) { this.children.push(...items); }, focus() { this.focused = true; } };
   }
   const proposal = { id: "proposal-1", stale, cases: [{ bank_id: "B1", status: "auto", date: "2026-03-01", account: "A",
     available_minor: 100, reason: "unique_transport", reason_text: "Cần đối chiếu chứng từ", memo: "<script>unsafe</script>",
     allocations: [{ invoice_id: "I1", amount_minor: 100 }], candidates: [] }] };
   let pending;
-  const scope = { node, $: () => target, crypto: { randomUUID: () => "test-key" },
+  const scope = { node, $: id => id === "reconciliation-drawer" ? drawer : target, crypto: { randomUUID: () => "test-key" },
+    currentView:"reconciliation",
     reconciliationState: { proposal }, exactMoney: String, displayDate: String, reconciliationReviewer: () => "Accountant",
     action: work => { pending = work(); }, api: async (url, options) => { calls.push([url, JSON.parse(options.body)]); },
     refresh: async () => {}, loadReconciliation: async () => {}, notice() {} };
@@ -260,7 +303,9 @@ function reviewUI(stale = false) {
   vm.runInContext(section(agentSource, "  function renderReconciliationCases(", "  function renderReconciliationHistory("), scope);
   scope.renderReconciliationCases(proposal);
   const all = object => [object, ...(object.children || []).flatMap(all)];
-  return { calls, proposal, scope, elements: all(target), readElements: () => all(target), run: async (form, kind) => {
+  const openReview = () => all(target).find(x => x.tag === "button" && x.textContent === "Mở đối soát")?.onclick();
+  openReview();
+  return { calls, proposal, scope, openReview, elements: all(drawer), readElements: () => all(drawer), run: async (form, kind) => {
     form.onsubmit({ preventDefault() {}, submitter: { value: kind } });
     await pending;
   } };
@@ -299,6 +344,7 @@ test("T9 candidate selection works outside the first page of pending bank rows",
   ui.proposal.cases[0].candidates = [{ invoice_id: "I1", customer_id: "C1", score: 1,
     amount_open_minor: "100000000000000000", evidence: ["Khớp số hóa đơn"] }];
   ui.scope.renderReconciliationCases(ui.proposal);
+  ui.openReview();
   ui.readElements().find(x => x.tag === "button" && x.textContent === "Chọn để ghép thủ công").onclick();
   assert.equal(selected[0].bank_id, "B1");
   assert.equal(selected[1], "I1");
