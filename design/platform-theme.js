@@ -30,7 +30,7 @@
       input.dataset.sonFile = '1';
       const cs = getComputedStyle(input);
       const box = input.getBoundingClientRect();
-      if (input.hidden || cs.display === 'none' || /visually-hidden|sr-only|hidden/.test(input.className) || (box.width < 4 && box.height < 4)) return;
+      if (input.hidden || cs.display === 'none' || /visually-hidden|sr-only|hidden/.test(input.className) || (box.width < 4 && box.height < 4)) { if (document.documentElement.dataset.agent === '2') delete input.dataset.sonFile; return; }
       const wrap = document.createElement('span');
       const btn = document.createElement('button');
       const name = document.createElement('span');
@@ -67,6 +67,24 @@
 
   function decorate() {
     enhanceFiles();
+    if (document.documentElement.dataset.agent === '2') {
+      document.querySelectorAll('input[type=file][data-son-file]').forEach(input => {
+        const button = input.previousElementSibling?.querySelector('.son-file-btn');
+        if (button && button.disabled !== input.disabled) button.disabled = input.disabled;
+      });
+      const messages = [
+        ['Chưa cấu hình luồng bundle.', 'Doanh nghiệp chưa có bộ thiết lập phân tích.'],
+        ['Liên hệ người vận hành.', 'Nhờ người quản lý thiết lập trước khi chạy.'],
+        ['Chưa có bundle', 'Chưa có bộ thiết lập phân tích'],
+        ['Snapshot không', 'Bản dữ liệu không'],
+      ];
+      document.querySelectorAll('#notice, #bw-notice, #ws-notice, #bt-notice').forEach(box => {
+        if (box.children.length) return;
+        const old = box.textContent;
+        const next = messages.reduce((v, [a,b]) => v.split(a).join(b), old);
+        if (next !== old) box.textContent = next;
+      });
+    }
     toolTabs();
     const root = document.documentElement;
     const agent = root.dataset.agent;
@@ -137,7 +155,71 @@
     } catch (e) { /* decoration only */ }
   };
 
+  // Agent 2 presentation shell. Existing controls, IDs, permissions and routes stay intact.
+  function setupAgent2Shell() {
+    if (document.documentElement.dataset.agent !== '2' || document.body.classList.contains('a2-product')) return;
+    const header = document.querySelector('body > header');
+    const main = document.querySelector('body > main');
+    if (!header || !main) return;
+    document.body.classList.add('a2-product');
+    header.classList.add('a2-header');
+    main.classList.add('a2-main');
+    if (!main.id) main.id = 'a2-main';
+    const skip = document.createElement('a');
+    skip.className = 'a2-skip'; skip.href = '#' + main.id; skip.textContent = 'Đến nội dung chính';
+    document.body.prepend(skip);
+    const brand = header.querySelector('.brand');
+    if (brand) { brand.textContent = 'Agent 2 · Kiểm tra giao dịch'; brand.classList.add('a2-brand'); }
+    let nav = header.querySelector('nav');
+    if (!nav) { nav = document.createElement('nav'); header.append(nav); }
+    nav.classList.add('a2-nav'); nav.id = 'a2-navigation'; nav.setAttribute('aria-label', 'Chức năng Agent 2');
+    for (const link of [...header.querySelectorAll(':scope > a:not(.brand)')]) nav.append(link);
+    const page = a => new URL(a.href, location.href).pathname.replace(/\/+$/, '').split('/').pop();
+    const here = location.pathname.replace(/\/+$/, '').split('/').pop() ||
+      (document.getElementById('bw-company') ? 'pipeline-workspace' : 'data-import');
+    const primary = [['pipeline-workspace', 'Việc cần kiểm tra'], ['data-import', 'Nhập dữ liệu'], ['workspace', 'Kết quả và công việc']];
+    const extras = { 'status': 'T\u00ecnh tr\u1ea1ng h\u1ec7 th\u1ed1ng', 'encrypted-analysis': 'Phân tích bảo mật', 'label-verification': 'Xác nhận kết quả giao dịch',
+      'batch-training': 'Hướng dẫn hệ thống học', 'pipeline-releases': 'Quản lý phiên bản phân tích', 'analysis-settings': 'Thiết lập phân tích' };
+    if (extras[here] && ![...nav.querySelectorAll('a[href]')].some(a => page(a) === here)) { const self = document.createElement('a'); self.href = here + location.hash; self.textContent = extras[here]; nav.append(self); }
+    let previous = null;
+    for (const [route, label] of primary) {
+      let link = [...nav.querySelectorAll('a[href]')].find(a => page(a) === route);
+      if (!link) { link = document.createElement('a'); link.href = route + location.hash; }
+      link.textContent = label;
+      if (previous) previous.after(link); else nav.prepend(link);
+      previous = link;
+    }
+    for (const link of nav.querySelectorAll('a[href]')) {
+      if (extras[page(link)]) link.textContent = extras[page(link)];
+      if (page(link) === here) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    }
+    const menu = document.createElement('button'); menu.type = 'button'; menu.className = 'a2-menu';
+    menu.textContent = '☰'; menu.setAttribute('aria-controls', nav.id); menu.setAttribute('aria-label', 'Mở danh sách chức năng');
+    header.prepend(menu);
+    const shade = document.createElement('button'); shade.type = 'button'; shade.className = 'a2-nav-shade';
+    shade.setAttribute('aria-label', 'Đóng danh sách chức năng'); document.body.append(shade);
+    function setMenu(open) {
+      document.body.classList.toggle('a2-nav-open', open);
+      menu.setAttribute('aria-expanded', String(open));
+      menu.setAttribute('aria-label', open ? 'Đóng danh sách chức năng' : 'Mở danh sách chức năng');
+      nav.inert = !document.documentElement.classList.contains('in-platform') && innerWidth < 900 && !open;
+    }
+    menu.addEventListener('click', () => setMenu(!document.body.classList.contains('a2-nav-open')));
+    shade.addEventListener('click', () => { setMenu(false); menu.focus(); });
+    nav.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.body.classList.contains('a2-nav-open')) { setMenu(false); menu.focus(); } });
+    window.addEventListener('resize', () => setMenu(false)); setMenu(false);
+    const theme = document.createElement('button'); theme.type = 'button'; theme.className = 'a2-theme';
+    theme.setAttribute('aria-label', 'Đổi giao diện sáng hoặc tối'); theme.title = 'Đổi giao diện sáng hoặc tối';
+    function appearance(dark) { document.body.classList.toggle('a2-dark', dark); theme.textContent = dark ? '☀' : '☾'; theme.setAttribute('aria-pressed', String(dark)); }
+    try { appearance(localStorage.getItem('agent2.appearance') === 'dark'); } catch (_) { appearance(false); }
+    theme.addEventListener('click', () => { const dark = !document.body.classList.contains('a2-dark'); appearance(dark); try { localStorage.setItem('agent2.appearance', dark ? 'dark' : 'light'); } catch (_) { /* preference only */ } });
+    header.append(theme);
+  }
+
   function start() {
+    setupAgent2Shell();
     setupPortalReturn();
     decorate();
     let pending = false;
@@ -146,7 +228,9 @@
       pending = true;
       requestAnimationFrame(() => { pending = false; decorate(); });
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+    const watch = { childList: true, subtree: true };
+    if (document.documentElement.dataset.agent === '2') Object.assign(watch, { attributes: true, attributeFilter: ['hidden', 'disabled'] });
+    observer.observe(document.body, watch);
     document.addEventListener('click', () => requestAnimationFrame(decorate));
     window.addEventListener('hashchange', decorate);
   }
