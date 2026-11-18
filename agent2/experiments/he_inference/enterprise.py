@@ -3,13 +3,22 @@ import time
 import uuid
 
 import numpy as np
-import tenseal as ts
+try:
+    import tenseal as ts
+except ImportError:
+    ts = None
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from sme_fraud.unsupervised_statistics import ShrunkMahalanobis
-from .protocol import (ABS_TOLERANCE, BINDING, CONTRACT, MAX_CIPHER, MAX_NORMALIZED,
+from .protocol import (ABS_TOLERANCE, BINDING, CONTRACT, HEUnavailable, MAX_CIPHER, MAX_NORMALIZED,
                        MAX_ROWS, MAX_WEIGHT, PAIRS, PROFILE, VERSION, b64, canonical,
                        identifier, public_hex, require, sha, sign, unb64, verify)
+
+
+def _require_tenseal():
+    if ts is None:
+        raise HEUnavailable('tenseal_unavailable')
+    return ts
 
 
 def numeric_pair(values, maximum_rows=None):
@@ -58,11 +67,12 @@ class EnterpriseSession:
         return instance
 
     def _initialize_crypto(self, tenant, company):
+        _ts = _require_tenseal()
         precision = self.model.cov_.precision_
         self.weights = [float(precision[i, j]) * (1 if i == j else 2) for i, j in PAIRS]
         require(all(np.isfinite(w) and abs(w) <= MAX_WEIGHT for w in self.weights), 'MODEL_OUT_OF_DOMAIN')
-        self.context = ts.context(ts.SCHEME_TYPE.CKKS, poly_modulus_degree=8192,
-                                  coeff_mod_bit_sizes=[60, 40, 40, 60], n_threads=1)
+        self.context = _ts.context(_ts.SCHEME_TYPE.CKKS, poly_modulus_degree=8192,
+                                   coeff_mod_bit_sizes=[60, 40, 40, 60], n_threads=1)
         self.context.global_scale = 2 ** 40
         self.signer = Ed25519PrivateKey.generate()
         self.public_context = self.context.serialize(save_secret_key=False, save_galois_keys=False)

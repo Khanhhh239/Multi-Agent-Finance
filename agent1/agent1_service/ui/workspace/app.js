@@ -811,6 +811,50 @@
     $(invoiceId ? "allocate-note" : "allocate-invoice").focus();
     $("manual-allocation").scrollIntoView({behavior: "smooth", block: "center"});
   }
+  function focusCorrectionRecord(record) {
+    const input = (record.kind === "bank" && record.inputs.cash_flow_class)
+      || Object.values(record.inputs)[0];
+    if (input) {
+      input.scrollIntoView({behavior:"smooth", block:"center"});
+      input.focus({preventScroll:true});
+    }
+  }
+  function openBankCorrection(bankId) {
+    const form = $("source-correction-load"), panel = form.closest("details");
+    $("source-correction-kind").value = "bank";
+    $("source-correction-id").value = bankId;
+    panel.open = true;
+    panel.scrollIntoView({behavior:"smooth", block:"start"});
+    const existing = sourceCorrection.records.find(record => record.kind === "bank" && record.identifier === bankId);
+    if (existing) {
+      focusCorrectionRecord(existing);
+      return;
+    }
+    form.requestSubmit();
+  }
+  let reconciliationProposalRefresh = null;
+  function findReconciliationProposals() {
+    if (!reconciliationProposalRefresh) {
+      reconciliationProposalRefresh = (async () => {
+        $("reconciliation-status").textContent = "Đang tìm lại đề xuất theo công nợ hiện tại. Chưa duyệt thêm khoản thu nào.";
+        await api("/reconciliation/run", {method:"POST", body:"{}"});
+        await loadReconciliation();
+      })().finally(() => { reconciliationProposalRefresh = null; });
+    }
+    return reconciliationProposalRefresh;
+  }
+  async function refreshReconciliationAfterChange(message) {
+    notice(message);
+    try {
+      await refresh();
+      await loadReconciliation();
+      if (reconciliationState.pending_count && reconciliationState.proposal?.stale)
+        await findReconciliationProposals();
+    } catch (error) {
+      notice(message + " Chưa tải lại được đề xuất: " + (error.message || "Mất kết nối") +
+        ". Bấm Tải lại đề xuất; không cần gửi lại thao tác vừa lưu.", true);
+    }
+  }
   async function loadReconciliation() {
       const r = await api("/reconciliation");
       reconciliationState = r;
@@ -833,11 +877,7 @@
         choose.type = "button";
         choose.onclick = () => chooseAllocation(item);
         const edit = node("button", "Sửa dòng sao kê", "link-button"); edit.type = "button";
-        edit.onclick = () => {
-          $("source-correction-kind").value = "bank"; $("source-correction-id").value = item.bank_id;
-          $("source-correction-load").closest("details").open = true;
-          $("source-correction-load").requestSubmit();
-        };
+        edit.onclick = () => openBankCorrection(item.bank_id);
         const actions = node("div", undefined, "pending-actions");
         actions.append(choose, edit); cell.append(actions); tr.append(cell);
       });
@@ -853,12 +893,25 @@
   }
   function renderReconciliationCases(proposal) {
     const target = $("reconciliation-cases"); target.replaceChildren();
+    if (proposal?.stale) {
+      const panel = node("article", undefined, "reconciliation-case"), reload = node("button", "Tải lại đề xuất cho các khoản còn chờ", "button primary");
+      reload.type = "button";
+      reload.onclick = () => action(findReconciliationProposals, reload);
+      panel.append(node("h4", "Cần cập nhật đề xuất"),
+        node("p", "Công nợ đã thay đổi sau thao tác vừa lưu. Đề xuất cũ ngừng sử dụng; các khoản khác vẫn cần được xử lý riêng."),
+        node("p", "Hiện còn " + reconciliationState.pending_count + " khoản chờ · " + exactMoney(reconciliationState.unallocated) + " VND."), reload);
+      target.append(panel);
+      return;
+    }
     if (!proposal?.cases.length) {
       target.append(node("p", proposal ? "Không có khoản thu cần đối soát thêm." : "Chưa có đề xuất. Bấm Tìm đề xuất đối soát.", "muted"));
       return;
     }
-    if (proposal.cases.length > 100) target.append(node("p", "Đang hiện 100 / " + proposal.cases.length + " giao dịch. Sau khi xử lý, chạy lại để xem các khoản tiếp theo."));
-    for (const item of proposal.cases.slice(0, 100)) {
+    const outsideAr = proposal.cases.filter(item => item.reason === "non_ar_bank_movement");
+    const reviewCases = proposal.cases.filter(item => item.reason !== "non_ar_bank_movement");
+    if (!reviewCases.length) target.append(node("p", "Không còn đề xuất ghép công nợ cần xử lý.", "muted"));
+    if (reviewCases.length > 100) target.append(node("p", "Đang hiện 100 / " + reviewCases.length + " khoản đối soát. Sau khi xử lý, chạy lại để xem các khoản tiếp theo."));
+    for (const item of reviewCases.slice(0, 100)) {
       const card = node("article", undefined, "reconciliation-case");
       const nonAr = item.reason === "non_ar_bank_movement";
       const status = nonAr ? "Ngoài công nợ" : {auto:"Có đề xuất", review:"Cần kiểm tra", unmatched:"Chưa ghép", rejected:"Đã từ chối"}[item.status] || item.status;
@@ -923,14 +976,47 @@
             await api("/reconciliation/" + kind, {method:"POST", body:JSON.stringify({
               idempotency_key:keys[kind], proposal_id:proposal.id, bank_id:item.bank_id, reviewed_by:actor, note:note.value.trim(),
             })});
-            await refresh(); await loadReconciliation();
-            notice(kind === "accept" ? "Đã duyệt và cập nhật công nợ. Tìm đề xuất mới để xử lý khoản tiếp theo." : "Đã lưu lý do từ chối. Khoản thu vẫn chưa phân bổ.");
+            await refreshReconciliationAfterChange(kind === "accept"
+              ? "Đã duyệt riêng " + item.bank_id + " và cập nhật công nợ."
+              : "Đã lưu lý do từ chối cho " + item.bank_id + ". Khoản thu vẫn chưa phân bổ.");
           }, event.submitter);
         };
         card.append(form);
       }
       target.append(card);
     }
+    if (outsideAr.length) target.append(renderOutsideAr(outsideAr));
+  }
+  function renderOutsideAr(items) {
+    const details = node("details", undefined, "reconciliation-case"), body = node("div");
+    details.id = "reconciliation-outside-ar";
+    details.append(node("summary", "Ngoài công nợ · " + items.length + " giao dịch · Mở để tra cứu"),
+      node("p", "Các dòng này được phân loại ngoài công nợ khách hàng, không cần duyệt ghép hóa đơn. Chúng vẫn được giữ trong sao kê và dữ liệu dòng tiền. Nếu phân loại sai, sửa dòng sao kê theo bằng chứng.", "helper"), body);
+    const sorted = [...items].sort((a, b) => b.date.localeCompare(a.date) || a.bank_id.localeCompare(b.bank_id));
+    const pageSize = 25;
+    let page = 0, loaded = false;
+    function renderPage() {
+      loaded = true;
+      const start = page * pageSize, grid = node("table"), head = node("thead"), header = node("tr"), rows = node("tbody");
+      for (const label of ["Mã dòng sao kê", "Ngày", "Tài khoản", "Số tiền (VND)", "Nội dung", "Thao tác"]) header.append(node("th", label));
+      head.append(header); grid.append(head, rows);
+      for (const item of sorted.slice(start, start + pageSize)) {
+        const row = node("tr"), actions = node("td"), edit = node("button", "Sửa dòng sao kê", "link-button");
+        for (const value of [item.bank_id, displayDate(item.date), item.account, exactMoney(item.available_minor), item.memo || "Chưa có nội dung chuyển khoản"]) row.append(node("td", value));
+        edit.type = "button"; edit.onclick = () => openBankCorrection(item.bank_id);
+        actions.append(edit); row.append(actions); rows.append(row);
+      }
+      const scroll = node("div", undefined, "table-scroll"), controls = node("div", undefined, "reconciliation-actions");
+      const previous = node("button", "Trang trước", "button"), next = node("button", "Trang sau", "button");
+      previous.type = next.type = "button";
+      previous.disabled = page === 0; next.disabled = start + pageSize >= sorted.length;
+      previous.onclick = () => { page--; renderPage(); };
+      next.onclick = () => { page++; renderPage(); };
+      controls.append(previous, node("span", "Dòng " + (start + 1) + "–" + Math.min(start + pageSize, sorted.length) + " / " + sorted.length + " · mới nhất trước"), next);
+      scroll.append(grid); body.replaceChildren(controls, scroll);
+    }
+    details.ontoggle = () => { if (details.open && !loaded) renderPage(); };
+    return details;
   }
   function renderReconciliationHistory(history, count) {
     const target = $("reconciliation-history"); target.replaceChildren();
@@ -959,8 +1045,7 @@
             if (!note.value.trim()) { note.focus(); throw new Error("Nhập lý do đảo phân bổ."); }
             await api("/reconciliation/reverse", {method:"POST", body:JSON.stringify({idempotency_key:key,
               decision_id:item.decision_id, reviewed_by:reconciliationReviewer(), note:note.value.trim()})});
-            await refresh(); await loadReconciliation();
-            notice("Đã đảo phân bổ. Công nợ và số tiền chưa phân bổ đã cập nhật.");
+            await refreshReconciliationAfterChange("Đã đảo phân bổ. Công nợ và số tiền chưa phân bổ đã cập nhật.");
           }, event.submitter);
         };
         row.append(form);
@@ -969,10 +1054,7 @@
     }
   }
   $("load-pending").onclick = () => action(loadReconciliation, $("load-pending"));
-  $("run-reconciliation").onclick = () => action(async () => {
-    await api("/reconciliation/run", {method:"POST", body:"{}"});
-    await loadReconciliation();
-  }, $("run-reconciliation"));
+  $("run-reconciliation").onclick = () => action(findReconciliationProposals, $("run-reconciliation"));
   $("allocate-form").onsubmit = (e) => {
     e.preventDefault();
     action(async () => {
@@ -991,9 +1073,7 @@
           note: $("allocate-note").value.trim(),
         }),
       });
-      await refresh();
-      await loadReconciliation();
-      notice("Đã ghi phân bổ và cập nhật số còn phải thu.");
+      await refreshReconciliationAfterChange("Đã ghi phân bổ và cập nhật số còn phải thu.");
     }, e.submitter);
   };
   function invalidateSourceCorrection() {
@@ -1048,6 +1128,7 @@
       const kind = $("source-correction-kind").value, identifier = $("source-correction-id").value.trim();
       if (sourceCorrection.records.length >= 20) throw new Error("Mỗi lần sửa tối đa 20 bản ghi.");
       if (sourceCorrection.records.some(r => r.kind === kind && r.identifier === identifier)) throw new Error("Bản ghi này đã có trong form sửa.");
+      $("source-correction-status").textContent = "Đang tải bản ghi " + identifier + " để sửa…";
       const record = await api("/corrections/record?kind=" + encodeURIComponent(kind) + "&identifier=" + encodeURIComponent(identifier));
       if (sourceCorrection.base_hash && sourceCorrection.base_hash !== record.base_hash)
         throw new Error("Dữ liệu đã đổi. Làm trống form sửa rồi tải lại các bản ghi.");
@@ -1066,6 +1147,7 @@
       fieldset.append(grid, remove); $("source-correction-editors").append(fieldset); sourceCorrection.records.push(record);
       if (!$("source-correction-reviewer").value) $("source-correction-reviewer").value = $("reconciliation-reviewer").value;
       $("source-correction-status").textContent = "Đã tải " + sourceCorrection.records.length + " bản ghi. Nhập giá trị đúng rồi xem trước ảnh hưởng.";
+      focusCorrectionRecord(record);
     }, event.submitter);
   };
   $("source-correction-reviewer").oninput = $("source-correction-note").oninput = invalidateSourceCorrection;

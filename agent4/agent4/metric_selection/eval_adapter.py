@@ -117,7 +117,9 @@ async def _predict_online(
         query_context=request["query_context"],
     )
     retrieval = (
-        await asyncio.to_thread(retrieve) if provider.config.provider == "ollama" else retrieve()
+        await asyncio.to_thread(retrieve)
+        if provider.config.provider in ("ollama", "openai")
+        else retrieve()
     )
     if retrieval["status"] == "retrieval_unavailable":
         return {

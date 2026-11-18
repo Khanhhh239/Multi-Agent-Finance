@@ -26,6 +26,10 @@ def find_venv_python(agent_name: str) -> str:
             candidate = base / rel
             if candidate.exists():
                 return str(candidate)
+    if agent_name == 'agent4':
+        for fallback in (Path.home() / '.venvs/maf-agent4/Scripts/python.exe', Path.home() / '.venvs/maf-agent4/bin/python'):
+            if fallback.exists():
+                return str(fallback)
     return sys.executable
 
 
@@ -65,8 +69,8 @@ def ensure_dataset(mode: str) -> Path:
             print(f'[data] Đang sinh bộ dữ liệu Minh Phát MPX10 đầy đủ tại {target.relative_to(ROOT)} ...', flush=True)
             env = dict(os.environ, PYTHONUTF8='1')
             subprocess.run([py4, str(ROOT / 'data_pipeline/enterprise.py'), '--out', str(target)], cwd=ROOT, env=env, check=True)
-            subprocess.run([py4, str(ROOT / 'data_pipeline/validate.py'), str(target)], cwd=ROOT, env=env, check=True)
             subprocess.run([py4, str(ROOT / 'data_pipeline/export.py'), str(target)], cwd=ROOT, env=env, check=True)
+            subprocess.run([py4, str(ROOT / 'data_pipeline/validate.py'), str(target)], cwd=ROOT, env=env, check=True)
     else:
         if (full_dir / 'warehouse.duckdb').is_file():
             target = full_dir
@@ -85,8 +89,8 @@ def ensure_dataset(mode: str) -> Path:
                 print(f'[data] Sinh nhanh kho dữ liệu mẫu (--smoke) tại {target.relative_to(ROOT)} ...', flush=True)
                 env = dict(os.environ, PYTHONUTF8='1')
                 subprocess.run([py4, str(ROOT / 'data_pipeline/enterprise.py'), '--smoke', '--out', str(target)], cwd=ROOT, env=env, check=True)
-                subprocess.run([py4, str(ROOT / 'data_pipeline/validate.py'), str(target)], cwd=ROOT, env=env, check=True)
                 subprocess.run([py4, str(ROOT / 'data_pipeline/export.py'), str(target)], cwd=ROOT, env=env, check=True)
+                subprocess.run([py4, str(ROOT / 'data_pipeline/validate.py'), str(target)], cwd=ROOT, env=env, check=True)
         elif (smoke_dir / 'warehouse.duckdb').is_file():
             target = smoke_dir
         else:
@@ -94,8 +98,8 @@ def ensure_dataset(mode: str) -> Path:
             print(f'[data] Sinh nhanh kho dữ liệu mẫu (--smoke) tại {target.relative_to(ROOT)} ...', flush=True)
             env = dict(os.environ, PYTHONUTF8='1')
             subprocess.run([py4, str(ROOT / 'data_pipeline/enterprise.py'), '--smoke', '--out', str(target)], cwd=ROOT, env=env, check=True)
-            subprocess.run([py4, str(ROOT / 'data_pipeline/validate.py'), str(target)], cwd=ROOT, env=env, check=True)
             subprocess.run([py4, str(ROOT / 'data_pipeline/export.py'), str(target)], cwd=ROOT, env=env, check=True)
+            subprocess.run([py4, str(ROOT / 'data_pipeline/validate.py'), str(target)], cwd=ROOT, env=env, check=True)
 
     # Ensure demo intake bundle exists from whichever dataset has exported inputs
     demo_bundle = WORK / 'mpx10-demo-input-full'
@@ -298,20 +302,31 @@ with tempfile.TemporaryDirectory() as tmp:
     header = 'Bearer ' + tok
     bindings = []
 
+    mpx10_bundle_candidates = [
+        ROOT / 'portal/workspace/datasets/enterprise-x10-v3-full/inputs/a2/canonical_bundle.json',
+        ROOT / 'portal/workspace/datasets/enterprise-x10-v3-candidate02/inputs/a2/canonical_bundle.json',
+        ROOT / 'portal/workspace/datasets/enterprise-x10-v3-smoke/inputs/a2/canonical_bundle.json',
+        ROOT / 'portal/workspace/mpx10-demo-input-full/03_agent2_bundle.json',
+    ]
+    mpx10_bundle_file = next((p for p in mpx10_bundle_candidates if p.is_file()), None)
+
     for cid, ml_method, scale in target_companies:
-        src = canonical_source()
-        for table, rows in src.items():
-            if isinstance(rows, list):
-                for row in rows:
-                    row['company_id'] = cid
-                    if table == 'companies':
-                        row['record_id'] = cid
-                        row['name'] = f'Doanh nghiệp mô phỏng {cid}'
-                    if 'amount_vnd' in row:
-                        row['amount_vnd'] = int(row['amount_vnd']) * scale
-                    for line in row.get('accounting_lines', []):
-                        line['debit_vnd'] = int(line['debit_vnd']) * scale
-                        line['credit_vnd'] = int(line['credit_vnd']) * scale
+        if cid == 'MPX10' and mpx10_bundle_file is not None:
+            src = json.loads(mpx10_bundle_file.read_text('utf-8'))
+        else:
+            src = canonical_source()
+            for table, rows in src.items():
+                if isinstance(rows, list):
+                    for row in rows:
+                        row['company_id'] = cid
+                        if table == 'companies':
+                            row['record_id'] = cid
+                            row['name'] = f'Doanh nghiệp mô phỏng {cid}'
+                        if 'amount_vnd' in row:
+                            row['amount_vnd'] = int(row['amount_vnd']) * scale
+                        for line in row.get('accounting_lines', []):
+                            line['debit_vnd'] = int(line['debit_vnd']) * scale
+                            line['credit_vnd'] = int(line['credit_vnd']) * scale
         scope = auth.authorize(header, cid)
         check = lambda c=cid: auth.authorize(header, c)
         key_base = 'runtime-bootstrap-' + cid.lower()

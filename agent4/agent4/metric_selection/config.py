@@ -123,6 +123,7 @@ class EvaluationConfig(StrictModel):
 class RecoveryConfig(StrictModel):
     enable_empty_candidate_fallback: bool = False
     degraded_lexical_fallback: bool = False
+    llm_lexical_fallback: bool = False
     enable_candidate_expansion: bool = False
 
 
@@ -159,7 +160,8 @@ _ENV_OVERRIDES = {
 
 
 def load_config(path: str | Path | None = None) -> MetricSelectionConfig:
-    config_path = Path(path) if path else DEFAULT_CONFIG_PATH
+    env_path = os.getenv("AGENT4_SELECTION_CONFIG") or os.getenv("AGENT4_METRIC_SELECTION_CONFIG")
+    config_path = Path(path) if path else (Path(env_path) if env_path else DEFAULT_CONFIG_PATH)
     try:
         raw = yaml.safe_load(config_path.read_text(encoding="utf-8")) or {}
         if isinstance(raw, dict):

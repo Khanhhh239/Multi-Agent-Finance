@@ -14,7 +14,11 @@ import pandas as pd
 from agent1.adaptive.data import fingerprint
 from agent1.adaptive.bundle_metadata import serving_manifest
 from agent1.adaptive.methods import train
-from agent1.adaptive.payment_coverage import attest
+from agent1.adaptive.payment_coverage import (
+    attest,
+    attest_reconciled_books,
+    check_reconciled_completeness,
+)
 from agent1.adaptive.t1_catalog import GlobalCatalog
 from agent1.adaptive.t1_data import (
     score_audit_snapshot,
@@ -34,9 +38,76 @@ def now():
 
 
 def _challenger_metadata(record):
-    fields = ("id", "origin", "status", "baseline_version", "challenger_version",
-              "created_at", "evaluated_asof", "evaluation", "policy")
+    fields = (
+        "id",
+        "origin",
+        "status",
+        "baseline_version",
+        "challenger_version",
+        "created_at",
+        "evaluated_asof",
+        "evaluation",
+        "policy",
+    )
     return {k: record[k] for k in fields if k in record}
+
+
+def confirm_reconciled_books(
+    store,
+    firm,
+    reconciled_through,
+    *,
+    start_date=None,
+    periods=None,
+    policy=None,
+    strict=False,
+):
+    """Confirm reconciled historical ledger periods honestly with known_at = today.
+
+    Validates period continuity and resolved 91-day cohort counts, persists the
+    honest confirmation record to `company_payment_coverage` (unless `strict=True`
+    and missing periods/cohorts exist), and returns Vietnamese diagnostics.
+    """
+    policy = policy or UpdatePolicy()
+    confirmation = now().isoformat()
+    today_iso = str(now().date())
+    if str(pd.Timestamp(reconciled_through).date()) > today_iso:
+        raise ValueError("Không xác nhận đối soát sổ sách cho ngày tương lai")
+    with store.lock:
+        data = current_data(store, firm)
+        diagnostics = check_reconciled_completeness(
+            data,
+            reconciled_through,
+            confirmation_date=today_iso,
+            start_date=start_date,
+            periods=periods,
+            minimum_fit_snapshots=policy.minimum_fit_snapshots,
+            minimum_fit_invoices=policy.minimum_fit_invoices,
+            minimum_validation_snapshots=policy.minimum_validation_snapshots,
+            minimum_audit_snapshots=policy.minimum_audit_snapshots,
+            validation_offsets_days=policy.validation_offsets_days,
+            stride_days=policy.stride_days,
+            lookback_days=policy.lookback_days,
+        )
+        if strict and not diagnostics["ok"]:
+            raise ValueError(diagnostics["summary_vi"])
+        if diagnostics["missing_periods"]:
+            return dict(diagnostics, recorded=False, coverage=None)
+        coverage = dict(
+            id=uuid.uuid4().hex,
+            created_at=confirmation,
+            **attest_reconciled_books(
+                data,
+                reconciled_through,
+                today_iso,
+                start_date=diagnostics["start_date"],
+                periods=periods,
+            ),
+        )
+        with store.connection:
+            store.connection.execute("BEGIN IMMEDIATE")
+            store.put(firm, "company_payment_coverage", [coverage])
+    return dict(diagnostics, recorded=True, coverage=coverage)
 
 
 def update_status(store, firm):
@@ -44,8 +115,11 @@ def update_status(store, firm):
     today = pd.Timestamp(now().date())
     with store.lock:
         state = store.one(firm, "company_t1_update_state", "current")
-        runs = sorted(store.get(firm, "company_t1_update_runs"),
-                      key=lambda r: r.get("created_at", ""), reverse=True)[:100]
+        runs = sorted(
+            store.get(firm, "company_t1_update_runs"),
+            key=lambda r: r.get("created_at", ""),
+            reverse=True,
+        )[:100]
         ids = set(store.ids(firm, "company_t1_challengers"))
         indexed = {r["id"]: r for r in store.get(firm, "company_t1_challenger_index")}
         # Backfill old stores once, one snapshot at a time. Subsequent polls
@@ -56,7 +130,9 @@ def update_status(store, firm):
                 # A CLI cycle may have committed since the first read. Never
                 # overwrite its newer status with a stale migration snapshot.
                 ids = set(store.ids(firm, "company_t1_challengers"))
-                indexed = {r["id"]: r for r in store.get(firm, "company_t1_challenger_index")}
+                indexed = {
+                    r["id"]: r for r in store.get(firm, "company_t1_challenger_index")
+                }
                 missing = []
                 for identifier in sorted(ids - indexed.keys()):
                     record = store.one(firm, "company_t1_challengers", identifier)
@@ -70,23 +146,41 @@ def update_status(store, firm):
     challengers = []
     for record in records:
         row = dict(record)
-        maturity = pd.Timestamp(record["origin"]) + pd.Timedelta(days=91) if record.get("origin") else None
+        maturity = (
+            pd.Timestamp(record["origin"]) + pd.Timedelta(days=91)
+            if record.get("origin")
+            else None
+        )
         evaluation = record.get("evaluation") or {}
         status = record["status"]
         if status == "pending":
-            status = ("origin_not_recorded" if maturity is None
-                      else "waiting_for_91_days" if today < maturity
-                      else "insufficient_eligible_outcomes"
-                      if evaluation.get("status") == "insufficient_eligible_outcomes"
-                      else "ready_for_audit")
-        row.update(matures_on=str(maturity.date()) if maturity is not None else None, display_status=status,
-                   eligible_rows=evaluation.get("rows", evaluation.get("n")),
-                   minimum_rows=(record.get("policy") or {}).get("minimum_audit_snapshots", 20))
+            status = (
+                "origin_not_recorded"
+                if maturity is None
+                else "waiting_for_91_days"
+                if today < maturity
+                else "insufficient_eligible_outcomes"
+                if evaluation.get("status") == "insufficient_eligible_outcomes"
+                else "ready_for_audit"
+            )
+        row.update(
+            matures_on=str(maturity.date()) if maturity is not None else None,
+            display_status=status,
+            eligible_rows=evaluation.get("rows", evaluation.get("n")),
+            minimum_rows=(record.get("policy") or {}).get(
+                "minimum_audit_snapshots", 20
+            ),
+        )
         challengers.append(row)
     challengers.sort(key=lambda r: (r.get("origin", ""), r["id"]), reverse=True)
-    return dict(state=state, runs=runs, challengers=challengers,
-                pending_count=sum(r["status"] == "pending" for r in challengers),
-                asof=str(today.date()), due=not state or today >= pd.Timestamp(state["next_due"]))
+    return dict(
+        state=state,
+        runs=runs,
+        challengers=challengers,
+        pending_count=sum(r["status"] == "pending" for r in challengers),
+        asof=str(today.date()),
+        due=not state or today >= pd.Timestamp(state["next_due"]),
+    )
 
 
 def encode(bundle):
@@ -115,8 +209,10 @@ def current_data(store, firm):
     if not record:
         raise ValueError("Không tìm thấy snapshot dữ liệu của doanh nghiệp")
     data = dict(record["data"])
-    data["payment_coverage"] = [*data.get("payment_coverage", []),
-                                *store.get(firm, "company_payment_coverage")]
+    data["payment_coverage"] = [
+        *data.get("payment_coverage", []),
+        *store.get(firm, "company_payment_coverage"),
+    ]
     return data
 
 
@@ -125,21 +221,41 @@ def with_promotion_evidence(store, firm, row):
     if row.get("promotion_audit"):
         return row
     identifier = row.get("prospective_audit_id")
-    if not identifier and row.get("promotion_status") == "accepted_prospective_audit" and row.get("id"):
+    if (
+        not identifier
+        and row.get("promotion_status") == "accepted_prospective_audit"
+        and row.get("id")
+    ):
         decision = store.one(firm, "company_t1_update_runs", row["id"]) or {}
         identifier = decision.get("prospective_audit_id")
     if not identifier:
         return row
-    challenger = (store.one(firm, "company_t1_challenger_index", identifier)
-                  or store.one(firm, "company_t1_challengers", identifier) or {})
+    challenger = (
+        store.one(firm, "company_t1_challenger_index", identifier)
+        or store.one(firm, "company_t1_challengers", identifier)
+        or {}
+    )
     evaluation = challenger.get("evaluation") or {}
-    if (challenger.get("status") != "accepted" or evaluation.get("status") != "scored"
-            or challenger.get("challenger_version") != row.get("t1_version")):
+    if (
+        challenger.get("status") != "accepted"
+        or evaluation.get("status") != "scored"
+        or challenger.get("challenger_version") != row.get("t1_version")
+    ):
         return row
-    audit = dict(evaluation, accepted=True, kind="prospective", challenger_id=identifier,
-                 evaluated_asof=challenger["evaluated_asof"], serving_version=row["t1_version"])
-    result = dict(row, promotion_audit=audit, prospective_audit_id=identifier,
-                  candidate_update_audit=row.get("candidate_update_audit", row.get("audit")))
+    audit = dict(
+        evaluation,
+        accepted=True,
+        kind="prospective",
+        challenger_id=identifier,
+        evaluated_asof=challenger["evaluated_asof"],
+        serving_version=row["t1_version"],
+    )
+    result = dict(
+        row,
+        promotion_audit=audit,
+        prospective_audit_id=identifier,
+        candidate_update_audit=row.get("candidate_update_audit", row.get("audit")),
+    )
     if row.get("promotion_status") == "accepted_prospective_audit":
         result["audit"] = deepcopy(audit)
     return result
@@ -159,7 +275,9 @@ def load_active(store, firm, cutoff, *, catalog=None):
         if not weight:
             raise ValueError("Thiếu artifact của phiên bản đang phục vụ")
         bundle = decode(weight)
-    result = with_promotion_evidence(store, firm, valid_incumbent(bundle, cutoff, catalog))
+    result = with_promotion_evidence(
+        store, firm, valid_incumbent(bundle, cutoff, catalog)
+    )
     return result, record
 
 
@@ -211,6 +329,8 @@ def run_cycle(
     cutoff,
     *,
     payments_complete,
+    reconciled_through=None,
+    confirmed_periods=None,
     policy=None,
     catalog=None,
     force=False,
@@ -223,13 +343,15 @@ def run_cycle(
     origin. A later job scores one FIFO challenger after 91 days, against the
     same still-active incumbent. Retrospective snapshots cannot promote.
     """
-    if not payments_complete:
+    if not payments_complete and reconciled_through is None:
         raise ValueError("Cần xác nhận dữ liệu thanh toán đầy đủ đến ngày cập nhật")
     policy, catalog = policy or UpdatePolicy(), catalog or GlobalCatalog()
     T = pd.Timestamp(cutoff).normalize()
     created = now().isoformat()
     if T.date() > now().date():
         raise ValueError("Không tạo chu kỳ T1 cho ngày tương lai")
+    if reconciled_through is not None and pd.Timestamp(reconciled_through).date() > T.date():
+        raise ValueError("Ngày chốt đối soát lịch sử không được vượt quá ngày chu kỳ cập nhật")
     state = store.one(firm, "company_t1_update_state", "current") or {}
     if state and T < pd.Timestamp(state["last_cycle_asof"]):
         raise ValueError("Ngày cập nhật T1 không được đi lùi")
@@ -241,7 +363,32 @@ def run_cycle(
         }
     data = current_data(store, firm)
     snapshot_hash = fingerprint(visible_data(data, T))
-    coverage = dict(id=uuid.uuid4().hex, **attest(data, T, created))
+    if reconciled_through is not None and confirmed_periods is not None:
+        completeness = check_reconciled_completeness(
+            data,
+            reconciled_through,
+            confirmation_date=created[:10],
+            periods=confirmed_periods,
+            minimum_fit_snapshots=policy.minimum_fit_snapshots,
+            minimum_fit_invoices=policy.minimum_fit_invoices,
+            minimum_validation_snapshots=policy.minimum_validation_snapshots,
+            minimum_audit_snapshots=policy.minimum_audit_snapshots,
+            validation_offsets_days=policy.validation_offsets_days,
+            stride_days=policy.stride_days,
+            lookback_days=policy.lookback_days,
+        )
+        if completeness["missing_periods"]:
+            raise ValueError(completeness["summary_vi"])
+    coverage = dict(
+        id=uuid.uuid4().hex,
+        **attest(
+            data,
+            T,
+            created,
+            reconciled_through=reconciled_through,
+            periods=confirmed_periods,
+        ),
+    )
     data = dict(data, payment_coverage=[*data.get("payment_coverage", []), coverage])
     active_pointer = store.one(firm, "company_model_active", "active")
     baseline, _ = load_active(store, firm, T, catalog=catalog)
@@ -268,8 +415,15 @@ def run_cycle(
         )
         if result["status"] != "scored":
             audit_updates.append(
-                dict(record, status="pending" if result["status"] == "insufficient_eligible_outcomes"
-                     else result["status"], evaluation=result)
+                dict(
+                    record,
+                    status=(
+                        "pending"
+                        if result["status"] == "insufficient_eligible_outcomes"
+                        else result["status"]
+                    ),
+                    evaluation=result,
+                )
             )
             continue
         accepted = improves(result["challenger"], result["baseline"], locked_policy)
@@ -295,20 +449,29 @@ def run_cycle(
             baseline["asof"] = str(T.date())
             baseline["promotion_status"] = "accepted_prospective_audit"
             baseline["promotion_audit"] = dict(
-                result, accepted=True, kind="prospective", challenger_id=record["id"],
-                evaluated_asof=str(T.date()), serving_version=record["challenger_version"],
+                result,
+                accepted=True,
+                kind="prospective",
+                challenger_id=record["id"],
+                evaluated_asof=str(T.date()),
+                serving_version=record["challenger_version"],
             )
             baseline["audit"] = deepcopy(baseline["promotion_audit"])
             baseline["serving_manifest"] = serving_manifest(
-                baseline, data_version=baseline["serving_manifest"]["data_version"],
-                policy=baseline["serving_manifest"]["policy"], ready_on=str(T.date()),
+                baseline,
+                data_version=baseline["serving_manifest"]["data_version"],
+                policy=baseline["serving_manifest"]["policy"],
+                ready_on=str(T.date()),
             )
             baseline_version = baseline["t1_version"]
             promoted_live = record["id"]
         break  # Audit one preselected challenger; never search by audit outcomes.
     progress("T1: tạo ứng viên trên cửa sổ trượt gần nhất")
     fit = trainer or train
-    bundle = fit(data, T, progress, incumbent=baseline, catalog=catalog, policy=policy)
+    fit_kwargs = dict(incumbent=baseline, catalog=catalog, policy=policy)
+    if trainer is None and reconciled_through is not None:
+        fit_kwargs["reconciled_through"] = reconciled_through
+    bundle = fit(data, T, progress, **fit_kwargs)
     proposal = bundle.pop("proposal", None)
     bundle["candidate_update_audit"] = deepcopy(bundle["audit"])
     if promoted_live:
@@ -319,7 +482,9 @@ def run_cycle(
         bundle["audit"] = deepcopy(bundle["promotion_audit"])
     elif bundle["promotion_status"] == "accepted_historical_audit":
         bundle["promotion_audit"] = dict(
-            bundle["audit"], kind="historical", evaluated_asof=str(T.date()),
+            bundle["audit"],
+            kind="historical",
+            evaluated_asof=str(T.date()),
             serving_version=bundle["t1_version"],
         )
         bundle["prospective_audit_id"] = None
@@ -344,16 +509,24 @@ def run_cycle(
             "through": str(T.date()),
         },
     }
+    if reconciled_through is not None:
+        bundle["update_period"]["reconciled_through"] = str(
+            pd.Timestamp(reconciled_through).date()
+        )
     manifest = bundle["serving_manifest"]
     bundle["serving_manifest"] = serving_manifest(
-        bundle, data_version=manifest["data_version"], policy=manifest["policy"],
+        bundle,
+        data_version=manifest["data_version"],
+        policy=manifest["policy"],
         ready_on=manifest["ready_on"],
     )
     encrypted_report = bool(save_training_report(bundle, data, identifier))
     challenger_row = challenger_weight = None
     if (
         proposal
-        and (proposal["historical_audit_passed"] or proposal.get("prospective_eligible"))
+        and (
+            proposal["historical_audit_passed"] or proposal.get("prospective_eligible")
+        )
         and proposal["version"] != bundle["t1_version"]
     ):
         shadow = deepcopy(bundle)
@@ -371,7 +544,9 @@ def run_cycle(
             promotion_status="pending_prospective_audit",
         )
         shadow["serving_manifest"] = serving_manifest(
-            shadow, data_version=bundle.get("dataset_hash"), policy=bundle["policy"],
+            shadow,
+            data_version=bundle.get("dataset_hash"),
+            policy=bundle["policy"],
             ready_on=str(T.date()),
         )
         snapshot = snapshot_for_audit(

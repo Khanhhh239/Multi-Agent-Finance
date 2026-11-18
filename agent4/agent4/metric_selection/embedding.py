@@ -95,7 +95,9 @@ class EmbeddingProvider:
     ) -> dict[str, Any]:
         enforce_exact_keys(request, required_keys=_REQUEST_KEYS, stage=_EMBEDDING_STAGE)
         if input_type not in ("query", "document"):
-            raise ContractError("invalid_request", _EMBEDDING_STAGE, "Invalid embedding input type.")
+            raise ContractError(
+                "invalid_request", _EMBEDDING_STAGE, "Invalid embedding input type."
+            )
         if request["model_id"] != self.model_id or request["model_version"] != self.model_version:
             raise ContractError("invalid_request", _EMBEDDING_STAGE, "Embedding model mismatch.")
         if request["normalize"] is not self.normalize:

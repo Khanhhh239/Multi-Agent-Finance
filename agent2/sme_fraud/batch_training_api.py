@@ -23,9 +23,16 @@ from .rule_snapshot_features import SOURCE_CONTRACT, build_from_rule_snapshot
 from .snapshot_features import build_from_snapshot, utc
 from .snapshots import APPLICATION_ID as SNAPSHOT_APP_ID
 from .validation_api import RequestFailure, respond_failure
+from experiments.he_training import (
+    EXECUTION_MODE_NATIVE,
+    EXECUTION_MODE_VERIFIED,
+    PROFILE_VERSION,
+    resolve_quantization_profile,
+)
 from experiments.he_training.batch_enterprise import BatchEnterprise
 from experiments.he_training.batch_plan import VERSION as PLAN_VERSION, prepare_batch_plan
 from experiments.he_training.protocol import TrainingError, sha, strict_json, verify
+from experiments.he_training.runtime import ENV_HE_AGGREGATOR_URL, resolve_he_runtime
 from experiments.he_training.snapshot_adapter import (
     COLUMNS as ADAPTER_COLUMNS,
     MAPPING_VERSION,
@@ -107,6 +114,7 @@ TRAINING_ERRORS = {
     "TIMESTAMP_INVALID": (400, "Thời điểm chốt as_of không hợp lệ.", "Nhập thời điểm as_of theo định dạng ISO-8601 có múi giờ (ví dụ 2026-03-31T00:00:00Z)."),
     "FEATURE_DOMAIN": (400, "Vector feature nằm ngoài miền {0, 1} hoặc vượt quá giới hạn 1..64 dòng mỗi lần gọi.", "Kiểm tra nguồn dữ liệu hoặc chia lô tối đa 64 dòng mỗi lần chấm."),
     "SHADOW_ROW_IDS_INVALID": (400, "Danh sách mã giao dịch row_ids không hợp lệ.", "Đảm bảo mỗi dòng có record_id hợp lệ."),
+    "LEGACY_MODEL_PROFILE_MISMATCH": (409, "Model hoặc bản mã thuộc profile lượng tử hóa cũ (legacy_s2_v1) không khớp với fhe_sgd_s16_v2.", "Không giải mã model scale=2 bằng scale=16; chọn đúng build/model cùng profile_version."),
 }
 
 
@@ -237,8 +245,8 @@ class BatchTrainingManager:
         build=None,
         worker_url=None,
         worker_verify_key=None,
-        linux_python="/home/sang/.local/share/agent2/he4/bin/python",
-        distro="Debian",
+        linux_python=None,
+        distro=None,
         runtime_config_path=None,
         node_factory=None,
         clock=None,
@@ -360,10 +368,10 @@ class BatchTrainingManager:
             label_store=label_store,
             enterprise_root=cfg.get("enterprise_root"),
             build=cfg.get("build"),
-            worker_url=cfg.get("worker_url"),
+            worker_url=cfg.get("worker_url") or os.environ.get(ENV_HE_AGGREGATOR_URL, "").strip() or None,
             worker_verify_key=cfg.get("worker_verify_key"),
-            linux_python=cfg.get("linux_python", "/home/sang/.local/share/agent2/he4/bin/python"),
-            distro=cfg.get("distro", "Debian"),
+            linux_python=cfg.get("linux_python"),
+            distro=cfg.get("distro"),
             runtime_config_path=config_path,
         )
 
@@ -378,7 +386,7 @@ class BatchTrainingManager:
     def _runtime_settings(self):
         build = self.build
         root = self.enterprise_root
-        url = self.worker_url
+        url = self.worker_url or os.environ.get(ENV_HE_AGGREGATOR_URL, "").strip() or None
         pub = self.worker_verify_key
         py = self.linux_python
         distro = self.distro
@@ -910,6 +918,12 @@ class BatchTrainingManager:
                 fingerprint=source_fc.get("fingerprint") or model_mapping.get("source_contract_fingerprint"),
                 feature_count=source_fc.get("feature_count"),
             ),
+            profile_version=candidate.get("profile_version", PROFILE_VERSION),
+            training_execution_mode=candidate.get("execution_mode", EXECUTION_MODE_VERIFIED),
+            native_fhe_executed=bool(candidate.get("execution_mode") == EXECUTION_MODE_NATIVE),
+            weight_scale=candidate.get("weight_scale", 16),
+            bias_scale=candidate.get("bias_scale", 16),
+            probability_scale=candidate.get("probability_scale", 16),
             weights_code=candidate.get("weights_code"),
             coefficients=candidate.get("coefficients"),
             intercept=candidate.get("intercept"),
@@ -956,8 +970,25 @@ class BatchTrainingManager:
             with closing(self._connect()) as c:
                 approved_models = self._list_approved_models(c, scope, tenant, company, recheck)
                 shadow_runs = self._list_saved_shadow_runs(c, tenant, company)
+        rt_info = resolve_he_runtime(
+            python=self.linux_python,
+            distro=self.distro,
+            aggregator_url=self.worker_url,
+        )
+        prof_meta = resolve_quantization_profile(PROFILE_VERSION)
         res = dict(
             version=PORTAL_VERSION,
+            profile_version=PROFILE_VERSION,
+            execution_mode=rt_info["execution_mode"],
+            fhe_runtime=dict(
+                profile_version=PROFILE_VERSION,
+                weight_scale=prof_meta["weight_scale"],
+                bias_scale=prof_meta["bias_scale"],
+                probability_scale=prof_meta["probability_scale"],
+                execution_mode=rt_info["execution_mode"],
+                native_fhe_available=rt_info["native_fhe_available"],
+                aggregator_url=rt_info["aggregator_url"],
+            ),
             tenant_id=tenant,
             company_id=company,
             actor_id=actor,
@@ -2013,6 +2044,9 @@ class BatchTrainingManager:
                     "Chấm điểm tại node doanh nghiệp bằng model ứng viên đã giải mã và được phê duyệt shadow "
                     "(không gửi dữ liệu giao dịch bản rõ lên worker đám mây; không phải suy luận HE trên cloud)."
                 ),
+                profile_version=model_info.get("profile_version", PROFILE_VERSION),
+                training_execution_mode=model_info.get("training_execution_mode", EXECUTION_MODE_VERIFIED),
+                native_fhe_training_executed=bool(model_info.get("native_fhe_executed", False)),
                 cloud_he_inference_performed=False,
                 uncalibrated=True,
                 uncalibrated_label=(

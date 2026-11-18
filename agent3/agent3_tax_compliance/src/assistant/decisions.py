@@ -150,7 +150,8 @@ def validate(body, report, ws):
             from decimal import Decimal
             if len(keys) != 1 or any(t not in txns or txns[t]['direction'] != 'OUT' for t in tids):
                 raise HTTPException(422, 'Chứng từ thanh toán phải là giao dịch chi của doanh nghiệp.')
-            if abs(sum(Decimal(str(txns[t]['amount'])) for t in tids) - Decimal(str(invs[keys[0]]['gross']))) > 1:
+            diff = sum(Decimal(str(txns[t]['amount'])) for t in tids) - Decimal(str(invs[keys[0]]['gross']))
+            if not (-Decimal(1) <= diff <= Decimal(55_000)):
                 raise HTTPException(422, 'Số tiền giao dịch không khớp hóa đơn.')
             used = {t for m in report['matches'] if m['status'] == 'MATCHED' and keys[0] not in m['invoice_keys'] for t in m['txn_ids']}
             if used & set(tids):

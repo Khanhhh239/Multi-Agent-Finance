@@ -94,6 +94,13 @@ ACCOUNTS: list[tuple[str, str, str, str, str | None]] = [
     ("811", "Chi phí khác", "EXPENSE", "D", None),
     ("821", "Chi phí thuế thu nhập doanh nghiệp", "EXPENSE", "D", None),
     ("911", "Xác định kết quả kinh doanh", "CLOSING", "C", None),
+    (
+        "4219",
+        "Điều chỉnh chi phí không được trừ & GTGT không khấu trừ (Chỉ tiêu B4 - 03/TNDN)",
+        "EQUITY",
+        "C",
+        "421",
+    ),
 ]
 POSTABLE_PARENTS = {
     "131",

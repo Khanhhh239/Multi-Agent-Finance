@@ -2,6 +2,7 @@
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+from functools import lru_cache
 import calendar
 import hashlib
 import json
@@ -27,11 +28,19 @@ def digest(value):
                                      separators=(',', ':')).encode()).hexdigest()
 
 
-def timestamp(value):
+@lru_cache(maxsize=65536)
+def _parsed_vn(value):
     parsed = datetime.fromisoformat(value)
     if parsed.utcoffset() is None:
         raise ValueError('Dynamic thresholds require timezone-aware timestamps')
-    return parsed.astimezone(VN).isoformat()
+    vn_dt = parsed.astimezone(VN)
+    return vn_dt, vn_dt.isoformat()
+
+
+def timestamp(value):
+    if not isinstance(value, str):
+        raise TypeError('Timestamp must be an ISO string')
+    return _parsed_vn(value)[1]
 
 
 def integer(value, field, minimum=0):

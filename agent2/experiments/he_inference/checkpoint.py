@@ -1,10 +1,20 @@
 """Strict JSON checkpoint; serialized private HE context only inside node AEAD."""
 from copy import deepcopy
-from importlib.metadata import version
+from importlib.metadata import PackageNotFoundError, version as _pkg_version
 import hashlib
 from pathlib import Path
 
-import tenseal as ts
+try:
+    import tenseal as ts
+except ImportError:  # pragma: no cover - optional wheel on Windows Python 3.12+
+    ts = None
+
+
+def version(pkg_name: str) -> str:
+    try:
+        return _pkg_version(pkg_name)
+    except PackageNotFoundError:
+        return getattr(ts, '__version__', '0.3.18')
 
 from .enterprise import EnterpriseSession
 from .protocol import BINDING, HEUnavailable, b64, unb64, MAX_CONTEXT, require
@@ -14,7 +24,14 @@ import experiments.he_inference.registry_export as registry
 VERSION = 'he-private-checkpoint/1.0.0'
 
 
+def _require_tenseal():
+    if ts is None:
+        raise HEUnavailable('tenseal_unavailable')
+    return ts
+
+
 def freeze(export):
+    _require_tenseal()
     export._check()
     require(export.ready, 'HE_EXPORT_UNAVAILABLE')
     return dict(version=VERSION, tenseal_version=version('tenseal'),
@@ -26,6 +43,7 @@ def freeze(export):
 
 
 def restore(value, check, scope, worker_verify_key):
+    ts_mod = _require_tenseal()
     check()
     require(isinstance(value, dict) and set(value) == {'version', 'tenseal_version', 'rows', 'receipt', 'positions',
                 'packet', 'policy', 'worker_verify_key', 'private_context'}, 'CHECKPOINT_INVALID')
@@ -38,7 +56,7 @@ def restore(value, check, scope, worker_verify_key):
     require(p['model_id'] == receipt['opaque_model_id']
             and all(p[k] == value['policy'][k] for k in BINDING), 'CHECKPOINT_BINDING')
     session = EnterpriseSession.__new__(EnterpriseSession)
-    session.context = ts.context_from(unb64(value['private_context'], MAX_CONTEXT), n_threads=1)
+    session.context = ts_mod.context_from(unb64(value['private_context'], MAX_CONTEXT), n_threads=1)
     require(session.context.has_secret_key(), 'CHECKPOINT_KEY_MISSING')
     session.binding = {k: p[k] for k in BINDING}
     session.pending = {p['nonce']: dict(request=deepcopy(packet), worker_verify_key=worker_verify_key)}

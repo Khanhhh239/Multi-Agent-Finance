@@ -10,9 +10,33 @@ class PromiseReliability:
 
     def fit(self, promises, T):
         T = pd.Timestamp(T)
-        p = promises[(promises.made_date <= T) & (promises.promised_date + pd.Timedelta(days=3) <= T)].copy()
-        if 'resolved_date' in p:
-            p = p[p.resolved_date.notna() & (p.resolved_date <= T)]
+        if promises.empty:
+            self.priors = {}
+            self.stats = pd.DataFrame()
+            self.asof = T
+            return self
+        made = pd.to_datetime(promises.made_date)
+        promised = pd.to_datetime(promises.promised_date)
+        mask = (made <= T) & (promised + pd.Timedelta(days=3) <= T)
+        if 'known_at' in promises:
+            known = pd.to_datetime(promises.known_at)
+            mask &= known.isna() | (known <= T)
+        if 'resolved_date' in promises:
+            resolved = pd.to_datetime(promises.resolved_date)
+            mask &= resolved.notna() & (resolved <= T)
+        p = promises[mask].copy()
+        p['made_date'] = pd.to_datetime(p['made_date'])
+        p['promised_date'] = pd.to_datetime(p['promised_date'])
+        if 'actual_paid_date' in p:
+            paid_dt = pd.to_datetime(p['actual_paid_date'])
+            if 'paid_known_at' in p:
+                paid_known = pd.to_datetime(p['paid_known_at'])
+                paid_dt = paid_dt.where(paid_known.isna() | (paid_known <= T), pd.NaT)
+            # Strict anti-leakage: payments occurring after T are unobserved at T.
+            future_paid = paid_dt > T
+            if future_paid.any() and 'kept' in p:
+                p.loc[future_paid, 'kept'] = False
+            p['actual_paid_date'] = paid_dt.where(paid_dt <= T, pd.NaT)
         p = p[p.kept.notna()]
         if 'firm_id' not in p:
             p['firm_id'] = '__all__'
@@ -27,8 +51,12 @@ class PromiseReliability:
             rate = self.priors.get(g.firm_id.iloc[0], 4 / 6)
             w, s = g.weight.sum(), g.success.sum()
             rel = (s + self.strength * rate) / (w + self.strength)
-            # Độ trễ thực chỉ từ các bản ghi đã xác minh, nếu có.
-            delay = (g.actual_paid_date - g.promised_date).dt.days if 'actual_paid_date' in g else pd.Series(dtype=float)
+            # Độ trễ thực chỉ từ các khoản thực trả đã phát sinh <= T.
+            if 'actual_paid_date' in g:
+                valid_paid = g.actual_paid_date.dropna()
+                delay = (valid_paid - g.loc[valid_paid.index, 'promised_date']).dt.days
+            else:
+                delay = pd.Series(dtype=float)
             sensitivity = np.nan
             if 'amount' in g and g.amount.nunique() >= 3:
                 sensitivity = g.amount.rank().corr(g.kept.astype(float), method='spearman')

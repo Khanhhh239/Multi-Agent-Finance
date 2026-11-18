@@ -11,6 +11,7 @@ import re
 
 import networkx as nx
 
+from .identity import MISSING_CONTACTS, normalize_mst, normalize_vn_phone_digits
 from .temporal_evidence import bank_identity, bank_token
 
 
@@ -19,6 +20,7 @@ VN = timezone(timedelta(hours=7))
 FIELDS = ('bank_account', 'phone', 'address', 'tax_code')
 NODE_TYPES = ('employee', 'vendor', *FIELDS)
 TABLES = ('employees', 'vendors', 'entity_links')
+_PHONE_RE = re.compile(r'[0-9]{9,15}\Z')
 
 
 def digest(value):
@@ -39,20 +41,26 @@ def node_id(company, kind, value):
     return f'{kind}:{digest([company, kind, value])[:24]}'
 
 
+def _is_missing_placeholder(token):
+    return not token or token in MISSING_CONTACTS
+
+
 def normalized(value, kind, bank_code=''):
     if not isinstance(value, str):
         raise ValueError(f'Graph {kind} must be a string; preserve leading zeros')
     token = bank_token(value)
+    if _is_missing_placeholder(token):
+        return ''
     if kind == 'bank_account':
+        if not token.startswith('BANKSYN') and not any(c.isdigit() for c in token):
+            return ''
         return bank_identity(value, bank_code)
     if kind == 'phone':
-        if token.startswith('0084') and len(token) == 13:
-            token = '0'+token[4:]
-        elif token.startswith('84') and len(token) == 11:
-            token = '0'+token[2:]
-        return token if token.startswith('PHONESYN') or re.fullmatch(r'[0-9]{9,15}', token) else ''
+        if token.isdigit():
+            token = normalize_vn_phone_digits(token)
+        return token if token and (token.startswith('PHONESYN') or _PHONE_RE.fullmatch(token)) else ''
     if kind == 'tax_code':
-        return token if token.startswith('MSTSYN') or re.fullmatch(r'(?:[0-9]{10}|[0-9]{13})', token) else ''
+        return normalize_mst(token)
     return token
 
 
@@ -146,16 +154,19 @@ class EntityGraph:
                 continue
             if not isinstance(value, str) or not isinstance(bank, str):
                 raise ValueError('Graph identity fields must be strings')
+            raw_token = bank_token(value)
+            if _is_missing_placeholder(raw_token):
+                continue
             token = normalized(value, field, bank)
             verified = bool(token)
             # Unknown-bank accounts remain visible as separate unconfirmed
             # nodes. Equal digits alone must never merge different institutions.
             if not token:
-                token = digest([kind, identity, field, bank_token(value)])
+                token = digest([kind, identity, field, raw_token])
                 self.gaps.append(dict(entity_type=kind, entity_id=identity, field=field,
                                       reason='missing_bank_code' if field == 'bank_account' else 'unrecognized_identity_format'))
             target = node_id(company_id, field, token)
-            label = (f'{bank_token(bank)} · {bank_token(value)}' if field == 'bank_account' and bank else bank_token(value))
+            label = (f'{bank_token(bank)} · {raw_token}' if field == 'bank_account' and bank else raw_token)
             self.graph.add_node(target, type=field, label=label, value=token,
                                 matchable=verified, identity_scope='company')
             actor = self.entities[(kind, identity)]
@@ -205,7 +216,7 @@ class EntityGraph:
         result = []
         for attribute, data in sorted(self.graph.nodes(data=True)):
             field = data['type']
-            if field not in FIELDS or not data.get('matchable'):
+            if field not in FIELDS or not data.get('matchable') or _is_missing_placeholder(data.get('value', '')):
                 continue
             neighbors = sorted(self.graph.neighbors(attribute))
             vendors = [n for n in neighbors if self.graph.nodes[n]['type'] == 'vendor']
@@ -213,7 +224,7 @@ class EntityGraph:
             types = []
             if vendors and employees and field in {'bank_account', 'phone'}:
                 types.append('vendor_employee_shared_'+field)
-            if len(vendors) >= 2 and field in {'bank_account', 'address'}:
+            if len(vendors) >= 2 and (field in {'bank_account', 'address'} or (field == 'phone' and not employees)):
                 types.append('vendors_shared_'+field)
             for finding_type in types:
                 actors = sorted(vendors+employees) if finding_type.startswith('vendor_employee') else vendors

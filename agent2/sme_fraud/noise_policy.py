@@ -1,6 +1,8 @@
 """Rule-only domain evidence and scoring roles; no truth/partition input."""
 from collections import defaultdict, deque
+from datetime import timedelta, timezone
 from difflib import SequenceMatcher
+from functools import lru_cache
 import hashlib
 import json
 import math
@@ -11,16 +13,56 @@ import unicodedata
 from .generate import parse
 from .temporal_evidence import approved_evidence, employee_at
 
+VN = timezone(timedelta(hours=7))
+_PROTECTED_VN_CO_RE = re.compile(r'\bCƠ\b')
+_NON_ALNUM_RE = re.compile(r'[^A-Z0-9]')
+_SYNTHETIC_PARTNER_RE = re.compile(r'CONGTYMOPHONGDOITAC\d+\Z')
+_DOTTED_INITIALS_RE = re.compile(r'\b(?:[A-Z]\.){2,}[A-Z]?\b')
+_ENGLISH_CO_SUFFIX_RE = re.compile(
+    r'(?:(?:&|AND)\s+CO[.,]*\s*\Z|\bCO[.,]*\s+(?:LTD|LIMITED|INC|INCORPORATED|LLC|CORP|CORPORATION)\b|\bCO\.,\s*|\bCO\.\s*\Z)'
+)
+_LEGAL_ENTITY_RE = re.compile(
+    r'\b(?:'
+    r'CONG\s+TY|CTY|DOANH\s+NGHIEP\s+TU\s+NHAN|DNTN|HO\s+KINH\s+DOANH|HKD|'
+    r'TRACH\s+NHIEM\s+HUU\s+HAN|TNHH|MOT\s+THANH\s+VIEN|MTV|1TV|'
+    r'CO\s+PHAN|CP|CHI\s+NHANH|'
+    r'JSC|LLC|LTD|LIMITED|INC|INCORPORATED|CORPORATION|CORP|COMPANY'
+    r')\b'
+)
+_VN_BOILERPLATE_RE = re.compile(
+    r'\b(?:'
+    r'THUONG\s+MAI|DICH\s+VU|XAY\s+DUNG|SAN\s+XUAT|XUAT\s+NHAP\s+KHAU|'
+    r'DAU\s+TU|PHAT\s+TRIEN|TONG\s+HOP|TU\s+VAN|VAN\s+TAI|KY\s+THUAT|'
+    r'TM\s*DV|SX\s*TM|TM|DV|XD|SX|XNK'
+    r')\b'
+)
+_VN_CO_FOLLOWERS_RE = re.compile(r'\bCO\s+(?:KHI|DIEN|SO|GIOI|HOC|CAU|TU|NANG)\b')
 
+
+@lru_cache(maxsize=65536)
 def name_key(value):
-    text = str(value or '').upper().replace('Đ', 'D')
-    text = ''.join(c for c in unicodedata.normalize('NFD', text) if unicodedata.category(c) != 'Mn')
-    joined = re.sub('[^A-Z0-9]', '', text)
-    if re.fullmatch(r'CONGTYMOPHONGDOITAC\d+', joined) or not re.search('[A-Z]', joined):
+    raw = str(value or '').strip().upper().replace('Đ', 'D')
+    # Protect Vietnamese "CƠ" (e.g., "CƠ KHÍ", "CƠ ĐIỆN", "CƠ SỞ") before NFD stripping.
+    protected = _PROTECTED_VN_CO_RE.sub('__VN_CO__', raw)
+    text = ''.join(c for c in unicodedata.normalize('NFD', protected) if unicodedata.category(c) != 'Mn')
+    joined_check = _NON_ALNUM_RE.sub('', text.replace('__VN_CO__', 'CO'))
+    if _SYNTHETIC_PARTNER_RE.fullmatch(joined_check) or not re.search('[A-Z]', joined_check):
         return '', 'synthetic_or_uninformative_name'
-    text = re.sub(r'\b(CONG\s+TY|CO\s+PHAN|TRACH\s+NHIEM\s+HUU\s+HAN|TNHH|JSC|LLC|LTD|LIMITED|CORPORATION|COMPANY|CO)\b', ' ', text)
-    key = re.sub('[^A-Z0-9]', '', text)
-    return (key, '') if len(key) >= 3 else ('', 'insufficient_distinctive_name')
+    text = _DOTTED_INITIALS_RE.sub(lambda m: m.group(0).replace('.', ''), text)
+    # Protect common ASCII-only Vietnamese "CO KHI / CO DIEN / CO SO / CO GIOI" compounds too.
+    text = _VN_CO_FOLLOWERS_RE.sub(lambda m: '__VN_CO__ ' + m.group(0).split(None, 1)[1], text)
+    # Strip English "Co., Ltd" / "& Co" patterns without touching Vietnamese "CƠ".
+    text = _ENGLISH_CO_SUFFIX_RE.sub(' ', text)
+    text = re.sub(r'[.,;/\\()\[\]"\'-]+', ' ', text)
+    text = _LEGAL_ENTITY_RE.sub(' ', text)
+    # Also strip trailing standalone English "CO" at end of string (never "__VN_CO__").
+    text = re.sub(r'\bCO\s*\Z', ' ', text)
+    stripped_boilerplate = _VN_BOILERPLATE_RE.sub(' ', text)
+    restored = stripped_boilerplate.replace('__VN_CO__', 'CO')
+    key = _NON_ALNUM_RE.sub('', restored)
+    if len(key) < 3:
+        return '', 'insufficient_distinctive_name'
+    return key, ''
 
 
 def name_similarity(left, right):
@@ -73,6 +115,8 @@ def vendor_fulfilment(documents, row, staff, now):
 
 def outside_schedule(timestamp, action, company, employee, schedules, staff, holidays):
     dt = parse(timestamp)
+    if dt.utcoffset() is not None:
+        dt = dt.astimezone(VN)
     employee = employee_at(staff, employee['employee_id'], timestamp)
     versions = {}
     for record in sorted(schedules, key=lambda r: r['observed_at']):

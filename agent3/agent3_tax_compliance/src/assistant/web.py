@@ -460,7 +460,8 @@ def coverage(wid: str):
     ws = ws_path(wid)
     as_of = _as_of(ws)
     pack = load_pack(ws / 'pack.json')
-    threshold = pack.thresholds.get('non_cash_threshold_override') or param(load_ruleset(pipeline.DEFAULT_RULESET), 'NON_CASH_THRESHOLD', as_of)[0]
+    p_thr = param(load_ruleset(pipeline.DEFAULT_RULESET), 'NON_CASH_THRESHOLD', as_of)
+    threshold = pack.thresholds.get('non_cash_threshold_override') or (p_thr[0] if p_thr else Decimal(5_000_000))
     return _json(inbox.coverage(ws, pack, as_of, Decimal(str(threshold))))
 
 
@@ -573,6 +574,16 @@ async def save_decisions(wid, request, body=None):
         events = decision_store.validate(d, report, ws)
         bridge.require(ws.name)
         receipt = decision_store.append(ws, d, events)
+        findings_by_id = {it['finding_id']: it for it in report.get('items', []) if it.get('finding_id')}
+        r12_keys = [
+            ev['invoice_key']
+            for ev in events
+            if ev.get('action') == 'CONFIRMED_OK'
+            and ev.get('invoice_key')
+            and str(findings_by_id.get(ev.get('finding_id'), {}).get('code', '')).startswith('R12')
+        ]
+        if r12_keys:
+            web_ai._remember_confirmed(ws, r12_keys, 'CONFIRMED_OK', finding_codes=['R12_ITEM_PURPOSE'])
     bridge.require(ws.name)
     try:
         rep = _run(ws)

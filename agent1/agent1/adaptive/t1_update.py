@@ -16,9 +16,15 @@ from threadpoolctl import threadpool_limits
 
 from .data import fingerprint
 from .bundle_metadata import serving_manifest
-from .cash_adapter import FIT_VERSION, VERSION as ADAPTER_VERSION, bundle_version, fit_partial
+from .cash_adapter import (
+    FIT_VERSION,
+    VERSION as ADAPTER_VERSION,
+    bundle_version,
+    fit_partial,
+)
 from .landmark_adaptation import continue_neural, continue_tree, pool
 from .landmark_features import SCHEMA
+from .payment_coverage import check_reconciled_completeness, max_covered_date
 from .t1_catalog import GlobalCatalog
 from .t1_data import (
     landmarks,
@@ -130,14 +136,22 @@ def valid_incumbent(bundle, cutoff, catalog):
             raise ValueError("Gói global đã đổi; cần migration có kiểm định riêng")
         if getattr(bundle["model"], "feature_schema", None) != SCHEMA:
             raise ValueError("Schema model T1 đang phục vụ không khớp")
-        if (bundle.get("partial") is None or bundle["partial"].version != ADAPTER_VERSION
-                or pd.Timestamp(bundle["partial"].fitted_through) > pd.Timestamp(cutoff)):
+        if (
+            bundle.get("partial") is None
+            or bundle["partial"].version != ADAPTER_VERSION
+            or pd.Timestamp(bundle["partial"].fitted_through) > pd.Timestamp(cutoff)
+        ):
             raise ValueError("Bundle thiếu nhánh partial hợp lệ tại ngày chốt")
         if not bundle.get("serving_manifest"):
-            bundle = dict(bundle, serving_manifest=serving_manifest(
-                bundle, data_version=bundle.get("dataset_hash") or catalog.digest,
-                policy=bundle.get("policy", {"method": "legacy_serving"}), ready_on=bundle["asof"],
-            ))
+            bundle = dict(
+                bundle,
+                serving_manifest=serving_manifest(
+                    bundle,
+                    data_version=bundle.get("dataset_hash") or catalog.digest,
+                    policy=bundle.get("policy", {"method": "legacy_serving"}),
+                    ready_on=bundle["asof"],
+                ),
+            )
         return bundle
     # Legacy local-from-scratch ensembles are not eligible for the new selector.
     result = catalog.default_bundle(cutoff, auxiliary=bundle)
@@ -194,10 +208,13 @@ def train_update(
     catalog=None,
     policy=None,
     grids=None,
+    reconciled_through=None,
 ):
     catalog = catalog or GlobalCatalog()
     if catalog.partial.evidence.get("fit_version") != FIT_VERSION:
-        raise ValueError("Cần đóng gói catalog partial v3 để cập nhật; catalog cũ chỉ dùng phục vụ/phát lại")
+        raise ValueError(
+            "Cần đóng gói catalog partial v3 để cập nhật; catalog cũ chỉ dùng phục vụ/phát lại"
+        )
     policy = policy or UpdatePolicy()
     grids = GRIDS if grids is None else grids
     T = pd.Timestamp(cutoff).normalize()
@@ -208,11 +225,21 @@ def train_update(
     }
     # Training sees only records known at T; future revisions never enter its hash.
     data = visible_data(data, T)
+    covered_end = (
+        str(pd.Timestamp(reconciled_through).date())
+        if reconciled_through is not None
+        else max_covered_date(data, T)
+    )
+    anchor_end = (
+        min(T, pd.Timestamp(covered_end).normalize())
+        if covered_end is not None
+        else T
+    )
     validation_origins = sorted(
-        T - pd.Timedelta(days=n) for n in policy.validation_offsets_days
+        anchor_end - pd.Timedelta(days=n) for n in policy.validation_offsets_days
     )
     validation_origin = validation_origins[0]
-    audit_origin = T - pd.Timedelta(days=91)
+    audit_origin = anchor_end - pd.Timedelta(days=91)
     result = deepcopy(incumbent)
     result.update(
         update_asof=str(T.date()),
@@ -239,12 +266,14 @@ def train_update(
             "validation_origins": [str(t.date()) for t in validation_origins],
             "validation_label_through": str(audit_origin.date()),
             "audit_origin": str(audit_origin.date()),
-            "audit_label_through": str(T.date()),
-            "final_label_through": str(T.date()),
+            "audit_label_through": str(anchor_end.date()),
+            "final_label_through": str(anchor_end.date()),
             "rolling_lookback_days": policy.lookback_days,
         },
         limitation="Chọn bằng cash13 và guard IBS; nhãn tuần chưa quan sát bị censor. Dải tiền T6 được kiểm định riêng.",
     )
+    if reconciled_through is not None:
+        result["windows"]["reconciled_through"] = str(anchor_end.date())
     if not catalog.ready(validation_origin):
         result["audit"]["status"] = "globals_unavailable_at_validation_origin"
         return result
@@ -254,12 +283,16 @@ def train_update(
         validation_origin,
         lookback_days=policy.lookback_days,
         stride_days=policy.stride_days,
+        knowledge_end=T,
     )
     fit = fit[fit.followup_days >= 7].reset_index(drop=True)
     validation_parts = [
-        landmarks(data, origin, audit_origin) for origin in validation_origins
+        landmarks(data, origin, audit_origin, knowledge_end=T)
+        for origin in validation_origins
     ]
-    validation_parts = [p[p.followup_days >= 91].reset_index(drop=True) for p in validation_parts]
+    validation_parts = [
+        p[p.followup_days >= 91].reset_index(drop=True) for p in validation_parts
+    ]
     val = pd.concat(validation_parts, ignore_index=True)
     result["train_n"], result["validation_n"] = len(fit), len(val)
     if (
@@ -269,16 +302,36 @@ def train_update(
             len(part) < policy.minimum_validation_snapshots for part in validation_parts
         )
     ):
+        diag = check_reconciled_completeness(
+            data,
+            anchor_end,
+            confirmation_date=T,
+            minimum_fit_snapshots=policy.minimum_fit_snapshots,
+            minimum_fit_invoices=policy.minimum_fit_invoices,
+            minimum_validation_snapshots=policy.minimum_validation_snapshots,
+            minimum_audit_snapshots=policy.minimum_audit_snapshots,
+            validation_offsets_days=policy.validation_offsets_days,
+            stride_days=policy.stride_days,
+            lookback_days=policy.lookback_days,
+        )
         result["audit"].update(
-            fit_rows=len(fit), validation_rows=len(val)
+            fit_rows=len(fit),
+            validation_rows=len(val),
+            missing_periods=diag["missing_periods"],
+            missing_cohorts=diag["missing_cohorts"],
+            messages_vi=diag["messages_vi"],
         )
         return result
     arrays, result["fit_data"] = risk_rows(
         fit, cap=policy.risk_cap, half_life_days=policy.half_life_days
     )
-    partial = fit_partial(fit, validation_origin, prior=catalog.partial,
-                          strength=policy.partial_prior_strength,
-                          half_life_days=policy.half_life_days)
+    partial = fit_partial(
+        fit,
+        validation_origin,
+        prior=catalog.partial,
+        strength=policy.partial_prior_strength,
+        half_life_days=policy.half_life_days,
+    )
     result["partial_selection"] = dict(sha256=partial.digest, **partial.evidence)
     baseline_val = catalog.models["default"]
     if pd.Timestamp(incumbent["asof"]) <= validation_origin:
@@ -353,13 +406,33 @@ def train_update(
         baseline_audit = chosen_audit = None
         passed = False
         if comparator_available:
-            audit = landmarks(data, audit_origin, T)
+            audit = landmarks(data, audit_origin, anchor_end, knowledge_end=T)
             audit = audit[audit.followup_days >= 91].reset_index(drop=True)
             if len(audit) < policy.minimum_audit_snapshots:
-                result["audit"].update(status="insufficient_audit_outcomes", n=len(audit))
+                diag = check_reconciled_completeness(
+                    data,
+                    anchor_end,
+                    confirmation_date=T,
+                    minimum_fit_snapshots=policy.minimum_fit_snapshots,
+                    minimum_fit_invoices=policy.minimum_fit_invoices,
+                    minimum_validation_snapshots=policy.minimum_validation_snapshots,
+                    minimum_audit_snapshots=policy.minimum_audit_snapshots,
+                    validation_offsets_days=policy.validation_offsets_days,
+                    stride_days=policy.stride_days,
+                    lookback_days=policy.lookback_days,
+                )
+                result["audit"].update(
+                    status="insufficient_audit_outcomes",
+                    n=len(audit),
+                    missing_cohorts=diag["missing_cohorts"],
+                    messages_vi=diag["messages_vi"],
+                )
                 return result
-            baseline_audit = score(predict(incumbent["model"], audit), audit,
-                                   partial=incumbent["partial"])
+            baseline_audit = score(
+                predict(incumbent["model"], audit),
+                audit,
+                partial=incumbent["partial"],
+            )
             chosen_audit = score(predict(chosen, audit), audit, partial=partial)
             passed = improves(chosen_audit, baseline_audit, policy)
         result["audit"] = {
@@ -381,16 +454,29 @@ def train_update(
             # No refit and no second candidate after a failed audit.
             return result
         final = chosen
-        full = rolling_landmarks(data, T, lookback_days=policy.lookback_days,
-                                 stride_days=policy.stride_days)
-        final_partial = fit_partial(full, T, prior=catalog.partial,
-                                    strength=policy.partial_prior_strength,
-                                    half_life_days=policy.half_life_days)
+        full = rolling_landmarks(
+            data,
+            anchor_end,
+            lookback_days=policy.lookback_days,
+            stride_days=policy.stride_days,
+            knowledge_end=T,
+        )
+        final_partial = fit_partial(
+            full,
+            T,
+            prior=catalog.partial,
+            strength=policy.partial_prior_strength,
+            half_life_days=policy.half_life_days,
+        )
         parameter_asof = incumbent.get("t1_parameter_asof")
         if selected["method"].startswith("global_"):
-            parameter_asof = catalog.metadata["models"][selected["method"].removeprefix("global_")]["available_asof"]
+            parameter_asof = catalog.metadata["models"][
+                selected["method"].removeprefix("global_")
+            ]["available_asof"]
         elif selected["family"]:
-            parameter_asof = catalog.metadata["models"][selected["family"]]["available_asof"]
+            parameter_asof = catalog.metadata["models"][selected["family"]][
+                "available_asof"
+            ]
         if selected["family"] and selected["alpha"] > 0:
             progress(
                 "T1: refit từ global trên cửa sổ gần nhất, chỉ dùng tuần đã quan sát"
@@ -416,7 +502,9 @@ def train_update(
                     **trace,
                 )
             )
-            final = pool(catalog.models[selected["family"]], updated, selected["alpha"])
+            final = pool(
+                catalog.models[selected["family"]], updated, selected["alpha"]
+            )
             parameter_asof = str(T.date())
         proposal_version = bundle_version(final, final_partial)
         # A candidate can be trained now, but cannot be back-scored against an
@@ -450,7 +538,9 @@ def train_update(
                 promotion_status="accepted_historical_audit",
             )
             result["serving_manifest"] = serving_manifest(
-                result, data_version=result["dataset_hash"], policy=result["policy"],
+                result,
+                data_version=result["dataset_hash"],
+                policy=result["policy"],
                 ready_on=str(T.date()),
             )
         else:

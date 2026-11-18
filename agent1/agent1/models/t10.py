@@ -96,7 +96,7 @@ def scenario_library(sim_args=None):
                 args['force_week'] = np.where(inv.customer_id.eq(top), K, -1)
         if 'revenue_drop' in definition and args.get('rev_q') is not None:
             args['rev_q'] = args['rev_q'] * (1 - definition['revenue_drop'])
-        _, bal = simulate(**args)
+        bal, _ = simulate(**args)
         hit = np.flatnonzero(bal[0] < 0)
         rows.append(dict(scenario=name, runway_weeks=int(hit[0]) if len(hit) else K,
                          censored_at_13w=not bool(len(hit)), minimum_balance=float(bal.min())))

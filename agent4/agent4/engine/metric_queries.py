@@ -124,14 +124,18 @@ METRIC_QUERIES = {
         "Cash Flow Breakdown",
         f"""
         SELECT CASE
-            WHEN source_document_type = 'RECEIPT' THEN 'customer_receipts'
+            WHEN source_document_type IN ('RECEIPT', 'CUSTOMER_ADVANCE', 'SALES_INVOICE') THEN 'customer_receipts'
             WHEN source_document_type = 'PAYMENT' THEN 'supplier_payments'
+            WHEN source_document_type IN ('EXPENSE', 'CASH_EXPENSE', 'BANK_FEE', 'ADVANCE', 'ADVANCE_SETTLEMENT') THEN 'operating_expenses'
             WHEN source_document_type IN ('PAYROLL_PAYMENT', 'HR_REMITTANCE') THEN 'payroll'
             WHEN source_document_type IN ('VAT_PAYMENT','CIT_PAYMENT','TAX_PAYMENT') THEN 'tax'
-            WHEN source_document_type IN ('LOAN_MOVEMENT','LOAN_INTEREST','INTEREST') THEN 'financing'
-            WHEN source_document_type IN ('ASSET_PURCHASE','ASSET_ACQUISITION') THEN 'investing'
+            WHEN source_document_type IN ('LOAN_MOVEMENT','LOAN_DRAWDOWN','LOAN_REPAYMENT','LOAN_DISBURSEMENT','LOAN_PRINCIPAL','LOAN_INTEREST','INTEREST') THEN 'financing'
+            WHEN source_document_type IN ('ASSET_PURCHASE','ASSET_ACQUISITION','OTHER_INCOME','INTEREST_INCOME') THEN 'investing'
             ELSE 'other' END AS component, SUM(net_debit) AS value
-        FROM v_mgmt, period WHERE {_FLOW} AND {_CASH} GROUP BY 1
+        FROM v_mgmt, period
+        WHERE {_FLOW} AND {_CASH}
+          AND COALESCE(source_document_type, '') <> 'CASH_TRANSFER'
+        GROUP BY 1
     """,
         ("component",),
     ),
@@ -142,7 +146,7 @@ METRIC_QUERIES = {
             WHEN posting_date > end_date - 90 AND NOT is_closing
              AND source_module IS DISTINCT FROM 'OPENING'
                 AND COALESCE(source_document_type, '') NOT IN
-                    ('LOAN_MOVEMENT','LOAN_PRINCIPAL','LOAN_REPAYMENT','LOAN_DISBURSEMENT','CASH_TRANSFER')
+                    ('LOAN_MOVEMENT','LOAN_DRAWDOWN','LOAN_PRINCIPAL','LOAN_REPAYMENT','LOAN_DISBURSEMENT','CASH_TRANSFER')
             THEN credit_amount ELSE 0 END), 0) AS value
         FROM v_mgmt, period WHERE posting_date <= end_date AND {_CASH}
     """,

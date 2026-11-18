@@ -3,8 +3,8 @@ from collections import defaultdict, deque
 from functools import lru_cache
 
 from .case_identity import component_key
-from .identity import normalize
-from .temporal_evidence import bank_identity
+from .identity import MISSING_CONTACTS, normalize
+from .temporal_evidence import bank_identity, bank_token
 
 
 def master_versions(rows, id_field):
@@ -93,7 +93,11 @@ class KnownGraph:
             if field == 'representative_id' and field not in item:
                 continue
             kind = 'representative' if field == 'representative_id' else field
-            token = bank_identity(item.get(field, ''), item.get('bank_code', '')) if typed_bank and field == 'bank_account' else item.get(field, '')
+            raw_val = item.get(field, '')
+            if field == 'bank_account' and bank_token(raw_val) in MISSING_CONTACTS:
+                token = ''
+            else:
+                token = bank_identity(raw_val, item.get('bank_code', '')) if typed_bank and field == 'bank_account' else raw_val
             right_kind = 'entity' if kind == 'representative' else kind
             target = self.node(token, right_kind) if normalize(token, right_kind) else ''
             self.replace(cid, source, target, item['recorded_at'], kind, master=True)
@@ -106,7 +110,11 @@ class KnownGraph:
         if status not in {'active', 'revoked', 'deleted', 'inactive'}:
             raise ValueError(f'Invalid graph link status: {status}')
         right_kind = 'entity' if kind == 'representative' else kind
-        token = bank_identity(edge['target_id'], edge.get('bank_code', '')) if typed_bank and kind == 'bank_account' else edge['target_id']
+        raw_target = edge['target_id']
+        if kind == 'bank_account' and bank_token(raw_target) in MISSING_CONTACTS:
+            token = ''
+        else:
+            token = bank_identity(raw_target, edge.get('bank_code', '')) if typed_bank and kind == 'bank_account' else raw_target
         right = self.node(token, right_kind) if normalize(token, right_kind) else ''
         source = self.node(edge['source_id'], 'entity')
         if status == 'active':

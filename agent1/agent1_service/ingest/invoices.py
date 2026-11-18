@@ -226,6 +226,10 @@ def reconcile_invoices(existing, incoming):
             if not (same_source_revision and len(versions) == 1) and old_minor != row[col+'_minor']:
                 raise ValueError(f'Hóa đơn {row["invoice_id"]} lệch {col} giữa các nguồn')
         for col in ('issue_date', 'due_date'):
+            if col == 'due_date' and {old.get('source'), row['source']} == {'xml', 'erp'} and (
+                old.get('due_date_inferred') or row.get('due_date_inferred')
+            ):
+                continue
             if old.get(col) and row.get(col) and not (same_source_revision and len(versions) == 1) and not _same_date(old[col], row[col]):
                 raise ValueError(f'Hóa đơn {row["invoice_id"]} lệch {col} giữa các nguồn')
         for col in ('buyer_mst', 'currency', 'adjustment_type'):
@@ -233,19 +237,21 @@ def reconcile_invoices(existing, incoming):
                 raise ValueError(f'Hóa đơn {row["invoice_id"]} lệch {col} giữa các nguồn')
         merged = dict(old)
         # XML is authoritative for invoice fields; ERP contributes its customer
-        # code and ledger outcome after all shared facts have been checked.
+        # code, explicit due date (when XML inferred a default), and ledger outcome.
         if row['source'] == 'xml':
             merged.update(row)
             if 'erp' in old.get('sources', [old.get('source')]):
                 merged['customer_id'] = old['customer_id']
-                if not row.get('due_date'):
+                if (not row.get('due_date') or row.get('due_date_inferred')) and old.get('due_date'):
                     merged['due_date'] = old.get('due_date')
+                    merged.pop('due_date_inferred', None)
                 if old.get('ledger_clear_date'):
                     merged['ledger_clear_date'] = old['ledger_clear_date']
         elif row['source'] == 'erp' and old.get('source') == 'xml':
             merged['customer_id'] = row['customer_id']
-            if not old.get('due_date'):
+            if (not old.get('due_date') or old.get('due_date_inferred')) and row.get('due_date'):
                 merged['due_date'] = row.get('due_date')
+                merged.pop('due_date_inferred', None)
             if row.get('ledger_clear_date'):
                 merged['ledger_clear_date'] = row['ledger_clear_date']
         else:

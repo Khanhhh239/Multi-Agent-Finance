@@ -1,7 +1,8 @@
 """Dated production landmarks, censored weekly likelihood and common cash scoring.
 
-Features are frozen at each origin. Only labels available by label_end are used;
-an unobserved future week never becomes a negative training example.
+Features are frozen at each origin. Only labels available by knowledge_end within
+the economic horizon min(label_end, origin + 91d) are used; an unobserved future
+week never becomes a negative training example.
 """
 
 from __future__ import annotations
@@ -15,7 +16,7 @@ from .cash_adapter import expected_cash, probabilities
 from .compact_t1 import workspace_context
 from .data import as_of, effective_data, fingerprint, observed
 from .landmark_features import FEATURES, prepare_features
-from .payment_coverage import followup_days
+from .payment_coverage import followup_days, historical_end_for_origin
 
 
 def visible_data(data, cutoff):
@@ -55,38 +56,94 @@ COLUMNS = (
 )
 
 
-def _label_view(data, origin, label_end):
-    """Economic window ends at day 91; late evidence is known by label_end.
+def _project_confirmed_historical(data, known_cutoff: pd.Timestamp, hist_end: str):
+    """Project confirmed historical books onto event dates without mutating stored known_at.
+
+    Only records already known by `known_cutoff` with business event dates <= `hist_end`
+    participate. Explicit `book_posted_at` (if supplied) is preserved so late-posted
+    pre-origin cash still obeys the pre-origin guard (`paid <= origin < book_posted_at`).
+    Post-origin revisions (`record_version > 1` or `_deleted`) retain their true `known_at`.
+    """
+    base = visible_data(data, known_cutoff)
+    event_fields = {
+        "invoices": "issue_date",
+        "payments": "payment_date",
+        "actions": "date",
+        "invoice_events": "event_date",
+    }
+
+    def _project_row(kind: str, row: dict) -> dict:
+        if row.get("_deleted") or (kind == "invoices" and int(row.get("record_version", 1)) > 1):
+            return row
+        ev_col = event_fields[kind]
+        ev_date = str(row.get(ev_col, ""))[:10]
+        if not ev_date or ev_date > hist_end:
+            return row
+        posted = str(row.get("book_posted_at") or ev_date)[:10]
+        if posted < str(row.get("known_at", posted))[:10]:
+            updated = dict(row, known_at=posted)
+            if "available_on" in updated:
+                updated["available_on"] = posted
+            return updated
+        return row
+
+    projected = dict(base)
+    for kind in event_fields:
+        if kind in projected:
+            projected[kind] = [_project_row(kind, r) for r in projected.get(kind, [])]
+    if "record_history" in base:
+        projected["record_history"] = {
+            kind: (
+                [_project_row(kind, r) for r in rows]
+                if kind in event_fields
+                else list(rows)
+            )
+            for kind, rows in base["record_history"].items()
+        }
+    return projected
+
+
+def _label_view(data, origin, label_end, knowledge_end=None):
+    """Economic window ends at day 91 (or label_end); late evidence is known by knowledge_end.
 
     Ordinary record revisions/deletions take effect on their knowledge date.
     Dated lifecycle documents and cancellations can arrive later and still
     invalidate a claim inside the economic window. Receipts retain their true
-    cash date even when the allocation becomes known after day 91.
+    cash date even when the allocation becomes known after day 91 (or at onboarding).
     """
+    known_cutoff = label_end if knowledge_end is None else knowledge_end
     end = min(label_end, origin + pd.Timedelta(days=91))
-    known = visible_data(data, label_end)
+    known = visible_data(data, known_cutoff)
     invoices = {
-        r["invoice_id"]: r for r in as_of(data, end).get("invoices", [])
+        r["invoice_id"]: r
+        for r in as_of(data, end).get("invoices", [])
         if pd.Timestamp(r["known_at"]) <= end and pd.Timestamp(r["issue_date"]) <= end
     }
     for r in known.get("invoices", []):
-        if (r["invoice_id"] not in invoices
-                and r.get("adjustment_type") in ("adjustment", "replacement")
-                and pd.Timestamp(r["issue_date"]) <= end):
+        if (
+            r["invoice_id"] not in invoices
+            and r.get("adjustment_type") in ("adjustment", "replacement")
+            and pd.Timestamp(r["issue_date"]) <= end
+        ):
             invoices[r["invoice_id"]] = r
     result = dict(known, invoices=list(invoices.values()))
     result.pop("record_history", None)  # Do not reselect post-window revisions.
-    for kind, date in (("payments", "payment_date"), ("actions", "date"),
-                       ("invoice_events", "event_date")):
+    for kind, date in (
+        ("payments", "payment_date"),
+        ("actions", "date"),
+        ("invoice_events", "event_date"),
+    ):
         result[kind] = [r for r in known.get(kind, []) if pd.Timestamp(r[date]) <= end]
     return result, end
 
 
-def _changed_claims(data, origin, end, label_end):
+def _changed_claims(data, origin, end, knowledge_end):
     """Track each financial change, including separate, subsequently reversed docs."""
-    versions = [*data.get("record_history", {}).get("invoices", []),
-                *data.get("invoices", [])]
-    versions = [r for r in versions if pd.Timestamp(r["known_at"]) <= label_end]
+    versions = [
+        *data.get("record_history", {}).get("invoices", []),
+        *data.get("invoices", []),
+    ]
+    versions = [r for r in versions if pd.Timestamp(r["known_at"]) <= knowledge_end]
     versions.sort(key=lambda r: r["known_at"])
     previous, first_known, related, changed = {}, {}, {}, set()
     facts = ("amount", "customer_id", "adjustment_type", "adjusts_invoice_id")
@@ -96,9 +153,14 @@ def _changed_claims(data, origin, end, label_end):
         old = previous.get(iid)
         lifecycle = r.get("adjustment_type") in ("adjustment", "replacement")
         for version in (old, r):
-            if (version and version.get("adjusts_invoice_id")
-                    and (version.get("adjustment_type") != "replacement"
-                         or max(pd.Timestamp(version["issue_date"]), first_known[iid]) > origin)):
+            if (
+                version
+                and version.get("adjusts_invoice_id")
+                and (
+                    version.get("adjustment_type") != "replacement"
+                    or max(pd.Timestamp(version["issue_date"]), first_known[iid]) > origin
+                )
+            ):
                 target = version["adjusts_invoice_id"]
                 related.setdefault(iid, set()).add(target)
                 related.setdefault(target, set()).add(iid)
@@ -107,13 +169,21 @@ def _changed_claims(data, origin, end, label_end):
                     related.setdefault(iid, set()).add(alias)
                     related.setdefault(alias, set()).add(iid)
         if origin < known <= end and old is not None:
-            fields = (*facts, "issue_date") if lifecycle or old.get("adjustment_type") else facts
+            fields = (
+                (*facts, "issue_date")
+                if lifecycle or old.get("adjustment_type")
+                else facts
+            )
             if r.get("_deleted") or any(r.get(k) != old.get(k) for k in fields):
                 changed.add(iid)
         # A newly revealed credit/replacement affects the target even if its
         # arrival is after day 91. Pure confirmations of old docs do not.
-        if (known > origin and lifecycle and pd.Timestamp(r["issue_date"]) <= end
-                and first_known[iid] > origin):
+        if (
+            known > origin
+            and lifecycle
+            and pd.Timestamp(r["issue_date"]) <= end
+            and first_known[iid] > origin
+        ):
             changed.add(iid)
         previous[iid] = r
     # Pre-origin replacements have their own fixed principal: editing an
@@ -128,14 +198,25 @@ def _changed_claims(data, origin, end, label_end):
     return changed
 
 
-def landmarks(data, origin, label_end):
+def landmarks(data, origin, label_end, *, knowledge_end=None):
     origin, label_end = (
         pd.Timestamp(origin).normalize(),
         pd.Timestamp(label_end).normalize(),
     )
-    if label_end < origin:
+    known_cutoff = (
+        label_end
+        if knowledge_end is None
+        else pd.Timestamp(knowledge_end).normalize()
+    )
+    if label_end < origin or known_cutoff < origin:
         raise ValueError("Ngày nhãn T1 phải từ origin trở đi")
-    visible = as_of(data, origin)
+    hist_end = historical_end_for_origin(data, origin, known_cutoff)
+    if hist_end is not None:
+        label_end = min(label_end, pd.Timestamp(hist_end).normalize())
+        working_data = _project_confirmed_historical(data, known_cutoff, hist_end)
+    else:
+        working_data = data
+    visible = as_of(working_data, origin)
     if not any(
         pd.Timestamp(row["issue_date"]) <= origin
         and pd.Timestamp(row["known_at"]) <= origin
@@ -143,9 +224,9 @@ def landmarks(data, origin, label_end):
     ):
         return pd.DataFrame(columns=COLUMNS)
     try:
-        history = workspace_context(data, origin)
+        history = workspace_context(working_data, origin)
     except ValueError:
-        if not as_of(data, origin).get("invoices"):
+        if not as_of(working_data, origin).get("invoices"):
             return pd.DataFrame(columns=COLUMNS)
         raise
     opened = history[
@@ -153,24 +234,31 @@ def landmarks(data, origin, label_end):
     ].copy()
     if opened.empty:
         return pd.DataFrame(columns=COLUMNS)
-    label_data, window_end = _label_view(data, origin, label_end)
+    label_data, window_end = _label_view(
+        working_data, origin, label_end, knowledge_end=known_cutoff
+    )
     if not label_data["invoices"]:
         return pd.DataFrame(columns=COLUMNS)
-    outcome = observed(label_data, label_end).set_index("invoice_id")
-    available = effective_data(label_data, label_end)
+    obs_clock = max(label_end, known_cutoff)
+    outcome = observed(label_data, obs_clock).set_index("invoice_id")
+    available = effective_data(label_data, obs_clock)
     payments = {}
     for row in available.get("payments", []):
         paid, known = pd.Timestamp(row["payment_date"]), pd.Timestamp(row["known_at"])
-        if max(paid, known) <= label_end:
+        if paid <= window_end and known <= known_cutoff:
             payments.setdefault(row["invoice_id"], []).append(
                 (paid, known, int(row["amount"]))
             )
     pieces, valid = [], []
     shared_followup = None
-    if not any(r.get("invoice_ids") is not None or r.get("customer_ids") is not None
-               for r in data.get("payment_coverage", [])):
-        shared_followup = followup_days(data, origin, label_end, None, None)
-    changed = _changed_claims(data, origin, window_end, label_end)
+    if not any(
+        r.get("invoice_ids") is not None or r.get("customer_ids") is not None
+        for r in working_data.get("payment_coverage", [])
+    ):
+        shared_followup = followup_days(
+            working_data, origin, label_end, None, None, knowledge_end=known_cutoff
+        )
+    changed = _changed_claims(working_data, origin, window_end, known_cutoff)
     for position, row in enumerate(opened.itertuples()):
         iid = row.invoice_id
         if iid in changed or iid not in outcome.index:
@@ -183,12 +271,28 @@ def landmarks(data, origin, label_end):
             continue
         if pd.notna(end.written_off_at) and end.written_off_at <= window_end:
             continue
-        followup = (shared_followup if shared_followup is not None else
-                    followup_days(data, origin, label_end, iid, row.customer_id))
+        followup = (
+            shared_followup
+            if shared_followup is not None
+            else followup_days(
+                working_data,
+                origin,
+                label_end,
+                iid,
+                row.customer_id,
+                knowledge_end=known_cutoff,
+            )
+        )
         entries = sorted(payments.get(iid, []), key=lambda p: (p[0], p[1]))
         if any(paid <= origin < known for paid, known, _ in entries):
             continue  # Late-linked old cash must not become a future receipt.
-        if abs(sum(amount for paid, _, amount in entries if paid <= origin) - float(row.received)) > 0.01:
+        if (
+            abs(
+                sum(amount for paid, _, amount in entries if paid <= origin)
+                - float(row.received)
+            )
+            > 0.01
+        ):
             continue  # Revision/deletion of old cash invalidates opening principal.
         cumulative = 0
         settlement = np.inf
@@ -222,15 +326,21 @@ def landmarks(data, origin, label_end):
     return frame
 
 
-def rolling_landmarks(data, label_end, *, lookback_days=730, stride_days=28):
+def rolling_landmarks(
+    data, label_end, *, lookback_days=730, stride_days=28, knowledge_end=None
+):
     end = pd.Timestamp(label_end).normalize()
+    known_cutoff = (
+        end if knowledge_end is None else pd.Timestamp(knowledge_end).normalize()
+    )
     # Include a seven-day-old origin exactly, independent of calendar phase.
     last = end - pd.Timedelta(days=7)
-    visible = as_of(data, end)
+    visible = as_of(data, known_cutoff)
     starts = [
         pd.Timestamp(r["issue_date"])
         for r in visible.get("invoices", [])
-        if pd.Timestamp(r["known_at"]) <= end
+        if pd.Timestamp(r["issue_date"]) <= end
+        and pd.Timestamp(r["known_at"]) <= known_cutoff
     ]
     if not starts:
         return pd.DataFrame(columns=COLUMNS)
@@ -240,7 +350,7 @@ def rolling_landmarks(data, label_end, *, lookback_days=730, stride_days=28):
         if first <= last
         else []
     )
-    parts = [landmarks(data, t, end) for t in clocks]
+    parts = [landmarks(data, t, end, knowledge_end=known_cutoff) for t in clocks]
     parts = [p for p in parts if not p.empty]
     return (
         pd.concat(parts, ignore_index=True) if parts else pd.DataFrame(columns=COLUMNS)
@@ -369,13 +479,19 @@ def snapshot_for_audit(
     data, cutoff, baseline, challenger, baseline_version, challenger_version, created_at
 ):
     for bundle in (baseline, challenger):
-        if (pd.Timestamp(bundle.get("asof", bundle["partial"].fitted_through)) > pd.Timestamp(cutoff)
-                or pd.Timestamp(bundle["partial"].fitted_through) > pd.Timestamp(cutoff)):
+        if (
+            pd.Timestamp(bundle.get("asof", bundle["partial"].fitted_through))
+            > pd.Timestamp(cutoff)
+            or pd.Timestamp(bundle["partial"].fitted_through) > pd.Timestamp(cutoff)
+        ):
             raise ValueError("Bundle audit được học sau origin")
     frame = landmarks(data, cutoff, cutoff)
     if frame.empty:
         return None
-    base, proposed = predict(baseline["model"], frame), predict(challenger["model"], frame)
+    base, proposed = (
+        predict(baseline["model"], frame),
+        predict(challenger["model"], frame),
+    )
     return {
         "origin": str(pd.Timestamp(cutoff).date()),
         "created_at": created_at,
@@ -390,7 +506,9 @@ def snapshot_for_audit(
         "baseline_partial_sha256": baseline["partial"].digest,
         "challenger_partial_sha256": challenger["partial"].digest,
         "baseline_cash": cash_fractions(base, frame, baseline["partial"]).tolist(),
-        "challenger_cash": cash_fractions(proposed, frame, challenger["partial"]).tolist(),
+        "challenger_cash": cash_fractions(
+            proposed, frame, challenger["partial"]
+        ).tolist(),
         "snapshot_sha256": frame_receipt(frame, data, cutoff)["frame_sha256"],
     }
 
@@ -401,6 +519,7 @@ def score_audit_snapshot(snapshot, data, cutoff, *, minimum_rows=20):
     if snapshot["created_at"][:10] > snapshot["origin"]:
         return {"status": "retrospective_snapshot_not_for_promotion"}
     from .cash_adapter import VERSION
+
     if snapshot.get("adapter_version") != VERSION:
         return {"status": "incompatible_cash_adapter"}
     truth = landmarks(data, snapshot["origin"], cutoff).set_index(

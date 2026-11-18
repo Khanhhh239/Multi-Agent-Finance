@@ -12,6 +12,7 @@ from ..extraction.xml_context import MIN_HISTORY, amount_outlier, fold, similari
 from .models import InvoiceFact, Match, RiskItem
 from .pack import Pack
 
+
 def vn(n) -> str:
     return f'{n:,.0f}'.replace(',', '.')
 
@@ -28,11 +29,25 @@ def load_ruleset(path: Path) -> dict:
 
 def param(ruleset: dict, name: str, on: date | None):
     """(value, basis) of the parameter version in force on the date; None when no version covers it."""
-    if on is None:
+    if on is None or not isinstance(ruleset, dict):
         return None
-    for v in ruleset['parameters'][name]:
-        if (v['from'] is None or date.fromisoformat(v['from']) <= on) and (v['to'] is None or on < date.fromisoformat(v['to'])):
-            return v['value'], v['basis']
+    params = ruleset.get('parameters') or {}
+    if name not in params:
+        return None
+    if isinstance(on, str):
+        try:
+            on = date.fromisoformat(on[:10])
+        except ValueError:
+            return None
+    for v in params.get(name) or ():
+        if not isinstance(v, dict):
+            continue
+        frm = v.get('from')
+        to = v.get('to')
+        start_ok = frm is None or date.fromisoformat(str(frm)) <= on
+        end_ok = to is None or on < date.fromisoformat(str(to))
+        if start_ok and end_ok:
+            return v.get('value'), v.get('basis', '')
     return None
 
 
@@ -68,10 +83,12 @@ def evaluate(invoices: list[InvoiceFact], matches: list[Match], pack: Pack, rule
             items.append(_item(ruleset, 'R05_DUPLICATE', 'AT_RISK', [i], vat(i), ['Một hóa đơn chỉ được khấu trừ một lần'],
                                detail=f'Tệp {i.file} trùng với {i.duplicate_of}', evidence=(i.file, i.duplicate_of)))
 
+    replaced_originals: set[str] = set()
     for i in originals:                                   # replacement and adjustment references
         if i.related and i.related['key'] in by_key:
             orig = by_key[i.related['key']]
             if i.related['nature'] == '1':
+                replaced_originals.add(orig.key)
                 items.append(_item(ruleset, 'R06_REPLACED_ORIGINAL', 'AT_RISK', [orig], vat(orig), ['Hóa đơn bị thay thế không còn giá trị khấu trừ (thứ cấp)'],
                                    detail=f'{orig.display} bị thay thế bởi {i.display}', evidence=(orig.file, i.file)))
             else:
@@ -79,12 +96,19 @@ def evaluate(invoices: list[InvoiceFact], matches: list[Match], pack: Pack, rule
                                    detail=f'{i.display} điều chỉnh {orig.display}'))
 
     own = pack.tax_code.replace('-', '')
+    wrong_buyer: set[str] = set()
     for i in originals:                                   # buyer block against the enterprise profile
         buyer = (i.buyer_tax_id or '').replace('-', '')
-        if buyer != own and buyer[:10] != own[:10]:
+        same_root_branch = len(own) in (10, 13) and len(buyer) in (10, 13) and buyer[:10] == own[:10]
+        if buyer != own and not same_root_branch:
+            wrong_buyer.add(i.key)
             items.append(_item(ruleset, 'R07_BUYER_TAX_ID', 'AT_RISK', [i], vat(i), ['Hóa đơn phải ghi đúng mã số thuế người mua (thứ cấp)'],
                                detail=f'Mã số thuế người mua trên hóa đơn: {i.buyer_tax_id or "không có"}; hồ sơ: {pack.tax_code}'))
             continue
+        if buyer != own and same_root_branch:
+            items.append(_item(ruleset, 'R07_BUYER_TAX_ID', 'REVIEW', [i], vat(i),
+                               ['Hóa đơn ghi mã số thuế trụ sở/chi nhánh khác hồ sơ; cần xác nhận chi nhánh phụ thuộc được ủy quyền'],
+                               detail=f'Mã số thuế người mua trên hóa đơn: {i.buyer_tax_id}; hồ sơ: {pack.tax_code}'))
         problems = []
         if i.buyer_name and similarity(i.buyer_name, pack.legal_name) < 0.8:
             problems.append(f'tên "{i.buyer_name}" khác "{pack.legal_name}"')
@@ -100,37 +124,43 @@ def evaluate(invoices: list[InvoiceFact], matches: list[Match], pack: Pack, rule
                                    detail=f'Danh sách tính đến ngày {ref.as_of.isoformat()}'))
 
     override = pack.thresholds['non_cash_threshold_override']
-    small_by_day = defaultdict(list)
+    by_seller_day = defaultdict(list)
     for i in originals:                                   # payment evidence
         if not i.gross or not i.issue_date:
             continue
         p = param(ruleset, 'NON_CASH_THRESHOLD', i.issue_date)
-        threshold = min(Decimal(p[0]), override) if override is not None else Decimal(p[0])
-        basis = [p[1]] + ([f'Ngưỡng nội bộ thấp hơn: {override}'] if override is not None and override < Decimal(p[0]) else [])
+        if p is None:
+            continue
+        threshold = min(Decimal(str(p[0])), override) if override is not None else Decimal(str(p[0]))
+        basis = [p[1]] + ([f'Ngưỡng nội bộ thấp hơn: {override}'] if override is not None and override < Decimal(str(p[0])) else [])
         if i.gross >= threshold:
-            if i.key in matched:
-                continue
-            if not deduction:
-                items.append(_item(ruleset, 'R01_PAYMENT_EVIDENCE', 'INFO', [i], Decimal(0), basis,
-                                   detail='Doanh nghiệp không khấu trừ thuế đầu vào; vẫn ảnh hưởng chi phí được trừ thuế thu nhập doanh nghiệp'))
-            elif i.key in ambiguous:
-                m = ambiguous[i.key]
-                items.append(_item(ruleset, 'R03_AMBIGUOUS_PAYMENT', 'REVIEW', [i], vat(i), basis, detail=m.note, evidence=m.txn_ids))
-            else:
-                items.append(_item(ruleset, 'R01_PAYMENT_EVIDENCE', 'AT_RISK', [i], vat(i), basis,
-                                   detail=f'Tổng thanh toán {vn(i.gross)} đồng, ngưỡng {vn(threshold)} đồng; nhãn trên hóa đơn: {i.payment_label or "không ghi"}'))
-        else:
-            small_by_day[(i.seller_tax_id, i.issue_date, threshold, p[1])].append(i)
-    for (seller, day, threshold, basis), group in sorted(small_by_day.items(), key=lambda kv: (str(kv[0][0]), kv[0][1])):
-        total = sum(i.gross for i in group)
-        if len(group) < 2 or total < threshold:
+            if i.key not in matched:
+                if not deduction:
+                    items.append(_item(ruleset, 'R01_PAYMENT_EVIDENCE', 'INFO', [i], Decimal(0), basis,
+                                       detail='Doanh nghiệp không khấu trừ thuế đầu vào; vẫn ảnh hưởng chi phí được trừ thuế thu nhập doanh nghiệp'))
+                elif i.key in ambiguous:
+                    m = ambiguous[i.key]
+                    items.append(_item(ruleset, 'R03_AMBIGUOUS_PAYMENT', 'REVIEW', [i], vat(i), basis, detail=m.note, evidence=m.txn_ids))
+                else:
+                    items.append(_item(ruleset, 'R01_PAYMENT_EVIDENCE', 'AT_RISK', [i], vat(i), basis,
+                                       detail=f'Tổng thanh toán {vn(i.gross)} đồng, ngưỡng {vn(threshold)} đồng; nhãn trên hóa đơn: {i.payment_label or "không ghi"}'))
+        # Group ALL valid same-day purchases from the same seller (both >= threshold and < threshold, paid or unpaid),
+        # excluding replaced originals (R06_REPLACED_ORIGINAL) and wrong-buyer-MST invoices (R07_BUYER_TAX_ID).
+        seller_clean = (i.seller_tax_id or '').replace('-', '').strip()
+        if seller_clean and i.key not in replaced_originals and i.key not in wrong_buyer:
+            by_seller_day[(seller_clean, i.issue_date, threshold, tuple(basis))].append(i)
+
+    for (seller, day, threshold, basis_tuple), group in sorted(by_seller_day.items(), key=lambda kv: (kv[0][0], kv[0][1])):
+        day_total = sum(i.gross for i in group)
+        if len(group) < 2 or day_total < threshold:
             continue
         for i in group:
-            if i.key in matched or not deduction:
+            # Invoices >= threshold were already handled by R01 above; here we flag < threshold invoices lacking non-cash proof.
+            if i.gross >= threshold or i.key in matched or not deduction:
                 continue
             status, code = ('REVIEW', 'R03_AMBIGUOUS_PAYMENT') if i.key in ambiguous else ('AT_RISK', 'R02_SAME_DAY_CUMULATIVE')
-            items.append(_item(ruleset, code, status, [i], vat(i), [basis],
-                               detail=f'{len(group)} hóa đơn của cùng người bán ngày {day.isoformat()}, tổng {vn(total)} đồng'))
+            items.append(_item(ruleset, code, status, [i], vat(i), list(basis_tuple),
+                               detail=f'{len(group)} hóa đơn của cùng người bán ngày {day.isoformat()}, tổng {vn(day_total)} đồng'))
 
     if portal is not None:                                # portal list reconciliation
         portal_keys = {r['key']: r for r in portal}
@@ -188,9 +218,11 @@ def totals(items: list[RiskItem], ruleset: dict, as_of: date) -> dict:
         elif it.status == 'OPPORTUNITY':
             opportunity += it.amount
     review = {k: v for k, v in review.items() if k not in at_risk}
-    rate, basis = param(ruleset, 'UNDERDECLARATION_PENALTY_RATE', as_of)
+    pen = param(ruleset, 'UNDERDECLARATION_PENALTY_RATE', as_of)
+    rate = Decimal(str(pen[0])) if pen is not None else None
+    basis = pen[1] if pen is not None else ''
     total = sum(at_risk.values(), Decimal(0))
-    return dict(at_risk_vat=total, at_risk_invoices=len(at_risk), penalty_rate=Decimal(rate),
-                penalty_estimate=(total * Decimal(rate)).quantize(Decimal(1)), penalty_basis=basis,
+    return dict(at_risk_vat=total, at_risk_invoices=len(at_risk), penalty_rate=rate,
+                penalty_estimate=(total * rate).quantize(Decimal(1)) if rate is not None else None, penalty_basis=basis,
                 review_vat=sum(review.values(), Decimal(0)), review_invoices=len(review), opportunity_vat=opportunity,
                 by_code={c: sum(1 for it in items if it.code == c) for c in sorted({it.code for it in items})})

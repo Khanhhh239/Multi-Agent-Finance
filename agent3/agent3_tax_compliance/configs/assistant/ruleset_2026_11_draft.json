@@ -93,6 +93,12 @@
   ],
   "LATE_PAYMENT_RATE_PER_DAY": [
    {
+    "from": null,
+    "to": "2026-07-01",
+    "value": "0.0003",
+    "basis": "Điểm a khoản 2 Điều 59 Luật Quản lý thuế 38/2019/QH14 (được sửa đổi bởi Luật 56/2024/QH15): 0,03%/ngày tính trên số tiền thuế chậm nộp (thứ cấp)"
+   },
+   {
     "from": "2026-07-01",
     "to": null,
     "value": "0.0003",
@@ -107,6 +113,12 @@
    }
   ],
   "CIT_PROVISIONAL_DUE": [
+   {
+    "from": null,
+    "to": "2026-07-01",
+    "value": "LAST_DAY_OF_FIRST_MONTH_OF_NEXT_QUARTER",
+    "basis": "Khoản 1 Điều 55 Luật Quản lý thuế 38/2019/QH14 (sửa đổi bởi Luật 56/2024/QH15) và khoản 6 Điều 8 Nghị định 126/2020/NĐ-CP (sửa đổi bởi Nghị định 91/2022/NĐ-CP): thời hạn tạm nộp thuế TNDN quý chậm nhất là ngày cuối của tháng đầu quý tiếp theo (thứ cấp)"
+   },
    {
     "from": "2026-07-01",
     "to": null,
@@ -128,6 +140,12 @@
   ],
   "CIT_FINALIZATION_DUE": [
    {
+    "from": null,
+    "to": "2026-07-01",
+    "value": "LAST_DAY_OF_THIRD_MONTH_AFTER_PERIOD",
+    "basis": "Điểm a khoản 2 Điều 44 Luật Quản lý thuế 38/2019/QH14: hồ sơ khai quyết toán thuế năm chậm nhất là ngày cuối cùng của tháng thứ 03 kể từ ngày kết thúc năm dương lịch hoặc năm tài chính (thứ cấp)"
+   },
+   {
     "from": "2026-07-01",
     "to": null,
     "value": "LAST_DAY_OF_THIRD_MONTH_AFTER_PERIOD",
@@ -143,6 +161,12 @@
   ],
   "DEADLINE_DAY_OFF_SHIFT": [
    {
+    "from": null,
+    "to": "2026-07-01",
+    "value": "NEXT_WORKING_DAY",
+    "basis": "Điều 86 Thông tư 80/2021/TT-BTC và Nghị định 126/2020/NĐ-CP: thời hạn nộp hồ sơ khai thuế, nộp thuế trùng với ngày nghỉ theo quy định thì tính là ngày làm việc tiếp theo của ngày nghỉ đó (thứ cấp)"
+   },
+   {
     "from": "2026-07-01",
     "to": null,
     "value": "NEXT_WORKING_DAY",
@@ -157,6 +181,12 @@
    }
   ],
   "SELF_CORRECTION_NO_PENALTY": [
+   {
+    "from": null,
+    "to": "2026-07-01",
+    "value": "TRUE",
+    "basis": "Khoản 3 Điều 51 và Điều 47 Luật Quản lý thuế 38/2019/QH14: tự phát hiện, khai bổ sung và tự giác nộp đủ tiền thuế, tiền chậm nộp trước khi cơ quan thuế công bố quyết định thanh tra, kiểm tra thì không bị xử phạt vi phạm hành chính về thuế (thứ cấp)"
+   },
    {
     "from": "2026-07-01",
     "to": null,

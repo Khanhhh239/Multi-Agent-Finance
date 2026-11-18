@@ -4,11 +4,13 @@ Every extracted value records its XPath so reviewers can trace it to the signed 
 Checks return ERROR (blocks automatic use), WARN or UNCHECKED; nothing defaults silently.
 """
 import re
-from dataclasses import dataclass, field
+import unicodedata
+from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
+from pathlib import Path
 
-from .xml_signature import SignatureResult, safe_parse, verify_invoice_signatures
+from .xml_signature import SignatureResult, is_tax_authority_cert, safe_parse, verify_invoice_signatures
 
 VAT_RATES = ('0%', '5%', '8%', '10%', 'KCT', 'KKKNT')
 NO_TAX_RATES = ('0%', 'KCT', 'KKKNT')
@@ -56,9 +58,12 @@ def _dec(s):
 
 
 def mst_checksum_ok(code) -> bool:
-    c = (code or '').replace('-', '')
+    raw = str(code or '').strip()
+    if '-' in raw and not re.fullmatch(r'\d{10}-\d{3}', raw):
+        return False
+    c = raw.replace('-', '')
     if c.isdigit() and len(c) == 12:
-        return True  # personal ID number replaces the tax code since 2025-07-01
+        return True  # 12-digit personal ID (CCCD) replaces individual/household tax code per TT 86/2024/TT-BTC
     if not c.isdigit() or len(c) not in (10, 13):
         return False
     check = (10 - sum(int(d) * w for d, w in zip(c[:9], WEIGHTS)) % 11) % 11
@@ -66,28 +71,47 @@ def mst_checksum_ok(code) -> bool:
 
 
 def words_to_int(text: str):
-    """Vietnamese amount in words to an integer; None when any token is not understood."""
-    t = re.sub(r'[.,;]', ' ', text.lower())
-    t = re.sub(r'\b(đồng|chẵn|việt nam|vnd)\b', ' ', t)
+    """Vietnamese amount in words to an integer; None when empty or any token is not understood."""
+    if not text or not str(text).strip():
+        return None
+    t = unicodedata.normalize('NFC', str(text)).lower()
+    t = re.sub(r'[.,;/()\[\]{}\-–—!:״"\'`]+', ' ', t)
+    t = re.sub(r'\b(?:việt\s+nam\s+đồng|việt\s+nam|đồng|chẵn|vnđ|vnd)\b', ' ', t)
+    tokens = t.split()
+    if not tokens:
+        return None
     total = hundreds = tens = 0
     digit = None
-    for w in t.split():
+    saw_number = False
+    for w in tokens:
         if w in UNITS:
             digit = UNITS[w]
+            saw_number = True
         elif w == 'trăm':
             hundreds, digit = (digit or 0), None
+            saw_number = True
         elif w == 'mười':
             tens, digit = 10, None
+            saw_number = True
         elif w == 'mươi':
             tens, digit = (digit or 0) * 10, None
+            saw_number = True
         elif w in ('linh', 'lẻ'):
             pass
         elif w in SCALES:
-            total += (hundreds * 100 + tens + (digit or 0)) * SCALES[w]
+            sub = hundreds * 100 + tens + (digit or 0)
+            scale = SCALES[w]
+            if scale == 10**9 and 0 < total < 10**9:
+                total = (total + sub) * scale
+            else:
+                total += sub * scale
             hundreds = tens = 0
             digit = None
+            saw_number = True
         else:
             return None
+    if not saw_number:
+        return None
     return total + hundreds * 100 + tens + (digit or 0)
 
 
@@ -124,7 +148,8 @@ def _f(el, base, tag):
     return XmlField(value, f'{base}/{tag}')
 
 
-def extract(raw: bytes, today: date | None = None) -> XmlInvoice:
+def extract(raw: bytes, today: date | None = None, *, simulated: bool = False,
+            ca_roots_dir: Path | None = None) -> XmlInvoice:
     today = today or date.today()
     root = safe_parse(raw)
     if root.tag != 'HDon' or root.find('DLHDon') is None:
@@ -164,15 +189,18 @@ def extract(raw: bytes, today: date | None = None) -> XmlInvoice:
         b = f'{P}/NDHDon/TToan/THTTLTSuat/LTSuat[{i}]'
         groups.append({k: _f(g, b, t) for k, t in (('rate', 'TSuat'), ('base', 'ThTien'), ('vat', 'TThue'))})
 
-    sigs = verify_invoice_signatures(root)
+    sigs = verify_invoice_signatures(root, ca_roots_dir=ca_roots_dir)
     seller_sig = sigs['seller']
-    checks = _guards(root, d, fields, items, groups, sigs, today)
-    fidelity = FIDELITY_SIGNED if seller_sig.verified and not [c for c in checks if c.code.startswith('XML_CHECK_SIGNATURE') and c.status == 'ERROR'] \
-        else FIDELITY_UNSIGNED
+    checks = _guards(root, d, fields, items, groups, sigs, today, simulated=simulated)
+    sig_or_chain_errors = [
+        c for c in checks
+        if (c.code.startswith('XML_CHECK_SIGNATURE') or c.code == 'XML_CHECK_CERT_CHAIN') and c.status == 'ERROR'
+    ]
+    fidelity = FIDELITY_SIGNED if seller_sig.verified and not sig_or_chain_errors else FIDELITY_UNSIGNED
     return XmlInvoice(fields, items, groups, checks, sigs, fidelity, d.get('Id'))
 
 
-def _guards(root, d, fl, items, groups, sigs, today) -> list[Check]:
+def _guards(root, d, fl, items, groups, sigs, today, *, simulated: bool = False) -> list[Check]:
     v = lambda k: fl[k].value  # noqa: E731
     res = []
 
@@ -265,26 +293,67 @@ def _guards(root, d, fl, items, groups, sigs, today) -> list[Check]:
         add('XML_CHECK_QR_NUMBER', tl.get('03') == sym and tl.get('04') == str(int(v('number') or 0)) if (v('number') or '').isdigit() else False)
         add('XML_CHECK_QR_DATE', tl.get('05') == (v('issue_date') or '').replace('-', ''))
         add('XML_CHECK_QR_TOTAL', _dec(tl.get('06')) == gross, f"{tl.get('06')} vs {gross}")
+
+    # XSW structural check: enforce exactly one DLHDon in the entire document
+    dlhdon_direct = root.findall('DLHDon')
+    all_dlhdon = root.xpath('//*[local-name()="DLHDon"]')
+    unique_dlhdon = len(dlhdon_direct) == 1 and len(all_dlhdon) == 1 and all_dlhdon[0] is d
+
     # signatures
     s = sigs['seller']
-    if not s.present:
+    if not unique_dlhdon:
+        res.append(Check('XML_CHECK_SIGNATURE_SELLER', 'ERROR', 'multiple or wrapped DLHDon elements detected (XSW)'))
+    elif not s.present:
         res.append(Check('XML_CHECK_SIGNATURE_SELLER', 'ERROR', 'seller signature absent'))
     else:
         add('XML_CHECK_SIGNATURE_SELLER', s.verified, '; '.join(s.notes))
-        add('XML_CHECK_SIGNATURE_SIGNER', s.signer_tax_id is not None and s.signer_tax_id.replace('-', '')[:10] == (v('seller_tax_id') or '').replace('-', '')[:10],
-            f'certificate tax id {s.signer_tax_id}')
+        signer_clean = (s.signer_tax_id or '').replace('-', '').strip()
+        seller_clean = (v('seller_tax_id') or '').replace('-', '').strip()
+        if len(seller_clean) == 12 or len(signer_clean) == 12:
+            signer_ok = bool(signer_clean) and signer_clean == seller_clean
+        else:
+            signer_ok = (bool(signer_clean) and len(seller_clean) in (10, 13)
+                         and len(signer_clean) in (10, 13) and signer_clean[:10] == seller_clean[:10])
+        add('XML_CHECK_SIGNATURE_SIGNER', signer_ok, f'certificate tax id {s.signer_tax_id}')
         if s.signing_time and s.not_before and s.not_after:
             add('XML_CHECK_SIGNATURE_VALIDITY', s.not_before <= s.signing_time <= s.not_after, 'signing time within certificate validity')
         else:
             res.append(Check('XML_CHECK_SIGNATURE_VALIDITY', 'ERROR', 'signing time or validity missing'))
         if issued and s.signing_time:
             add('XML_CHECK_SIGNATURE_DATE', s.signing_time.date() >= issued, 'signed before issue date')
-    if sym.startswith('C'):
-        c = sigs['tax_authority']
-        if not c.present and len(sym) > 3 and sym[3] == 'M':
+
+    c = sigs['tax_authority']
+    if sym.startswith('C') or c.present:
+        if not c.present and sym.startswith('C') and len(sym) > 3 and sym[3] == 'M':
             res.append(Check('XML_CHECK_SIGNATURE_AUTHORITY', 'UNCHECKED', 'cash-register invoice: authority signature requirement not established'))
+        elif not c.present:
+            res.append(Check('XML_CHECK_SIGNATURE_AUTHORITY', 'ERROR', 'authority signature absent'))
         else:
-            add('XML_CHECK_SIGNATURE_AUTHORITY', c.verified, 'authority signature absent or invalid' if not c.verified else '')
-    res.append(Check('XML_CHECK_CERT_CHAIN', 'UNCHECKED', 'certificate chain and revocation are not verified'))
+            auth_dn_ok, auth_note = is_tax_authority_cert(c, s, v('seller_tax_id'))
+            self_signed_blocked = c.self_signed and not simulated and c.chain_trusted is not True
+            auth_ok = c.verified and auth_dn_ok and not self_signed_blocked
+            reasons = list(c.notes)
+            if not auth_dn_ok:
+                reasons.append(auth_note)
+            if self_signed_blocked:
+                reasons.append('self-signed authority certificate rejected in production mode')
+            add('XML_CHECK_SIGNATURE_AUTHORITY', auth_ok, '; '.join(reasons) if not auth_ok else '')
+
+    # Certificate chain & self-signed guard
+    if s.present:
+        if s.chain_trusted is True:
+            res.append(Check('XML_CHECK_CERT_CHAIN', 'PASS', 'certificate chain verified against configured CA root'))
+        elif s.self_signed:
+            if simulated:
+                res.append(Check('XML_CHECK_CERT_CHAIN', 'WARN', 'SIMULATED_SELF_SIGNED: self-signed certificate allowed only because pack.simulated=True'))
+            else:
+                res.append(Check('XML_CHECK_CERT_CHAIN', 'ERROR', 'self-signed certificate rejected (not pack.simulated)'))
+        elif s.chain_trusted is False:
+            res.append(Check('XML_CHECK_CERT_CHAIN', 'ERROR', 'certificate issuer not trusted by configured CA roots'))
+        else:
+            res.append(Check('XML_CHECK_CERT_CHAIN', 'UNCHECKED', 'certificate chain and revocation are not verified'))
+    else:
+        res.append(Check('XML_CHECK_CERT_CHAIN', 'UNCHECKED', 'certificate chain and revocation are not verified'))
+
     res.append(Check('XML_CHECK_SELLER_STATUS', 'UNCHECKED', 'seller status on the tax portal is not verified'))
     return res

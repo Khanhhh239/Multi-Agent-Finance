@@ -818,7 +818,11 @@ def plan_statistics_from_rule_snapshot(
             )
             continue
         try:
-            args = p.statistics(values, loaded['model'].med_, loaded['model'].scale_)
+            scale_eff = np.asarray(loaded['model'].scale_, dtype=float).copy()
+            active_mask = getattr(loaded['model'], 'active_mask_', None)
+            if active_mask is not None:
+                scale_eff = np.where(np.asarray(active_mask, dtype=bool), scale_eff, 1e9)
+            args = p.statistics(values, loaded['model'].med_, scale_eff)
         except p.InputUnavailable as error:
             rows_plan.append(
                 dict(record_id=cid, transaction_id=cid, available=False, status='unavailable', reason=error.code, requests=[])
@@ -870,6 +874,12 @@ def decode_statistics_plan_results(plan: dict, outputs: list) -> dict:
     cursor = 0
     meta = plan.get('artifact') or {}
     ref_arr = np.asarray(meta.get('reference_values') or [], dtype=float)
+    raw_scores_avail = [float(v / 1024.0) for v in outputs]
+    ranks_avail = (
+        np.atleast_1d(empirical_rank(ref_arr, np.asarray(raw_scores_avail, dtype=float)))
+        if raw_scores_avail
+        else np.asarray([], dtype=float)
+    )
     rows_out = []
     for entry in plan['rows']:
         tid = entry['transaction_id']
@@ -890,13 +900,13 @@ def decode_statistics_plan_results(plan: dict, outputs: list) -> dict:
             )
             continue
         val = outputs[cursor]
-        cursor += 1
         if isinstance(val, np.ndarray) and val.ndim == 0:
             val = int(val.item())
         if type(val) is not int or not 0 <= val <= 20480:
             raise ValueError('he4_statistics_output')
         raw_score = float(val / 1024.0)
-        rank = float(empirical_rank(ref_arr, np.asarray([raw_score], dtype=float))[0])
+        rank = float(ranks_avail[cursor])
+        cursor += 1
         rows_out.append(
             dict(
                 transaction_id=tid,

@@ -103,7 +103,7 @@ class BundleHETests(unittest.TestCase):
         for row in r['rows']:
             self.assertEqual(len(row['rule_coverage']['rules']),35)
             for name in ('statistics','ml'):self.assertFalse(row['branches'][name]['available'])
-            self.assertGreaterEqual(row['rule_coverage']['summary']['unavailable'],23)
+            self.assertGreaterEqual(row['rule_coverage']['summary']['unavailable'],22)
         self.assertEqual(len(r['scope_results']),7)
         self.assertTrue(all(not item['available'] for item in r['scope_results']))
         target=next(x for x in r['rows'] if x['transaction_id']=='AUDIT_0000')

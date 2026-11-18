@@ -29,7 +29,7 @@ def safe_display_text(value: str) -> str:
     normalized = " ".join(normalized.split())
     if INJECTION_PATTERNS.search(normalized) or _PHYSICAL.search(normalized):
         return "[REDACTED]"
-    return value
+    return normalized
 
 
 def _invalid() -> ContractError:

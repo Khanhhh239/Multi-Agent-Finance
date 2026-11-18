@@ -35,8 +35,15 @@ CORE = ["HOÀNG PHÁT", "MINH ANH", "TÂN THÀNH", "PHÚ AN", "ĐẠI DƯƠNG", 
         "THẮNG LỢI", "HẢI NAM", "CƯỜNG THỊNH", "THÀNH CÔNG", "HUY HOÀNG", "NHƯ Ý", "TẤN PHÁT", "AN PHÚ"]
 SUFFIX = ["", "", "", " VIỆT NAM", " SÀI GÒN", " MIỀN BẮC", " MIỀN NAM", " HÀ NỘI", " QUỐC TẾ", " GROUP"]
 PROVINCE_PREFIX = ["01", "03", "02", "04", "37", "36", "23", "31", "38", "34", "08", "27", "25", "33"]
+CCCD_PROVINCE_PREFIX = [
+    "001", "010", "019", "024", "027", "031", "036", "038",
+    "040", "048", "056", "074", "075", "079", "092",
+]
 BANKS = ["VCB", "BIDV", "CTG", "TCB", "MBB", "ACB", "VPB", "STB", "TPB", "HDB", "VIB", "SHB", "MSB", "OCB"]
 MST_W = np.array([31, 29, 23, 19, 17, 13, 7, 5, 3])
+_MST_10_RE = re.compile(r"^[0-9]{10}$")
+_MST_12_CCCD_RE = re.compile(r"^[0-9]{12}$")
+_MST_13_BRANCH_RE = re.compile(r"^([0-9]{10})-?([0-9]{3})$")
 
 
 def mst_check_digit(first9: str) -> int | None:
@@ -53,9 +60,35 @@ def make_mst(rng) -> str:
             return first9 + str(c)
 
 
+def make_cccd_mst(rng) -> str:
+    """Sinh MST cá nhân / hộ kinh doanh 12 chữ số CCCD theo Thông tư 86/2024/TT-BTC."""
+    prov = rng.choice(CCCD_PROVINCE_PREFIX)
+    gender_century = str(int(rng.integers(0, 4)))
+    birth_year = f"{int(rng.integers(60, 100)) if gender_century in {'0', '1'} else int(rng.integers(0, 8)):02d}"
+    serial = f"{int(rng.integers(1, 1_000_000)):06d}"
+    return f"{prov}{gender_century}{birth_year}{serial}"
+
+
 def valid_mst(m: str) -> bool:
-    m = re.sub(r"\D", "", str(m))[:10]
-    return len(m) == 10 and mst_check_digit(m[:9]) == int(m[9])
+    """Kiểm tra MST Việt Nam hợp lệ:
+    - 10 chữ số (doanh nghiệp / tổ chức / MST cũ): kiểm chữ số thứ 10 theo mod 11.
+    - 12 chữ số CCCD (MST cá nhân / hộ kinh doanh theo Thông tư 86/2024/TT-BTC).
+    - 13 chữ số chi nhánh (`NNNNNNNNNN-NNN` hoặc `NNNNNNNNNNNNN`): 10 số đầu hợp lệ + hậu tố chi nhánh `001..999`.
+    """
+    if m is None or isinstance(m, bool):
+        return False
+    s = str(m).strip()
+    if not s or not s.isascii():
+        return False
+    if _MST_10_RE.fullmatch(s):
+        return s[:2] != "00" and mst_check_digit(s[:9]) == int(s[9])
+    if _MST_12_CCCD_RE.fullmatch(s):
+        return s[:3] != "000" and s[6:] != "000000" and len(set(s)) > 1
+    branch_match = _MST_13_BRANCH_RE.fullmatch(s)
+    if branch_match:
+        head, branch = branch_match.groups()
+        return head[:2] != "00" and mst_check_digit(head[:9]) == int(head[9]) and int(branch) >= 1
+    return False
 
 
 def make_company_name(rng, sector: str, used: set) -> tuple[str, str, str]:

@@ -1,13 +1,49 @@
 """Monthly as-of aggregate diagnostics; never transaction fraud scores."""
 from __future__ import annotations
 
+import calendar
 import math
 from collections import Counter, defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+from functools import lru_cache
 
 from .generate import parse
 
 SOURCE = 'https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.chisquare.html'
+VN = timezone(timedelta(hours=7))
+
+
+@lru_cache(maxsize=131072)
+def vn_timestamp(value):
+    """Convert any aware timestamp (including UTC 'Z') to Asia/Ho_Chi_Minh (UTC+7)."""
+    dt = parse(value) if isinstance(value, str) else value
+    if dt.utcoffset() is None:
+        return dt.replace(tzinfo=VN)
+    return dt.astimezone(VN)
+
+
+@lru_cache(maxsize=131072)
+def vn_posting_context(value):
+    """Inspect off-hours, weekend, and period-end cutoffs strictly in Vietnam local time (UTC+7)."""
+    dt = vn_timestamp(value)
+    month_days = calendar.monthrange(dt.year, dt.month)[1]
+    is_date_only_midnight = (dt.hour == 0 and dt.minute == 0 and dt.second == 0 and dt.microsecond == 0)
+    off_hours = (not is_date_only_midnight) and (dt.hour >= 22 or dt.hour < 6)
+    return dict(
+        vn_iso=dt.isoformat(),
+        vn_date=dt.date().isoformat(),
+        year=dt.year,
+        month=dt.month,
+        day=dt.day,
+        hour=dt.hour,
+        weekday=dt.weekday(),
+        is_sunday=dt.weekday() == 6,
+        is_weekend=dt.weekday() >= 5,
+        is_off_hours=off_hours,
+        is_period_end=(month_days - dt.day) <= 2,
+        days_until_month_end=month_days - dt.day,
+        is_date_only_midnight=is_date_only_midnight,
+    )
 
 
 def bh_adjust(values):
@@ -79,14 +115,14 @@ def monthly_diagnostics(tables, definition_policy='legacy', *, point_in_time=Fal
     companies = sorted({r['company_id'] for r in rows})
     payments = [r for r in rows if int(r['is_financial_entry']) and r['payment_channel'] in {'bank', 'cash'}
                 and r['txn_type'] not in {'customer_receipt', 'payroll', 'rent'} and int(r['amount_vnd']) > 0]
-    cutoffs = sorted({(parse(r['posted_at']).year + (parse(r['posted_at']).month == 12),
-                       parse(r['posted_at']).month % 12 + 1) for r in rows})
+    cutoffs = sorted({(vn_timestamp(r['posted_at']).year + (vn_timestamp(r['posted_at']).month == 12),
+                       vn_timestamp(r['posted_at']).month % 12 + 1) for r in rows})
     results = []
     for year, month in cutoffs:
-        cutoff = datetime(year, month, 1, tzinfo=parse(rows[0]['posted_at']).tzinfo)
-        prior = [r for r in payments if parse(r['posted_at']) < cutoff
-                 and (not point_in_time or parse(r['observed_at']) < cutoff)]
-        window = [r for r in prior if (cutoff - parse(r['posted_at'])).total_seconds() <= 90 * 86400]
+        cutoff = datetime(year, month, 1, tzinfo=VN)
+        prior = [r for r in payments if vn_timestamp(r['posted_at']) < cutoff
+                 and (not point_in_time or vn_timestamp(r['observed_at']) < cutoff)]
+        window = [r for r in prior if (cutoff - vn_timestamp(r['posted_at'])).total_seconds() <= 90 * 86400]
         period_results = []
         for cid in companies:
             company_rows = [r for r in window if r['company_id'] == cid]
@@ -140,8 +176,8 @@ def monthly_diagnostics(tables, definition_policy='legacy', *, point_in_time=Fal
                     for key, observations in sorted(segments.items()):
                         segmented = record('D6', f'{field}:{key}', observations, 'first', 300)
                         segmented['segmentation'] = field
-            recent = [r for r in company_rows if (cutoff - parse(r['posted_at'])).total_seconds() <= 30 * 86400]
-            older = [r for r in prior if r['company_id'] == cid and 30 * 86400 < (cutoff - parse(r['posted_at'])).total_seconds() <= 120 * 86400]
+            recent = [r for r in company_rows if (cutoff - vn_timestamp(r['posted_at'])).total_seconds() <= 30 * 86400]
+            older = [r for r in prior if r['company_id'] == cid and 30 * 86400 < (cutoff - vn_timestamp(r['posted_at'])).total_seconds() <= 120 * 86400]
             suffixes = (0, 500, 999)
             suffix = dict(rule_id='D4', company_id=cid, cutoff_at=cutoff.isoformat(), scope='company',
                           window_days=30, rows=len(recent), baseline_rows=len(older),
@@ -150,9 +186,10 @@ def monthly_diagnostics(tables, definition_policy='legacy', *, point_in_time=Fal
                           action='aggregate_review_only', adds_transaction_score=False, baseline='past_empirical_not_uniform')
             if suffix['status'] == 'evaluated':
                 ratios = []
+                scale_div = 1000 if all(int(x['amount_vnd']) % 1000 == 0 for x in recent + older) else 1
                 for ending in suffixes:
-                    current = sum(int(r['amount_vnd']) % 1000 == ending for r in recent) / len(recent)
-                    previous = sum(int(r['amount_vnd']) % 1000 == ending for r in older) / len(older)
+                    current = sum((int(r['amount_vnd']) // scale_div) % 1000 == ending for r in recent) / len(recent)
+                    previous = sum((int(r['amount_vnd']) // scale_div) % 1000 == ending for r in older) / len(older)
                     ratios.append(dict(suffix=f'{ending:03}', current_rate=current, baseline_rate=previous,
                                        signal=(current > previous * 2 if previous > 0 else None) if phase4 else previous > 0 and current > previous * 2,
                                        note='zero_baseline_rate_not_evaluable' if phase4 and previous == 0 else ''))

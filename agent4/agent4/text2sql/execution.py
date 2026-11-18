@@ -9,6 +9,19 @@ from .errors import DataUnavailable, UnsafeQuery
 from .models import BoundQuery, ResultColumn, ResultData, decimal_string
 
 
+def _connect_read_only(database_path: Path) -> duckdb.DuckDBPyConnection:
+    connection = duckdb.connect(
+        str(database_path),
+        read_only=True,
+        config={"enable_external_access": False},
+    )
+    try:
+        connection.execute("SET enable_external_access = false")
+    except duckdb.Error:
+        pass
+    return connection
+
+
 class DuckDBReadOnlyExecutor:
     """A fresh read-only connection per request avoids leaked session state."""
 
@@ -19,7 +32,7 @@ class DuckDBReadOnlyExecutor:
         if not self.database_path.is_file():
             return False
         try:
-            with duckdb.connect(str(self.database_path), read_only=True) as connection:
+            with _connect_read_only(self.database_path) as connection:
                 connection.execute("SELECT 1").fetchone()
             return True
         except duckdb.Error:
@@ -30,7 +43,7 @@ class DuckDBReadOnlyExecutor:
         if not self.database_path.is_file():
             raise DataUnavailable("synthetic database is unavailable")
         try:
-            with duckdb.connect(str(self.database_path), read_only=True) as connection:
+            with _connect_read_only(self.database_path) as connection:
                 cursor = connection.execute(query.sql, list(query.params))
                 description = cursor.description or []
                 raw_rows = cursor.fetchall()

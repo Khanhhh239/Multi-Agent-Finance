@@ -13,7 +13,12 @@ from itertools import combinations
 from .allocation import Config, invariant_errors, validate
 from .data import fingerprint
 from .ledger import positive, text
-from .matching import normalize
+from .matching import (
+    index_invoice_number,
+    normalize,
+    reference_lookup_keys,
+    within_fee_tolerance,
+)
 
 
 def unique_transport(supplies, capacities, edges):
@@ -88,13 +93,17 @@ def allocate(invoices, payments, config=None):
     key = lambda r: (r["tenant_id"], r["id"])
     inv = {key(i): i for i in invoices}
     remaining = {k: i["amount_minor"] for k, i in inv.items()}
-    party_index, refs_index, widths = defaultdict(list), defaultdict(list), defaultdict(set)
+    party_index, refs_index, prefixed_refs_index, widths = (
+        defaultdict(list), defaultdict(list), defaultdict(list), defaultdict(set)
+    )
     for k, i in sorted(inv.items()):
         party_index[(i["tenant_id"], i["currency"], i["side"], i["party_id"])].append(k)
-        number = normalize(i["invoice_number"])
+        number, aliases = index_invoice_number(i["invoice_number"])
         if number:
             refs_index[(i["tenant_id"], number)].append(k)
             widths[i["tenant_id"]].add(len(number.split()))
+            for alias in aliases:
+                prefixed_refs_index[(i["tenant_id"], alias)].append(k)
     # Solve the whole visible snapshot jointly. Chronological greedy batches
     # can commit an early ambiguous split before a later observed payment
     # supplies the constraint that makes the component unique. Eligibility
@@ -113,18 +122,26 @@ def allocate(invoices, payments, config=None):
         by_p, fixed, risks = {}, {}, set()
         pmap = {key(p): p for p in visible_payments}
         for pk, p in pmap.items():
-            words, known = normalize(p["reference"]).split(), set()
+            fee_tol = config.fee_tolerance_vnd if p["currency"] == "VND" else 0
+            words, prefixed_keys = reference_lookup_keys(p["reference"])
+            known = set()
             for width in widths[p["tenant_id"]]:
                 for start in range(len(words) - width + 1):
                     known.update(refs_index.get((p["tenant_id"], " ".join(words[start:start + width])), ()))
+            for token in prefixed_keys:
+                known.update(refs_index.get((p["tenant_id"], token), ()))
+                known.update(prefixed_refs_index.get((p["tenant_id"], token), ()))
             remittance = p.get("remittance")
             if remittance is not None:
                 if not isinstance(remittance, list) or not remittance:
                     raise ValueError("remittance must be a nonempty observed breakdown")
                 exact = {}
                 for row in remittance:
-                    number = normalize(text(row["invoice_number"]))
+                    number, aliases = index_invoice_number(text(row["invoice_number"]))
                     matches = refs_index.get((p["tenant_id"], number), [])
+                    if not matches:
+                        alias_hits = {k for alias in aliases for k in prefixed_refs_index.get((p["tenant_id"], alias), ())}
+                        matches = sorted(alias_hits)
                     positive(row["amount_minor"])
                     if len(matches) != 1 or not eligible(p, matches[0]) or matches[0] in exact:
                         risks.add(pk)
@@ -141,42 +158,66 @@ def allocate(invoices, payments, config=None):
                 valid = sorted(k for k in known if eligible(p, k))
                 if (len(valid) != len(known) or len({inv[k]["party_id"] for k in valid}) != 1
                         or len({normalize(inv[k]["invoice_number"]) for k in valid}) != len(valid)):
-                    decisions[pk] = {"status": "review", "reason": "reference_conflict"}
+                    decisions[pk] = {"status": "review", "reason": "reference_conflict", "fee_minor": 0}
                     continue
-                # A valid reference alone cannot distinguish equal obligations
-                # when remittance may name the wrong existing invoice.
-                if remittance is None and len(valid) == 1:
+                # Disambiguate equal-amount invoices from distinct billing dates/periods
+                # (e.g. monthly retainers) when the bank narrative names a specific invoice_no.
+                # Only hold for review when strict_same_day_equal_amount is enabled and two
+                # identical same-day twin obligations share issued_on, due_on, and balance.
+                if remittance is None and len(valid) == 1 and config.strict_same_day_equal_amount:
                     resolved_pool = party_index[(p["tenant_id"], p["currency"], p["side"], inv[valid[0]]["party_id"])]
-                    alternatives = [k for k in resolved_pool if k != valid[0] and eligible(p, k)
-                                    and remaining[k] == remaining[valid[0]]]
+                    alternatives = [
+                        k for k in resolved_pool
+                        if k != valid[0]
+                        and eligible(p, k)
+                        and remaining[k] == remaining[valid[0]]
+                        and inv[k]["issued_on"] == inv[valid[0]]["issued_on"]
+                        and inv[k].get("due_on") == inv[valid[0]].get("due_on")
+                    ]
                     if alternatives:
                         valid += alternatives
                         risks.add(pk)
                 by_p[pk] = sorted(set(valid))
             elif remittance is not None:
-                decisions[pk] = {"status": "review", "reason": "remittance_conflict"}
+                decisions[pk] = {"status": "review", "reason": "remittance_conflict", "fee_minor": 0}
             elif not p["party_id"]:
-                decisions[pk] = {"status": "review", "reason": "unknown_party"}
+                decisions[pk] = {"status": "review", "reason": "unknown_party", "fee_minor": 0}
             else:
-                pool = [k for k in pool if eligible(p, k) and remaining[k] <= p["amount_minor"]]
-                candidates.update((pk[0], pk[1], k[1]) for k in pool)
-                if len(pool) > config.max_group_pool:
-                    decisions[pk] = {"status": "review", "reason": "group_pool_overflow"}
+                all_eligible = [k for k in pool if eligible(p, k)]
+                candidates.update((pk[0], pk[1], k[1]) for k in all_eligible)
+                candidate_pool = [k for k in all_eligible if remaining[k] <= p["amount_minor"] + fee_tol]
+                if len(candidate_pool) > config.max_group_pool:
+                    decisions[pk] = {"status": "review", "reason": "group_pool_overflow", "fee_minor": 0}
                     continue
+                exact_pool = [k for k in candidate_pool if remaining[k] <= p["amount_minor"]]
                 subsets = []
                 for size in range(1, config.max_group_size + 1):
-                    for subset in combinations(pool, size):
+                    for subset in combinations(exact_pool, size):
                         if sum(remaining[k] for k in subset) == p["amount_minor"]:
                             subsets.append(subset)
                             if len(subsets) == 2:
                                 break
                     if len(subsets) == 2:
                         break
+                if not subsets and fee_tol > 0:
+                    for size in range(1, config.max_group_size + 1):
+                        for subset in combinations(candidate_pool, size):
+                            sub_total = sum(remaining[k] for k in subset)
+                            fee_gap = sub_total - p["amount_minor"]
+                            if within_fee_tolerance(fee_gap, sub_total, fee_tol):
+                                ordered_sub = tuple(sorted(subset, key=lambda ik: (inv[ik]["issued_on"], inv[ik]["id"])))
+                                if remaining[ordered_sub[-1]] > fee_gap:
+                                    subsets.append(ordered_sub)
+                                    if len(subsets) == 2:
+                                        break
+                        if len(subsets) == 2:
+                            break
                 if len(subsets) == 1:
                     by_p[pk] = list(subsets[0])
                 else:
-                    decisions[pk] = {"status": "review" if pool else "unmatched",
-                                     "reason": "ambiguous_subset" if subsets else "no_exact_subset"}
+                    decisions[pk] = {"status": "review" if all_eligible else "unmatched",
+                                     "reason": "ambiguous_subset" if subsets else "no_exact_subset",
+                                     "fee_minor": 0}
         by_i = defaultdict(set)
         for pk, iks in by_p.items():
             for ik in iks:
@@ -195,7 +236,7 @@ def allocate(invoices, payments, config=None):
                     queue.extend(by_i[ik] - ps)
             unseen -= ps
             ps, ii = sorted(ps), sorted(ii)
-            reason, flow = None, {}
+            reason, flow, edge_fees = None, {}, {}
             fixed_i, fixed_edges = Counter(), {}
             for pk in ps:
                 for ik, amount in fixed.get(pk, {}).items():
@@ -207,6 +248,26 @@ def allocate(invoices, payments, config=None):
                 reason = "flow_component_overflow"
             elif any(fixed_i[ik] > remaining[ik] for ik in ii):
                 reason = "remittance_overflow"
+            elif len(ps) == 1 and ps[0] not in fixed and len(ii) > 1:
+                pk0 = ps[0]
+                fee_tol = config.fee_tolerance_vnd if pmap[pk0]["currency"] == "VND" else 0
+                total_cap = sum(remaining[ik] for ik in ii)
+                fee_gap = total_cap - pmap[pk0]["amount_minor"]
+                ordered_ii = sorted(ii, key=lambda ik: (inv[ik]["issued_on"], inv[ik]["id"]))
+                if within_fee_tolerance(fee_gap, total_cap, fee_tol) and remaining[ordered_ii[-1]] > fee_gap:
+                    for ik in ordered_ii[:-1]:
+                        flow[pk0, ik] = remaining[ik]
+                    flow[pk0, ordered_ii[-1]] = remaining[ordered_ii[-1]] - fee_gap
+                    edge_fees[pk0, ordered_ii[-1]] = fee_gap
+                else:
+                    supplies = [pmap[pk0]["amount_minor"]]
+                    capacities = [remaining[ik] for ik in ii]
+                    edges = [(0, i) for i, ik in enumerate(ii) if ik in by_p[pk0]]
+                    status, solved = unique_transport(supplies, capacities, edges)
+                    if status != "unique":
+                        reason = "flow_" + status
+                    else:
+                        flow = {(ps[p], ii[i]): amount for (p, i), amount in solved.items()}
             else:
                 supplies = [0 if pk in fixed else pmap[pk]["amount_minor"] for pk in ps]
                 capacities = [remaining[ik] - fixed_i[ik] for ik in ii]
@@ -217,18 +278,29 @@ def allocate(invoices, payments, config=None):
                     reason = "flow_" + status
                 else:
                     flow = {**fixed_edges, **{(ps[p], ii[i]): amount for (p, i), amount in solved.items()}}
+                    for (p_idx, i_idx), amount in solved.items():
+                        pk_e, ik_e = ps[p_idx], ii[i_idx]
+                        fee_tol = config.fee_tolerance_vnd if pmap[pk_e]["currency"] == "VND" else 0
+                        if (len(by_p[pk_e]) == 1 and len(by_i[ik_e]) == 1
+                                and amount == pmap[pk_e]["amount_minor"]):
+                            fee_gap = remaining[ik_e] - amount
+                            if within_fee_tolerance(fee_gap, remaining[ik_e], fee_tol):
+                                edge_fees[pk_e, ik_e] = fee_gap
             if reason:
                 for pk in ps:
-                    decisions[pk] = {"status": "review", "reason": reason}
+                    decisions[pk] = {"status": "review", "reason": reason, "fee_minor": 0}
                 continue
             for (pk, ik), amount in sorted(flow.items()):
                 remaining[ik] -= amount
                 result.append({"tenant_id": pk[0], "payment_id": pk[1], "invoice_id": ik[1],
                                "side": pmap[pk]["side"], "currency": pmap[pk]["currency"],
-                               "amount_minor": amount, "reason": "observed_remittance" if pk in fixed else "unique_transport"})
+                               "amount_minor": amount, "fee_minor": edge_fees.get((pk, ik), 0),
+                               "reason": "observed_remittance" if pk in fixed else "unique_transport"})
             for pk in ps:
+                pk_fee = sum(fee for (p_key, _), fee in edge_fees.items() if p_key == pk)
                 decisions[pk] = {"status": "auto" if any(k[0] == pk for k in flow) else "review",
-                                 "reason": "unique_transport" if any(k[0] == pk for k in flow) else "no_cash_flow"}
+                                 "reason": "unique_transport" if any(k[0] == pk for k in flow) else "no_cash_flow",
+                                 "fee_minor": pk_fee}
     result.sort(key=lambda a: (a["tenant_id"], a["payment_id"], a["invoice_id"]))
     errors = invariant_errors(invoices, payments, result)
     if errors:

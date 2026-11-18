@@ -42,7 +42,7 @@ class SnapshotStore:
         conn = sqlite3.connect(self.path, timeout=30, isolation_level=None)
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA foreign_keys=ON")
-        conn.execute("PRAGMA synchronous=FULL")
+        conn.execute("PRAGMA synchronous=NORMAL")
         return conn
 
     def _now(self):
@@ -286,6 +286,42 @@ class SnapshotStore:
         with self._transaction(scope, recheck) as conn:
             manifest, raw = self._read_snapshot(conn, scope, snapshot_id)
             return raw if data else manifest
+
+    def list_snapshots(self, scope, recheck=None, *, limit=100):
+        with self._transaction(scope, recheck) as conn:
+            tenant, company, _ = self._scope(scope)
+            rows = conn.execute(
+                "SELECT snapshot_id FROM snapshots WHERE tenant_id=? AND company_id=? ORDER BY rowid DESC LIMIT ?",
+                (tenant, company, int(limit)),
+            ).fetchall()
+            datasets = []
+            for r in rows:
+                manifest, raw = self._read_snapshot(conn, scope, r["snapshot_id"])
+                payload = loads(raw)
+                txs = payload.get("transactions") if isinstance(payload, dict) else None
+                if txs is None and isinstance(payload, dict) and isinstance(payload.get("source"), dict):
+                    txs = payload["source"].get("tables", {}).get("transactions", [])
+                txs = txs or []
+                times = [t.get("effective_at") or t.get("posted_at") or t.get("observed_at") for t in txs if isinstance(t, dict)]
+                times = [t for t in times if isinstance(t, str) and t]
+                sim = any(
+                    isinstance(t, dict) and (
+                        (isinstance(t.get("source"), dict) and t["source"].get("is_simulated"))
+                        or payload.get("source", {}).get("is_simulated")
+                    )
+                    for t in txs
+                ) if txs else bool(isinstance(payload, dict) and payload.get("source", {}).get("is_simulated"))
+                datasets.append(dict(
+                    snapshot_id=manifest["snapshot_id"],
+                    contract_version=manifest["contract_version"],
+                    created_at=manifest["created_at"],
+                    record_count=len(txs),
+                    period_start=min(times) if times else manifest["created_at"],
+                    period_end=max(times) if times else manifest["created_at"],
+                    simulated_records=sim,
+                ))
+            datasets.sort(key=lambda d: (d["created_at"], d["snapshot_id"]), reverse=True)
+            return datasets
 
     def commit(self, scope, import_id, request, key, recheck=None):
         if not isinstance(request, dict) or set(request) != COMMIT_FIELDS or request.get("acknowledge") is not True:

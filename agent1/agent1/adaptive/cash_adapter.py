@@ -6,23 +6,32 @@ receipt paths. A partial receipt never changes T1's settlement event probability
 
 from __future__ import annotations
 
+from copy import deepcopy
 import hashlib
 import pickle
 from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
+from scipy.special import ndtr
 
 VERSION = "settlement-partial-cash-v2"
 FIT_VERSION = "partial-empirical-prior-v3"
 LABEL_CONTRACT = "cash-calendar-full-settlement-v2"
+DEFAULT_CUSTOMER_STRESS_RHO = 0.80
 
 
 def probabilities(distribution, rows=None):
     p = np.asarray(distribution, float)
-    if (p.ndim != 2 or p.shape[1] < 2 or rows is not None and len(p) != rows
-            or not np.isfinite(p).all() or (p < 0).any()
-            or not np.allclose(p.sum(1), 1, atol=1e-10, rtol=0)):
+    if (
+        p.ndim != 2
+        or p.shape[1] < 2
+        or rows is not None
+        and len(p) != rows
+        or not np.isfinite(p).all()
+        or (p < 0).any()
+        or not np.allclose(p.sum(1), 1, atol=1e-10, rtol=0)
+    ):
         raise ValueError("Phân phối tất toán T1 không hợp lệ")
     return p
 
@@ -34,13 +43,19 @@ def receipt_state(frame):
 
 
 def overdue(frame):
+    """Days overdue at forecast cutoff without asymmetric issue/due clipping bias."""
     if frame.empty:
         return np.zeros(0)
+    if "overdue_days_signed" in frame:
+        return frame.overdue_days_signed.to_numpy(float)
+    if "due_date" in frame and "cutoff" in frame.attrs:
+        clock = pd.Timestamp(frame.attrs["cutoff"])
+        due = pd.to_datetime(frame.due_date)
+        return (clock - due).dt.days.to_numpy(float)
     if "age_days" in frame:
         return frame.age_days.to_numpy(float) - frame.term_days.to_numpy(float)
     clock = pd.Timestamp(frame.attrs["cutoff"])
-    return ((clock - frame.issue_date).dt.days.clip(0, 730).to_numpy(float)
-            - (frame.due_date - frame.issue_date).dt.days.clip(0, 365).to_numpy(float))
+    return (clock - pd.to_datetime(frame.due_date)).dt.days.to_numpy(float)
 
 
 def bins(late, received, week):
@@ -61,16 +76,28 @@ class PartialModel:
 
     def __post_init__(self):
         self.probability = np.asarray(self.probability, float)
-        if (self.probability.shape != (6,) or not np.isfinite(self.probability).all()
-                or (self.probability < 0).any() or (self.probability > 1).any()
-                or len(self.ratios) != 6 or len(self.weights) != 6):
+        if (
+            self.probability.shape != (6,)
+            or not np.isfinite(self.probability).all()
+            or (self.probability < 0).any()
+            or (self.probability > 1).any()
+            or len(self.ratios) != 6
+            or len(self.weights) != 6
+        ):
             raise ValueError("Nhánh partial không hợp lệ")
         for values, weights in zip(self.ratios, self.weights):
             a, w = np.asarray(values, float), np.asarray(weights, float)
-            if (a.ndim != 1 or not len(a) or w.shape != a.shape
-                    or not np.isfinite(a).all() or not np.isfinite(w).all()
-                    or (a <= 0).any() or (a >= 1).any() or (w < 0).any()
-                    or not np.isclose(w.sum(), 1)):
+            if (
+                a.ndim != 1
+                or not len(a)
+                or w.shape != a.shape
+                or not np.isfinite(a).all()
+                or not np.isfinite(w).all()
+                or (a <= 0).any()
+                or (a >= 1).any()
+                or (w < 0).any()
+                or not np.isclose(w.sum(), 1)
+            ):
                 raise ValueError("Phân phối tỷ lệ partial không hợp lệ")
 
     @property
@@ -82,14 +109,24 @@ class PartialModel:
         return np.array([np.dot(v, w) for v, w in zip(self.ratios, self.weights)])
 
     def record(self):
-        return dict(probability=self.probability.tolist(), ratios=[np.asarray(v).tolist() for v in self.ratios],
-                    weights=[np.asarray(w).tolist() for w in self.weights], fitted_through=self.fitted_through,
-                    evidence=self.evidence, version=self.version)
+        return dict(
+            probability=self.probability.tolist(),
+            ratios=[np.asarray(v).tolist() for v in self.ratios],
+            weights=[np.asarray(w).tolist() for w in self.weights],
+            fitted_through=self.fitted_through,
+            evidence=self.evidence,
+            version=self.version,
+        )
 
     @classmethod
     def from_record(cls, record):
-        return cls(**dict(record, ratios=tuple(np.asarray(v) for v in record["ratios"]),
-                          weights=tuple(np.asarray(w) for w in record["weights"])))
+        return cls(
+            **dict(
+                record,
+                ratios=tuple(np.asarray(v) for v in record["ratios"]),
+                weights=tuple(np.asarray(w) for w in record["weights"]),
+            )
+        )
 
 
 def fit_partial(frame, cutoff, *, prior, strength=30.0, half_life_days=180.0):
@@ -121,7 +158,12 @@ def fit_partial(frame, cutoff, *, prior, strength=30.0, half_life_days=180.0):
             complete = frame.followup_days.to_numpy(float) >= 7 * (week + 1)
             no_settlement = frame.paid_days.to_numpy(float) > 7 * (week + 1)
             eligible = complete & no_settlement & (remaining > 1e-8)
-            ratios = np.divide(cash[:, week], remaining, out=np.zeros(len(frame)), where=remaining > 1e-8)
+            ratios = np.divide(
+                cash[:, week],
+                remaining,
+                out=np.zeros(len(frame)),
+                where=remaining > 1e-8,
+            )
             groups = bins(late, state, week)
             for i in np.flatnonzero(eligible):
                 if not 0 <= ratios[i] < 1:
@@ -143,14 +185,21 @@ def fit_partial(frame, cutoff, *, prior, strength=30.0, half_life_days=180.0):
         # incidence. Its ratio atom is unreachable until evidence is observed.
         prior_p = prior.probability[group] if prior is not None else 0.0
         prior_mass = strength if prior is not None else 0.0
+        prior_positive_mass = prior_mass * prior_p
         positive_mass = float(w[positive].sum())
-        ps.append((positive_mass + prior_mass * prior_p) / (n + prior_mass)
-                  if n + prior_mass else 0.0)
-        # An empty cell's ratio atom is only a serialization placeholder. It
-        # must not turn into thirty 50%-receipts when the first event arrives.
+        ps.append(
+            (positive_mass + prior_positive_mass) / (n + prior_mass)
+            if n + prior_mass
+            else 0.0
+        )
+        # Conditional ratio Dirichlet prior pseudo-count is prior_mass * prior_p
+        # (expected positive partial weeks in the prior), never raw prior_mass.
         if prior is not None and prior_p > 0:
             v = np.r_[prior.ratios[group], ratios[positive]]
-            rw = np.r_[np.asarray(prior.weights[group]) * prior_mass, w[positive]]
+            rw = np.r_[
+                np.asarray(prior.weights[group]) * prior_positive_mass,
+                w[positive],
+            ]
         else:
             v, rw = ratios[positive], w[positive]
         if not len(v):
@@ -163,11 +212,26 @@ def fit_partial(frame, cutoff, *, prior, strength=30.0, half_life_days=180.0):
             rw = np.full(256, 1 / 256)
         values.append(v)
         weights.append(rw)
-        evidence.append(dict(weeks=len(samples), effective_weeks=n, partial_weeks=int(positive.sum())))
-    return PartialModel(np.asarray(ps), tuple(values), tuple(weights), str(cutoff.date()),
-                         dict(cells=evidence, fit_version=FIT_VERSION,
-                              prior_sha256=prior.digest if prior is not None else None,
-                             prior_strength=strength, label_contract=LABEL_CONTRACT))
+        evidence.append(
+            dict(
+                weeks=len(samples),
+                effective_weeks=n,
+                partial_weeks=int(positive.sum()),
+            )
+        )
+    return PartialModel(
+        np.asarray(ps),
+        tuple(values),
+        tuple(weights),
+        str(cutoff.date()),
+        dict(
+            cells=evidence,
+            fit_version=FIT_VERSION,
+            prior_sha256=prior.digest if prior is not None else None,
+            prior_strength=strength,
+            label_contract=LABEL_CONTRACT,
+        ),
+    )
 
 
 def expected_cash_components(distribution, frame, partial):
@@ -193,8 +257,19 @@ def expected_cash_components(distribution, frame, partial):
     groups = np.zeros_like(states, dtype=int)
     means = partial.means
     for week in range(p.shape[1] - 1):
-        h = np.divide(p[:, week], tail[:, week], out=np.zeros(len(p)), where=tail[:, week] > 0)
-        group = np.column_stack([bins(late, np.full(len(p), s), week) for s in (0, 1)])
+        h = np.clip(
+            np.divide(
+                p[:, week],
+                tail[:, week],
+                out=np.zeros(len(p)),
+                where=tail[:, week] > 1e-15,
+            ),
+            0.0,
+            1.0,
+        )
+        group = np.column_stack(
+            [bins(late, np.full(len(p), s), week) for s in (0, 1)]
+        )
         q, ratio = partial.probability[group], means[group]
         opening[:, week] = remaining.sum(1)
         states[:, week] = remaining
@@ -207,12 +282,25 @@ def expected_cash_components(distribution, frame, partial):
         result[:, week] = settlement[:, week] + pieces_total[:, week]
         # Zero-receipt state moves to positive state only on a partial event.
         remaining[:, 0] = alive[:, 0] * (1 - q[:, 0])
-        remaining[:, 1] = alive[:, 1] - pieces[:, 1] + alive[:, 0] * q[:, 0] * (1 - ratio[:, 0])
+        remaining[:, 1] = (
+            alive[:, 1]
+            - pieces[:, 1]
+            + alive[:, 0] * q[:, 0] * (1 - ratio[:, 0])
+        )
+        remaining = np.maximum(0.0, remaining)
         closing[:, week] = remaining.sum(1)
     result[:, -1] = remaining.sum(1)
-    return dict(cash=result, settlement=settlement, partial=pieces_total,
-                opening=opening, remaining=closing, hazard=hazards,
-                state_debt=states, cells=groups)
+    return dict(
+        cash=result,
+        settlement=settlement,
+        partial=pieces_total,
+        opening=opening,
+        closing=closing,
+        remaining=closing,
+        hazard=hazards,
+        state_debt=states,
+        cells=groups,
+    )
 
 
 def expected_cash(distribution, frame, partial):
@@ -229,14 +317,27 @@ class InvoiceCashPaths:
     settlement_week: np.ndarray
 
 
-def iter_cash_paths(distribution, frame, partial, amounts, rng, paths, *, shared_customer=False):
+def iter_cash_paths(
+    distribution,
+    frame,
+    partial,
+    amounts,
+    rng,
+    paths,
+    *,
+    shared_customer=False,
+    customer_rho=None,
+):
     """Yield a complete receipt/balance history per invoice, using bounded memory.
 
     The latent cash-full event follows T1 even on paths with earlier partials.
     Tail is a timing category, never a second write-off probability.
-    Customer stress retains only RNG states, replaying one invoice's draws at a
-    time. Repeated customers do not advance the parent RNG, preserving paired
-    scenarios and the exact draws of the original tensor-caching engine.
+    - `shared_customer="copula"` (or `customer_rho` in (0, 1)): spawns independent
+      child RNG streams via `rng.spawn(...)` per customer and per invoice with a
+      Gaussian factor copula so same-customer trajectories correlate (`0 < rho < 1`)
+      without cloning identical RNG draws across invoices.
+    - `shared_customer=True` (with `customer_rho=None`): preserves exact low-memory
+      state-replay compatibility for legacy tensor-free tests.
     """
     if partial is None or partial.version != VERSION:
         raise ValueError("Cần nhánh partial đã fit để chuyển T1 thành dòng tiền")
@@ -244,15 +345,53 @@ def iter_cash_paths(distribution, frame, partial, amounts, rng, paths, *, shared
         raise ValueError("Số đường mô phỏng phải là số nguyên dương")
     p = probabilities(distribution, len(frame))
     amounts = np.asarray(amounts, float)
-    if amounts.shape != (len(p),) or not np.isfinite(amounts).all() or (amounts < 0).any():
+    if (
+        amounts.shape != (len(p),)
+        or not np.isfinite(amounts).all()
+        or (amounts < 0).any()
+    ):
         raise ValueError("Dư nợ mô phỏng không hợp lệ")
     horizon = p.shape[1] - 1
     late, initial = overdue(frame), receipt_state(frame)
     customers = frame.customer_id.astype(str).to_numpy()
-    shared_states = {}
-    shared_rng = np.random.Generator(type(rng.bit_generator)(0)) if shared_customer else None
+
+    use_copula = shared_customer == "copula" or customer_rho is not None
+    rho = (
+        DEFAULT_CUSTOMER_STRESS_RHO
+        if customer_rho is None
+        else float(customer_rho)
+    )
+    if use_copula and (not np.isfinite(rho) or not 0.0 <= rho <= 1.0):
+        raise ValueError("Hệ số tương quan khách hàng phải thuộc [0, 1]")
+
+    cust_master = inv_master = cust_replay = None
+    customer_seed_states: dict[str, dict] = {}
+    shared_states: dict[str, dict] = {}
+    shared_rng = None
+
+    if use_copula:
+        cust_master, inv_master = rng.spawn(2)
+        cust_replay = cust_master.spawn(1)[0]
+    elif shared_customer:
+        shared_rng = np.random.Generator(deepcopy(rng.bit_generator))
+
     for i in range(len(p)):
-        if shared_customer:
+        if use_copula:
+            cid = customers[i]
+            if cid not in customer_seed_states:
+                c_gen = cust_master.spawn(1)[0]
+                customer_seed_states[cid] = c_gen.bit_generator.state
+                z_cust = c_gen.standard_normal((paths, horizon))
+            else:
+                cust_replay.bit_generator.state = customer_seed_states[cid]
+                z_cust = cust_replay.standard_normal((paths, horizon))
+            inv_gen = inv_master.spawn(1)[0]
+            z_idio = inv_gen.standard_normal((paths, horizon))
+            latent = np.sqrt(rho) * z_cust + np.sqrt(1.0 - rho) * z_idio
+            u_settle = ndtr(latent)
+            u_part = inv_gen.random((2, paths, horizon))
+            draws = np.concatenate((u_settle[None, :, :], u_part), axis=0)
+        elif shared_customer:
             if customers[i] not in shared_states:
                 shared_states[customers[i]] = rng.bit_generator.state
                 draws = rng.random((3, paths, horizon))
@@ -261,6 +400,7 @@ def iter_cash_paths(distribution, frame, partial, amounts, rng, paths, *, shared
                 draws = shared_rng.random((3, paths, horizon))
         else:
             draws = rng.random((3, paths, horizon))
+
         remaining = np.full(paths, float(amounts[i]))
         received = np.full(paths, initial[i])
         receipts = np.zeros((paths, horizon))
@@ -268,7 +408,7 @@ def iter_cash_paths(distribution, frame, partial, amounts, rng, paths, *, shared
         settlement_week = np.full(paths, horizon + 1, dtype=int)
         for week in range(horizon):
             tail = p[i, week:].sum()
-            h = p[i, week] / tail if tail > 0 else 0.0
+            h = float(np.clip(p[i, week] / tail, 0.0, 1.0)) if tail > 1e-15 else 0.0
             active = settlement_week == horizon + 1
             settled = active & (draws[0, :, week] < h)
             settlement_week[settled] = week + 1
@@ -278,25 +418,52 @@ def iter_cash_paths(distribution, frame, partial, amounts, rng, paths, *, shared
             fraction[settled] = 1.0
             for cell in np.unique(group[pay]):
                 take = pay & (group == cell)
-                indices = np.searchsorted(np.cumsum(partial.weights[cell]), draws[2, take, week])
-                fraction[take] = np.asarray(partial.ratios[cell])[np.minimum(indices, len(partial.ratios[cell]) - 1)]
+                indices = np.searchsorted(
+                    np.cumsum(partial.weights[cell]), draws[2, take, week]
+                )
+                fraction[take] = np.asarray(partial.ratios[cell])[
+                    np.minimum(indices, len(partial.ratios[cell]) - 1)
+                ]
             cash = remaining * fraction
             receipts[:, week] = cash
-            remaining -= cash
+            remaining = np.maximum(0.0, remaining - cash)
             balances[:, week] = remaining
             received |= cash > 0
-        yield InvoiceCashPaths(str(frame.iloc[i].invoice_id), receipts, balances, settlement_week)
+        yield InvoiceCashPaths(
+            str(frame.iloc[i].invoice_id), receipts, balances, settlement_week
+        )
 
 
-def sample_cash(distribution, frame, partial, amounts, rng, paths, *, shared_customer=False):
+def sample_cash(
+    distribution,
+    frame,
+    partial,
+    amounts,
+    rng,
+    paths,
+    *,
+    shared_customer=False,
+    customer_rho=None,
+):
     """Aggregate the same per-invoice receipt paths used by acceptance audits."""
     p = probabilities(distribution, len(frame))
     result = np.zeros((paths, p.shape[1] - 1))
-    for invoice in iter_cash_paths(p, frame, partial, amounts, rng, paths,
-                                   shared_customer=shared_customer):
+    for invoice in iter_cash_paths(
+        p,
+        frame,
+        partial,
+        amounts,
+        rng,
+        paths,
+        shared_customer=shared_customer,
+        customer_rho=customer_rho,
+    ):
         result += invoice.receipts
     return result
 
 
 def bundle_version(model, partial):
-    return "bundle:" + hashlib.sha256(pickle.dumps((model, partial), protocol=4)).hexdigest()[:24]
+    return (
+        "bundle:"
+        + hashlib.sha256(pickle.dumps((model, partial), protocol=4)).hexdigest()[:24]
+    )

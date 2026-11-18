@@ -12,6 +12,8 @@ from functools import cache
 from pathlib import Path
 from uuid import uuid4
 
+import duckdb
+
 from agent4.answer.evidence import build_evidence_preview
 from agent4.answer.generator import generate_grounded_answer
 from agent4.answer.result_validator import safe_display_text, validate_result
@@ -29,6 +31,7 @@ from agent4.engine.metrics import REGISTRY
 from agent4.metric_selection.config import MetricSelectionConfig, load_config
 from agent4.metric_selection.recovery import SelectionTrace, select_metrics_with_recovery
 from agent4.metric_selection.validator import validate_metrics
+from agent4.planning._time import _RELATIVE_PERIOD
 from agent4.planning.clarification import ClarificationSessionStore, resolve_clarification_turn
 from agent4.planning.planner import _filters, build_semantic_plan_draft, detect_query_views
 from agent4.planning.validator import (
@@ -37,7 +40,7 @@ from agent4.planning.validator import (
     validate_semantic_plan_draft,
 )
 from agent4.sql.compiler import compile_sql
-from agent4.sql.executor import _RESULT_CACHE, execute_safe_sql
+from agent4.sql.executor import _RESULT_CACHE, _connect_read_only, execute_safe_sql
 from agent4.sql.safety import validate_sql_safety
 
 _LOG = logging.getLogger(__name__)
@@ -152,7 +155,11 @@ async def run_governed_pipeline(
 ) -> dict:
     request_id, trace_id = uuid4().hex, uuid4().hex
     app_config = app_config or AppConfig()
-    config = selection_config or load_config()
+    config = selection_config or load_config(
+        os.getenv("AGENT4_SELECTION_CONFIG")
+        or os.getenv("AGENT4_METRIC_SELECTION_CONFIG")
+        or app_config.selection_config_path
+    )
     catalog = catalog or MetricCatalog(canonical=True)
     sessions = sessions if sessions is not None else _SESSIONS
     trace = trace if trace is not None else PipelineTrace()
@@ -284,7 +291,21 @@ async def _run(
             key: metrics.get(key) for key in ("status", "metric_ids", "clarification_question")
         }
         with measure("planning"):
-            draft = build_semantic_plan_draft(query, metrics, context)
+            planning_context = dict(context)
+            if not any(
+                k in planning_context for k in ("reference_date", "as_of_date", "data_watermark")
+            ):
+                if app_config.reporting_data_watermark:
+                    planning_context["data_watermark"] = app_config.reporting_data_watermark
+                elif (
+                    _RELATIVE_PERIOD.search(query["normalized_question"])
+                    and tenant in warehouses
+                    and warehouses[tenant].is_file()
+                ):
+                    wm = await asyncio.to_thread(_read_warehouse_watermark, warehouses[tenant])
+                    if wm:
+                        planning_context["data_watermark"] = wm
+            draft = build_semantic_plan_draft(query, metrics, planning_context)
             trace.plan = draft
         with measure("plan_validation"):
             plan = validate_semantic_plan_draft(draft, metrics, catalog, auth, row_cap=cap)
@@ -411,6 +432,17 @@ def _registry_labels() -> tuple[tuple[str, str], ...]:
         for metric in REGISTRY.values()
         for label in (metric.id, metric.label.casefold())
     )
+
+
+def _read_warehouse_watermark(path: Path) -> str | None:
+    try:
+        with _connect_read_only(path) as connection:
+            row = connection.execute(
+                "SELECT value FROM company_info WHERE key = 'as_of_date'"
+            ).fetchone()
+        return row[0] if row and isinstance(row[0], str) else None
+    except (OSError, duckdb.Error):
+        return None
 
 
 def _check_request_scope(question: str, catalog: MetricCatalog, auth: dict) -> set[str]:

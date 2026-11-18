@@ -139,3 +139,62 @@ def test_browser_saved_plan_restores_inputs_and_requires_fresh_confirmation(clie
     assert client.get("/v1/forecasts/" + saved["id"]).json() == saved
     runtime.expect(page.locator("#forecast-input-context")).to_be_hidden()
     assert not page.evaluate("document.documentElement.scrollWidth > innerWidth")
+
+
+def test_browser_edit_pending_bank_opens_visible_correction_and_reuses_loaded_record(client, page):
+    core(client)
+    before = client.get("/v1/workspace").json()["dataset_hash"]
+    bank_id = client.get("/v1/reconciliation").json()["pending"][0]["bank_id"]
+    page, runtime = page
+    page.locator('nav [data-view="data"]').click()
+    page.locator("#load-pending").click()
+    row = page.locator("#pending-rows tbody tr").filter(has_text=bank_id)
+    edit = row.get_by_role("button", name="Sửa dòng sao kê", exact=True)
+    edit.click()
+    editor = page.locator("#source-correction-editors fieldset")
+    runtime.expect(editor).to_have_count(1)
+    flow = editor.locator("label").filter(has_text="Loại dòng tiền").locator("input")
+    runtime.expect(flow).to_be_focused()
+    runtime.expect(flow).to_be_in_viewport()
+    flow.fill("other_external")
+    edit.click()
+    runtime.expect(editor).to_have_count(1)
+    runtime.expect(flow).to_be_focused()
+    runtime.expect(flow).to_be_in_viewport()
+    runtime.expect(flow).to_have_value("other_external")
+    capture(page, "pending_bank_correction_visible")
+    assert client.get("/v1/workspace").json()["dataset_hash"] == before
+
+
+def test_browser_outside_ar_history_is_collapsed_and_paginated_without_hiding_review(client, page):
+    core(client)
+    before = client.get("/v1/workspace").json()["dataset_hash"]
+    payload = client.get("/v1/reconciliation").json()
+    case = dict(bank_id="NEEDS-REVIEW", date="2026-11-18", account="DP-VND01",
+                available_minor=10000000, status="auto", reason="unique_transport",
+                reason_text="Đối chiếu chứng từ", memo="Thanh toán hóa đơn",
+                candidates=[], allocations=[dict(invoice_id="DEMO-INVOICE", amount_minor=10000000)])
+    outside = [dict(case, bank_id=f"OUT-{i:04}", reason="non_ar_bank_movement", allocations=[])
+               for i in range(625)]
+    payload["proposal"] = dict(id="DISPLAY-ONLY", cutoff="2026-11-18", stale=False,
+                               cases=outside + [case])
+    page, runtime = page
+    page.route("**/v1/reconciliation", lambda route: route.fulfill(json=payload))
+    page.locator('nav [data-view="data"]').click()
+    page.locator("#load-pending").click()
+    cases = page.locator("#reconciliation-cases")
+    runtime.expect(cases.get_by_role("button", name="Duyệt phân bổ", exact=True)).to_have_count(1)
+    group = page.locator("#reconciliation-outside-ar")
+    runtime.expect(group.locator("summary")).to_contain_text("625 giao dịch")
+    assert group.get_attribute("open") is None
+    runtime.expect(group.locator("tbody tr")).to_have_count(0)
+    group.locator("summary").click()
+    runtime.expect(group.locator("tbody tr")).to_have_count(25)
+    runtime.expect(group.get_by_role("button", name="Trang trước", exact=True)).to_be_disabled()
+    group.get_by_role("button", name="Trang sau", exact=True).click()
+    runtime.expect(group).to_contain_text("Dòng 26–50 / 625")
+    runtime.expect(group.locator("tbody tr").first).to_contain_text("OUT-0025")
+    capture(page, "outside_ar_compact_lookup")
+    group.locator("summary").click()
+    runtime.expect(group.locator("table")).to_be_hidden()
+    assert client.get("/v1/workspace").json()["dataset_hash"] == before

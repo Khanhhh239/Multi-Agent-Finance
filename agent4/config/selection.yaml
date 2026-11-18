@@ -1,18 +1,17 @@
 version: "1"
 prompt_version: metric-selection-v1-e0
+cache_enabled: true
 
 embedding:
-  provider: openai
-  base_url: https://openrouter.ai/api/v1
-  model: nvidia/nemotron-3.5-embed-8b:free
-  dimensions: 4096
-  query_input_type: query
-  document_input_type: passage
+  provider: hashing
+  base_url: http://localhost:11434
+  model: hashing-v1
+  dimensions: 768
   cache_enabled: true
-  cache_path: .cache/metric_selection_index_nemotron_3_5_embed_8b.npz
+  cache_path: .cache/metric_selection_index.npz
 
 retrieval:
-  mode: hybrid
+  mode: full_catalog
   dense_enabled: true
   lexical_enabled: true
   fusion_method: rrf
@@ -48,14 +47,20 @@ fewshot:
   delta: 0.25
 
 llm:
-  provider: openai
-  base_url: https://api.groq.com/openai/v1
-  model: qwen/qwen3.8-27b
+  provider: ollama
+  base_url: http://localhost:11434
+  model: qwen3:4b
   temperature: 0
-  timeout_s: 360
-  max_retries: 1
-  structured_output: true
-  context_window: 131072
+  timeout_s: 30
+  max_retries: 0
+  structured_output: false
+  context_window: 8192
+
+recovery:
+  degraded_lexical_fallback: true
+  llm_lexical_fallback: true
+  enable_empty_candidate_fallback: true
+  enable_candidate_expansion: false
 
 evaluation:
   save_traces: true

@@ -22,8 +22,14 @@ def linux_path(path):
 
 
 class CryptoBridge:
-    def __init__(self,enterprise_root,key_file,*,distro='Debian',python='/home/sang/.local/share/agent2/he4/bin/python'):
-        if not re.fullmatch('[A-Za-z0-9_.-]{1,80}',distro) or not python.startswith('/') or any(c in python for c in '\r\n\x00'):raise ValueError('fixed Linux runtime required')
+    def __init__(self,enterprise_root,key_file,*,distro=None,python=None):
+        import os
+        distro = distro or os.environ.get('AGENT2_WSL_DISTRO', '').strip() or None
+        python = python or os.environ.get('AGENT2_HE_PYTHON', '').strip() or 'python3'
+        if distro is not None and not re.fullmatch('[A-Za-z0-9_.-]{1,80}',distro):
+            raise ValueError('valid Linux WSL distro name required')
+        if any(c in python for c in '\r\n\x00') or not python:
+            raise ValueError('valid HE Python executable required')
         self.root=Path(enterprise_root).resolve();self.key_file=Path(key_file).resolve()
         self.distro,self.python=distro,python;self.source=Path(__file__).resolve().parents[2]
 
@@ -39,13 +45,21 @@ class CryptoBridge:
         return bundle,self.root/name,binding,key
 
     def _call(self,scope,bundle,action,output=None,**fields):
+        import os
+        from experiments.he_training.runtime import discover_wsl_distro, has_native_concrete
         bundle,vault,binding,key=self.context(scope,bundle)
         if action!='provision' and not (vault/'context.sealed').is_file():raise HEUnavailable('he4_key_not_provisioned')
         request=dict(wrapping_key=base64.b64encode(key).decode(),tenant_id=binding['tenant_id'],company_id=binding['company_id'],**fields)
-        command=['wsl.exe','-d',self.distro,'--cd',linux_path(self.source),'--exec',self.python,'-m','experiments.he4.enterprise_helper',action,'--bundle',linux_path(bundle),'--vault',linux_path(vault)]
-        if output is not None:command+=['--output',linux_path(output)]
+        if os.name!='nt' and has_native_concrete():
+            command=[self.python,'-m','experiments.he4.enterprise_helper',action,'--bundle',str(bundle),'--vault',str(vault)]
+            if output is not None:command+=['--output',str(output)]
+        else:
+            distro=self.distro or discover_wsl_distro()
+            if not distro:raise HEUnavailable('he4_helper_unavailable')
+            command=['wsl.exe','-d',distro,'--cd',linux_path(self.source),'--exec',self.python,'-m','experiments.he4.enterprise_helper',action,'--bundle',linux_path(bundle),'--vault',linux_path(vault)]
+            if output is not None:command+=['--output',linux_path(output)]
         try:
-            result=subprocess.run(command,input=canonical(request),stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=600,creationflags=subprocess.CREATE_NO_WINDOW)
+            result=subprocess.run(command,input=canonical(request),stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=600,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
             if result.returncode or len(result.stdout)>16384:raise ValueError('helper failed')
             meta=json.loads(result.stdout)
             if meta['binding']!=binding or not re.fullmatch('key_[a-f0-9]{64}',meta['key_epoch']) or meta['evaluation_keys_sha256']!=BlobStore.digest(vault/'evaluation.keys'):raise ValueError('helper context mismatch')

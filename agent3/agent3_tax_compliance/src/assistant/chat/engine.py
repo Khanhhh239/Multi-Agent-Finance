@@ -46,9 +46,10 @@ class ChatContext:
             return None
         from ...lawbase import rag
         from ...lawbase.store import Corpus
+        from .params import expand
         c = Corpus(self.lawbase_db)
         try:
-            return rag.answer(c, question, self.as_of, self.llm)
+            return rag.answer(c, expand(question), self.as_of, self.llm)
         finally:
             c.close()
 

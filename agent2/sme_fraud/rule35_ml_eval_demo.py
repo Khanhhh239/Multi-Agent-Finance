@@ -44,6 +44,21 @@ def fit_config(snapshot_id, method_id):
 
 def _finalize(c, *, tenant_id, company_id, as_of, candidate_ids, source_id):
     c.tables['transactions'] = c.rows
+    existing_audit_txs = {r.get('transaction_id') for r in c.tables.get('journal_audit_log', ())}
+    for tx in c.rows:
+        tid = tx['transaction_id']
+        if tid not in existing_audit_txs:
+            c.tables.setdefault('journal_audit_log', []).append(dict(
+                audit_id=f'AUD_{tid}',
+                company_id=company_id,
+                employee_id=tx['creator_id'],
+                transaction_id=tid,
+                entry_origin='automatic',
+                entered_at=tx.get('created_at') or tx['posted_at'],
+                observed_at=tx['posted_at'],
+                evidence_id=f'EV_AUD_{tid}',
+            ))
+            existing_audit_txs.add(tid)
     for rows in c.tables.values():
         if isinstance(rows, list):
             for row in rows:
@@ -208,6 +223,7 @@ def _add_clean_payment(c, tx_id, at, amount, *, vendor=None, scale=1, company_id
     )
     tx['transaction_id'] = tx_id
     tx['company_id'] = company_id
+    tx['amount_vnd'] = int(amount)
     if imbalance:
         c.tables.setdefault('journal_lines', []).append(dict(
             line_id=f'JL_IMB_{tx_id}',
@@ -244,10 +260,10 @@ def _add_clean_payment(c, tx_id, at, amount, *, vendor=None, scale=1, company_id
 def _add_history_and_reference(c, company_id, scale, prefix):
     rng = random.Random(20261115 + (1 if company_id == 'C001' else 2))
     history_ids = []
-    # 30 history payments in July-August 2026, strictly Monday-Friday daytime.
+    # 18 history vendor payments + 14 baseline payroll runs in July-August 2026 = 32 history rows.
     day = datetime(2026, 7, 1, 10, 15, tzinfo=TZ)
     idx = 0
-    while idx < 30:
+    while idx < 18:
         if day.weekday() < 5:
             idx += 1
             amt = (1_050_000 + rng.randint(0, 45) * 13_700) * scale
@@ -256,10 +272,19 @@ def _add_history_and_reference(c, company_id, scale, prefix):
             history_ids.append(tid)
         day += timedelta(days=1)
 
-    # 10 reference payments in Sep 1..18, 2026.
+    p_day = datetime(2026, 7, 2, 10, 0, tzinfo=TZ)
+    for m_idx in range(1, 15):
+        while p_day.weekday() >= 5:
+            p_day += timedelta(days=1)
+        p_id = f'{prefix}_PAY_HIST_{m_idx:02d}'
+        _add_payroll_tx(c, p_id, p_day, (14_150_000 + (m_idx % 4) * 125_000) * scale, company_id=company_id, scale=scale, terminated=False)
+        history_ids.append(p_id)
+        p_day += timedelta(days=3)
+
+    # 6 reference vendor payments + 4 clean payroll entries in Sep 1..18, 2026 = 10 reference rows (total 42 history_only).
     ref_day = datetime(2026, 9, 1, 10, 30, tzinfo=TZ)
     r_idx = 0
-    while r_idx < 10:
+    while r_idx < 6:
         if ref_day.weekday() < 5:
             r_idx += 1
             amt = (1_120_000 + rng.randint(0, 35) * 11_300) * scale
@@ -267,10 +292,17 @@ def _add_history_and_reference(c, company_id, scale, prefix):
             _add_clean_payment(c, tid, ref_day, amt, scale=scale, company_id=company_id, doc=True)
             history_ids.append(tid)
         ref_day += timedelta(days=1)
-    # Include baseline clean payroll entries in fit/reference windows so normal payroll is modeled.
-    for m_idx, p_day in enumerate((datetime(2026, 8, 25, 10, 0, tzinfo=TZ), datetime(2026, 9, 18, 10, 0, tzinfo=TZ)), start=1):
+    for m_idx, p_day in enumerate(
+        (
+            datetime(2026, 9, 3, 10, 0, tzinfo=TZ),
+            datetime(2026, 9, 9, 10, 0, tzinfo=TZ),
+            datetime(2026, 9, 14, 10, 0, tzinfo=TZ),
+            datetime(2026, 9, 18, 10, 0, tzinfo=TZ),
+        ),
+        start=1,
+    ):
         p_id = f'{prefix}_PAY_{m_idx:02d}'
-        _add_payroll_tx(c, p_id, p_day, 14_200_000 * scale, company_id=company_id, scale=scale, terminated=False)
+        _add_payroll_tx(c, p_id, p_day, (14_250_000 + m_idx * 80_000) * scale, company_id=company_id, scale=scale, terminated=False)
         history_ids.append(p_id)
     return history_ids
 
@@ -298,6 +330,7 @@ def _add_payroll_tx(c, tx_id, at, amount, *, company_id, scale, terminated=False
                support_doc_count=1)
     tx['transaction_id'] = tx_id
     tx['company_id'] = company_id
+    tx['amount_vnd'] = int(amount)
     period = '2026-10'
     tx['payroll_period'] = period
     c.tables['attendance'].append(dict(
@@ -321,6 +354,19 @@ def _add_payroll_tx(c, tx_id, at, amount, *, company_id, scale, terminated=False
         entitled_amount_vnd=int(amount),
         observed_at=stamp(at - timedelta(hours=2)),
     )
+    evidence(
+        c, 'payroll_settlements',
+        settlement_id=f'{company_id}_SETTLE_{tx_id}',
+        company_id=company_id,
+        employee_id=c.worker['employee_id'],
+        transaction_id=tx_id,
+        payroll_period=period,
+        payment_kind='regular_salary',
+        service_period_start='2026-10-01',
+        service_period_end='2026-10-10',
+        authorized_amount_vnd=int(amount),
+        observed_at=stamp(at),
+    )
     if terminated:
         evidence(
             c, 'employment_events',
@@ -330,19 +376,6 @@ def _add_payroll_tx(c, tx_id, at, amount, *, company_id, scale, terminated=False
             event_type='termination',
             effective_date='2026-09-25',
             observed_at='2026-09-25T17:00:00+07:00',
-        )
-        evidence(
-            c, 'payroll_settlements',
-            settlement_id=f'{company_id}_SETTLE_01',
-            company_id=company_id,
-            employee_id=c.worker['employee_id'],
-            transaction_id=tx_id,
-            payroll_period=period,
-            payment_kind='regular_salary',
-            service_period_start='2026-10-01',
-            service_period_end='2026-10-10',
-            authorized_amount_vnd=int(amount),
-            observed_at=stamp(at),
         )
     return tx
 

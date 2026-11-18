@@ -9,7 +9,10 @@ import sqlite3
 import sys
 import time
 
-import tenseal as ts
+try:
+    import tenseal as ts
+except ImportError:
+    ts = None
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from .protocol import (BINDING, CONTRACT, MAX_CIPHER, MAX_CONTEXT, MAX_ROWS,
@@ -107,6 +110,8 @@ def evaluate(packet, policy, signing_key, replay_db, *, now=None,reservation=Non
     require([sha(v) for v in weights] == policy.get('quadratic_sha256'), 'MODEL_BINDING')
     # Reject private contexts before loading any ciphertext. One thread bounds
     # native parallelism; public context/cipher hashes were authenticated first.
+    if ts is None:
+        raise HEUnavailable('tenseal_unavailable')
     context = ts.context_from(context_bytes, n_threads=1)
     require(not context.has_secret_key() and context.has_public_key()
             and context.has_relin_keys(), 'PRIVATE_OR_INCOMPLETE_CONTEXT')

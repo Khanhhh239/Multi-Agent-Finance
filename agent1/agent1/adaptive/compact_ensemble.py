@@ -7,6 +7,7 @@ from pathlib import Path
 
 import joblib
 import numpy as np
+from scipy.special import expit, ndtr
 
 from .compact_t1 import HORIZON, CompactT1, sha256
 
@@ -69,9 +70,15 @@ class CompactRule(CompactT1):
             return empirical
         delay = rows[:, 2] if self.name == "customer" else 0.0
         remaining = rows[:, 0] + delay - age
-        target = np.maximum(1, np.ceil(remaining / 7))
-        scheduled = (week == target).astype(float)
-        return np.where(remaining > 0, scheduled, empirical)
+        # Smooth Gaussian-survival scheduled hazard blended continuously with
+        # empirical overdue hazard across the due-date boundary (no 1-day cliff).
+        sigma = 7.0
+        z_lo = np.minimum((7.0 * (week - 1) - remaining) / sigma, 8.0)
+        z_hi = np.minimum((7.0 * week - remaining) / sigma, 8.5)
+        surv_prev = np.maximum(1.0 - ndtr(z_lo), 1e-12)
+        scheduled = np.clip((ndtr(z_hi) - ndtr(z_lo)) / surv_prev, 0.0, 0.92)
+        blend = expit(remaining / 7.0)
+        return blend * scheduled + (1.0 - blend) * empirical
 
     def save(self, directory, metadata):
         directory = Path(directory)
@@ -117,9 +124,12 @@ class CompactEnsemble(CompactT1):
         active = sorted({column for model in self.members for column in model.active})
         super().__init__(None, active, metadata)
 
-    def distribution_from_features(self, x, ages=None, horizon=13):
+    def distribution_from_features(self, x, ages=None, horizon=13, *, tail_extrapolation=False):
         return sum(
-            weight * model.distribution_from_features(x, ages, horizon)
+            weight
+            * model.distribution_from_features(
+                x, ages, horizon, tail_extrapolation=tail_extrapolation
+            )
             for weight, model in zip(self.weights, self.members)
         )
 

@@ -449,11 +449,18 @@ def transform_with_reference(
 
     frozen = tuple(float(v) for v in reference["sorted_scores"])
     mapped = {}
+    finite_keys = []
+    finite_vals = []
     for key, val in raw_by_key.items():
         if not _is_finite_number(val):
             mapped[key] = None
         else:
-            mapped[key] = round(float(empirical_rank(frozen, float(val))), 8)
+            finite_keys.append(key)
+            finite_vals.append(float(val))
+    if finite_vals:
+        ranked = empirical_rank(frozen, np.asarray(finite_vals, dtype=float), break_ties_above_max=True)
+        for key, rk in zip(finite_keys, ranked):
+            mapped[key] = round(float(rk), 10)
     return mapped
 
 
@@ -909,8 +916,18 @@ def _select_keys_for_arm(
             s = arm_scores[_row_key(r)]
             return s["priority_score"] if s["available"] else None
 
+        def raw_tiebreak(r):
+            if len(arm["branches"]) == 1:
+                raw_v = (r["branches"].get(arm["branches"][0]) or {}).get("raw_score")
+                if _is_finite_number(raw_v):
+                    return -float(raw_v)
+            return 0.0
+
         eligible_rows = [r for r in rows if score_of(r) is not None and (min_threshold is None or float(score_of(r)) >= min_threshold)]
-        ordered = sorted(eligible_rows, key=lambda r: (-float(score_of(r)), utc(r["event_at"]), r["record_id"], int(r["revision"])))
+        ordered = sorted(
+            eligible_rows,
+            key=lambda r: (-float(score_of(r)), raw_tiebreak(r), utc(r["event_at"]), r["record_id"], int(r["revision"])),
+        )
         chosen = [_row_key(r) for r in ordered[:budget]]
         return chosen, [], list(chosen), [[k] for k in chosen]
 
