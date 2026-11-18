@@ -728,18 +728,28 @@
     // Browser preferences never authorize a company. Recheck the current
     // Portal identity and grants before restoring a page in the iframe.
     const context = await api("/agent2/api/v1/ui/context");
+    const portalCompany = String(state?.company?.agent2_company || state?.company?.code || "").trim();
     let saved, legacy;
     try { saved = JSON.parse(sessionStorage.getItem("agent2.company.selection")); } catch (e) { /* optional */ }
     try { legacy = JSON.parse(sessionStorage.getItem("agent2.workbench")); } catch (e) { /* optional */ }
-    if (!saved && legacy?.actor === context.actor_id && (legacy.context === undefined || legacy.context === (context.context_id || ""))) saved = { version: 1, actor: legacy.actor, context: context.context_id || "", company: legacy.company, page: "data-import" };
+    if (!saved && legacy?.actor === context.actor_id && (legacy.context === undefined || legacy.context === (context.context_id || ""))) saved = { version: 1, actor: legacy.actor, context: legacy.context_id || context.context_id || "", company: legacy.company, page: "data-import" };
     const pages = ["workspace", "pipeline-workspace", "data-import", "encrypted-analysis", "analysis-settings"];
-    if (saved?.version !== 1 || saved.actor !== context.actor_id || saved.context !== (context.context_id || "") || !context.companies.includes(saved.company) || !pages.includes(saved.page)) return fallback;
+    const validSaved = saved?.version === 1 && saved.actor === context.actor_id && saved.context === (context.context_id || "") && context.companies.includes(saved.company) && pages.includes(saved.page);
+    if (!validSaved) {
+      if (portalCompany && context.companies.includes(portalCompany)) {
+        const target = new URL("/agent2/", location.origin);
+        target.hash = new URLSearchParams({ company: portalCompany }).toString();
+        return target.href;
+      }
+      return fallback;
+    }
     // Old business workspace pins an HE/P1 run. The shared bundle workspace
     // must not reinterpret that run as a 35-rule bundle observation.
     const page = saved.page === "workspace" ? "pipeline-workspace" : saved.page;
+    const chosenCompany = portalCompany && context.companies.includes(portalCompany) ? portalCompany : saved.company;
     const target = new URL("/agent2/" + page, location.origin);
-    const fields = new URLSearchParams({ company: saved.company });
-    if (page === "pipeline-workspace" && saved.page === page && /^[A-Za-z0-9_.:-]{8,128}$/.test(saved.run || "")) fields.set("run", saved.run);
+    const fields = new URLSearchParams({ company: chosenCompany });
+    if (chosenCompany === saved.company && page === "pipeline-workspace" && saved.page === page && /^[A-Za-z0-9_.:-]{8,128}$/.test(saved.run || "")) fields.set("run", saved.run);
     target.hash = fields.toString();
     return target.href;
   }
@@ -843,12 +853,19 @@
       $("agent-off").hidden = false;
     }
     if (!isOnline) {
+      const needsUnlock = a.id === "agent2" && a.state === "running" && (!token || !state.intake.unlocked);
+      if ($("agent-off-title")) {
+        $("agent-off-title").textContent = needsUnlock ? "Cần mở khóa phiên làm việc" : a.state === "starting" ? "Agent đang khởi động" : "Agent đang tắt";
+      }
       $("agent-off-text").textContent =
-        a.state === "starting" ? "Đang khởi động, trang sẽ tự mở khi agent sẵn sàng."
-          : a.state === "busy-port" ? "Cổng " + a.port + " đang bị chương trình khác dùng. Tắt chương trình đó hoặc đổi cổng trong portal/config.local.json."
-            : "Bật agent để mở giao diện. Portal chạy agent từ thư mục " + a.root + ".";
+        needsUnlock ? "Agent 2 (Soát xét Giao dịch) yêu cầu phiên bảo mật đang mở khóa để xác thực quyền truy cập dữ liệu doanh nghiệp."
+          : a.state === "starting" ? "Đang khởi động, trang sẽ tự mở khi agent sẵn sàng."
+            : a.state === "busy-port" ? "Cổng " + a.port + " đang bị chương trình khác dùng. Tắt chương trình đó hoặc đổi cổng trong portal/config.local.json."
+              : "Bật agent để mở giao diện. Portal chạy agent từ thư mục " + a.root + ".";
       $("agent-start").hidden = a.state !== "stopped";
-      api(a.log).then((d) => ($("agent-log").textContent = d.log || "Chưa có nhật ký.")).catch(() => {});
+      if ($("agent-unlock-link")) $("agent-unlock-link").hidden = !needsUnlock;
+      if ($("agent-log-details")) $("agent-log-details").hidden = needsUnlock;
+      if (!needsUnlock) api(a.log).then((d) => ($("agent-log").textContent = d.log || "Chưa có nhật ký.")).catch(() => {});
     }
   }
 
@@ -1456,7 +1473,7 @@
     if (state.package && reason.length < 10) { $("reason").focus(); toast("Gói đã niêm phong: nhập lý do bổ sung hoặc thay thế, ít nhất 10 ký tự.", true); return; }
     if (replaces && button.dataset.confirm !== "1") {
       button.dataset.confirm = "1";
-      button.textContent = "Bấm lần nữa: Agent 2 thay toàn bộ giao dịch";
+      button.textContent = "Bấm lần nữa: xác nhận tạo snapshot Agent 2";
       setTimeout(() => { delete button.dataset.confirm; renderQueue(); }, 6000);
       return;
     }

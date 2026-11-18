@@ -1,8 +1,9 @@
-"""Portal intake for Agent 2: turn the shared transaction CSV into Agent 2's input contract 1.1.0 and walk it through
-Agent 2's own import API (upload, preview, commit) with the operator's Portal session.
+"""Portal intake for Agent 2: turn the shared transaction CSV/XLSX (or native Agent 2 JSON contract)
+into Agent 2's input contract and walk it through Agent 2's import API (upload, preview, commit)
+with the operator's Portal session.
 
-Only cash movements are sent: rows paid through the bank (receipts, vendor payments, rent, payroll). Journal-only
-entries (sales invoices, depreciation, VAT offsets) are not money moving and stay with Agents 1, 3 and 4.
+For shared transaction tables, only cash movements paid through the bank (receipts, vendor payments,
+rent, payroll) are sent; journal-only entries stay with Agents 1, 3 and 4.
 Standard library only, like the rest of the portal.
 """
 import csv
@@ -19,7 +20,9 @@ MAX_BYTES = 9 * 1024 * 1024         # Agent 2 refuses files above 10 MB
 
 
 class IntakeError(ValueError):
-    pass
+    def __init__(self, message, details=None):
+        super().__init__(message)
+        self.details = list(details or [])
 
 
 def _source(record_id):
@@ -31,28 +34,73 @@ def _base(tenant, company, record_id, observed, effective):
             'observed_at': observed, 'effective_at': effective, 'source': _source(record_id)}
 
 
-def build_contract(raw, tenant, company, company_name):
-    """Return (json bytes, summary) for the transaction CSV `raw`."""
-    rows = list(csv.DictReader(io.StringIO(raw.decode('utf-8-sig'), newline='')))
+def _read_table_rows(name, raw, xlsx_reader=None):
+    if name.lower().endswith('.xlsx'):
+        if xlsx_reader is None:
+            raise IntakeError('Chưa hỗ trợ đọc XLSX trực tiếp khi thiếu bộ đọc bảng.')
+        it = xlsx_reader(raw)
+        header = [str(c).strip() for c in next(it, [])]
+        if not header:
+            return []
+        out = []
+        for values in it:
+            row = {header[i]: (str(values[i]).strip() if i < len(values) and values[i] is not None else '')
+                   for i in range(len(header)) if header[i]}
+            if any(row.values()):
+                out.append(row)
+        return out
+    text = raw.decode('utf-8-sig')
+    first = next((line for line in text.splitlines() if line.strip()), '')
+    delimiter = max((',', ';', '\t'), key=first.count) if first else ','
+    return list(csv.DictReader(io.StringIO(text, newline=''), delimiter=delimiter))
+
+
+def build_contract(raw, tenant, company, company_name, *, name='transactions.csv', xlsx_reader=None):
+    """Return (json bytes, summary) for a transaction CSV/XLSX or native Agent 2 JSON package."""
+    if name.lower().endswith('.json'):
+        if len(raw) > MAX_BYTES:
+            raise IntakeError('Tệp JSON vượt giới hạn 9 MB của Agent 2.')
+        try:
+            doc = json.loads(raw.decode('utf-8-sig'))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise IntakeError(f'Tệp JSON không hợp lệ: {exc}') from exc
+        if not isinstance(doc, dict) or not isinstance(doc.get('transactions'), list):
+            raise IntakeError('Tệp JSON không chứa danh sách transactions hợp lệ của Agent 2.')
+        txs = doc['transactions']
+        if not txs:
+            raise IntakeError('Tệp JSON không có giao dịch nào.')
+        dates = [str(t.get('effective_at') or t.get('posted_at') or '') for t in txs if isinstance(t, dict)]
+        dates = [d for d in dates if d]
+        first = min(dates) if dates else ''
+        last = max(dates) if dates else ''
+        return raw, dict(rows=len(txs), skipped=0, first=first, last=last,
+                         vendors=len(doc.get('vendors') or []), employees=len(doc.get('employees') or []),
+                         native_json=True)
+
+    rows = _read_table_rows(name, raw, xlsx_reader=xlsx_reader)
     if not rows:
         raise IntakeError('Tệp giao dịch không có dòng nào.')
     transactions, vendors, employees, skipped = [], {}, {}, 0
     first = last = None
     for row in rows:
-        kind = KIND.get(row.get('txn_type', ''))
-        if kind is None or row.get('payment_channel') != 'bank':
+        kind = KIND.get(str(row.get('txn_type', '')).strip())
+        if kind is None or str(row.get('payment_channel', '')).strip() != 'bank':
             skipped += 1
             continue
-        rid = row['transaction_id'].strip()
-        posted = row['posted_at']
-        observed = row.get('approved_at') or row.get('created_at') or posted
+        rid = str(row.get('transaction_id') or '').strip()
+        posted = str(row.get('posted_at') or '').strip()
+        observed = str(row.get('approved_at') or row.get('created_at') or posted).strip()
+        try:
+            amount_vnd = int(Decimal_or_int(row.get('amount_vnd', 0)))
+        except (ValueError, TypeError) as exc:
+            raise IntakeError(f'Số tiền không hợp lệ tại giao dịch {rid or "?"}: {row.get("amount_vnd")}') from exc
         item = _base(tenant, company, rid, observed, posted)
-        item.update(amount_vnd=int(row['amount_vnd']), currency='VND', kind=kind,
-                    description=(row.get('business_purpose') or row.get('accounting_purpose') or kind)[:2000],
+        item.update(amount_vnd=amount_vnd, currency='VND', kind=kind,
+                    description=str(row.get('business_purpose') or row.get('accounting_purpose') or kind)[:2000],
                     payment_channel='bank')
-        vendor = (row.get('vendor_id') or '').strip()
-        employee = (row.get('employee_id') or '').strip()
-        creator = (row.get('creator_id') or '').strip()
+        vendor = str(row.get('vendor_id') or '').strip()
+        employee = str(row.get('employee_id') or '').strip()
+        creator = str(row.get('creator_id') or '').strip()
         if vendor:
             vendors[vendor] = True
             item['vendor_ref'] = {'record_id': vendor, 'revision': 1}
@@ -79,7 +127,14 @@ def build_contract(raw, tenant, company, company_name):
     if len(body) > MAX_BYTES:
         raise IntakeError('Tệp sau khi chuyển đổi vượt 9 MB; chia nhỏ theo kỳ rồi nạp lại.')
     return body, dict(rows=len(transactions), skipped=skipped, first=first, last=last, vendors=len(vendors),
-                      employees=len(employees))
+                      employees=len(employees), native_json=False)
+
+
+def Decimal_or_int(val):
+    s = str(val).strip()
+    if s.endswith('.0') or s.endswith('.00'):
+        s = s.split('.', 1)[0]
+    return int(s)
 
 
 def _headers(token, extra=None):
@@ -88,13 +143,14 @@ def _headers(token, extra=None):
     return head
 
 
-def preview(call, agent_url, token, tenant, company, company_name, name, raw):
+def preview(call, agent_url, token, tenant, company, company_name, name, raw, *, xlsx_reader=None):
     """Upload and preview. `call(method, url, body, headers, timeout)` is the portal's own HTTP helper."""
-    body, summary = build_contract(raw, tenant, company, company_name)
+    body, summary = build_contract(raw, tenant, company, company_name, name=name, xlsx_reader=xlsx_reader)
     base = f'/api/v1/companies/{quote(company)}/'
     key = 'portal-' + sha256(body).hexdigest()[:40]
+    upload_name = name if name.lower().endswith('.json') else (name.rsplit('.', 1)[0] + '.json')
     st, draft = call('POST', agent_url(base + 'imports/upload'), body,
-                     _headers(token, {'Content-Type': 'application/octet-stream', 'X-File-Name': quote(name.rsplit('.', 1)[0] + '.json'),
+                     _headers(token, {'Content-Type': 'application/octet-stream', 'X-File-Name': quote(upload_name),
                                       'Idempotency-Key': key}), 600)
     if st not in (200, 201):
         raise IntakeError(_message(draft, st))
@@ -102,6 +158,11 @@ def preview(call, agent_url, token, tenant, company, company_name, name, raw):
                     _headers(token), 600)
     if st not in (200, 201):
         raise IntakeError(_message(prev, st))
+    if isinstance(prev, dict) and prev.get('status') == 'rejected':
+        errs = prev.get('errors') or []
+        details = [f'{e.get("path") or "$"}: {e.get("message", "")}' for e in errs[:5] if isinstance(e, dict)]
+        first_msg = errs[0].get('message') if errs and isinstance(errs[0], dict) else 'Tệp bị từ chối khi kiểm tra cấu trúc Agent 2.'
+        raise IntakeError(first_msg, details=details)
     return dict(import_id=draft['import_id'], preview={k: prev.get(k) for k in
                 ('revision', 'preview_id', 'source_hash', 'mapping_hash', 'report_hash', 'context_hash', 'expires_at')},
                 key=key, summary=summary, warnings=prev.get('warnings') or [])
@@ -121,6 +182,9 @@ def commit(call, agent_url, token, company, pending):
 
 def _message(res, status):
     if isinstance(res, dict):
+        errs = res.get('errors')
+        if isinstance(errs, list) and errs and isinstance(errs[0], dict) and errs[0].get('message'):
+            return str(errs[0]['message'])[:400]
         text = res.get('error') or res.get('message') or res.get('detail')
         if isinstance(text, dict):
             text = text.get('message') or json.dumps(text, ensure_ascii=False)[:300]

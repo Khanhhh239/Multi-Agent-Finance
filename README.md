@@ -1,68 +1,67 @@
-# Văn phòng kế toán số: bốn agent trong một web
+# Sổ Son — Văn phòng Kế toán số Đa tác tử (Multi-Agent Finance)
 
-Nhánh `platform-Khanh` ghép bốn agent vào một giao diện. Có một hồ sơ doanh nghiệp, một nơi nạp tệp, rồi bốn khung agent. Code của từng agent giữ nguyên trong thư mục riêng.
+Nền tảng kế toán số tích hợp **4 Agent chuyên biệt** trong một giao diện web thống nhất (**Portal**): dùng chung một hồ sơ doanh nghiệp, một cổng tiếp nhận & niêm phong chứng từ, một ngôn ngữ thiết kế và một quy trình tạo dữ liệu đồng bộ.
 
-| Thư mục | Lấy từ nhánh | Việc của agent |
-|---|---|---|
-| `agent1/` | `agent1-Khanh` | Dòng tiền: dự báo thu chi theo tuần, kịch bản, xuất Excel |
-| `agent2/` | `agent2-Khanh-sosoat` | Soát giao dịch: luật cứng, luật xác suất, đồ thị quan hệ, túi phương pháp ML |
-| `agent3/` | `agent3-core-adapt` | Thuế GTGT: đọc hóa đơn XML, đối chiếu sao kê và bảng kê, căn cứ điều luật |
-| `agent4/` | `Agent4` (thư mục `agent4`) | Hỏi đáp số liệu: câu hỏi tiếng Việt thành truy vấn đã kiểm tra trên kho chỉ đọc |
-| `agent4_chat/` | mới | Khung chat cho Agent 4, để riêng cho nhóm Agent 4 tự chỉnh |
-| `portal/` | mới | Web chung: cấu hình, nạp dữ liệu, bật tắt và hiển thị các agent |
+## Kiến trúc hệ thống
 
-Commit ghép là một subtree merge có đủ bốn nhánh làm cha, nên lịch sử của từng nhánh vẫn còn. Mỗi nhánh gốc không bị sửa.
+| Thành phần | Thư mục | Cổng | Chức năng chính |
+|---|---|---|---|
+| **Portal (Web chung)** | `portal/` | `8800` | Quản lý hồ sơ doanh nghiệp, mở khóa mật khẩu / FaceID, phân luồng & niêm phong chứng từ, nhúng đồng bộ 4 Agent |
+| **Agent 1 · Dòng tiền** | `agent1/` | `8011` | Đối soát công nợ – ngân hàng, dự báo thu chi 13–52 tuần theo kịch bản, xuất báo cáo Excel |
+| **Agent 2 · Soát giao dịch** | `agent2/` | `8766` | Rà soát giao dịch bất thường kết hợp 4 nhánh: bộ 35 luật, thống kê (`RobustZ`), đồ thị quan hệ và ML (`Isolation Forest` / `ECOD`) |
+| **Agent 3 · Thuế GTGT** | `agent3/` | `8640` | Đọc hóa đơn điện tử XML/ZIP, đối chiếu sao kê ngân hàng & bảng kê thuế, tra cứu căn cứ điều luật thuế GTGT |
+| **Agent 4 · Hỏi đáp CFO** | `agent4/`, `agent4_chat/` | `8040` | Chuyển câu hỏi tiếng Việt thành truy vấn được kiểm soát trên kho sổ cái DuckDB chỉ đọc, giải thích nguồn minh bạch |
+| **Data Pipeline** | `data_pipeline/` | — | Sinh kho dữ liệu doanh nghiệp mô phỏng **Minh Phát (MPX10)** đồng bộ xuyên suốt cả 4 Agent |
+| **Giao diện chung** | `design/` | — | Bộ token giao diện Sổ Son & phông chữ *Be Vietnam Pro* đồng bộ cho Portal và 4 Agent (`python design/sync.py`) |
 
-## Chạy
+---
 
-Mỗi agent cần môi trường Python riêng như README của agent đó. Portal chỉ dùng thư viện chuẩn của Python.
+## Chạy nhanh bằng 1 lệnh duy nhất
 
-1. Chép `portal/config.example.json` thành `portal/config.local.json`. Khai báo `python` cho agent nào không có `.venv` trong thư mục của nó.
-2. Chạy:
+Từ thư mục gốc dự án trên Windows PowerShell:
 
 ```powershell
-python portal/server.py --start-all
+.\run_web.ps1
 ```
 
-3. Mở http://127.0.0.1:8800. Nút Ctrl+C dừng portal và các agent do portal bật.
+*(Hoặc nhấp đúp trực tiếp vào tệp **`run_web.bat`** trong Windows Explorer).*
 
-Cổng mặc định: portal 8800, Agent 1 là 8011, Agent 2 là 8766, Agent 3 là 8640, Agent 4 là 8040. Đổi trong `config.local.json`.
+Lệnh `.\run_web.ps1` tự động thực hiện trọn gói:
+1. Giải phóng các tiến trình cũ nếu đang chiếm cổng `8800`, `8011`, `8766`, `8640`, `8040`.
+2. Khởi động dịch vụ **Ollama** nền (nếu đã cài mà chưa bật).
+3. Đồng bộ cấu hình `portal/config.local.json`, hồ sơ doanh nghiệp mẫu **MPX10**, kho DuckDB của Agent 4 và mô hình phân tích của Agent 2.
+4. Bật **Portal** cùng toàn bộ **4 Agent** và tự mở trình duyệt tại **http://127.0.0.1:8800**.
 
-## Luồng dùng
+> Xem hướng dẫn thao tác chi tiết từng bước tại **[HUONG_DAN_CHAY_WEB.md](HUONG_DAN_CHAY_WEB.md)**.
 
-1. **Cấu hình doanh nghiệp**: tên, mã số thuế, mã dùng chung, phương pháp thuế, kỳ kê khai, định dạng ngày và số tiền trong tệp. Nhãn bên phải mỗi ô cho biết agent nào dùng ô đó.
-   - Agent 1 và Agent 2 dùng mã dùng chung. Đổi mã thì portal khởi động lại Agent 1 với kho của mã mới.
-   - Agent 1 nhận mã doanh nghiệp, định dạng ngày và số tiền qua hồ sơ riêng của mã đó. Các giá trị hiện trong Agent 1 và áp dụng cho cả tệp nhập lẫn tệp mẫu; chỉnh tại cấu hình chung rồi kiểm tra lại tệp. Sau khi cập nhật code này, khởi động lại portal và Agent 1 một lần để bật kết nối hồ sơ.
-   - Agent 3 tạo doanh nghiệp theo mã số thuế. Lần đầu cần mật khẩu quản trị Agent 3. Portal chuyển mật khẩu cho Agent 3 rồi đăng xuất ngay, không lưu lại.
-   - Agent 2 chỉ nhận tệp cho doanh nghiệp đã có trong danh mục của nó. Ô "Mã doanh nghiệp ở Agent 2" dùng khi mã khác mã chung.
-2. **Nạp dữ liệu**: thả tệp vào một ô. Portal nhận dạng từng tệp và chạy bước xem trước của agent nhận. Một tệp sao kê chung được chuẩn hóa cho cả Agent 1 và Agent 3. Chưa có gì được ghi ở bước này. Xem [hướng dẫn demo và tệp mẫu](DEMO.md).
-   - Bảng mẫu Agent 1 (hóa đơn, tiền về, khoản chi, sao kê, kỳ sao kê, hứa trả) đi tới Agent 1.
-   - Sổ giao dịch theo mẫu Agent 2 đi tới Agent 2.
-   - Hóa đơn XML, ZIP, sao kê ngân hàng và bảng kê cổng thuế đi tới Agent 3. Agent 3 tự phân loại lại. Tệp chỉ đi Agent 3 không tự được chép sang Agent 1.
-3. Bấm **Ghi vào agent**. Với tệp của Agent 2, nút hỏi xác nhận lần hai vì Agent 2 thay toàn bộ giao dịch cũ. Sau mỗi lần ghi, portal kiểm tra lại các tệp còn chờ. Ví dụ tiền khách trả bị lỗi tham chiếu sẽ qua sau khi hóa đơn đã ghi.
-4. Mở **Agent 1 đến 4** ở menu trái. Mỗi agent hiện trong cùng khung. Cách kết nối, đối soát và sửa dữ liệu nguồn của Agent 1 nằm trong [README của Agent 1](agent1/README.md).
+---
 
-## Thay đổi nhỏ trong code agent
+## Các lệnh tiện ích chính
 
-Các điểm tích hợp Portal:
-
-| Tệp | Thay đổi |
+| Nhu cầu | Lệnh duy nhất |
 |---|---|
-| `agent1/agent1_service/workspace/api.py` | `frame-ancestors` lấy từ `AGENT1_FRAME_ANCESTORS`; không đặt thì vẫn là `'none'` |
-| `agent1/agent1_service/ui/workspace/app.js` | Khi nằm trong khung, nhận khóa từ trang cha (chỉ chấp nhận `127.0.0.1` hoặc `localhost`) và giữ trong bộ nhớ như khóa gõ tay |
-| `agent2/sme_fraud/review_server.py` | `frame-ancestors` lấy từ `SOSOAT_FRAME_ANCESTORS`; không đặt thì vẫn là `'none'` |
+| **Bật web + 4 Agent** | `.\run_web.ps1` *(hoặc mở `run_web.bat`)* |
+| **Dừng toàn bộ hệ thống** | `.\run_web.ps1 -StopOnly` *(hoặc nhấn `Ctrl+C` tại cửa sổ đang chạy)* |
+| **Tạo / đồng bộ nhanh dữ liệu & mô hình** | `.\create_data.ps1` |
+| **Sinh mới toàn bộ kho dữ liệu 4 năm (MPX10)** | `.\create_data.ps1 -Full` |
+| **Cài đặt môi trường từ đầu trên máy mới** | `.\setup_all.ps1` |
 
-## Đã kiểm tra trên máy (08/11/2026, dữ liệu mô phỏng)
+---
 
-- Bốn agent bật từ portal và hiện trong khung chung. Agent 1 tự kết nối và thấy 12.780 hóa đơn vừa nạp.
-- Nạp 13 tệp một lượt: 6 CSV Đại Phát tới Agent 1, 6 tệp demo Sao Việt tới Agent 3 (Agent 3 ghi nhận 22 tệp: 17 hóa đơn mua vào, 3 bán ra, 1 sao kê, 1 bảng kê), 1 sổ giao dịch 90 dòng tới Agent 2.
-- Lần ghi đầu, 3 tệp Agent 1 báo lỗi tham chiếu đúng như dự kiến. Portal kiểm tra lại sau khi ghi hóa đơn và sao kê, lần ghi thứ hai đạt.
-- Agent 4 trả lời 5 câu gợi ý có bảng và nguồn.
+## Luồng sử dụng trên Web (`http://127.0.0.1:8800`)
 
-## Giới hạn
+1. **Hồ sơ doanh nghiệp (`#config`)**: Kiểm tra hoặc cập nhật mã đơn vị (mặc định `MPX10`), tên pháp lý, mã số thuế (`0999999905`), kỳ kê khai và định dạng ngày/số tiền.
+2. **Nạp dữ liệu chung (`#data`)**:
+   - Đặt mật khẩu quản trị lần đầu (tối thiểu 8 ký tự; tùy chọn đăng ký mở khóa khuôn mặt **FaceID AI 128 chiều**).
+   - Kéo thả chứng từ vào ô tiếp nhận (ví dụ trọn bộ 4 tệp mẫu trong `portal/workspace/mpx10-demo-input-full/`):
+     - `01_invoices.csv` → **Agent 1** (hóa đơn bán & công nợ).
+     - `02_sao_ke_chung.csv` → **Agent 1 & Agent 3** (một tệp sao kê tự động chuẩn hóa cho cả dòng tiền và thuế GTGT).
+     - `03_transactions.csv` *(hoặc `.xlsx`, `.json`)* → **Agent 2** (tạo snapshot giao dịch bất biến để soát xét).
+     - `04_hoa_don.zip` *(hoặc `.xml`)* → **Agent 3** (tự động phân loại hóa đơn mua vào / bán ra).
+   - Kiểm tra kết quả xem trước và bấm **Ghi toàn bộ dữ liệu** để niêm phong phiên bản gói chứng từ kèm chuỗi băm nhật ký SHA-256.
+3. **Làm việc trên 4 phân hệ (`#agent1` → `#agent4`)**: Chuyển mượt mà giữa 4 Agent ngay trên thanh điều hướng bên trái hoặc mở sang tab riêng khi cần.
 
-- Agent 4 đọc kho dữ liệu demo sinh bằng `python -m agent4.datagen.build`, chưa nhận tệp và chưa dùng hồ sơ doanh nghiệp.
-- Doanh nghiệp tạo ở Agent 3 qua portal chưa có các quy định chi tiêu gợi ý mà trình tạo của Agent 3 đánh dấu sẵn. Thêm trong trang Quản trị của Agent 3 nếu cần.
-- Trang Agent 3 chưa tự chọn doanh nghiệp vừa tạo. Chọn ở ô "Chọn doanh nghiệp" trong khung Agent 3.
-- Bộ demo lớn của Agent 2 cần thêm cột danh mục (`self_approval_limit_vnd`, `registered_at`...) thì mới nhận tệp nhập. Portal không tự sửa danh mục của Agent 2.
-- Portal phục vụ trên máy cục bộ, không có đăng nhập riêng. Không mở ra mạng ngoài.
+## Lưu ý bảo mật & phạm vi dữ liệu
+
+- Toàn bộ số liệu đi kèm (`MPX10`, `C001`, `C002`, `Đại Phát`, `Sao Việt`) là **dữ liệu mô phỏng** phục vụ kiểm thử và trình diễn kỹ thuật.
+- Hệ thống mặc định chỉ lắng nghe trên `127.0.0.1` (cục bộ), dữ liệu không rời khỏi máy của doanh nghiệp. Khi triển khai lên máy chủ tập trung, tham khảo thêm [docs/DEPLOY_SERVER.md](docs/DEPLOY_SERVER.md).

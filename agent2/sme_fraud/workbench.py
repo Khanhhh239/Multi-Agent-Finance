@@ -31,7 +31,11 @@ ASSETS = {'/': ('index.html', 'text/html; charset=utf-8'),
           '/assets/rule-source-intake.js': ('rule-source-intake.js','text/javascript; charset=utf-8'),
           '/samples/rule-sources.xlsx': ('rule-sources.xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
           '/assets/workbench.css': ('workbench.css', 'text/css; charset=utf-8'),
+          '/assets/platform-theme.css': ('platform-theme.css', 'text/css; charset=utf-8'),
+          '/assets/platform-theme.js': ('platform-theme.js', 'text/javascript; charset=utf-8'),
           '/samples/import-demo.json': ('import-demo.json', 'application/json; charset=utf-8')}
+for _font in sorted((ROOT / 'platform-fonts').glob('*.woff2')) if (ROOT / 'platform-fonts').is_dir() else ():
+    ASSETS['/assets/platform-fonts/' + _font.name] = ('platform-fonts/' + _font.name, 'font/woff2')
 SAMPLES={'/samples/import-demo.csv':('csv','text/csv; charset=utf-8'),'/samples/import-demo.xlsx':('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')}
 
 

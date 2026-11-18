@@ -152,10 +152,10 @@
       const res = await fetch("/api/agent4/metrics", { cache: "no-store" }).then((r) => r.json());
       const list = Array.isArray(res) ? res : res.items || res.metrics || [];
       if (!list.length) throw new Error(res.error || "Danh mục trống.");
-      for (const m of list) { const id = m.metric_id || m.id; const name = m.label || m.name; if (id && name && name !== id) metricNames[id] = name; }
+      for (const m of list) { const id = m.metric_id || m.id; const name = m.name_vi || m.label || m.name; if (id && name && name !== id) metricNames[id] = name; }
       $("metric-count").textContent = list.length + " chỉ tiêu.";
       $("metrics").replaceChildren(...list.slice(0, 40).map((m) =>
-        el("li", {}, m.label || m.name || m.metric_id || m.id, m.unit ? el("span", {}, " (" + m.unit + ")") : null)));
+        el("li", {}, m.name_vi || m.label || m.name || m.metric_id || m.id, m.unit ? el("span", {}, " (" + m.unit + ")") : null)));
     } catch (err) {
       $("metric-count").textContent = "Chưa đọc được danh mục: " + err.message;
     }

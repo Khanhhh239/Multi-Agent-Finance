@@ -1,9 +1,0 @@
-{
-  "preview_limits_hidden_after_commit": true,
-  "results_display_all_source_limit_headings": false,
-  "vendor_source_names_in_business_response": false,
-  "invoice_number_in_business_response": false,
-  "first_payment_status": "no_signal",
-  "first_payment_transactions_to_review": 0,
-  "first_payment_UI_has_no_signal_and_excess": true
-}

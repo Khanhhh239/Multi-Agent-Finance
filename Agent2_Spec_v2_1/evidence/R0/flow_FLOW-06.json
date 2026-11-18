@@ -1,9 +1,0 @@
-{
-  "id": "FLOW-06",
-  "status": "not_present",
-  "observed": "Old eval-row test and new restored-model fit spy confirm no fit in score(). Versioned background fit jobs are still R2 work.",
-  "blocker": null,
-  "baseline": "before_tests.log",
-  "candidate": "after_tests.log",
-  "scope": "R0 inventory; not R1-R6 acceptance"
-}

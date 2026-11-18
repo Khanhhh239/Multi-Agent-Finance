@@ -1,8 +1,0 @@
-{
-  "status": "passed",
-  "checks": [
-    "same pinned sources/order; no model deserialization",
-    "mismatched comparison model rejected before output",
-    "source model and snapshot databases unchanged"
-  ]
-}

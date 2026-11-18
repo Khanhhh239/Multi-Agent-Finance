@@ -6,9 +6,12 @@ from datetime import datetime
 import io
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from sme_fraud.import_files import canonical,digest,parse_file,mapping_contract,ImportFailure
 from sme_fraud.native_rule_demo import scenario

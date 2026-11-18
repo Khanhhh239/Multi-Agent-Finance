@@ -1,9 +1,0 @@
-Dữ liệu mô phỏng, chưa đánh giá độ chính xác ML.
-Snapshot: snp_23fa029fa49b4071a9d805ab99d8d011 | tổng dòng trả về: 20 | giao dịch mới được ML chấm: 5
-NATIVE_20250812_0 | điểm luật: 20 | ML khả dụng: True | điểm ML: 1.0
-NATIVE_20250812_1 | điểm luật: 0 | ML khả dụng: True | điểm ML: 0.4
-NATIVE_20250812_2 | điểm luật: 0 | ML khả dụng: True | điểm ML: 0.1
-NATIVE_20250812_3 | điểm luật: 1 | ML khả dụng: True | điểm ML: 0.4
-NATIVE_20250812_4 | điểm luật: 0 | ML khả dụng: True | điểm ML: 0.8
-Có 3 dòng điểm luật bằng 0 vẫn được ML chấm.
-Kết quả: D:\agent22\Agent2_Spec_v2_1\evidence\R2\demo_output.json

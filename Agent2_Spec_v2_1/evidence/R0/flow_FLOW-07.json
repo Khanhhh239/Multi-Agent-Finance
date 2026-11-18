@@ -1,9 +1,0 @@
-{
-  "id": "FLOW-07",
-  "status": "not_testable",
-  "observed": "Old UI is archived; current server is a status page. Two v2.1 role DTOs/shared business run are not built.",
-  "blocker": "R5 has not been assigned; cannot test a shared v2.1 run across two UIs",
-  "baseline": "before_tests.log",
-  "candidate": "after_tests.log",
-  "scope": "R0 inventory; not R1-R6 acceptance"
-}

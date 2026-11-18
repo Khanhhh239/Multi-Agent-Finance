@@ -1,7 +1,0 @@
-logical_module,actual_path,status
-shared import core,shared/finance_input/src/finance_input/validation.py,implemented_schema_scope_identity
-shared money parser,shared/finance_input/src/finance_input/money.py,reused_exact_upstream
-imports/validation,agent2/sme_fraud/imports.py,contract_profile_only
-auth,agent2/sme_fraud/auth.py,not_implemented; AccessScope is trusted caller context only
-snapshots,agent2/sme_fraud/snapshots.py,not_implemented
-features,agent2/sme_fraud/features.py,retained_unchanged; no canonical contract adapter yet

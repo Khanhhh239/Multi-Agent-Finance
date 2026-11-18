@@ -1,10 +1,6 @@
-# Khung chat Agent 4
+# Giao diện Hỏi đáp Agent 4 (`agent4_chat/`)
 
-Ba tệp tĩnh: `index.html`, `chat.css` và `chat.js`, không cần build. Portal phục vụ tại `/agent4/` và hiện trong khung Agent 4.
+Khung giao diện trò chuyện tiếng Việt cho **Agent 4** bên trong Portal (`http://127.0.0.1:8800/#agent4`).
 
-- Trang chỉ gọi portal: `POST /api/agent4/query` với `{"question": "..."}` và `GET /api/agent4/metrics`. Portal tự thêm khóa của Agent 4, nên trang không giữ khóa nào.
-- Câu trả lời là `QueryResponse` của `agent4/agent4/text2sql/models.py`. Các trường đang dùng: `status`, `answer`, `data` (bảng), `interpretation`, `provenance`, `warnings`.
-- Màu và chữ dùng cùng biến với portal (`--ink`, `--accent`, font Be Vietnam Pro) nên nằm liền với khung chung. Muốn đổi thì sửa `chat.css`.
-- Câu gợi ý nằm ở đầu `chat.js` (`SUGGESTIONS`). Năm câu hiện có đều được Agent 4 trả lời trên kho demo.
-
-Chạy riêng ngoài portal không được, vì trang cần portal chuyển câu hỏi tới Agent 4 kèm khóa.
+- Giao diện chỉ gọi qua `/api/agent4/query` và `/api/agent4/metrics` của Portal; khóa xác thực nội bộ của Agent 4 được giữ ở tầng máy chủ, không lộ ra trình duyệt.
+- Tự động định dạng số tiền VND dễ đọc (kèm quy đổi triệu / tỷ / nghìn tỷ đồng), hiển thị bảng kết quả và hộp kiểm tra nguồn (chỉ tiêu, kỳ dữ liệu, khung sổ quản trị/thuế, mã băm danh mục).

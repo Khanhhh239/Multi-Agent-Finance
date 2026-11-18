@@ -1,9 +1,0 @@
-{
-  "id": "FLOW-05",
-  "status": "not_testable",
-  "observed": "Raw core outputs are explicitly anomaly/heuristic/rank values. MethodScore availability/null envelope and evaluated fallback do not yet exist.",
-  "blocker": "R2 MethodScore adapter and D-03/D-04 missing; no false claim of calibrated fraud probability",
-  "baseline": "before_tests.log",
-  "candidate": "after_tests.log",
-  "scope": "R0 inventory; not R1-R6 acceptance"
-}

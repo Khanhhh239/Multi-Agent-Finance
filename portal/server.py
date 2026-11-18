@@ -212,8 +212,12 @@ def agent_python(aid):
     configured = agent_cfg(aid).get('python')
     if configured:
         return str(path_of(configured, configured))
-    venv = agent_root(aid) / '.venv' / 'Scripts' / 'python.exe'
-    return str(venv) if venv.exists() else sys.executable
+    for base in (agent_root(aid), ROOT / aid):
+        for rel in (Path('.venv/Scripts/python.exe'), Path('.venv/bin/python')):
+            venv = base / rel
+            if venv.exists():
+                return str(venv)
+    return sys.executable
 
 
 def agent_url(aid, path=''):
@@ -265,8 +269,29 @@ def launch_spec(aid):
         env.update(AGENT4_DEMO_MODE='1', AGENT4_DEMO_TOKEN=AGENT4_TOKEN,
                    AGENT4_SELECTION_CONFIG='config/eval_governed_lexical.yaml',
                    AGENT4_LLM_MODEL='qwen3:4b-instruct-2507-q4_K_M')
-    env.update({k: str(path_of(v, v)) if k.endswith(('_DIR', '_STORE', 'WORKSPACES')) else str(v)
+        for db_candidate in (
+            WORK / 'datasets/enterprise-x10-v3-full/warehouse.duckdb',
+            WORK / 'datasets/enterprise-x10-v3-candidate02/warehouse.duckdb',
+            WORK / 'datasets/enterprise-x10-v3-smoke/warehouse.duckdb',
+            root / 'data/enterprise-x10-v3/warehouse.duckdb',
+            root / 'data/cfo_warehouse.duckdb',
+        ):
+            if db_candidate.is_file():
+                env['AGENT4_DB_PATH'] = str(db_candidate.resolve())
+                break
+    env.update({k: str(path_of(v, v)) if k.endswith(('_DIR', '_STORE', 'WORKSPACES', '_PATH', '_DB', '_FILE')) else str(v)
                 for k, v in agent_cfg(aid).get('env', {}).items()})
+    if aid == 'agent4' and env.get('AGENT4_DB_PATH') and not Path(env['AGENT4_DB_PATH']).is_file():
+        for db_candidate in (
+            WORK / 'datasets/enterprise-x10-v3-full/warehouse.duckdb',
+            WORK / 'datasets/enterprise-x10-v3-candidate02/warehouse.duckdb',
+            WORK / 'datasets/enterprise-x10-v3-smoke/warehouse.duckdb',
+            root / 'data/enterprise-x10-v3/warehouse.duckdb',
+            root / 'data/cfo_warehouse.duckdb',
+        ):
+            if db_candidate.is_file():
+                env['AGENT4_DB_PATH'] = str(db_candidate.resolve())
+                break
     if aid == 'agent2':
         # Operator env cannot accidentally overwrite the live bridge binding.
         env.update(AGENT2_PORTAL_BRIDGE_SECRET=AGENT2_TOKEN, AGENT2_PORTAL_URL=ORIGIN)
@@ -588,8 +613,17 @@ def classify(name, raw):
         if b'HDon' in raw[:200000]:
             return dict(base, kind='invoice_xml', label='Hóa đơn điện tử XML', targets=['agent3'])
         return dict(base, note='Tệp XML không có thẻ HDon nên không phải hóa đơn điện tử.')
+    if ext == '.json':
+        try:
+            doc = json.loads(raw.decode('utf-8-sig'))
+        except (UnicodeDecodeError, ValueError):
+            return dict(base, note='Tệp JSON không hợp lệ.')
+        if isinstance(doc, dict) and isinstance(doc.get('transactions'), list) and doc.get('contract_version'):
+            return dict(base, kind='a2:json', label='Gói dữ liệu chuẩn Agent 2 (JSON)', targets=['agent2'],
+                        note=f'Hợp đồng {doc.get("contract_version")}')
+        return dict(base, note='Tệp JSON không khớp hợp đồng đầu vào của Agent 2.')
     if ext not in ('.csv', '.xlsx', '.txt'):
-        return dict(base, note='Chỉ nhận CSV, XLSX, XML hoặc ZIP.')
+        return dict(base, note='Chỉ nhận CSV, XLSX, XML, ZIP hoặc JSON hợp đồng Agent 2.')
     try:
         header = xlsx_header(raw) if ext == '.xlsx' else csv_header(raw)
     except (zipfile.BadZipFile, ElementTree.ParseError, KeyError, IndexError, ValueError):
@@ -962,7 +996,8 @@ SLOTS = [
 def slot_of(kind):
     if kind.startswith('a1:'):
         return 'agent1:' + kind[3:]
-    return {'transactions': 'agent2:transactions', 'invoice_xml': 'agent3:xml', 'zip': 'agent3:xml',
+    return {'transactions': 'agent2:transactions', 'a2:json': 'agent2:transactions',
+            'invoice_xml': 'agent3:xml', 'zip': 'agent3:xml',
             'statement_or_list': 'agent3:list'}.get(kind, '')
 
 
@@ -1057,6 +1092,13 @@ def period_of(name, raw, kind):
                 for member in z.infolist()[:500]:
                     if member.filename.lower().endswith('.xml'):
                         days += [d.decode() for d in re.findall(rb'<NLap>(\d{4}-\d{2}-\d{2})', z.read(member)[:200000])]
+        elif ext == '.json' and kind == 'a2:json':
+            doc = json.loads(raw.decode('utf-8-sig'))
+            for tx in (doc.get('transactions') or [])[:50000]:
+                if isinstance(tx, dict):
+                    d = _day(str(tx.get('effective_at') or tx.get('posted_at') or ''))
+                    if d:
+                        days.append(d)
         return [min(days), max(days)] if days else None
     except (zipfile.BadZipFile, ValueError, IndexError, StopIteration, csv.Error):
         return None
@@ -1190,12 +1232,14 @@ def check(aid, record, raw, *, bank_rows=None):
             return dict(state='error', message='Cần mở khóa nạp dữ liệu rồi kiểm tra lại.')
         try:
             result = agent2_intake.preview(call, lambda path: agent_url('agent2', path), token, agent2_tenant(), agent2_company(),
-                                           c.get('legal_name') or agent2_company(), record['name'], raw)
+                                           c.get('legal_name') or agent2_company(), record['name'], raw, xlsx_reader=xlsx_rows)
         except agent2_intake.IntakeError as e:
-            return dict(state='error', message=str(e))
+            return dict(state='error', message=str(e), detail=getattr(e, 'details', [])[:5])
         s = result['summary']
+        period_note = f' ({s["first"][:10]} đến {s["last"][:10]})' if s.get('first') and s.get('last') else ''
+        label_prefix = f'{s["rows"]} giao dịch chuẩn hợp đồng' if s.get('native_json') else f'{s["rows"]} giao dịch chuyển tiền ngân hàng'
         return dict(state='ready', preview=result, rows=s['rows'],
-                    message=f'{s["rows"]} giao dịch chuyển tiền ngân hàng ({s["first"][:10]} đến {s["last"][:10]})'
+                    message=label_prefix + period_note
                             + (f'; bỏ {s["skipped"]} bút toán không phải dòng tiền' if s['skipped'] else ''),
                     warning='Agent 2 lưu thành bản dữ liệu cố định mới (snapshot), không ghi đè các bản cũ. Phân tích đồng bộ giới hạn 200 giao dịch mỗi lần.')
     if aid == 'agent3':
@@ -1456,7 +1500,7 @@ class Handler(BaseHTTPRequestHandler):
     def agent2_proxy(self, method, path, query):
         self.agent2_host()
         if query or not agent2_bridge.allowed_path(path):return self.send(404,{'error':'Đường dẫn Agent2 không được hỗ trợ.'})
-        public = method=='GET' and path in agent2_bridge.PUBLIC
+        public = method=='GET' and (path in agent2_bridge.PUBLIC or agent2_bridge.FONT_ASSET.fullmatch(path) is not None)
         headers = {}
         if not public:
             self.guard()

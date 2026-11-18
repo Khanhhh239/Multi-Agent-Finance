@@ -487,7 +487,7 @@
               <a class="intake-sample-link" href="/samples/sao-ke-chung.csv" download>Tải mẫu sao kê chuẩn (CSV)</a>
             </div>
             <label class="drop" id="drop">
-              <input type="file" id="file-input" data-son-file="1" multiple accept=".csv,.xlsx,.xml,.zip,.txt">
+              <input type="file" id="file-input" data-son-file="1" multiple accept=".csv,.xlsx,.xml,.zip,.json,.txt">
               <span class="drop-kicker">KHU VỰC TIẾP NHẬN CHỨNG TỪ GỐC</span>
               <span class="drop-title">Thả toàn bộ tệp chứng từ tại đây</span>
               <span class="drop-action-line">hoặc <strong class="drop-pick">chọn tệp từ máy tính</strong> để hệ thống tự động nhận dạng</span>
@@ -495,7 +495,7 @@
                 <span>XML Hóa đơn</span>
                 <span>ZIP Lô hóa đơn</span>
                 <span>CSV / XLSX Sao kê &amp; Sổ</span>
-                <span>TXT Dữ liệu</span>
+                <span>JSON Hợp đồng A2</span>
               </div>
               <span class="drop-sub">Hỗ trợ chọn nhiều tệp cùng lúc · Tối đa 300 MB mỗi tệp · Tự động kiểm tra cấu trúc trước khi ghi</span>
             </label>
@@ -569,9 +569,9 @@
             <tbody>
               <tr><td>Sao kê dùng chung (CSV hoặc XLSX) · <a href="/samples/sao-ke-chung.csv" download>Tải mẫu CSV</a></td><td>Agent 1 và Agent 3</td><td>Mỗi tệp nạp một lần. Cần mã giao dịch duy nhất, tài khoản của doanh nghiệp, ngày và số tiền. Nên có nội dung và đối tác để ghép hóa đơn.</td></tr>
               <tr><td>Sổ hóa đơn bán, tiền khách trả, khoản chi, kỳ sao kê, hứa trả (CSV hoặc XLSX theo mẫu Agent 1)</td><td>Agent 1</td><td>Gộp theo mã dòng, không xóa dữ liệu cũ.</td></tr>
-              <tr><td>Gói JSON theo hợp đồng Agent 2</td><td><a href="#agent2">Mở Agent 2</a></td><td>Nhập trong Agent 2 để kiểm tra và tạo snapshot. Luồng nạp chung tại đây chưa nối API v2.</td></tr>
+              <tr><td>Sổ giao dịch chuẩn Agent 2 (CSV, XLSX hoặc JSON hợp đồng)</td><td>Agent 2</td><td>Trích xuất bút toán dòng tiền ngân hàng, kiểm tra hợp đồng dữ liệu và tạo snapshot cố định mới (không ghi đè bản cũ). Ánh xạ bảng nâng cao 35 luật có thêm trực tiếp trong <a href="#agent2">Agent 2</a>.</td></tr>
               <tr><td>Hóa đơn XML, ZIP hóa đơn, bảng kê cổng thuế và sao kê theo mẫu thuế cũ</td><td>Agent 3</td><td>Dùng mẫu sao kê chung ở trên nếu cần cả Agent 1.</td></tr>
-              <tr><td>Kho dữ liệu truy vấn CFO</td><td>Agent 4</td><td>Đang dùng kho dữ liệu DuckDB độc lập.</td></tr>
+              <tr><td>Kho dữ liệu truy vấn CFO</td><td>Agent 4</td><td>Truy vấn chỉ đọc trên kho DuckDB đồng bộ theo bộ dữ liệu doanh nghiệp.</td></tr>
             </tbody>
           </table>
         </details>
@@ -645,10 +645,11 @@
         <iframe id="agent-frame-agent3" class="agent-frame" title="Giao diện Agent 3" hidden></iframe>
         <iframe id="agent-frame-agent4" class="agent-frame" title="Giao diện Agent 4" hidden></iframe>
         <div class="agent-off" id="agent-off" hidden>
-          <h2>Agent đang tắt</h2>
+          <h2 id="agent-off-title">Agent đang tắt</h2>
           <p id="agent-off-text"></p>
           <button type="button" class="primary" id="agent-start">Bật agent</button>
-          <details><summary>Nhật ký khởi động</summary><pre id="agent-log"></pre></details>
+          <a class="btn primary" id="agent-unlock-link" href="#data" hidden>Mở khóa tại Nạp dữ liệu</a>
+          <details id="agent-log-details"><summary>Nhật ký khởi động</summary><pre id="agent-log"></pre></details>
         </div>
       </div>
     </section>

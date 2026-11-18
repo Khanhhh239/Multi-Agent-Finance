@@ -1,8 +1,0 @@
-logical_module,path,status
-snapshots,agent2/sme_fraud/snapshots.py,implemented_immutable_atomic_retry
-storage schema,agent2/sme_fraud/snapshot_storage.sql,new_db_only_version_1
-imports/file mapping,agent2/sme_fraud/import_files.py,JSON_source_rename_only
-imports/snapshots HTTP,agent2/sme_fraud/snapshot_api.py,upload_source_mapping_preview_commit_read
-shared HTTP auth,agent2/sme_fraud/validation_api.py,guard_reused_with_old_validate_route
-auth,agent2/sme_fraud/auth.py,unchanged_file_policy_adapter
-features,agent2/sme_fraud/features.py,unchanged; snapshot bridge/replay pending

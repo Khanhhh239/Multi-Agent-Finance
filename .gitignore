@@ -1,6 +1,11 @@
 portal/config.local.json
 portal/workspace/
+/*.log
 /.runtime/
+agent2/.runtime/
+agent1/.state-business*/
+agent3/agent3_tax_compliance/data/lawbase/
+agent3/agent3_tax_compliance/data/workspaces/
 /.state/
 /.state-keys/
 __pycache__/

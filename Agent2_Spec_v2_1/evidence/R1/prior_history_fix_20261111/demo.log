@@ -1,9 +1,0 @@
-Demo dữ liệu mô phỏng; chỉ tạo feature, không fit/chấm ML.
-Snapshot: snp_94d8be5910b14fcfbc83cf3798ef12a8
-Đã tạo: 3 dòng · 33 biến dự báo
-T001: cùng nhìn 1 giao dịch trước nhóm
-T002: cùng nhìn 1 giao dịch trước nhóm
-Chạy as_of muộn hơn: feature quá khứ T001/T002 giữ nguyên.
-Biến dự báo: features.json; mã dòng: rows.json; nguồn đối chiếu: evidence.json.
-Artifact: D:\agent22\agent2\.runtime\feature_demo\features\ftr_81c6f798d08e3fff9cd896a3b1ef0da8f594df256d4e5ca4dd5ef0f96bfb6a5f
-Checksum: 1b0efc204e05655c6ba4466497009e2bccd23b90f8baa0752b8c32f9fbe8ad2a

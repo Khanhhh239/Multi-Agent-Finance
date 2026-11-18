@@ -1,9 +1,0 @@
-{
-  "status": "passed",
-  "server_response_job_capture": true,
-  "saved_run_reopen": true,
-  "no_duplicate_job": true,
-  "rows": 5,
-  "scope": "isolated CKKS fixture; not live P1/FHE4 acceptance",
-  "credentials_exported": false
-}

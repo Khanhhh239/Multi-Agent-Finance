@@ -87,8 +87,14 @@ html.in-platform body::before { display: none; }
 /* 5. Agent 2 uses the same surfaces for the review workbench and its configuration screens. */
 [data-agent="2"] {
   --blue: var(--kt-accent); --navy: var(--kt-ink); --border: var(--kt-line); --muted: var(--kt-muted);
+  --ink: var(--kt-ink); --green: var(--kt-accent); --line: var(--kt-line); --bg: var(--kt-canvas);
   background: var(--kt-canvas); color: var(--kt-text);
 }
+[data-agent="2"] body { background: var(--kt-canvas); color: var(--kt-text); }
+[data-agent="2"] header { background: var(--kt-surface); border-bottom-color: var(--kt-line); }
+[data-agent="2"] :is(.tag, .badge:not(.unavailable, .needs_review, .no_signal, .not_applicable, .available, .partial)) { background: var(--kt-accent-soft); color: var(--kt-accent-strong); }
+[data-agent="2"] :is(.metric, .context, .group) { background: var(--kt-canvas); border-color: var(--kt-line); }
+[data-agent="2"] .group { border-left-color: var(--kt-accent); }
 [data-agent="2"] :is(h1, h2, h3) { color: var(--kt-ink); }
 [data-agent="2"] a { color: var(--kt-accent); }
 [data-agent="2"] :is(.sidebar, .topbar, .panel, .stats article, .tool-page main > section) { background: var(--kt-surface); border-color: var(--kt-line); box-shadow: none; }

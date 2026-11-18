@@ -1,7 +1,0 @@
-﻿actor,operation,scope,observed
-C001 accountant,run/review/create-task/export,own company,allowed
-C001 accountant,configure bundle,own company,403
-C002 director,run/review/create-task/export,own company,allowed
-any actor,read run/review/task,other company,denied
-revoked permission,commit task,previous company,rollback
-client,declare binding/model/policy,own company,rejected

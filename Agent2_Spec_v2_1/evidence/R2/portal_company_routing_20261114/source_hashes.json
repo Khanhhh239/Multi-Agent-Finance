@@ -1,8 +1,0 @@
-{
-  "portal/static/app.js": "e54c75b41a30c13973188ed7f236f938a0782ef44c90e65f5148aa575473cf9c",
-  "agent2/sme_fraud/web/workspace.js": "dd15b65dd3d424a4c088a4b32b508f23bf9a86cb7b26d3dc3ef7d00a802ed432",
-  "agent2/sme_fraud/web/workbench.js": "58ad5d1bcfa988d883f6c751718940ed8aa71b9d9c47fd6a58566a8218a34815",
-  "agent2/sme_fraud/web/he-analysis.js": "9ba5111e1e530c176d3b303570ad48859fc0d64be7e63c2653546e62b5552bca",
-  "agent2/sme_fraud/web/analysis-settings.js": "834cddcc436b805b720c7853bae4001bab1b8eb09df64693d864047655bc9b93",
-  "agent2/scripts/check_portal_company_routing.py": "42f68b9930476e82960744955c97fe4ad32a971db2ff0c74a9ab60792276fccc"
-}

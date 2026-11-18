@@ -1,9 +1,0 @@
-{
-  "id": "FLOW-03",
-  "status": "not_testable",
-  "observed": "Legacy case_queue and budget code are archived. v2.1 obligation grouping/candidate-evidence contract is not implemented.",
-  "blocker": "R3 case policy/RunContext missing; D-05/D-06 not approved",
-  "baseline": "before_tests.log",
-  "candidate": "after_tests.log",
-  "scope": "R0 inventory; not R1-R6 acceptance"
-}

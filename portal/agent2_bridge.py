@@ -83,6 +83,8 @@ PUBLIC.update({'/pipeline-releases','/assets/pipeline-releases.js','/assets/pipe
 PUBLIC.update({'/pipeline-workspace','/assets/bundle-workspace.js'})
 PUBLIC.update({'/assets/bundle-remediation.js','/assets/bundle-remediation.css'})
 PUBLIC.update({'/assets/rule-source-intake.js','/samples/rule-sources.xlsx'})
+PUBLIC.update({'/assets/platform-theme.css','/assets/platform-theme.js'})
+FONT_ASSET = re.compile(r'/assets/platform-fonts/[a-z0-9-]{3,64}\.woff2\Z')
 HE_API = re.compile(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/he/(?:datasets|runs|jobs(?:/herun_[a-f0-9]{32}(?:/(?:result|resume|reviews(?:/rvw_[a-f0-9]{64}/(?:start|heartbeat|save|attachments(?:/att_[a-f0-9]{64})?))?))?)?)\Z')
 API = re.compile(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/(?:imports/(?:upload|validate|imp_[a-f0-9]{32}(?:/(?:source|mapping|inspect|preview|commit|report))?)|snapshots/snp_[a-f0-9]{32}(?:/(?:data|analyze))?)\Z')
 
@@ -99,6 +101,7 @@ def allowed_path(path):
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/batch-training(?:/(?:preview|create-labels|confirm|resume|receive|evaluate|approve|shadow|shadow-runs(?:/(?:check|shrun_[0-9]+_[a-f0-9]{16}))?))?',path):return True
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/(?:label-sources(?:/snp_[a-f0-9]{32})?|label-packets(?:/lbl_[a-f0-9]{64}(?:/(?:save|lock|reopen|export))?)?)',path):return True
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/rules/catalogue',path):return True
+    if FONT_ASSET.fullmatch(path):return True
     return path in PUBLIC or path == '/api/v1/ui/context' or API.fullmatch(path) is not None or HE_API.fullmatch(path) is not None or re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/workspace(?:/runs/herun_[a-f0-9]{32}(?:/(?:report|report\.csv|comparison))?)?',path) is not None or re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/analysis-config(?:/(?:draft|fit|activate))?',path) is not None
 
 

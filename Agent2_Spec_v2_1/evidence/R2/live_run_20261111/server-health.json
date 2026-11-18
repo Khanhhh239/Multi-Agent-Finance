@@ -1,9 +1,0 @@
-{
-  "status": "ok",
-  "mode": "import_snapshots",
-  "milestone": "R1",
-  "pipeline_ready": false,
-  "active_delivery": false,
-  "validation_auth_configured": true,
-  "snapshot_storage_configured": true
-}

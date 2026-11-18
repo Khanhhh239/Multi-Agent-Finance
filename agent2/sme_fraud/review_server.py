@@ -96,7 +96,7 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
             if self.close_connection:self.send_header('Connection','close')
             if code==401:self.send_header('WWW-Authenticate','Bearer realm="agent2"')
             self.send_header('Cache-Control','no-store');self.send_header('X-Content-Type-Options','nosniff')
-            self.send_header('Content-Security-Policy',"default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; form-action 'none'; base-uri 'none'; frame-ancestors "+os.environ.get('SOSOAT_FRAME_ANCESTORS',"'none'"))
+            self.send_header('Content-Security-Policy',"default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'none'; base-uri 'none'; frame-ancestors "+os.environ.get('SOSOAT_FRAME_ANCESTORS',"'none'"))
             self.end_headers();self.wfile.write(body)
         def do_GET(self):
             if handle_workbench(self,authorizer,analysis_mode='four_encrypted_branches' if he_backend and hasattr(he_backend,'settings') else None,bundle_mode=release_service is not None):return

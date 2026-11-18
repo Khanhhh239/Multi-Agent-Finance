@@ -1,9 +1,0 @@
-{
-  "id": "FLOW-08",
-  "status": "not_testable",
-  "observed": "Legacy notification implementation and prior audit remain in archive. New active delivery is disabled.",
-  "blocker": "R3 delivery ledger/idempotency implementation and mandatory policy D-07 not available",
-  "baseline": "before_tests.log",
-  "candidate": "after_tests.log",
-  "scope": "R0 inventory; not R1-R6 acceptance"
-}
