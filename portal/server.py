@@ -188,7 +188,7 @@ AGENTS = {
     'agent3': dict(name='Thuế GTGT', summary='Đọc hóa đơn XML, đối chiếu sao kê và bảng kê, căn cứ điều luật.',
                    default_root='agent3/agent3_tax_compliance', port=8640, health='/api/schema', page='/'),
     'agent4': dict(name='Hỏi đáp số liệu', summary='Hỏi chỉ tiêu tài chính bằng tiếng Việt, trả lời có nguồn.',
-                   default_root='agent4', port=8040, health='/health/live', page=None),
+                   default_root='agent4', port=8040, health='/health', page=None),
 }
 PROCS: dict[str, subprocess.Popen] = {}
 
@@ -256,8 +256,12 @@ def launch_spec(aid):
         cmd = ['-m', 'src.assistant.web']
         env.update(AGENT3_PORT=str(port))
     else:
-        cmd = ['-m', 'uvicorn', 'agent4.text2sql.api:create_app', '--factory', '--host', HOST, '--port', str(port)]
-        env.update(AGENT4_DEMO_TOKEN=AGENT4_TOKEN)
+        # Governed pipeline (metric selection, planner, compiled SQL, read-only DuckDB). Demo mode gives the two server-owned
+        # synthetic personas; the old text2sql slice stays in the repo but is no longer started here.
+        cmd = ['-m', 'uvicorn', 'agent4.api:create_demo_app', '--factory', '--host', HOST, '--port', str(port)]
+        env.update(AGENT4_DEMO_MODE='1', AGENT4_DEMO_TOKEN=AGENT4_TOKEN,
+                   AGENT4_SELECTION_CONFIG='config/eval_governed_lexical.yaml',
+                   AGENT4_LLM_MODEL='qwen3:4b-instruct-2507-q4_K_M')
     env.update({k: str(path_of(v, v)) if k.endswith(('_DIR', '_STORE', 'WORKSPACES')) else str(v)
                 for k, v in agent_cfg(aid).get('env', {}).items()})
     if aid == 'agent2':
@@ -1345,8 +1349,17 @@ def agent4_query(question):
     body = dict(api_version='v1', question=question, locale='vi-VN', session_id=None,
                 options=dict(include_table=True, explain_metrics=True))
     status, res = call('POST', agent_url('agent4', '/v1/query'), body, {'Authorization': f'Bearer {AGENT4_TOKEN}'}, timeout=60)
+    if isinstance(res, dict) and 'status' in res and 'api_version' in res:
+        return res          # the governed pipeline answers every outcome (refused, needs clarification, error) in one shape
     if status != 200:
-        return dict(status='error', answer=res.get('error', f'Lỗi {status}') if isinstance(res, dict) else str(res), warnings=[])
+        detail = res.get('error', f'Lỗi {status}') if isinstance(res, dict) else str(res)
+        try:        # call() flattens an HTTP error body to text; the governed pipeline puts its error object there
+            err = json.loads(detail)
+        except (TypeError, ValueError):
+            err = None
+        if isinstance(err, dict) and 'code' in err:
+            return dict(status='unsupported' if str(err['code']).startswith('unsupported') else 'error', answer=None, error=err, warnings=[])
+        return dict(status='error', answer=detail, warnings=[])
     return res
 
 

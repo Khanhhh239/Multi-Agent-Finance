@@ -75,13 +75,13 @@
     if (!p && !i) return null;
     const rows = [];
     if (i) {
-      rows.push(["Chỉ tiêu", i.metric_ids.join(", ")]);
-      if (i.dimensions.length) rows.push(["Chiều", i.dimensions.join(", ")]);
+      rows.push(["Chỉ tiêu", i.metric_ids.map(label).join(", ")]);
+      if (i.dimensions.length) rows.push(["Chiều", i.dimensions.map(label).join(", ")]);
       if (i.time) rows.push(["Thời gian", i.time.mode === "range" ? i.time.start + " đến " + i.time.end : i.time.as_of || "không giới hạn"]);
       if (i.view) rows.push(["Khung số liệu", i.view === "tax" ? "thuế" : "quản trị"]);
     }
     if (p) {
-      rows.push(["Nguồn", p.source]);
+      rows.push(["Nguồn", ({ mgmt: "Sổ quản trị", tax: "Sổ thuế", synthetic_duckdb: "Kho DuckDB mô phỏng" })[p.source] || String(p.source).replace(/_/g, " ")]);
       if (p.data_watermark) rows.push(["Dữ liệu đến", p.data_watermark]);
       rows.push(["Danh mục", p.catalog_hash.slice(0, 12)]);
     }
@@ -90,6 +90,19 @@
   }
 
   // Agent 4 writes raw amounts ("55792824000.00 VND", "khung mgmt"); show them the way an accountant reads them.
+  // Error codes of the governed pipeline, in words a user can act on.
+  const ERROR_TEXT = {
+    unsupported_metric: "Chưa có chỉ tiêu nào phù hợp với câu hỏi này. Hãy hỏi về doanh thu, lợi nhuận, công nợ, tiền mặt hoặc chi phí.",
+    forbidden: "Bạn không có quyền xem chỉ tiêu này.",
+    retrieval_unavailable: "Dịch vụ tìm chỉ tiêu tạm thời chưa sẵn sàng. Hãy thử lại sau ít giây.",
+  };
+  function errorText(error) {
+    if (!error) return "";
+    if (typeof error === "string") return error;
+    if (ERROR_TEXT[error.code]) return ERROR_TEXT[error.code];
+    if (error.stage === "llm_metric_selection") return "Mô hình chưa chọn được chỉ tiêu cho câu này. Hãy diễn đạt lại, ví dụ nêu rõ chỉ tiêu và kỳ.";
+    return error.message || "Không trả lời được.";
+  }
   function readable(text) {
     return String(text)
       .replace(/(\d+(?:\.\d+)?) VND/g, (_, n) => vnd.format(Math.round(Number(n))) + " đồng")
@@ -102,11 +115,11 @@
     const warnings = (res.warnings || []).filter(Boolean);
     return [
       el("span", { class: "tag " + res.status }, STATUS[res.status] || res.status),
-      el("div", { class: "answer" }, readable(res.answer || (res.error && res.error.message) || "Không có câu trả lời.")),
+      el("div", { class: "answer" }, readable(res.answer || errorText(res.error) || "Không có câu trả lời.")),
       table(res.data),
       res.data && res.data.truncated ? el("p", { class: "source" }, "Chỉ hiện 50 dòng đầu.") : null,
       source(res),
-      warnings.length ? el("ul", { class: "warnings" }, warnings.map((w) => el("li", {}, WARNINGS.reduce((t, [re, vi]) => t.replace(re, vi), String(w))))) : null,
+      warnings.length ? el("ul", { class: "warnings" }, warnings.map((w) => el("li", {}, ({ partial_data_watermark: "Kỳ báo cáo chưa hoàn tất, số liệu có thể thay đổi." })[w] || WARNINGS.reduce((t, [re, vi]) => t.replace(re, vi), String(w))))) : null,
     ];
   }
 
