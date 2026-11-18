@@ -9,7 +9,7 @@ Nhánh `platform-Khanh`, 18/11/2026. Mục tiêu: một server chạy ổn đị
 | Portal | Python chuẩn, `portal/server.py` | 8800 | JSON và tệp trong `portal/workspace` (mật khẩu băm, phiên bản gói, nhật ký) |
 | Agent 1 Dòng tiền | FastAPI, pandas, sklearn | 8011 | SQLite và khóa trong `agent1/.state-business-firm-<mã>-data`; vài GB RAM khi huấn luyện |
 | Agent 2 Soát giao dịch | Python chuẩn, sklearn, networkx | 8766 | SQLite snapshot và mô hình trong `agent2/.runtime/platform`; HE cần Concrete trên Linux |
-| Agent 3 Thuế GTGT | FastAPI, torch, transformers | 8640 | Kho luật `data/lawbase` (khoảng 130 MB), mô hình xếp hạng lại 2,2 GB, không gian làm việc theo MST |
+| Agent 3 Thuế GTGT | FastAPI, torch, transformers | 8640 | Kho luật `data/lawbase` (khoảng 400 MB, riêng `legal_corpus.sqlite3` 364 MB), mô hình xếp hạng lại 2,2 GB, không gian làm việc theo MST |
 | Agent 4 Hỏi đáp | FastAPI, DuckDB | 8040 | DuckDB chỉ đọc (bản đầy đủ 2,3 GB) |
 | Ollama | mô hình ngôn ngữ cục bộ | 11434 | `qwen3:8b` (5 GB), `qwen3:4b` (2,5 GB), `bge-m3`, `qwen3-embedding:0.6b` |
 
