@@ -1531,7 +1531,7 @@ th,td,.metrics,.audit-metrics{font-variant-numeric:tabular-nums}td:has(+td){bord
 
 
 /* Agent workspace header and navigation. Desktop tabs inside the Portal share its page flow. */
-:root { --agent-header-height: 48px; }
+:root { --agent-header-height: var(--kt-topbar-h, 52px); }
 .topbar {
   position: fixed;
   inset: 0 0 auto;
