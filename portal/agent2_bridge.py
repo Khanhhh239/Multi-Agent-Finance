@@ -81,6 +81,8 @@ PUBLIC = {'/','/workspace','/status','/data-import','/encrypted-analysis','/anal
 PUBLIC.update({'/label-verification','/assets/label-verification.js','/batch-training','/assets/batch-training.js'})
 PUBLIC.update({'/pipeline-releases','/assets/pipeline-releases.js','/assets/pipeline-releases.css'})
 PUBLIC.update({'/pipeline-workspace','/assets/bundle-workspace.js'})
+PUBLIC.update({'/pipeline-operations','/assets/investigation.js','/assets/investigation.css'})
+PUBLIC.update({'/model-management','/assets/model-management.js','/assets/model-management.css'})
 PUBLIC.update({'/assets/bundle-remediation.js','/assets/bundle-remediation.css'})
 PUBLIC.update({'/assets/rule-source-intake.js','/samples/rule-sources.xlsx'})
 PUBLIC.update({'/assets/platform-theme.css','/assets/platform-theme.js'})
@@ -91,6 +93,8 @@ API = re.compile(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/(?:imports/(?:upload
 
 def allowed_path(path):
     if '..' in path or '//' in path:return False
+    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/model-lifecycle(?:/(?:profile|train|evaluate|approve|rollback|score-queue|lr-fhe(?:/(?:status|worker-health|worker-restart|prepare|train|resume|decrypt|promote))?|lr-registry(?:/(?:register|validate|transition))?))?',path):return True
+    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-workspace/(?:runs/[A-Za-z0-9_.:-]{8,128}/)?investigation(?:/[A-Za-z0-9_.:%-]{1,384}(?:/reviews/rvw_[a-f0-9]{64})?(?:/(?:start|heartbeat|save|attachments))?)?',path):return True
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-workspace/backlog(?:/(?:reevaluate|active|shadow))?',path):return True
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-workspace/runs/[A-Za-z0-9_.:-]{8,128}/reviews/rvw_[a-f0-9]{64}/remediation(?:/documents/doc_[a-f0-9]{24}/versions/[1-9][0-9]{0,3})?',path):return True
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-workspace(?:/runs(?:/[A-Za-z0-9_.:-]{8,128}(?:/(?:report(?:\.csv)?|reviews/rvw_[a-f0-9]{64}/(?:start|heartbeat|save|attachments|tasks)(?:/att_[a-f0-9]{64})?))?)?)?',path):return True

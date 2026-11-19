@@ -1,0 +1,14 @@
+{
+  "status": "pass",
+  "checks": [
+    "Queue reads saved real pipeline scores, sorted priorities, statuses and source-bound explanations",
+    "Node expansion and selected-edge evidence work without new scoring/fitting; graph uses frozen source identities",
+    "Related records, source evidence, saved score components and model/source trace are reachable",
+    "Start survives reload; attachment round-trip, conclusion, audit and response-loss retry persist exactly one review revision",
+    "Filters, unsaved-edit guard and company reload preserve isolation",
+    "Portal denies unauthenticated and cross-company reads; mobile 390px fits; no JavaScript errors"
+  ],
+  "synthetic_data": true,
+  "actual_fhe": false,
+  "live_state_changed": false
+}

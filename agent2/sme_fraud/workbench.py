@@ -14,7 +14,13 @@ ASSETS = {'/': ('index.html', 'text/html; charset=utf-8'),
           '/assets/workspace.css': ('workspace.css','text/css; charset=utf-8'),
           '/analysis-settings': ('analysis-settings.html','text/html; charset=utf-8'),
           '/pipeline-releases': ('pipeline-releases.html','text/html; charset=utf-8'),
-          '/pipeline-workspace': ('bundle-workspace.html','text/html; charset=utf-8'),
+          '/pipeline-workspace': ('investigation.html','text/html; charset=utf-8'),
+          '/pipeline-operations': ('bundle-workspace.html','text/html; charset=utf-8'),
+          '/model-management': ('model-management.html','text/html; charset=utf-8'),
+          '/assets/investigation.js': ('investigation.js','text/javascript; charset=utf-8'),
+          '/assets/investigation.css': ('investigation.css','text/css; charset=utf-8'),
+          '/assets/model-management.js': ('model-management.js','text/javascript; charset=utf-8'),
+          '/assets/model-management.css': ('model-management.css','text/css; charset=utf-8'),
           '/assets/bundle-workspace.js': ('bundle-workspace.js','text/javascript; charset=utf-8'),
           '/assets/bundle-remediation.js': ('bundle-remediation.js','text/javascript; charset=utf-8'),
           '/assets/bundle-remediation.css': ('bundle-remediation.css','text/css; charset=utf-8'),
@@ -69,7 +75,7 @@ def handle_workbench(handler, authorizer,*,analysis_mode=None,bundle_mode=False)
         else:
             filename, mime = ASSETS[path.path]
             if path.path=='/' and analysis_mode=='four_encrypted_branches':filename='workspace.html'
-            if path.path=='/' and bundle_mode:filename='bundle-workspace.html'
+            if path.path=='/' and bundle_mode:filename='investigation.html'
             handler.respond(200, (ROOT / filename).read_bytes(), mime)
     except AuthError as error:
         respond_failure(handler, error)

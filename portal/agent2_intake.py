@@ -35,6 +35,17 @@ class IntakeError(ValueError):
         self.details = list(details or [])
 
 
+class AlreadyCommitted(IntakeError):
+    """The same bytes were already saved as an immutable Agent 2 snapshot; nothing to write again."""
+
+
+def _is_committed(res):
+    try:
+        return 'IMPORT_COMMITTED' in json.dumps(res, ensure_ascii=False)
+    except (TypeError, ValueError):
+        return False
+
+
 def _source(record_id):
     return {'system': SYSTEM, 'record_id': record_id, 'is_simulated': True}
 
@@ -232,12 +243,18 @@ def preview(call, agent_url, token, tenant, company, company_name, name, raw, *,
                      _headers(token, {'Content-Type': 'application/octet-stream', 'X-File-Name': quote(upload_name),
                                       'Idempotency-Key': key}), 600)
     if st not in (200, 201):
+        if _is_committed(draft):
+            raise AlreadyCommitted('Agent 2 đã lưu snapshot cho đúng nội dung này trước đó; không ghi đè.')
         raise IntakeError(_message(draft, st))
     st, prev = call('POST', agent_url(base + 'imports/' + draft['import_id'] + '/preview'), {'expected_revision': draft['revision']},
                     _headers(token), 600)
     if st not in (200, 201):
+        if _is_committed(prev):
+            raise AlreadyCommitted('Agent 2 đã lưu snapshot cho đúng nội dung này trước đó; không ghi đè.')
         raise IntakeError(_message(prev, st))
     if isinstance(prev, dict) and prev.get('status') == 'rejected':
+        if _is_committed(prev):
+            raise AlreadyCommitted('Agent 2 đã lưu snapshot cho đúng nội dung này trước đó; không ghi đè.')
         errs = prev.get('errors') or []
         details = [f'{e.get("path") or "$"}: {e.get("message", "")}' for e in errs[:5] if isinstance(e, dict)]
         first_msg = errs[0].get('message') if errs and isinstance(errs[0], dict) else 'Tệp bị từ chối khi kiểm tra cấu trúc Agent 2.'

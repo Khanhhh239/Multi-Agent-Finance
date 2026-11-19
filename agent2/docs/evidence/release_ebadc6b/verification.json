@@ -1,0 +1,106 @@
+{
+  "evidence_version": "1.0.0",
+  "date": "2026-11-19",
+  "source_commit": "ebadc6b867c2f2f8a3613b66b7dc1809199ccf16",
+  "scope": "Selected regression and integration tests, not the complete repository suite or real-world fraud effectiveness evaluation",
+  "data_kind": "synthetic",
+  "agent2": {
+    "initial_run": {
+      "passed": 97,
+      "failed": 2,
+      "deselected": 3,
+      "subtests_passed": 17,
+      "duration_seconds": 447.37
+    },
+    "reruns": [
+      {
+        "test": "test_lr_r3_integration.LRR3IntegrationTests.test_02_ckks_encrypted_evaluation_and_worker_8868_honesty",
+        "status": "passed",
+        "python": "agent2/.venv/Scripts/python.exe",
+        "duration_seconds": 20.708,
+        "exit_code": 0,
+        "initial_failure_reason": "System Python lacked TenSEAL; rerun in Agent2 environment with TenSEAL"
+      },
+      {
+        "test": "test_batch_training_portal.BatchTrainingPortalTests.test_portal_bridge_allowlist_and_static_assets",
+        "status": "passed",
+        "duration_seconds": 7.78,
+        "initial_failure_reason": "Two exact UI text expectations referred to previous Vietnamese wording",
+        "fix": "Updated the two expected headings without changing production logic"
+      }
+    ],
+    "distinct_selected_tests_passed_after_targeted_reruns": 99,
+    "all_passed_in_one_full_rerun": false,
+    "native_tests_not_rerun": [
+      "LRFHER2Tests.test_01_portal_worker_lifecycle_health_timeout_and_controlled_restart",
+      "LRFHER2Tests.test_03_real_concrete_fhe_e2e_checkpoint_resume_duplicate_guard_validation_and_http_rbac",
+      "R4FederatedFHETests.test_01_real_concrete_2_company_joint_fhe_training_on_worker_8870"
+    ]
+  },
+  "portal": {
+    "passed": 81,
+    "subtests_passed": 3,
+    "duration_seconds": 10.09,
+    "modules": [
+      "portal/test_dashboard_health.py",
+      "portal/test_portal_security_and_intake.py",
+      "portal/test_bank_intake.py"
+    ]
+  },
+  "ui": {
+    "passed_checks": 8,
+    "report": "browser-report.json"
+  },
+  "fraud_precision_recall_or_roi_measured": false,
+  "source_file_sha256": {
+    "agent2/docs/AGENT2_THONG_TIN_20261119.md": "1ab15572610829a7fd25ecdb33add0b4826082059d11ab7873052b77c5452ed2",
+    "agent2/docs/INVESTIGATION_WORKFLOW.md": "2df26b3dcab6aa990559edbe4782f2f1bb98b242d88d1062c78324e10b8c4727",
+    "agent2/docs/PROMPT_ANTIGRAVITY_MODEL_MANAGEMENT.md": "c6b359ce0430dfd9a9194521c41883b658e3d98de450986f08f14468082bf797",
+    "agent2/docs/R4_MULTI_COMPANY_FHE_RESEARCH_AND_DESIGN.md": "bfcb49883ba0cbfcc6581993f2ae01bf06e4b1b0d17e23340fcfe4ace4c82e55",
+    "agent2/docs/evidence/investigation_20261119/01-queue.png": "cbe26cbeff34bf910a2f3c91bebe8a824cda99cd1590301b9f1df1a295d3dd92",
+    "agent2/docs/evidence/investigation_20261119/02-investigation.png": "e3222bbe39183ccd4558d1e6a202b22d7271161a92f7df3320ac9afec2753779",
+    "agent2/docs/evidence/investigation_20261119/03-mobile.png": "5293228d4988cb703e2d9dc862a685fe5666c2d4ea2138243b961c24f224376e",
+    "agent2/docs/evidence/investigation_20261119/browser-report.json": "80d6b147a8b2ade5884e028307f4c289d31b5c152986506efeef49dc5d8d72b5",
+    "agent2/docs/evidence/investigation_20261119/live-acceptance.json": "568dd4694635d8f016967677af35248c90c27eb1fae0ec150cc863531cce0384",
+    "agent2/docs/evidence/investigation_20261119/source-comparison.json": "766ee3068ba66aab505d1a0d287a4738e9ca81c6910cdb05f6830beef112b6a0",
+    "agent2/docs/evidence/investigation_20261119/verification.json": "ffc3cae71ad03e542df3ffd1b7f9e452f579efe3862ecc0b181275aad302c399",
+    "agent2/experiments/he_training/batch_enterprise.py": "8fe47f0da27d8af5e21f99bffe7da3b203d5bfada6ea6d630dd2294142a38197",
+    "agent2/experiments/he_training/federated_r4.py": "2245ae9da7f637536ba5f231a563b86d9e053e8c0325bf30351509b5bc20a52b",
+    "agent2/experiments/he_training/helper.py": "ca8893e86ed4aabcecdc65e11983da45eaae3b203c9c37c0041bb98887115857",
+    "agent2/scripts/check_investigation_ui.py": "696859e00ba90725810db3862724386069af93161ed23b4ea4ffd24701d92fb1",
+    "agent2/scripts/check_r2_lr_fhe_ui.py": "16fd78ee1d54750e19c244ced99ec58ee06967e5130f81e1a9fe169e387241f4",
+    "agent2/scripts/check_r3_five_method_ui.py": "6cd5b27a1f302b97b7fbad66ea340d51c54e18fe8d10b4a715283b470ef81ee3",
+    "agent2/scripts/check_r5_lr_registry_ui.py": "7337a74889ce298b7bef4b17dad923a06b77b58f944914b8596fa3ee612c0cc0",
+    "agent2/scripts/check_two_area_ui.py": "33d8f77ffc07b0ce0b4df25bc02b4d7876e1ca576ab3f00e2c2392e57d3cd126",
+    "agent2/sme_fraud/bundle_workspace_api.py": "48489370f308c80536e249d0b879d9e486985f8b7e5f793d4ac14a4472602dc6",
+    "agent2/sme_fraud/case_coalescing.py": "b0e2ec04f0143e49c2411549999c901b8b784053af2e675bde7935f2615d768e",
+    "agent2/sme_fraud/investigation.py": "3abdf91baf29c183e059bc8b425e3b3073877c8bbad129a9308a0b1671571f74",
+    "agent2/sme_fraud/investigation_api.py": "7d1daeaf90b7b5a5eb3aabf997b6104d2977c7685087591c74fcf8cef561d2ac",
+    "agent2/sme_fraud/lr_fhe_training.py": "b242806c9020f1383d3485b432c4a18930d144979fb6bbbecbf26003a96f3c35",
+    "agent2/sme_fraud/lr_inference.py": "443f5b848c9050480512d1fd9e79b917f55eced265f6232582213ef0106c5536",
+    "agent2/sme_fraud/lr_registry.py": "b1414810ed7c06e1da33dfaa7ec3a0ba711f8149f33bf4b194b1f3d4d3e132db",
+    "agent2/sme_fraud/model_lifecycle.py": "665c8debf933776f075e9c233ee97d2a631add2c07aa282e4c4d63f958c5a933",
+    "agent2/sme_fraud/model_lifecycle_api.py": "3bebcd426439538a9efc07450cce912579f58fcfae8c85b37c8472f5e1fd44a3",
+    "agent2/sme_fraud/review_server.py": "62ef13b8d23c467790a999837ee7ec673de35263be8296a4ad8a05f62eb02dd2",
+    "agent2/sme_fraud/web/investigation.css": "818577fdceb98a8797ae159e4d500f27ec8b8f6bfc3aa04a425d1d8b134dea22",
+    "agent2/sme_fraud/web/investigation.html": "efb459e2aed0a4144f6692db87a58e358a9206fdf98717b7f51063fce5d9eff7",
+    "agent2/sme_fraud/web/investigation.js": "ade0444ab9e2b945cec7437a8687fe80c6912c1f67c3ae17c3c0f31ca7c069c5",
+    "agent2/sme_fraud/web/model-management.css": "85232d6bbb995bdfb709f42c028de18b010a7044596027bde9c1682f3b4ac16e",
+    "agent2/sme_fraud/web/model-management.html": "4d59dc92c103acd3a0cd65d3a7eed31d7ac2343c6ac3d16f48275327ddc84434",
+    "agent2/sme_fraud/web/model-management.js": "467b9c4bc4cfd8ed9334d7a9a0ac96893cfddd5faaecceb0566c83f37cc17857",
+    "agent2/sme_fraud/workbench.py": "d662db6b2151297ed7b85e261e46b3975d387c3bb3a20ee1717cb5fa1620baa5",
+    "agent2/tests_he/test_bundle_workspace.py": "e634c412631a9070c7ff1d124a7b56388945f274cb1c4874249f18e55d4f96d4",
+    "agent2/tests_he/test_investigation.py": "9c6b1887134c5dcde385e610a7db0d811df2974996375cc6bf8cf6c7e5406bb1",
+    "agent2/tests_he/test_lr_fhe_r2.py": "e3f5b3e7a123c268ca997a088843acf25fb36f4d0be39d625dffc588cecb4581",
+    "agent2/tests_he/test_lr_r3_integration.py": "801947e4837e23c288f535cd825472cf8c3ee544906fe11134c55ec18564721d",
+    "agent2/tests_he/test_model_lifecycle.py": "bd41130044a1874d3afd93b24ad0a3e9c75058a57e26f7b33896281c4df6ed97",
+    "agent2/tests_he/test_r4_federated_fhe.py": "c2623c4b181d1ff898ef52fefda063c1c9f019e43a70359aaa1f0d78e5af357b",
+    "agent2/tests_he/test_r5_lr_registry.py": "cecbfe32558895d0424b6bc584903963289f0b2d3cb11a23254147daf2daacdc",
+    "portal/agent2_bridge.py": "a16d2415b118660ad8c82e25acac07de439a5092bfff9b3119ba548827e62b36",
+    "portal/agent2_he_training_runtime.py": "2b0504721016e5ac8b82e01a69d080799f737ec65848de41772f09fa140325cb",
+    "portal/server.py": "aa084b24707614887e06edf40830051bdf989dee0aef101eb1bc252d41fc5e6b",
+    "portal/static/app.js": "132371d39681ee23c247eff71c4db8f18f4b896f48e9232802153d75205e93ba",
+    "agent2/tests_he/test_batch_training_portal.py": "ecdbd1bfedd72992b17a889e1e4616eb09ed82e8f1b4e964be74dce276e0fdbf"
+  },
+  "provenance": "Summarized from local test logs and tool results captured before publishing the source commit. Raw logs remain local; this public-safe summary excludes credentials, private keys and live databases."
+}

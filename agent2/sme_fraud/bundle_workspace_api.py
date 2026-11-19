@@ -15,6 +15,8 @@ BACKLOG=re.compile(r'/api/v1/companies/([A-Za-z0-9_.:-]{1,128})/pipeline-workspa
 
 
 def handle_bundle_workspace(handler,authorizer,service,method):
+    from .investigation_api import handle
+    if handle(handler,authorizer,service,method):return True
     path=urlsplit(handler.path).path
     bkl=BACKLOG.fullmatch(path)
     rem=REMEDIATION.fullmatch(path)

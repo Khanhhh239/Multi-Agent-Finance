@@ -97,6 +97,8 @@ AGENT3_TOKEN = secrets.token_urlsafe(32)          # backend bridge only; never r
 AGENT2_TOKEN = secrets.token_urlsafe(32)          # introspection channel only, never a user credential
 HE_RUNTIME = None
 HE_RUNTIME_SETTINGS = None
+HE_TRAINING_RUNTIME = None
+HE_TRAINING_RUNTIME_SETTINGS = None
 
 
 def path_of(value, default):
@@ -399,6 +401,33 @@ def he_runtime(env=None):
     with LOCK:return _he_runtime(env)
 
 
+def _he_training_runtime():
+    global HE_TRAINING_RUNTIME, HE_TRAINING_RUNTIME_SETTINGS
+    worker = agent_cfg('agent2').get('he_training_worker')
+    if not isinstance(worker, dict):
+        return None
+    worker = dict(worker)
+    for name in ('bundle', 'config'):
+        if name in worker:
+            worker[name] = str(path_of(worker[name], worker[name]).resolve())
+    settings = (json.dumps(worker, sort_keys=True), str(LOGS))
+    if HE_TRAINING_RUNTIME is None or HE_TRAINING_RUNTIME_SETTINGS != settings:
+        if HE_TRAINING_RUNTIME is not None and HE_TRAINING_RUNTIME.state()['owned']:
+            raise ValueError('Cấu hình worker huấn luyện FHE đã đổi. Tắt Agent2 trước khi áp dụng cấu hình mới.')
+        try:
+            from .agent2_he_training_runtime import TrainingLinuxRuntime
+        except ImportError:
+            from agent2_he_training_runtime import TrainingLinuxRuntime
+        HE_TRAINING_RUNTIME = TrainingLinuxRuntime(worker, LOGS)
+        HE_TRAINING_RUNTIME_SETTINGS = settings
+    return HE_TRAINING_RUNTIME
+
+
+def he_training_runtime():
+    with LOCK:
+        return _he_training_runtime()
+
+
 def agent_state(aid):
     proc = PROCS.get(aid)
     owned = proc is not None and proc.poll() is None
@@ -425,6 +454,10 @@ def agent_state(aid):
             runtime=he_runtime()
             if runtime:value['dependency']=runtime.state()
         except ValueError as error:value['dependency']=dict(status='unavailable',owned=False,can_recover=False,message=str(error))
+        try:
+            tr=he_training_runtime()
+            if tr:value['he_training_worker']=tr.state()
+        except ValueError as error:value['he_training_worker']=dict(status='unavailable',ready=False,owned=False,can_recover=False,message=str(error))
     return value
 
 
@@ -439,13 +472,23 @@ def dashboard_agents():
 def start_agent(aid):
     with LOCK:
         runtime=None
+        training_rt=None
         if aid=='agent2':
             runtime=he_runtime()
-            if runtime:
+            training_rt=he_training_runtime()
+            if runtime or training_rt:
                 existing=PROCS.get(aid)
                 if port_open(agent_port(aid)) and (existing is None or existing.poll() is not None):
                     raise ValueError('Agent2 đang chạy ngoài phiên Portal này. Người quản lý cần kiểm tra trước khi bật.')
-                runtime.start()
+                if runtime:
+                    runtime.start()
+                if training_rt:
+                    try:
+                        training_rt.start()
+                    except Exception:
+                        if runtime:
+                            runtime.stop()
+                        raise
         if agent_state(aid)['state'] in ('running', 'starting'):
             return agent_state(aid)
         if port_open(agent_port(aid)):
@@ -460,7 +503,7 @@ def start_agent(aid):
                 flags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
                 PROCS[aid] = subprocess.Popen(cmd, cwd=cwd, env=env, stdout=log, stderr=subprocess.STDOUT,
                                               stdin=subprocess.DEVNULL, creationflags=flags)
-            if runtime:
+            if runtime or training_rt:
                 deadline=time.monotonic()+30
                 while time.monotonic()<deadline:
                     if PROCS[aid].poll() is not None:
@@ -469,8 +512,10 @@ def start_agent(aid):
                     time.sleep(.1)
                 else:raise ValueError('Agent2 chưa sẵn sàng. Thử bật lại sau khi kiểm tra kết nối.')
         except Exception:
-            if runtime:
-                stop_owned(PROCS.pop(aid,None));runtime.stop()
+            if runtime or training_rt:
+                stop_owned(PROCS.pop(aid,None))
+                if training_rt:training_rt.stop()
+                if runtime:runtime.stop()
             raise
         return agent_state(aid)
 
@@ -479,8 +524,10 @@ def stop_agent(aid):
     with LOCK:
         proc = PROCS.pop(aid, None)
         runtime=HE_RUNTIME if aid=='agent2' else None
-        if aid=='agent2' and (proc is not None or runtime is not None and runtime.process is not None):
+        training_rt=HE_TRAINING_RUNTIME if aid=='agent2' else None
+        if aid=='agent2' and (proc is not None or (runtime is not None and runtime.process is not None) or (training_rt is not None and training_rt.process is not None)):
             stop_owned(proc)
+            if training_rt:training_rt.stop()
             if runtime:runtime.stop()
             return agent_state(aid)
         if proc is None or proc.poll() is not None:
@@ -511,6 +558,7 @@ def stop_all():
             stop_agent(aid)
         except ValueError:
             pass
+    if HE_TRAINING_RUNTIME is not None:HE_TRAINING_RUNTIME.stop()
     if HE_RUNTIME is not None:HE_RUNTIME.stop()
 
 
@@ -1270,6 +1318,56 @@ def intake_context():
     return {key: c[key] for key in ('code', 'agent2_company', 'tax_code', 'date_format', 'number_format')}
 
 
+def committed_results(record, context=None):
+    """Return successful prior writes for this exact source file and company."""
+    context = context or record.get('intake_context') or intake_context()
+    digest = record.get('sha256')
+    kind = record.get('kind')
+    if not digest or not kind or not context.get('code'):
+        return {}
+    found = {}
+    for batch in current_batches():
+        if batch.get('company') != context['code']:
+            continue
+        for item in batch.get('files', []):
+            if item.get('sha256') != digest or item.get('kind') != kind:
+                continue
+            item_context = item.get('intake_context')
+            if item_context is not None and item_context != context:
+                continue
+            for aid, result in item.get('results', {}).items():
+                if aid in record.get('targets', []) and result.get('state') == 'done':
+                    found[aid] = result
+    return found
+
+
+def reconcile_committed_pending(record, context=None, *, prune=True):
+    """Apply prior successful results and retire a fully committed duplicate."""
+    context = context or intake_context()
+    if record.get('intake_context') != context:
+        return record
+    recorded = committed_results(record, context)
+    if not recorded:
+        return record
+    applied = record.setdefault('applied', {})
+    checks = record.setdefault('checks', {})
+    changed = False
+    for aid, result in recorded.items():
+        if applied.get(aid, {}).get('state') == 'done' and checks.get(aid, {}).get('state') == 'done':
+            continue
+        applied[aid] = dict(result, message='Đã ghi trước đó; dùng snapshot/bản ghi đã có.')
+        checks[aid] = dict(applied[aid])
+        changed = True
+    if prune and all(applied.get(aid, {}).get('state') == 'done' for aid in record.get('targets', [])):
+        # The immutable committed batch is the durable record. A duplicate
+        # pending copy must not remain as a red error or be offered for retry.
+        remove_file(record['id'])
+        return None
+    if changed:
+        write_json(PENDING / (record['id'] + '.json'), record)
+    return record
+
+
 def pending():
     # Read the file and test its running state in the same critical section.
     # Otherwise a poll can read "checking", wait for a completed check's lock,
@@ -1291,6 +1389,10 @@ def _pending_locked():
         if bound != context:
             record['checks'] = {aid: dict(state='stale', message='Cần kiểm tra lại với hồ sơ hiện tại.')
                                 for aid in record['targets']}
+        else:
+            record = reconcile_committed_pending(record, context)
+            if record is None:
+                continue
         with LOCK:
             if record['id'] not in CHECKING and any(c.get('state') == 'checking' for c in record.get('checks', {}).values()):
                 record['checks'] = {aid: record.get('applied', {}).get(aid) or dict(
@@ -1304,7 +1406,7 @@ def pending_file(fid, context):
     record = read_json(PENDING / f'{fid}.json', None)
     if record is None or record.get('intake_context', context)['code'] != context['code']:
         raise KeyError('Không có tệp này trong hàng chờ của doanh nghiệp hiện tại.')
-    return record
+    return reconcile_committed_pending(record, context)
 
 
 def history():
@@ -1381,32 +1483,40 @@ def add_file(name, raw):
     clean = re.sub(r'[^\w.\-]', '_', Path(name).name)[:120] or 'tep'
     classification = classify(clean, raw)
     digest = hashlib.sha256(raw).hexdigest()
+    refresh_id = None
     with LOCK:
         if COMMITTING:
             raise ValueError('Đang ghi dữ liệu. Chờ hoàn tất trước khi chọn thêm tệp.')
         if context != intake_context():
             raise ValueError('Doanh nghiệp đã đổi. Tải lại trang trước khi nạp tệp.')
-        if classification['kind'] == 'shared_bank' or classification['kind'].startswith('a1:'):
-            for existing in pending():
-                if existing.get('sha256') == digest and existing.get('intake_context') == context:
-                    return existing
-        if classification['kind'] == 'shared_bank':
-            received = {aid: result for batch in current_batches() for item in batch['files']
-                        if item.get('kind') == 'shared_bank' and item.get('sha256') == digest
-                        and item.get('intake_context') == context
-                        for aid, result in item.get('results', {}).items() if result.get('state') == 'done'}
+        for existing in pending():
+            if existing.get('sha256') == digest and existing.get('intake_context') == context:
+                existing = reconcile_committed_pending(existing, context)
+                if existing is None:
+                    raise AlreadyRecorded('Tệp này đã được ghi đầy đủ cho doanh nghiệp đang chọn.')
+                if existing['id'] not in CHECKING and any(
+                        c.get('state') in ('error', 'offline') for c in existing.get('checks', {}).values()):
+                    # A copy left red by an earlier attempt gets a fresh check, outside the lock (the agent calls back the Portal).
+                    refresh_id = existing['id']
+                    break
+                return existing
+        if refresh_id is None:
+            received = committed_results(dict(classification, sha256=digest, intake_context=context), context)
             if set(received) >= set(classification['targets']):
-                raise AlreadyRecorded('Sao kê này đã được ghi vào cả Agent 1 và Agent 3 cho doanh nghiệp đang chọn.')
-        fid = uuid.uuid4().hex[:12]
-        (PENDING / f'{fid}.bin').write_bytes(raw)
-        record = dict(id=fid, name=clean, size=len(raw), added_at=time.strftime('%Y-%m-%d %H:%M:%S'),
-                      intake_context=context, **classification)
-        record['slot'] = slot_of(record['kind'])
-        record['period'] = period_of(clean, raw, record['kind'])
-        record['sha256'] = digest
-        if classification['kind'] == 'shared_bank' and received:
-            record['applied'] = received
-        _begin_check(record)
+                raise AlreadyRecorded('Tệp này đã được ghi đầy đủ cho doanh nghiệp đang chọn.')
+            fid = uuid.uuid4().hex[:12]
+            (PENDING / f'{fid}.bin').write_bytes(raw)
+            record = dict(id=fid, name=clean, size=len(raw), added_at=time.strftime('%Y-%m-%d %H:%M:%S'),
+                          intake_context=context, **classification)
+            record['slot'] = slot_of(record['kind'])
+            record['period'] = period_of(clean, raw, record['kind'])
+            record['sha256'] = digest
+            if received:
+                record['applied'] = received
+                record['checks'] = dict(received)
+            _begin_check(record)
+    if refresh_id is not None:
+        return recheck(refresh_id)
     return _finish_check(record, raw)
 
 
@@ -1422,10 +1532,19 @@ def _begin_check(record):
 def _finish_check(record, raw):
     try:
         checks = preview_file(record, raw)
+        if record['targets'] and all(c.get('state') == 'done' and c.get('already') for c in checks.values()):
+            # Every agent already holds exactly this file: do not leave a red or retryable duplicate behind.
+            with LOCK:
+                CHECKING.discard(record['id'])
+                for suffix in ('.json', '.bin'):
+                    (PENDING / f'{record["id"]}{suffix}').unlink(missing_ok=True)
+            raise AlreadyRecorded('Tệp này đã được ghi đầy đủ cho doanh nghiệp đang chọn.')
         with LOCK:
             record['checks'] = checks
             write_json(PENDING / (record['id'] + '.json'), record)
         return record
+    except AlreadyRecorded:
+        raise
     except Exception as exc:
         with LOCK:
             record['checks'] = {aid: record.get('applied', {}).get(aid) or dict(
@@ -1546,6 +1665,8 @@ def check(aid, record, raw, *, bank_rows=None):
         try:
             result = agent2_intake.preview(call, lambda path: agent_url('agent2', path), token, agent2_tenant(), agent2_company(),
                                            c.get('legal_name') or agent2_company(), record['name'], raw, xlsx_reader=xlsx_rows)
+        except agent2_intake.AlreadyCommitted as e:
+            return dict(state='done', already=True, message=str(e))
         except agent2_intake.IntakeError as e:
             return dict(state='error', message=str(e), detail=getattr(e, 'details', [])[:5])
         s = result['summary']
@@ -1594,7 +1715,15 @@ def ensure_agent3_workspace(password=None):
 def commit(fids, reason=''):
     """Write the checked files to their agents and record them as one sealed batch (version) of the company's package."""
     context = intake_context()
-    records = [pending_file(fid, context) for fid in dict.fromkeys(fids)]
+    records = [record for fid in dict.fromkeys(fids)
+               if (record := pending_file(fid, context)) is not None]
+    if not records:
+        prior = current_batches()
+        latest = prior[-1] if prior else {}
+        return dict(id=latest.get('id', ''), company=context['code'], version=latest.get('version', 0),
+                    kind='đã ghi trước đó', requested_count=len(set(fids)), written_count=0,
+                    already_count=len(set(fids)), remaining_files=[], reason=reason,
+                    files=[], manifest=latest.get('manifest', hashlib.sha256(b'').hexdigest()))
     if not context['code'] or any(r.get('intake_context') != context for r in records):
         raise ValueError('Hồ sơ doanh nghiệp đã đổi. Kiểm tra lại các tệp trước khi ghi.')
     prior = current_batches()
@@ -1963,6 +2092,22 @@ class Handler(BaseHTTPRequestHandler):
         if path == '/api/internal/agent2/identity':
             if method!='POST' or url.query:return self.send(405,{'error':'Phương thức không được hỗ trợ.'})
             return self.agent2_identity()
+        if path == '/api/internal/agent2/he-training-worker':
+            if method!='POST' or url.query:return self.send(405,{'error':'Phương thức không được hỗ trợ.'})
+            self.agent2_host()
+            values = self.headers.get_all('Authorization',[])
+            if self.headers.get_all('Origin',[]) or len(values)!=1 or not hmac.compare_digest(values[0],'Bearer '+AGENT2_TOKEN):
+                raise PermissionError('Kênh điều khiển worker Agent2 không được phép.')
+            if self.headers.get('Content-Type') != 'application/json':raise ValueError('Cần JSON.')
+            body = json.loads(self.body(4096))
+            action = str(body.get('action') or 'status') if isinstance(body, dict) else 'status'
+            if action not in ('status', 'restart'):
+                raise ValueError('Thao tác worker không hợp lệ.')
+            tr = he_training_runtime()
+            if tr is None:
+                return self.send(200, {'configured': False, 'status': 'not_configured', 'ready': False, 'message': 'Chưa cấu hình he_training_worker.'})
+            res = tr.restart() if action == 'restart' else tr.state()
+            return self.send(200, dict(configured=True, **res))
         if path.startswith('/agent2/'):
             return self.agent2_proxy(method,path[len('/agent2'):],url.query)
         if method == 'GET':
@@ -1986,6 +2131,12 @@ class Handler(BaseHTTPRequestHandler):
                 self.guard_read()
                 self.require_auth_if_enrolled()
                 return self.send(200, dict(key=agent1_key()))
+            if path == '/api/agents/agent2/he-training-worker':
+                self.guard_read()
+                tr = he_training_runtime()
+                if tr is None:
+                    return self.send(200, {'configured': False, 'status': 'not_configured', 'ready': False, 'message': 'Chưa cấu hình he_training_worker.'})
+                return self.send(200, dict(configured=True, **tr.state()))
             m = re.fullmatch(r'/api/agents/(agent[1-4])/log', path)
             if m:
                 self.guard_read()
@@ -2075,6 +2226,12 @@ class Handler(BaseHTTPRequestHandler):
             if not password:
                 raise ValueError('Nhập mật khẩu quản trị Agent 3.')
             return self.send(200, ensure_agent3_workspace(password))
+        if method == 'POST' and path == '/api/agents/agent2/he-training-worker/restart':
+            self.need_session()
+            tr = he_training_runtime()
+            if tr is None:
+                raise ValueError('Chưa cấu hình he_training_worker trong portal/config.local.json.')
+            return self.send(200, dict(configured=True, **tr.restart()))
         if method=='POST' and path=='/api/agents/agent2/recover':
             self.need_session()
             return self.send(200,start_agent('agent2'))
@@ -2108,7 +2265,10 @@ class Handler(BaseHTTPRequestHandler):
                 remove_file(fid)
                 audit('discard', dict(id=fid))
                 return self.send(200, dict(ok=True))
-            return self.send(200, recheck(fid))
+            try:
+                return self.send(200, recheck(fid))
+            except AlreadyRecorded as e:
+                return self.send(200, dict(already_recorded=True, message=str(e)))
         if method == 'POST' and path == '/api/inbox/clear':
             self.need_session()
             if self.json_body().get('company') != company()['code'] or not company()['code']:

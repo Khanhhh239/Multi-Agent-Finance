@@ -1,0 +1,17 @@
+{
+  "status": "pass",
+  "checks": [
+    "Area A renders queue, interactive PIT graph, inline related table, and readable Vietnamese records",
+    "Area B bootstraps live pinned C001-v1 model, shared data summary, and 4-item quality checklist",
+    "Step 1 profiles shared Portal snapshot without any file upload UI",
+    "Step 2 displays all 33 point-in-time features, missingness status, and excluded predictors",
+    "Step 3 trains real Autoencoder candidate C001-v2 and automatically transitions to Step 4 comparison",
+    "Step 5 requires checkbox + reason, approves C001-v2, and enables queue connection",
+    "Approved C001-v2 scores into Area A queue and traces exact version & feature attributions in Explanation tab",
+    "Rollback cleanly restores previous approved Isolation Forest C001-v1"
+  ],
+  "errors": [],
+  "synthetic_data": true,
+  "actual_concrete_tfhe_training_tested": false,
+  "environment": "isolated Portal and Agent2 harness; enterprise-local training"
+}

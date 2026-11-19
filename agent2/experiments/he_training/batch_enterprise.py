@@ -156,7 +156,7 @@ class BatchEnterprise(Enterprise):
             for batch in source['content']['training']
         ]
 
-    def confirm_batch_reviews(self, url, worker_key, reviews, *, epochs=1):
+    def confirm_batch_reviews(self, url, worker_key, reviews, *, epochs=1, initial_weights=None):
         self.guard('model.fit')
         source = self.saved('batch-source.json')
         receipt = strict_json((self.root / 'batch-receipt.json').read_bytes())
@@ -174,7 +174,7 @@ class BatchEnterprise(Enterprise):
             )
             for batch, review in zip(source['content']['training'], reviews)
         ]
-        return self._confirm_batches(url, worker_key, reviews, labels, epochs)
+        return self._confirm_batches(url, worker_key, reviews, labels, epochs, initial_weights=initial_weights)
 
     def confirm_locked_batches(self, url, worker_key, label_store, locks, *, epochs=1):
         """Read prior attestations, not a fresh verification by the fitting actor."""
@@ -202,7 +202,7 @@ class BatchEnterprise(Enterprise):
             labels.append([int(r['outcome'] == 'verified_fraud') for r in exported['labels']])
         return self._confirm_batches(url, worker_key, reviews, labels, epochs)
 
-    def _confirm_batches(self, url, worker_key, reviews, labels, epochs):
+    def _confirm_batches(self, url, worker_key, reviews, labels, epochs, *, initial_weights=None):
         self.guard('model.fit')
         source = self.saved('batch-source.json')
         count = len(source['content']['training'])
@@ -212,10 +212,10 @@ class BatchEnterprise(Enterprise):
         verify(receipt, worker_key)
         upload = verify(strict_json((self.root / 'batch-upload.json').read_bytes()), self.public_key)
         require(receipt['payload']['upload_sha256'] == sha((self.root / 'batch-upload.json').read_bytes()), 'BATCH_RECEIPT_MISMATCH')
-        intent = self.save_once(
-            'batch-verified-reviews.json',
-            dict(context=self.meta, dataset_id=source['dataset_id'], reviews=reviews, labels=labels, epochs=epochs),
-        )
+        intent_body = dict(context=self.meta, dataset_id=source['dataset_id'], reviews=reviews, labels=labels, epochs=epochs)
+        if initial_weights is not None:
+            intent_body['initial_weights'] = [int(v) for v in initial_weights]
+        intent = self.save_once('batch-verified-reviews.json', intent_body)
         batches = []
         initial = None
         for i, (review, y) in enumerate(zip(reviews, labels)):
@@ -224,7 +224,10 @@ class BatchEnterprise(Enterprise):
             if (self.root / name).exists():
                 cached = self.saved(name)
             else:
-                encrypted = self.helper('encrypt-batch-labels', dict(y=y, initialize_weights=(i == 0)))
+                req = dict(y=y, initialize_weights=(i == 0))
+                if i == 0 and initial_weights is not None:
+                    req['initial_weights'] = [int(v) for v in initial_weights]
+                encrypted = self.helper('encrypt-batch-labels', req)
                 keep_keys = ('y_cipher', 'y_cipher_sha256') + (('weights_cipher', 'weights_cipher_sha256') if i == 0 else ())
                 cipher_only = {k: encrypted[k] for k in keep_keys}
                 cached = self.save_once(
@@ -301,7 +304,7 @@ class BatchEnterprise(Enterprise):
         consent = verify(strict_json((self.root / 'batch-consent.json').read_bytes()), self.public_key)
         require(intent['dataset_id'] == source['dataset_id'] and intent['epochs'] == consent['epochs'], 'BATCH_REVIEW_BINDING')
         prof_ver = getattr(self, 'profile_version', PROFILE_VERSION)
-        weights = [0, 0, 0]
+        weights = list(intent.get('initial_weights') or [0, 0, 0])
         for _ in range(consent['epochs']):
             for i, batch in enumerate(source['content']['training']):
                 require(

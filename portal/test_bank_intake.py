@@ -18,6 +18,62 @@ CONTEXT = dict(code='MOCK', agent2_company='MOCK', tax_code='0999999905', date_f
 
 
 class SharedBankTest(unittest.TestCase):
+    def test_exact_reupload_of_committed_agent2_file_is_already_recorded(self):
+        raw = b'transaction_id,posted_at,amount_vnd\nTX-1,2026-11-18,250000\n'
+        digest = server.hashlib.sha256(raw).hexdigest()
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            inbox = work / 'pending'
+            inbox.mkdir()
+            batch_file = work / 'batches.json'
+            server.write_json(batch_file, [dict(company=CONTEXT['code'], version=1, files=[dict(
+                name='07_so_giao_dich_ngan_hang_A2.csv', kind='transactions', sha256=digest,
+                results={'agent2': dict(state='done', snapshot_id='snp_existing')})])])
+            with patch.multiple(server, WORK=work, PENDING=inbox, BATCH_FILE=batch_file), \
+                 patch.object(server, 'company', return_value=CONTEXT), \
+                 patch.object(server, 'classify', return_value=dict(kind='transactions', targets=['agent2'])), \
+                 patch.object(server, 'check') as check:
+                with self.assertRaisesRegex(server.AlreadyRecorded, 'đã được ghi đầy đủ'):
+                    server.add_file('07_so_giao_dich_ngan_hang_A2.csv', raw)
+                self.assertEqual(check.call_count, 0)
+                self.assertEqual(server.pending(), [])
+
+    def test_duplicate_agent2_source_in_one_upload_reuses_one_pending_item(self):
+        raw = b'transaction_id,posted_at,amount_vnd\nTX-1,2026-11-18,250000\n'
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            inbox = work / 'pending'
+            inbox.mkdir()
+            with patch.multiple(server, WORK=work, PENDING=inbox, BATCH_FILE=work / 'batches.json'), \
+                 patch.object(server, 'company', return_value=CONTEXT), \
+                 patch.object(server, 'classify', return_value=dict(kind='transactions', targets=['agent2'])), \
+                 patch.object(server, 'check', return_value=dict(state='ready', message='Tệp hợp lệ')) as check:
+                first = server.add_file('07_so_giao_dich_ngan_hang_A2.csv', raw)
+                second = server.add_file('07_so_giao_dich_ngan_hang_A2.csv', raw)
+                self.assertEqual(first['id'], second['id'])
+                self.assertEqual(check.call_count, 1)
+                self.assertEqual(len(server.pending()), 1)
+
+    def test_partial_prior_write_resumes_only_missing_agent(self):
+        raw = b'transaction-source'
+        digest = server.hashlib.sha256(raw).hexdigest()
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            inbox = work / 'pending'
+            inbox.mkdir()
+            batch_file = work / 'batches.json'
+            server.write_json(batch_file, [dict(company=CONTEXT['code'], version=1, files=[dict(
+                name='transactions.csv', kind='transactions', sha256=digest,
+                intake_context=CONTEXT, results={'agent1': dict(state='done', message='Đã ghi')})])])
+            with patch.multiple(server, WORK=work, PENDING=inbox, BATCH_FILE=batch_file), \
+                 patch.object(server, 'company', return_value=CONTEXT), \
+                 patch.object(server, 'classify', return_value=dict(kind='transactions', targets=['agent1', 'agent3'])), \
+                 patch.object(server, 'check', side_effect=lambda aid, *_args, **_kwargs: dict(state='ready', message='Cần xử lý')) as check:
+                record = server.add_file('02_sao_ke_chung_A1_A3.csv', raw)
+                self.assertEqual(record['checks']['agent1']['state'], 'done')
+                self.assertEqual(record['checks']['agent3']['state'], 'ready')
+                self.assertEqual([call.args[0] for call in check.call_args_list], ['agent3'])
+
     def test_long_payment_check_is_visible_and_same_upload_does_not_start_again(self):
         raw = (b'payment_id,invoice_id,payment_date,known_at,amount,bank_id\n'
                b'P1,I1,2026-11-18,2026-11-18,10000000,B1\n')

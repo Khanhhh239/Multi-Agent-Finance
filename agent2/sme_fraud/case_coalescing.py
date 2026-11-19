@@ -366,6 +366,16 @@ def build_case_bundle_from_rule_analysis(
         cal_prob = extra.get("calibrated_fraud_probability")
         cal_status = extra.get("calibration_status", "uncalibrated")
 
+        lr_branch = (row.get("methods") or {}).get("supervised_lr")
+        lr_available = bool(
+            tx_visible and isinstance(lr_branch, dict) and lr_branch.get("available") is True and _is_finite_number(lr_branch.get("score"))
+        )
+        lr_score = float(lr_branch["score"]) if lr_available else None
+        lr_prob = float(lr_branch["probability"]) if (lr_available and _is_finite_number(lr_branch.get("probability"))) else None
+        lr_pred = int(lr_branch["prediction"]) if (lr_available and lr_branch.get("prediction") in (0, 1)) else None
+        lr_thresh = float(lr_branch["threshold"]) if (lr_available and _is_finite_number(lr_branch.get("threshold"))) else None
+        lr_ver = str(lr_branch.get("model_version")) if (lr_available and lr_branch.get("model_version")) else None
+
         for ref in (row.get("feature_evidence") or {}).get("records") or []:
             evidence_refs.append(
                 dict(
@@ -387,7 +397,8 @@ def build_case_bundle_from_rule_analysis(
         rule_points_total = sum(float(h["points"]) for h in actionable_hits)
         has_hard = any(bool(h["hard_trigger"]) for h in actionable_hits)
         has_ml_signal = _is_finite_number(ml_norm) and float(ml_norm) >= ml_candidate_min_score
-        is_candidate = bool(actionable_hits or has_hard or has_ml_signal or not tx_visible)
+        has_lr_signal = lr_available and lr_pred == 1 and (lr_score or 0.0) > 0.0
+        is_candidate = bool(actionable_hits or has_hard or has_ml_signal or has_lr_signal or not tx_visible)
 
         records.append(
             dict(
@@ -407,7 +418,7 @@ def build_case_bundle_from_rule_analysis(
                 event_at=_iso_utc(row["event_at"]),
                 knowledge_at=_iso_utc(row["knowledge_at"]),
                 tx_visible=tx_visible,
-                scorable=bool(tx_visible and (actionable_hits or _is_finite_number(ml_norm))),
+                scorable=bool(tx_visible and (actionable_hits or _is_finite_number(ml_norm) or lr_available)),
                 is_candidate=is_candidate,
                 role="candidate" if is_candidate else "evidence_only",
                 actionable_hits=actionable_hits,
@@ -419,6 +430,12 @@ def build_case_bundle_from_rule_analysis(
                 ml_available=ml_available,
                 ml_raw_score=ml_raw,
                 ml_normalized_score=float(ml_norm) if _is_finite_number(ml_norm) else None,
+                lr_available=lr_available,
+                lr_score=lr_score,
+                lr_probability=lr_prob,
+                lr_prediction=lr_pred,
+                lr_threshold=lr_thresh,
+                lr_model_version=lr_ver,
                 calibrated_fraud_probability=float(cal_prob) if _is_finite_number(cal_prob) else None,
                 calibration_status=cal_status,
                 related_evidence_tx_ids=sorted(related_prior_tx_ids),
@@ -471,12 +488,14 @@ def _compute_candidate_score(rec: dict, policy: dict) -> float | None:
     if ml_val is None and _is_finite_number(rec.get("ml_raw_score")):
         ml_val = float(rec["ml_raw_score"])
     cal_prob = rec.get("calibrated_fraud_probability")
+    lr_val = rec.get("lr_score") if rec.get("lr_available") else None
 
     has_rule = _is_finite_number(rule_pts) and (bool(rec.get("actionable_hits")) or float(rule_pts) > 0)
     has_ml = _is_finite_number(ml_val)
     has_cal = _is_finite_number(cal_prob) and float(scoring["calibrated_weight"]) > 0
-    if not (has_rule or has_ml or has_cal or rec.get("rules_evaluated_no_hit")):
-        if scorable is None and not rec.get("ml_available") and not rec.get("actionable_hits"):
+    has_lr = _is_finite_number(lr_val) and float(scoring["calibrated_weight"]) > 0
+    if not (has_rule or has_ml or has_cal or has_lr or rec.get("rules_evaluated_no_hit")):
+        if scorable is None and not rec.get("ml_available") and not rec.get("lr_available") and not rec.get("actionable_hits"):
             return None
 
     total = 0.0
@@ -486,6 +505,8 @@ def _compute_candidate_score(rec: dict, policy: dict) -> float | None:
         total += float(scoring["ml_weight"]) * float(ml_val)
     if _is_finite_number(cal_prob):
         total += float(scoring["calibrated_weight"]) * float(cal_prob)
+    elif _is_finite_number(lr_val):
+        total += float(scoring["calibrated_weight"]) * float(lr_val)
     return round(total, 6)
 
 
@@ -871,6 +892,11 @@ def coalesce_cases(bundle: dict, policy: dict) -> list[dict]:
                             transaction_id=str(r["transaction_id"]),
                             rule_score=r.get("rule_score"),
                             ml_score=r.get("ml_normalized_score") if r.get("ml_normalized_score") is not None else r.get("ml_raw_score"),
+                            lr_score=r.get("lr_score") if r.get("lr_available") else None,
+                            lr_probability=r.get("lr_probability") if r.get("lr_available") else None,
+                            lr_prediction=r.get("lr_prediction") if r.get("lr_available") else None,
+                            lr_threshold=r.get("lr_threshold") if r.get("lr_available") else None,
+                            lr_model_version=r.get("lr_model_version") if r.get("lr_available") else None,
                             candidate_score=_compute_candidate_score(r, policy),
                         )
                         for r in cands

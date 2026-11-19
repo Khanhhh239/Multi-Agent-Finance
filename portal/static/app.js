@@ -516,9 +516,13 @@
     const notes = $("intake-selection-notes");
     notes.hidden = !extras.length;
     notes.replaceChildren(...extras.map((item) => el("li", {}, item.name + " — " + item.message)));
+    // Every selected file is already in the sealed package: nothing to write, so the step is complete rather than stuck.
+    const allRecorded = !ready.length && !rows.length && extras.length > 0 && extras.every((item) => item.done);
     $("intake-summary-agents").textContent = targets.size
       ? "Nghiệp vụ nhận tệp: " + [...targets].map((aid) => AGENT_LABEL[aid]).join(", ")
-      : "Chưa có tệp sẵn sàng để phân phối.";
+      : allRecorded
+        ? "Cả " + extras.length + " tệp đã được ghi trước đó, không cần ghi lại. Xem ở Lịch sử dữ liệu."
+        : "Chưa có tệp sẵn sàng để phân phối.";
     $("reason-field").hidden = !state.package;
     const button = $("commit");
     button.disabled = !ready.length || Boolean(intakeActivity || pendingCheck());
@@ -671,7 +675,7 @@
       try { sessionStorage.setItem("agent2.workbench", JSON.stringify(legacy)); } catch (e) { /* optional */ }
     }
     if (!saved && legacy?.actor === context.actor_id && (legacy.context === undefined || legacy.context === (context.context_id || ""))) saved = { version: 1, actor: legacy.actor, context: legacy.context_id || context.context_id || "", company: legacy.company, page: "data-import" };
-    const pages = ["workspace", "pipeline-workspace", "data-import", "encrypted-analysis", "analysis-settings"];
+    const pages = ["workspace", "pipeline-workspace", "model-management", "data-import", "encrypted-analysis", "analysis-settings"];
     const validSaved = saved?.version === 1 && saved.actor === context.actor_id && saved.context === (context.context_id || "") && context.companies.includes(saved.company) && pages.includes(saved.page);
     if (!validSaved) {
       if (portalCompany && context.companies.includes(portalCompany)) {
@@ -688,6 +692,10 @@
     const target = new URL("/agent2/" + page, location.origin);
     const fields = new URLSearchParams({ company: chosenCompany });
     if (chosenCompany === saved.company && page === "pipeline-workspace" && saved.page === page && /^[A-Za-z0-9_.:-]{8,128}$/.test(saved.run || "")) fields.set("run", saved.run);
+    if (chosenCompany === saved.company && page === "pipeline-workspace" && saved.page === page &&
+        /^[A-Za-z0-9_.:-]{1,128}$/.test(saved.transaction || "") && /^rvw_[a-f0-9]{64}$/.test(saved.review || "") && /^[A-Za-z0-9_.:-]{8,128}$/.test(saved.source_run || "")) {
+      fields.set("transaction", saved.transaction); fields.set("review", saved.review); fields.set("source_run", saved.source_run);
+    }
     target.hash = fields.toString();
     return target.href;
   }
@@ -1442,7 +1450,7 @@
           const query = new URLSearchParams({ name: file.name, company: code });
           const result = await api("/api/inbox?" + query, { method: "POST", body: file, headers: { "Content-Type": "application/octet-stream" }, signal: AbortSignal.timeout(660000) });
           if (result.already_recorded) extras.push({ name: file.name, done: true, message: "Đã ghi trước đó" });
-          else if (received.has(result.id)) extras.push({ name: file.name, done: false, message: "Trùng với tệp khác trong lượt chọn" });
+          else if (received.has(result.id)) extras.push({ name: file.name, done: true, message: "Tệp trùng trong lượt chọn; giữ một bản." });
           else { received.add(result.id); uploaded++; }
         } catch (err) {
           extras.push({ name: file.name, message: err.message });
@@ -1545,7 +1553,7 @@
       }
       $("reason").value = "";
       const written = res.batch.written_count ?? res.batch.files.length;
-      const already = extras.filter((item) => item.done).length;
+      const already = (res.batch.already_count || 0) + extras.filter((item) => item.done).length;
       const total = ids.length + extras.length;
       const remaining = total - written - already;
       intakeStage = remaining ? "review" : "history";
