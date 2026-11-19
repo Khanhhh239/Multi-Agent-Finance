@@ -1544,6 +1544,35 @@ class ModelLifecycle:
             )
             return result
 
+    def analyze_latest(self, scope: AccessScope, authorization: str | None, body: dict, key: str, recheck=None) -> dict:
+        """One-click analysis of the newest shared snapshot.
+
+        Deterministic methods always run. If the company has no approved ML model yet, a baseline model is fitted on
+        this snapshot and put in shadow mode so the queue has an ML factor. A supervised model joins the score only
+        when an approved one exists (handled inside score_to_queue); otherwise it is skipped.
+        """
+        tenant, company = _require_company_scope(scope, recheck)
+        require_fit(scope)
+        snaps = self._list_snapshots(scope, recheck, limit=1)
+        if not snaps:
+            fail(409, 'ANALYZE_NO_DATA', 'Chưa có dữ liệu để phân tích.', 'Nạp dữ liệu ở màn hình Nạp dữ liệu của Portal rồi bấm Phân tích.')
+        snapshot_id = snaps[0]['snapshot_id']
+        with self._tx(scope, recheck, write=False) as conn:
+            has_model = conn.execute(
+                "SELECT 1 FROM model_versions WHERE tenant_id=? AND company_id=? AND status IN ('active','shadow') AND approval_json IS NOT NULL LIMIT 1",
+                (tenant, company)).fetchone() is not None
+        baseline = False
+        if not has_model:
+            trained = self.train_candidate(scope, authorization, {'snapshot_id': snapshot_id, 'method_id': 'isolation_forest', 'missing_policy': 'median_flags'}, key + '-train', recheck)
+            version = trained['version']
+            if version['status'] != 'pending_approval':
+                fail(409, 'ANALYZE_MODEL_NOT_READY', 'Dữ liệu hiện có chưa đủ để dựng mô hình nền.', 'Nạp thêm dữ liệu lịch sử của doanh nghiệp rồi phân tích lại.')
+            self.approve_and_activate(scope, {'version_id': version['version_id'], 'mode': 'shadow', 'reviewed_evaluation': True,
+                                              'reason': 'Mô hình nền do hệ thống dựng tự động khi phân tích lần đầu.'}, key + '-approve', recheck)
+            baseline = True
+        out = self.score_to_queue(scope, {'snapshot_id': snapshot_id}, key + '-score', recheck)
+        return dict(out, baseline_model_created=baseline)
+
     def score_to_queue(self, scope: AccessScope, body: dict, key: str, recheck=None) -> dict:
         """Connect approved ML model + 35 rules + entity graph to Area A Investigation Queue.
 

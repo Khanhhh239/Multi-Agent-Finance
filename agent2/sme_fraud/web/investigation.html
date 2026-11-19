@@ -8,27 +8,16 @@
   <link rel="stylesheet" href="assets/platform-theme.css">
   <link rel="stylesheet" href="assets/investigation.css">
   <script defer src="assets/investigation.js"></script>
+  <link rel="stylesheet" href="assets/agent2-shell.css">
+  <script defer src="assets/agent2-shell.js"></script>
 </head>
 <body>
-  <header class="top">
-    <div class="top-inner">
-      <div class="brand-wrap">
-        <strong>Agent2 · Giám sát</strong>
-        <nav aria-label="Chức năng Agent2">
-          <a id="nav-queue" href="pipeline-workspace" aria-current="page">Hàng đợi &amp; điều tra</a>
-          <a id="nav-models" href="model-management" hidden>Huấn luyện &amp; mô hình</a>
-        </nav>
-      </div>
-      <div class="top-right">
-        <span id="env-badge" class="env-badge" hidden>DỮ LIỆU MÔ PHỎNG</span>
-      </div>
-    </div>
-  </header>
+  <div id="a2-shell" data-page="overview" data-title="Tổng quan" data-desc="Giao dịch cần kiểm tra, điểm ưu tiên và tiến độ xử lý trong kỳ."></div>
 
   <main>
     <div id="notice" role="alert" hidden></div>
 
-    <div class="toolbar">
+    <div class="toolbar" hidden>
       <label>Doanh nghiệp<select id="company" disabled></select></label>
       <label>Nguồn kết quả<select id="run"><option value="">Lần phân tích mới nhất của từng vụ</option></select></label>
       <button id="refresh" class="secondary">Tải lại</button>
@@ -40,6 +29,10 @@
         <div>
           <h1>Giao dịch cần kiểm tra</h1>
           <p class="muted">Ưu tiên việc quan trọng, đối chiếu bằng chứng và quan hệ đối tượng trước khi kết luận.</p>
+        </div>
+        <div class="analyze-box" id="analyze-box" hidden>
+          <button id="analyze" type="button" class="primary">Phân tích dữ liệu mới nhất</button>
+          <span id="analyze-status" class="muted" role="status"></span>
         </div>
       </div>
 

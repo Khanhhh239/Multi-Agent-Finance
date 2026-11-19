@@ -8,37 +8,18 @@
   <link rel="stylesheet" href="assets/platform-theme.css">
   <link rel="stylesheet" href="assets/model-management.css">
   <script defer src="assets/model-management.js"></script>
+  <link rel="stylesheet" href="assets/agent2-shell.css">
+  <script defer src="assets/agent2-shell.js"></script>
 </head>
 <body>
-  <header class="a2-top">
-    <div class="a2-top-row">
-      <div class="a2-brand-wrap">
-        <strong class="a2-brand">Agent2 · Giám sát</strong>
-        <nav class="a2-area-tabs" aria-label="Khu vực chức năng Agent2">
-          <a id="nav-queue" href="pipeline-workspace">Hàng đợi &amp; điều tra</a>
-          <a id="nav-models" href="model-management" aria-current="page">Huấn luyện &amp; mô hình</a>
-        </nav>
-      </div>
-      <div class="a2-top-meta">
-        <span id="source-env-badge" class="env-badge" hidden>DỮ LIỆU MÔ PHỎNG</span>
-        <label class="inline-select">
-          <span>Doanh nghiệp</span>
-          <select id="company" disabled></select>
-        </label>
-        <button id="refresh" type="button" class="btn-outline">Tải lại</button>
-      </div>
-    </div>
-  </header>
+  <div id="a2-shell" data-page="models" data-env-id="source-env-badge" data-title="Huấn luyện &amp; mô hình" data-desc="Học từ dữ liệu doanh nghiệp, đánh giá trước khi đưa vào sử dụng."></div>
+  <div hidden><select id="company" disabled></select><button id="refresh" type="button"></button></div>
 
   <main class="mm-main">
     <div id="notice" role="alert" hidden></div>
     <div id="success-banner" role="status" hidden></div>
 
     <div class="mm-page-head">
-      <div>
-        <h1>Huấn luyện &amp; quản lý mô hình</h1>
-        <p class="mm-sub">Học từ dữ liệu doanh nghiệp, đánh giá trước khi đưa vào sử dụng.</p>
-      </div>
       <span id="role-badge" class="role-badge">Quyền quản trị mô hình</span>
     </div>
 
@@ -63,60 +44,29 @@
           <span id="shared-data-meta" class="hero-meta">Đọc từ bản dữ liệu đã chuẩn hóa &amp; khóa tại sảnh chung.</span>
         </div>
         <div class="hero-action">
-          <button id="btn-inspect-data" type="button" class="btn-link">Xem chất lượng dữ liệu ›</button>
+          <button hidden id="btn-inspect-data" type="button" class="btn-link">Xem chất lượng dữ liệu ›</button>
         </div>
       </article>
     </section>
 
-    <nav class="stepper" aria-label="Quy trình 5 bước huấn luyện và phê duyệt mô hình">
-      <button type="button" class="step-pill" data-step="1"><span class="step-num">1</span> Chọn dữ liệu</button>
+    <nav class="stepper" aria-label="Quy trình huấn luyện và phê duyệt mô hình">
+      <button type="button" class="step-pill" data-step="2"><span class="step-num">1</span> Đặc trưng</button>
       <span class="step-arrow" aria-hidden="true">→</span>
-      <button type="button" class="step-pill" data-step="2"><span class="step-num">2</span> Chuẩn bị đặc trưng</button>
+      <button type="button" class="step-pill" data-step="3"><span class="step-num">2</span> Huấn luyện</button>
       <span class="step-arrow" aria-hidden="true">→</span>
-      <button type="button" class="step-pill" data-step="3"><span class="step-num">3</span> Huấn luyện</button>
-      <span class="step-arrow" aria-hidden="true">→</span>
-      <button type="button" class="step-pill active" data-step="4" aria-current="step"><span class="step-num">4</span> Đánh giá</button>
-      <span class="step-arrow" aria-hidden="true">→</span>
-      <button type="button" class="step-pill" data-step="5"><span class="step-num">5</span> Phê duyệt</button>
+      <button type="button" class="step-pill active" data-step="4" aria-current="step"><span class="step-num">3</span> Đánh giá &amp; phê duyệt</button>
     </nav>
 
-    <!-- STEP 1: SHARED DATA SELECTION & QUALITY PROFILE -->
-    <section id="step-panel-1" class="mm-card step-panel" hidden>
-      <div class="card-head">
-        <div>
-          <h2>Bước 1 · Tiếp nhận &amp; kiểm tra chất lượng dữ liệu từ sảnh chung</h2>
-          <p class="muted">Agent2 chỉ đọc bản dữ liệu đã được kiểm tra và niêm phong tại sảnh chung, không tạo lại luồng tải tệp.</p>
-        </div>
-        <div class="head-actions">
-          <label class="inline-select">
-            <span>Bản dữ liệu đã khóa</span>
-            <select id="profile-snapshot"></select>
-          </label>
-          <button id="btn-run-profile" type="button" class="btn-outline">Phân tích chất lượng</button>
-        </div>
-      </div>
-      <div id="profile-kpis" class="kpi-strip"></div>
-      <div id="profile-warnings" class="warn-list"></div>
-      <div class="two-col-even">
-        <div>
-          <h3>Phạm vi nguồn và độ phủ bảng</h3>
-          <div id="profile-tables" class="table-scroll"></div>
-        </div>
-        <div>
-          <h3>Phân bố loại nghiệp vụ &amp; tách kỳ đề xuất</h3>
-          <div id="profile-split-box" class="info-box"></div>
-        </div>
-      </div>
-      <div class="step-footer">
-        <button id="btn-to-step-2" type="button" class="btn-primary">Tiếp sang bước 2: Chuẩn bị đặc trưng →</button>
-      </div>
-    </section>
+    <div hidden aria-hidden="true">
+      <select id="profile-snapshot"></select><button id="btn-run-profile" type="button"></button>
+      <div id="profile-kpis"></div><div id="profile-warnings"></div><div id="profile-tables"></div><div id="profile-split-box"></div>
+    </div>
 
     <!-- STEP 2: 33-FEATURE PREPARATION & MISSINGNESS -->
     <section id="step-panel-2" class="mm-card step-panel" hidden>
       <div class="card-head">
         <div>
-          <h2>Bước 2 · Chuẩn bị đặc trưng tài chính &amp; quan hệ (33 đặc trưng theo thời điểm)</h2>
+          <h2>Bước 1 · Đặc trưng đưa vào mô hình</h2>
           <p class="muted">Mọi đặc trưng chỉ sử dụng dữ kiện đã biết tại thời điểm giao dịch; loại bỏ hoàn toàn nhãn, mã định danh và điểm luật khỏi biến đầu vào ML.</p>
         </div>
         <span id="feature-contract-badge" class="pill-soft"></span>
@@ -125,8 +75,7 @@
       <div id="feature-table-wrap" class="table-scroll"></div>
       <div id="feature-exclusions" class="muted-note"></div>
       <div class="step-footer">
-        <button id="btn-back-step-1" type="button" class="btn-outline">← Bước 1</button>
-        <button id="btn-to-step-3" type="button" class="btn-primary">Tiếp sang bước 3: Chọn &amp; huấn luyện mô hình →</button>
+        <button id="btn-to-step-3" type="button" class="btn-primary">Tiếp sang bước 2: Huấn luyện →</button>
       </div>
     </section>
 
@@ -134,8 +83,8 @@
     <section id="step-panel-3" class="mm-card step-panel" hidden>
       <div class="card-head">
         <div>
-          <h2>Bước 3 · Huấn luyện phiên bản mô hình mới</h2>
-          <p class="muted">Ưu tiên các phương pháp không giám sát phù hợp với dữ liệu doanh nghiệp (Isolation Forest, Autoencoder). Chạy ngoại tuyến, không bao giờ tự fit khi chấm điểm.</p>
+          <h2>Bước 2 · Huấn luyện phiên bản mô hình mới</h2>
+          <p class="muted">Huấn luyện mô hình AI từ dữ liệu của doanh nghiệp. Việc huấn luyện chạy riêng, không xảy ra khi chấm điểm giao dịch.</p>
         </div>
       </div>
       <div id="algo-grid" class="algo-grid" role="radiogroup" aria-label="Chọn thuật toán huấn luyện"></div>
@@ -147,7 +96,7 @@
           <label>Bản dữ liệu đánh giá tách kỳ
             <select id="train-eval-snapshot"></select>
           </label>
-          <label>Xử lý trường tùy chọn khuyết
+          <label hidden>Xử lý trường tùy chọn khuyết
             <select id="train-missing-policy">
               <option value="median_flags">Điền trung vị tập train + ghi nhận khuyết riêng (Khuyến nghị)</option>
               <option value="strict">Nghiêm ngặt — chỉ chấm khi đủ 100% trường</option>
@@ -165,7 +114,7 @@
           </div>
         </details>
         <div class="step-footer">
-          <button id="btn-back-step-2" type="button" class="btn-outline">← Bước 2</button>
+          <button id="btn-back-step-2" type="button" class="btn-outline">← Bước 1</button>
           <button id="btn-train" type="submit" class="btn-primary">Bắt đầu huấn luyện ứng viên</button>
           <span id="train-status" class="muted" role="status"></span>
         </div>
@@ -240,7 +189,7 @@
               <span class="pill-rose">Khóa cứng theo mạch · Không cho chọn 33 đặc trưng</span>
             </div>
             <div id="lr-locked-feature-list" class="lr-feature-chips"></div>
-            <p class="muted small-note">31 đặc trưng còn lại bị vô hiệu hóa ở chế độ FHE LR vì mạch Concrete hiện tại chỉ biên dịch cho 2 đặc trưng nhị phân. Để dùng đủ 33 đặc trưng, hãy chọn Isolation Forest hoặc Autoencoder ở trên.</p>
+            
           </div>
 
           <div id="lr-dataset-kpis" class="lr-kpi-grid"></div>
@@ -574,7 +523,7 @@
 
           <div class="queue-connect-box" id="queue-connect-box">
             <h3>Kết nối kết quả ML vào hàng đợi</h3>
-            <p class="muted small-note">Dùng mô hình đã phê duyệt kết hợp 35 luật &amp; đồ thị quan hệ để tạo lượt ưu tiên kiểm tra (không huấn luyện lại).</p>
+            <p class="muted small-note">Dùng mô hình đã phê duyệt, kết hợp phương pháp tất định và AI, để tạo lượt ưu tiên kiểm tra.</p>
             <label class="field-block">Bản dữ liệu cần chấm
               <select id="score-snapshot"></select>
             </label>
@@ -582,7 +531,7 @@
             <div id="score-queue-result" class="score-result" hidden></div>
           </div>
 
-          <button id="btn-limits" type="button" class="btn-outline btn-block">Xem giải thích &amp; giới hạn</button>
+          <button id="btn-limits" type="button" class="btn-outline btn-block" hidden>Xem giải thích &amp; giới hạn</button>
         </article>
       </aside>
     </section>

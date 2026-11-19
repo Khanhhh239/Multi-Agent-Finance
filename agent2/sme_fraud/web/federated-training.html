@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="vi" data-agent="2">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Agent2 · Huấn luyện chung nhiều doanh nghiệp</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/platform-theme.css">
+  <link rel="stylesheet" href="assets/model-management.css">
+  <link rel="stylesheet" href="assets/federated-training.css">
+  <script defer src="assets/federated-training.js"></script>
+  <link rel="stylesheet" href="assets/agent2-shell.css">
+  <script defer src="assets/agent2-shell.js"></script>
+</head>
+<body>
+  <div id="a2-shell" data-page="contribute" data-env-id="sim-badge" data-title="Đóng góp huấn luyện" data-desc="Nạp dữ liệu có nhãn để mô hình chung học được từ doanh nghiệp của bạn."></div>
+  <div hidden><select id="company" disabled></select><button id="refresh" type="button"></button></div>
+
+  <main class="mm-main fed-main">
+    <div id="notice" role="alert" hidden></div>
+    <div id="success-banner" role="status" hidden></div>
+
+    <div class="mm-page-head">
+      <div>
+        <h1>Huấn luyện chung nhiều doanh nghiệp</h1>
+        <p class="mm-sub">Mỗi doanh nghiệp tự mã hóa dữ liệu bằng khóa riêng và giữ khóa tại máy mình. Máy chủ cloud chỉ tính trên bản mã và không bao giờ có khóa giải mã.</p>
+      </div>
+      <span id="worker-pill" class="status-pill status-idle">Đang kiểm tra máy chủ cloud…</span>
+    </div>
+
+    <ol class="fed-steps" aria-label="Các bước">
+      <li><a href="#fed-data"><b>1</b> Doanh nghiệp &amp; dữ liệu</a></li>
+      <li><a href="#fed-features"><b>2</b> Đặc trưng</a></li>
+      <li><a href="#fed-run"><b>3</b> Mã hóa &amp; huấn luyện</a></li>
+      <li><a href="#fed-result"><b>4</b> Kết quả 9:1</a></li>
+      <li><a href="#fed-approve"><b>5</b> Phê duyệt</a></li>
+      <li><a href="#fed-cloud"><b>☁</b> Triển khai cloud</a></li>
+    </ol>
+
+    <section id="fed-data" class="mm-card">
+      <h2>1 · Doanh nghiệp đóng góp dữ liệu huấn luyện</h2>
+      <p class="mm-sub">Dữ liệu và nhãn 0/1 (0 = hợp lệ, 1 = có vấn đề) nằm tại doanh nghiệp. Hệ thống chia 9:1 ngay tại đây: 90% để huấn luyện, 10% giữ lại để kiểm định và không đi vào bước mã hóa.</p>
+      <div class="fed-table-wrap">
+        <table class="fed-table">
+          <thead><tr><th>Doanh nghiệp</th><th>Khóa mã hóa riêng</th><th>Dòng dữ liệu</th><th>Nhãn 1 / 0</th><th>Train / Kiểm định</th><th>Nguồn</th><th>Thao tác</th></tr></thead>
+          <tbody id="fed-companies"></tbody>
+        </table>
+      </div>
+      <p class="mm-sub">Tệp CSV cần các cột <code>record_id</code>, <code>round_million</code>, <code>creator_equals_approver</code>, <code>label</code> (giá trị 0 hoặc 1). Tối thiểu 20 dòng, có đủ hai nhãn.</p>
+      <div class="fed-actions"><button id="fed-sim-all" type="button" class="btn-outline">Dùng dữ liệu mô phỏng cho cả 3 doanh nghiệp</button>
+        <a id="fed-sample" class="btn-link" href="#" download="mau_du_lieu_huan_luyen.csv">Tải tệp CSV mẫu</a></div>
+    </section>
+
+    <section id="fed-features" class="mm-card">
+      <h2>2 · Đặc trưng đưa vào mạch mã hóa</h2>
+      <div id="fed-feature-list" class="fed-feature-list"></div>
+      <p class="mm-sub" id="fed-feature-note"></p>
+    </section>
+
+    <section id="fed-run" class="mm-card">
+      <h2>3 · Mã hóa và huấn luyện</h2>
+      <div class="fed-run-bar">
+        <label class="inline-select"><span>Số vòng</span>
+          <select id="fed-rounds"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
+        <button id="fed-start" type="button" class="btn-primary">Bắt đầu huấn luyện mã hóa</button>
+        <span id="fed-state" class="status-pill status-idle">Chưa chạy</span>
+      </div>
+      <p class="mm-sub">Mỗi vòng: từng doanh nghiệp mã hóa 16 dòng, cloud chạy SGD trên bản mã, doanh nghiệp giải mã riêng phần cập nhật của mình, rồi các bản cập nhật được che bằng mặt nạ và cộng lại.</p>
+      <div class="fed-progress"><div id="fed-progress-fill"></div></div>
+      <ol id="fed-events" class="fed-events" aria-live="polite"></ol>
+    </section>
+
+    <section id="fed-result" class="mm-card" hidden>
+      <h2>4 · Kết quả trên tập kiểm định 10%</h2>
+      <div id="fed-kpis" class="fed-kpis"></div>
+      <div id="fed-target" class="fed-target"></div>
+      <h3>So sánh mô hình đã huấn luyện và chưa huấn luyện</h3>
+      <div class="fed-table-wrap"><table class="fed-table"><thead><tr><th>Phạm vi</th><th>Mô hình</th><th>Recall</th><th>Precision</th><th>F1</th><th>Sai số BCE</th><th>Mẫu</th></tr></thead><tbody id="fed-compare"></tbody></table></div>
+      <h3>Trọng số mô hình chung</h3>
+      <p id="fed-weights" class="fed-weights"></p>
+      <h3>Bằng chứng riêng tư</h3>
+      <ul id="fed-privacy" class="fed-privacy"></ul>
+    </section>
+
+    <section id="fed-approve" class="mm-card" hidden>
+      <h2>5 · Phê duyệt</h2>
+      <p class="mm-sub">Cảnh báo cần người có thẩm quyền phê duyệt. Mô hình chung chỉ được chạy song song (shadow) để đối chiếu, chưa thay điểm đang dùng.</p>
+      <div id="fed-approval-box"></div>
+      <label class="fed-reason"><span>Lý do phê duyệt</span><textarea id="fed-reason" rows="2" maxlength="300" placeholder="Ví dụ: recall đạt mục tiêu trên tập kiểm định, đồng ý chạy song song."></textarea></label>
+      <button id="fed-approve-btn" type="button" class="btn-primary">Phê duyệt chạy song song</button>
+    </section>
+
+    <section id="fed-cloud" class="mm-card">
+      <h2>Triển khai máy chủ cloud huấn luyện</h2>
+      <p class="mm-sub">Cloud và doanh nghiệp tách riêng. Cloud chỉ nhận khóa công khai và bản mã. Hai lệnh dưới đây chạy trên máy tương ứng.</p>
+      <div class="fed-cmd"><b>Trên máy chủ cloud</b><code id="fed-cmd-cloud">python scripts/he_cloud.py serve --bind 0.0.0.0 --port 8870</code></div>
+      <div class="fed-cmd"><b>Trên máy mỗi doanh nghiệp</b><code id="fed-cmd-company">python scripts/he_cloud.py enroll --company MÃ_DN --cloud http://MÁY_CHỦ:8870</code></div>
+      <p class="mm-sub">Lệnh <code>enroll</code> sinh khóa riêng tại doanh nghiệp, chỉ gửi khóa đánh giá công khai lên cloud và ghi địa chỉ cloud vào cấu hình. Từ đó, nút huấn luyện ở trên dùng cloud thật.</p>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,19 @@
+/* Thanh tab và banner Agent 2, cùng ngôn ngữ thiết kế với Agent Thuế (Agent 3). */
+.a2-tabbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 24px; background: var(--kt-canvas, #fffaf6); border-top: 3px solid var(--kt-accent, #97162d); border-bottom: 1px solid var(--kt-line, #e8dcd6); position: sticky; top: 0; z-index: 20; }
+.a2-tabs { display: flex; gap: 6px; overflow-x: auto; }
+.a2-tab { padding: 16px 16px 14px; font-size: 16px; font-weight: 500; color: var(--kt-muted, #6b5b57); text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; }
+.a2-tab:hover { color: var(--kt-ink, #2a1a1d); }
+.a2-tab[aria-current="page"] { color: var(--kt-ink, #2a1a1d); font-weight: 700; border-bottom-color: var(--kt-accent, #97162d); }
+.a2-env { font-size: 12px; font-weight: 700; letter-spacing: .04em; padding: 5px 12px; border-radius: 999px; background: var(--kt-accent-soft, #f7e4e8); color: var(--kt-accent, #97162d); border: 1px solid #ecc6cd; white-space: nowrap; }
+.a2-banner { margin: 18px 24px !important; width: auto !important; }
+.page-heading.a3-compact-header { position: relative; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; box-sizing: border-box; min-height: 112px; padding: 18px 250px 18px 22px !important; background: linear-gradient(135deg, #fffdf9 0%, #f9f0e8 65%, #f4e6dc 100%); border: 1px solid var(--kt-line, #e2d1d1); border-left: 4px solid var(--kt-accent, #97162d); border-radius: 14px; box-shadow: 0 2px 10px rgba(41, 23, 27, .04); overflow: hidden; }
+.page-heading.a3-compact-header.son-illustrated::after { right: 12px !important; width: 220px !important; height: 98px !important; opacity: .9; mix-blend-mode: multiply; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 100%); }
+.a3-header-main { position: relative; z-index: 1; }
+.a3-header-main .eyebrow { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .06em; color: var(--kt-accent, #97162d); }
+.a3-eyebrow-pill { padding: 3px 10px; border-radius: 6px; background: #f7e4e8; border: 1px solid #ecc6cd; }
+.a3-header-main h1.page { margin: 6px 0 0; font-size: 34px; line-height: 1.15; color: var(--kt-ink, #2a1a1d); }
+.a3-company-line { margin: 8px 0 0; font-size: 18px; font-weight: 500; color: var(--kt-ink, #2a1a1d); }
+.a3-company-line:empty { display: none; }
+.a3-header-sub { margin: 6px 0 0; font-size: 14px; color: var(--kt-muted, #6b5b57); }
+.a3-sub-meta { color: var(--kt-ink, #2a1a1d); font-weight: 600; }
+@media (max-width: 900px) { .page-heading.a3-compact-header { padding: 14px 16px !important; min-height: 0; } .page-heading.a3-compact-header.son-illustrated::after { display: none !important; } .a2-tabbar { padding: 0 12px; } .a2-banner { margin: 12px !important; } }

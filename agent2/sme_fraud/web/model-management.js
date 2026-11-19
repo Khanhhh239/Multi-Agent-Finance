@@ -62,6 +62,7 @@
     } catch {}
     $('nav-queue').href = mount + '/pipeline-workspace#company=' + encodeURIComponent(company);
     $('nav-models').href = mount + '/model-management#company=' + encodeURIComponent(company);
+    $('nav-fed').href = mount + '/federated-training#company=' + encodeURIComponent(company);
   }
 
   async function api(path, body, idempotencyKey) {
@@ -94,11 +95,10 @@
       if (active) btn.setAttribute('aria-current', 'step');
       else btn.removeAttribute('aria-current');
     }
-    $('step-panel-1').hidden = currentStep !== 1;
     $('step-panel-2').hidden = currentStep !== 2;
     $('step-panel-3').hidden = currentStep !== 3;
     $('step-panel-45').hidden = !(currentStep === 4 || currentStep === 5);
-    if ((currentStep === 1 || currentStep === 2 || currentStep === 3) && !profileData && overviewData?.shared_data?.primary_snapshot) {
+    if ((currentStep === 2 || currentStep === 3) && !profileData && overviewData?.shared_data?.primary_snapshot) {
       loadProfile(overviewData.shared_data.primary_snapshot.snapshot_id);
     }
     if (currentStep === 5) {
@@ -469,9 +469,7 @@
   for (const btn of document.querySelectorAll('.step-pill')) {
     btn.onclick = () => setStep(btn.dataset.step);
   }
-  $('btn-inspect-data').onclick = () => setStep(1);
-  $('btn-to-step-2').onclick = () => setStep(2);
-  $('btn-back-step-1').onclick = () => setStep(1);
+  $('btn-inspect-data').onclick = () => setStep(2);
   $('btn-to-step-3').onclick = () => setStep(3);
   $('btn-back-step-2').onclick = () => setStep(2);
   $('btn-new-train').onclick = () => setStep(3);

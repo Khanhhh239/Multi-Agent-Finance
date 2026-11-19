@@ -1,0 +1,41 @@
+/* Huấn luyện chung: dùng token và thẻ của model-management để đồng bộ với các agent khác. */
+.fed-main { display: grid; gap: 18px; }
+.fed-steps { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+.fed-steps a { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid var(--kt-line, #e7d9d4); border-radius: 999px; background: var(--kt-surface, #fff); color: var(--kt-ink, #3b1a22); text-decoration: none; font-size: 14px; }
+.fed-steps a:hover { border-color: var(--kt-accent, #7a1f35); }
+.fed-steps b { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--kt-accent, #7a1f35); color: #fff; font-size: 12px; }
+.mm-card h2 { margin: 0 0 6px; font-size: 18px; }
+.mm-card h3 { margin: 18px 0 8px; font-size: 15px; }
+.fed-table-wrap { overflow-x: auto; margin: 10px 0; }
+.fed-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.fed-table th { text-align: left; background: var(--kt-accent-soft, #f7e9ec); color: var(--kt-accent-strong, #5b1325); padding: 9px 12px; font-weight: 600; white-space: nowrap; }
+.fed-table td { padding: 10px 12px; border-top: 1px solid var(--kt-line, #eadfdb); vertical-align: middle; }
+.fed-strong { font-weight: 600; }
+.fed-ok { color: #1c6b3a; }
+.fed-bad { color: #a3262f; }
+.fed-row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.fed-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+.fed-feature-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 8px 0; }
+.fed-feature { display: grid; gap: 4px; padding: 12px 14px; border: 1px solid var(--kt-line, #eadfdb); border-radius: 10px; background: var(--kt-canvas, #fffaf7); }
+.fed-feature em { color: var(--kt-muted, #7a6a66); font-style: normal; font-size: 13px; }
+.fed-run-bar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.fed-progress { height: 8px; border-radius: 999px; background: var(--kt-accent-soft, #f3e4e7); overflow: hidden; margin: 12px 0; }
+#fed-progress-fill { height: 100%; width: 0; background: var(--kt-accent, #7a1f35); transition: width .4s ease; }
+.fed-events { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; max-height: 340px; overflow-y: auto; }
+.fed-ev { display: grid; grid-template-columns: 72px 1fr; gap: 10px; font-size: 14px; padding: 6px 10px; border-left: 3px solid var(--kt-line, #e4d4cf); background: var(--kt-canvas, #fffaf7); border-radius: 0 8px 8px 0; }
+.fed-ev time { color: var(--kt-muted, #7a6a66); font-variant-numeric: tabular-nums; }
+.fed-ev-fhe, .fed-ev-aggregate { border-left-color: var(--kt-accent, #7a1f35); }
+.fed-ev-completed, .fed-ev-approved { border-left-color: #1c6b3a; }
+.fed-ev-failed { border-left-color: #a3262f; }
+.fed-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.fed-kpis .kpi-box { display: grid; gap: 2px; padding: 12px 14px; border: 1px solid var(--kt-line, #eadfdb); border-radius: 10px; background: var(--kt-surface, #fff); }
+.fed-kpis .kpi-box strong { font-size: 22px; }
+.fed-kpis .kpi-box small, .fed-kpis .kpi-box span { color: var(--kt-muted, #7a6a66); font-size: 13px; }
+.fed-target { margin: 12px 0; font-weight: 600; }
+.fed-weights { font-family: ui-monospace, Consolas, monospace; font-size: 13px; background: var(--kt-canvas, #fffaf7); padding: 10px 12px; border-radius: 8px; overflow-wrap: anywhere; }
+.fed-privacy { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.fed-reason { display: grid; gap: 6px; margin: 12px 0; font-size: 14px; }
+.fed-reason textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--kt-line, #e4d4cf); border-radius: 8px; font: inherit; }
+.fed-cmd { display: grid; gap: 4px; margin: 10px 0; }
+.fed-cmd code, .mm-sub code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; background: var(--kt-canvas, #f7efec); padding: 6px 10px; border-radius: 6px; overflow-wrap: anywhere; }
+@media (max-width: 720px) { .fed-ev { grid-template-columns: 1fr; } }

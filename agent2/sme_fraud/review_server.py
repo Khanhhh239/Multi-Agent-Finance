@@ -139,6 +139,8 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
             snapshot_store=snapshot_store,
         )
         model_lifecycle.lr_fhe.lr_registry=model_lifecycle.lr_registry
+        from .federated_lr import FederatedLRService
+        model_lifecycle.federated=FederatedLRService(lc_db.with_name('federated-lr.sqlite3'),model_lifecycle.lr_fhe,authorizer)
     class Handler(BaseHTTPRequestHandler):
         def respond(self,code,value,mime='application/json; charset=utf-8'):
             body=value if isinstance(value,bytes) else (json.dumps(value,ensure_ascii=False) if isinstance(value,dict) else value).encode('utf-8')
