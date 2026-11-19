@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="/workspace.css">
 <script src="/design/platform-theme.js"></script>
 <script src="/face-api.min.js"></script>
+<script src="/runtime-config.js"></script>
 <script src="/app.js" defer></script>
 </head>
 <body>
@@ -61,7 +62,7 @@
       </a>
     </div>
     <div class="nav-group">
-      <p class="nav-title">Nghiệp vụ · 4 agent</p>
+      <p class="nav-title" id="nav-agent-title">Nghiệp vụ · 4 agent</p>
       <div id="nav-agents"></div>
     </div>
     <div class="sidebar-note"><span class="company-monogram" id="sidebar-monogram" aria-hidden="true"></span><strong id="sidebar-company"></strong></div>
@@ -106,7 +107,7 @@
         <a href="#agent-grid" class="exec-kpi-card">
           <span class="exec-kpi-kicker">HỆ THỐNG ĐA TÁC TỬ</span>
           <strong class="exec-kpi-val" id="exec-agents-val">—/4 sẵn sàng</strong>
-          <span class="exec-kpi-sub" id="exec-agents-sub">Đang kiểm tra 4 phân hệ AI…</span>
+          <span class="exec-kpi-sub" id="exec-agents-sub">Đang kiểm tra các phân hệ AI…</span>
         </a>
         <a href="#config" class="exec-kpi-card">
           <span class="exec-kpi-kicker">CHẾ ĐỘ THUẾ &amp; KỲ SỔ</span>
@@ -159,7 +160,7 @@
       <!-- 3. Sleek Minimalist Agent Cards (4 Trạm Nghiệp vụ — Gọn, Ít chữ) -->
       <div class="workstations-header">
         <h2 class="workstations-title">Phân hệ Nghiệp vụ Sổ Son</h2>
-        <span class="workstations-hint">Dự báo dòng tiền · Kiểm soát gian lận &amp; FHE · Rà soát thuế &amp; HĐĐT · Hỏi đáp CFO hai sổ</span>
+        <span class="workstations-hint" id="workstations-hint">Dự báo dòng tiền · Kiểm soát gian lận &amp; FHE · Rà soát thuế &amp; HĐĐT · Hỏi đáp CFO hai sổ</span>
       </div>
       <div class="agents workstations-grid" id="agent-grid"></div>
 
@@ -203,19 +204,19 @@
         <details class="demo-guide-details" id="demo-guide">
           <summary>Hướng dẫn thao tác nhanh cho Kế toán trưởng &amp; Ban giám khảo (60 giây)</summary>
           <div class="demo-guide-grid">
-            <div class="demo-guide-item">
+            <div class="demo-guide-item" data-requires-agents="agent1,agent2,agent3">
               <strong>01 · Định danh &amp; FaceID 3 khung</strong>
               <p>Kiểm tra MST, kỳ thuế tại <a href="#config">Hồ sơ doanh nghiệp</a> và mở khóa bằng mật khẩu hoặc quét 3 khung hình FaceID liên tiếp tại <a href="#data">Nạp dữ liệu</a>.</p>
             </div>
-            <div class="demo-guide-item">
+            <div class="demo-guide-item" data-requires-agents="agent1,agent2,agent3">
               <strong>02 · Nạp một cửa &amp; Niêm phong</strong>
               <p>Thả sao kê CSV, hóa đơn XML/ZIP hoặc sổ bút toán để Portal tự phân luồng cho Agent 1–3 và đóng dấu chuỗi băm SHA-256.</p>
             </div>
-            <div class="demo-guide-item">
+            <div class="demo-guide-item" data-requires-agents="agent1,agent2,agent3">
               <strong>03 · Dòng tiền · Gian lận FHE · Thuế</strong>
               <p>Chuyển mượt giữa <a href="#agent1">Dự báo dòng tiền</a>, <a href="#agent2">Kiểm soát gian lận &amp; FHE</a> và <a href="#agent3">Rà soát thuế &amp; HĐĐT</a>.</p>
             </div>
-            <div class="demo-guide-item">
+            <div class="demo-guide-item" data-requires-agents="agent4">
               <strong>04 · Hỏi đáp CFO hai sổ đa lượt</strong>
               <p>Mở <a href="#agent4">Hỏi đáp CFO hai sổ</a> để truy vấn tiếng Việt trên Sổ quản trị (<code>v_mgmt</code>) &amp; Sổ thuế (<code>v_tax</code>) kèm bằng chứng SQL tất định.</p>
             </div>
@@ -232,7 +233,7 @@
       <div class="profile-heading" data-son-sheet="2" data-son-row="4">
         <div>
           <h1 id="h-config">Hồ sơ doanh nghiệp</h1>
-          <p class="profile-lead">Thông tin pháp lý, thuế, kỳ kế toán và thiết lập định dạng dùng chung cho 4 phân hệ.</p>
+          <p class="profile-lead" id="profile-lead">Thông tin pháp lý, thuế, kỳ kế toán và thiết lập định dạng dùng chung cho 4 phân hệ.</p>
         </div>
       </div>
       <nav class="paper-tabs profile-tabs" id="profile-tabs" aria-label="Các mục hồ sơ">

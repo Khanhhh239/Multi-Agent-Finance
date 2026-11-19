@@ -1,0 +1,56 @@
+services:
+  - type: web
+    name: multi-agent-fin-agent4
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./cloud/Dockerfile
+    dockerContext: .
+    healthCheckPath: /healthz
+    envVars:
+      - key: PORT
+        value: "10000"
+      - key: AGENT4_CLOUD_MODE
+        value: "1"
+      - key: AGENT4_DEMO_MODE
+        value: "0"
+      - key: AGENT4_SELECTION_CONFIG
+        value: /app/config/selection_cloud.yaml
+      - key: AGENT4_MAX_CONCURRENT_QUERIES
+        value: "1"
+      - key: AGENT4_QUERY_TIMEOUT_MS
+        value: "5000"
+      - key: AGENT4_LLM_PROVIDER
+        value: openai
+      - key: AGENT4_LLM_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: AGENT4_LLM_MODEL
+        value: qwen/qwen3.8-27b
+      - key: AGENT4_EMBED_PROVIDER
+        value: openai
+      - key: AGENT4_EMBED_BASE_URL
+        value: https://openrouter.ai/api/v1
+      - key: AGENT4_EMBED_MODEL
+        value: nvidia/nemotron-3.5-embed-8b:free
+      - key: AGENT4_EMBED_DIMENSIONS
+        value: "4096"
+      - key: AGENT4_RETRIEVAL_MODE
+        value: hybrid
+      - key: AGENT4_WAREHOUSE_MAX_BYTES
+        value: "67108864"
+      - key: AGENT4_WAREHOUSE_PATH
+        value: /tmp/agent4/warehouse.duckdb
+      - key: AGENT4_WAREHOUSE_URL
+        sync: false
+      - key: AGENT4_WAREHOUSE_SHA256
+        sync: false
+      - key: AGENT4_CORS_ORIGINS
+        sync: false
+      - key: AGENT4_WAREHOUSE_TENANT_ID
+        sync: false
+      - key: AGENT4_LLM_API_KEY
+        sync: false
+      - key: AGENT4_EMBED_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false

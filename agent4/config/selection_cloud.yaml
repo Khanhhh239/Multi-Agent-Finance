@@ -8,6 +8,7 @@ embedding:
   dimensions: 4096
   query_input_type: query
   document_input_type: passage
+  timeout_s: 20
   cache_enabled: true
   cache_path: .cache/metric_selection_index_nemotron_3_5_embed_8b.npz
 
@@ -52,7 +53,7 @@ llm:
   base_url: https://api.groq.com/openai/v1
   model: qwen/qwen3.8-27b
   temperature: 0
-  timeout_s: 360
+  timeout_s: 20
   max_retries: 1
   structured_output: true
   context_window: 131072

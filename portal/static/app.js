@@ -2,6 +2,13 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const AGENT_LABEL = { agent1: "Agent 1", agent2: "Agent 2", agent3: "Agent 3", agent4: "Agent 4" };
+  const ALL_AGENT_IDS = Object.keys(AGENT_LABEL);
+  const runtimeConfig = window.__MAF_RUNTIME_CONFIG__ || {};
+  const enabledAgentIds = new Set(
+    (Array.isArray(runtimeConfig.enabledAgents) ? runtimeConfig.enabledAgents : ALL_AGENT_IDS)
+      .filter((id) => ALL_AGENT_IDS.includes(id))
+  );
+  const apiBaseUrl = String(runtimeConfig.apiBaseUrl || "").replace(/\/+$/, "");
   const WORKSPACE_LABEL = {
     agent1: "Dự báo dòng tiền",
     agent2: "Kiểm soát gian lận & FHE",
@@ -22,6 +29,50 @@
   let authVersion = 0;
   let agent2RouteEpoch = 0;
   try { token = sessionStorage.getItem("kt-session") || ""; } catch (e) { token = ""; }
+
+  const isAgentEnabled = (id) => enabledAgentIds.has(id);
+  const apiUrl = (path) => {
+    const value = String(path || "");
+    if (/^https?:\/\//i.test(value)) return value;
+    return apiBaseUrl + (value.startsWith("/") ? value : "/" + value);
+  };
+  const filterRuntimeState = (next) => {
+    if (!next || !Array.isArray(next.agents)) return next;
+    const keepAgent = (id) => isAgentEnabled(id);
+    const filterChecks = (checks) => Object.fromEntries(
+      Object.entries(checks || {}).filter(([id]) => keepAgent(id))
+    );
+    return {
+      ...next,
+      agents: next.agents.filter((agent) => keepAgent(agent.id)),
+      slots: Array.isArray(next.slots) ? next.slots.filter((slot) => keepAgent(slot.agent)) : next.slots,
+      pending: Array.isArray(next.pending)
+        ? next.pending.map((record) => ({
+            ...record,
+            targets: Array.isArray(record.targets) ? record.targets.filter(keepAgent) : record.targets,
+            checks: filterChecks(record.checks),
+          }))
+        : next.pending,
+      batches: Array.isArray(next.batches)
+        ? next.batches.map((batch) => ({
+            ...batch,
+            files: Array.isArray(batch.files)
+              ? batch.files.map((file) => ({ ...file, results: filterChecks(file.results) }))
+              : batch.files,
+          }))
+        : next.batches,
+    };
+  };
+
+  function applyRuntimeUi() {
+    const cloudSlice = enabledAgentIds.size < ALL_AGENT_IDS.length;
+    const navTitle = $("nav-agent-title");
+    if (navTitle) navTitle.textContent = cloudSlice ? "Nghiệp vụ · Agent 4 cloud" : "Nghiệp vụ · 4 agent";
+    document.querySelectorAll("[data-requires-agents]").forEach((node) => {
+      const required = String(node.dataset.requiresAgents || "").split(",").filter(Boolean);
+      node.hidden = required.some((id) => !isAgentEnabled(id));
+    });
+  }
 
   const sidebarMedia = window.matchMedia("(max-width: 900px)");
   let desktopSidebarOpen = true;
@@ -150,7 +201,7 @@
         headers["Content-Type"] = "application/json";
         options.body = JSON.stringify(options.json);
       }
-      const res = await fetch(path, { ...options, headers, cache: "no-store" });
+      const res = await fetch(apiUrl(path), { ...options, headers, cache: "no-store" });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         if (res.status === 401 && data.locked && reqAuthVersion === authVersion && reqToken === token) {
@@ -168,7 +219,7 @@
   }
 
   const sizeText = (n) => (n < 1024 ? n + " B" : n < 1048576 ? (n / 1024).toFixed(0) + " KB" : (n / 1048576).toFixed(1) + " MB");
-  const agentById = (id) => state.agents.find((a) => a.id === id);
+  const agentById = (id) => state?.agents?.find((a) => a.id === id);
   const dmy = (iso) => (iso ? iso.slice(8, 10) + "/" + iso.slice(5, 7) + "/" + iso.slice(0, 4) : "");
   const stamp = (s) => (s ? dmy(s.slice(0, 10)) + " " + s.slice(11, 16) : "");
   const monogram = (company) => company.split(/\s+/).filter(Boolean).slice(-2).map((word) => [...word][0]).join("").toUpperCase() || "—";
@@ -415,6 +466,18 @@
 
   function renderOverview() {
     const c = state.company;
+    const agentCount = state.agents.length;
+    const enabledNames = state.agents.map((agent) => "A" + agent.number + " " + (WORKSPACE_LABEL[agent.id] || agent.name));
+    if ($("workstations-hint")) {
+      $("workstations-hint").textContent = agentCount === 1 && isAgentEnabled("agent4")
+        ? "Hỏi đáp CFO hai sổ · Truy vấn Sổ quản trị (v_mgmt) & Sổ thuế (v_tax)"
+        : "Dự báo dòng tiền · Kiểm soát gian lận & FHE · Rà soát thuế & HĐĐT · Hỏi đáp CFO hai sổ";
+    }
+    if ($("profile-lead")) {
+      $("profile-lead").textContent = agentCount === 1 && isAgentEnabled("agent4")
+        ? "Thông tin hồ sơ dùng cho phiên Portal Agent 4. Các agent chưa được triển khai cloud không hiển thị."
+        : "Thông tin pháp lý, thuế, kỳ kế toán và thiết lập định dạng dùng chung cho 4 phân hệ.";
+    }
     if ($("today")) {
       $("today").textContent = new Intl.DateTimeFormat("vi-VN", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date());
     }
@@ -452,21 +515,23 @@
     const pill = $("overview-status-pill");
     const statusText = $("overview-system-status");
     if (statusText) {
-      if (runningCount === state.agents.length) {
-        statusText.textContent = "4/4 Agent sẵn sàng";
+      if (agentCount > 0 && runningCount === agentCount) {
+        statusText.textContent = runningCount + "/" + agentCount + " Agent sẵn sàng";
         if (pill) pill.classList.remove("is-partial");
       } else if (runningCount > 0) {
-        statusText.textContent = runningCount + "/4 Agent đang chạy";
+        statusText.textContent = runningCount + "/" + agentCount + " Agent đang chạy";
         if (pill) pill.classList.add("is-partial");
       } else {
-        statusText.textContent = "Agent đang tắt";
+        statusText.textContent = agentCount ? "Agent đang tắt" : "Chưa có Agent khả dụng";
         if (pill) pill.classList.add("is-partial");
       }
     }
 
     if ($("start-all")) {
       $("start-all").disabled = state.agents.every((a) => a.state !== "stopped");
-      $("start-all").innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${runningCount === state.agents.length ? "Đang chạy" : "Bật tất cả"}</span>`;
+      const allRunning = agentCount > 0 && runningCount === agentCount;
+      const actionLabel = allRunning ? "Đang chạy" : agentCount === 1 ? "Bật Agent 4" : "Bật tất cả";
+      $("start-all").innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${actionLabel}</span>`;
     }
 
     // 1b. Executive Summary KPI Strip (100% live state data)
@@ -477,11 +542,11 @@
     }
     if ($("exec-agents-sub")) {
       const startingCount = state.agents.filter((a) => a.state === "starting").length;
-      $("exec-agents-sub").textContent = runningCount === state.agents.length
-        ? "A1 Dòng tiền · A2 FHE · A3 Thuế · A4 CFO"
+      $("exec-agents-sub").textContent = agentCount > 0 && runningCount === agentCount
+        ? enabledNames.join(" · ")
         : startingCount > 0
           ? startingCount + " phân hệ đang khởi động…"
-          : "Nhấn 'Bật tất cả' để khởi chạy toàn bộ";
+          : agentCount === 1 ? "Nhấn 'Bật Agent 4' để khởi chạy" : "Nhấn 'Bật tất cả' để khởi chạy toàn bộ";
     }
     if ($("exec-regime-val")) {
       const configured = Boolean(c.legal_name && c.code);
@@ -619,7 +684,7 @@
         : "Chưa khai báo";
     }
     if ($("step-agents-status")) {
-      $("step-agents-status").textContent = runningCount + "/4 sẵn sàng";
+      $("step-agents-status").textContent = runningCount + "/" + agentCount + " sẵn sàng";
     }
     if ($("step-data-desc")) {
       $("step-data-desc").textContent = state.package
@@ -861,6 +926,7 @@
   function renderAgentView() {
     if (!currentAgent) return;
     const a = agentById(currentAgent);
+    if (!a) return;
     const noEl = $("agent-no");
     if (noEl) {
       noEl.textContent = "A" + a.number;
@@ -1011,7 +1077,7 @@
     const reqAuthVersion = authVersion;
     const reqToken = token;
     try {
-      const next = await api("/api/state", { silent: Boolean(state) });
+      const next = filterRuntimeState(await api("/api/state", { silent: Boolean(state) }));
       if (version !== profileVersion && state) next.company = state.company;
       if (reqAuthVersion !== authVersion || reqToken !== token) {
         if (state) {
@@ -1043,8 +1109,12 @@
   const TITLES = { overview: "Tổng quan", config: "Cấu hình", data: "Nạp dữ liệu" };
 
   function show() {
-    const view = location.hash.slice(1) || "overview";
-    const isAgent = /^agent[1-4]$/.test(view);
+    let view = location.hash.slice(1) || "overview";
+    if (/^agent[1-4]$/.test(view) && !isAgentEnabled(view)) {
+      history.replaceState(null, "", "#overview");
+      view = "overview";
+    }
+    const isAgent = /^agent[1-4]$/.test(view) && isAgentEnabled(view);
     for (const id of ["overview", "config", "data"]) $("view-" + id).hidden = id !== view;
     $("view-agent").hidden = !isAgent;
     if (view !== currentAgent) {
@@ -1961,6 +2031,7 @@
     });
   }
 
+  applyRuntimeUi();
   renderSidebar();
   for (const input of $("company-form").elements) if (input.name || input.tagName === "BUTTON") input.disabled = true;
   show();

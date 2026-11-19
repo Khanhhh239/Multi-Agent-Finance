@@ -286,3 +286,86 @@ Kết quả: `4 passed`; dry-run tạo plan cho migration `001`. Chưa có Neon 
 - G5: schema/adapter contract đã có; apply trên Neon branch, pooled connection, storage budget và restore rehearsal vẫn OPEN.
 - G9: checksum mismatch/forward-fix và rollback hướng dẫn đã có; chưa diễn tập branch/snapshot thật.
 - G3/G6/G8: không thay đổi; Render image, object storage, provider quota và transfer budget vẫn OPEN.
+
+## Phase 1 implementation evidence — CM-031 Render image and static Portal contract
+
+Ngày đo: 2026-11-19
+
+Đã tạo contract tối thiểu cho một image chỉ chứa Agent 4 cloud runtime:
+
+- cloud/Dockerfile dùng python:3.12-slim, một Uvicorn worker, user non-root agent4, bind 0.0.0.0:$PORT, không copy Agent 1–3 và không cài pandas/torch/transformers/Concrete.
+- cloud/entrypoint.sh xác thực immutable DuckDB artifact trước khi start; file được tải từ presigned URL chỉ khi thiếu, ghi atomically vào /tmp, giới hạn 64 MiB mặc định và kiểm tra SHA-256.
+- render.yaml khai báo một Render Free web service duy nhất, /healthz, concurrency 1, timeout 5 giây cho SQL admission và secret names server-side.
+- vercel.json phục vụ output static, security headers và route /agent4; không tạo Vercel Function chứa business/backend logic.
+- cloud/build_portal_static.py đóng gói Portal hiện có, design assets cần thiết và agent4_chat; runtime config chỉ chứa MAF_API_BASE_URL (public HTTPS origin) và MAF_ENABLED_AGENTS. Không đưa secret vào build artifact.
+- Portal giữ local fallback all-agents; cloud build mặc định chỉ bật Agent 4 và không render route/card của Agent 1–3. agent4_chat dùng cùng runtime API origin thay vì hardcode localhost.
+
+### Evidence
+
+Smoke warehouse:
+
+- bytes: 24,391,680
+- SHA-256: d9eeb66ea65bd5ddc9188a48ca618fa68c62969c3aea5cf5219041f7689c37ec
+
+Commands/results:
+
+    docker build -f cloud/Dockerfile -t multi-agent-fin-agent4:cloud-slice .
+    # build pass; image inspect logical size: 424,260,709 bytes (~404.7 MiB)
+
+    curl -fsS http://127.0.0.1:18040/healthz
+    # {"status":"live"}
+
+    curl -fsS http://127.0.0.1:18040/readyz
+    # {"status":"ready","checks":{"config":"ready","warehouse_artifact":"ready"}}
+
+    docker stats --no-stream agent4-cloud-smoke
+    # mem=49.57MiB, oom=false; health-only, không có query/provider
+
+    docker run --rm --entrypoint python multi-agent-fin-agent4:cloud-slice -m pip check
+    # No broken requirements found.
+
+    docker run --rm --entrypoint python multi-agent-fin-agent4:cloud-slice \
+      -c 'import agent4.api; print("agent4.api import ok")'
+    # agent4.api import ok
+
+    ./.venv/bin/pytest -q tests/contracts/test_cloud_artifact.py tests/contracts/test_cloud_deployment_contract.py
+    # 8 passed
+
+    node --check portal/static/app.js
+    node --check agent4_chat/chat.js
+    ./.venv/bin/ruff check ../cloud/build_portal_static.py tests/contracts/test_cloud_deployment_contract.py
+    # pass
+
+    MAF_API_BASE_URL=https://gateway.example.test MAF_ENABLED_AGENTS=agent4 python3 cloud/build_portal_static.py --output /tmp/maf-portal-static
+    # output bytes: 11,854,097; no README/design test or sync assets copied
+
+Final deterministic query rerun sau khi rebuild image/dependency:
+
+    ./.venv/bin/python scripts/benchmark_cloud_query.py --provider-mode deterministic --output /tmp/agent4-phase1-query-final.json
+
+    status=ready
+    row_count=1
+    elapsed_ms=44.727
+    peak_rss_kb=115124 (~112.4 MiB)
+    sql_execution_ms=30.655
+    metric_selection_ms=4.202
+    planning_ms=5.563
+    stage_errors={}
+
+Pipeline trace có status ok cho request validation, authentication, request scope, metric selection, plan validation, planning, SQL safety/compiler/execution, result validation và answer. Đây vẫn là deterministic/mock provider evidence; external API latency/failure chưa được đo.
+
+### Giới hạn của bằng chứng
+
+- docker stats chạy trên Docker host không áp dụng cgroup 512 MiB/0.1 CPU của Render; đây chỉ là health-only smoke, không phải resource GO.
+- Chưa deploy Render thật, chưa chạy query external LLM/embedding trong container, chưa chạy Vercel preview và chưa có Gateway/IdP inject claims/policy.
+- vercel.json cố ý chưa rewrite /api/* tới Agent 4 trực tiếp. MAF_API_BASE_URL phải trỏ tới một Gateway đã xác thực; trỏ thẳng browser vào Agent 4 sẽ nhận deny-by-default 403 và không được coi là triển khai hợp lệ.
+- Portal vẫn gọi các /api/state, intake và session endpoints của Gateway. Agent 4 cloud backend hiện chỉ cung cấp /v1/*; vì vậy Portal cloud end-to-end vẫn OPEN cho CM-010/CM-012/CM-030.
+
+### Gate update
+
+- G2 memory: health-only container quan sát 49.57 MiB và deterministic process query 112.4 MiB; chưa đạt gate three cold runs/concurrency dưới Render cgroup.
+- G3 startup/health: image bind 0.0.0.0:$PORT, /healthz và /readyz pass local Docker; Render smoke vẫn OPEN.
+- G4 query: deterministic local path pass; external provider, container query và timeout budget vẫn OPEN.
+- G6 security: static artifact không có secret, UI không hiện agent chưa bật; Gateway/IdP, CSRF/session và browser CORS flow vẫn OPEN.
+- G7 functional: static packaging contract pass; Portal state/intake regression cloud chưa thể chạy khi thiếu Gateway. design/test_ui_ux_regression.py chạy 4/5 test pass nhưng test sync bị fail vì các asset Agent 1–3/Agent 2/Agent 3 out-of-date; không tự sửa trong slice này.
+- G5/G8/G9: Neon apply/restore, provider quota, Render quota và rollback rehearsal chưa thay đổi.

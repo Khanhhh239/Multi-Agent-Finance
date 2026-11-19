@@ -3,6 +3,13 @@
 // Talks only to the portal (/api/agent4/...); exact BigInt/Decimal VND formatting; zero inline styles.
 (() => {
   const $ = (id) => document.getElementById(id);
+  const runtimeConfig = window.__MAF_RUNTIME_CONFIG__ || {};
+  const apiBaseUrl = String(runtimeConfig.apiBaseUrl || "").replace(/\/+$/, "");
+  const apiUrl = (path) => {
+    const value = String(path || "");
+    if (/^https?:\/\//i.test(value)) return value;
+    return apiBaseUrl + (value.startsWith("/") ? value : "/" + value);
+  };
   const SESSION_STORAGE_KEY = "soson.agent4.session_id";
 
   const SUGGESTIONS = [
@@ -749,7 +756,7 @@
         ...(isClarificationTurn ? {} : { clarification_mode: "guided" }),
       },
     };
-    const r = await fetch("/api/agent4/query", {
+    const r = await fetch(apiUrl("/api/agent4/query"), {
       method: "POST",
       cache: "no-store",
       headers: { "Content-Type": "application/json", "X-Platform": "1" },
@@ -829,7 +836,7 @@
     const listEl = $("metrics");
     if (!countEl || !listEl) return;
     try {
-      const res = await fetch("/api/agent4/metrics", { cache: "no-store" }).then((r) => r.json());
+      const res = await fetch(apiUrl("/api/agent4/metrics"), { cache: "no-store" }).then((r) => r.json());
       const list = Array.isArray(res) ? res : res.items || res.metrics || [];
       if (!list.length) throw new Error(res.error || "Danh mục trống.");
       for (const m of list) {
