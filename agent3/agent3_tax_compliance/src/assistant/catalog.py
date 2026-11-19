@@ -204,7 +204,7 @@ def ai_categories() -> dict:
 
 def law_alerts(db_path, today: date, days_back: int = 150, days_ahead: int = 180) -> list:
     """Documents that took or lose effect around today and concern a small or medium enterprise. Relevance: the title is
-    compared with the topic descriptions by meaning (bge-m3); when the embedding server is down, by the keyword list."""
+    compared with the topic descriptions by meaning through the embedding API; when the API is down, by the keyword list."""
     from datetime import timedelta
     from ..extraction.xml_context import fold
     from ..lawbase.store import Corpus

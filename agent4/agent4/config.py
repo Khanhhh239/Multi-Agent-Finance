@@ -29,8 +29,9 @@ LAST_CLOSED_MONTH = os.getenv("AGENT4_LAST_CLOSED_MONTH", "2026-08")
 
 @dataclass(frozen=True)
 class LLMConfig:
-    base_url: str = os.getenv("AGENT4_LLM_BASE_URL", "http://localhost:11434")
-    model: str = os.getenv("AGENT4_LLM_MODEL", "qwen3:8b")
+    base_url: str = os.getenv("AGENT4_LLM_BASE_URL", "https://api.groq.com/openai/v1")
+    model: str = os.getenv("AGENT4_LLM_MODEL", "qwen/qwen3.8-27b")
+    api_key: str | None = os.getenv("AGENT4_LLM_API_KEY")
     temperature: float = float(os.getenv("AGENT4_LLM_TEMPERATURE", "0"))
     num_ctx: int = int(os.getenv("AGENT4_LLM_NUM_CTX", "8192"))
     # Qwen3 hybrid thinking: off by default — tool routing is narrowed by the

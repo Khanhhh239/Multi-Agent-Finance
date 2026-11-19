@@ -38,10 +38,6 @@ class AppConfig:
         )
     )
     selection_config_path: Path = field(default_factory=_selection_config_path)
-    qwen_base_url: str = field(
-        default_factory=lambda: os.getenv("AGENT4_LLM_BASE_URL", "http://localhost:11434/api/chat")
-    )
-    qwen_model: str = field(default_factory=lambda: os.getenv("AGENT4_LLM_MODEL", "qwen3:4b"))
     max_question_length: int = field(
         default_factory=lambda: _env_int("AGENT4_MAX_QUESTION_LENGTH", 500)
     )
@@ -55,8 +51,6 @@ class AppConfig:
     )
 
     def __post_init__(self) -> None:
-        if not self.qwen_base_url.strip() or not self.qwen_model.strip():
-            raise ValueError("Qwen endpoint and model must be non-empty")
         if self.max_question_length <= 0:
             raise ValueError("max_question_length must be positive")
         if self.default_row_cap <= 0:

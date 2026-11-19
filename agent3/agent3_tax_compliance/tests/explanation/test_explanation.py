@@ -1,6 +1,7 @@
 """Technical fixtures, local HTTP transport, native ZEN/API. No legal-accuracy claim."""
 import hashlib
 import json
+import os
 import sys
 import threading
 import time
@@ -18,7 +19,7 @@ from src.explanation_v2.contracts import Policy, Corpus, Chunk, Context, Fact, E
 from src.explanation_v2.retrieval import retrieve, tokens
 from src.explanation_v2.context_builder import build_context
 from src.explanation_v2.validator import validate, fallback
-from src.explanation_v2.llm import Ollama, ProviderFailure
+from src.explanation_v2.llm import OpenAICompatible, ProviderFailure
 from src.explanation_v2.selection import request_data, materialize
 from src.explanation_v2.service import ExplanationService, explain
 from src.legal_registry.registry import LegalRegistry, LegalDocument
@@ -377,6 +378,11 @@ class CompactSelectionTests(unittest.TestCase):
 
 
 class ProviderTransportTests(unittest.TestCase):
+    def setUp(self):
+        self.api_env = patch.dict(os.environ, {'AGENT3_LLM_API_KEY': 'test-key'})
+        self.api_env.start()
+        self.addCleanup(self.api_env.stop)
+
     def context(self):
         return Context(evaluation_id='e',record_revision=1,record_sha256='a'*64,excerpts=(),facts=(Fact(fact_id='f',variants=('Verified',),refs=('evaluation:e',)),))
 
@@ -384,9 +390,6 @@ class ProviderTransportTests(unittest.TestCase):
         owner=self
         class Handler(BaseHTTPRequestHandler):
             def log_message(self,*args):pass
-            def do_GET(self):
-                data={'models':[{'name':'qwen3:8b','digest':'sha256:test'}]}
-                self.send_response(200);self.end_headers();self.wfile.write(json.dumps(data).encode())
             def do_POST(self):
                 body=json.loads(self.rfile.read(int(self.headers['Content-Length'])))
                 owner.observed=body
@@ -399,60 +402,57 @@ class ProviderTransportTests(unittest.TestCase):
                     if mode=='natural':
                         p={'text':'Verified','fact_ids':['f']}
                         output={'summary':p,'reasons':[p],'next_actions':[p]}
-                    raw=json.dumps({'model':body['model'],'done':True,'message':{'content':json.dumps(output)}}).encode()
+                    raw=json.dumps({'model':body['model'],'choices':[{'message':{'content':json.dumps(output)}}]}).encode()
                 self.send_response(200);self.end_headers()
                 try:self.wfile.write(raw)
                 except OSError:pass
         server=ThreadingHTTPServer(('127.0.0.1',0),Handler)
         thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
         self.addCleanup(server.server_close);self.addCleanup(server.shutdown)
-        return Policy(enabled=True,model_revision='sha256:test',endpoint=f'http://127.0.0.1:{server.server_port}/api/chat')
+        return Policy(enabled=True,endpoint=f'http://127.0.0.1:{server.server_port}/v1/chat/completions')
 
     def test_actual_http_json_shape_and_thinking_disabled(self):
-        policy=self.server();raw=Ollama()._generate(self.context(),policy)
+        policy=self.server();raw=OpenAICompatible(policy.model, policy.endpoint, 'test-key')._generate(self.context(),policy)
         self.assertTrue(validate(raw,self.context()))
-        self.assertFalse(self.observed['think']);self.assertFalse(self.observed['stream'])
-        self.assertIsInstance(self.observed['format'],dict)
-        self.assertIn('selections',self.observed['format']['properties'])
+        self.assertFalse(self.observed['stream'])
+        self.assertEqual(self.observed['response_format']['type'],'json_object')
         user=json.loads(self.observed['messages'][1]['content'])
         self.assertEqual(set(user),{'facts'})
         self.assertNotIn('refs',user['facts'][0])
 
     def test_invalid_selection_cannot_bypass_validator(self):
         with self.assertRaises(ProviderFailure) as caught:
-            Ollama()._generate(self.context(),self.server('bad_selection'))
+            OpenAICompatible('test-model', self.server('bad_selection').endpoint, 'test-key')._generate(self.context(),self.server('bad_selection'))
         self.assertEqual(str(caught.exception),'CLAIM_VALIDATION_FAILED')
 
     def test_natural_transport_pins_section_refs_but_does_not_approve_semantics(self):
         from src.explanation_v2.natural import validate_draft
         policy=self.server('natural').model_copy(update={'style':'NATURAL_DRAFT'})
-        raw=Ollama()._generate(self.context(),policy)
+        raw=OpenAICompatible(policy.model, policy.endpoint, 'test-key')._generate(self.context(),policy)
         self.assertTrue(validate_draft(raw,self.context()))
-        schema=self.observed['format']
-        self.assertEqual(schema['properties']['summary']['properties']['fact_ids']['prefixItems'][0]['const'],'f')
+        self.assertEqual(self.observed['response_format']['type'],'json_object')
 
     def test_supervised_local_transport(self):
         policy=self.server()
-        self.assertTrue(validate(Ollama().generate(self.context(),policy),self.context()))
+        self.assertTrue(validate(OpenAICompatible(policy.model, policy.endpoint, 'test-key').generate(self.context(),policy),self.context()))
 
     def test_supervisor_deadline_terminates_process(self):
         started=time.monotonic()
         with self.assertRaises(ProviderFailure) as caught:
-            Ollama().generate(self.context(),self.server('timeout').model_copy(update={'timeout_seconds':.05}))
+            OpenAICompatible('test-model', self.server('timeout').endpoint, 'test-key').generate(self.context(),self.server('timeout').model_copy(update={'timeout_seconds':.05}))
         self.assertEqual(str(caught.exception),'PROVIDER_TIMEOUT')
         self.assertLess(time.monotonic()-started,3)
 
-    def test_cloud_redirect_or_credentials_disallowed(self):
-        for endpoint in ('https://example.com/api/chat','http://localhost:11434/api/chat','http://127.0.0.1:11434/other','http://user:pass@127.0.0.1:11434/api/chat'):
-            with self.assertRaises(ProviderFailure):Ollama()._generate(self.context(),Policy(endpoint=endpoint))
+    def test_api_key_is_required(self):
+        with patch.dict(os.environ, {'AGENT3_LLM_API_KEY': ''}):
+            with self.assertRaisesRegex(ProviderFailure, 'API_KEY_MISSING'):
+                OpenAICompatible('test-model', 'http://127.0.0.1:1/v1/chat/completions', '')._generate(self.context(), self.server())
 
     def test_pin_mismatch_response_limit_invalid_json_timeout(self):
         for mode in ('invalid','oversized','timeout'):
             policy=self.server(mode).model_copy(update={'max_response_bytes':1024,'timeout_seconds':.15 if mode=='timeout' else 3})
             with self.subTest(mode=mode):
-                with self.assertRaises(ProviderFailure):Ollama()._generate(self.context(),policy)
-        policy=self.server().model_copy(update={'model_revision':'wrong'})
-        with self.assertRaises(ProviderFailure):Ollama()._generate(self.context(),policy)
+                with self.assertRaises(ProviderFailure):OpenAICompatible('test-model', policy.endpoint, 'test-key')._generate(self.context(),policy)
 
 
 if __name__=='__main__':unittest.main()

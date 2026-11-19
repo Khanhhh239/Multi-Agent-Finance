@@ -9,6 +9,7 @@ from pathlib import Path
 
 from .validity import SCHEMA as VALIDITY_SCHEMA
 from .vbpl import ParsedDoc, chunks
+from ..runtime_config import env
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS documents(doc_id TEXT PRIMARY KEY, url TEXT, slug TEXT, lastmod TEXT, doc_num TEXT, title TEXT, doc_type TEXT,
@@ -61,10 +62,10 @@ def polarity_clash(question: str, path: str) -> str | None:
 
 
 class Corpus:
-    hybrid = True                                        # semantic retrieval (bge-m3) fused with keywords; set per instance
-    # cross-encoder over the top candidates: on 54 questions it raised first-place hits from 39 to 45 (bge-m3 hybrid alone);
-    # (a Vietnamese fine-tuned embedding was measured too and did not beat bge-m3, so it was dropped). Off without the model folder.
-    rerank = (Path(__file__).resolve().parents[2] / 'models/Vietnamese_Reranker').exists()
+    hybrid = True                                      # API embeddings fused with keyword retrieval
+    rerank = (env('AGENT3_RERANK_PROVIDER', 'cohere') or 'cohere').lower() == 'cohere' and bool(
+        env('AGENT3_RERANK_API_KEY') or env('AGENT3_API_KEY')
+    )
 
     def __init__(self, path: Path):
         self.path = Path(path)

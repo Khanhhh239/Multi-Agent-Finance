@@ -1,4 +1,4 @@
-"""The controlled AI layer: the local model proposes, deterministic checks verify, a person approves, everything is logged.
+"""The controlled AI layer: the API model proposes, deterministic checks verify, a person approves, everything is logged.
 
 Every task follows the same contract (see Part 13 of the design notes):
 * the model gets only facts computed by the rules (amounts, codes, candidates) and answers in a fixed JSON schema;
@@ -20,12 +20,13 @@ from decimal import Decimal
 from pathlib import Path
 
 from ..extraction.xml_context import fold, similarity
-from ..lawbase.llm import ContextOverflow, LLMUnavailable, Ollama
+from ..lawbase.llm import ContextOverflow, LLMUnavailable, configured_llm
 from ..lawbase.rag import norm, numbers
+from ..runtime_config import env
 
 PROJECT = Path(__file__).resolve().parents[2]
 CACHE = PROJECT / 'data/ai_cache.sqlite3'
-MODEL = 'qwen3:8b'
+MODEL = env('AGENT3_LLM_MODEL', 'qwen/qwen3.8-27b')
 CLASSIFY_PROMPT_VERSION = 'v3'
 
 # Control chars and zero-width characters stripped from untrusted XML/CSV fields
@@ -114,7 +115,7 @@ class AI:
     """One door to the model, with a cache. llm may be any object with chat(system, user, schema, num_predict)."""
 
     def __init__(self, llm=None, cache_path: Path = CACHE):
-        self.llm = llm or Ollama(MODEL)
+        self.llm = llm or configured_llm(MODEL)
         self.cache_path = Path(cache_path)
         self.cache_path.parent.mkdir(parents=True, exist_ok=True)
         db = sqlite3.connect(self.cache_path)

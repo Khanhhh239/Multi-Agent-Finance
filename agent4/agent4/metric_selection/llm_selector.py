@@ -279,36 +279,22 @@ class LLMMetricSelector:
             ],
             "stream": False,
         }
-        openai = self.config.provider == "openai"
-        if openai:
-            url = openai_endpoint(self.config.base_url, "chat/completions")
-            request.update(
-                temperature=self.config.temperature,
-                seed=seed,
-                max_tokens=self.config.max_tokens,
-                response_format={
-                    "type": "json_schema",
-                    "json_schema": {
-                        "name": "metric_selection",
-                        "strict": True,
-                        "schema": _RESPONSE_SCHEMA,
-                    },
-                }
-                if self.config.structured_output
-                else {"type": "json_object"},
-            )
-        else:
-            url = f"{self.config.base_url.rstrip('/')}/api/chat"
-            request.update(
-                format=_RESPONSE_SCHEMA if self.config.structured_output else "json",
-                think=False,
-                options={
-                    "temperature": self.config.temperature,
-                    "seed": seed,
-                    "num_ctx": self.config.context_window,
-                    "num_predict": self.config.max_tokens,
+        url = openai_endpoint(self.config.base_url, "chat/completions")
+        request.update(
+            temperature=self.config.temperature,
+            seed=seed,
+            max_tokens=self.config.max_tokens,
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "metric_selection",
+                    "strict": True,
+                    "schema": _RESPONSE_SCHEMA,
                 },
-            )
+            }
+            if self.config.structured_output
+            else {"type": "json_object"},
+        )
         headers = (
             {"Authorization": f"Bearer {self.config.api_key}"} if self.config.api_key else None
         )
@@ -333,25 +319,22 @@ class LLMMetricSelector:
         except (ValueError, TypeError) as exc:
             raise SelectionFormatError("Provider returned a malformed response.") from exc
 
-        counts = body.get("usage") if openai else body
+        counts = body.get("usage")
         usage = None
         if isinstance(counts, dict):
-            fields = (
-                ("prompt_tokens", "completion_tokens")
-                if openai
-                else ("prompt_eval_count", "eval_count")
+            input_tokens, output_tokens = (
+                counts.get("prompt_tokens"),
+                counts.get("completion_tokens"),
             )
-            input_tokens, output_tokens = (counts.get(field) for field in fields)
             if all(type(count) is int and count >= 0 for count in (input_tokens, output_tokens)):
                 usage = {"input_tokens": input_tokens, "output_tokens": output_tokens}
         try:
-            choice = body["choices"][0] if openai else body
+            choice = body["choices"][0]
             content = choice["message"]["content"]
             if isinstance(content, str):
                 content = _THINK_BLOCK.sub("", content).strip()
                 _reject_unsafe_text(content)
-            finish_key = "finish_reason" if openai else "done_reason"
-            if choice.get(finish_key) != "stop":
+            if choice.get("finish_reason") != "stop":
                 raise SelectionFormatError("Provider returned an incomplete selection.")
             try:
                 draft = _normalize_model_draft(json.loads(content))

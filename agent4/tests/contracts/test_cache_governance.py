@@ -19,6 +19,7 @@ from agent4.metric_selection import select_metrics_with_recovery
 from agent4.metric_selection.config import (
     EmbeddingConfig,
     FewshotConfig,
+    LLMSelectionConfig,
     MetricSelectionConfig,
     RecoveryConfig,
     RetrievalConfig,
@@ -209,9 +210,19 @@ def backend(tmp_path, monkeypatch, selection_catalog):
     """Exercise real HTTP encoding and result validation with controllable provider failures."""
     config = MetricSelectionConfig(
         embedding=EmbeddingConfig(
-            provider="ollama", dimensions=64, cache_path=tmp_path / "index.npz"
+            provider="openai",
+            model="embed-test",
+            api_key="embed-test-key",
+            dimensions=64,
+            cache_path=tmp_path / "index.npz",
         ),
         retrieval=RetrievalConfig(mode="hybrid"),
+        llm=LLMSelectionConfig(
+            provider="openai",
+            base_url="https://model.test",
+            model="chat-test",
+            api_key="llm-test-key",
+        ),
         fewshot=FewshotConfig(
             enabled=True, strategy="static", example_bank_path=tmp_path / "bank.jsonl"
         ),
@@ -225,7 +236,10 @@ def backend(tmp_path, monkeypatch, selection_catalog):
         embed_calls.extend(inputs)
         if errors["embed"]:
             return httpx.Response(503)
-        return httpx.Response(200, json={"embeddings": [[1.0] * 64 for _ in inputs]})
+        return httpx.Response(
+            200,
+            json={"data": [{"index": i, "embedding": [1.0] * 64} for i, _ in enumerate(inputs)]},
+        )
 
     def select(request):
         prompt = json.loads(json.loads(request.content)["messages"][1]["content"])
@@ -236,10 +250,13 @@ def backend(tmp_path, monkeypatch, selection_catalog):
         return httpx.Response(
             200,
             json={
-                "done_reason": "stop",
-                "message": {"content": json.dumps(_draft(metric_id))},
-                "prompt_eval_count": 100,
-                "eval_count": 10,
+                "choices": [
+                    {
+                        "finish_reason": "stop",
+                        "message": {"content": json.dumps(_draft(metric_id))},
+                    }
+                ],
+                "usage": {"prompt_tokens": 100, "completion_tokens": 10},
             },
         )
 

@@ -74,8 +74,6 @@ class TestGeneralConventions:
         for name in (
             "AGENT4_DB",
             "AGENT4_GROUND_TRUTH",
-            "AGENT4_LLM_BASE_URL",
-            "AGENT4_LLM_MODEL",
             "AGENT4_MAX_QUESTION_LENGTH",
             "AGENT4_DEFAULT_ROW_CAP",
             "AGENT4_QUERY_TIMEOUT_MS",
@@ -87,8 +85,6 @@ class TestGeneralConventions:
         assert config.ground_truth_path == Path(
             "data/enterprise-x10-v3/warehouse_ground_truth.json"
         )
-        assert config.qwen_base_url == "http://localhost:11434/api/chat"
-        assert config.qwen_model == "qwen3:4b"
         assert config.max_question_length == 500
         assert config.default_row_cap == 1000
         assert config.query_timeout_ms == 5000

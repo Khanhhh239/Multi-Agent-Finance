@@ -65,7 +65,7 @@ def _index_metadata(catalog_hash: str, provider: EmbeddingProvider) -> dict[str,
         "document_version": DOCUMENT_VERSION,
         "index_version": INDEX_VERSION,
     }
-    if provider.config.provider in ("ollama", "openai"):
+    if provider.config.provider == "openai":
         endpoint = (
             provider.config.provider,
             provider.config.base_url.rstrip("/"),
@@ -197,7 +197,7 @@ def load_or_build_index(
             and provider.config.cache_enabled
             and provider.available
             and provider.normalize
-            and provider.config.provider in ("ollama", "openai")
+            and provider.config.provider == "openai"
         ):
             raise
 

@@ -24,23 +24,23 @@
       "type": "string"
     },
     "provider": {
-      "const": "ollama",
-      "default": "ollama",
+      "const": "openai",
+      "default": "openai",
       "title": "Provider",
       "type": "string"
     },
     "endpoint": {
-      "default": "http://127.0.0.1:11434/api/chat",
+      "default": "https://api.groq.com/openai/v1/chat/completions",
       "title": "Endpoint",
       "type": "string"
     },
     "model": {
-      "default": "qwen3:8b",
+      "default": "qwen/qwen3.8-27b",
       "title": "Model",
       "type": "string"
     },
     "model_revision": {
-      "default": "UNVERIFIED",
+      "default": "api:qwen/qwen3.8-27b",
       "title": "Model Revision",
       "type": "string"
     },

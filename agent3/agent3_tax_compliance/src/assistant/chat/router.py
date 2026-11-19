@@ -1,11 +1,11 @@
 """Choose the answer domain of a question.
 
-Stage 1, semantic: the question is embedded (bge-m3, local). A logistic-regression head trained on the embedded example
+Stage 1, semantic: the question is embedded through the configured API. A logistic-regression head trained on the embedded example
 questions of configs/assistant/catalog/chat_domains.json (hand-written examples plus model-written paraphrases that passed
 a consistency filter, SetFit-style head on frozen embeddings) gives a probability per domain.
 Stage 2, structure: parameters written in the question settle the cases the meaning alone cannot (an invoice number
 together with 'if ... evidence' is a what-if; a named issue type turns a risk question into a list by issue).
-Stage 3, model: when stage 1 is not clear (low score or two domains close), a small local model (qwen3:4b instruct)
+Stage 3, model: when stage 1 is not clear (low score or two domains close), the configured API model
 chooses among the catalog ids or NONE, constrained by a JSON schema. Its choice is accepted only inside the stage-1
 shortlist, so it cannot jump to an unrelated domain.
 When nothing is clear the router refuses and the answer lists what can be asked: it never guesses.
@@ -18,11 +18,13 @@ from pathlib import Path
 import numpy as np
 
 from ...extraction.xml_context import fold
+from ...lawbase.llm import configured_llm
+from ...runtime_config import env
 
 PROJECT = Path(__file__).resolve().parents[3]
 CATALOG = PROJECT / 'configs/assistant/catalog/chat_domains.json'
 INDEX = PROJECT / 'data/chat_index.npz'
-ROUTER_MODEL = 'qwen3:4b-instruct-2507-q4_K_M'   # same accuracy as qwen3:8b on dev and holdout, about 10 times faster (fits the 6 GB GPU)
+ROUTER_MODEL = env('AGENT3_LLM_MODEL', 'qwen/qwen3.8-27b')
 
 ACCEPT = 0.55        # stage-1 probability accepted without the model
 MARGIN = 0.20        # and ahead of the runner-up by at least this
@@ -100,8 +102,7 @@ class Router:
     # ------------------------------------------------------------------ model tie-break
     def _ask_model(self, question: str, shortlist: list[str]) -> str | None:
         if self._llm is None:
-            from ...lawbase.llm import Ollama
-            self._llm = Ollama(ROUTER_MODEL, num_ctx=4096, timeout=120)
+            self._llm = configured_llm(ROUTER_MODEL, num_ctx=4096, timeout=120)
         options = shortlist + ['NONE']
         system = ('Bạn phân loại câu hỏi của kế toán doanh nghiệp vào đúng một loại. Chỉ chọn trong danh sách. '
                   'Câu hỏi về số liệu, hóa đơn, người bán, hạn nộp, tiền phạt của chính doanh nghiệp là loại dữ liệu; '

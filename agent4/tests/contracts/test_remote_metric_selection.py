@@ -141,21 +141,29 @@ async def test_openai_chat_schema_thinking_and_resolved_cleanup(monkeypatch, str
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("clarification", [None, "", "  "])
-async def test_ollama_supplies_missing_clarification(monkeypatch, clarification):
+async def test_openai_supplies_missing_clarification(monkeypatch, clarification):
     def respond(request):
         payload = json.loads(request.content)
-        assert payload["options"]["num_predict"] == 256
-        assert payload["think"] is False
+        assert payload["max_tokens"] == 256
         return httpx.Response(
             200,
             json={
-                "done_reason": "stop",
-                "message": {"content": json.dumps(_draft("ambiguous", [], clarification))},
+                "choices": [
+                    {
+                        "finish_reason": "stop",
+                        "message": {"content": json.dumps(_draft("ambiguous", [], clarification))},
+                    }
+                ],
+                "usage": {"prompt_tokens": 3, "completion_tokens": 4},
             },
         )
 
     _mock_chat(monkeypatch, respond)
-    selector = LLMMetricSelector(LLMSelectionConfig(max_tokens=256))
+    selector = LLMMetricSelector(
+        LLMSelectionConfig(
+            provider="openai", base_url="https://model.test", api_key="test-key", max_tokens=256
+        )
+    )
     draft, _ = await selector.select("Which figure?", [])
     assert draft["clarification_question"] == (
         "Bạn vui lòng làm rõ chỉ số tài chính và kỳ thời gian cần tra cứu?"
@@ -171,11 +179,14 @@ async def test_unsafe_inactive_messages_are_rejected_before_normalization(monkey
     _mock_chat(
         monkeypatch,
         lambda request: httpx.Response(
-            200, json={"done_reason": "stop", "message": {"content": content}}
+            200,
+            json={"choices": [{"finish_reason": "stop", "message": {"content": content}}]},
         ),
     )
     with pytest.raises(ContractError, match="prohibited") as error:
-        await LLMMetricSelector().select("Revenue?", [])
+        await LLMMetricSelector(
+            LLMSelectionConfig(provider="openai", base_url="https://model.test", api_key="test-key")
+        ).select("Revenue?", [])
     assert not isinstance(error.value, SelectionFormatError)
 
 
@@ -248,31 +259,34 @@ def test_openai_embedding_batch_uses_response_indices(invalid):
         assert [row["values"][:2] for row in provider.embed(request)["vectors"]] == [[1, 0], [0, 1]]
 
 
-def _remote_embedding(path, calls, provider_name="openai", *, outage=False):
+def _remote_embedding(path, calls, *, outage=False):
     def respond(request):
         texts = json.loads(request.content)["input"]
         calls.append(len(texts))
         if outage:
             return httpx.Response(503)
         vectors = [[1.0] * 64 for _ in texts]
-        if provider_name == "ollama":
-            return httpx.Response(200, json={"embeddings": vectors})
         return httpx.Response(
             200,
             json={"data": [{"index": i, "embedding": v} for i, v in enumerate(vectors)]},
         )
 
     return EmbeddingProvider(
-        EmbeddingConfig(provider=provider_name, model="embed-test", dimensions=64, cache_path=path),
+        EmbeddingConfig(
+            provider="openai",
+            model="embed-test",
+            dimensions=64,
+            api_key="test-key",
+            cache_path=path,
+        ),
         transport=httpx.MockTransport(respond),
     )
 
 
-@pytest.mark.parametrize("provider_name", ["ollama", "openai"])
-def test_remote_retrieval_rebuilds_missing_and_stale_index(tmp_path, analyst_auth, provider_name):
+def test_remote_retrieval_rebuilds_missing_and_stale_index(tmp_path, analyst_auth):
     calls = []
     path = tmp_path / "index.npz"
-    provider = _remote_embedding(path, calls, provider_name)
+    provider = _remote_embedding(path, calls)
     config = MetricSelectionConfig(
         embedding=provider.config, retrieval=RetrievalConfig(mode="dense_only")
     )

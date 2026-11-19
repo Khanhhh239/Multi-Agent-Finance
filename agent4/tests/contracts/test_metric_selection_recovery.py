@@ -70,12 +70,17 @@ def stub_model(monkeypatch: pytest.MonkeyPatch):
             return httpx.Response(
                 200,
                 json={
-                    "done_reason": "stop",
-                    "prompt_eval_count": 30,
-                    "eval_count": 5,
-                    "message": {
-                        "content": response if isinstance(response, str) else json.dumps(response)
-                    },
+                    "choices": [
+                        {
+                            "finish_reason": "stop",
+                            "message": {
+                                "content": response
+                                if isinstance(response, str)
+                                else json.dumps(response)
+                            },
+                        }
+                    ],
+                    "usage": {"prompt_tokens": 30, "completion_tokens": 5},
                 },
             )
 
@@ -220,7 +225,14 @@ async def test_schema_retry_uses_fixed_reminder_and_revalidates(
             (
                 httpx.Response(
                     200,
-                    json={"done_reason": "length", "message": {"content": "SELECT * FROM payroll"}},
+                    json={
+                        "choices": [
+                            {
+                                "finish_reason": "length",
+                                "message": {"content": "SELECT * FROM payroll"},
+                            }
+                        ]
+                    },
                 ),
             ),
             "invalid_request",

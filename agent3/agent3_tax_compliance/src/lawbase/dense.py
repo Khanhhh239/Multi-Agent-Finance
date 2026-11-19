@@ -1,5 +1,7 @@
-"""Semantic retrieval with bge-m3 served by the local Ollama. Vectors are stored next to the chunks; search filters on the
-same validity dates as the keyword search and is fused with it in store.search (hybrid).
+"""Semantic retrieval through an authenticated OpenAI-compatible embedding API.
+
+Vectors are stored next to the chunks; search filters on the same validity dates
+as the keyword search and is fused with it in ``store.search``.
 
   python -m src.lawbase.dense build      embed every indexed chunk that has no vector yet (resumable)
 """
@@ -7,54 +9,89 @@ import json
 import sqlite3
 import sys
 import time
+import urllib.error
 import urllib.request
 
 import numpy as np
 
-MODEL = 'bge-m3'
-URL = 'http://127.0.0.1:11434/api/embed'
+from ..runtime_config import env
+
+MODEL = env('AGENT3_EMBED_MODEL', 'nvidia/nemotron-3.5-embed-8b:free')
+URL = env('AGENT3_EMBED_BASE_URL', 'https://openrouter.ai/api/v1')
 SCHEMA = 'CREATE TABLE IF NOT EXISTS chunk_vec(chunk_id TEXT PRIMARY KEY, vec BLOB)'
 _cache = {}
 
-# Cross-encoder reranker (AITeamVN/Vietnamese_Reranker, local copy in models/); optional, off when the folder is missing.
-from pathlib import Path as _Path  # noqa: E402
-RERANK_DIR = _Path(__file__).resolve().parents[2] / 'models/Vietnamese_Reranker'
-_st = {}
+def _cohere_rerank_scores(query: str, texts: list[str], timeout: int = 120) -> list[float]:
+    key = env('AGENT3_RERANK_API_KEY') or env('AGENT3_API_KEY')
+    if not key:
+        raise RuntimeError('Chưa cấu hình AGENT3_RERANK_API_KEY cho reranker API.')
+    endpoint = env('AGENT3_RERANK_URL', 'https://api.cohere.com/v2/rerank')
+    body = dict(model=env('AGENT3_RERANK_MODEL', 'rerank-v3.5'), query=query, documents=texts, top_n=len(texts))
+    req = urllib.request.Request(
+        endpoint,
+        data=json.dumps(body).encode(),
+        headers={'Content-Type': 'application/json', 'Authorization': f'Bearer {key}'},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            payload = json.loads(response.read())
+    except urllib.error.HTTPError as exc:
+        detail = exc.read(512).decode('utf-8', 'replace')
+        raise RuntimeError(f'Rerank API trả HTTP {exc.code}: {detail[:240]}') from exc
+    except (urllib.error.URLError, ConnectionError, TimeoutError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f'Không gọi được rerank API tại {endpoint}: {exc}') from exc
+    results = payload.get('results')
+    if not isinstance(results, list):
+        raise RuntimeError('Rerank API không trả về results hợp lệ.')
+    scores = [0.0] * len(texts)
+    for row in results:
+        index = row.get('index')
+        if isinstance(index, int) and 0 <= index < len(scores):
+            scores[index] = float(row.get('relevance_score', 0.0))
+    return scores
 
 
 def rerank_scores(query: str, texts: list[str]) -> list[float]:
-    """Cross-encoder relevance (AITeamVN/Vietnamese_Reranker, a fine-tune of bge-reranker-v2-m3).
+    """Use the configured API reranker."""
+    return _cohere_rerank_scores(query, texts)
 
-    The model waits in main memory and borrows the GPU only while scoring (about 1 GB, under a second), then gives it
-    back: kept resident it pushed the answering model (qwen3:8b, same 6 GB card) half onto the CPU and answers took
-    two to three times longer."""
-    import torch
-    if 'rr' not in _st:
-        from sentence_transformers import CrossEncoder
-        _st['rr'] = CrossEncoder(str(RERANK_DIR), device='cpu', max_length=512)
-        _st['rr'].model.half()
-    m = _st['rr']
-    pairs = [(query, t) for t in texts]
-    if not torch.cuda.is_available():
-        m.model.float()
-        return [float(x) for x in m.predict(pairs, batch_size=16, show_progress_bar=False)]
+
+def _openai_embed(texts: list[str], timeout: int, base_url: str, model: str, api_key: str) -> np.ndarray:
+    endpoint = base_url.rstrip('/')
+    if not endpoint.endswith('/embeddings'):
+        endpoint += '/embeddings'
+    req = urllib.request.Request(
+        endpoint,
+        data=json.dumps(dict(model=model, input=texts)).encode(),
+        headers={'Content-Type': 'application/json', 'Authorization': f'Bearer {api_key}'},
+    )
     try:
-        m.model.to('cuda')
-        m._target_device = torch.device('cuda')
-        out = m.predict(pairs, batch_size=16, show_progress_bar=False)
-    finally:
-        m.model.to('cpu')
-        m._target_device = torch.device('cpu')
-        torch.cuda.empty_cache()
-    return [float(x) for x in out]
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            payload = json.loads(response.read())
+    except urllib.error.HTTPError as exc:
+        detail = exc.read(512).decode('utf-8', 'replace')
+        raise RuntimeError(f'Embedding API trả HTTP {exc.code}: {detail[:240]}') from exc
+    except (urllib.error.URLError, ConnectionError, TimeoutError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f'Không gọi được embedding API tại {base_url}: {exc}') from exc
+    rows = payload.get('data')
+    if not isinstance(rows, list) or not rows:
+        raise RuntimeError('Embedding API không trả về data hợp lệ.')
+    rows = sorted(rows, key=lambda row: row.get('index', 0))
+    return np.asarray([row['embedding'] for row in rows], dtype=np.float32)
 
 
 def embed(texts: list[str], timeout: int = 300) -> np.ndarray:
     if len(texts) > 64:                                   # the server rejects very large batches
         return np.vstack([embed(texts[k:k + 64], timeout) for k in range(0, len(texts), 64)])
-    req = urllib.request.Request(URL, data=json.dumps(dict(model=MODEL, input=texts)).encode(), headers={'Content-Type': 'application/json'})
-    out = json.loads(urllib.request.urlopen(req, timeout=timeout).read())['embeddings']
-    v = np.asarray(out, dtype=np.float32)
+    provider = (env('AGENT3_EMBED_PROVIDER', 'openai') or 'openai').lower()
+    model = env('AGENT3_EMBED_MODEL', MODEL) or MODEL
+    base_url = env('AGENT3_EMBED_BASE_URL', URL) or URL
+    if provider not in ('openai', 'openai-compatible', 'openrouter'):
+        raise RuntimeError(f'Nhà cung cấp embedding không được hỗ trợ: {provider}')
+    api_key = env('AGENT3_EMBED_API_KEY') or env('AGENT3_API_KEY') or env('OPENAI_API_KEY')
+    if not api_key:
+        raise RuntimeError('Chưa cấu hình AGENT3_EMBED_API_KEY cho embedding API.')
+    v = _openai_embed(texts, timeout, base_url, model, api_key)
     return v / np.maximum(np.linalg.norm(v, axis=1, keepdims=True), 1e-9)
 
 

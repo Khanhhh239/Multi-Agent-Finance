@@ -10,7 +10,7 @@
   "valid": true,
   "errors": [],
   "corpus_acceptance": "REQUIRES_LABELED_RETRIEVAL_EVALUATION",
-  "model": "qwen3:8b",
+  "model": "qwen/qwen3.8-27b",
   "model_revision": "UNVERIFIED",
   "llm_enabled": false,
   "runtime": {

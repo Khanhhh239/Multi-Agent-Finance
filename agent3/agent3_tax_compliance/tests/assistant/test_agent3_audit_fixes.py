@@ -469,10 +469,10 @@ def test_sources_parse_amount_never_divides_comma_thousands_by_1000():
 # ==============================================================================
 def test_ai_classify_resilience_cache_model_name_and_prompt_injection(tmp_path):
     class BrokenLLM:
-        model = 'qwen3:8b'
+        model = 'qwen/qwen3.8-27b'
 
         def chat(self, system, user, schema=None, num_predict=900):
-            raise ai.LLMUnavailable('Ollama connection refused')
+            raise ai.LLMUnavailable('API provider unavailable')
 
     # 1. LLM failure degrades gracefully to deterministic classification with explicit fallback_reason
     res = ai.classify_lines(
@@ -497,19 +497,19 @@ def test_ai_classify_resilience_cache_model_name_and_prompt_injection(tmp_path):
             return json.dumps({'text': self.text}), {}
 
     cache_db = tmp_path / 'shared_cache.sqlite3'
-    llm_4b = NamedLLM('qwen3:4b', 'Giải thích từ bản nhỏ cho hóa đơn 33.000.000 đồng.')
-    llm_8b = NamedLLM('qwen3:8b', 'Giải thích từ bản lớn cho hóa đơn 33.000.000 đồng.')
+    llm_fast = NamedLLM('qwen/qwen3.8-27b', 'Giải thích từ API cho hóa đơn 33.000.000 đồng.')
+    llm_backup = NamedLLM('openai/gpt-4o-mini', 'Giải thích từ API dự phòng cho hóa đơn 33.000.000 đồng.')
     item = dict(title='Cảnh báo', detail='33.000.000 đồng', action='Kiểm tra', amount=None)
-    e4 = ai.explain(ai.AI(llm_4b, cache_db), item, None)
-    e8 = ai.explain(ai.AI(llm_8b, cache_db), item, None)
+    e4 = ai.explain(ai.AI(llm_fast, cache_db), item, None)
+    e8 = ai.explain(ai.AI(llm_backup, cache_db), item, None)
     assert e4.mode == 'AI_VERIFIED' and e8.mode == 'AI_VERIFIED'
-    assert llm_4b.calls == 1 and llm_8b.calls == 1 and e4.text != e8.text
+    assert llm_fast.calls == 1 and llm_backup.calls == 1 and e4.text != e8.text
 
     # 3. Prompt injection in <THHDVu> is wrapped in <untrusted_data> and forced unverified KHONG_RO even if LLM says CO
     captured = {}
 
     class GullibleLLM:
-        model = 'qwen3:8b'
+        model = 'qwen/qwen3.8-27b'
 
         def chat(self, system, user, schema=None, num_predict=900):
             captured['user'] = user
@@ -530,7 +530,7 @@ def test_ai_classify_resilience_cache_model_name_and_prompt_injection(tmp_path):
 
 def test_bank_proposals_continues_after_json_or_context_error(tmp_path):
     class FlakyLLM:
-        model = 'qwen3:8b'
+        model = 'qwen/qwen3.8-27b'
 
         def __init__(self):
             self.n = 0
@@ -570,10 +570,10 @@ def test_scoped_remember_confirmed_only_persists_on_r12_findings(tmp_path, monke
     (ws / 'ai').mkdir(exist_ok=True)
     (ws / 'ai' / 'line_labels.json').write_text(
         json.dumps({
-            r08_key: dict(model='qwen3:8b', version='v3', labels=[
+            r08_key: dict(model='qwen/qwen3.8-27b', version='v3', labels=[
                 dict(line='Máy cắt gạch', category='CA_NHAN', business_use='KHONG', reason='test r08 line', verified=True)
             ]),
-            s18_key: dict(model='qwen3:8b', version='v3', labels=[
+            s18_key: dict(model='qwen/qwen3.8-27b', version='v3', labels=[
                 dict(line='Điện thoại di động iPhone 16 Pro Max 256GB', category='CA_NHAN', business_use='KHONG',
                      reason='iPhone có thể dùng cá nhân', verified=True)
             ]),

@@ -2,7 +2,7 @@
 
 Một công ty phần mềm, khai thuế theo quý, quý 3 năm 2026. Làm tuần tự 7 bước dưới đây, khoảng 10 phút. Mỗi bước ghi rõ **bấm gì** và **phải thấy gì**; nếu khác, đó là lỗi.
 
-Cần: ứng dụng đang chạy (`chay_agent3.bat`). Bước 6 và 7 cần Ollama.
+Cần: ứng dụng đang chạy (`chay_agent3.bat`) và Agent 3 đã được cấu hình API key.
 
 ## Bước 1. Đặt mật khẩu quản trị (một lần)
 
@@ -42,7 +42,7 @@ Phải thấy:
 
 Vào **Việc cần xử lý**. Danh sách có ô chọn "Mọi vấn đề" để lọc theo nhóm, ô tìm kiếm và ô chọn tháng. Bấm hóa đơn **396** (bản quyền phần mềm 52.800.000 đồng, trả tiền mặt). Khung bên phải cho: lời giải thích dễ hiểu, bảng **"Nên xử lý thế nào để ít thiệt hại nhất"** (tự khai bổ sung ngay so với để cơ quan thuế phát hiện), các căn cứ. Chọn **Không kê khai khấu trừ hóa đơn này**, ghi lý do và người duyệt, bấm **Lưu**: thuế có nguy cơ giảm 4.800.000 đồng.
 
-## Bước 6. Dùng AI (cần Ollama)
+## Bước 6. Dùng AI (cần API key)
 
 Vào **Việc cần xử lý**, khung "Trợ lý AI chạy trên máy":
 1. Bấm **Phân loại dòng hàng** (khoảng 2 phút). Phải thấy việc **"Hàng hóa có thể không phục vụ kinh doanh"** cho hóa đơn 264 (máy chơi game PlayStation 5 Pro, tivi OLED 65 inch).

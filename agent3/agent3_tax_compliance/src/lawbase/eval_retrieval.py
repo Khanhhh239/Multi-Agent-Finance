@@ -1,5 +1,5 @@
 """Retrieval only, no model: is an expected provision among the passages packed for the model (hit), and at which rank.
-Compares keyword search with hybrid (keyword + bge-m3) on the development set and the held-out set.
+Compares keyword search with hybrid (keyword + API embeddings) on the development set and the held-out set.
 
   python -m src.lawbase.eval_retrieval
 """
@@ -14,8 +14,8 @@ from .sync import DEFAULT_DB, PROJECT
 
 SETS = {'phát triển': PROJECT / 'configs/lawbase/eval_questions.json', 'giữ lại': PROJECT / 'configs/lawbase/eval_questions_holdout.json',
         'giữ lại 2': PROJECT / 'configs/lawbase/eval_questions_holdout2.json'}
-CONFIGS = [('từ khóa', dict(hybrid=False)), ('lai bge-m3', dict(hybrid=True)),
-           ('lai bge-m3 + reranker', dict(hybrid=True, rerank=True))]
+CONFIGS = [('từ khóa', dict(hybrid=False)), ('lai API embedding', dict(hybrid=True)),
+           ('lai API embedding + reranker', dict(hybrid=True, rerank=True))]
 
 
 def first_rank(passages, expected):

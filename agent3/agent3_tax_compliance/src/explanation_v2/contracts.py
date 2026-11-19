@@ -9,10 +9,10 @@ class Policy(Contract):
     version: Identifier = 'explanation-v2-1'
     enabled: bool = False
     style: Literal['CONTROLLED_SELECTION','NATURAL_DRAFT'] = 'CONTROLLED_SELECTION'
-    provider: Literal['ollama'] = 'ollama'
-    endpoint: str = 'http://127.0.0.1:11434/api/chat'
-    model: str = 'qwen3:8b'
-    model_revision: str = 'UNVERIFIED'
+    provider: Literal['openai'] = 'openai'
+    endpoint: str = 'https://api.groq.com/openai/v1/chat/completions'
+    model: str = 'qwen/qwen3.8-27b'
+    model_revision: str = 'api:qwen/qwen3.8-27b'
     timeout_seconds: float = Field(default=300, gt=0, le=300)
     max_output_tokens: int = Field(default=1536, ge=128, le=4096)
     max_context_bytes: int = Field(default=48000, ge=1024, le=128000)

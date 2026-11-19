@@ -22,11 +22,11 @@ class StrictModel(BaseModel):
 
 
 class EmbeddingConfig(StrictModel):
-    provider: Literal["hashing", "ollama", "openai", "mock"] = "hashing"
+    provider: Literal["hashing", "openai", "mock"] = "hashing"
     model: str = Field(default="hashing-v1", min_length=1)
     model_version: str = Field(default="1", min_length=1)
     dimensions: int = Field(default=768, ge=64)
-    base_url: str = Field(default="http://localhost:11434", min_length=1)
+    base_url: str = Field(default="https://api.openai.com/v1", min_length=1)
     api_key: str | None = Field(default=None, exclude=True, repr=False)
     query_input_type: str | None = Field(default=None, min_length=1)
     document_input_type: str | None = Field(default=None, min_length=1)
@@ -34,13 +34,6 @@ class EmbeddingConfig(StrictModel):
     timeout_s: float = Field(default=30.0, gt=0, allow_inf_nan=False)
     cache_enabled: bool = True
     cache_path: Path = PROJECT_DIR / ".cache" / "metric_selection_index.npz"
-
-    @model_validator(mode="before")
-    @classmethod
-    def set_default_model(cls, data: object) -> object:
-        if isinstance(data, dict) and data.get("provider") == "ollama" and "model" not in data:
-            return {**data, "model": "qwen3-embedding:0.6b"}
-        return data
 
 
 class RetrievalConfig(StrictModel):
@@ -102,9 +95,9 @@ class FewshotConfig(StrictModel):
 
 
 class LLMSelectionConfig(StrictModel):
-    provider: Literal["ollama", "openai", "mock"] = "ollama"
-    base_url: str = "http://localhost:11434"
-    model: str = "qwen3:4b"
+    provider: Literal["openai", "mock"] = "openai"
+    base_url: str = "https://api.groq.com/openai/v1"
+    model: str = "qwen/qwen3.8-27b"
     api_key: str | None = Field(default=None, exclude=True, repr=False)
     max_tokens: int = Field(default=1024, ge=64)
     temperature: float = Field(default=0.0, ge=0)
@@ -197,6 +190,25 @@ def load_config(path: str | Path | None = None) -> MetricSelectionConfig:
         raise ConfigurationError(
             f"Cannot load metric-selection config {config_path}: {exc}"
         ) from exc
+
+
+def require_api_key_config(config: MetricSelectionConfig) -> None:
+    """Reject non-cloud or unauthenticated configs at a web entrypoint."""
+    requirements = (
+        ("LLM", config.llm.provider, config.llm.api_key),
+        ("embedding", config.embedding.provider, config.embedding.api_key),
+    )
+    missing = [
+        f"{name} provider must be openai-compatible"
+        if provider != "openai"
+        else f"{name} API key is missing"
+        for name, provider, api_key in requirements
+        if provider != "openai" or not api_key
+    ]
+    if missing:
+        raise ConfigurationError(
+            "Agent 4 web requires authenticated API providers: " + "; ".join(missing)
+        )
 
 
 def _absolute_project_path(path: Path) -> Path:

@@ -25,14 +25,13 @@ from .recovery import SelectionTrace, _select_from_retrieval, select_metrics_wit
 def _e0_pipeline():
     config = load_config()
     if (
-        config.retrieval.mode != "full_catalog"
-        or config.fewshot.enabled
-        or config.llm.provider != "ollama"
-        or config.llm.model != "qwen3:4b"
+        config.fewshot.enabled
+        or config.llm.provider != "openai"
+        or not config.llm.api_key
         or config.llm.temperature != 0
     ):
         raise ConfigurationError(
-            "E0 requires full catalog, Ollama qwen3:4b and zero-shot selection."
+            "E0 requires an authenticated OpenAI-compatible API and zero-shot selection."
         )
     # E0 is the historical zero-shot control. Keep its wire format and token cap.
     llm = config.llm.model_copy(
@@ -117,9 +116,7 @@ async def _predict_online(
         query_context=request["query_context"],
     )
     retrieval = (
-        await asyncio.to_thread(retrieve)
-        if provider.config.provider in ("ollama", "openai")
-        else retrieve()
+        await asyncio.to_thread(retrieve) if provider.config.provider == "openai" else retrieve()
     )
     if retrieval["status"] == "retrieval_unavailable":
         return {

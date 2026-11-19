@@ -8,7 +8,7 @@ Covers:
    hardened assert_safe_select SQL tokenizer, and DuckDB read-only / no-external-access sandbox.
 3. All 7 MPX10 branches, 11 departments, C/V partner codes, refined _UNSAFE_OUTPUT sanitizer,
    and deterministic reference_date-anchored Vietnamese relative time resolution.
-4. Non-blocking asyncio.to_thread OpenAI retrieval, offline Ollama GovernedLexicalSelector fallback,
+   4. Non-blocking asyncio.to_thread OpenAI retrieval, remote-provider GovernedLexicalSelector fallback,
    safe_display_text normalization, answer numeric & sign consistency validator, and 100% local-first
    selection.yaml + selection_cloud.yaml + dual env-var support.
 """
@@ -20,7 +20,6 @@ import time
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
-from urllib.parse import urlparse
 
 import duckdb
 import httpx
@@ -40,6 +39,7 @@ from agent4.metric_selection.config import (
     EmbeddingConfig,
     LLMSelectionConfig,
     MetricSelectionConfig,
+    RecoveryConfig,
     RetrievalConfig,
     load_config,
 )
@@ -2155,8 +2155,9 @@ async def test_openai_embedding_runs_in_worker_thread_without_blocking_event_loo
 
     emb_cfg = EmbeddingConfig(
         provider="openai",
-        base_url="http://localhost:11434/v1",
+        base_url="https://embedding.test/v1",
         model="local-embed",
+        api_key="test-embedding-key",
         dimensions=64,
         cache_enabled=False,
         cache_path=tmp_path / "idx.npz",
@@ -2221,7 +2222,7 @@ async def test_openai_embedding_runs_in_worker_thread_without_blocking_event_loo
 
 
 @pytest.mark.asyncio
-async def test_offline_ollama_falls_back_to_governed_lexical_selector_preserving_filters(
+async def test_unavailable_remote_provider_falls_back_to_governed_lexical_selector_preserving_filters(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     catalog = MetricCatalog()
@@ -2237,9 +2238,13 @@ async def test_offline_ollama_falls_back_to_governed_lexical_selector_preserving
         lambda **kw: orig_async_client(transport=httpx.MockTransport(raise_connect_error), **kw),
     )
 
-    cfg = load_config()
-    assert cfg.recovery.degraded_lexical_fallback is True
-    assert cfg.recovery.llm_lexical_fallback is True
+    cfg = MetricSelectionConfig(
+        retrieval=RetrievalConfig(mode="full_catalog"),
+        llm=LLMSelectionConfig(
+            provider="openai", base_url="https://model.test", api_key="test-llm-key"
+        ),
+        recovery=RecoveryConfig(degraded_lexical_fallback=True, llm_lexical_fallback=True),
+    )
 
     question = "Doanh thu thuần chi nhánh NA của khách hàng C000012 tháng 08/2026?"
     intake = query_intake({"api_version": "v1", "locale": "vi-VN", "question": question})
@@ -2391,9 +2396,9 @@ def test_local_first_selection_yaml_cloud_separation_and_dual_env_vars(
         monkeypatch.delenv(key, raising=False)
 
     default_cfg = load_config(DEFAULT_CONFIG_PATH)
-    assert urlparse(default_cfg.embedding.base_url).hostname in ("localhost", "127.0.0.1")
-    assert urlparse(default_cfg.llm.base_url).hostname in ("localhost", "127.0.0.1")
-    assert default_cfg.llm.provider == "ollama"
+    assert default_cfg.embedding.base_url == "https://openrouter.ai/api/v1"
+    assert default_cfg.llm.base_url == "https://api.groq.com/openai/v1"
+    assert default_cfg.llm.provider == "openai"
     assert default_cfg.recovery.degraded_lexical_fallback is True
     assert default_cfg.recovery.llm_lexical_fallback is True
 
@@ -2419,7 +2424,7 @@ def test_local_first_selection_yaml_cloud_separation_and_dual_env_vars(
 
 
 @pytest.mark.asyncio
-async def test_governed_pipeline_offline_ollama_and_relative_vietnamese_time_e2e(
+async def test_governed_pipeline_unavailable_remote_provider_and_relative_vietnamese_time_e2e(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     from agent4.pipeline import run_governed_pipeline
@@ -2438,7 +2443,7 @@ async def test_governed_pipeline_offline_ollama_and_relative_vietnamese_time_e2e
         )
 
     def raise_connect_error(request: httpx.Request) -> httpx.Response:
-        raise httpx.ConnectError("Ollama offline", request=request)
+        raise httpx.ConnectError("Remote provider offline", request=request)
 
     orig_async_client = httpx.AsyncClient
     monkeypatch.setattr(
@@ -2456,7 +2461,13 @@ async def test_governed_pipeline_offline_ollama_and_relative_vietnamese_time_e2e
         _CFO_CLAIMS,
         _CFO_POLICY,
         warehouses={"minh-phat": db_path},
-        selection_config=load_config(DEFAULT_CONFIG_PATH),
+        selection_config=MetricSelectionConfig(
+            retrieval=RetrievalConfig(mode="full_catalog"),
+            llm=LLMSelectionConfig(
+                provider="openai", base_url="https://model.test", api_key="test-llm-key"
+            ),
+            recovery=RecoveryConfig(llm_lexical_fallback=True),
+        ),
     )
     assert resp["status"] == "ready", resp
     assert resp["data"]["rows"] == [{"net_revenue": "75000000.00"}]

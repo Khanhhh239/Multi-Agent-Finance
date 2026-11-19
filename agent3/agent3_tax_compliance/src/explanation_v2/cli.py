@@ -1,11 +1,10 @@
-"""Offline corpus integrity inspection; local model probe never sends invoices."""
+"""Offline corpus integrity inspection and API configuration check."""
 import argparse
-import http.client
 import json
-from urllib.parse import urlparse
 from .service import load_config, implementation_sha
 from ..legal_registry.registry import load_registry
 from ..canonicalization.derive import sha
+from ..runtime_config import env
 
 
 def inspect(policy, corpus, registry):
@@ -29,26 +28,14 @@ def inspect(policy, corpus, registry):
 
 
 def probe(policy):
-    url=urlparse(policy.endpoint)
-    if url.scheme!='http' or url.hostname not in ('127.0.0.1','::1') or url.username or url.password:
-        return dict(status='LOCAL_ENDPOINT_REQUIRED')
-    connection=http.client.HTTPConnection(url.hostname,url.port or 80,timeout=2)
-    try:
-        connection.request('GET','/api/tags')
-        response=connection.getresponse();raw=response.read(64001)
-        if response.status!=200 or len(raw)>64000:return dict(status='MODEL_MANIFEST_UNAVAILABLE')
-        models=json.loads(raw).get('models',[])
-        model=next((m for m in models if m.get('name')==policy.model),None)
-        if not model:return dict(status='MODEL_NOT_INSTALLED')
-        return dict(status='MODEL_INSTALLED',model=policy.model,digest=model.get('digest'),
-                    pin_matches=model.get('digest')==policy.model_revision)
-    except (OSError,ValueError,TypeError):return dict(status='PROVIDER_UNAVAILABLE')
-    finally:connection.close()
+    key = env('AGENT3_LLM_API_KEY') or env('AGENT3_API_KEY') or env('OPENAI_API_KEY') or env('GROQ_API_KEY')
+    return dict(status='API_CONFIGURED' if policy.provider == 'openai' and key else 'API_KEY_MISSING',
+                provider=policy.provider, endpoint=policy.endpoint, model=policy.model)
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--probe',action='store_true',help='Inspect loopback Ollama manifest, no document sent')
+    parser.add_argument('--probe',action='store_true',help='Check API configuration without sending document data')
     args=parser.parse_args()
     policy,corpus=load_config();result=inspect(policy,corpus,load_registry())
     if args.probe:result['runtime']=probe(policy)

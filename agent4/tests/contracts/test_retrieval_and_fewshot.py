@@ -152,7 +152,11 @@ def _assert_embedding_unavailable(error: ProductionContractError) -> None:
 class TestEmbeddingProviderBoundary:
     def test_configuration_and_request_boundaries(self) -> None:
         config = load_config().embedding
-        assert (config.provider, config.model, config.dimensions) == ("hashing", "hashing-v1", 768)
+        assert (config.provider, config.model, config.dimensions) == (
+            "openai",
+            "nvidia/nemotron-3.5-embed-8b:free",
+            4096,
+        )
         assert config.cache_path.is_absolute()
         provider = ProductionEmbeddingProvider(
             EmbeddingConfig(provider="mock", normalize=False), max_batch_size=1, max_text_length=20
@@ -175,28 +179,33 @@ class TestEmbeddingProviderBoundary:
                 provider.embed(invalid)
             assert exc_info.value.code == "invalid_request"
 
-    def test_ollama_request_and_normalization_with_mock_transport(self) -> None:
+    def test_openai_request_and_normalization_with_mock_transport(self) -> None:
         config = EmbeddingConfig(
-            provider="ollama", dimensions=64, base_url="http://embedding.test/"
+            provider="openai",
+            model="embed-test",
+            dimensions=64,
+            base_url="http://embedding.test/",
+            api_key="test-key",
         )
 
         def embed(request: httpx.Request) -> httpx.Response:
             assert request.method == "POST"
-            assert str(request.url) == "http://embedding.test/api/embed"
+            assert str(request.url) == "http://embedding.test/v1/embeddings"
             assert json.loads(request.content) == {
-                "model": "qwen3-embedding:0.6b",
+                "model": "embed-test",
                 "input": ["doanh thu tháng 8"],
                 "dimensions": 64,
-                "truncate": False,
             }
-            return httpx.Response(200, json={"embeddings": [[3, 4] + [0] * 62]})
+            return httpx.Response(
+                200, json={"data": [{"index": 0, "embedding": [3, 4] + [0] * 62}]}
+            )
 
         provider = ProductionEmbeddingProvider(config, transport=httpx.MockTransport(embed))
         res = provider.embed(_embedding_request(provider))
         assert res["vectors"][0]["values"] == pytest.approx([0.6, 0.8] + [0] * 62)
 
     @pytest.mark.parametrize("failure", ["connection", "timeout", "status", "shape", "zero", "nan"])
-    def test_ollama_failure_is_unavailable(self, failure: str) -> None:
+    def test_openai_failure_is_unavailable(self, failure: str) -> None:
         def fail(request: httpx.Request) -> httpx.Response:
             if failure == "connection":
                 raise httpx.ConnectError("private connection details", request=request)
@@ -205,13 +214,26 @@ class TestEmbeddingProviderBoundary:
             if failure == "status":
                 return httpx.Response(503)
             if failure == "nan":
-                return httpx.Response(200, content=b'{"embeddings": [[NaN' + b",0" * 63 + b"]]}")
+                return httpx.Response(
+                    200, content=b'{"data": [{"index": 0, "embedding": [NaN' + b",0" * 63 + b"]}]}"
+                )
             return httpx.Response(
-                200, json={"embeddings": [[0] * (64 if failure == "zero" else 1)]}
+                200,
+                json={
+                    "data": [
+                        {
+                            "index": 0,
+                            "embedding": [0] * (64 if failure == "zero" else 1),
+                        }
+                    ]
+                },
             )
 
         provider = ProductionEmbeddingProvider(
-            EmbeddingConfig(provider="ollama", dimensions=64), transport=httpx.MockTransport(fail)
+            EmbeddingConfig(
+                provider="openai", model="embed-test", dimensions=64, api_key="test-key"
+            ),
+            transport=httpx.MockTransport(fail),
         )
         with pytest.raises(ProductionContractError) as exc_info:
             provider.embed(_embedding_request(provider))
@@ -965,7 +987,15 @@ class TestFewShotGovernance:
         config = tmp_path / "selection.yaml"
         config.write_text(
             yaml.safe_dump(
-                {"embedding": {"cache_path": str(index)}, "fewshot": {"max_examples": 1}}
+                {
+                    "embedding": {"cache_path": str(index)},
+                    "fewshot": {"max_examples": 1},
+                    "llm": {
+                        "provider": "openai",
+                        "base_url": "https://model.test",
+                        "api_key": "test-key",
+                    },
+                }
             )
         )
         monkeypatch.setenv("AGENT4_METRIC_SELECTION_CONFIG", str(config))
@@ -983,7 +1013,16 @@ class TestFewShotGovernance:
                 "unsupported_reason": None,
             }
             return httpx.Response(
-                200, json={"done_reason": "stop", "message": {"content": json.dumps(output)}}
+                200,
+                json={
+                    "choices": [
+                        {
+                            "finish_reason": "stop",
+                            "message": {"content": json.dumps(output)},
+                        }
+                    ],
+                    "usage": {"prompt_tokens": 10, "completion_tokens": 5},
+                },
             )
 
         monkeypatch.setattr(

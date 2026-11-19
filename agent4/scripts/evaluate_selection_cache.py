@@ -21,8 +21,8 @@ def main() -> int:
     parser.add_argument("--model-version", required=True)
     args = parser.parse_args()
     config = load_config(args.config)
-    if config.llm.provider != "ollama" or not config.cache_enabled:
-        parser.error("Choose a real Ollama preset with cache enabled.")
+    if config.llm.provider != "openai" or not config.llm.api_key or not config.cache_enabled:
+        parser.error("Choose an authenticated API preset with cache enabled.")
     args.output_dir.mkdir(parents=True, exist_ok=False)
     os.environ["AGENT4_METRIC_SELECTION_CONFIG"] = str(args.config)
     common = [

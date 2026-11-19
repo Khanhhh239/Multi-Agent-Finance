@@ -3,7 +3,7 @@
   Khởi động toàn bộ nền tảng Sổ Son (Portal + 4 Agent) chỉ với 1 lệnh duy nhất.
 .DESCRIPTION
   - Tự động dọn tiến trình cũ bị kẹt trên cổng 8800, 8011, 8766, 8640, 8040
-  - Tự động bật Ollama (nếu đã cài mà chưa chạy)
+  - Nạp API-key configuration cho các agent
   - Tự động đồng bộ cấu hình, hồ sơ doanh nghiệp, kho dữ liệu & mô hình Agent 1–4
   - Khởi chạy Portal cùng cả 4 Agent và mở trình duyệt tại http://127.0.0.1:8800
 .EXAMPLE
@@ -53,17 +53,6 @@ $missingVenv = @('agent1', 'agent2', 'agent3', 'agent4') | Where-Object { -not (
 if ($missingVenv.Count -gt 0) {
     Write-Host "[setup] Thiếu môi trường Python cho: $($missingVenv -join ', '). Đang chạy setup_all.ps1..." -ForegroundColor Cyan
     & "$PSScriptRoot\setup_all.ps1" -SkipLawSync
-}
-
-# Tự động bật Ollama nếu có trên máy nhưng chưa lắng nghe cổng 11434
-$ollamaOpen = $null -ne (Get-NetTCPConnection -LocalPort 11434 -State Listen -ErrorAction SilentlyContinue)
-if (-not $ollamaOpen) {
-    $ollamaCmd = Get-Command ollama -ErrorAction SilentlyContinue
-    if ($ollamaCmd) {
-        Write-Host "[ollama] Khởi động dịch vụ Ollama nền..." -ForegroundColor Cyan
-        Start-Process -FilePath $ollamaCmd.Source -ArgumentList 'serve' -WindowStyle Hidden
-        Start-Sleep -Seconds 2
-    }
 }
 
 # Chọn Python điều phối (ưu tiên agent2/.venv có sẵn cryptography cho WebAuthn, hoặc python hệ thống)

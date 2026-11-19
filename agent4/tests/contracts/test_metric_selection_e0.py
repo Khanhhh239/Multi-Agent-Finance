@@ -152,14 +152,15 @@ async def test_e0_uses_only_authorized_candidates_and_scores_validated_output(
 ):
     client = httpx.AsyncClient
 
-    def ollama(request):
+    monkeypatch.setenv("AGENT4_LLM_API_KEY", "test-e0-key")
+
+    def openai(request):
         body = json.loads(request.content)
-        assert request.url.path == "/api/chat"
-        assert body["model"] == "qwen3:4b"
-        assert body["format"] == "json"
-        assert body["think"] is False
-        assert body["options"]["temperature"] == 0
-        assert body["options"]["seed"] == 1234
+        assert request.url.path == "/openai/v1/chat/completions"
+        assert body["model"] == "qwen/qwen3.8-27b"
+        assert body["response_format"] == {"type": "json_object"}
+        assert body["temperature"] == 0
+        assert body["seed"] == 1234
         prompt = json.loads(body["messages"][1]["content"])
         assert prompt["question"] == "Doanh thu thuần?"
         assert prompt["dynamic_fewshot"] == {"examples": []}
@@ -181,17 +182,20 @@ async def test_e0_uses_only_authorized_candidates_and_scores_validated_output(
         return httpx.Response(
             200,
             json={
-                "message": {"content": json.dumps(draft)},
-                "done_reason": "stop",
-                "prompt_eval_count": 100,
-                "eval_count": 20,
+                "choices": [
+                    {
+                        "message": {"content": json.dumps(draft)},
+                        "finish_reason": "stop",
+                    }
+                ],
+                "usage": {"prompt_tokens": 100, "completion_tokens": 20},
             },
         )
 
     monkeypatch.setattr(
         httpx,
         "AsyncClient",
-        lambda **kwargs: client(transport=httpx.MockTransport(ollama), **kwargs),
+        lambda **kwargs: client(transport=httpx.MockTransport(openai), **kwargs),
     )
     prediction = Prediction.model_validate(
         await predict_e0(

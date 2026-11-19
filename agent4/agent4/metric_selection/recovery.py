@@ -121,7 +121,7 @@ def _retrieval_unavailable() -> ContractError:
 
 
 class GovernedLexicalSelector:
-    """Deterministic governed fallback selector when the local LLM daemon is offline."""
+    """Deterministic governed fallback selector when the remote model is unavailable."""
 
     _OUT_OF_DOMAIN = re.compile(
         r"\b(?:dự báo|forecast|tỷ giá|giá cổ phiếu|bitcoin|ev/ebitda|altman)\b",

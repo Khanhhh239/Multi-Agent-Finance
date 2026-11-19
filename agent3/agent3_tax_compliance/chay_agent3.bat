@@ -9,11 +9,11 @@ if not exist ".venv\Scripts\python.exe" (
   pause
   exit /b 1
 )
-where ollama >nul 2>nul
+".venv\Scripts\python.exe" -c "from src.runtime_config import load_env_file, require_api_keys; load_env_file(); require_api_keys()"
 if errorlevel 1 (
-  echo [Canh bao] Chua cai Ollama: phan kiem tra hoa don van chay, phan hoi dap luat va AI se dung cau mau.
-) else (
-  start "" /min ollama serve
+  echo [Loi] Agent 3 can AGENT3_LLM_API_KEY va AGENT3_EMBED_API_KEY trong agent3\.env.
+  pause
+  exit /b 1
 )
 start "" "http://127.0.0.1:8640"
 ".venv\Scripts\python.exe" -m src.assistant.web

@@ -161,7 +161,7 @@ const EDITORS = {
         .map((tr) => ({ date: tr.querySelector('.f-date').value, name: tr.querySelector('.f-name').value.trim(), verified: tr.querySelector('.f-ver').checked })).filter((r) => r.date)])) }),
   },
   law_topics: {
-    help: 'Tin luật mới được lọc theo độ gần nghĩa giữa trích yếu văn bản và các chủ đề dưới đây (mô hình bge-m3 chạy trên máy). Viết mỗi chủ đề một dòng, càng cụ thể càng tốt. "Chủ đề loại trừ" là từ khóa của văn bản khu vực công cần bỏ qua.',
+    help: 'Tin luật mới được lọc theo độ gần nghĩa giữa trích yếu văn bản và các chủ đề dưới đây (embedding API). Viết mỗi chủ đề một dòng, càng cụ thể càng tốt. "Chủ đề loại trừ" là từ khóa của văn bản khu vực công cần bỏ qua.',
     render: (d) => `<div class="cds--form-item"><label class="cds--label" for="topics">Chủ đề liên quan (mỗi dòng một chủ đề)</label><textarea class="cds--text-area" id="topics" rows="12">${esc(d.topics.join('\n'))}</textarea></div>
       <div class="cds--form-item"><label class="cds--label" for="noise">Chủ đề loại trừ (mỗi dòng một cụm từ, viết không dấu)</label><textarea class="cds--text-area" id="noise" rows="6">${esc((d.noise || []).join('\n'))}</textarea></div>`,
     read: (d) => ({ ...d, topics: lines($('#topics').value), noise: lines($('#noise').value) }),

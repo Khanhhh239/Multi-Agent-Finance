@@ -1,6 +1,6 @@
 """Measure retrieval and grounded answering on hand-checked questions (configs/lawbase/eval_questions.json).
 
-  python -m src.lawbase.evaluate_rag [--db PATH] [--think]
+  python -m src.lawbase.evaluate_rag [--db PATH]
 """
 import argparse
 import json
@@ -8,7 +8,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
-from .llm import Ollama
+from .llm import configured_llm
 from .rag import answer, norm
 from .store import Corpus
 from .sync import DEFAULT_DB, PROJECT
@@ -27,7 +27,7 @@ def hit(passages, expected):
 def run(db=DEFAULT_DB, think=False, out=sys.stdout, questions=QUESTIONS):
     corpus = Corpus(db)
     qs = json.loads(Path(questions).read_text(encoding='utf-8'))['questions']
-    llm = Ollama(think=think)
+    llm = configured_llm()
     rows = []
     for q in qs:
         r = answer(corpus, q['q'], date.fromisoformat(q['as_of']), llm)
@@ -54,7 +54,6 @@ if __name__ == '__main__':
     sys.stdout.reconfigure(encoding='utf-8')
     p = argparse.ArgumentParser()
     p.add_argument('--db', default=str(DEFAULT_DB))
-    p.add_argument('--think', action='store_true')
     p.add_argument('--questions', default=str(QUESTIONS))
     a = p.parse_args()
-    run(Path(a.db), a.think, questions=a.questions)
+    run(Path(a.db), questions=a.questions)

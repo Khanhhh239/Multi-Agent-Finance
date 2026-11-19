@@ -441,14 +441,26 @@ class TestAgent4ProxyAndLaunch:
         assert calls[1]['question'] == 'gross_profit'
 
     def test_launch_spec_agent4_sets_both_selection_config_env_vars(self, isolated_portal: Path):
-        with patch.dict(os.environ, {}, clear=False):
+        with patch.dict(
+            os.environ,
+            {'AGENT4_LLM_API_KEY': 'test-llm-key', 'AGENT4_EMBED_API_KEY': 'test-embed-key'},
+            clear=False,
+        ):
             os.environ.pop('AGENT4_SELECTION_CONFIG', None)
             os.environ.pop('AGENT4_METRIC_SELECTION_CONFIG', None)
             _, _, env = server.launch_spec('agent4')
-            assert env['AGENT4_SELECTION_CONFIG'] == 'config/eval_governed_lexical.yaml'
-            assert env['AGENT4_METRIC_SELECTION_CONFIG'] == 'config/eval_governed_lexical.yaml'
+            assert env['AGENT4_SELECTION_CONFIG'] == 'config/selection.yaml'
+            assert env['AGENT4_METRIC_SELECTION_CONFIG'] == 'config/selection.yaml'
 
-        with patch.dict(os.environ, {'AGENT4_METRIC_SELECTION_CONFIG': 'config/custom_local.yaml'}, clear=False):
+        with patch.dict(
+            os.environ,
+            {
+                'AGENT4_METRIC_SELECTION_CONFIG': 'config/custom_local.yaml',
+                'AGENT4_LLM_API_KEY': 'test-llm-key',
+                'AGENT4_EMBED_API_KEY': 'test-embed-key',
+            },
+            clear=False,
+        ):
             os.environ.pop('AGENT4_SELECTION_CONFIG', None)
             _, _, env_override = server.launch_spec('agent4')
             assert env_override['AGENT4_SELECTION_CONFIG'] == 'config/custom_local.yaml'

@@ -229,10 +229,10 @@ get_catalog_hash()
 - Batch size và text length phải có giới hạn.
 - Không gửi raw financial data nhạy cảm nếu provider chưa được phê duyệt.
 - Provider failure là `unavailable`, không phải `unsupported`.
-- Provider remote dùng Ollama `/api/embed` hoặc OpenAI-compatible
-  `/v1/embeddings`. Batch OpenAI ghép vector theo `index` trong response.
+- Provider remote dùng OpenAI-compatible `/v1/embeddings`. Batch ghép vector
+  theo `index` trong response.
 - Khi caching được bật, hybrid/dense retrieval có thể tự tạo lại index thiếu
-  hoặc stale cho Ollama/OpenAI. Archive hỏng trả `retrieval_unavailable`.
+  hoặc stale cho API provider. Archive hỏng trả `retrieval_unavailable`.
   Index remote ghi dấu nhận dạng backend để phát hiện khi đổi endpoint.
 
 ## 6. Metric Document Builder Contract
@@ -621,10 +621,10 @@ fewshot_unavailable
 - Không tạo metric mới.
 - Không tự thay đổi view, tenant hoặc role.
 - LLM output luôn phải qua Metrics Validation.
-- Selector remote dùng Ollama `/api/chat` hoặc OpenAI-compatible
-  `/v1/chat/completions`. Selector bỏ khối thinking và chuẩn hóa trường tin
-  nhắn theo trạng thái trước khi kiểm tra schema. Nội dung giải mã được kiểm
-  tra an toàn trước khi bỏ trường tin nhắn thừa.
+- Selector remote dùng OpenAI-compatible `/v1/chat/completions`. Selector
+  bỏ khối thinking và chuẩn hóa trường tin nhắn theo trạng thái trước khi
+  kiểm tra schema. Nội dung giải mã được kiểm tra an toàn trước khi bỏ trường
+  tin nhắn thừa.
 - `metric_ids` gồm các định danh duy nhất. Trạng thái `ambiguous` và `unsupported` phải có danh sách rỗng. Tin nhắn nếu có phải đúng với trạng thái tương ứng.
 - Pipeline tích hợp có tối đa một hành động recovery mỗi request. Retry định dạng chỉ dùng lời nhắc schema cố định và không đưa bản nháp lỗi vào prompt.
 

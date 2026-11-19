@@ -4,7 +4,7 @@ Agent 3 là trợ lý thuế cho doanh nghiệp nhỏ và vừa: rà hóa đơn,
 
 ## Bật ứng dụng
 
-Bấm đúp `chay_agent3.bat` (trong thư mục `agent3_tax_compliance`). Trình duyệt mở `http://127.0.0.1:8640`. Cần Ollama đang chạy nếu muốn dùng các phần AI.
+Bấm đúp `chay_agent3.bat` (trong thư mục `agent3_tax_compliance`). Trình duyệt mở `http://127.0.0.1:8640`. Cần điền các API key của Agent 3 trong `agent3/.env` trước khi chạy.
 
 ## Hai cách demo
 

@@ -1,6 +1,6 @@
 """Measure the AI layer on hand-labelled data with dual-tier reporting (clear statutory cases vs ambiguous boundary cases).
 
-  python -m src.assistant.evaluate_ai lines          A1 line purpose with the local Ollama model (falls back if offline)
+  python -m src.assistant.evaluate_ai lines          A1 line purpose with the configured API model
   python -m src.assistant.evaluate_ai deterministic  A1 line purpose using the deterministic fallback classifier only
   python -m src.assistant.evaluate_ai explain WS     A4 share of explanations that pass the number check on a workspace report
 """

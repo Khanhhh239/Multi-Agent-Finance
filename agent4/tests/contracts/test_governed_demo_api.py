@@ -13,6 +13,7 @@ from agent4.core.context import build_auth_context
 from agent4.core.errors import ContractError
 from agent4.engine.metrics import REGISTRY
 from agent4.metric_selection.config import MetricSelectionConfig
+from agent4.metric_selection.errors import ConfigurationError
 from agent4.metric_selection.validator import validate_metrics
 
 _WAREHOUSE = Path(__file__).resolve().parents[2] / "data/cfo_warehouse.duckdb"
@@ -33,7 +34,7 @@ def demo_app(monkeypatch, tmp_path, demo_warehouse):
     preset.write_text("llm: {provider: mock, model: demo-contract-model}\n", encoding="utf-8")
     monkeypatch.setenv("AGENT4_DB_PATH", str(demo_warehouse))
     monkeypatch.setenv("AGENT4_SELECTION_CONFIG", str(preset))
-    return create_demo_app()
+    return create_demo_app(allow_test_providers=True)
 
 
 @pytest.fixture
@@ -58,7 +59,9 @@ def test_demo_factory_publishes_ui_health_and_reference_data(demo, demo_warehous
         "db_path": str(demo_warehouse),
         "verified_metrics_count": 67,
         "llm_model": "demo-contract-model",
+        "llm_provider": "mock",
         "embedding_model": "hashing-v1",
+        "embedding_provider": "hashing",
         "retrieval_mode": "full_catalog",
     }
     ui = demo.get("/")
@@ -89,6 +92,16 @@ def test_demo_factory_publishes_ui_health_and_reference_data(demo, demo_warehous
     assert [example["id"] for example in examples] == [f"D-{n:02d}" for n in range(1, 13)]
     assert examples[10]["persona"] == "branch_viewer"
     assert examples[8]["locale"] == "en-US"
+
+
+def test_production_demo_requires_both_api_keys(monkeypatch, tmp_path):
+    preset = tmp_path / "cloud-selection.yaml"
+    preset.write_text("embedding: {provider: openai}\nllm: {provider: openai}\n", encoding="utf-8")
+    monkeypatch.setenv("AGENT4_SELECTION_CONFIG", str(preset))
+    monkeypatch.delenv("AGENT4_LLM_API_KEY", raising=False)
+    monkeypatch.delenv("AGENT4_EMBED_API_KEY", raising=False)
+    with pytest.raises(ConfigurationError, match="both|API key"):
+        create_demo_app()
 
 
 def test_non_demo_ignores_persona_and_requires_auth(monkeypatch):
@@ -282,7 +295,7 @@ async def test_guided_clarification_continues_original_question(monkeypatch, tmp
     monkeypatch.setenv("AGENT4_DB_PATH", str(_WAREHOUSE))
     monkeypatch.setenv("AGENT4_SELECTION_CONFIG", str(preset))
     monkeypatch.setenv("AGENT4_REPORTING_LAST_CLOSED_MONTH", "2026-08")
-    demo_app = create_demo_app()
+    demo_app = create_demo_app(allow_test_providers=True)
 
     async def ambiguous_selection(query, catalog, *, auth_context, query_context, **_kwargs):
         return validate_metrics(

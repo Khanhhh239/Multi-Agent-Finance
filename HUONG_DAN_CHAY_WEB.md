@@ -16,11 +16,15 @@ Hoặc nhấp đúp trực tiếp vào tệp **`run_web.bat`** trong thư mục 
 
 ### Hệ thống sẽ tự động làm gì?
 - Tự dọn các tiến trình cũ nếu cổng `8800`, `8011`, `8766`, `8640`, `8040` đang bận.
-- Tự khởi chạy dịch vụ **Ollama** (`11434`) nếu đã cài trên máy.
+- Không tự khởi chạy mô hình cục bộ; Agent 4 dùng provider API đã cấu hình.
 - Tự đồng bộ `portal/config.local.json`, hồ sơ doanh nghiệp mẫu **Minh Phát (`MPX10`, MST `0999999905`)**, kho dữ liệu DuckDB cho **Agent 4** và các mô hình thống kê/ML cho **Agent 2**.
 - Khởi động **Portal** cùng **Agent 1, 2, 3, 4** và tự mở trình duyệt tại: **http://127.0.0.1:8800**
 
 > **Cách tắt hệ thống:** Nhấn `Ctrl + C` tại cửa sổ PowerShell đang chạy, hoặc chạy lệnh `.\run_web.ps1 -StopOnly`.
+
+### Chế độ API key cho Agent 3 và Agent 4
+
+Portal tự đọc các tệp `.env` bị git bỏ qua tại `agent3/.env` và `agent4/.env` khi khởi động agent. Agent 4 yêu cầu đồng thời `AGENT4_LLM_API_KEY` và `AGENT4_EMBED_API_KEY`, luôn dùng `config/selection.yaml` và không có fallback cục bộ. Agent 3 dùng LLM OpenAI-compatible, embedding API và Cohere reranker theo cấu hình trong `agent3/.env`. Không cần ghi secret vào `portal/config.local.json`.
 
 ---
 
@@ -47,13 +51,27 @@ Sau khi chạy xong, gói 4 tệp chứng từ đồng bộ để nạp thử qu
 
 ## 3. Cài đặt trên máy mới tinh (chỉ làm 1 lần)
 
-Yêu cầu máy cài sẵn **Python 3.12+** (khuyến nghị có `uv`) và **Ollama** (https://ollama.com). Chạy 1 lệnh duy nhất:
+Yêu cầu máy cài sẵn **Python 3.12+** (khuyến nghị có `uv`). Agent 4 không yêu cầu cài mô hình cục bộ.
+
+Trên Windows chạy:
 
 ```powershell
 .\setup_all.ps1
 ```
 
-Lệnh sẽ tự tạo 4 môi trường `.venv` riêng cho từng Agent, tải các mô hình Ollama (`qwen3:8b`, `qwen3:4b-instruct-2507-q4_K_M`, `bge-m3`, `qwen3-embedding:0.6b`, `qwen2.5:0.5b`), đồng bộ kho văn bản luật thuế + mô hình xếp hạng cho Agent 3, và chuẩn bị sẵn dữ liệu.
+Lệnh sẽ tạo 4 môi trường `.venv` lõi, đồng bộ kho văn bản luật thuế và chuẩn bị dữ liệu. Các model local nặng được bỏ qua vì Agent 3/4 đang dùng API key.
+
+Nếu cần fallback local cho Agent 3, cài thêm Torch bản CPU và reranker:
+
+```powershell
+.\setup_all.ps1
+```
+
+Trên Linux có thể dùng:
+
+```bash
+bash setup_demo.sh
+```
 
 ---
 

@@ -6,7 +6,7 @@ import pytest
 
 from src.lawbase import rag
 from src.lawbase.fetch import FetchError, PoliteFetcher
-from src.lawbase.llm import ContextOverflow, LLMUnavailable, Ollama
+from src.lawbase.llm import ContextOverflow, LLMUnavailable, OpenAICompatible
 from src.lawbase.store import Corpus
 from src.lawbase.vbpl import coverage_errors, in_scope, parse_page, parse_sitemap
 
@@ -159,7 +159,7 @@ def test_fallbacks_extractive_and_abstain(corpus):
 
 def test_context_overflow_is_refused_before_calling_the_model():
     with pytest.raises(ContextOverflow):
-        Ollama(num_ctx=1024).chat('x' * 3000, 'y' * 3000)
+        OpenAICompatible('test-model', 'https://api.example.test/v1', 'test-key', num_ctx=1024).chat('x' * 3000, 'y' * 3000)
 
 
 def test_verifier_recites_the_right_passage_and_refuses_off_topic_answers():

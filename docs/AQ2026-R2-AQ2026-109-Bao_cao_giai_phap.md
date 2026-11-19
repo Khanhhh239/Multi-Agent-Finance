@@ -129,7 +129,7 @@ Doanh nghiệp nhỏ và vừa (SME) chiếm >97% doanh nghiệp Việt Nam như
 | :--- | :--- | :--- | :--- |
 | **Agent 1 (Ngân quỹ)** | Đối soát sao kê–HĐĐT (T9) & dự báo xác suất tất toán (Survival + Empirical Bayes + Gaussian Copula + Bootstrap) cho phân vị **`[P10, P50, P90]`** 13–52 tuần. | • Thời gian chờ onboarding<br>• Lệch kỳ vọng Log-Normal<br>• Bộ adaptive & lifecycle | • **`0` ngày chờ** (`reconciled_through`)<br>• **`+0,7%`** (giảm từ `-13,1%`)<br>• **`537/537` adaptive OK** (`1.145` full*) |
 | **Agent 2 (Kiểm soát & FHE)** | Chấm điểm 4 nhánh (35 luật + thống kê `RobustZ`/Benford + đồ thị + 4 ML không nhãn) & huấn luyện SGD mã hóa đồng cấu **`TFHE S=P=16`** / `CKKS`. | • Độ phủ luật chuẩn SME<br>• Bảo toàn gradient `TFHE`<br>• Tốc độ nạp `7.700` dòng | • **`26/35` luật** (+ 9 mở rộng)<br>• **`4.096/4.096` (`100%`)**<br>• **`< 10 giây`** (`520/520` HE, `898` core*) |
-| **Agent 3 (Thuế & HĐĐT)** | Kiểm định XML-DSig (`<NBan>`, `<CQT>`), luật R01–R14 hiệu lực theo ngày (`R02` 5tr cùng ngày), RAG lai (`FTS + bge-m3 + Reranker`) & chống Injection. | • An toàn XSW & CCCD 12 số<br>• Toàn vẹn `ruleset`<br>• Bộ test tuân thủ & XML | • Chặn **100%** XSW, đủ 12 số CCCD<br>• `check-ruleset`: **`23 ĐẠT, 0 LỖI`**<br>• **`191/191`** (`3` deselected `real_ai`) |
+| **Agent 3 (Thuế & HĐĐT)** | Kiểm định XML-DSig (`<NBan>`, `<CQT>`), luật R01–R14 hiệu lực theo ngày (`R02` 5tr cùng ngày), RAG lai (`FTS + API embedding + API reranker`) & chống Injection. | • An toàn XSW & CCCD 12 số<br>• Toàn vẹn `ruleset`<br>• Bộ test tuân thủ & XML | • Chặn **100%** XSW, đủ 12 số CCCD<br>• `check-ruleset`: **`23 ĐẠT, 0 LỖI`**<br>• **`191/191`** (`3` deselected `real_ai`) |
 | **Agent 4 (CFO Hai Sổ)** | Biên dịch tiếng Việt $\to$ chọn chỉ tiêu (`66` metric VAS/TT133/TT200) $\to$ SQL mẫu chỉ đọc DuckDB trên `v_mgmt` và `v_tax` (`TK 4219`). | • Sai lệch cân bằng kép `v_tax`<br>• Bao phủ catalog 66 metric<br>• Bộ test toàn hệ thống Agent 4 | • **`0 VND`** lệch Nợ/Có & CĐKT<br>• **`66/66`** chỉ tiêu đồng bộ<br>• **`734/734` test ĐẠT (100%)** |
 
 #### 1.4. Xử lý các ràng buộc thực tế
@@ -169,7 +169,7 @@ flowchart TD
     Portal --> A1 & A2 & A3 & A4
 ```
 
-*Nguyên tắc bất biến:* **"Con số do chương trình tính tất định — AI chỉ đề xuất trong ranh giới kiểm soát — Con người phê duyệt và đóng dấu SHA-256."** Cổng **Portal (`:8800`)** giữ duy nhất một hồ sơ doanh nghiệp, tiếp nhận tệp 1 cửa có kiểm định và phân phối đồng bộ sang 4 tiến trình độc lập: **Agent 1 (`:8011`)**, **Agent 2 (`:8766`)**, **Agent 3 (`:8640`)**, **Agent 4 (`:8040`)**, chia sẻ chung **Kho Sổ Cái MPX10**, **Kho Pháp luật `vbpl.vn`** và **Ollama cục bộ (`:11434`)**.
+*Nguyên tắc bất biến:* **"Con số do chương trình tính tất định — AI chỉ đề xuất trong ranh giới kiểm soát — Con người phê duyệt và đóng dấu SHA-256."** Cổng **Portal (`:8800`)** giữ duy nhất một hồ sơ doanh nghiệp, tiếp nhận tệp 1 cửa có kiểm định và phân phối đồng bộ sang 4 tiến trình độc lập: **Agent 1 (`:8011`)**, **Agent 2 (`:8766`)**, **Agent 3 (`:8640`)**, **Agent 4 (`:8040`)**, chia sẻ chung **Kho Sổ Cái MPX10** và **Kho Pháp luật `vbpl.vn`**; các chức năng AI gọi API có xác thực.
 
 #### 3.2. Định vị rõ Yếu tố Lượng tử / Hậu lượng tử (`AI–QUANTUM CHALLENGE 2026`)
 1. **Bài toán an ninh dài hạn thực tế ("Harvest Now, Decrypt Later")**: Theo **Điều 41 Luật Kế toán 88/2015/QH13**, chứng từ kế toán – thuế phải lưu tối thiểu **10 năm đến vĩnh viễn**. Các hệ mật mã cổ điển (`RSA-2048`, `ECDSA`) bị thuật toán lượng tử **Shor** phá vỡ trong thời gian đa thức, đe dọa trực tiếp dữ liệu lưu trữ hoặc cộng tác liên doanh nghiệp.
@@ -252,7 +252,7 @@ flowchart TD
 | Giai đoạn | Hạng mục triển khai chính | Thời lượng | Biện pháp kiểm soát rủi ro kỹ thuật & pháp lý |
 | :--- | :--- | :---: | :--- |
 | **Bước A — Demo Hội đồng** | Chạy `1` lệnh tại máy chấm hoặc qua Cloudflare Tunnel có mật khẩu xác thực | `0,5 ngày` | Không lưu dữ liệu thật; Strict CSP & khóa phiên Portal |
-| **Bước B — Đóng gói Server** | Docker Compose (`portal`, `agent1..4`, `ollama`, `duckdb`), Caddy HTTPS | `3–5 ngày` | Ghi JSON nguyên tử, khóa đọc DuckDB `read_only=True` |
+| **Bước B — Đóng gói Server** | Docker Compose (`portal`, `agent1..4`, `duckdb`), Caddy HTTPS và secret API provider | `3–5 ngày` | Ghi JSON nguyên tử, khóa đọc DuckDB `read_only=True` |
 | **Bước C — Shadow Pilot** | Thử nghiệm song song trên sổ đã đóng kỳ tại 1–2 SME / Đại lý Thuế + Chuyên gia thuế duyệt `ruleset` | `2–3 tuần` | Không ghi đè sổ gốc ERP; xác nhận bảng `ruleset` bởi CTA |
 | **Bước D — Multi-Tenant & Liên minh FHE** | Phân tách OIDC đa vai trò (Kế toán/KTT/Giám đốc) + kích hoạt mạng lưới học cộng tác FHE (`ConsortiumKeyCommittee`) | `1–2 tháng` | Ngưỡng chia khóa $N$-trên-$N$; đám mây `0%` quyền thấy `sk`/plaintext |
 

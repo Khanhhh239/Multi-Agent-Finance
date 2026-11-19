@@ -28,7 +28,7 @@ Từ thư mục gốc dự án trên Windows PowerShell:
 
 Lệnh `.\run_web.ps1` tự động thực hiện trọn gói:
 1. Giải phóng các tiến trình cũ nếu đang chiếm cổng `8800`, `8011`, `8766`, `8640`, `8040`.
-2. Khởi động dịch vụ **Ollama** nền (nếu đã cài mà chưa bật).
+2. Kiểm tra cấu hình API key của các agent; Agent 4 bắt buộc có đủ LLM và embedding key.
 3. Đồng bộ cấu hình `portal/config.local.json`, hồ sơ doanh nghiệp mẫu **MPX10**, kho DuckDB của Agent 4 và mô hình phân tích của Agent 2.
 4. Bật **Portal** cùng toàn bộ **4 Agent** và tự mở trình duyệt tại **http://127.0.0.1:8800**.
 
@@ -44,7 +44,8 @@ Lệnh `.\run_web.ps1` tự động thực hiện trọn gói:
 | **Dừng toàn bộ hệ thống** | `.\run_web.ps1 -StopOnly` *(hoặc nhấn `Ctrl+C` tại cửa sổ đang chạy)* |
 | **Tạo / đồng bộ nhanh dữ liệu & mô hình** | `.\create_data.ps1` |
 | **Sinh mới toàn bộ kho dữ liệu 4 năm (MPX10)** | `.\create_data.ps1 -Full` |
-| **Cài đặt môi trường từ đầu trên máy mới** | `.\setup_all.ps1` |
+| **Cài đặt môi trường lõi từ đầu** | `.\setup_all.ps1` |
+| **Cấu hình API key cho Agent 3** | `agent3/.env` từ `agent3/.env.example` |
 
 ---
 

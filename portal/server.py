@@ -101,6 +101,51 @@ def path_of(value, default):
     return p if p.is_absolute() else (ROOT / p)
 
 
+def read_dotenv(path):
+    """Read a small, dependency-free .env file without printing or logging secrets.
+
+    The Portal deliberately keeps credentials out of config.local.json.  Values already
+    present in the parent process win over the file, which makes explicit shell exports
+    the highest-precedence option.
+    """
+    path = Path(path)
+    if not path.is_file():
+        return {}
+    values = {}
+    for raw in path.read_text(encoding='utf-8-sig').splitlines():
+        line = raw.strip()
+        if not line or line.startswith('#'):
+            continue
+        if line.startswith('export '):
+            line = line[7:].lstrip()
+        if '=' not in line:
+            continue
+        key, value = line.split('=', 1)
+        key = key.strip()
+        value = value.strip()
+        if not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*', key):
+            continue
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'"):
+            value = value[1:-1]
+        values[key] = value
+    return values
+
+
+def agent_dotenv(aid):
+    """Find the ignored per-agent .env file, including Agent 3's parent folder."""
+    root = agent_root(aid)
+    candidates = (root / '.env', ROOT / aid / '.env', root.parent / '.env')
+    for candidate in candidates:
+        if candidate.is_file():
+            return candidate
+    return None
+
+
+def dotenv_for_agent(aid):
+    path = agent_dotenv(aid)
+    return read_dotenv(path) if path else {}
+
+
 _FILE_IO_LOCK = threading.RLock()
 
 
@@ -250,9 +295,13 @@ def agent1_storage():
     return root / name, root / (name + '-keys')
 
 
-def launch_spec(aid):
+def launch_spec(aid, load_dotenv=False):
     root, port, c = agent_root(aid), agent_port(aid), company()
     env = dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8')
+    if load_dotenv:
+        # Keep secrets in the ignored per-agent .env file. Explicit process env wins.
+        for key, value in dotenv_for_agent(aid).items():
+            env.setdefault(key, value)
     if aid == 'agent1':
         state, keys = agent1_storage()
         code = c['code'] or 'SME'
@@ -279,19 +328,29 @@ def launch_spec(aid):
         env.update(SOSOAT_FRAME_ANCESTORS=' '.join(ORIGINS), PYTHONDONTWRITEBYTECODE='1',
                    AGENT2_PORTAL_BRIDGE_SECRET=AGENT2_TOKEN)
     elif aid == 'agent3':
+        missing_keys = [
+            name for name in ('AGENT3_LLM_API_KEY', 'AGENT3_EMBED_API_KEY')
+            if not env.get(name) and not env.get('AGENT3_API_KEY')
+        ]
+        if missing_keys:
+            raise RuntimeError('Agent 3 requires API keys: ' + ', '.join(missing_keys))
         cmd = ['-m', 'src.assistant.web']
         env.update(AGENT3_PORT=str(port))
     else:
         # Governed pipeline (metric selection, planner, compiled SQL, read-only DuckDB). Demo mode gives the two server-owned
         # synthetic personas; the old text2sql slice stays in the repo but is no longer started here.
         cmd = ['-m', 'uvicorn', 'agent4.api:create_demo_app', '--factory', '--host', HOST, '--port', str(port)]
-        sel_cfg = (os.environ.get('AGENT4_SELECTION_CONFIG')
-                   or os.environ.get('AGENT4_METRIC_SELECTION_CONFIG')
-                   or 'config/eval_governed_lexical.yaml')
+        missing_keys = [name for name in ('AGENT4_LLM_API_KEY', 'AGENT4_EMBED_API_KEY') if not env.get(name)]
+        if missing_keys:
+            raise RuntimeError(
+                'Agent 4 requires both API keys: ' + ', '.join(missing_keys)
+            )
+        sel_cfg = (env.get('AGENT4_SELECTION_CONFIG')
+                   or env.get('AGENT4_METRIC_SELECTION_CONFIG')
+                   or 'config/selection.yaml')
         env.update(AGENT4_DEMO_MODE='1', AGENT4_DEMO_TOKEN=AGENT4_TOKEN,
                    AGENT4_SELECTION_CONFIG=sel_cfg,
-                   AGENT4_METRIC_SELECTION_CONFIG=sel_cfg,
-                   AGENT4_LLM_MODEL=os.environ.get('AGENT4_LLM_MODEL', 'qwen3:4b-instruct-2507-q4_K_M'))
+                   AGENT4_METRIC_SELECTION_CONFIG=sel_cfg)
         for db_candidate in (
             WORK / 'datasets/enterprise-x10-v3-full/warehouse.duckdb',
             WORK / 'datasets/enterprise-x10-v3-candidate02/warehouse.duckdb',
@@ -423,7 +482,7 @@ def start_agent(aid):
             return agent_state(aid)
         if port_open(agent_port(aid)):
             raise ValueError(f'Cổng {agent_port(aid)} đang bị chương trình khác dùng. Đổi cổng trong portal/config.local.json.')
-        cmd, cwd, env = launch_spec(aid)
+        cmd, cwd, env = launch_spec(aid, load_dotenv=True)
         if not Path(cmd[0]).exists():
             raise ValueError(f'Không thấy Python cho {aid}: {cmd[0]}. Khai báo "python" trong portal/config.local.json.')
         LOGS.mkdir(parents=True, exist_ok=True)

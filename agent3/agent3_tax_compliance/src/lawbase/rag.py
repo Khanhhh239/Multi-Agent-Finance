@@ -1,4 +1,4 @@
-"""Grounded legal answers: retrieve dated provisions, pack them within a measured budget, let the local model draft, verify.
+"""Grounded legal answers: retrieve dated provisions, pack them within a measured budget, let the API model draft, verify.
 
 Contract (enforced in code, not only in the prompt):
   * the model sees only the packed passages, each with a short id [P1]..[Pn];
@@ -13,7 +13,7 @@ import unicodedata
 from dataclasses import asdict, dataclass, field
 from datetime import date
 
-from .llm import CHARS_PER_TOKEN, ContextOverflow, LLMUnavailable, Ollama
+from .llm import CHARS_PER_TOKEN, ContextOverflow, LLMUnavailable, configured_llm
 from .store import STOP, Corpus, fold, polarity_clash, tokens
 
 SYSTEM = (
@@ -283,7 +283,7 @@ def verify(raw: str, passages: list[Passage], question: str = '', min_topic: flo
     return kept, dropped, bool(data.get('abstain')), data.get('missing', '')
 
 
-def answer(corpus: Corpus, question: str, as_of: date | None = None, llm: Ollama | None = None, min_coverage: float = 0.35,
+def answer(corpus: Corpus, question: str, as_of: date | None = None, llm=None, min_coverage: float = 0.35,
            k: int = 8, budget_tokens: int = 7000, doc_ids: list[str] | None = None) -> RagAnswer:
     as_of = as_of or date.today()
     passages = pack(corpus, question, as_of, k, budget_tokens, doc_ids)
@@ -293,7 +293,7 @@ def answer(corpus: Corpus, question: str, as_of: date | None = None, llm: Ollama
     if not passages or res.stats['retrieval_top_coverage'] < min_coverage:
         res.note = 'Kho văn bản không có đoạn đủ liên quan để trả lời; hãy hỏi chuyên gia hoặc tra Chatbot AI của Cục Thuế.'
         return res
-    llm = llm or Ollama()
+    llm = llm or configured_llm()
     user = f'Ngày áp dụng: {as_of:%d/%m/%Y}\nCâu hỏi: {question}\n\nCác đoạn văn bản:\n{render(passages)}'
     try:
         raw, stats = llm.chat(SYSTEM, user, SCHEMA)

@@ -24,7 +24,7 @@ rag:
   chunk_size: 500
   chunk_overlap: 50
   embedding:
-    model: sentence-transformers/all-MiniLM-L6-v2 # fallback or default local if needed, BGE-M3 for production
+    model: nvidia/nemotron-3.5-embed-8b:free # authenticated embedding API model
   vector_db:
     path: d:/financial/agent3_tax_compliance/data/database/vector_store.db
   citation_threshold: 0.95

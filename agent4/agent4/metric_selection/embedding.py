@@ -127,7 +127,7 @@ class EmbeddingProvider:
             if (cached := _QUERY_CACHE.get(key)) is not None:
                 return cached
 
-        if self.config.provider in ("ollama", "openai"):
+        if self.config.provider == "openai":
             vectors = self._embed_remote(texts, input_type=input_type)
         else:
             # SHAKE supplies a deterministic byte for every requested dimension.
@@ -158,19 +158,14 @@ class EmbeddingProvider:
 
     def _embed_remote(self, texts: list[str], *, input_type: str) -> np.ndarray:
         payload = {"model": self.model_id, "input": texts, "dimensions": self.dimension}
-        openai = self.config.provider == "openai"
-        if openai:
-            url = openai_endpoint(self.config.base_url, "embeddings")
-            provider_input_type = (
-                self.config.query_input_type
-                if input_type == "query"
-                else self.config.document_input_type
-            )
-            if provider_input_type is not None:
-                payload["input_type"] = provider_input_type
-        else:
-            url = f"{self.config.base_url.rstrip('/')}/api/embed"
-            payload["truncate"] = False
+        url = openai_endpoint(self.config.base_url, "embeddings")
+        provider_input_type = (
+            self.config.query_input_type
+            if input_type == "query"
+            else self.config.document_input_type
+        )
+        if provider_input_type is not None:
+            payload["input_type"] = provider_input_type
         headers = (
             {"Authorization": f"Bearer {self.config.api_key}"} if self.config.api_key else None
         )
@@ -184,9 +179,7 @@ class EmbeddingProvider:
                 response = client.post(url, json=payload)
                 response.raise_for_status()
             body = response.json()
-            rows = (
-                _openai_embedding_rows(body["data"], len(texts)) if openai else body["embeddings"]
-            )
+            rows = _openai_embedding_rows(body["data"], len(texts))
             if (
                 not isinstance(rows, list)
                 or len(rows) != len(texts)

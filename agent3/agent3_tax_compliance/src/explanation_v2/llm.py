@@ -1,12 +1,15 @@
-"""Local Ollama adapter. Bounded wall time, payload and response; no redirects/proxies."""
-import http.client
-import json
-import time
-import multiprocessing
-from urllib.parse import urlparse
-from .selection import request_data, materialize
+"""Authenticated OpenAI-compatible explanation transport with bounded execution."""
 
-PROMPT_VERSION = 'grounded-explanation-vi-v5'
+import json
+import multiprocessing
+import time
+import urllib.error
+import urllib.request
+
+from .selection import materialize, request_data
+from ..runtime_config import env
+
+PROMPT_VERSION = 'grounded-explanation-vi-v6'
 SYSTEM = ('Arrange verified Vietnamese explanation facts for readability. '
           'Return JSON with exactly one key selections: an array of {fact_id,variant_index}. '
           'Include EVERY supplied fact exactly once. variant_index is zero-based; use 0 unless another supplied variant reads better. '
@@ -19,7 +22,7 @@ class ProviderFailure(Exception):
     pass
 
 
-class Ollama:
+class OpenAICompatible:
     def generate(self, context, policy):
         # A parent deadline bounds slow headers/trickle reads and stuck provider code.
         mp = multiprocessing.get_context('spawn')
@@ -45,88 +48,71 @@ class Ollama:
             child.close()
 
     def _generate(self, context, policy):
-        url = urlparse(policy.endpoint)
-        if (url.scheme != 'http' or url.hostname not in ('127.0.0.1', '::1') or
-            url.username or url.password or url.query or url.fragment or url.path != '/api/chat'):
-            raise ProviderFailure('LOCAL_ENDPOINT_REQUIRED')
-        system=SYSTEM
-        if policy.style=='NATURAL_DRAFT':
-            from .natural import request_data as natural_request, SYSTEM as natural_system
-            content,output_schema=natural_request(context);system=natural_system
-        else:
-            content, output_schema = request_data(context)
-        if len(content.encode()) > policy.max_context_bytes:
+        api_key = env('AGENT3_LLM_API_KEY') or env('AGENT3_API_KEY') or env('OPENAI_API_KEY') or env('GROQ_API_KEY')
+        if not api_key:
+            raise ProviderFailure('API_KEY_MISSING')
+        if policy.provider != 'openai':
+            raise ProviderFailure('PROVIDER_UNSUPPORTED')
+        if len(context.model_dump_json().encode()) > policy.max_context_bytes:
             raise ProviderFailure('CONTEXT_BUDGET')
-        body = json.dumps(dict(model=policy.model, stream=False, think=False, keep_alive='5m',
-            format=output_schema, messages=[dict(role='system', content=system), dict(role='user', content=content)],
-            options=dict(temperature=0, num_predict=policy.max_output_tokens)), ensure_ascii=False).encode()
+        system = SYSTEM
+        if policy.style == 'NATURAL_DRAFT':
+            from .natural import request_data as natural_request, SYSTEM as natural_system
+            content, _ = natural_request(context)
+            system = natural_system
+        else:
+            content, _ = request_data(context)
+        body = dict(
+            model=policy.model,
+            stream=False,
+            temperature=0,
+            max_tokens=policy.max_output_tokens,
+            messages=[dict(role='system', content=system), dict(role='user', content=content)],
+            response_format={'type': 'json_object'},
+        )
         started = time.monotonic()
-        connection = http.client.HTTPConnection(url.hostname, url.port or 80, timeout=policy.timeout_seconds)
+        request = urllib.request.Request(
+            policy.endpoint,
+            data=json.dumps(body, ensure_ascii=False).encode(),
+            headers={'Content-Type': 'application/json', 'Authorization': f'Bearer {api_key}'},
+        )
         try:
-            # Ollama tags contain the immutable digest of the locally installed weights.
-            # A friendly model name alone is not a reproducible model revision.
-            connection.request('GET', '/api/tags')
-            tags_response = connection.getresponse()
-            tags_raw = tags_response.read(policy.max_response_bytes+1)
-            if tags_response.status != 200 or len(tags_raw) > policy.max_response_bytes:
-                raise ProviderFailure('MODEL_MANIFEST_UNAVAILABLE')
-            models = json.loads(tags_raw).get('models', [])
-            installed = next((m for m in models if m.get('name') == policy.model), None)
-            if not installed or installed.get('digest') != policy.model_revision:
-                raise ProviderFailure('MODEL_REVISION_MISMATCH')
-            remaining = policy.timeout_seconds - (time.monotonic()-started)
-            if remaining <= 0:
-                raise ProviderFailure('PROVIDER_TIMEOUT')
-            connection.close()
-            connection = http.client.HTTPConnection(url.hostname, url.port or 80, timeout=remaining)
-            connection.request('POST', url.path, body=body, headers={'Content-Type': 'application/json'})
-            response = connection.getresponse()
-            if response.status != 200:
-                raise ProviderFailure('PROVIDER_HTTP_ERROR')
-            chunks = []
-            length = 0
-            while True:
-                remaining = policy.timeout_seconds - (time.monotonic()-started)
-                if remaining <= 0:
-                    raise ProviderFailure('PROVIDER_TIMEOUT')
-                # read1 avoids an unbounded read loop under a trickle response.
-                if response.fp and response.fp.raw:
-                    response.fp.raw._sock.settimeout(remaining)
-                part = response.read1(min(8192, policy.max_response_bytes+1-length))
-                if not part:
-                    break
-                chunks.append(part)
-                length += len(part)
-                if length > policy.max_response_bytes:
-                    raise ProviderFailure('RESPONSE_BUDGET')
-            payload = json.loads(b''.join(chunks))
-            if payload.get('model') != policy.model or payload.get('done') is not True:
-                raise ProviderFailure('MODEL_OR_COMPLETION_MISMATCH')
-            if payload.get('done_reason') == 'length':
-                raise ProviderFailure('OUTPUT_TRUNCATED')
-            if policy.style=='NATURAL_DRAFT':
-                return payload['message']['content']
+            with urllib.request.urlopen(request, timeout=policy.timeout_seconds) as response:
+                raw = response.read(policy.max_response_bytes + 1)
+            if len(raw) > policy.max_response_bytes:
+                raise ProviderFailure('RESPONSE_BUDGET')
+            payload = json.loads(raw)
+            output = payload['choices'][0]['message']['content']
+            if isinstance(output, list):
+                output = ''.join(str(part.get('text', '')) if isinstance(part, dict) else str(part) for part in output)
+            if not isinstance(output, str) or not output.strip():
+                raise ProviderFailure('PROVIDER_INVALID_RESPONSE')
+            if policy.style == 'NATURAL_DRAFT':
+                return output
             try:
-                return materialize(payload['message']['content'], context)
+                return materialize(output, context)
             except (ValueError, TypeError) as exc:
                 raise ProviderFailure('CLAIM_VALIDATION_FAILED') from exc
         except ProviderFailure:
             raise
-        except (TimeoutError, OSError) as exc:
-            raise ProviderFailure('PROVIDER_UNAVAILABLE') from exc
-        except (KeyError, ValueError, TypeError, AttributeError) as exc:
+        except urllib.error.HTTPError as exc:
+            raise ProviderFailure('PROVIDER_HTTP_ERROR') from exc
+        except (TimeoutError, OSError, urllib.error.URLError):
+            raise ProviderFailure('PROVIDER_UNAVAILABLE')
+        except (KeyError, IndexError, ValueError, TypeError) as exc:
             raise ProviderFailure('PROVIDER_INVALID_RESPONSE') from exc
         finally:
-            connection.close()
+            if time.monotonic() - started > policy.timeout_seconds:
+                raise ProviderFailure('PROVIDER_TIMEOUT')
 
 
 def provider_for(policy):
-    return {'ollama': Ollama}[policy.provider]()
+    return {'openai': OpenAICompatible}[policy.provider]()
 
 
 def _worker(pipe, context, policy):
     try:
-        pipe.send((True, Ollama()._generate(context, policy)))
+        pipe.send((True, OpenAICompatible()._generate(context, policy)))
     except ProviderFailure as exc:
         pipe.send((False, str(exc)))
     except Exception:

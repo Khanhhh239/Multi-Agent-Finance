@@ -16,6 +16,10 @@ from datetime import date, datetime
 from decimal import Decimal
 from pathlib import Path
 
+from ..runtime_config import load_env_file, require_api_keys
+
+load_env_file()
+
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -753,4 +757,5 @@ if __name__ == '__main__':
     import uvicorn
     # Load by module name: run as __main__, this file is a second copy of the module and web_ai attaches to the named one.
     import os
+    require_api_keys()
     uvicorn.run('src.assistant.web:app', host='127.0.0.1', port=int(os.environ.get('AGENT3_PORT', 8640)))

@@ -36,7 +36,7 @@ const server = http.createServer(async (req, res) => {
     else if (url.pathname === '/api/admin/catalog') data = [];
     else if (url.pathname.endsWith('/report')) { res.statusCode = reportMode === 'missing' ? 404 : reportMode === 'error' ? 503 : 200; data = reportMode === 'normal' ? report : { detail:'Lỗi máy chủ mô phỏng' }; }
     else if (url.pathname.endsWith('/freshness')) data = { stale: false, analysed: true };
-    else if (url.pathname.endsWith('/ai')) data = { model:'qwen3:8b', labelled_invoices:0, flagged_invoices:0, proposals:[], job:null };
+    else if (url.pathname.endsWith('/ai')) data = { model:'qwen/qwen3.8-27b', labelled_invoices:0, flagged_invoices:0, proposals:[], job:null };
     else if (url.pathname.endsWith('/ai/explain')) { res.statusCode = 503; data = { detail:'Mô hình chưa sẵn sàng' }; }
     else if (url.pathname.endsWith('/exposure')) data = {};
     else if (url.pathname.endsWith('/decisions/suggest')) data = { suggestion: null };
