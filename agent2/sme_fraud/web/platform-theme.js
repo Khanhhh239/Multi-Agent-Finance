@@ -9,19 +9,34 @@
   function setupPortalReturn() {
     const links = document.querySelectorAll("[data-portal-return]");
     if (!links.length) return;
+    const agent = document.documentElement.dataset.agent;
+    const sameOriginAgent = agent === "2" || agent === "4";
     let origin = new URLSearchParams(location.search).get("portal");
-    if (!origin && document.documentElement.dataset.agent === "4") origin = location.origin;
+    if (!origin && sameOriginAgent) origin = location.origin;
     try {
       if (!origin) origin = sessionStorage.getItem("kt-portal-origin") || sessionStorage.getItem("agent1-portal-origin");
       const portal = new URL(origin);
       if (portal.protocol !== "http:" || !["127.0.0.1", "localhost"].includes(portal.hostname) ||
-          portal.username || portal.password || (portal.origin === location.origin && document.documentElement.dataset.agent !== "4")) return;
+          portal.username || portal.password || (portal.origin === location.origin && !sameOriginAgent)) return;
       for (const link of links) {
         link.href = portal.origin + "/#overview";
         link.hidden = false;
       }
       try { sessionStorage.setItem("kt-portal-origin", portal.origin); } catch (e) { /* private mode */ }
     } catch (e) { /* Independently opened agents may have no portal context. */ }
+  }
+
+  function enforceLightAppearance() {
+    document.body.classList.remove("a2-dark");
+    if (document.documentElement.dataset.agent === "3") {
+      document.body.classList.remove("cds--g100");
+      document.body.classList.add("cds--g10");
+    }
+    try {
+      localStorage.removeItem("agent2.appearance");
+      localStorage.removeItem("agent3.theme");
+      localStorage.removeItem("agent3.theme.embedded");
+    } catch (_) { /* private mode */ }
   }
 
   // The browser's own file control is written in the browser's language. Swap it for a Vietnamese button and file name.
@@ -201,7 +216,7 @@
     if (document.documentElement.dataset.agent !== '2' || document.body.classList.contains('a2-product')) return;
     const header = document.querySelector('body > header');
     const main = document.querySelector('body > main');
-    if (!header || !main) return;
+    if (!header || !main || header.classList.contains('top') || header.classList.contains('a2-top')) return;
     document.body.classList.add('a2-product');
     header.classList.add('a2-header');
     main.classList.add('a2-main');
@@ -210,7 +225,14 @@
     skip.className = 'a2-skip'; skip.href = '#' + main.id; skip.textContent = 'Đến nội dung chính';
     document.body.prepend(skip);
     const brand = header.querySelector('.brand');
-    if (brand) { brand.textContent = 'Trợ lý Giám sát'; brand.classList.add('a2-brand'); }
+    if (brand) {
+      brand.classList.add('a2-brand', 'kt-agent-brand');
+      brand.replaceChildren(
+        Object.assign(document.createElement('span'), { className: 'kt-agent-badge', textContent: 'A2' }),
+        Object.assign(document.createElement('span'), { textContent: 'Trợ lý Giám sát' })
+      );
+      brand.firstElementChild.setAttribute('aria-hidden', 'true');
+    }
     let nav = header.querySelector('nav');
     if (!nav) { nav = document.createElement('nav'); header.append(nav); }
     nav.classList.add('a2-nav'); nav.id = 'a2-navigation'; nav.setAttribute('aria-label', 'Chức năng Agent 2');
@@ -239,6 +261,23 @@
     const menu = document.createElement('button'); menu.type = 'button'; menu.className = 'a2-menu';
     menu.textContent = '☰'; menu.setAttribute('aria-controls', nav.id); menu.setAttribute('aria-label', 'Mở danh sách chức năng');
     header.prepend(menu);
+    if (!header.querySelector('[data-portal-return]')) {
+      const back = document.createElement('a');
+      back.className = 'kt-portal-return';
+      back.setAttribute('data-portal-return', '');
+      back.target = '_top';
+      back.setAttribute('aria-label', 'Quay về trang chung');
+      back.title = 'Quay về trang chung';
+      back.hidden = true;
+      const arrow = document.createElement('span');
+      arrow.setAttribute('aria-hidden', 'true');
+      arrow.textContent = '←';
+      const lbl = document.createElement('span');
+      lbl.className = 'kt-return-label';
+      lbl.textContent = 'Trang chung';
+      back.append(arrow, lbl);
+      header.prepend(back);
+    }
     const shade = document.createElement('button'); shade.type = 'button'; shade.className = 'a2-nav-shade';
     shade.setAttribute('aria-label', 'Đóng danh sách chức năng'); document.body.append(shade);
     function setMenu(open) {
@@ -252,15 +291,10 @@
     nav.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.body.classList.contains('a2-nav-open')) { setMenu(false); menu.focus(); } });
     window.addEventListener('resize', () => setMenu(false)); setMenu(false);
-    const theme = document.createElement('button'); theme.type = 'button'; theme.className = 'a2-theme';
-    theme.setAttribute('aria-label', 'Đổi giao diện sáng hoặc tối'); theme.title = 'Đổi giao diện sáng hoặc tối';
-    function appearance(dark) { document.body.classList.toggle('a2-dark', dark); theme.textContent = dark ? '☀' : '☾'; theme.setAttribute('aria-pressed', String(dark)); }
-    try { appearance(localStorage.getItem('agent2.appearance') === 'dark'); } catch (_) { appearance(false); }
-    theme.addEventListener('click', () => { const dark = !document.body.classList.contains('a2-dark'); appearance(dark); try { localStorage.setItem('agent2.appearance', dark ? 'dark' : 'light'); } catch (_) { /* preference only */ } });
-    header.append(theme);
   }
 
   function start() {
+    enforceLightAppearance();
     setupAgent2Shell();
     setupPortalReturn();
     decorate();

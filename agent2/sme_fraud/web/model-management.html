@@ -3,17 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
   <title>Agent2 · Huấn luyện và quản lý mô hình</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="assets/platform-theme.css">
   <link rel="stylesheet" href="assets/model-management.css">
   <script defer src="assets/model-management.js"></script>
+  <script src="assets/platform-theme.js"></script>
+<link rel="stylesheet" href="assets/platform-theme.css">
 </head>
 <body>
-  <header class="a2-top">
+  <header class="a2-top" aria-label="Agent 2">
     <div class="a2-top-row">
       <div class="a2-brand-wrap">
-        <strong class="a2-brand">Agent2 · Giám sát</strong>
+        <a class="kt-portal-return" data-portal-return target="_top" aria-label="Quay về trang chung" title="Quay về trang chung" hidden><span aria-hidden="true">←</span><span class="kt-return-label">Trang chung</span></a>
+        <a class="kt-agent-brand" href="pipeline-workspace"><span class="kt-agent-badge" aria-hidden="true">A2</span><span>Trợ lý Giám sát</span></a>
         <nav class="a2-area-tabs" aria-label="Khu vực chức năng Agent2">
           <a id="nav-queue" href="pipeline-workspace">Hàng đợi &amp; điều tra</a>
           <a id="nav-models" href="model-management" aria-current="page">Huấn luyện &amp; mô hình</a>
@@ -23,7 +26,7 @@
         <span id="source-env-badge" class="env-badge" hidden>DỮ LIỆU MÔ PHỎNG</span>
         <label class="inline-select">
           <span>Doanh nghiệp</span>
-          <select id="company" disabled></select>
+          <select id="company" class="son-box" disabled></select>
         </label>
         <button id="refresh" type="button" class="btn-outline">Tải lại</button>
       </div>

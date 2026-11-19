@@ -74,14 +74,11 @@ document.addEventListener('click', (e) => {
 });
 $('.menu-toggle').setAttribute('aria-expanded', 'false');
 $('.menu-toggle').onclick = () => { const open = document.body.classList.toggle('nav-open'); $('.menu-toggle').setAttribute('aria-expanded', String(open)); };
-const inPlatform = window.self !== window.top;
-const initial = inPlatform ? (store.get('agent3.theme.embedded') || 'g10') : (store.get('agent3.theme') || (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'g100' : 'g10'));
-document.body.className = `cds--${initial}`;
-$('.theme-toggle').onclick = () => {
-  const next = document.body.classList.contains('cds--g100') ? 'g10' : 'g100';
-  document.body.className = `cds--${next}`;
-  store.set(inPlatform ? 'agent3.theme.embedded' : 'agent3.theme', next);
-};
+document.body.className = 'cds--g10';
+try {
+  localStorage.removeItem('agent3.theme');
+  localStorage.removeItem('agent3.theme.embedded');
+} catch { /* private mode */ }
 window.addEventListener('hashchange', route);
 installValidation();
 $('.skip-link').onclick = (e) => { e.preventDefault(); app().focus(); };
