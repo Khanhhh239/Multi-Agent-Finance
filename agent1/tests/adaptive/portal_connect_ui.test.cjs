@@ -32,7 +32,7 @@ function embeddedHandoff() {
   const frame = {contentWindow:{postMessage:(data, origin)=>sent.push([data,origin])}};
   const scope = {
     window:{addEventListener:(name, handler)=>{ assert.equal(name,"message"); listener=handler; }},
-    state:{}, agentById:()=>({url:"http://127.0.0.1:8011/workspace"}),
+    state:{}, authVersion:0, agentById:()=>({url:"http://127.0.0.1:8011/workspace"}),
     $: id => id === "agent-frame-agent1" ? frame : null, URL,
     api:async url=>{calls.push(url);return {key:"synthetic-key"};}, toast() {}
   };
@@ -51,6 +51,20 @@ test("embedded Agent 1 receives its key only from its own frame and origin", asy
   assert.equal(ui.sent[0][0].type,"platform-access-key");
   assert.equal(ui.sent[0][0].key,"synthetic-key");
   assert.equal(ui.sent[0][1],"http://127.0.0.1:8011");
+});
+
+test("changing the Portal session clears both assistant frames for a fresh handoff", () => {
+  const frames = Object.fromEntries(["agent1", "agent2"].map(id => [id, {
+    dataset: {src: id}, removeAttribute(name) { assert.equal(name, "src"); this.removed = true; }
+  }]));
+  const scope = { token: "old", authVersion: 0, agent2RouteEpoch: 0,
+    $: id => frames[id.replace("agent-frame-", "")],
+    sessionStorage: {setItem(){}, removeItem(){}} };
+  vm.createContext(scope);
+  vm.runInContext(section(portalSource, "  function setToken(", "  function el("), scope);
+  scope.setToken("new");
+  for (const frame of Object.values(frames)) { assert.equal(frame.removed, true); assert.equal(frame.dataset.src, undefined); }
+  assert.equal(scope.authVersion, 1);
 });
 
 test("ticket is removed from the address before authentication while portal context is retained", () => {

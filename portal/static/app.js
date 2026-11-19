@@ -61,8 +61,10 @@
     if (token !== nextToken) {
       authVersion += 1;
       agent2RouteEpoch += 1;
-      const frame = $("agent-frame-agent2") || $("agent-frame");
-      if (frame) { frame.removeAttribute("src"); delete frame.dataset.src; }
+      for (const id of ["agent1", "agent2"]) {
+        const frame = $("agent-frame-" + id) || $("agent-frame");
+        if (frame) { frame.removeAttribute("src"); delete frame.dataset.src; }
+      }
     }
     token = nextToken;
     try { token ? sessionStorage.setItem("kt-session", token) : sessionStorage.removeItem("kt-session"); } catch (e) { /* private mode */ }
@@ -750,7 +752,8 @@
     }
 
     // Grace period: keep frame visible during temporary glitches (< 3 poll cycles = 12s)
-    const isOnline = (a.state === "running" || (frame.dataset.src && a.state === "starting" && offlineFailures[a.id] < 3)) && (a.id !== "agent2" || !!token && state.intake.unlocked);
+    const needsUnlock = (a.id === "agent2" || (a.id === "agent1" && (state.intake.configured || state.intake.has_biometric))) && (!token || !state.intake.unlocked);
+    const isOnline = (a.state === "running" || (frame.dataset.src && a.state === "starting" && offlineFailures[a.id] < 3)) && !needsUnlock;
 
     for (const id of ["agent1", "agent2", "agent3", "agent4"]) {
       const f = $("agent-frame-" + id);
@@ -786,24 +789,23 @@
       $("agent-off").hidden = true;
     } else {
       frame.hidden = true;
-      if (a.state === "stopped" || a.id === "agent2") {
+      if (a.state === "stopped" || needsUnlock) {
         if (a.id === "agent2") agent2RouteEpoch += 1;
         frame.removeAttribute("src"); delete frame.dataset.src;
       }
       $("agent-off").hidden = false;
     }
     if (!isOnline) {
-      const needsUnlock = a.id === "agent2" && a.state === "running" && (!token || !state.intake.unlocked);
       if ($("agent-off-title")) {
-        $("agent-off-title").textContent = needsUnlock ? "Cần mở khóa phiên làm việc" : a.state === "starting" ? "Agent đang khởi động" : "Agent đang tắt";
+        $("agent-off-title").textContent = needsUnlock && a.state === "running" ? "Cần mở khóa phiên làm việc" : a.state === "starting" ? "Agent đang khởi động" : "Agent đang tắt";
       }
       $("agent-off-text").textContent =
-        needsUnlock ? "Agent 2 (Soát xét Giao dịch) yêu cầu phiên bảo mật đang mở khóa để xác thực quyền truy cập dữ liệu doanh nghiệp."
+        needsUnlock && a.state === "running" ? `${WORKSPACE_LABEL[a.id]} yêu cầu mở khóa phiên bảo mật để truy cập dữ liệu doanh nghiệp.`
           : a.state === "starting" ? "Đang khởi động, trang sẽ tự mở khi agent sẵn sàng."
             : a.state === "busy-port" ? "Cổng " + a.port + " đang bị chương trình khác dùng. Tắt chương trình đó hoặc đổi cổng trong portal/config.local.json."
               : "Bật agent để mở giao diện. Portal chạy agent từ thư mục " + a.root + ".";
       $("agent-start").hidden = a.state !== "stopped";
-      if ($("agent-unlock-link")) $("agent-unlock-link").hidden = !needsUnlock;
+      if ($("agent-unlock-link")) $("agent-unlock-link").hidden = !(needsUnlock && a.state === "running");
       if ($("agent-log-details")) $("agent-log-details").hidden = needsUnlock;
       if (!needsUnlock) api(a.log).then((d) => ($("agent-log").textContent = d.log || "Chưa có nhật ký.")).catch(() => {});
     }
@@ -1564,9 +1566,11 @@
     if (!a1 || event.data?.type !== "platform-ready" || (a1Frame && event.source !== a1Frame.contentWindow)) return;
     const origin = new URL(a1.url).origin;
     if (event.origin !== origin) return;
+    const version = authVersion;
+    const source = a1Frame.contentWindow;
     try {
       const { key } = await api("/api/agents/agent1/key");
-      if (key && a1Frame) a1Frame.contentWindow.postMessage({ type: "platform-access-key", key }, origin);
+      if (key && version === authVersion && source === a1Frame.contentWindow) source.postMessage({ type: "platform-access-key", key }, origin);
     } catch (err) { toast(err.message, true); }
   });
 
