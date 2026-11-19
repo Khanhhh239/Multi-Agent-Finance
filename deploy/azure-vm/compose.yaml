@@ -1,0 +1,64 @@
+services:
+  maf-demo:
+    container_name: maf-demo
+    build:
+      context: ../..
+      dockerfile: deploy/azure-vm/Dockerfile
+    restart: unless-stopped
+    stop_grace_period: 30s
+    user: "${MAF_UID:-1000}:${MAF_GID:-1000}"
+    env_file: .env
+    environment:
+      MAF_PORTAL_CONFIG: /app/deploy/azure-vm/portal-config.json
+      MAF_PORTAL_BIND_HOST: 0.0.0.0
+      MAF_AGENT_INTERNAL_HOST: 127.0.0.1
+      MAF_AGENT1_BIND_HOST: 0.0.0.0
+      MAF_AGENT3_BIND_HOST: 0.0.0.0
+      MAF_PUBLIC_ORIGIN: https://${PORTAL_HOST}
+      MAF_ALLOWED_ORIGINS: https://${PORTAL_HOST}
+      MAF_PORTAL_ALLOWED_HOSTS: ${PORTAL_HOST}
+      MAF_AGENT1_PUBLIC_URL: https://${AGENT1_HOST}
+      MAF_AGENT3_PUBLIC_URL: https://${AGENT3_HOST}
+      MAF_AGENT2_PORTAL_URL: http://127.0.0.1:8800
+      MAF_AGENT3_PORTAL_URL: http://127.0.0.1:8800
+      HOME: /state/home
+      AGENT1_REPORT_DIR: /state/agent1/reports
+      AGENT3_LAW_DB: /state/agent3/legal_corpus.sqlite3
+      AGENT3_LAW_CACHE: /state/agent3/law-cache
+      AGENT4_DB_PATH: /state/demo/warehouse.duckdb
+    volumes:
+      - ./state:/state
+    expose:
+      - "8800"
+      - "8011"
+      - "8640"
+    networks:
+      - edge
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: maf-demo-caddy
+    restart: unless-stopped
+    depends_on:
+      - maf-demo
+    environment:
+      PORTAL_HOST: ${PORTAL_HOST}
+      AGENT1_HOST: ${AGENT1_HOST}
+      AGENT3_HOST: ${AGENT3_HOST}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - edge
+
+networks:
+  edge:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:

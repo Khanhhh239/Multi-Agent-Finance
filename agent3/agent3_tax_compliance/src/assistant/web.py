@@ -53,7 +53,8 @@ def _bridge_save(ws, data, by):
 
 bridge = Bridge(os.environ.get('AGENT3_COMPANY_PROFILE_FILE'), os.environ.get('AGENT3_PLATFORM_TOKEN', ''),
                 os.environ.get('AGENT3_PORTAL_URL', ''), WORKSPACES, _bridge_save,
-                demo_company=json.loads(os.environ.get('AGENT3_DEMO_COMPANY', 'null')))
+                demo_company=json.loads(os.environ.get('AGENT3_DEMO_COMPANY', 'null')),
+                public_portal_url=os.environ.get('AGENT3_PUBLIC_PORTAL_URL'))
 
 
 @app.on_event('startup')
@@ -748,7 +749,17 @@ def index():
     page = STATIC / 'index.html'
     if not page.exists():
         return JSONResponse(dict(error='chưa dựng giao diện: cd webui && npm install && npm run build'), status_code=503)
-    return FileResponse(page, headers={'Cache-Control': 'no-cache'})
+    ancestors = os.environ.get('AGENT3_FRAME_ANCESTORS', "'none'")
+    return FileResponse(page, headers={
+        'Cache-Control': 'no-cache',
+        'Content-Security-Policy': (
+            f"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; "
+            f"img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; "
+            f"object-src 'none'; base-uri 'self'; frame-ancestors {ancestors}"
+        ),
+        'X-Content-Type-Options': 'nosniff',
+        'Referrer-Policy': 'no-referrer',
+    })
 
 
 from . import web_ai  # noqa: E402,F401  (registers the AI, dossier and law-alert endpoints)
@@ -758,4 +769,5 @@ if __name__ == '__main__':
     # Load by module name: run as __main__, this file is a second copy of the module and web_ai attaches to the named one.
     import os
     require_api_keys()
-    uvicorn.run('src.assistant.web:app', host='127.0.0.1', port=int(os.environ.get('AGENT3_PORT', 8640)))
+    uvicorn.run('src.assistant.web:app', host=os.environ.get('AGENT3_BIND_HOST', '127.0.0.1'),
+                port=int(os.environ.get('AGENT3_PORT', 8640)))

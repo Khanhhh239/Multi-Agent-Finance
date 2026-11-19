@@ -35,18 +35,26 @@ def etag(ws):
 
 
 class Bridge:
-    def __init__(self, source, token, portal_url, root, save, demo_company=None):
+    def __init__(self, source, token, portal_url, root, save, demo_company=None, public_portal_url=None):
         self.source = Path(source) if source else None
         self.token = token
         u = urlsplit(portal_url)
         self.portal_url = portal_url.rstrip('/') if u.scheme == 'http' and u.hostname in ('localhost', '127.0.0.1', '::1') and not u.username and not u.password and u.path in ('', '/') and not u.query and not u.fragment else None
+        public = urlsplit(public_portal_url or portal_url)
+        is_public_https = public.scheme == 'https' and bool(public.hostname)
+        is_local_http = public.scheme == 'http' and public.hostname in ('localhost', '127.0.0.1', '::1')
+        self.public_portal_url = (public_portal_url or portal_url).rstrip('/') if (
+            (is_public_https or is_local_http) and not public.username and not public.password and
+            public.path in ('', '/') and not public.query and not public.fragment
+        ) else self.portal_url
         self.root = root
         self.save = save
         self.demo_company = demo_company
         self.bound = None
 
     def context(self):
-        base = dict(state='unconnected', workspace_id=None, profile=None, profile_revision=None, portal_url=self.portal_url)
+        base = dict(state='unconnected', workspace_id=None, profile=None, profile_revision=None,
+                    portal_url=self.public_portal_url)
         if not self.source or not self.token or not self.portal_url:
             return base
         try:

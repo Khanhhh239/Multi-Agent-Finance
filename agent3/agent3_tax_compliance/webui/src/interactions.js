@@ -4,7 +4,9 @@ export function portalOrigin() {
   try {
     const value = state.platform?.portal_url;
     const u = new URL(value);
-    if (u.protocol === 'http:' && ['127.0.0.1', 'localhost'].includes(u.hostname) && !u.username && !u.password && u.origin !== location.origin) return u.origin;
+    const securePortal = u.protocol === 'https:';
+    const localPortal = u.protocol === 'http:' && ['127.0.0.1', 'localhost'].includes(u.hostname);
+    if ((securePortal || localPortal) && !u.username && !u.password && u.origin !== location.origin) return u.origin;
   } catch { /* standalone */ }
   return null;
 }

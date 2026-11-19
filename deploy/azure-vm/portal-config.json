@@ -1,0 +1,38 @@
+{
+  "port": 8800,
+  "workspace": "/state/portal",
+  "demo_company": null,
+  "agents": {
+    "agent1": {
+      "root": "/app/agent1",
+      "port": 8011,
+      "storage_root": "/state/agent1"
+    },
+    "agent2": {
+      "root": "/app/agent2",
+      "port": 8766,
+      "snapshot_db": "/state/agent2/snapshots-v2.sqlite3",
+      "model_db": "/state/agent2/models-v2.sqlite3",
+      "analysis_bindings": "/state/agent2/analysis-bindings.json",
+      "access_file": "/state/portal/agent2_access.json"
+    },
+    "agent3": {
+      "root": "/app/agent3/agent3_tax_compliance",
+      "port": 8640,
+      "env": {
+        "AGENT3_WORKSPACES": "/state/agent3/workspaces",
+        "AGENT3_ADMIN_STORE": "/state/agent3/admin.json",
+        "AGENT3_LAW_DB": "/state/agent3/legal_corpus.sqlite3",
+        "AGENT3_LAW_CACHE": "/state/agent3/law-cache"
+      }
+    },
+    "agent4": {
+      "root": "/app/agent4",
+      "port": 8040,
+      "env": {
+        "AGENT4_DB_PATH": "/state/demo/warehouse.duckdb",
+        "AGENT4_SELECTION_CONFIG": "/app/agent4/config/selection.yaml"
+      }
+    }
+  }
+}

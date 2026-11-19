@@ -1,0 +1,14 @@
+{$PORTAL_HOST} {
+	encode zstd gzip
+	reverse_proxy maf-demo:8800
+}
+
+{$AGENT1_HOST} {
+	encode zstd gzip
+	reverse_proxy maf-demo:8011
+}
+
+{$AGENT3_HOST} {
+	encode zstd gzip
+	reverse_proxy maf-demo:8640
+}

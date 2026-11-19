@@ -16,7 +16,7 @@ from .vbpl import in_scope, parse_page, parse_sitemap, slug, slug_year
 PROJECT = Path(__file__).resolve().parents[2]
 DEFAULT_SCOPE = PROJECT / 'configs/lawbase/scope.json'
 DEFAULT_DB = Path(os.environ.get('AGENT3_LAW_DB') or (PROJECT / 'data/lawbase/legal_corpus.sqlite3'))
-DEFAULT_CACHE = PROJECT / 'data/lawbase/cache'
+DEFAULT_CACHE = Path(os.environ.get('AGENT3_LAW_CACHE') or PROJECT / 'data/lawbase/cache')
 DEFAULT_RULESET = PROJECT / 'configs/assistant/ruleset_2026_11_draft.json'
 
 

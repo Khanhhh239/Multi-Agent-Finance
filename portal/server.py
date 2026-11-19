@@ -67,7 +67,6 @@ PORTAL = ROOT / 'portal'
 STATIC = PORTAL / 'static'
 CHAT = ROOT / 'agent4_chat'
 DESIGN = ROOT / 'design'
-HOST = '127.0.0.1'
 
 
 # ----------------------------------------------------------------------------------------------------------- config
@@ -82,8 +81,53 @@ def load_config():
 
 
 CFG = load_config()
-ORIGIN = f'http://{HOST}:{CFG["port"]}'
-ORIGINS = (ORIGIN, f'http://localhost:{CFG["port"]}')       # the page may be opened under either name
+
+
+def clean_origin(value, name):
+    parsed = urlsplit(str(value or '').strip())
+    try:
+        port = parsed.port
+        valid_port = port is None or 1 <= port <= 65535
+    except ValueError:
+        port = None
+        valid_port = False
+    if (parsed.scheme not in ('http', 'https') or not parsed.hostname or not valid_port or
+            parsed.username or parsed.password or parsed.path not in ('', '/') or parsed.query or parsed.fragment):
+        raise ValueError(f'{name} must be an HTTP(S) origin without a path, query or credentials.')
+    host = parsed.hostname.lower()
+    if ':' in host:
+        host = f'[{host}]'
+    if port and port != (80 if parsed.scheme == 'http' else 443):
+        host += f':{port}'
+    return f'{parsed.scheme.lower()}://{host}'
+
+
+PORTAL_BIND_HOST = os.environ.get('MAF_PORTAL_BIND_HOST', '127.0.0.1')
+AGENT_INTERNAL_HOST = os.environ.get('MAF_AGENT_INTERNAL_HOST', '127.0.0.1')
+AGENT1_BIND_HOST = os.environ.get('MAF_AGENT1_BIND_HOST', '127.0.0.1')
+AGENT3_BIND_HOST = os.environ.get('MAF_AGENT3_BIND_HOST', '127.0.0.1')
+LOCAL_ORIGINS = (f'http://127.0.0.1:{CFG["port"]}', f'http://localhost:{CFG["port"]}')
+PUBLIC_ORIGIN = os.environ.get('MAF_PUBLIC_ORIGIN')
+ORIGIN = clean_origin(PUBLIC_ORIGIN or LOCAL_ORIGINS[0], 'MAF_PUBLIC_ORIGIN')
+_EXTRA_ORIGINS = tuple(
+    clean_origin(item, 'MAF_ALLOWED_ORIGINS')
+    for item in os.environ.get('MAF_ALLOWED_ORIGINS', '').split(',') if item.strip()
+)
+ORIGINS = tuple(dict.fromkeys((ORIGIN, *_EXTRA_ORIGINS, *(() if PUBLIC_ORIGIN else LOCAL_ORIGINS))))
+AGENT_PUBLIC_URLS = {
+    'agent1': clean_origin(os.environ['MAF_AGENT1_PUBLIC_URL'], 'MAF_AGENT1_PUBLIC_URL')
+    if os.environ.get('MAF_AGENT1_PUBLIC_URL') else '',
+    'agent3': clean_origin(os.environ['MAF_AGENT3_PUBLIC_URL'], 'MAF_AGENT3_PUBLIC_URL')
+    if os.environ.get('MAF_AGENT3_PUBLIC_URL') else '',
+}
+PORTAL_ALLOWED_HOSTS = {
+    item.strip().lower() for item in os.environ.get('MAF_PORTAL_ALLOWED_HOSTS', '').split(',') if item.strip()
+} | {'127.0.0.1', 'localhost'}
+AGENT_FRAME_ORIGINS = ORIGINS
+PORTAL_FRAME_SOURCES = tuple(dict.fromkeys((
+    "'self'", *(value for value in AGENT_PUBLIC_URLS.values() if value), *LOCAL_ORIGINS,
+    'http://127.0.0.1:*', 'http://localhost:*',
+)))
 WORK = (ROOT / CFG.get('workspace', 'portal/workspace')).resolve()
 PENDING = WORK / 'pending'
 LOGS = WORK / 'logs'
@@ -288,7 +332,12 @@ def agent_python(aid):
 
 
 def agent_url(aid, path=''):
-    return f'http://{HOST}:{agent_port(aid)}{path}'
+    return f'http://{AGENT_INTERNAL_HOST}:{agent_port(aid)}{path}'
+
+
+def agent_public_url(aid, path=''):
+    base = AGENT_PUBLIC_URLS.get(aid) or f'http://127.0.0.1:{agent_port(aid)}'
+    return base.rstrip('/') + path
 
 
 def agent1_storage():
@@ -301,6 +350,10 @@ def agent1_storage():
 def launch_spec(aid, load_dotenv=False):
     root, port, c = agent_root(aid), agent_port(aid), company()
     env = dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8')
+    own_prefix = aid.upper() + '_'
+    for name in tuple(env):
+        if name.startswith(('AGENT1_', 'AGENT2_', 'AGENT3_', 'AGENT4_')) and not name.startswith(own_prefix):
+            env.pop(name, None)
     if load_dotenv:
         # Keep secrets in the ignored per-agent .env file. Explicit process env wins.
         for key, value in dotenv_for_agent(aid).items():
@@ -311,7 +364,8 @@ def launch_spec(aid, load_dotenv=False):
         env.update(AGENT1_THREADS='4', OMP_NUM_THREADS='4', OPENBLAS_NUM_THREADS='1', AGENT1_STATE_DIR=str(state),
                    AGENT1_KEY_DIR=str(keys), AGENT1_FIRM_ID=code, AGENT1_RESEARCH_MODE='0',
                    AGENT1_COMPANY_PROFILE_FILE=str(agent1_profile_file(c)),
-                   AGENT1_DEMO_TRAINING='1' if code.startswith('DEMO_') else '0', AGENT1_FRAME_ANCESTORS=' '.join(ORIGINS))
+                   AGENT1_DEMO_TRAINING='1' if code.startswith('DEMO_') else '0',
+                   AGENT1_FRAME_ANCESTORS=' '.join(AGENT_FRAME_ORIGINS))
         if code.startswith('DEMO_'):
             keys.mkdir(parents=True, exist_ok=True)
             password = keys / 'report-password.txt'
@@ -319,7 +373,7 @@ def launch_spec(aid, load_dotenv=False):
                 password.write_text(secrets.token_urlsafe(32), encoding='utf-8')
             env.update(AGENT1_REPORT_PASSWORD_FILE=str(password),
                        AGENT1_REPORT_DIR=env.get('AGENT1_REPORT_DIR', str(root / 'outputs' / 'private-training-reports')))
-        cmd = ['-m', 'uvicorn', 'agent1_service.main:app', '--host', HOST, '--port', str(port)]
+        cmd = ['-m', 'uvicorn', 'agent1_service.main:app', '--host', AGENT1_BIND_HOST, '--port', str(port)]
     elif aid == 'agent2':
         a = agent_cfg(aid)
         run = root / '.runtime' / 'platform'
@@ -327,8 +381,8 @@ def launch_spec(aid, load_dotenv=False):
                '--snapshot-db', str(path_of(a.get('snapshot_db'), run / 'snapshots-v2.sqlite3')),
                '--model-db', str(path_of(a.get('model_db'), run / 'models-v2.sqlite3')),
                '--analysis-bindings', str(path_of(a.get('analysis_bindings'), run / 'analysis-bindings.json')),
-               '--portal-url', ORIGIN]
-        env.update(SOSOAT_FRAME_ANCESTORS=' '.join(ORIGINS), PYTHONDONTWRITEBYTECODE='1',
+               '--portal-url', os.environ.get('MAF_AGENT2_PORTAL_URL', ORIGIN)]
+        env.update(SOSOAT_FRAME_ANCESTORS=' '.join(AGENT_FRAME_ORIGINS), PYTHONDONTWRITEBYTECODE='1',
                    AGENT2_PORTAL_BRIDGE_SECRET=AGENT2_TOKEN)
     elif aid == 'agent3':
         missing_keys = [
@@ -336,16 +390,16 @@ def launch_spec(aid, load_dotenv=False):
             if not env.get(name) and not env.get('AGENT3_API_KEY')
         ]
         if missing_keys:
-            raise RuntimeError('Agent 3 requires API keys: ' + ', '.join(missing_keys))
+            raise ValueError('Agent 3 requires API keys: ' + ', '.join(missing_keys))
         cmd = ['-m', 'src.assistant.web']
         env.update(AGENT3_PORT=str(port))
     else:
         # Governed pipeline (metric selection, planner, compiled SQL, read-only DuckDB). Demo mode gives the two server-owned
         # synthetic personas; the old text2sql slice stays in the repo but is no longer started here.
-        cmd = ['-m', 'uvicorn', 'agent4.api:create_demo_app', '--factory', '--host', HOST, '--port', str(port)]
+        cmd = ['-m', 'uvicorn', 'agent4.api:create_demo_app', '--factory', '--host', AGENT_INTERNAL_HOST, '--port', str(port)]
         missing_keys = [name for name in ('AGENT4_LLM_API_KEY', 'AGENT4_EMBED_API_KEY') if not env.get(name)]
         if missing_keys:
-            raise RuntimeError(
+            raise ValueError(
                 'Agent 4 requires both API keys: ' + ', '.join(missing_keys)
             )
         sel_cfg = (env.get('AGENT4_SELECTION_CONFIG')
@@ -385,9 +439,14 @@ def launch_spec(aid, load_dotenv=False):
                 break
     if aid == 'agent2':
         # Operator env cannot accidentally overwrite the live bridge binding.
-        env.update(AGENT2_PORTAL_BRIDGE_SECRET=AGENT2_TOKEN, AGENT2_PORTAL_URL=ORIGIN)
+        env.update(AGENT2_PORTAL_BRIDGE_SECRET=AGENT2_TOKEN,
+                   AGENT2_PORTAL_URL=os.environ.get('MAF_AGENT2_PORTAL_URL', ORIGIN))
     if aid == 'agent3':
-        env.update(AGENT3_COMPANY_PROFILE_FILE=str(COMPANY_FILE), AGENT3_PORTAL_URL=ORIGIN,
+        env.update(AGENT3_COMPANY_PROFILE_FILE=str(COMPANY_FILE),
+                   AGENT3_PORTAL_URL=os.environ.get('MAF_AGENT3_PORTAL_URL', ORIGIN),
+                   AGENT3_PUBLIC_PORTAL_URL=ORIGIN,
+                   AGENT3_FRAME_ANCESTORS=' '.join(AGENT_FRAME_ORIGINS),
+                   AGENT3_BIND_HOST=AGENT3_BIND_HOST,
                    AGENT3_PLATFORM_TOKEN=AGENT3_TOKEN,
                    AGENT3_DEMO_COMPANY=json.dumps(CFG.get('demo_company')))
     return [agent_python(aid), *cmd], root, env
@@ -396,7 +455,7 @@ def launch_spec(aid, load_dotenv=False):
 def port_open(port):
     with socket.socket() as s:
         s.settimeout(.3)
-        return s.connect_ex((HOST, port)) == 0
+        return s.connect_ex((AGENT_INTERNAL_HOST, port)) == 0
 
 
 def health(aid):
@@ -472,6 +531,8 @@ def agent_state(aid):
         state = 'stopped'
     info = AGENTS[aid]
     url = agent_url(aid, info['page']) if info['page'] else '/agent4/'
+    if aid in AGENT_PUBLIC_URLS and AGENT_PUBLIC_URLS[aid]:
+        url = agent_public_url(aid, info['page'] or '/')
     if aid == 'agent2':url = '/agent2/'
     if aid == 'agent3' and (workspace := agent3_workspace()):
         url += '#/?dn=' + quote(workspace)
@@ -600,7 +661,7 @@ def agent1_connect_link(expected_company, origin):
     ticket = result.get('ticket', '')
     if result.get('company') != code or not isinstance(ticket, str) or not re.fullmatch(r'[A-Za-z0-9_-]{40,128}', ticket):
         raise ValueError('Mã kết nối không khớp doanh nghiệp. Tải lại trang rồi thử lại.')
-    url = agent_url('agent1', '/workspace') + '?' + urlencode({'portal': origin}) + '#portal-connect=' + ticket
+    url = agent_public_url('agent1', '/workspace') + '?' + urlencode({'portal': origin}) + '#portal-connect=' + ticket
     return dict(url=url, company=code, expires_in=60)
 
 
@@ -1233,7 +1294,7 @@ def verify_biometric(credential_id: str, client_data_b64: str, auth_data_b64: st
         raise ValueError('Phiên xác thực sinh trắc học đã hết hạn hoặc bị phát lại. Vui lòng thử lại.')
 
     origin = client_data.get('origin', '')
-    if not any(origin.startswith(o) for o in ORIGINS):
+    if origin not in ORIGINS:
         raise ValueError(f'Nguồn gốc {origin} không hợp lệ.')
 
     try:
@@ -1882,7 +1943,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Referrer-Policy', 'no-referrer')
         self.send_header('Content-Security-Policy',
                          "default-src 'self'; style-src 'self'; font-src 'self'; "
-                         f"img-src 'self' data:; frame-src http://{HOST}:* http://localhost:*; frame-ancestors 'self'; base-uri 'none'")
+                         f"img-src 'self' data:; frame-src {' '.join(PORTAL_FRAME_SOURCES)}; frame-ancestors 'self'; base-uri 'none'")
         for k, v in (extra or {}).items():
             self.send_header(k, v)
         self.end_headers()
@@ -1951,8 +2012,9 @@ class Handler(BaseHTTPRequestHandler):
             self.need_session()
 
     def agent2_host(self):
-        port = self.server.server_port
-        if self.headers.get_all('Host',[]) not in ([f'127.0.0.1:{port}'],[f'localhost:{port}']):
+        hosts = self.headers.get_all('Host', [])
+        host = urlsplit('//' + hosts[0]).hostname.lower() if len(hosts) == 1 else None
+        if host not in PORTAL_ALLOWED_HOSTS:
             raise PermissionError('Địa chỉ Portal không hợp lệ.')
 
     def agent2_identity(self):
@@ -2263,13 +2325,13 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     autostart = '--start-all' in sys.argv
     start_agent2 = '--start-agent2' in sys.argv
-    server = ThreadingHTTPServer((HOST, CFG['port']), Handler)
+    server = ThreadingHTTPServer((PORTAL_BIND_HOST, CFG['port']), Handler)
     print(f'Portal: {ORIGIN} (Ctrl+C to stop the portal and its agents)', flush=True)
     if autostart or start_agent2:
         for aid in (AGENTS if autostart else ('agent2',)):
             try:
                 start_agent(aid)
-            except ValueError as e:
+            except (RuntimeError, ValueError) as e:
                 print(f'{aid}: {e}')
     try:
         server.serve_forever()

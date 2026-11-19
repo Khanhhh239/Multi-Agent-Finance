@@ -336,7 +336,9 @@ export async function loadWorkspaces() {
 export function portalLink(section = 'config', label = 'Mở hồ sơ chung tại portal') {
   try {
     const u = new URL(state.platform?.portal_url);
-    if (u.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(u.hostname) && !u.username && !u.password)
+    const securePortal = u.protocol === 'https:';
+    const localPortal = u.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(u.hostname);
+    if ((securePortal || localPortal) && !u.username && !u.password)
       return `<a class="cds--btn cds--btn--tertiary" href="${esc(u.origin)}/#${esc(section)}" target="_top">${esc(label)}</a>`;
   } catch { /* No trusted portal connection. */ }
   return '<p class="muted">Khởi động Agent 3 từ portal để kết nối hồ sơ doanh nghiệp chung.</p>';

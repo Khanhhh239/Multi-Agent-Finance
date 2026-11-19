@@ -273,7 +273,9 @@
     if (!supplied) return null;
     try {
       const portal = new URL(supplied);
-      if (portal.protocol !== "http:" || !["127.0.0.1", "localhost"].includes(portal.hostname) ||
+      const securePortal = portal.protocol === "https:";
+      const localPortal = portal.protocol === "http:" && ["127.0.0.1", "localhost"].includes(portal.hostname);
+      if ((!securePortal && !localPortal) ||
           portal.username || portal.password || portal.origin === location.origin) return null;
       return portal.origin + "/#" + view;
     } catch {

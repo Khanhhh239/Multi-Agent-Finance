@@ -2,6 +2,8 @@
 
 Nhánh `platform-Khanh`, 18/11/2026. Mục tiêu: một server chạy ổn định cho demo giám khảo hoặc pilot với doanh nghiệp thật, dữ liệu không rời máy chủ của doanh nghiệp.
 
+Với demo cuộc thi trên một VM, dùng scaffold tại [`deploy/azure-vm/README.md`](../deploy/azure-vm/README.md). Scaffold đó chạy đủ bốn giao diện sau một URL Portal; Agent 1 và Agent 3 cần hostname HTTPS riêng để trình duyệt nạp được giao diện nhúng. Phần bên dưới vẫn là lộ trình tổng quát, gồm cả các yêu cầu của pilot doanh nghiệp.
+
 ## 1. Hệ thống gồm những gì (cần cấp phát gì)
 
 | Thành phần | Công nghệ | Cổng | Dữ liệu và tài nguyên |

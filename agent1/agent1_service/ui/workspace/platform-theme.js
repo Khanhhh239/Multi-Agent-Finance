@@ -14,7 +14,9 @@
     try {
       if (!origin) origin = sessionStorage.getItem("kt-portal-origin") || sessionStorage.getItem("agent1-portal-origin");
       const portal = new URL(origin);
-      if (portal.protocol !== "http:" || !["127.0.0.1", "localhost"].includes(portal.hostname) ||
+      const securePortal = portal.protocol === "https:";
+      const localPortal = portal.protocol === "http:" && ["127.0.0.1", "localhost"].includes(portal.hostname);
+      if ((!securePortal && !localPortal) ||
           portal.username || portal.password || (portal.origin === location.origin && document.documentElement.dataset.agent !== "4")) return;
       for (const link of links) {
         link.href = portal.origin + "/#overview";
