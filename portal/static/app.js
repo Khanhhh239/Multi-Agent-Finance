@@ -18,6 +18,8 @@
   const offlineFailures = { agent1: 0, agent2: 0, agent3: 0, agent4: 0 };
   let intakeStage = "choose";
   let intakeActivity = null;
+  let intakeSelection = null;
+  let intakeResult = null;
   let token = "";
   let authVersion = 0;
   let agent2RouteEpoch = 0;
@@ -478,15 +480,22 @@
   }
 
   function renderQueue() {
+    const lastResult = intakeResult?.code === state.company.code ? intakeResult.message : "";
+    $("intake-result").textContent = lastResult;
+    $("intake-result").hidden = !lastResult;
+    const busy = Boolean(intakeActivity || pendingCheck());
+    const waiting = new Set(state.pending.filter((record) => canRecheckInBatch(record, state.pending)).map((record) => record.id));
     const rows = state.pending.map((r) =>
       el("tr", { role: "row" },
         el("td", { role: "cell" }, el("div", { class: "file-name" }, r.name), el("div", { class: "sub" }, sizeText(r.size) + ", thêm lúc " + r.added_at.slice(11, 16))),
         el("td", { role: "cell" }, r.label, r.note ? el("div", { class: "sub" }, r.note) : null),
         el("td", { role: "cell", class: "sub", "data-label": "Kỳ dữ liệu" }, periodText(r.period)),
-        el("td", { role: "cell" }, checkLines(r)),
+        el("td", { role: "cell" }, waiting.has(r.id)
+          ? el("span", { class: "stale" }, "Kiểm tra lại sau khi nạp tệp nguồn trong bộ này")
+          : checkLines(r)),
         el("td", { role: "cell", class: "right" }, el("div", { class: "queue-actions" },
           el("button", { type: "button", class: "link", disabled: Boolean(intakeActivity || pendingCheck()), onclick: () => recheck(r.id) }, "Kiểm tra lại"),
-          el("button", { type: "button", class: "link", disabled: Boolean(intakeActivity || pendingCheck()), onclick: () => dropFile(r.id) }, "Bỏ")))));
+          el("button", { type: "button", class: "link", disabled: busy || Boolean(r.applied), onclick: () => dropFile(r.id) }, "Bỏ")))));
     $("queue").tBodies[0].replaceChildren(...rows);
     $("queue-empty").hidden = rows.length > 0;
     const tabPending = $("intake-tab-pending");
@@ -495,8 +504,18 @@
       tabPending.textContent = String(rows.length);
     }
     const ready = state.pending.filter(canWrite);
+    const extras = selectionNotes();
+    const total = rows.length + extras.length;
+    const cleared = $("clear-intake");
+    cleared.hidden = !rows.length;
+    cleared.disabled = busy || !state.pending.some((record) => !record.applied);
     const targets = new Set(ready.flatMap((record) => record.targets.filter((aid) => record.checks[aid]?.state === "ready")));
-    $("intake-summary-count").textContent = ready.length + " / " + rows.length + " tệp sẵn sàng ghi";
+    $("intake-summary-count").textContent = "Tổng " + total + " tệp · " + ready.length + " sẵn sàng"
+      + (waiting.size ? " · " + waiting.size + " chờ tệp nguồn" : "")
+      + (extras.filter((item) => item.done).length ? " · " + extras.filter((item) => item.done).length + " đã có" : "");
+    const notes = $("intake-selection-notes");
+    notes.hidden = !extras.length;
+    notes.replaceChildren(...extras.map((item) => el("li", {}, item.name + " — " + item.message)));
     $("intake-summary-agents").textContent = targets.size
       ? "Nghiệp vụ nhận tệp: " + [...targets].map((aid) => AGENT_LABEL[aid]).join(", ")
       : "Chưa có tệp sẵn sàng để phân phối.";
@@ -504,8 +523,7 @@
     $("reason-field").hidden = !state.package;
     const button = $("commit");
     button.disabled = !ready.length || Boolean(intakeActivity || pendingCheck());
-    if (intakeActivity?.kind === "commit") button.textContent = "Đang ghi dữ liệu…";
-    else if (button.dataset.confirm !== "1") button.textContent = ready.length && ready.length < rows.length ? "Ghi " + ready.length + " tệp sẵn sàng" : "Ghi toàn bộ dữ liệu";
+    button.textContent = intakeActivity?.kind === "commit" ? "Đang nạp dữ liệu…" : "Nạp cả bộ";
 
     const mine = state.batches.filter((b) => b.company === state.company.code);
     const hist = mine.map((b) =>
@@ -1416,24 +1434,34 @@
     if (!code) return;
     intakeUploadBusy = true;
     let uploaded = 0;
-    const failures = [];
+    const extras = [];
+    const received = new Set();
+    intakeSelection = { code, extras };
+    intakeResult = null;
     try {
-      for (const file of files) {
+      for (const [index, file] of files.entries()) {
         startIntakeActivity("Đang kiểm tra tệp", file.name);
         toast("Đang kiểm tra " + file.name + ". Tệp lịch sử lớn có thể mất vài phút; hãy chờ kết quả.", false, true);
         try {
           const query = new URLSearchParams({ name: file.name, company: code });
-          await api("/api/inbox?" + query, { method: "POST", body: file, headers: { "Content-Type": "application/octet-stream" } });
-          uploaded++;
+          const result = await api("/api/inbox?" + query, { method: "POST", body: file, headers: { "Content-Type": "application/octet-stream" }, signal: AbortSignal.timeout(660000) });
+          if (result.already_recorded) extras.push({ name: file.name, done: true, message: "Đã ghi trước đó" });
+          else if (received.has(result.id)) extras.push({ name: file.name, done: false, message: "Trùng với tệp khác trong lượt chọn" });
+          else { received.add(result.id); uploaded++; }
         } catch (err) {
-          failures.push(file.name + " — " + err.message);
-          if (err.locked) break;
+          extras.push({ name: file.name, message: err.message });
+          if (err.locked) {
+            for (const item of files.slice(index + 1)) extras.push({ name: item.name, message: "Chưa gửi vì phiên đã khóa" });
+            break;
+          }
         }
       }
       await refresh();
-      toast(failures.length ? "Đã nhận " + uploaded + " tệp. " + failures.join(". ")
-        : "Đã kiểm tra " + uploaded + " tệp. Xem kết quả trước khi niêm phong.", failures.length > 0);
-      if (uploaded && state.intake.unlocked && location.hash === "#data") showIntakeStage("review", true);
+      const already = extras.filter((item) => item.done).length;
+      toast("Đã nhận " + uploaded + "/" + files.length + " tệp"
+        + (already ? " · " + already + " đã có" : "")
+        + (extras.length > already ? " · " + (extras.length - already) + " chưa vào hàng chờ" : "") + ".", extras.length > already);
+      if ((uploaded || extras.length) && state.intake.unlocked && location.hash === "#data") showIntakeStage("review", true);
     } finally {
       intakeUploadBusy = false;
       endIntakeActivity();
@@ -1462,32 +1490,55 @@
     refresh();
   }
 
+  function selectionNotes() {
+    return intakeSelection?.code === state.company.code ? intakeSelection.extras : [];
+  }
+
+  async function clearIntake() {
+    if (intakeUploadBusy || intakeActivity || pendingCheck()) return;
+    if (!window.confirm("Xóa tất cả tệp chưa ghi trong hàng chờ của doanh nghiệp này?")) return;
+    startIntakeActivity("Đang xóa tệp chờ", "");
+    try {
+      const res = await api("/api/inbox/clear", { method: "POST", json: { company: state.company.code } });
+      intakeSelection = null;
+      intakeResult = null;
+      await refresh();
+      toast("Đã xóa " + res.removed + " tệp chờ." + (res.retained ? " " + res.retained + " tệp đã ghi một phần vẫn cần hoàn tất." : ""));
+      if (!res.retained) showIntakeStage("choose");
+    } catch (err) { toast(err.message, true); }
+    finally { endIntakeActivity(); }
+  }
+
   function canWrite(record) {
     const checks = Object.values(record.checks || {});
     return checks.some((c) => c.state === "ready") &&
       (record.kind !== "shared_bank" || checks.every((c) => c.state === "ready" || c.state === "done"));
   }
 
+  function canRecheckInBatch(record, records) {
+    const parents = {
+      "a1:statements": ["shared_bank", "a1:bank"],
+      "a1:payments": ["a1:invoices", "shared_bank", "a1:bank"],
+      "a1:actions": ["a1:invoices"],
+      "a1:expense_payments": ["a1:outflows", "shared_bank", "a1:bank"]
+    }[record.kind];
+    return record.checks?.agent1?.state === "error" && parents
+      && records.some((item) => parents.includes(item.kind) && canWrite(item));
+  }
+
   async function commitAll() {
     if (intakeActivity || pendingCheck()) { toast("Chờ tác vụ đang xử lý hoàn tất trước khi ghi.", false, true); return; }
-    const ready = state.pending.filter(canWrite);
-    const ids = ready.map((r) => r.id);
-    const replaces = ready.some((r) => r.checks.agent2 && r.checks.agent2.state === "ready");
+    if (!state.pending.some(canWrite)) return;
+    const ids = state.pending.map((r) => r.id);
+    const extras = selectionNotes();
     const button = $("commit");
     const reason = $("reason").value.trim();
     if (state.package && reason.length < 10) { $("reason").focus(); toast("Gói đã niêm phong: nhập lý do bổ sung hoặc thay thế, ít nhất 10 ký tự.", true); return; }
-    if (replaces && button.dataset.confirm !== "1") {
-      button.dataset.confirm = "1";
-      button.textContent = "Bấm lần nữa: xác nhận tạo snapshot Agent 2";
-      setTimeout(() => { delete button.dataset.confirm; renderQueue(); }, 6000);
-      return;
-    }
-    delete button.dataset.confirm;
-    startIntakeActivity("Đang ghi dữ liệu", ready.map((r) => r.name).join(", "), "commit");
+    startIntakeActivity("Đang ghi dữ liệu", ids.length + " tệp trong hàng chờ", "commit");
     button.disabled = true;
     button.textContent = "Đang ghi";
     try {
-      const res = await api("/api/inbox/commit", { method: "POST", json: { ids, reason } });
+      const res = await api("/api/inbox/commit", { method: "POST", json: { ids, reason }, signal: AbortSignal.timeout(1800000) });
       if ((res.batch?.files || []).some((f) => f.results?.agent2?.snapshot_id)) {
         try {
           sessionStorage.removeItem("agent2.workbench");
@@ -1497,8 +1548,17 @@
         if (a2Frame) { a2Frame.removeAttribute("src"); delete a2Frame.dataset.src; }
       }
       $("reason").value = "";
-      intakeStage = "history";
-      toast("Đã niêm phong gói phiên bản " + res.batch.version + " với " + res.batch.files.length + " tệp.");
+      const written = res.batch.written_count ?? res.batch.files.length;
+      const already = extras.filter((item) => item.done).length;
+      const total = ids.length + extras.length;
+      const remaining = total - written - already;
+      intakeStage = remaining ? "review" : "history";
+      const message = "Đã ghi " + written + "/" + total + " tệp"
+        + (already ? " · " + already + " đã có" : "")
+        + (remaining ? " · " + remaining + " chưa ghi. Xem chi tiết trong hàng chờ." : " · Phiên bản " + res.batch.version + ".");
+      intakeResult = { code: res.batch.company, message };
+      toast(message, Boolean(remaining));
+      if (!remaining) intakeSelection = null;
     } catch (err) { toast(err.message, true); }
     finally { endIntakeActivity(); }
     refresh();
@@ -1716,6 +1776,7 @@
     finally{$("agent2-recover").disabled=false;refresh();}
   });
   $("commit").addEventListener("click", commitAll);
+  $("clear-intake").addEventListener("click", clearIntake);
   $("intake-tabs").addEventListener("click", (event) => {
     const button = event.target.closest("[data-intake-stage]");
     if (button && state?.intake.unlocked) showIntakeStage(button.dataset.intakeStage);

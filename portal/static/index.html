@@ -308,6 +308,7 @@
           <span id="intake-progress-time" aria-live="off"></span>
         </div>
 
+        <p class="intake-summary-stat" id="intake-result" role="status" hidden></p>
         <section id="intake-choose" class="intake-choose">
           <div class="intake-choose-main">
             <label class="drop" id="drop">
@@ -333,17 +334,19 @@
                 </table>
               </div>
               <p class="empty" id="queue-empty">Chưa có tệp nào trong hàng đợi kiểm tra. Hãy quay lại Bước 01 để chọn tệp.</p>
+              <button type="button" class="secondary" id="clear-intake" hidden>Xóa tất cả tệp chờ</button>
             </div>
             <aside class="intake-summary">
               <span class="intake-card-kicker">BẢNG QUYẾT ĐỊNH NIÊM PHONG</span>
               <h2>Tóm tắt nạp dữ liệu</h2>
               <p class="intake-summary-stat" id="intake-summary-count" aria-live="polite"></p>
               <p class="intake-summary-routes" id="intake-summary-agents"></p>
+              <ul class="checks" id="intake-selection-notes" hidden></ul>
               <button type="button" class="primary" id="intake-next">Xác nhận và tiếp tục</button>
               <div class="commit-bar" id="commit-bar">
                 <label class="field" id="reason-field" hidden><span class="label">Lý do bổ sung hoặc thay thế</span>
                   <input id="reason" maxlength="300" placeholder="Nhập lý do cập nhật gói (ít nhất 10 ký tự)..."></label>
-                <button type="button" class="primary" id="commit" disabled>Ghi toàn bộ dữ liệu</button>
+                <button type="button" class="primary" id="commit" disabled>Nạp cả bộ</button>
               </div>
             </aside>
           </div>
