@@ -1,7 +1,8 @@
 #!/bin/sh
 set -eu
 
-mkdir -p /state/home /state/portal /state/agent1 /state/agent2 /state/agent3/workspaces /state/agent3/law-cache /state/demo
+mkdir -p /state/home /state/portal /state/agent1 /state/agent2 /state/agent2/secrets /state/agent3/workspaces /state/agent3/law-cache /state/demo
+chmod 700 /state/agent2/secrets
 
 if [ -n "${AGENT3_LAW_DB:-}" ] && [ ! -f "$AGENT3_LAW_DB" ] \
    && [ -f /app/agent3/agent3_tax_compliance/data/lawbase/legal_corpus.sqlite3 ]; then

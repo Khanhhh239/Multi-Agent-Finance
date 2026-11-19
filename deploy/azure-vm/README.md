@@ -16,13 +16,27 @@ Agent 1's usable link includes a short-lived Portal connection ticket, and Agent
 
 ## Before starting
 
-- A Linux VM with Docker Engine and the Compose plugin.
+- A Linux VM with Docker Engine and the Compose plugin. The image builds a separate CPU-only Agent 2 HE environment using Concrete; its first build is larger and takes longer than the basic Agent 2 image.
 - Three DNS A records pointing to the VM: one for Portal, one for Agent 1, and one for Agent 3.
 - In the Azure network security group, allow inbound TCP 80 and 443. Limit SSH (22) to your own IP. Do not open ports 8011, 8040, 8640, 8766, or 8800.
 - Provider API credentials for Agent 3 and Agent 4. Their variables are listed in `.env.example`.
 - The Agent 4 demo warehouse and Agent 3 legal corpus. `bootstrap-data.sh` copies them from the current checkout when those local artifacts are present.
 
-The repository's current resource note recommends 8 vCPU, 32 GB RAM, and 200 GB SSD for the full workload. A smaller VM may start the interfaces but has not been verified for all analysis paths. The container build also needs outbound access to download Python and Node packages.
+The repository's current resource note recommends 8 vCPU, 32 GB RAM, and 200 GB SSD for the full workload. A smaller VM may start the interfaces but has not been verified for all analysis paths. The container build also needs outbound access to download Python, Node, CPU PyTorch, and Concrete packages.
+
+## Prepare Agent 2 data without putting it in Git
+
+On the checkout that already has the local Agent 2 demo state, run:
+
+```sh
+python deploy/azure-vm/prepare-agent2-state.py
+```
+
+On Windows, use `py -3 deploy/azure-vm/prepare-agent2-state.py` if `python` does not select Python 3.
+
+The script creates `deploy/azure-vm/state/agent2` and `state/portal/agent2_access.json` using SQLite's backup API. It copies the access policy and demo databases only; it does not copy HE keys, Portal passwords, or local config. The entire `state/` directory is ignored by Git. Transfer that state directory to the VM with a private file-transfer method before starting Compose. Do not commit it.
+
+When provisioning HE on Linux, save its keys under `/state/agent2/secrets`; the Linux provider creates owner-only files and does not read Windows DPAPI files. Existing DPAPI keys cannot be reused on Linux, so create a fresh synthetic demo context. This file-permission provider is intended for the competition demo only; host root can read it. Use Azure Key Vault for production. The current scaffold does not generate HE circuit bundles or node configs automatically.
 
 ## Configure the hostnames and credentials
 
@@ -72,6 +86,6 @@ This stops the containers and leaves the VM, its disk, state folder, and Caddy c
 
 ## Scope and limits
 
-This is a competition-demo setup, not a production security or availability profile. It does not configure Agent 2's optional encrypted HE worker; that remains a separate Linux setup with its own keys and runtime bundle. Agent 2 also needs its access policy and demo snapshot/model data. Agent 4 currently uses the demo API and the warehouse file provided above.
+This is a competition-demo setup, not a production security or availability profile. Agent 2's runtime and Concrete dependencies are Linux-capable, but HE workers remain opt-in: they need Linux-generated circuit bundles, key contexts, and worker configs before Portal will start them. Agent 2 also needs its access policy and demo snapshot/model data. Agent 4 currently uses the demo API and the warehouse file provided above.
 
 The app container persists Portal state, Agent 1 state, Agent 2 databases, Agent 3 workspaces, and the Agent 3 legal database under `state/`. Keep a backup before rebuilding or deleting the VM.

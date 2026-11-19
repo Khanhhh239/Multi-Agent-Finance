@@ -3,6 +3,7 @@
 .codex
 .agents
 **/.venv
+**/.he-venv
 **/venv
 **/__pycache__
 **/.pytest_cache

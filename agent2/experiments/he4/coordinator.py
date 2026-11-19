@@ -1,6 +1,7 @@
 """Enterprise-owned durable four-branch orchestration. No plaintext fallback."""
 from copy import deepcopy
 import json
+import os
 from pathlib import Path
 import queue
 import threading
@@ -30,6 +31,8 @@ class Settings:
         if set(config)!=required or config['version'] not in ('he4-enterprise/1.0.0','he4-enterprise/1.1.0'):raise ValueError('HE4 enterprise configuration')
         self.supports_rule_snapshot=config['version']=='he4-enterprise/1.1.0'
         worker_address(config['worker_url']);self.config=deepcopy(config);self.mutation_lock=threading.RLock()
+        if os.name != 'nt':
+            self.config['linux_python']=os.environ.get('AGENT2_HE_PYTHON', self.config['linux_python'])
         if not self.supports_rule_snapshot and set(config['builds'])!={'rules','statistics','graph'}:raise ValueError('three Concrete circuits required')
         if self.supports_rule_snapshot and (not {'rules','c3','graph'}<=set(config['builds']) or not set(config['builds'])<={'rules','statistics','c3','graph'}):raise ValueError('rule-snapshot HE requires rules, c3, graph builds')
         if not isinstance(config['worker_verify_key'],str) or len(bytes.fromhex(config['worker_verify_key']))!=32:raise ValueError('worker key')

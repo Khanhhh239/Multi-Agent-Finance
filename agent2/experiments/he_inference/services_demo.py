@@ -46,8 +46,8 @@ def request(port, path, payload=None, *, headers=None, method=None, raw=None):
 class Pair:
     def __init__(self, folder, *,state_key_file=None):
         self.root = Path(folder)
-        self.enterprise = self.root / 'enterprise'; self.enterprise.mkdir()
-        self.worker_root = self.root / 'worker'; self.worker_root.mkdir()
+        self.enterprise = self.root / 'enterprise'; self.enterprise.mkdir(mode=0o700)
+        self.worker_root = self.root / 'worker'; self.worker_root.mkdir(mode=0o700)
         self.bundle = build(self.worker_root / 'bundle')
         self.env = setup_demo(self.enterprise)
         self.worker_key = Ed25519PrivateKey.generate()
@@ -58,6 +58,8 @@ class Pair:
         self.grants_file.write_bytes(canonical(self.grants))
         self.worker_key_path = self.worker_root / 'response-signing.hex'
         self.worker_key_path.write_text(self.worker_key.private_bytes_raw().hex())
+        if os.name != 'nt':
+            os.chmod(self.worker_key_path, 0o600)
         self.node_key_path = self.enterprise / 'provisioning.dpapi.json'
         protect_key(self.node_key.private_bytes_raw(), self.node_key_path, purpose='node-signing')
         self.state_key_path = Path(state_key_file).resolve() if state_key_file else self.enterprise / 'state-wrapping.dpapi.json'

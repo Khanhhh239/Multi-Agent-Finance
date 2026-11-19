@@ -95,7 +95,7 @@ class Enterprise:
         self.python = python
         self.distro = distro
         self.recheck = recheck
-        self.root.mkdir(parents=True, exist_ok=True)
+        self.root.mkdir(parents=True, exist_ok=True, mode=0o700 if os.name != 'nt' else 0o777)
         manifest = strict_json((self.build / 'manifest.json').read_bytes())
         self.manifest = manifest
         self.profile_spec = resolve_quantization_profile(manifest)

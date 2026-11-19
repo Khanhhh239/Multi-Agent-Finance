@@ -24,7 +24,7 @@ from sme_fraud.method_preprocess import row_values
 from sme_fraud.snapshot_features import build_from_snapshot
 from .demo import worker_environment
 from .enterprise_server import load_node
-from .key_manager import PROVIDER, create_key, load_key
+from .key_manager import PROVIDER, WINDOWS_PROVIDER, create_key, load_key
 from .protocol import ABS_TOLERANCE, REL_TOLERANCE, canonical, public_hex, read_json
 from .registry_demo import setup_demo, database_dump
 from .registry_export import ReadOnlySnapshots, _load_model
@@ -35,20 +35,22 @@ COMPANIES = ('C001', 'C002')
 
 
 def private_folder(path):
-    """Only tighten a brand-new folder; never modify an existing tree's ACL."""
-    if os.name != 'nt':
-        raise ValueError('This protected demo requires Windows')
+    """Create a new private key directory without modifying an existing tree."""
     path = Path(path).resolve()
-    path.mkdir(parents=True, exist_ok=False)
-    result = subprocess.run(['whoami', '/user', '/fo', 'csv', '/nh'], capture_output=True, check=True)
-    # Account display names may use the console code page. Only the ASCII SID
-    # is used; decoding a display name must not break key preparation.
-    sid = next(csv.reader(io.StringIO(result.stdout.decode('utf-8', errors='replace'))))[1]
-    if not re.fullmatch(r'S-1-[0-9-]+', sid):
-        raise ValueError('Unable to resolve current Windows SID')
-    subprocess.run(['icacls', str(path), '/inheritance:r', '/grant:r',
-                    '*'+sid+':(OI)(CI)F', '*S-1-5-18:(OI)(CI)F'],
-                   capture_output=True, check=True)
+    if os.name == 'nt':
+        path.mkdir(parents=True, exist_ok=False)
+        result = subprocess.run(['whoami', '/user', '/fo', 'csv', '/nh'], capture_output=True, check=True)
+        # Account display names may use the console code page. Only the ASCII SID
+        # is used; decoding a display name must not break key preparation.
+        sid = next(csv.reader(io.StringIO(result.stdout.decode('utf-8', errors='replace'))))[1]
+        if not re.fullmatch(r'S-1-[0-9-]+', sid):
+            raise ValueError('Unable to resolve current Windows SID')
+        subprocess.run(['icacls', str(path), '/inheritance:r', '/grant:r',
+                        '*'+sid+':(OI)(CI)F', '*S-1-5-18:(OI)(CI)F'],
+                       capture_output=True, check=True)
+    else:
+        path.mkdir(parents=True, exist_ok=False, mode=0o700)
+        os.chmod(path, 0o700)
     return path
 
 
@@ -72,9 +74,9 @@ def snapshot_source(store, scope, snapshot_id):
 def prepare(destination):
     root = private_folder(destination)
     (root/'PREPARING').write_text('Incomplete until prepared.json is published. Do not reuse or overwrite keys.\n', encoding='utf-8')
-    enterprise = root/'enterprise'; enterprise.mkdir()
-    worker = root/'worker'; worker.mkdir()
-    data = root/'data'; data.mkdir()
+    enterprise = root/'enterprise'; enterprise.mkdir(mode=0o700)
+    worker = root/'worker'; worker.mkdir(mode=0o700)
+    data = root/'data'; data.mkdir(mode=0o700)
     env = setup_demo(enterprise)  # Explicit offline fit, before any scoring.
     # Tokens were only used in RAM for this offline preparation. Do not leave a
     # one-hour demo credential that would make the persisted packet unusable.
@@ -120,13 +122,19 @@ def prepare(destination):
     tracked = [p for folder in (data, enterprise) for p in folder.iterdir()
                if p.is_file() and p.name not in ('models.sqlite3','snapshots.sqlite3')]
     tracked += [worker/'service.json', worker/'grants.json', worker/'response-signing.hex', bundle/'worker-manifest.json']
+    protection = ('Windows DPAPI current-user' if PROVIDER == WINDOWS_PROVIDER else
+                  'Linux owner-only key file; not protected from host root')
+    worker_protection = ('private directory current-user/SYSTEM ACL; not an HE decryption key'
+                         if PROVIDER == WINDOWS_PROVIDER else
+                         'private owner-only directory; not an HE decryption key')
     manifest = dict(version=VERSION, status='prepared', data='synthetic_only', tenant_id='demo',
         prepared_at=datetime.now(timezone.utc).isoformat(), companies=rows,
         model='he_mahalanobis_2d', feature_contract_columns=33, selected_columns=2,
         key_scope='enterprise node wrapping/signing; HE secret keys are generated separately for each job/company',
         enterprise_keys=[signing.public_info(), wrapping.public_info()],
         source_sha256={p.relative_to(root).as_posix():digest(p.read_bytes()) for p in tracked},
-        worker_signing_protection='private directory current-user/SYSTEM ACL; not an HE decryption key',
+        key_protection=protection,
+        worker_signing_protection=worker_protection,
         live_configuration_changed=False, live_services_restarted=False)
     (root/'README.md').write_text(
         '# Bộ thử HE C001/C002\n\n'
@@ -135,7 +143,7 @@ def prepare(destination):
         'Chọn snapshot có 5 bản ghi khi chạy giao diện. Không dùng lịch sử fit làm tập đánh giá.\n\n'
         'Tệp để nhập thử: data/C001_5_giao_dich.json và data/C002_5_giao_dich.json. '
         'Các tệp này đã được lưu thành snapshot trong enterprise/snapshots.sqlite3.\n\n'
-        'Khóa node được Windows DPAPI bảo vệ; toàn bộ thư mục giới hạn ACL theo user tạo và SYSTEM. '
+        f'Khóa node dùng {protection}; toàn bộ thư mục khóa bị giới hạn quyền truy cập tương ứng với hệ điều hành. '
         'Không đổi tên/xóa khóa hoặc chạy prepare đè lên thư mục này. Không đẩy thư mục lên Git/cloud.\n\n'
         'Hướng dẫn đầy đủ: agent2/docs/HE_COMPANY_DEMO.md trong repo. '
         'Chưa bật HE trên Portal live; auth.json không cấp credential standalone.\n', encoding='utf-8')

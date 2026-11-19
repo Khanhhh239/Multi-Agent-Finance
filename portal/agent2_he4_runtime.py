@@ -1,4 +1,4 @@
-"""Portal owns WSL via a supervisor pipe; no enterprise keys in this process."""
+"""Portal owns the HE4 worker via WSL on Windows or a child process on Linux."""
 import hashlib
 import json
 import os
@@ -12,6 +12,7 @@ from urllib.request import build_opener,ProxyHandler,Request
 
 def linux_path(path):
     p=Path(path).resolve()
+    if os.name != 'nt':return str(p)
     if len(p.drive)!=2 or p.drive[1]!=':':raise ValueError('Local Windows drive required')
     return '/mnt/'+p.drive[0].lower()+'/'+p.as_posix()[3:]
 
@@ -36,7 +37,11 @@ class LinuxRuntime:
     def preflight(self,keys_only=False):
         command=[self.python,'-X','utf8','-B','-m','experiments.he4.preflight','--node-config',str(self.node_config),'--config',str(self.he4_config)]
         if keys_only:command.append('--keys-only')
-        result=subprocess.run(command,cwd=self.agent_root,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=120,creationflags=subprocess.CREATE_NO_WINDOW)
+        env=dict(os.environ)
+        source_paths=[str(self.agent_root),str(self.agent_root.parent)]
+        if env.get('PYTHONPATH'):source_paths.append(env['PYTHONPATH'])
+        env['PYTHONPATH']=os.pathsep.join(source_paths)
+        result=subprocess.run(command,cwd=self.agent_root,env=env,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=120,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
         try:value=json.loads(result.stdout)
         except ValueError:raise ValueError('Chưa kiểm tra được khóa phân tích bốn nhánh.') from None
         if result.returncode or value.get('status')!='ready':raise ValueError('Chưa sẵn sàng khóa, phiên bản hoặc kết nối phân tích bốn nhánh.')
@@ -59,9 +64,14 @@ class LinuxRuntime:
             connection.settimeout(.3)
             if connection.connect_ex(('127.0.0.1',self.worker['port']))==0:raise ValueError('Cổng HE4 đang do tiến trình khác dùng; Portal không tự nhận hoặc dừng tiến trình đó.')
         self.logs.mkdir(parents=True,exist_ok=True);self.token=secrets.token_hex(32)
-        command=['wsl.exe','-d',self.worker['distro'],'--cd',linux_path(self.worker['bundle']),'--exec',self.worker['python'],'-B','-m','experiments.he4.runner','--config',linux_path(self.worker['config']),'--port',str(self.worker['port'])]
+        if os.name == 'nt':
+            command=['wsl.exe','-d',self.worker['distro'],'--cd',linux_path(self.worker['bundle']),'--exec',self.worker['python'],'-B','-m','experiments.he4.runner','--config',linux_path(self.worker['config']),'--port',str(self.worker['port'])]
+            cwd=None
+        else:
+            command=[self.worker['python'],'-B','-m','experiments.he4.runner','--config',str(Path(self.worker['config']).resolve()),'--port',str(self.worker['port'])]
+            cwd=str(Path(self.worker['bundle']).resolve())
         with (self.logs/'agent2-he4-worker.log').open('ab') as log:
-            self.process=subprocess.Popen(command,stdin=subprocess.PIPE,stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW)
+            self.process=subprocess.Popen(command,cwd=cwd,stdin=subprocess.PIPE,stdout=log,stderr=subprocess.STDOUT,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
         self.process.stdin.write((json.dumps(dict(token=self.token))+'\n').encode());self.process.stdin.flush()
         try:
             end=time.monotonic()+30

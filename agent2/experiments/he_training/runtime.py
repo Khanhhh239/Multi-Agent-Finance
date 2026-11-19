@@ -63,11 +63,22 @@ _FORBIDDEN_AGGREGATOR_KEYS = frozenset({
 })
 
 
-def has_native_concrete() -> bool:
-    """Return True iff `concrete.fhe` is importable in the current Python process."""
+def has_native_concrete(python: str | None = None) -> bool:
+    """Return True iff the selected local Python can import `concrete.fhe`."""
+    if python is None or os.path.abspath(python) == os.path.abspath(sys.executable):
+        try:
+            return importlib.util.find_spec('concrete.fhe') is not None
+        except (ImportError, ValueError):
+            return False
     try:
-        return importlib.util.find_spec('concrete.fhe') is not None
-    except (ImportError, ValueError):
+        result = subprocess.run(
+            [python, '-c', 'import concrete.fhe'],
+            capture_output=True,
+            timeout=8,
+            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0),
+        )
+        return result.returncode == 0
+    except (OSError, subprocess.SubprocessError):
         return False
 
 
@@ -146,8 +157,8 @@ def resolve_he_runtime(
     aggregator_url: str | None = None,
 ) -> dict:
     """Discover portable HE execution capabilities across Linux, WSL2, Remote Aggregator, or Windows."""
-    native_local = has_native_concrete()
     resolved_python = resolve_he_python(python)
+    native_local = has_native_concrete(resolved_python)
     resolved_distro = discover_wsl_distro(distro)
     configured_url = aggregator_url or os.environ.get(ENV_HE_AGGREGATOR_URL, '').strip() or None
 

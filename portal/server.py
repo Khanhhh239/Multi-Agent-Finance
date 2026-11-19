@@ -493,16 +493,18 @@ def _he_runtime(env=None):
     if not node or not bindings or not isinstance(worker,dict):
         raise ValueError('Chưa cấu hình bộ xử lý đi cùng Agent2. Người quản lý cần kiểm tra he_worker.')
     worker=dict(worker)
+    he_python=env.get('AGENT2_HE_PYTHON') or agent_python('agent2')
     for name in ('bundle','config'):
         if name in worker:worker[name]=str(path_of(worker[name],worker[name]).resolve())
     he4=env.get('AGENT2_HE4_CONFIG');he4_worker=agent_cfg('agent2').get('he4_worker')
     if bool(he4)!=bool(he4_worker):raise ValueError('Cần cấu hình đồng thời node và worker bốn nhánh.')
     if he4_worker:
         he4_worker=dict(he4_worker)
+        if os.name != 'nt':he4_worker['python']=he_python
         for name in ('bundle','config'):
             if name in he4_worker:he4_worker[name]=str(path_of(he4_worker[name],he4_worker[name]).resolve())
         he4=str(path_of(he4,he4).resolve())
-    settings=(agent_python('agent2'),str(agent_root('agent2')),str(path_of(node,node).resolve()),str(path_of(bindings,bindings).resolve()),json.dumps(worker,sort_keys=True),str(LOGS),he4,json.dumps(he4_worker,sort_keys=True))
+    settings=(he_python,str(agent_root('agent2')),str(path_of(node,node).resolve()),str(path_of(bindings,bindings).resolve()),json.dumps(worker,sort_keys=True),str(LOGS),he4,json.dumps(he4_worker,sort_keys=True))
     if HE_RUNTIME is None or HE_RUNTIME_SETTINGS!=settings:
         if HE_RUNTIME is not None and HE_RUNTIME.state()['owned']:
             raise ValueError('Cấu hình phân tích đã đổi. Tắt Agent2 trước khi áp dụng cấu hình mới.')
@@ -510,7 +512,7 @@ def _he_runtime(env=None):
         if he4_worker:
             try:from .agent2_he4_runtime import LinuxRuntime,CombinedRuntime
             except ImportError:from agent2_he4_runtime import LinuxRuntime,CombinedRuntime
-            HE_RUNTIME=CombinedRuntime(HE_RUNTIME,LinuxRuntime(he4_worker,settings[1],settings[2],he4,settings[0],LOGS))
+            HE_RUNTIME=CombinedRuntime(HE_RUNTIME,LinuxRuntime(he4_worker,settings[1],settings[2],he4,he4_worker.get('python') or settings[0],LOGS))
         HE_RUNTIME_SETTINGS=settings
     return HE_RUNTIME
 
@@ -525,6 +527,10 @@ def _he_training_runtime():
     if not isinstance(worker, dict):
         return None
     worker = dict(worker)
+    if os.name != 'nt':
+        configured = agent_cfg('agent2').get('env', {}).get('AGENT2_HE_PYTHON') or os.environ.get('AGENT2_HE_PYTHON')
+        if configured:
+            worker['python'] = str(path_of(configured, configured))
     for name in ('bundle', 'config'):
         if name in worker:
             worker[name] = str(path_of(worker[name], worker[name]).resolve())

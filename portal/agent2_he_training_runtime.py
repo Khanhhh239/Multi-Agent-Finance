@@ -1,7 +1,8 @@
-"""Portal WSL supervisor for the encrypted training worker (port 8870).
+"""Portal supervisor for the encrypted training worker (port 8870).
 
 Owns lifecycle, bundle integrity verification, health check with timeout, and
-controlled restart for `experiments.he_training.runner` -> `worker.py`.
+controlled restart for `experiments.he_training.runner` -> `worker.py`. Uses
+WSL on Windows and the configured native interpreter on Linux.
 Never imports or touches enterprise secret keys.
 """
 from __future__ import annotations
@@ -9,6 +10,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 from pathlib import Path
 import secrets
 import socket
@@ -197,19 +199,28 @@ class TrainingLinuxRuntime:
 
             self.logs.mkdir(parents=True, exist_ok=True)
             self.token = secrets.token_hex(32)
-            command = [
-                'wsl.exe', '-d', self.worker['distro'],
-                '--cd', linux_path(self.worker['bundle']),
-                '--exec', self.worker['python'], '-B', '-m', 'experiments.he_training.runner',
-                '--config', linux_path(self.worker['config']),
-                '--port', str(self.worker['port']),
-            ]
+            if os.name == 'nt':
+                command = [
+                    'wsl.exe', '-d', self.worker['distro'],
+                    '--cd', linux_path(self.worker['bundle']),
+                    '--exec', self.worker['python'], '-B', '-m', 'experiments.he_training.runner',
+                    '--config', linux_path(self.worker['config']),
+                    '--port', str(self.worker['port']),
+                ]
+                cwd = None
+            else:
+                command = [
+                    self.worker['python'], '-B', '-m', 'experiments.he_training.runner',
+                    '--config', str(Path(self.worker['config']).resolve()),
+                    '--port', str(self.worker['port']),
+                ]
+                cwd = str(Path(self.worker['bundle']).resolve())
             flags = getattr(subprocess, 'CREATE_NO_WINDOW', 0)
             with (self.logs / 'agent2-he-training-worker.log').open('ab') as log:
                 log.write(f'\n--- {_iso_now()} start worker 8870 ---\n'.encode('utf-8'))
                 log.flush()
                 self.process = subprocess.Popen(
-                    command,
+                    command, cwd=cwd,
                     stdin=subprocess.PIPE,
                     stdout=log,
                     stderr=subprocess.STDOUT,

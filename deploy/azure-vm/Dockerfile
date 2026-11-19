@@ -11,7 +11,7 @@ RUN apt-get update \
 WORKDIR /app
 COPY shared/finance_input /app/shared/finance_input
 COPY agent1/requirements.txt agent1/requirements-service.txt /app/agent1/
-COPY agent2/requirements.txt /app/agent2/
+COPY agent2/requirements.txt agent2/requirements-he4-linux.txt /app/agent2/
 COPY agent3/agent3_tax_compliance/requirements.txt /app/agent3/agent3_tax_compliance/
 COPY agent4/requirements-cloud.txt /app/agent4/
 
@@ -21,6 +21,10 @@ RUN python -m venv /opt/portal-venv \
     && cd /app/agent1 && .venv/bin/pip install -r requirements-service.txt \
     && python -m venv /app/agent2/.venv \
     && cd /app/agent2 && .venv/bin/pip install -r requirements.txt cryptography \
+    && python -m venv /app/agent2/.he-venv \
+    && cd /app/agent2 && .he-venv/bin/pip install -e ../shared/finance_input \
+    && .he-venv/bin/pip install --index-url https://download.pytorch.org/whl/cpu torch==2.5.1 \
+    && .he-venv/bin/pip install -r requirements.txt -r requirements-he4-linux.txt \
     && python -m venv /app/agent3/agent3_tax_compliance/.venv \
     && cd /app/agent3/agent3_tax_compliance && .venv/bin/pip install -r requirements.txt \
     && python -m venv /app/agent4/.venv \
@@ -50,6 +54,7 @@ WORKDIR /app
 COPY --from=dependencies /opt/portal-venv /opt/portal-venv
 COPY --from=dependencies /app/agent1/.venv /app/agent1/.venv
 COPY --from=dependencies /app/agent2/.venv /app/agent2/.venv
+COPY --from=dependencies /app/agent2/.he-venv /app/agent2/.he-venv
 COPY --from=dependencies /app/agent3/agent3_tax_compliance/.venv /app/agent3/agent3_tax_compliance/.venv
 COPY --from=dependencies /app/agent4/.venv /app/agent4/.venv
 

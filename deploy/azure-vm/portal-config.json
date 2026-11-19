@@ -14,7 +14,12 @@
       "snapshot_db": "/state/agent2/snapshots-v2.sqlite3",
       "model_db": "/state/agent2/models-v2.sqlite3",
       "analysis_bindings": "/state/agent2/analysis-bindings.json",
-      "access_file": "/state/portal/agent2_access.json"
+      "access_file": "/state/portal/agent2_access.json",
+      "env": {
+        "AGENT2_CASE_QUEUE_DB": "/state/agent2/case-queue.sqlite3",
+        "AGENT2_REMEDIATION_DB": "/state/agent2/remediation.sqlite3",
+        "AGENT2_HE_PYTHON": "/app/agent2/.he-venv/bin/python"
+      }
     },
     "agent3": {
       "root": "/app/agent3/agent3_tax_compliance",
