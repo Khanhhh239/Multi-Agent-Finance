@@ -6,17 +6,21 @@ from .auth import AuthError
 from .validation_api import RequestFailure, respond_failure
 
 ROOT = Path(__file__).with_name('web')
-ASSETS = {'/': ('index.html', 'text/html; charset=utf-8'),
-          '/workspace': ('workspace.html','text/html; charset=utf-8'),
+ASSETS = {'/': ('investigation.html', 'text/html; charset=utf-8'),
+          '/workspace': ('investigation.html','text/html; charset=utf-8'),
           '/status': ('status.html','text/html; charset=utf-8'),
-          '/data-import': ('index.html','text/html; charset=utf-8'),
-          '/assets/workspace.js': ('workspace.js','text/javascript; charset=utf-8'),
+          '/data-import': ('investigation.html','text/html; charset=utf-8'),
           '/assets/workspace.css': ('workspace.css','text/css; charset=utf-8'),
           '/analysis-settings': ('analysis-settings.html','text/html; charset=utf-8'),
           '/pipeline-releases': ('pipeline-releases.html','text/html; charset=utf-8'),
           '/pipeline-workspace': ('investigation.html','text/html; charset=utf-8'),
           '/pipeline-operations': ('bundle-workspace.html','text/html; charset=utf-8'),
           '/model-management': ('model-management.html','text/html; charset=utf-8'),
+          '/assets/agent2-shell.js': ('agent2-shell.js','text/javascript; charset=utf-8'),
+          '/assets/agent2-shell.css': ('agent2-shell.css','text/css; charset=utf-8'),
+          '/federated-training': ('federated-training.html','text/html; charset=utf-8'),
+          '/assets/federated-training.js': ('federated-training.js','text/javascript; charset=utf-8'),
+          '/assets/federated-training.css': ('federated-training.css','text/css; charset=utf-8'),
           '/assets/investigation.js': ('investigation.js','text/javascript; charset=utf-8'),
           '/assets/investigation.css': ('investigation.css','text/css; charset=utf-8'),
           '/assets/model-management.js': ('model-management.js','text/javascript; charset=utf-8'),
@@ -74,8 +78,6 @@ def handle_workbench(handler, authorizer,*,analysis_mode=None,bundle_mode=False)
             kind,mime=SAMPLES[path.path];handler.respond(200,sample(json.loads((ROOT/'import-demo.json').read_bytes()),kind),mime)
         else:
             filename, mime = ASSETS[path.path]
-            if path.path=='/' and analysis_mode=='four_encrypted_branches':filename='workspace.html'
-            if path.path=='/' and bundle_mode:filename='investigation.html'
             handler.respond(200, (ROOT / filename).read_bytes(), mime)
     except AuthError as error:
         respond_failure(handler, error)

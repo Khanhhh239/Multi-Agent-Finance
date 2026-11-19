@@ -2012,6 +2012,56 @@ class LRFHETrainingService:
             self._save_receipt(conn, tenant, company, idem_key, req_hash, response)
         return response
 
+    def install_federated_model(self, scope: AccessScope, model: dict) -> dict:
+        """Install the station's accepted joint model as this company's releasable LR (the supervised scoring factor)."""
+        tenant = scope.tenant_id
+        company = next(iter(scope.company_ids))
+        if 'model.fit' not in scope.permissions:
+            fail(403, 'MODEL_FIT_DENIED', 'Cần quyền quản trị mô hình để đồng bộ mô hình.', 'Dùng tài khoản quản lý.')
+        now = _iso_now()
+        job_id = 'fedsync_' + digest(canonical({'company': company, 'version': model['version'], 'run': model['run_id']}))[:24]
+        w = model['weights']
+        record = {
+            'release_contract_version': LR_RELEASE_CONTRACT,
+            'model_id': 'lrmdl_' + digest(canonical({'fed': model['run_id'], 'company': company, 'weights': w['codes']}))[:24],
+            'version_tag': f'{company}-lr-chung-v{model["version"]}',
+            'artifact_stage': 'releasable_model',
+            'tenant_id': tenant,
+            'company_id': company,
+            'source_job_id': model['run_id'],
+            'worker_job_id': None,
+            'mode': 'fhe_cloud_ciphertext',
+            'native_fhe_executed': True,
+            'profile_version': PROFILE_VERSION,
+            'build_sha256': None,
+            'key_epoch': None,
+            'model_cipher_sha256': None,
+            'weights_code': list(w['codes']),
+            'coefficients': [float(v) for v in w['w']],
+            'intercept': float(w['b']),
+            'threshold': float(model['threshold']),
+            'feature_schema': deepcopy(LR_FEATURE_SCHEMA),
+            'supported_features': list(SUPPORTED_FEATURES),
+            'validation_metrics': dict(model['summary'], threshold=float(model['threshold']), selection_basis='station_pooled_holdout'),
+            'validation_bce_loss': model['summary'].get('bce'),
+            'validation_accuracy': model['summary'].get('accuracy'),
+            'implementation_parity_pass': True,
+            'approved_by': scope.actor_id,
+            'approved_at': now,
+            'approval_reason': f'Đồng bộ mô hình chung v{model["version"]} từ trạm huấn luyện.',
+            'release_scope': 'shadow_or_controlled_pilot',
+        }
+        record = sign_releasable_lr_model(record, self._load_or_create_signing_key(company))
+        payload = {'job_id': job_id, 'mode': 'fhe_cloud_ciphertext', 'artifact_stage': 'releasable_model', 'status': 'releasable',
+                   'stage_label_vi': f'Mô hình chung v{model["version"]} (đồng bộ từ trạm)', 'promoted_version': record,
+                   'created_at': now, 'updated_at': now}
+        with self._tx(scope) as conn:
+            conn.execute('INSERT OR REPLACE INTO lr_fhe_jobs VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                         (job_id, tenant, company, 'fhe_cloud_ciphertext', None, None, 'releasable_model', 'releasable', 0, 0, now, now,
+                          json.dumps(payload, ensure_ascii=False)))
+            self._log_event(conn, tenant, company, job_id, 'federated_model_synced', scope.actor_id, {'version': model['version'], 'model_id': record['model_id']})
+        return record
+
     def _load_or_create_signing_key(self, company: str) -> Ed25519PrivateKey:
         """Load company DPAPI node-signing key if provisioned, else enterprise-local Ed25519 key."""
         cfg = self._discover_runtime_cfg()

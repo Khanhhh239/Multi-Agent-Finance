@@ -56,6 +56,7 @@ class NativeEvaluator:
             if owner not in self.keys:
                 raw = Path(grant['evaluation_keys_file']).read_bytes()
                 require(sha(raw) == grant['evaluation_keys_sha256'], 'EVALUATION_KEYS_TAMPERED')
+                self.keys.clear()  # one company's ~1.3 GB key domain resident at a time (bounded worker memory)
                 self.keys[owner] = self.fhe.EvaluationKeys.deserialize(raw)
             values = [self.fhe.Value.deserialize(raw) for raw in (x, y, weights)]
             return self.server.run(*values, evaluation_keys=self.keys[owner]).serialize()
@@ -68,7 +69,7 @@ class NativeEvaluator:
         return self.aggregators[owner].step_bytes(x, y, weights)
 
 
-def make_server(port, store, batch_store=None, *, bind_host='127.0.0.1', allowed_hosts=None):
+def make_server(port, store, batch_store=None, *, bind_host='127.0.0.1', allowed_hosts=None, health=None):
     configured_remote = os.environ.get(ENV_HE_AGGREGATOR_URL, '').strip()
     extra_hosts = set(allowed_hosts or ())
     if configured_remote:
@@ -81,6 +82,27 @@ def make_server(port, store, batch_store=None, *, bind_host='127.0.0.1', allowed
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *_):
             pass
+
+        def do_GET(self):
+            try:
+                hosts = self.headers.get_all('Host', [])
+                valid = {f'127.0.0.1:{self.server.server_port}', f'localhost:{self.server.server_port}', *extra_hosts,
+                         *(f'{h}:{self.server.server_port}' for h in extra_hosts if ':' not in h)}
+                require(len(hosts) == 1 and hosts[0] in valid and not self.headers.get_all('Origin'), 'HOST_DENIED')
+                require(self.path == '/health', 'ROUTE_NOT_FOUND')
+                status = 200
+                result = dict(role='he_training_worker', version='he-training-worker/0.1.0', batch_training=batch_store is not None, **(health or {}))
+            except TrainingError as error:
+                status = 404 if error.code == 'ROUTE_NOT_FOUND' else 403
+                result = dict(error=error.code)
+            body = canonical(result)
+            self.send_response(status)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Content-Length', str(len(body)))
+            self.send_header('Cache-Control', 'no-store')
+            self.send_header('Connection', 'close')
+            self.end_headers()
+            self.wfile.write(body)
 
         def do_POST(self):
             try:
@@ -170,7 +192,9 @@ def main():
             evaluator,
             max_updates=evaluator.manifest['max_steps'],
         )
-    server = make_server(a.port, store, batches, bind_host=a.bind_host, allowed_hosts=cfg.get('allowed_hosts'))
+    server = make_server(a.port, store, batches, bind_host=a.bind_host, allowed_hosts=cfg.get('allowed_hosts'),
+                         health=dict(execution_mode=evaluator.execution_mode, profile_version=evaluator.profile_version,
+                                     worker_verify_key=key.public_key().public_bytes_raw().hex()))
     atomic(a.ready, canonical(dict(
         port=server.server_port,
         pid=os.getpid(),

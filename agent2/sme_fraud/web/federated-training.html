@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi" data-agent="2">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Agent2 · Đóng góp huấn luyện</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/platform-theme.css">
+  <link rel="stylesheet" href="assets/model-management.css">
+  <link rel="stylesheet" href="assets/federated-training.css">
+  <link rel="stylesheet" href="assets/agent2-shell.css">
+  <script defer src="assets/agent2-shell.js"></script>
+  <script defer src="assets/federated-training.js"></script>
+</head>
+<body>
+  <div id="a2-shell" data-page="contribute" data-env-id="sim-badge" data-title="Đóng góp huấn luyện" data-desc="Nạp dữ liệu có nhãn để mô hình chung học được từ doanh nghiệp của bạn."></div>
+
+  <main class="mm-main fed-main">
+    <div id="notice" role="alert" hidden></div>
+    <div id="success-banner" role="status" hidden></div>
+
+    <section class="mm-card">
+      <h2>1 · Dữ liệu có nhãn</h2>
+      <p class="mm-sub">Mỗi dòng là một giao dịch đã kiểm tra: nhãn 1 là có vấn đề, 0 là hợp lệ. Dữ liệu được mã hóa bằng khóa riêng của doanh nghiệp trước khi rời máy; máy trạm chỉ thấy nhãn.</p>
+      <div class="fed-actions">
+        <label class="btn-outline fed-file">Chọn tệp CSV<input id="fed-file" type="file" accept=".csv,text/csv" hidden></label>
+        <a id="fed-sample" class="btn-link" href="#" download="mau_du_lieu_dong_gop.csv">Tải tệp CSV mẫu</a>
+      </div>
+      <div id="fed-data" class="fed-kpis"></div>
+    </section>
+
+    <section class="mm-card">
+      <h2>2 · Gửi lên trạm huấn luyện</h2>
+      <p class="mm-sub">Trạm gom dữ liệu đã mã hóa của các doanh nghiệp, huấn luyện chung và chỉ cập nhật mô hình khi kết quả kiểm định tốt hơn.</p>
+      <div class="fed-run-bar">
+        <button id="fed-submit" type="button" class="btn-primary">Mã hóa và gửi lên trạm</button>
+        <span id="fed-submit-state" class="status-pill status-idle">Chưa gửi</span>
+      </div>
+    </section>
+
+    <section class="mm-card">
+      <h2>3 · Mô hình chung</h2>
+      <div id="fed-model" class="mm-sub">Trạm chưa có mô hình nào.</div>
+      <div class="fed-run-bar">
+        <button id="fed-sync" type="button" class="btn-primary">Đồng bộ mô hình về doanh nghiệp</button>
+        <span id="fed-sync-state" class="status-pill status-idle">Chưa đồng bộ</span>
+      </div>
+      <p class="mm-sub">Sau khi đồng bộ, lần bấm "Phân tích" tiếp theo ở tab Tổng quan sẽ dùng thêm mô hình có nhãn này để chấm điểm.</p>
+    </section>
+  </main>
+</body>
+</html>

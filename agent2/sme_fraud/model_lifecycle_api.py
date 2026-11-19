@@ -11,7 +11,7 @@ from .snapshot_api import _key
 from .validation_api import authorize_request, read_json, respond_failure
 
 ROUTE = re.compile(
-    r'/api/v1/companies/([A-Za-z0-9_.:-]{1,128})/model-lifecycle(?:/(profile|train|evaluate|approve|rollback|score-queue|lr-fhe/(?:status|worker-health|worker-restart|prepare|train|resume|decrypt|promote)|lr-registry(?:/(?:register|validate|transition))?))?\Z'
+    r'/api/v1/companies/([A-Za-z0-9_.:-]{1,128})/model-lifecycle(?:/(profile|train|evaluate|approve|rollback|score-queue|analyze|training-data|lr-fhe/(?:status|worker-health|worker-restart|prepare|train|resume|decrypt|promote)|federated/(?:status|contribute|submit|sync)|lr-registry(?:/(?:register|validate|transition))?))?\Z'
 )
 
 
@@ -68,6 +68,26 @@ def handle_model_lifecycle(handler, authorizer, lifecycle, method: str) -> bool:
                         value = lr_svc.promote_to_releasable_model(scope, body, idem, recheck)
             else:
                 fail(405, 'METHOD_NOT_ALLOWED', 'Thao tác huấn luyện LR FHE không hợp lệ.', 'Dùng đúng phương thức GET/POST.')
+        elif action and action.startswith('federated/'):
+            fed = getattr(lifecycle, 'federated', None)
+            if fed is None:
+                fail(503, 'FEDERATED_NOT_CONFIGURED', 'Chưa cấu hình huấn luyện chung nhiều doanh nghiệp.', 'Chạy thiết lập HE huấn luyện.')
+            sub = action.split('/', 1)[1]
+            if method == 'GET' and sub == 'status':
+                value = fed.company_status(company)
+            elif method == 'POST' and sub in ('contribute', 'submit', 'sync'):
+                require_fit(scope)
+                body = read_json(handler)
+                if not isinstance(body, dict):
+                    fail(400, 'MODEL_LIFECYCLE_BODY', 'Nội dung yêu cầu không hợp lệ.', 'Điền đúng thông tin trên màn hình.')
+                if sub == 'contribute':
+                    value = fed.contribute(company, body)
+                elif sub == 'submit':
+                    value = fed.submit(company)
+                else:
+                    value = fed.sync(company, scope)
+            else:
+                fail(405, 'METHOD_NOT_ALLOWED', 'Thao tác huấn luyện chung không hợp lệ.', 'Dùng đúng phương thức GET/POST.')
         elif action and (action == 'lr-registry' or action.startswith('lr-registry/')):
             lr_reg = getattr(lifecycle, 'lr_registry', None)
             if lr_reg is None:
@@ -92,7 +112,7 @@ def handle_model_lifecycle(handler, authorizer, lifecycle, method: str) -> bool:
             body = read_json(handler)
             sid = str((body or {}).get('snapshot_id') or '').strip() if isinstance(body, dict) else ''
             value = lifecycle.profile_snapshot(scope, sid, recheck)
-        elif method == 'POST' and action in ('train', 'evaluate', 'approve', 'rollback', 'score-queue'):
+        elif method == 'POST' and action in ('train', 'evaluate', 'approve', 'rollback', 'score-queue', 'analyze', 'training-data'):
             require_fit(scope)
             body = read_json(handler)
             if not isinstance(body, dict):
@@ -112,6 +132,10 @@ def handle_model_lifecycle(handler, authorizer, lifecycle, method: str) -> bool:
                     value = lifecycle.approve_and_activate(scope, body, idem, recheck)
                 elif action == 'rollback':
                     value = lifecycle.rollback_version(scope, body, idem, recheck)
+                elif action == 'training-data':
+                    value = lifecycle.ingest_training_files(scope, body, idem, recheck)
+                elif action == 'analyze':
+                    value = lifecycle.analyze_latest(scope, header, body, idem, recheck)
                 else:
                     value = lifecycle.score_to_queue(scope, body, idem, recheck)
         else:

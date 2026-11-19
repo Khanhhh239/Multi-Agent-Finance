@@ -399,3 +399,6 @@ fieldset { padding: 0; border: 0; margin: 14px 0; min-width: 0; }
   .section-heading { align-items: start; }
   .top strong { font-size: 17px; }
 }
+
+.analyze-box { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 12px; }
+.analyze-box[hidden] { display: none; }

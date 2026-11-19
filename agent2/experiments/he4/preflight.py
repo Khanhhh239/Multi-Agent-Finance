@@ -27,8 +27,18 @@ def check(node_config,config,keys_only=False):
         captured=settings.capture(scope)
         for program in captured['programs'].values():
             _,vault,binding,key=bridge.context(scope,program['path']);meta=read_json(vault/'context.json')
-            if meta['binding']!=binding or meta['evaluation_keys_sha256']!=BlobStore.digest(vault/'evaluation.keys'):raise ValueError('public context mismatch')
-            private=open_private(vault/'context.sealed',key,binding);del private
+            if meta['binding']!=binding:raise ValueError('public context mismatch')
+            # Each vault holds ~1 GB of keys; re-hashing and unsealing all of them on every Agent 2 start took minutes.
+            # Re-check only when the files changed since the last successful check (size + mtime + binding).
+            stamp={n:[(vault/n).stat().st_size,(vault/n).stat().st_mtime_ns] for n in ('evaluation.keys','context.sealed')}
+            stamp['binding']=binding
+            cache=vault/'preflight-ok.json'
+            try:cached=json.loads(cache.read_text())
+            except (OSError,ValueError):cached=None
+            if cached!=stamp:
+                if meta['evaluation_keys_sha256']!=BlobStore.digest(vault/'evaluation.keys'):raise ValueError('public context mismatch')
+                private=open_private(vault/'context.sealed',key,binding);del private
+                cache.write_text(json.dumps(stamp))
         if not keys_only:
             request=envelope(scope,signer,dict(challenge=secrets.token_hex(32)))
             actual=verify(post(c['worker_url'],'/v1/readiness',request),c['worker_verify_key'])

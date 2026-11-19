@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Trạm huấn luyện mã hóa</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header><strong>Trạm huấn luyện mã hóa</strong><span id="worker" class="pill">Đang kiểm tra…</span></header>
+  <main>
+    <p id="notice" class="notice" hidden></p>
+    <section>
+      <h2>Doanh nghiệp đã gửi dữ liệu</h2>
+      <p class="sub">Trạm chỉ thấy số dòng và nhãn; giao dịch đã được doanh nghiệp mã hóa bằng khóa riêng.</p>
+      <table><thead><tr><th>Doanh nghiệp</th><th>Trạng thái</th><th>Số dòng</th><th>Nhãn 1</th><th>Gửi lúc</th></tr></thead><tbody id="contrib"></tbody></table>
+    </section>
+    <section>
+      <h2>Huấn luyện</h2>
+      <div class="bar"><label>Số vòng <select id="rounds"><option>1</option><option selected>2</option><option>3</option><option>4</option></select></label>
+        <button id="run">Huấn luyện trên dữ liệu đã mã hóa</button><span id="state" class="pill">Chưa chạy</span></div>
+      <div class="progress"><div id="fill"></div></div>
+      <ol id="events"></ol>
+    </section>
+    <section>
+      <h2>Mô hình đang dùng</h2>
+      <div id="model" class="sub">Chưa có.</div>
+      <h3>Lịch sử phiên bản</h3>
+      <table><thead><tr><th>Phiên bản</th><th>Recall</th><th>Precision</th><th>F1</th><th>Cập nhật lúc</th></tr></thead><tbody id="models"></tbody></table>
+    </section>
+  </main>
+</body>
+</html>

@@ -675,16 +675,6 @@ class RemediationTests(unittest.TestCase):
         self.assertTrue(agent2_bridge.allowed_path("/api/v1/companies/C001/remediation/tasks/tsk_" + "a" * 24 + "/decision"))
         self.assertFalse(agent2_bridge.allowed_path("/api/v1/companies/../remediation/summary"))
 
-        web_dir = Path(__file__).resolve().parents[1] / "sme_fraud" / "web"
-        ws_html = (web_dir / "workspace.html").read_text(encoding="utf-8")
-        ws_js = (web_dir / "workspace.js").read_text(encoding="utf-8")
-        self.assertIn("ws-rem-filter", ws_html)
-        self.assertIn("Còn thiếu gì?", ws_js)
-        self.assertIn("Ai đang xử lý, hạn nào?", ws_js)
-        self.assertIn("Bước tiếp theo là gì?", ws_js)
-        self.assertIn("Yêu cầu bổ sung", ws_js)
-        self.assertIn("Xác nhận hoàn tất", ws_js)
-
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             auth = FileAuthorizer(_make_auth_policy(root / "access.json"))

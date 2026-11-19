@@ -86,6 +86,8 @@ class Runtime:
             message='Bộ xử lý đã kết nối.' if ready else 'Bộ xử lý mất kết nối. Kết nối lại để tiếp tục yêu cầu đã lưu.')
 
     def start(self):
+        if self.process is not None and self.process.poll() is None and self.verified:
+            return  # already verified and alive: skip the slow key preflight on re-open
         self.validate_bundle();self.preflight(keys_only=True)
         if self.process is not None and self.process.poll() is None:
             try:self.preflight();self.verified=True;return

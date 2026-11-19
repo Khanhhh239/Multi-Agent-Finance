@@ -22,7 +22,7 @@ $env:PYTHONUTF8 = '1'
 $env:PYTHONIOENCODING = 'utf-8'
 
 function Stop-PlatformPorts {
-    $ports = @(8800, 8011, 8766, 8640, 8040)
+    $ports = @(8800, 8011, 8766, 8640, 8040, 8868, 8869, 8870, 8890)
     $pids = @()
     foreach ($p in $ports) {
         $conns = Get-NetTCPConnection -LocalPort $p -State Listen -ErrorAction SilentlyContinue
@@ -40,6 +40,8 @@ function Stop-PlatformPorts {
     if ($pids.Count -gt 0) {
         Start-Sleep -Seconds 1
     }
+    # Các worker mã hóa chạy trong WSL; tắt WSL để trả lại RAM.
+    if (Get-Command wsl -ErrorAction SilentlyContinue) { wsl --shutdown 2>$null | Out-Null }
 }
 
 Stop-PlatformPorts
@@ -59,6 +61,13 @@ if ($missingVenv.Count -gt 0) {
 $py = 'agent2\.venv\Scripts\python.exe'
 if (-not (Test-Path -LiteralPath $py)) {
     $py = (Get-Command python -ErrorAction Stop).Source
+}
+
+# HE bắt buộc: lần đầu tự sinh khóa, mạch mã hóa, cấu hình và dữ liệu mẫu (scripts/setup_he.py), các lần sau bỏ qua.
+if (-not (Test-Path -LiteralPath '.runtime\he-ready.json')) {
+    Write-Host "[he] Thiết lập mã hóa đồng cấu (HE) lần đầu, có thể mất 10-20 phút..." -ForegroundColor Cyan
+    & $py -X utf8 scripts/setup_he.py
+    if ($LASTEXITCODE -ne 0) { throw "Thiết lập HE thất bại; xem thông báo phía trên." }
 }
 
 Write-Host "[sync] Đồng bộ cấu hình, dữ liệu và mô hình cho Portal + 4 Agent..." -ForegroundColor Cyan
@@ -90,5 +99,9 @@ Write-Host "  Agent 4   : http://127.0.0.1:8040  (Hỏi đáp số liệu CFO)" 
 Write-Host "  Nhấn Ctrl+C để dừng toàn bộ hệ thống." -ForegroundColor Yellow
 Write-Host "============================================================" -ForegroundColor Green
 Write-Host ""
+
+# Trạm huấn luyện mã hóa (web riêng, cổng 8890)
+Start-Process -FilePath $py -ArgumentList '-X','utf8','station/server.py' -WindowStyle Hidden
+Write-Host "  Trạm huấn luyện: http://127.0.0.1:8890" -ForegroundColor Gray
 
 & $py -X utf8 portal/server.py --start-all

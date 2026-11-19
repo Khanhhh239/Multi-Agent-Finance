@@ -3,7 +3,7 @@
 Adds immutable RobustZ artifacts and new protected contexts. Does not activate
 Portal settings, edit roles, rotate old keys, or overwrite existing state.
 """
-import argparse
+import argparse, os
 import json
 from pathlib import Path
 import sqlite3
@@ -55,7 +55,7 @@ def run(node_path,pins_path,root,builds,port):
     signer=Ed25519PrivateKey.from_private_bytes(load_key(node['provisioning_key_file'],purpose='node-signing',required_provider=PROVIDER).material)
     (cloud/'grants.json').write_bytes(canonical(dict(version='he-worker-grants/1.0.0',grants=[dict(tenant_id='demo',company_id=c,node_verify_key=public_hex(signer),active=True) for c in ('C001','C002')])))
     (cloud/'worker.json').write_bytes(canonical(dict(version='he4-worker/0.1.0',state_dir=linux_path(cloud/'state'),grants_file=linux_path(cloud/'grants.json'),signing_key_file=linux_path(cloud/'signing.hex'),builds={k:linux_path(v) for k,v in builds.items()})))
-    config=dict(version='he4-enterprise/1.0.0',state_dir=str(enterprise/'jobs'),enterprise_root=str(enterprise/'private'),state_key_file=node['state_key_file'],worker_url=f'http://127.0.0.1:{port}',worker_verify_key=public_hex(key),builds={k:str(v) for k,v in builds.items()},bindings_file=str(enterprise/'bindings.json'),linux_distro='Debian',linux_python='/home/sang/.local/share/agent2/he4/bin/python')
+    config=dict(version='he4-enterprise/1.0.0',state_dir=str(enterprise/'jobs'),enterprise_root=str(enterprise/'private'),state_key_file=node['state_key_file'],worker_url=f'http://127.0.0.1:{port}',worker_verify_key=public_hex(key),builds={k:str(v) for k,v in builds.items()},bindings_file=str(enterprise/'bindings.json'),linux_distro=os.environ.get('AGENT2_WSL_DISTRO','Debian'),linux_python=os.environ.get('AGENT2_HE_PYTHON','/home/sang/.local/share/agent2/he4/bin/python'))
     (enterprise/'node.json').write_bytes(canonical(config))
     report=dict(status='prepared_not_activated',companies=['C001','C002'],new_protected_contexts=6,existing_ml_models_preserved=True,portal_roles_unchanged=True,backups=True,seconds=time.monotonic()-started)
     (root/'preparation.json').write_bytes(canonical(report));print(json.dumps(report),flush=True)

@@ -41,7 +41,7 @@ class LinuxRuntime:
         source_paths=[str(self.agent_root),str(self.agent_root.parent)]
         if env.get('PYTHONPATH'):source_paths.append(env['PYTHONPATH'])
         env['PYTHONPATH']=os.pathsep.join(source_paths)
-        result=subprocess.run(command,cwd=self.agent_root,env=env,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=120,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+        result=subprocess.run(command,cwd=self.agent_root,env=env,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=600,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
         try:value=json.loads(result.stdout)
         except ValueError:raise ValueError('Chưa kiểm tra được khóa phân tích bốn nhánh.') from None
         if result.returncode or value.get('status')!='ready':raise ValueError('Chưa sẵn sàng khóa, phiên bản hoặc kết nối phân tích bốn nhánh.')
@@ -57,6 +57,10 @@ class LinuxRuntime:
         return dict(owned=owned,status='ready' if owned and self.verified and self.health() else 'unavailable',can_recover=True)
 
     def start(self):
+        # Re-opening Agent 2 while this worker is alive and already verified must not re-run the Concrete preflight
+        # (each run loads every company key vault in WSL: 1-2 minutes) — that was the lag on every unlock/restart.
+        if self.process is not None and self.process.poll() is None and self.verified and self.health():
+            return
         self.validate_bundle();self.preflight(keys_only=True)
         if self.process is not None and self.process.poll() is None:
             self.preflight();self.verified=True;return

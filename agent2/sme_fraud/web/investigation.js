@@ -124,6 +124,7 @@
     } catch {}
     $('nav-queue').href = mount + '/pipeline-workspace#company=' + encodeURIComponent(company);
     $('nav-models').href = mount + '/model-management#company=' + encodeURIComponent(company);
+    $('nav-fed').href = mount + '/federated-training#company=' + encodeURIComponent(company);
     $('operations').href = mount + '/pipeline-operations#company=' + encodeURIComponent(company);
   }
   function reset() {
@@ -230,6 +231,8 @@
       if (!wanted) remember();
       $('operations').hidden = !rights.can_manage;
       $('nav-models').hidden = !rights.can_manage;
+      $('nav-fed').hidden = !rights.can_manage;
+      $('analyze-box').hidden = !rights.can_manage;
       const isSim = listing.rows.some(r => r.source_kind === 'simulated');
       $('env-badge').textContent = isSim ? 'BẢN ĐỀ XUẤT · DỮ LIỆU MÔ PHỎNG' : 'DỮ LIỆU DOANH NGHIỆP';
       $('env-badge').hidden = !listing.rows.length;
@@ -917,6 +920,17 @@
   $('back').onclick = () => { if (guard()) { remember(); load(); } };
   $('refresh').onclick = () => { if (guard()) load(); };
   $('company').onchange = () => { if (!guard()) { $('company').value = company; return; } company = $('company').value; run = ''; selection = null; remember(); load(); };
+  $('analyze').onclick = async () => {
+    if (!guard()) return;
+    const btn = $('analyze'), st = $('analyze-status');
+    btn.disabled = true; st.textContent = 'Đang phân tích dữ liệu mới nhất…';
+    try {
+      const out = await api('/api/v1/companies/' + encodeURIComponent(company) + '/model-lifecycle/analyze', { request_id: 'ui-analyze-' + crypto.randomUUID() });
+      st.textContent = `Hoàn tất: ${out.admitted_cases} giao dịch cần kiểm tra trên ${out.total_cases} trường hợp.`;
+      run = ''; await init();
+    } catch (err) { st.textContent = ''; $('notice').textContent = err.message; $('notice').hidden = false; }
+    finally { btn.disabled = false; }
+  };
   $('run').onchange = () => { if (!guard()) { $('run').value = run; return; } run = $('run').value; remember(); load(); };
   for (const id of ['search', 'status', 'priority']) $(id).oninput = renderRows;
 
@@ -930,11 +944,13 @@
       company = ctx.companies.includes(hash.get('company')) ? hash.get('company') : ctx.companies[0] || '';
       $('company').replaceChildren(...ctx.companies.map(id => { const o = el('option', id); o.value = id; return o; }));
       $('company').value = company; $('company').disabled = !company;
-      run = hash.get('run') || '';
+      run = '';  // một lần đăng nhập = một doanh nghiệp; luôn mở lần phân tích mới nhất
       if (!company) { notice('Chưa được cấp quyền doanh nghiệp.'); return; }
       const old = await api(base());
       $('operations').hidden = !old.can_manage;
       $('nav-models').hidden = !old.can_manage;
+      $('nav-fed').hidden = !old.can_manage;
+      $('analyze-box').hidden = !old.can_manage;
       const wanted = hash.get('transaction') ? { transaction: hash.get('transaction'), review: hash.get('review'), source_run: hash.get('source_run') } : null;
       remember(wanted ? { transaction_id: wanted.transaction, review_id: wanted.review, run_id: wanted.source_run } : null);
       await load(wanted);

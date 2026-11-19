@@ -759,3 +759,6 @@ body::before { position: absolute !important; }
   .a2-top { padding: 12px 16px; }
   .kpi-strip, .algo-grid, .form-grid-3, .checklist-grid, .lr-kpi-grid, .r5-metrics-grid, .r5-gate-grid { grid-template-columns: 1fr !important; }
 }
+
+.train-files { display: grid; gap: 6px; grid-column: 1 / -1; }
+.train-files input[type=file] { padding: 10px; border: 1px dashed var(--kt-line, #d9c3c3); border-radius: 10px; background: var(--kt-canvas, #fffaf6); }

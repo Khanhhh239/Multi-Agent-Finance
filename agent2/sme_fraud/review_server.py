@@ -28,6 +28,7 @@ from .pipeline_release_api import handle_releases
 from .bundle_workspace_api import handle_bundle_workspace
 from .model_lifecycle import ModelLifecycle
 from .model_lifecycle_api import handle_model_lifecycle
+from .station_api import handle_station, station_secret
 from .lr_fhe_training import LRFHETrainingService
 from .lr_registry import LRModelRegistry
 
@@ -139,6 +140,9 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
             snapshot_store=snapshot_store,
         )
         model_lifecycle.lr_fhe.lr_registry=model_lifecycle.lr_registry
+        from .federated_lr import FederatedLRService
+        model_lifecycle.federated=FederatedLRService(lc_db.with_name('federated-lr.sqlite3'),model_lifecycle.lr_fhe,authorizer)
+        station_secret()
     class Handler(BaseHTTPRequestHandler):
         def respond(self,code,value,mime='application/json; charset=utf-8'):
             body=value if isinstance(value,bytes) else (json.dumps(value,ensure_ascii=False) if isinstance(value,dict) else value).encode('utf-8')
@@ -150,6 +154,7 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
             self.end_headers();self.wfile.write(body)
         def do_GET(self):
             if handle_workbench(self,authorizer,analysis_mode='four_encrypted_branches' if he_backend and hasattr(he_backend,'settings') else None,bundle_mode=release_service is not None):return
+            if handle_station(self,model_lifecycle,'GET'):return
             if handle_model_lifecycle(self,authorizer,model_lifecycle,'GET'):return
             if handle_releases(self,authorizer,release_service,'GET'):return
             if handle_bundle_workspace(self,authorizer,release_service,'GET'):return
@@ -176,6 +181,7 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
                 if 0<length<=65536:self.rfile.read(length)
             except (ValueError,OSError):pass
         def do_POST(self):
+            if handle_station(self,model_lifecycle,'POST'):return
             if handle_model_lifecycle(self,authorizer,model_lifecycle,'POST'):return
             if handle_releases(self,authorizer,release_service,'POST'):return
             if handle_bundle_workspace(self,authorizer,release_service,'POST'):return

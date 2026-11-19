@@ -7,3 +7,4 @@ agent1/outputs/t1/settlement_partial_catalog_v3_20261114/** -text
 # Shared theme copies and cache hashes must match across checkouts.
 platform-theme.css text eol=lf
 platform-theme.js text eol=lf
+*.sh text eol=lf

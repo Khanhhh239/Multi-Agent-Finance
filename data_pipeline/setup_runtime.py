@@ -387,6 +387,9 @@ with tempfile.TemporaryDirectory() as tmp:
 
 
 def ensure_agent2_models() -> None:
+    if (ROOT / '.runtime' / 'he-ready.json').is_file():
+        # HE setup (scripts/setup_he.py) owns models and bindings for C001/C002; refitting would orphan the encrypted release bundles.
+        return
     if port_open(8766):
         # Agent 2 is currently holding SQLite open; caller should stop old processes first if re-provisioning
         bindings_path = ROOT / 'agent2/.runtime/platform/analysis-bindings.json'
