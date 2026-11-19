@@ -1450,7 +1450,7 @@
           const query = new URLSearchParams({ name: file.name, company: code });
           const result = await api("/api/inbox?" + query, { method: "POST", body: file, headers: { "Content-Type": "application/octet-stream" }, signal: AbortSignal.timeout(660000) });
           if (result.already_recorded) extras.push({ name: file.name, done: true, message: "Đã ghi trước đó" });
-          else if (received.has(result.id)) extras.push({ name: file.name, done: false, message: "Trùng với tệp khác trong lượt chọn" });
+          else if (received.has(result.id)) extras.push({ name: file.name, done: true, message: "Tệp trùng trong lượt chọn; giữ một bản." });
           else { received.add(result.id); uploaded++; }
         } catch (err) {
           extras.push({ name: file.name, message: err.message });
@@ -1553,7 +1553,7 @@
       }
       $("reason").value = "";
       const written = res.batch.written_count ?? res.batch.files.length;
-      const already = extras.filter((item) => item.done).length;
+      const already = (res.batch.already_count || 0) + extras.filter((item) => item.done).length;
       const total = ids.length + extras.length;
       const remaining = total - written - already;
       intakeStage = remaining ? "review" : "history";
