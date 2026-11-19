@@ -546,6 +546,10 @@ class MockNode {
   append(...nodes) {
     for (const n of nodes) if (n !== null && n !== undefined) this.children.push(typeof n === "object" ? n : String(n));
   }
+  prepend(...nodes) {
+    this.children.unshift(...nodes);
+    for (const node of nodes) if (node && typeof node === "object") node.parentElement = this;
+  }
   replaceChildren(...nodes) { this.children = []; this.append(...nodes); }
   querySelector() { return new MockNode("button"); }
   querySelectorAll() { return []; }
@@ -678,6 +682,7 @@ const context = vm.createContext({
   faceapi: faceapiMock,
   URL,
   URLSearchParams,
+  AbortSignal,
   FormData: function () { return { entries: () => [] }; },
   Intl,
   Date,
@@ -726,12 +731,13 @@ assert.ok(Math.abs(avg[127] - (0.2 + 127 * 0.001)) < 1e-6);
 
   // Check cohesive Vietnamese SME navigation & quick switcher rendered
   const navText = getNode("nav-agents").textContent;
-  assert.match(navText, /Dự báo dòng tiền/);
-  assert.match(navText, /Kiểm soát gian lận & FHE/);
-  assert.match(navText, /Rà soát thuế & HĐĐT/);
-  assert.match(navText, /Hỏi đáp CFO hai sổ/);
-  assert.equal(getNode("meter-bar").dataset.done, "3");
-  assert.ok(!("style" in getNode("meter-bar").attributes));
+  assert.match(navText, /Trợ lý Dòng tiền/);
+  assert.match(navText, /Trợ lý Giám sát/);
+  assert.match(navText, /Trợ lý Thuế/);
+  assert.match(navText, /Trợ lý hỏi đáp/);
+  assert.equal(getNode("agent-grid").children.length, 4);
+  assert.equal(getNode("exec-agents-val").textContent, "4 / 4 phân hệ sẵn sàng");
+  assert.ok(!("style" in getNode("agent-grid").attributes));
 
   const switchText = getNode("agent-quick-switch").textContent;
   assert.match(switchText, /A1/);
