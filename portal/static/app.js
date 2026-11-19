@@ -3,10 +3,10 @@
   const $ = (id) => document.getElementById(id);
   const AGENT_LABEL = { agent1: "Agent 1", agent2: "Agent 2", agent3: "Agent 3", agent4: "Agent 4" };
   const WORKSPACE_LABEL = {
-    agent1: "Dự báo dòng tiền",
-    agent2: "Kiểm soát gian lận & FHE",
-    agent3: "Rà soát thuế & HĐĐT",
-    agent4: "Hỏi đáp CFO hai sổ"
+    agent1: "Trợ lý Dòng tiền",
+    agent2: "Trợ lý Giám sát",
+    agent3: "Trợ lý Thuế",
+    agent4: "Trợ lý hỏi đáp"
   };
   const STATE_TEXT = { running: "Đang chạy", starting: "Đang khởi động", stopped: "Đang tắt", "busy-port": "Cổng bị chiếm" };
   const CHECK_TEXT = { checking: "Đang kiểm tra", ready: "Sẵn sàng ghi", error: "Có lỗi", offline: "Agent tắt", done: "Đã ghi", skipped: "Bỏ qua", stale: "Chờ kiểm tra lại" };
@@ -61,8 +61,10 @@
     if (token !== nextToken) {
       authVersion += 1;
       agent2RouteEpoch += 1;
-      const frame = $("agent-frame-agent2") || $("agent-frame");
-      if (frame) { frame.removeAttribute("src"); delete frame.dataset.src; }
+      for (const id of ["agent1", "agent2"]) {
+        const frame = $("agent-frame-" + id) || $("agent-frame");
+        if (frame) { frame.removeAttribute("src"); delete frame.dataset.src; }
+      }
     }
     token = nextToken;
     try { token ? sessionStorage.setItem("kt-session", token) : sessionStorage.removeItem("kt-session"); } catch (e) { /* private mode */ }
@@ -150,7 +152,7 @@
         headers["Content-Type"] = "application/json";
         options.body = JSON.stringify(options.json);
       }
-      const res = await fetch(path, { ...options, headers, cache: "no-store" });
+      const res = await fetch(path, { ...options, headers, cache: "no-store", signal: options.signal || AbortSignal.timeout(120000) });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         if (res.status === 401 && data.locked && reqAuthVersion === authVersion && reqToken === token) {
@@ -176,20 +178,11 @@
   // ------------------------------------------------------------------ render
   function renderTop() {
     const c = state.company;
-    const configured = Boolean(c.legal_name && c.code);
-    $("company-name").textContent = configured ? c.legal_name : "Chưa cấu hình doanh nghiệp";
-    $("company-meta").textContent = configured ? [c.tax_code && "MST " + c.tax_code, "Mã " + c.code].filter(Boolean).join(", ") : "Bấm để nhập thông tin";
-    $("masthead-period").textContent = new Intl.DateTimeFormat("vi-VN", { month: "long", year: "numeric", timeZone: "Asia/Ho_Chi_Minh" }).format(new Date());
-    $("sidebar-monogram").textContent = c.code ? c.code.slice(0, 2) : monogram(c.legal_name || "");
+    $("sidebar-monogram").textContent = c.code ? c.code.slice(0, 2) : "SS";
     $("sidebar-company").textContent = c.legal_name || "Chưa cấu hình doanh nghiệp";
-    $("company-chip").title = c.legal_name || "Hồ sơ doanh nghiệp";
-    const p = state.package;
-    $("package-chip").hidden = !p;
-    if (p) $("package-chip").textContent = "Gói v" + p.version + ", niêm phong " + stamp(p.sealed_at).slice(0, 10);
     $("lock-badge").hidden = state.intake.unlocked;
-    const n = state.pending.length;
-    $("pending-count").hidden = !n;
-    $("pending-count").textContent = n;
+    $("pending-count").hidden = !state.pending.length;
+    $("pending-count").textContent = state.pending.length;
   }
 
   let activeProfileTab = "all";
@@ -255,19 +248,25 @@
   }
 
   function isProfileProtected() {
-    return (Boolean(state?.package) || Boolean(state?.intake?.has_biometric)) && !state?.intake?.unlocked;
+    return !state?.intake?.unlocked;
   }
 
   function renderConfig() {
     const c = state.company;
+    const gateHost = location.hash === "#config" && isProfileProtected() ? $("config-gate") : $("view-data");
+    if ($("gate").parentElement !== gateHost) gateHost.prepend($("gate"));
+    $("h-data").textContent = location.hash === "#config" ? "Mở khóa hồ sơ doanh nghiệp" : "Mở khóa dữ liệu";
     const form = $("company-form");
-    if (!form.dataset.dirty) for (const [k, v] of Object.entries(c)) if (form.elements[k]) form.elements[k].value = v ?? "";
+    form.hidden = isProfileProtected();
+    if (isProfileProtected()) { delete form.dataset.dirty; for (const input of form.elements) if (input.name) input.value = ""; }
+    if (!isProfileProtected() && !form.dataset.dirty) for (const [k, v] of Object.entries(c)) if (form.elements[k]) form.elements[k].value = v ?? "";
     profileText("saved-at", c.updated_at ? "Lưu lần cuối " + c.updated_at : "Chưa có lần lưu nào");
     const locked = isProfileProtected();
     $("config-lock").hidden = !locked;
     for (const input of form.elements) if (input.name) input.disabled = locked || profileSaving;
     form.querySelector("button[type=submit]").disabled = locked || profileSaving;
     $("profile-reset").disabled = !form.dataset.dirty || profileSaving;
+    $("profile-lock").disabled = locked;
     if ($("profile-fill-demo")) $("profile-fill-demo").disabled = locked || profileSaving;
     if ($("profile-sync-now")) $("profile-sync-now").disabled = locked || profileSaving;
     if ($("profile-start-all-inline")) $("profile-start-all-inline").disabled = state.agents.every((a) => a.state !== "stopped");
@@ -277,10 +276,10 @@
     const dirty = Boolean(form.dataset.dirty);
     const label = locked ? "Đang được bảo vệ" : profileSaving ? "Đang lưu hồ sơ" : dirty ? "Có thay đổi chưa lưu" : configured ? "Đã lưu" : "Chưa thiết lập";
     profileText("profile-status", label);
-    $("profile-status").dataset.state = locked ? "locked" : dirty ? "draft" : configured ? "saved" : "empty";
+
     profileText("profile-save-note", profileSaving ? "Đang lưu, vui lòng chờ" : locked ? "Mở khóa để lưu chỉnh sửa" : dirty ? "Có thay đổi chưa lưu" : "Thông tin được lưu trên máy này");
     updateProfileSummary();
-    renderDefaultSyncList();
+
     applyProfileTabFilter(activeProfileTab, false);
   }
 
@@ -365,17 +364,7 @@
       ...state.agents.map((a) =>
         el("a", { class: "nav-link", href: "#" + a.id, "data-view": a.id },
           el("span", { class: "num", "aria-hidden": "true" }, "A" + a.number), WORKSPACE_LABEL[a.id], el("span", { class: "dot " + a.state, title: STATE_TEXT[a.state] }))));
-    $("profile-agent-list").replaceChildren(...state.agents.map((a) =>
-      el("li", {},
-        el("a", { href: "#" + a.id, class: "profile-agent-link" }, WORKSPACE_LABEL[a.id] + " · A" + a.number),
-        el("div", { class: "profile-agent-actions" },
-          el("span", { class: "profile-agent-state state-" + a.state }, a.id === "agent4" && a.state !== "running" ? "Kho mô phỏng" : STATE_TEXT[a.state]),
-          a.state === "stopped"
-            ? el("button", { type: "button", class: "profile-agent-btn", onclick: () => toggleAgent(a) }, "Bật")
-            : el("a", { href: "#" + a.id, class: "profile-agent-btn" }, "Mở")
-        )
-      )
-    ));
+
     markCurrent();
   }
 
@@ -392,242 +381,46 @@
 
   const WORKSTATION_INFO = {
     agent1: {
-      title: "Dự báo dòng tiền",
-      desc: "Dự báo thanh khoản 13 tuần, đối soát sao kê & công nợ phải thu",
+      title: "Trợ lý Dòng tiền",
+      desc: "Dự báo thanh khoản cho nhiều tuần tới, đối soát sao kê và công nợ phải thu",
       icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`
     },
     agent2: {
-      title: "Kiểm soát gian lận & FHE",
-      desc: "35 luật kiểm toán nội bộ, đồ thị liên kết & mã hóa đồng cấu FHE",
+      title: "Trợ lý Giám sát",
+      desc: "Luật nội bộ, đồ thị và mã hóa đồng cấu học máy phát hiện gian lận",
       icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>`
     },
     agent3: {
-      title: "Rà soát thuế & HĐĐT",
-      desc: "Thẩm định hóa đơn điện tử XML, chữ ký số & luật thuế GTGT",
+      title: "Trợ lý Thuế",
+      desc: "Thẩm định hóa đơn điện tử, chữ ký số và hỏi đáp về luật thuế và giải thích",
       icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`
     },
     agent4: {
-      title: "Hỏi đáp CFO hai sổ",
-      desc: "Truy vấn Sổ quản trị (v_mgmt) & Sổ thuế (v_tax) bằng SQL tất định",
+      title: "Trợ lý hỏi đáp",
+      desc: "Truy xuất thông tin từ Sổ quản trị và Sổ thuế và giải đáp nhanh có dẫn chứng",
       icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="12" y1="7" x2="12" y2="13"/></svg>`
     }
   };
 
   function renderOverview() {
     const c = state.company;
-    if ($("today")) {
-      $("today").textContent = new Intl.DateTimeFormat("vi-VN", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date());
-    }
-
-    // 1. Minimalist Executive Header
-    const monogramText = (c.code || "SS").slice(0, 2).toUpperCase();
-    if ($("overview-monogram")) $("overview-monogram").textContent = monogramText;
-    if ($("h-overview")) {
-      $("h-overview").textContent = c.code ? c.code : "Sổ Son";
-    }
-    if ($("overview-company-fullname")) {
-      $("overview-company-fullname").textContent = c.legal_name || "Không gian kế toán số đa tác tử";
-    }
-    if ($("overview-tax-badge")) {
-      $("overview-tax-badge").textContent = c.tax_code ? "MST: " + c.tax_code : "MST: —";
-    }
-    const vatBadge = $("overview-vat-badge");
-    if (vatBadge) {
-      vatBadge.hidden = !c.vat_method;
-      if (c.vat_method) vatBadge.textContent = c.vat_method === "DEDUCTION" ? "GTGT Khấu trừ" : "GTGT Trực tiếp";
-    }
-    const periodBadge = $("overview-period-badge");
-    if (periodBadge) {
-      periodBadge.hidden = !c.filing_period;
-      if (c.filing_period) periodBadge.textContent = c.filing_period === "MONTH" ? "Kỳ tháng" : "Kỳ quý";
-    }
-    const pkgLabel = $("overview-package-label");
-    if (pkgLabel) {
-      pkgLabel.textContent = state.package
-        ? "Gói v" + state.package.version + " (" + state.package.files + ")"
-        : "Nạp dữ liệu";
-    }
-
-    const runningCount = state.agents.filter((a) => a.state === "running").length;
-    const pill = $("overview-status-pill");
-    const statusText = $("overview-system-status");
-    if (statusText) {
-      if (runningCount === state.agents.length) {
-        statusText.textContent = "4/4 Agent sẵn sàng";
-        if (pill) pill.classList.remove("is-partial");
-      } else if (runningCount > 0) {
-        statusText.textContent = runningCount + "/4 Agent đang chạy";
-        if (pill) pill.classList.add("is-partial");
-      } else {
-        statusText.textContent = "Agent đang tắt";
-        if (pill) pill.classList.add("is-partial");
-      }
-    }
-
-    if ($("start-all")) {
-      $("start-all").disabled = state.agents.every((a) => a.state !== "stopped");
-      $("start-all").innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${runningCount === state.agents.length ? "Đang chạy" : "Bật tất cả"}</span>`;
-    }
-
-    // 1b. Executive Summary KPI Strip (100% live state data)
-    if ($("exec-agents-val")) {
-      $("exec-agents-val").textContent = runningCount + " / " + state.agents.length + " phân hệ sẵn sàng";
-      $("exec-agents-val").parentElement?.classList.toggle("is-ready", runningCount === state.agents.length);
-      $("exec-agents-val").parentElement?.classList.toggle("is-warn", runningCount < state.agents.length);
-    }
-    if ($("exec-agents-sub")) {
-      const startingCount = state.agents.filter((a) => a.state === "starting").length;
-      $("exec-agents-sub").textContent = runningCount === state.agents.length
-        ? "A1 Dòng tiền · A2 FHE · A3 Thuế · A4 CFO"
-        : startingCount > 0
-          ? startingCount + " phân hệ đang khởi động…"
-          : "Nhấn 'Bật tất cả' để khởi chạy toàn bộ";
-    }
-    if ($("exec-regime-val")) {
-      const configured = Boolean(c.legal_name && c.code);
-      $("exec-regime-val").textContent = configured
-        ? (c.vat_method === "DIRECT" ? "GTGT Trực tiếp" : "GTGT Khấu trừ") + " · " + (c.filing_period === "MONTH" ? "Kỳ tháng" : "Kỳ quý")
-        : "Chưa khai báo hồ sơ";
-      $("exec-regime-val").parentElement?.classList.toggle("is-ready", configured);
-    }
-    if ($("exec-regime-sub")) {
-      $("exec-regime-sub").textContent = c.tax_code
-        ? "MST " + c.tax_code + " · Năm TC T" + (c.fiscal_year_end_month || "12")
-        : c.code ? "Mã đơn vị " + c.code : "Mở Hồ sơ doanh nghiệp để thiết lập";
-    }
-    if ($("exec-pkg-val")) {
-      const pkg = state.package;
-      $("exec-pkg-val").textContent = pkg
-        ? "Gói v" + pkg.version + " · " + pkg.files + " chứng từ"
-        : state.pending.length
-          ? state.pending.length + " tệp chờ niêm phong"
-          : "Chưa niêm phong";
-      $("exec-pkg-val").parentElement?.classList.toggle("is-ready", Boolean(pkg));
-    }
-    if ($("exec-pkg-sub")) {
-      const sealedSlots = (state.slots || []).filter((s) => s.state === "sealed").length;
-      const totalSlots = (state.slots || []).length;
-      $("exec-pkg-sub").textContent = state.package
-        ? "Mã băm #" + String(state.package.manifest || "").slice(0, 8) + " · " + sealedSlots + "/" + totalSlots + " khay"
-        : "Sao kê CSV, Hóa đơn XML/ZIP & Sổ nghiệp vụ";
-    }
-    if ($("exec-sec-val")) {
-      const intake = state.intake || {};
-      $("exec-sec-val").textContent = !intake.configured
-        ? "Chờ đặt mật khẩu"
-        : intake.unlocked
-          ? "Phiên đang mở khóa"
-          : "Đã khóa bảo vệ";
-      $("exec-sec-val").parentElement?.classList.toggle("is-ready", Boolean(intake.configured));
-    }
-    if ($("exec-sec-sub")) {
-      const intake = state.intake || {};
-      $("exec-sec-sub").textContent = intake.has_biometric
-        ? "FaceID 3 khung sẵn sàng · SHA-256 Chain"
-        : "Hỗ trợ FaceID 3 khung 128-D · SHA-256 Chain";
-    }
-
-    // 2. Sleek Minimalist Agent Cards (Ít chữ, hiện đại)
-    const fileCounts = Object.fromEntries(state.agents.map((a) => [a.id, state.intake.unlocked ? receivedCount(a.id) : null]));
-    const signature = JSON.stringify([state.agents.map((a) => [a.id, a.state, a.name]), c.code, fileCounts, state.package?.version]);
-    if ($("agent-grid").dataset.signature !== signature) {
-      $("agent-grid").dataset.signature = signature;
-
-      $("agent-grid").replaceChildren(
-        ...state.agents.map((a) => {
-          const info = WORKSTATION_INFO[a.id] || {
-            title: a.name,
-            desc: a.summary,
-            icon: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>`
-          };
-
-          const iconBox = el("div", { class: "ws-icon-box" });
-          iconBox.innerHTML = info.icon;
-
-          const isRunning = a.state === "running";
-          const isStarting = a.state === "starting";
-          const shortState = isRunning ? "Sẵn sàng" : isStarting ? "Đang bật..." : "Đã tắt";
-          const statusBadge = el("span", {
-            class: "ws-status-pill " + (isRunning ? "is-running" : isStarting ? "is-starting" : "is-stopped")
-          },
-            el("span", { class: "ws-status-dot " + (isRunning ? "" : isStarting ? "is-starting" : "is-stopped") }),
-            el("span", {}, shortState)
-          );
-
-          const files = fileCounts[a.id];
-          const dataNote = a.id === "agent4"
-            ? "Sổ cái DuckDB"
-            : files !== null && files > 0
-              ? files + " chứng từ"
-              : state.package
-                ? "Gói v" + state.package.version
-                : "0 chứng từ";
-
-          const rightAction = a.state === "stopped"
-            ? el("button", {
-                type: "button",
-                class: "ws-quick-start",
-                title: "Bật " + AGENT_LABEL[a.id],
-                onclick: (ev) => {
-                  ev.preventDefault();
-                  ev.stopPropagation();
-                  toggleAgent(a);
-                }
-              }, "Bật")
-            : el("span", { class: "ws-enter-label" }, "Mở");
-
-          return el("a", { class: "workstation-card ws-theme-" + a.id, href: "#" + a.id, "data-id": a.id },
-            el("div", { class: "ws-card-top" },
-              iconBox,
-              el("div", { class: "ws-top-right" },
-                statusBadge,
-                el("span", { class: "ws-num-watermark" }, a.number)
-              )
-            ),
-            el("h3", { class: "ws-title" }, info.title),
-            el("p", { class: "ws-desc" }, info.desc),
-            el("div", { class: "ws-card-foot" },
-              el("span", { class: "ws-meta-pill" }, dataNote),
-              rightAction
-            )
-          );
-        })
-      );
-    }
-
-    // 3. Compact 3-Step Setup Strip
-    const step1Done = Boolean(c.legal_name && c.code);
-    const step2Done = state.agents.every((a) => a.state === "running");
-    const step3Done = Boolean(state.package);
-    const doneCount = (step1Done ? 1 : 0) + (step2Done ? 1 : 0) + (step3Done ? 1 : 0);
-
-    if ($("meter-bar")) $("meter-bar").dataset.done = String(doneCount);
-    if ($("setup-progress-text")) {
-      $("setup-progress-text").textContent = doneCount + "/3 hoàn tất";
-    }
-
-    const steps = $("steps") ? $("steps").children : [];
-    if (steps.length >= 3) {
-      steps[0].classList.toggle("done", step1Done);
-      steps[1].classList.toggle("done", step2Done);
-      steps[2].classList.toggle("done", step3Done);
-    }
-
-    if ($("step-config-desc")) {
-      $("step-config-desc").textContent = step1Done
-        ? (c.tax_code ? "MST " + c.tax_code : c.code)
-        : "Chưa khai báo";
-    }
-    if ($("step-agents-status")) {
-      $("step-agents-status").textContent = runningCount + "/4 sẵn sàng";
-    }
-    if ($("step-data-desc")) {
-      $("step-data-desc").textContent = state.package
-        ? state.package.files + " tệp đã nạp"
-        : state.pending.length
-          ? state.pending.length + " tệp chờ"
-          : "Chưa nạp tệp";
-    }
+    $("h-overview").textContent = c.legal_name || "Sổ Son";
+    $("overview-company-fullname").textContent = "Dòng tiền, giám sát, thuế và hỏi đáp trong cùng một không gian làm việc.";
+    const running = state.agents.filter(a => a.state === "running").length;
+    $("exec-agents-val").textContent = running + " / 4 phân hệ sẵn sàng";
+    $("exec-sec-val").textContent = state.intake.unlocked ? "Phiên đang mở khóa" : "Đã khóa bảo vệ";
+    $("start-all").hidden = running === 4;
+    const signature = JSON.stringify(state.agents.map(a => [a.id,a.state]));
+    if ($("agent-grid").dataset.signature === signature) return;
+    $("agent-grid").dataset.signature = signature;
+    $("agent-grid").replaceChildren(...state.agents.map(a => {
+      const info = WORKSTATION_INFO[a.id];
+      const icon = el("span", {class:"ws-assistant-icon", "aria-hidden":"true"});
+      icon.innerHTML = info.icon;
+      return el("a", {class:"workstation-card ws-theme-"+a.id,href:"#"+a.id},
+        el("div",{class:"ws-card-top"},icon,el("span",{class:"ws-status-pill"},a.state === "running" ? "Sẵn sàng" : STATE_TEXT[a.state])),
+        el("h3",{class:"ws-title"},info.title),el("p",{class:"ws-desc"},info.desc),el("span",{class:"ws-enter-label"},"Mở trợ lý",el("span",{"aria-hidden":"true"},"→")));
+    }));
   }
 
   function checkLines(record) {
@@ -679,9 +472,9 @@
     $("package-line").textContent = p
       ? "Phiên bản " + p.version + ", niêm phong " + stamp(p.sealed_at) + ", " + p.files + " tệp, mã " + p.manifest + (p.amendments ? ", đã sửa đổi " + p.amendments + " lần" : "")
       : "Chưa có phiên bản niêm phong.";
-    const w = periodWarning();
-    $("period-warning").hidden = !w;
-    $("period-warning").textContent = w;
+
+
+
   }
 
   function renderQueue() {
@@ -760,8 +553,15 @@
     if (!i.unlocked) {
       intakeStage = "choose";
       const first = !i.configured;
+      const profileGate = location.hash === "#config";
+      $("gate-eyebrow").textContent = "Không gian bảo mật doanh nghiệp";
+      $("gate-title").textContent = profileGate ? "Hồ sơ doanh nghiệp" : "Nạp dữ liệu chung";
+      $("gate-description").textContent = profileGate
+        ? "Xác thực để xem và cập nhật thông tin doanh nghiệp."
+        : "Mở khóa để tiếp nhận và kiểm tra chứng từ doanh nghiệp.";
       $("gate-lead").textContent = first
-        ? "Đặt mật khẩu một lần. Từ đó mọi lần nạp, bổ sung hay sửa cấu hình sau khi niêm phong đều phải mở khóa."
+        ? "Đặt mật khẩu để bảo vệ hồ sơ và dữ liệu doanh nghiệp."
+        : profileGate ? "Nhập mật khẩu hoặc dùng FaceID để xem và chỉnh sửa hồ sơ. Phiên tự khóa sau 20 phút không dùng."
         : "Nhập mật khẩu để nạp hoặc xem gói dữ liệu của doanh nghiệp. Phiên tự khóa sau 20 phút không dùng.";
       $("gate-label").textContent = first ? "Mật khẩu mới (ít nhất 8 ký tự)" : "Mật khẩu";
       $("gate-confirm-field").hidden = !first;
@@ -811,9 +611,8 @@
       faceRm.hidden = !i.has_biometric;
     }
     const c = state.company;
-    $("intake-company").replaceChildren(c.code
-      ? el("strong", {}, c.legal_name + " · Mã " + c.code + (c.tax_code ? " · MST " + c.tax_code : ""))
-      : el("a", { href: "#config" }, "Lưu hồ sơ doanh nghiệp để nạp tệp"));
+    $("csv-format-help").textContent = "Điền ngày theo " + (c.date_format === "iso" ? "yyyy-mm-dd, ví dụ 2026-12-31" : "dd/mm/yyyy, ví dụ 31/12/2026") + ". Số tiền: " + (c.number_format === "plain" ? "1250000.50, dấu chấm thập phân, không có dấu phân nhóm" : "1.250.000,50, dấu chấm phân nhóm và dấu phẩy thập phân") + ". Giữ nguyên tên cột và lưu tệp CSV với mã hóa UTF-8.";
+
     $("file-input").disabled = !c.code || Boolean(intakeActivity || pendingCheck());
     $("drop").hidden = !c.code;
     renderSlots();
@@ -823,10 +622,10 @@
   }
 
   const AGENT_SUBTAGS = {
-    agent1: "Dự báo dòng tiền 13 tuần & Đối soát công nợ",
+    agent1: "Trợ lý Dòng tiền 13 tuần & Đối soát công nợ",
     agent2: "Kiểm soát gian lận nội bộ, Đồ thị & FHE",
     agent3: "Rà soát thuế GTGT, Chữ ký số & HĐĐT",
-    agent4: "Hỏi đáp CFO hai sổ (v_mgmt & v_tax)"
+    agent4: "Trợ lý hỏi đáp (v_mgmt & v_tax)"
   };
   function latestPortalAgent2Snapshot(companyCode) {
     if (!state?.batches || !companyCode) return "";
@@ -927,9 +726,9 @@
 
     const page = new URL(a.url, location.href);
     if (a.id !== "agent2") page.searchParams.set("portal", location.origin);
+    if (a.id === "agent1") page.searchParams.set("company", state.company.code || "SME");
     const pageUrl = page.href;
-    const newtab = $("agent-newtab");
-    if (newtab) newtab.href = pageUrl;
+
 
     const toggleBtn = $("agent-toggle");
     if (toggleBtn) {
@@ -944,7 +743,7 @@
     const dependency = a.id === 'agent2' ? a.dependency : null;
     $("agent2-dependency").hidden = !dependency || dependency.status === 'ready' || a.state === 'stopped';
     $("agent2-dependency").textContent = dependency?.message || '';
-    $("agent2-recover").hidden = !dependency || dependency.status === 'ready' || !a.owned || !dependency.can_recover;
+    if ($("agent2-recover")) $("agent2-recover").hidden = !dependency || dependency.status === 'ready' || !a.owned || !dependency.can_recover;
     const frame = $("agent-frame-" + a.id) || $("agent-frame");
     if (a.state === "running") {
       offlineFailures[a.id] = 0;
@@ -953,7 +752,8 @@
     }
 
     // Grace period: keep frame visible during temporary glitches (< 3 poll cycles = 12s)
-    const isOnline = (a.state === "running" || (frame.dataset.src && a.state === "starting" && offlineFailures[a.id] < 3)) && (a.id !== "agent2" || !!token && state.intake.unlocked);
+    const needsUnlock = (a.id === "agent2" || (a.id === "agent1" && (state.intake.configured || state.intake.has_biometric))) && (!token || !state.intake.unlocked);
+    const isOnline = (a.state === "running" || (frame.dataset.src && a.state === "starting" && offlineFailures[a.id] < 3)) && !needsUnlock;
 
     for (const id of ["agent1", "agent2", "agent3", "agent4"]) {
       const f = $("agent-frame-" + id);
@@ -975,7 +775,7 @@
               return;
             }
             frame.src = target;
-            $("agent-newtab").href = target;
+
           });
         }
         const onLoad = () => {
@@ -989,24 +789,23 @@
       $("agent-off").hidden = true;
     } else {
       frame.hidden = true;
-      if (a.state === "stopped" || a.id === "agent2") {
+      if (a.state === "stopped" || needsUnlock) {
         if (a.id === "agent2") agent2RouteEpoch += 1;
         frame.removeAttribute("src"); delete frame.dataset.src;
       }
       $("agent-off").hidden = false;
     }
     if (!isOnline) {
-      const needsUnlock = a.id === "agent2" && a.state === "running" && (!token || !state.intake.unlocked);
       if ($("agent-off-title")) {
-        $("agent-off-title").textContent = needsUnlock ? "Cần mở khóa phiên làm việc" : a.state === "starting" ? "Agent đang khởi động" : "Agent đang tắt";
+        $("agent-off-title").textContent = needsUnlock && a.state === "running" ? "Cần mở khóa phiên làm việc" : a.state === "starting" ? "Agent đang khởi động" : "Agent đang tắt";
       }
       $("agent-off-text").textContent =
-        needsUnlock ? "Agent 2 (Soát xét Giao dịch) yêu cầu phiên bảo mật đang mở khóa để xác thực quyền truy cập dữ liệu doanh nghiệp."
+        needsUnlock && a.state === "running" ? `${WORKSPACE_LABEL[a.id]} yêu cầu mở khóa phiên bảo mật để truy cập dữ liệu doanh nghiệp.`
           : a.state === "starting" ? "Đang khởi động, trang sẽ tự mở khi agent sẵn sàng."
             : a.state === "busy-port" ? "Cổng " + a.port + " đang bị chương trình khác dùng. Tắt chương trình đó hoặc đổi cổng trong portal/config.local.json."
               : "Bật agent để mở giao diện. Portal chạy agent từ thư mục " + a.root + ".";
       $("agent-start").hidden = a.state !== "stopped";
-      if ($("agent-unlock-link")) $("agent-unlock-link").hidden = !needsUnlock;
+      if ($("agent-unlock-link")) $("agent-unlock-link").hidden = !(needsUnlock && a.state === "running");
       if ($("agent-log-details")) $("agent-log-details").hidden = needsUnlock;
       if (!needsUnlock) api(a.log).then((d) => ($("agent-log").textContent = d.log || "Chưa có nhật ký.")).catch(() => {});
     }
@@ -1091,64 +890,15 @@
   }
 
   // ------------------------------------------------------------------ actions
-  async function openAgent1Tab(event) {
-    if (currentAgent === "agent2") {
-      event.preventDefault();
-      if (!token || !state.intake.unlocked) { location.hash = "data"; toast("Đăng nhập Portal để mở Agent 2.", true); return; }
-      const tab = window.open("about:blank", "_blank");
-      if (!tab) { toast("Cho phép mở tab mới rồi bấm lại.", true); return; }
-      try {
-        const version = authVersion, target = await agent2ResumeUrl(new URL("/agent2/", location.href).href);
-        if (version !== authVersion || !token || !state.intake.unlocked) { tab.close(); return; }
-        tab.sessionStorage.setItem("kt-session", token);
-        for (const key of ["agent2.company.selection", "agent2.workbench"]) { const value = sessionStorage.getItem(key); if (value) tab.sessionStorage.setItem(key, value); }
-        tab.opener = null; if (!tab.closed) tab.location.replace(target);
-      }
-      catch (err) { tab.close(); toast("Không mở được Agent 2. Dùng Agent 2 ngay trong Portal.", true); }
-      return;
-    }
-    if (currentAgent !== "agent1") return;
-    event.preventDefault();
-    const agent = agentById("agent1");
-    if (agent.state !== "running") {
-      toast("Bật Agent 1 rồi mở tab riêng.", true);
-      return;
-    }
-    const company = state.company.code || "SME";
-    const agentOrigin = new URL(agent.url, location.href).origin;
-    // Open during the click, then sever the opener before any navigation.
-    const tab = window.open("about:blank", "_blank");
-    if (!tab) {
-      toast("Trình duyệt đã chặn tab mới. Cho phép mở tab rồi bấm lại.", true);
-      return;
-    }
-    try {
-      tab.opener = null;
-      tab.document.title = "Đang kết nối Agent 1";
-      if (tab.document.body) tab.document.body.textContent = "Đang kết nối Agent 1 với doanh nghiệp của bạn…";
-      const result = await api("/api/agents/agent1/connect-link", { method: "POST", json: { company } });
-      if ((state.company.code || "SME") !== company || result.company !== company) {
-        throw new Error("Doanh nghiệp đã đổi. Mở lại tab từ trang chung.");
-      }
-      const target = new URL(result.url);
-      if (target.origin !== agentOrigin || target.pathname !== "/workspace" || target.searchParams.get("portal") !== location.origin) {
-        throw new Error("Địa chỉ kết nối không khớp Agent 1 đang mở.");
-      }
-      if (!tab.closed) tab.location.replace(target.href);
-    } catch (err) {
-      if (!tab.closed) tab.close();
-      toast(err.message, true);
-    }
-  }
 
   async function toggleAgent(a) {
     const action = a.state === "running" || a.state === "starting" ? "stop" : "start";
-    $("agent-start").disabled=true;$("agent-toggle").disabled=true;
+    $("agent-start").disabled=true;if ($("agent-toggle")) $("agent-toggle").disabled=true;
     try {
       await api("/api/agents/" + a.id + "/" + action, { method: "POST" });
       toast(action === "start" ? AGENT_LABEL[a.id] + " đang khởi động." : AGENT_LABEL[a.id] + " đã tắt.");
     } catch (err) { toast(err.message, true); }
-    finally {$("agent-start").disabled=false;$("agent-toggle").disabled=false;}
+    finally {$("agent-start").disabled=false;if ($("agent-toggle")) $("agent-toggle").disabled=false;}
     refresh();
   }
 
@@ -1796,12 +1546,12 @@
       profileVersion += 1;
       state.company = res.company;
       delete form.dataset.dirty;
-      $("sync-result").dataset.hasCustomSync = "1";
-      $("sync-result").replaceChildren(
+      if ($("sync-result")) $("sync-result").dataset.hasCustomSync = "1";
+      $("sync-result")?.replaceChildren(
         el("li", { class: "ok" }, "Đã lưu hồ sơ doanh nghiệp " + res.company.code + "."),
         ...Object.entries(res.sync || {}).map(([aid, s]) => syncItem(aid, s)));
       spotlightNode($("profile-sync"));
-      toast("Đã lưu hồ sơ. Xem kết quả kết nối từng agent bên dưới.");
+      toast("Đã lưu hồ sơ doanh nghiệp.");
       render();
       await refresh();
     } catch (err) {
@@ -1816,15 +1566,17 @@
     if (!a1 || event.data?.type !== "platform-ready" || (a1Frame && event.source !== a1Frame.contentWindow)) return;
     const origin = new URL(a1.url).origin;
     if (event.origin !== origin) return;
+    const version = authVersion;
+    const source = a1Frame.contentWindow;
     try {
       const { key } = await api("/api/agents/agent1/key");
-      if (key && a1Frame) a1Frame.contentWindow.postMessage({ type: "platform-access-key", key }, origin);
+      if (key && version === authVersion && source === a1Frame.contentWindow) source.postMessage({ type: "platform-access-key", key }, origin);
     } catch (err) { toast(err.message, true); }
   });
 
   // ------------------------------------------------------------------ wire up
   window.addEventListener("hashchange", show);
-  $("agent-newtab").addEventListener("click", openAgent1Tab);
+
   document.querySelector(".skip-link").addEventListener("click", (event) => {
     event.preventDefault();
     $("content").focus();
@@ -1916,8 +1668,8 @@
     showProfileErrors({});
     if ($("sync-result")) delete $("sync-result").dataset.hasCustomSync;
     renderConfig();
-    $("profile-status").setAttribute("tabindex", "-1");
-    $("profile-status").focus({ preventScroll:true });
+    $("profile-status")?.setAttribute("tabindex", "-1");
+    $("profile-status")?.focus({ preventScroll:true });
   });
   $("company-form").addEventListener("focusin", (event) => {
     if (!event.target.matches("input,select,a,button")) return;
@@ -1926,7 +1678,7 @@
       if (!target.isConnected || target.closest(".profile-actions")) return;
       const bounds = target.getBoundingClientRect();
       const actions = $("profile-submit").closest(".profile-actions").getBoundingClientRect();
-      const header = document.querySelector(".topbar").getBoundingClientRect();
+      const header = { bottom: 0 };
       if (bounds.bottom > actions.top - 12 || bounds.top < header.bottom + 12) target.scrollIntoView({ block:"center", behavior:"instant" });
     });
   });
@@ -1937,6 +1689,7 @@
   $("face-modal-close")?.addEventListener("click", stopFaceCamera);
   $("face-cancel-btn")?.addEventListener("click", stopFaceCamera);
   $("lock-now").addEventListener("click", lockNow);
+  $("profile-lock").addEventListener("click", lockNow);
   $("audit").addEventListener("toggle", (e) => e.target.open && loadAudit());
   $("start-all").addEventListener("click", async () => {
     for (const a of state.agents.filter((x) => x.state === "stopped")) {
@@ -1955,8 +1708,8 @@
     }
   });
   $("agent-start").addEventListener("click", () => toggleAgent(agentById(currentAgent)));
-  $("agent-toggle").addEventListener("click", () => toggleAgent(agentById(currentAgent)));
-  $("agent2-recover").addEventListener("click", async()=>{
+  $("agent-toggle")?.addEventListener("click", () => toggleAgent(agentById(currentAgent)));
+  $("agent2-recover")?.addEventListener("click", async()=>{
     $("agent2-recover").disabled=true;
     try{await api('/api/agents/agent2/recover',{method:'POST'});toast('Đã kết nối lại. Yêu cầu đã lưu có thể tiếp tục.');}
     catch(error){toast(error.message,true);}

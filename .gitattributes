@@ -3,3 +3,7 @@ portal/workspace/datasets/enterprise-x10-v3-candidate02/warehouse.duckdb.zlib fi
 # Frozen catalog manifests contain byte hashes; preserve their exact line endings.
 agent1/outputs/t1/settlement_partial_catalog_v3_20261114/** -text
 *.sh text eol=lf
+
+# Shared theme copies and cache hashes must match across checkouts.
+platform-theme.css text eol=lf
+platform-theme.js text eol=lf

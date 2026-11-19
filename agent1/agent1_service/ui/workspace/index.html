@@ -4,69 +4,66 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="color-scheme" content="light" />
-    <title>Agent1 · Sổ điều hành dòng tiền</title>
+    <title>Trợ lý Dòng tiền</title>
     <link rel="icon" href="/workspace-assets/vendor/chart-line.svg" />
     <link rel="stylesheet" href="/workspace-assets/vendor/uPlot.min.css" />
     <link rel="stylesheet" href="/workspace-assets/style.css" />
     <script defer src="/workspace-assets/vendor/uPlot.iife.min.js"></script>
     <script defer src="/workspace-assets/app.js"></script>
-<script src="/workspace-assets/platform-theme.js?v=0e11e37e"></script>
-<link rel="stylesheet" href="/workspace-assets/platform-theme.css?v=b6dee958">
+<script src="/workspace-assets/platform-theme.js?v=b7ada208"></script>
+<link rel="stylesheet" href="/workspace-assets/platform-theme.css?v=68325505">
 </head>
   <body>
     <a class="skip" href="#main">Đến nội dung</a>
-    <aside class="rail">
-      <a class="brand" href="/workspace"
-        ><span class="brandmark">a₁</span
-        ><span>AGENT<span class="brandline">TRỢ LÝ DÒNG TIỀN</span></span></a
-      >
-      <nav aria-label="Điều hướng chính">
-        <button data-view="forecast"><img src="/workspace-assets/vendor/chart-line.svg" alt="">Dự báo</button>
-        <button data-view="data" class="reconciliation-nav"><img src="/workspace-assets/vendor/database-import.svg" alt="">Nạp dữ liệu</button>
-        <button data-view="records"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Sổ dữ liệu</button>
-        <details class="nav-more">
-          <summary>Quản lý</summary>
-          <button data-view="overview">Tổng quan</button>
-          <button data-view="training">Cập nhật dự báo</button>
-          <button data-view="guide">Hướng dẫn</button>
-        </details>
-      </nav>
-      <div class="company">
-        <span class="avatar">DN</span>
-        <div>
-          <b id="company-name">Doanh nghiệp của bạn</b
-          ><small id="connection-state">Chưa kết nối</small>
-        </div>
-        <button
-          id="connect-open"
-          title="Kết nối doanh nghiệp"
-          aria-label="Kết nối doanh nghiệp"
-        >
-          ↗
-        </button>
+    <header class="topbar cds--header" aria-label="Agent 1">
+      <div class="workspace-heading">
+        <a id="portal-return" class="kt-portal-return" data-portal-return target="_top" aria-label="Quay về trang chung" title="Quay về trang chung" hidden><span aria-hidden="true">←</span><span class="kt-return-label">Trang chung</span></a>
+        <button class="header-brand" type="button" data-view="overview" aria-label="Agent 1 · Tổng quan dòng tiền"><span class="brandmark" aria-hidden="true">A1</span><span>Trợ lý Dòng tiền</span></button>
       </div>
+      <div class="top-actions">
+        <div class="ws-picker">
+          <span id="active-company" class="ws-select"><b id="company-name">Doanh nghiệp của bạn</b><span id="company-tax-code" hidden></span></span>
+        </div>
+        <button id="connect-top" class="link-button">Kết nối</button>
+        <small class="connection-badge" id="connection-state" role="status">Chưa kết nối</small>
+        <span class="badge" id="mode-badge" hidden>Dữ liệu diễn tập</span>
+        <button id="refresh" class="icon-button" aria-label="Làm mới dữ liệu" title="Làm mới dữ liệu">
+          <img src="/workspace-assets/vendor/refresh.svg" alt="" />
+        </button>
+        <button id="logout" class="link-button" hidden>Ngắt kết nối</button>
+      </div>
+    </header>
+    <aside class="rail">
+      <nav aria-label="Điều hướng chính">
+        <div class="nav-group">
+          <div class="nav-group-title">VẬN HÀNH</div>
+          <button data-view="overview">Tổng quan</button>
+          <button data-view="forecast"><img src="/workspace-assets/vendor/chart-line.svg" alt="">Dự báo dòng tiền</button>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-title">SỔ SÁCH</div>
+          <button data-view="records" data-table="invoices"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Công nợ (AR)</button>
+          <button data-view="records" data-table="outflows"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Lịch chi (AP)</button>
+          <button data-view="records" data-table="bank"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Sao kê tài khoản</button>
+          <button data-view="reconciliation">Đối soát công nợ</button>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-title">DỮ LIỆU & HỆ THỐNG</div>
+          <button data-view="records"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Sổ dữ liệu</button>
+          <button data-view="training"><img src="/workspace-assets/vendor/refresh.svg" alt="">Cập nhật mô hình</button>
+          <button data-view="guide"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Hướng dẫn</button>
+        </div>
+      </nav>
+      <div class="side-foot">Dữ liệu dòng tiền xử lý nội bộ. Kịch bản P10-P90 mang tính tham mưu tài chính.</div>
     </aside>
     <div class="shell">
-      <header class="topbar">
-        <div class="workspace-heading">
-          <a id="portal-return" class="kt-portal-return" data-portal-return target="_top" aria-label="Quay về trang chung" title="Quay về trang chung" hidden><span aria-hidden="true">←</span><span class="kt-return-label">Trang chung</span></a>
-          <span class="top-label">SỔ ĐIỀU HÀNH</span
-          ><span class="divider">/</span><span id="breadcrumb">Tổng quan</span>
-        </div>
-        <div class="top-actions">
-          <span class="badge" id="mode-badge">KHÔNG GIAN RIÊNG</span
-          ><button id="connect-top" class="link-button">Kết nối</button
-          ><button
-            id="refresh"
-            class="icon-button"
-            aria-label="Làm mới dữ liệu"
-          >
-            <img src="/workspace-assets/vendor/refresh.svg" alt="" /></button
-          ><button id="logout" class="link-button" hidden>Ngắt kết nối</button>
-        </div>
-      </header>
       <main id="main" tabindex="-1">
         <div id="notice" role="status" aria-live="polite" hidden></div>
+        <section id="company-sync-error" class="paper company-sync-error" aria-labelledby="company-sync-title" hidden>
+          <h2 id="company-sync-title">Cần kiểm tra hồ sơ doanh nghiệp</h2>
+          <p id="company-sync-message"></p>
+          <a id="company-sync-link" class="button" target="_top">Về hồ sơ doanh nghiệp</a>
+        </section>
         <section class="company-profile" id="company-profile" aria-label="Cấu hình doanh nghiệp dùng chung" hidden>
           <dl>
             <div><dt>Mã doanh nghiệp</dt><dd id="profile-code"></dd></div>
@@ -83,13 +80,6 @@
 
             </div>
           </div>
-          <details class="entry-help">
-          <summary>Hướng dẫn bắt đầu và dữ liệu xem thử</summary>
-          <div class="entry-choice">
-            <article><h2>Bắt đầu với doanh nghiệp của bạn</h2><p>Dùng sổ công nợ, các khoản đã thu và lịch chi của doanh nghiệp để lập kế hoạch dòng tiền.</p><button class="button primary" data-view="data">Thiết lập doanh nghiệp của tôi</button></article>
-            <article><h2>Xem thử trước</h2><p>Khám phá Đại Phát: 12.780 hóa đơn, 120 khách hàng, sổ ngân hàng và bốn kịch bản dòng tiền có sẵn.</p><a class="button" href="/workspace-assets/dai-phat.html">Xem thử với dữ liệu mô phỏng →</a></article>
-          </div>
-          </details>
           <div class="metrics">
             <div>
               <span>CÔNG NỢ ĐANG MỞ</span><strong id="kpi-outstanding">—</strong
@@ -139,54 +129,18 @@
                 Loại dải số dư và phạm vi hiệu chỉnh sẽ hiển thị cùng kế hoạch.
               </p>
             </article>
-            <aside class="onboarding">
-              <span class="eyebrow">BẮT ĐẦU CÙNG AGENT1</span>
-              <h2>Nạp dữ liệu.<br />Chủ động thu chi.</h2>
-              <ol>
-                <li>
-                  <span>01</span>
-                  <div>
-                    <b>Nạp sổ của doanh nghiệp</b>
-                    <p>CSV hoặc Excel. Ghép cột ngay trên màn hình.</p>
-                  </div>
-                </li>
-                <li>
-                  <span>02</span>
-                  <div>
-                    <b>Kiểm tra dự báo trên lịch sử</b>
-                    <p>Chỉ đổi phiên bản khi có đủ bằng chứng tốt hơn.</p>
-                  </div>
-                </li>
-                <li>
-                  <span>03</span>
-                  <div>
-                    <b>Chủ động kế hoạch thu chi</b>
-                    <p>Xem dự báo, thử tình huống và cập nhật dữ liệu mới.</p>
-                  </div>
-                </li>
-              </ol>
-              <button data-view="guide">
-                Xem hướng dẫn 5 phút <span>↗</span>
-              </button>
-            </aside>
+
           </div>
-          <article class="paper next-step">
-            <span class="number-stamp">01—03</span>
-            <div>
-              <h3 id="next-title">Dữ liệu đúng là khởi đầu tốt nhất.</h3>
-              <p id="next-copy">
-                Nạp sổ hóa đơn và các khoản đã thu. Lịch chi đã biết là phần bổ sung khi lập dòng tiền.
-                Không cần biết lập trình.
-              </p>
-            </div>
-            <button class="button" data-view="guide">Xem mẫu dữ liệu →</button>
-          </article>
         </section>
 
         <section class="view" id="view-records" hidden>
           <div class="page-heading"><div><span class="eyebrow">DỮ LIỆU DOANH NGHIỆP</span><h1>Sổ dữ liệu và lịch sử nạp</h1>
             <p>Tìm bản ghi, xem chứng từ liên quan và các lần nạp đã thực hiện.</p></div>
-            <button type="button" class="button primary" data-view="data">Nạp dữ liệu</button></div>
+            <div class="heading-controls">
+              <button type="button" class="button" id="records-reconciliation" data-view="reconciliation" hidden>Đối soát công nợ</button>
+              <a class="button" id="records-tax" target="_top" hidden>Mở rà soát thuế ở Agent 3</a>
+              <button type="button" class="button primary" data-view="data">Nạp dữ liệu</button>
+            </div></div>
           <article class="paper">
             <h2>Danh sách bản ghi</h2>
             <form id="records-filter" class="records-filter">
@@ -220,7 +174,7 @@
           <div class="page-heading compact">
             <div>
               <div class="eyebrow">02 / DỮ LIỆU DOANH NGHIỆP</div>
-              <h1>Nạp dữ liệu và đối soát</h1>
+              <h1>Nạp dữ liệu</h1>
               <a href="/workspace-assets/demo-dai-phat-input-train.zip" download>Tải đầu vào Đại Phát · 6 CSV + hướng dẫn thực hành</a>
               <p>
                 Chọn file, ghép cột, kiểm tra rồi mới lưu. Tệp gốc trên máy bạn
@@ -346,6 +300,27 @@
               </dl>
             </details>
           </div>
+          <article id="preview-panel" class="paper preview-panel" hidden>
+            <div class="section-heading">
+              <div>
+                <span class="eyebrow">KẾT QUẢ KIỂM TRA</span>
+                <h2 id="preview-title">Bản xem trước</h2>
+              </div>
+              <button class="button primary" id="commit-import" disabled>Xác nhận lưu dữ liệu</button>
+            </div>
+            <div id="import-warnings"></div>
+            <div id="import-plan"></div>
+            <button class="button" id="all-errors" hidden>Tải toàn bộ lỗi</button>
+            <div id="changed-rows" class="table-scroll"></div>
+            <div id="import-errors" role="alert"></div>
+            <div class="table-scroll" id="preview-table"></div>
+          </article>
+        </section>
+
+        <section class="view" id="view-reconciliation" hidden>
+          <div class="page-heading compact">
+            <div><h1>Đối soát công nợ</h1><p>Ghép khoản thu trên sao kê với hóa đơn và tra cứu lịch sử phân bổ.</p></div>
+          </div>
           <article class="paper reconciliation-panel" id="reconciliation-panel">
             <div class="section-heading">
               <div><h2>Ghép khoản thu với hóa đơn</h2>
@@ -395,25 +370,6 @@
               <p class="helper">Lưu người xử lý, ghi chú và quyết định. Đảo phân bổ mở lại công nợ và khoản chờ; giao dịch ngân hàng vẫn được giữ.</p>
               <div id="reconciliation-history"><p class="muted">Chưa tải lịch sử.</p></div>
             </details>
-          </article>
-          <article id="preview-panel" class="paper preview-panel" hidden>
-            <div class="section-heading">
-              <div>
-                <span class="eyebrow">KẾT QUẢ KIỂM TRA</span>
-                <h2 id="preview-title">Bản xem trước</h2>
-              </div>
-              <button class="button primary" id="commit-import" disabled>
-                Xác nhận lưu dữ liệu
-              </button>
-            </div>
-            <div id="import-warnings"></div>
-            <div id="import-plan"></div>
-            <button class="button" id="all-errors" hidden>
-              Tải toàn bộ lỗi
-            </button>
-            <div id="changed-rows" class="table-scroll"></div>
-            <div id="import-errors" role="alert"></div>
-            <div class="table-scroll" id="preview-table"></div>
           </article>
           <details class="paper correction">
             <summary>Sửa dữ liệu nguồn / bản ghi nhập nhầm</summary>
@@ -553,13 +509,6 @@
           <div class="page-heading compact forecast-toolbar">
             <h1>Kế hoạch dòng tiền</h1>
             <div class="forecast-actions">
-              <details class="history-menu">
-                <summary class="button">Kế hoạch đã lưu</summary>
-                <div class="history-list">
-                  <button class="button" id="saved-plans">Tải danh sách</button>
-                  <div id="plans-list"></div>
-                </div>
-              </details>
               <button class="button" id="export-forecast" disabled>Xuất Excel ↓</button>
             </div>
           </div>
@@ -844,5 +793,17 @@
         </div>
       </form>
     </dialog>
+    <dialog id="confirm-modal" class="confirm-modal" aria-labelledby="confirm-title" aria-describedby="confirm-message confirm-detail">
+      <form id="confirm-form" method="dialog">
+        <h3 id="confirm-title">Xác nhận xóa bản ghi</h3>
+        <p id="confirm-message" class="confirm-message"></p>
+        <p id="confirm-detail" class="confirm-detail helper"></p>
+        <div class="form-actions confirm-actions">
+          <button type="submit" class="button" id="confirm-cancel" value="cancelled" autofocus>Hủy bỏ</button>
+          <button type="submit" class="button danger" id="confirm-proceed" value="confirmed">Xác nhận xóa</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="reconciliation-drawer" class="drawer" aria-labelledby="reconciliation-drawer-title"></dialog>
   </body>
 </html>

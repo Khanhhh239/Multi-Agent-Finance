@@ -1,3 +1,7 @@
 # Historical gates and replay use byte-level SHA-256 fingerprints.
 # Preserve existing bytes on checkout, including pinned historical source.
 * -text
+
+# Shared theme copies and cache hashes must match across checkouts.
+platform-theme.css text eol=lf
+platform-theme.js text eol=lf

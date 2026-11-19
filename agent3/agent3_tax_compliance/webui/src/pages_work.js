@@ -47,7 +47,7 @@ export async function pageOverview() {
 
   app().innerHTML = `
     ${sonHeader('Tổng quan', 'Tổng quan', 'KHÔNG GIAN DOANH NGHIỆP', rep ? `<span class="ctx-chip chip-date">Phân tích: ${dmy(rep.meta.as_of)}</span>` : '')}
-    ${ warningsHtml }
+
     <div id="fresh"></div>
     <div id="watch"></div>
     ${deadlineBanner(rep)}
@@ -69,14 +69,14 @@ export async function pageOverview() {
 
       <a href="#/viec?loc=REVIEW" class="kpi-card-v2 kpi-card-warn">
         <div class="kpi-head-v2">
-          <span class="kpi-title-label">Thuế đầu vào cần xem xét</span>
+          <span class="kpi-title-label">Việc cần rà soát</span>
           <span class="rev-card-count pill-warn">${stats ? `${stats.reviewItems} việc` : '0 việc'}</span>
         </div>
         <div class="kpi-money-block">
-          <div class="kpi-main-money val-warn">${formatSpecialMoney(stats?.reviewVat)}</div>
+          <div class="kpi-main-money val-warn">${stats?.reviewItems && !stats.reviewInvoices ? '<span class="kpi-amount-empty">Chưa xác định</span>' : formatSpecialMoney(stats?.reviewVat)}</div>
         </div>
         <div class="kpi-footer-v2">
-          <span class="kpi-sub-text">${stats ? `<strong>${stats.reviewInvoices}</strong> hóa đơn mua vào · <strong>${stats.reviewItems}</strong> đầu việc` : 'Chưa phân tích'}</span>
+          <span class="kpi-sub-text">${stats ? (stats.reviewInvoices ? `<strong>${stats.reviewInvoices}</strong> hóa đơn mua vào · <strong>${stats.reviewItems}</strong> đầu việc` : `<strong>${stats.reviewItems}</strong> đầu việc cần rà soát thêm`) : 'Chưa phân tích'}</span>
           <span class="kpi-arrow-action" aria-hidden="true">Mở việc →</span>
         </div>
       </a>
@@ -112,13 +112,6 @@ export async function pageOverview() {
 
     <div class="bar a3-overview-toolbar">
       ${button('Chạy phân tích ngay', 'primary', 'id="run"')}
-      <div class="quick-links">
-        <a href="#/hoa-don">Hóa đơn (${rep ? rep.invoices.filter(i => !i.duplicate_of).length : 0})</a>
-        <a href="#/ngan-hang">Sao kê ngân hàng (${rep ? rep.transactions.length : 0})</a>
-        <a href="#/so-lieu">Bảng tính thuế GTGT</a>
-        <a href="#/giai-trinh">Hồ sơ giải trình</a>
-        <a href="#/lich">Lịch thuế</a>
-      </div>
       ${rep ? `<details class="quick-export"><summary>Xuất báo cáo</summary>
         <a class="cds--btn cds--btn--tertiary cds--btn--sm" href="/api/workspaces/${esc(state.ws)}/report.html" target="_blank" rel="noopener">Báo cáo in (HTML)</a>
         <a class="cds--btn cds--btn--ghost cds--btn--sm" href="/api/workspaces/${esc(state.ws)}/export/hoa-don.xlsx">Danh sách hóa đơn (Excel)</a>
@@ -130,22 +123,7 @@ export async function pageOverview() {
 
     ${monthChart()}
 
-    <div class="grid2">
-      <div>
-        <div class="a3-section-head">
-          <h2 class="section" style="margin:0">Việc ưu tiên cần xử lý</h2>
-          ${rep?.items?.length ? `<a class="small" href="#/viec">Xem tất cả ${rep.items.length} việc →</a>` : ''}
-        </div>
-        ${table(['Trạng thái', 'Chứng từ', 'Vấn đề', { label: 'Số tiền', num: true }], (rep?.items || []).slice(0, 6).map((it) => {
-          const inv = invoiceOf(it.invoice_keys[0]);
-          return `<tr class="clickable" data-go="#/viec?open=${encodeURIComponent(itemId(it))}">
-            <td>${reviewStatusBadge(it.status)}</td>
-            <td><strong>${esc(invLabel(inv) || it.invoice_keys[0] || 'Giao dịch NH')}</strong><div class="muted small">${esc(inv?.seller_name || '')}</div></td>
-            <td>${esc(it.title)}</td>
-            <td class="num"><strong>${money(it.amount)}</strong></td>
-          </tr>`;
-        }), rep ? 'Không có khoản nào có rủi ro.' : 'Chưa phân tích.')}
-      </div>
+    <div class="a3-overview-data">
 
       <div>
         <div class="a3-section-head">
@@ -181,11 +159,11 @@ export async function pageOverview() {
         </tr>`), 'Chưa có lịch thuế trong kỳ.')}
       </div>
     </div>
-    <div id="next"></div>`;
+`;
 
   freshBanner($('#fresh'));
   sellerWatch($('#watch'), rep);
-  nextSteps(ws, rep).then((h) => { const el = $('#next'); if (el) el.innerHTML = h; });
+
 
   $('#run').onclick = async () => {
     const run = $('#run');

@@ -63,7 +63,7 @@ Lệnh sẽ tự tạo 4 môi trường `.venv` riêng cho từng Agent, tải c
 ## 4. Kịch bản trải nghiệm trọn vẹn trên Web
 
 1. **Tổng quan (`http://127.0.0.1:8800/#overview`)**
-   - Kiểm tra trạng thái **4/4 Agent sẵn sàng** (nếu Agent 3 đang nạp mô hình lần đầu, đợi khoảng 15–25 giây đèn sẽ chuyển xanh).
+   - Kiểm tra trạng thái **4/4 Agent sẵn sàng** (từ lúc chạy `run_web.bat` đến khi cả 4 Agent sẵn sàng mất khoảng 1 phút, đo được 63 giây trên máy GPU 6 GB).
 
 2. **Hồ sơ doanh nghiệp (`#config`)**
    - Hồ sơ mặc định đã điền sẵn **Công ty CP Phân phối và Dịch vụ Minh Phát (`MPX10`)**, MST **`0999999905`**, định dạng ngày `yyyy-mm-dd` (`iso`) và số tiền `plain`.

@@ -174,6 +174,8 @@ def sync_portal_files(warehouse_db: Path) -> None:
     (a1_prof_dir / f'{code}.json').write_text(
         json.dumps({
             'code': code,
+            'legal_name': company_data.get('legal_name', ''),
+            'tax_code': company_data.get('tax_code', ''),
             'date_format': company_data.get('date_format', 'iso'),
             'number_format': company_data.get('number_format', 'plain'),
         }, ensure_ascii=False, indent=2) + '\n',
@@ -269,12 +271,29 @@ bindings_path = run_dir / 'analysis-bindings.json'
 
 target_companies = [('MPX10', 'isolation_forest', 3), ('C001', 'isolation_forest', 1), ('C002', 'ecod', 2)]
 
+# A fitted model is only usable while the feature contract and preprocessing in the code are unchanged
+# (otherwise Agent 2 reports artifact_incompatible and the ML and statistics branches show 0 available).
+# Stamp the fit with a fingerprint of those sources and refit when it differs.
+def code_fingerprint():
+    h = hashlib.sha256()
+    for name in ('snapshot_features.py', 'method_adapters.py', 'method_preprocess.py', 'ml_estimators.py', 'unsupervised_statistics.py'):
+        h.update(name.encode())
+        h.update((AGENT2 / 'sme_fraud' / name).read_bytes())
+    return h.hexdigest()
+
+stamp_path = run_dir / 'code-fingerprint.txt'
+fingerprint = code_fingerprint()
+
 if model_path.is_file() and bindings_path.is_file():
     try:
         b = json.loads(bindings_path.read_text('utf-8'))
         bound_ids = {row['company_id'] for row in b.get('bindings', []) if row.get('statistics_artifact_id') and row.get('ml_artifacts')}
         if {'MPX10', 'C001', 'C002'} <= bound_ids:
-            sys.exit(0)
+            if stamp_path.is_file() and stamp_path.read_text('utf-8').strip() == fingerprint:
+                sys.exit(0)
+            print('[agent2] Mã đặc trưng hoặc tiền xử lý đã đổi so với lần fit trước; fit lại mô hình.', flush=True)
+            model_path.replace(model_path.with_suffix('.sqlite3.old'))
+            bindings_path.replace(bindings_path.with_suffix('.json.old'))
     except Exception:
         pass
 
@@ -329,7 +348,7 @@ with tempfile.TemporaryDirectory() as tmp:
                             line['credit_vnd'] = int(line['credit_vnd']) * scale
         scope = auth.authorize(header, cid)
         check = lambda c=cid: auth.authorize(header, c)
-        key_base = 'runtime-bootstrap-' + cid.lower()
+        key_base = 'runtime-bootstrap-' + cid.lower() + '-' + fingerprint[:10]
         draft = snapshots.upload(scope, canonical(src), f'bootstrap-{cid}.json', key_base + '-up', check)
         prev = snapshots.preview(scope, draft['import_id'], draft['revision'], check)
         req = {k: prev[k] for k in ('preview_id', 'source_hash', 'mapping_hash', 'report_hash', 'context_hash')}
@@ -362,6 +381,7 @@ with tempfile.TemporaryDirectory() as tmp:
         })
 
     bindings_path.write_bytes(canonical({'version': BINDINGS_VERSION, 'bindings': bindings}))
+    stamp_path.write_text(fingerprint + '\n', encoding='utf-8')
     print(f'[agent2] Đã khởi tạo models-v2.sqlite3 & analysis-bindings.json cho {[c for c, _, _ in target_companies]}', flush=True)
 """
 

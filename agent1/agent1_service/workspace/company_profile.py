@@ -10,7 +10,7 @@ from fastapi import HTTPException
 DATE_FORMATS = {"dmy": "%d/%m/%Y", "iso": "%Y-%m-%d"}
 
 
-def company_profile(firm):
+def company_profile(firm, *, include_identity=False):
     profile = dict(code=firm, date_format="dmy", number_format="vi-VN", managed=False)
     filename = os.environ.get("AGENT1_COMPANY_PROFILE_FILE")
     if not filename:
@@ -23,7 +23,12 @@ def company_profile(firm):
             raise HTTPException(409, "Hồ sơ không khớp mã doanh nghiệp đã kết nối. Mở lại Agent 1 từ workspace tổng.")
         if data.get("date_format") not in DATE_FORMATS or data.get("number_format") not in ("vi-VN", "plain"):
             raise ValueError("Unsupported import format")
-        return dict(code=firm, date_format=data["date_format"], number_format=data["number_format"], managed=True)
+        profile.update(date_format=data["date_format"], number_format=data["number_format"], managed=True)
+        if include_identity:
+            for key in ("legal_name", "tax_code"):
+                if isinstance(data.get(key), str) and data[key].strip():
+                    profile[key] = data[key].strip()
+        return profile
     except (OSError, ValueError, TypeError):
         raise HTTPException(503, "Không đọc được cấu hình doanh nghiệp. Kiểm tra lại hồ sơ ở workspace tổng.") from None
 

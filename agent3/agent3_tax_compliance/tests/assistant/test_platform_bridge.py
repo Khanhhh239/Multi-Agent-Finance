@@ -205,3 +205,110 @@ def test_actual_background_job_rejects_late_result(env):
         finish.set()
     assert done.wait(5)
     assert not path.exists()
+
+def test_auto_enrichment_cache_invalidates_on_input_change(env, monkeypatch):
+    c, wid, b = env
+    ws = b.root / wid
+    source = ws / 'bank' / 'input.csv'
+    source.parent.mkdir(exist_ok=True)
+    source.write_text('date,amount\n2026-01-01,10', encoding='utf-8')
+    report = dict(invoices=[], transactions=[], matches=[])
+    monkeypatch.setattr(web_ai, '_report', lambda _: report)
+    monkeypatch.setattr(web_ai, '_run', lambda _: None)
+    calls = []
+    monkeypatch.setattr(web_ai.ai_mod, 'AI', lambda: calls.append(1))
+    monkeypatch.setattr(web_ai.ai_mod, 'bank_proposals', lambda *args: [])
+    monkeypatch.setattr(web_ai, '_jobs', {})
+    def immediate(wid, task, work):
+        job = dict(running=True)
+        work(job)
+        return dict(job, running=False)
+    monkeypatch.setattr(web_ai, '_start', immediate)
+    url = f'/api/workspaces/{wid}/ai/auto'
+    assert c.post(url).status_code == 200
+    assert c.post(url).json()['cached'] is True
+    assert len(calls) == 1
+    source.write_text('date,amount\n2026-01-01,100', encoding='utf-8')
+    assert c.post(url).status_code == 200
+    assert len(calls) == 2
+
+
+def test_auto_enrichment_discards_results_when_data_changes_during_inference(env, monkeypatch):
+    c, wid, b = env
+    ws = b.root / wid
+    source = ws / 'bank' / 'input.csv'
+    source.parent.mkdir(exist_ok=True)
+    source.write_text('original', encoding='utf-8')
+    report = dict(invoices=[], transactions=[], matches=[])
+    monkeypatch.setattr(web_ai, '_report', lambda _: report)
+    monkeypatch.setattr(web_ai, '_run', lambda _: None)
+    monkeypatch.setattr(web_ai.ai_mod, 'AI', lambda: None)
+    def infer(*args):
+        source.write_text('new imported input', encoding='utf-8')
+        return []
+    monkeypatch.setattr(web_ai.ai_mod, 'bank_proposals', infer)
+    monkeypatch.setattr(web_ai, '_jobs', {})
+    def immediate(wid, task, work):
+        job = dict(running=True)
+        work(job)
+        return dict(job, running=False)
+    monkeypatch.setattr(web_ai, '_start', immediate)
+    r = c.post(f'/api/workspaces/{wid}/ai/auto')
+    assert r.status_code == 200
+    assert r.json()['result']['discarded'] is True
+    assert not (ws / 'ai/auto_cache.json').exists()
+    assert json.loads((ws / 'ai/line_labels.json').read_text(encoding='utf-8')) == {}
+
+
+def test_clause_lookup_uses_cpu_search_preserving_date_and_sources(monkeypatch, tmp_path):
+    from datetime import date
+    db = tmp_path / 'law.sqlite'
+    db.touch()
+    seen = {}
+    class FakeCorpus:
+        def __init__(self, path):
+            self.db = self
+        def execute(self, *args): return self
+        def fetchone(self): return ['https://vbpl.vn/source']
+        def search(self, query, as_of, k):
+            seen.update(hybrid=self.hybrid, rerank=self.rerank, query=query, as_of=as_of, k=k)
+            return [dict(doc_id='doc', doc_num='48', doc_type='Luật', path='Điều 14', prov_id='p', eff_from='2025-07-01', status_name='Còn hiệu lực', rank=1)]
+        def unit_text(self, *args): return 'Nguyên văn điều khoản'
+        def close(self): pass
+    monkeypatch.setattr(web, 'LAW_DB', db)
+    monkeypatch.setattr(web, 'Corpus', FakeCorpus)
+    r = web.law_search('  nội dung  ', '2026-11-19', 999)
+    assert seen == dict(hybrid=False, rerank=False, query='nội dung', as_of=date(2026, 11, 19), k=20)
+    assert r[0]['retrieval_method'] == 'keyword_coverage'
+    assert r[0]['text'] == 'Nguyên văn điều khoản'
+    assert r[0]['url'] == 'https://vbpl.vn/source'
+
+
+def test_auto_fingerprint_tracks_scoped_decisions_and_rejected_proposals(env, monkeypatch):
+    c, wid, b = env
+    ws = b.root / wid
+    events = []
+    monkeypatch.setattr(web_ai.decision_store, 'history', lambda _: list(events))
+    first = web_ai._auto_fingerprint(ws, {})
+    events.append({'action': 'CONFIRM', 'invoice_key': 'invoice-1'})
+    second = web_ai._auto_fingerprint(ws, {})
+    assert second != first
+    (ws / 'ai').mkdir(exist_ok=True)
+    (ws / 'ai/bank_rejected.json').write_text('[{"txn_id":"t1","invoice_key":"i1"}]', encoding='utf-8')
+    assert web_ai._auto_fingerprint(ws, {}) != second
+
+
+def test_failed_auto_job_exposes_error_and_allows_explicit_retry(env, monkeypatch):
+    c, wid, b = env
+    ws = b.root / wid
+    report = dict(invoices=[], transactions=[], matches=[])
+    monkeypatch.setattr(web_ai, '_report', lambda _: report)
+    fingerprint = web_ai._auto_fingerprint(ws, report)
+    monkeypatch.setattr(web_ai, '_jobs', {wid: dict(running=False, error='model temporarily unavailable', auto_fingerprint=fingerprint)})
+    started = []
+    monkeypatch.setattr(web_ai, '_start', lambda *args: started.append(args[0]) or dict(running=True))
+    url = f'/api/workspaces/{wid}/ai/auto'
+    assert c.post(url).json()['error'] == 'model temporarily unavailable'
+    assert started == []
+    assert c.post(url + '?retry=true').json()['running'] is True
+    assert started == [wid]

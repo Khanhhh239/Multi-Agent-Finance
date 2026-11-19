@@ -71,8 +71,8 @@
     year: "Năm",
     value: "Giá trị",
     amount: "Số tiền",
-    mgmt_value: "Sổ quản trị (v_mgmt)",
-    tax_value: "Sổ thuế (v_tax)",
+    mgmt_value: "Sổ quản trị",
+    tax_value: "Sổ thuế",
     delta: "Chênh lệch",
     diff: "Chênh lệch",
     variance: "Chênh lệch",
@@ -221,8 +221,8 @@
           return shortText ? match + " (khoảng " + shortText + ")" : match;
         }
       )
-      .replace(/\bkhung mgmt\b/gi, "Sổ quản trị (v_mgmt)")
-      .replace(/\bkhung tax\b/gi, "Sổ thuế (v_tax)")
+      .replace(/\bkhung mgmt\b/gi, "Sổ quản trị")
+      .replace(/\bkhung tax\b/gi, "Sổ thuế")
       .replace(/(\d{4})-(\d{2})-(\d{2})/g, "$3/$2/$1")
       .replace(/(\d{2}\/\d{2}\/\d{4})\s*–\s*(\d{2}\/\d{2}\/\d{4})/g, "$1 đến $2");
   }
@@ -258,6 +258,7 @@
   }
 
   let sessionId = loadOrCreateSessionId();
+  let conversationVersion = 0;
   let activeClarification = null;
 
   function renderSessionHeader() {
@@ -282,14 +283,14 @@
     return el("li", { class: "intro", id: "chat-intro" },
       el("div", { class: "intro-badges" },
         el("span", { class: "data-badge" }, "Một sổ cái · Hai góc nhìn"),
-        el("span", { class: "data-badge gov" }, "SQL tất định chỉ đọc")
+        el("span", { class: "data-badge gov" }, "Số liệu có dẫn chứng")
       ),
-      el("h1", {}, "Hỏi đáp CFO hai sổ"),
+      el("h1", {}, "Trợ lý hỏi đáp"),
       el("p", {},
         "Đặt câu hỏi bằng tiếng Việt về doanh thu, lợi nhuận, công nợ, dòng tiền hay chi phí theo ",
-        el("strong", {}, "Sổ quản trị (v_mgmt)"),
+        el("strong", {}, "Sổ quản trị"),
         " hoặc ",
-        el("strong", {}, "Sổ thuế (v_tax)"),
+        el("strong", {}, "Sổ thuế"),
         ". Hỗ trợ hỏi nối tiếp trong cùng phiên (ví dụ: ",
         el("em", {}, "“Còn theo sổ thuế thì sao?”"),
         ", ",
@@ -299,10 +300,53 @@
     );
   }
 
+  // ------------------------------------------------------------------ Follow-up context
+  // The governed pipeline answers each question on its own: a session only carries a pending clarification.
+  // A short follow-up ("Còn theo sổ thuế thì sao?", "Chi tiết theo từng chi nhánh?") is therefore rewritten here
+  // into a complete question from the last answered one before it is sent.
+  let lastAnswered = null;
+  const FOLLOW_RE = /^(?:vậy |thế )?(?:còn|nếu)\s+(.+?)(?:\s+thì sao)?\s*\??$/i;
+  const DETAIL_RE = /^(?:chi tiết|tách|phân)\s+(?:theo\s+)?(.+?)\s*\??$/i;
+  const COMPARE_RE = /^so sánh hai sổ/i;
+  const MODIFIER_RE = /(sổ|chi nhánh|tháng|quý|năm|khu vực|sản phẩm|đối tác|phân khúc|kênh)/i;
+
+  function baseQuestion(q) {
+    return String(q || "")
+      .replace(/\s*\((?:theo\s+)?sổ\s+(?:thuế|quản trị)\)/gi, "")
+      .replace(/\s+theo\s+(?:sổ\s+)?(?:thuế|quản trị)(?:\s*\(v_\w+\))?/gi, "")
+      .replace(/\s+theo\s+(?:từng\s+)?(?:chi nhánh|tháng|quý|khu vực|dòng sản phẩm|sản phẩm|đối tác|phân khúc)/gi, "")
+      .replace(/\s*(?:là\s+)?bao nhiêu\s*\??\s*$/i, "")
+      .replace(/\s*\?+\s*$/, "")
+      .trim();
+  }
+
+  function composeFollowUp(q) {
+    if (!lastAnswered) return null;
+    const base = baseQuestion(lastAnswered.question);
+    if (!base) return null;
+    if (COMPARE_RE.test(q)) {
+      return { pair: [base + " theo sổ quản trị là bao nhiêu?", base + " theo sổ thuế là bao nhiêu?"] };
+    }
+    let m = q.match(FOLLOW_RE);
+    if (m && MODIFIER_RE.test(m[1])) {
+      const mod = /^theo\b/i.test(m[1].trim()) ? m[1].trim() : "theo " + m[1].trim();
+      return { text: base + " " + mod + " là bao nhiêu?" };
+    }
+    m = q.match(DETAIL_RE);
+    if (m && MODIFIER_RE.test(m[1])) {
+      const view = (String(lastAnswered.question).match(/theo\s+sổ\s+(?:thuế|quản trị)/i) || [""])[0];
+      return { text: (base + " theo " + m[1].trim().replace(/^theo\s+/i, "") + (view ? " " + view : "")).trim() };
+    }
+    return null;
+  }
+
   function resetConversation() {
+    conversationVersion += 1;
+    if ($("send")) $("send").disabled = false;
     sessionId = generateSessionId();
     saveSessionId(sessionId);
     activeClarification = null;
+    lastAnswered = null;
     renderSessionHeader();
     const thread = $("thread");
     if (thread) {
@@ -335,13 +379,13 @@
       || hasDualCols;
 
     if (hasBothViews) {
-      return { key: "dual", label: "So sánh hai sổ (v_mgmt & v_tax)", css: "view-dual" };
+      return { key: "dual", label: "So sánh hai sổ", css: "view-dual" };
     }
     if (viewStr === "tax" || viewStr === "v_tax" || rawViews[0] === "tax") {
-      return { key: "tax", label: "Sổ thuế (v_tax)", css: "view-tax" };
+      return { key: "tax", label: "Sổ thuế", css: "view-tax" };
     }
     if (viewStr === "mgmt" || viewStr === "v_mgmt" || rawViews[0] === "mgmt") {
-      return { key: "mgmt", label: "Sổ quản trị (v_mgmt)", css: "view-mgmt" };
+      return { key: "mgmt", label: "Sổ quản trị", css: "view-mgmt" };
     }
     return null;
   }
@@ -363,18 +407,18 @@
     if (isLexicalDegraded) {
       return {
         key: "lexical",
-        label: "Chế độ từ vựng dự phòng (Lexical)",
+        label: "Tra cứu danh mục",
         css: "prov-lexical",
-        detail: "Khớp từ vựng / danh mục cục bộ (không qua LLM)",
+        detail: "Đối chiếu danh mục chỉ tiêu",
       };
     }
     if (prov.query_fingerprint || res?.demo_evidence?.sql || res?.evidence || (res?.status === "ready" && (prov.catalog_hash || prov.source))) {
       const fp = prov.query_fingerprint ? " · #" + String(prov.query_fingerprint).slice(0, 8) : "";
       return {
         key: "sql",
-        label: "SQL tất định đóng dấu",
+        label: "Số liệu đã đối chiếu",
         css: "prov-sql",
-        detail: "Biên dịch & kiểm duyệt an toàn chỉ đọc" + fp,
+        detail: "Đã đối chiếu với nguồn dữ liệu",
       };
     }
     return null;
@@ -520,29 +564,25 @@
     if (viewBadge) {
       rows.push(["Khung sổ kế toán", viewBadge.label]);
     }
-    if (provBadge) {
-      rows.push(["Cơ chế thực thi", provBadge.detail]);
-    }
+
     if (p) {
       const srcMap = {
-        mgmt: "Sổ quản trị (v_mgmt)",
-        v_mgmt: "Sổ quản trị (v_mgmt)",
-        tax: "Sổ thuế (v_tax)",
-        v_tax: "Sổ thuế (v_tax)",
-        synthetic_duckdb: "Kho DuckDB doanh nghiệp",
+        mgmt: "Sổ quản trị",
+        v_mgmt: "Sổ quản trị",
+        tax: "Sổ thuế",
+        v_tax: "Sổ thuế",
+        synthetic_duckdb: "Kho dữ liệu doanh nghiệp",
       };
       if (p.source) {
         rows.push(["Nguồn truy vấn", srcMap[p.source] || String(p.source).replace(/_/g, " ")]);
       }
       if (p.data_watermark) rows.push(["Dữ liệu cập nhật đến", readable(p.data_watermark)]);
-      if (p.query_fingerprint) rows.push(["Dấu vân tay SQL", String(p.query_fingerprint).slice(0, 16)]);
-      if (p.catalog_hash) rows.push(["Mã băm danh mục", String(p.catalog_hash).slice(0, 12)]);
     }
 
     return el("details", { class: "source" },
-      el("summary", {}, "Kiểm tra nguồn & truy vết quản trị"),
+      el("summary", {}, "Kiểm tra nguồn số liệu"),
       el("dl", {}, rows.map(([k, v]) => [el("dt", {}, k), el("dd", {}, v)])),
-      sqlText ? el("pre", { class: "sql-preview" }, sqlText) : null
+      null
     );
   }
 
@@ -601,8 +641,8 @@
 
       if (slots.includes("view") || /quản trị|sổ thuế|góc nhìn|khung/.test(text)) {
         items.push(
-          { label: "Sổ quản trị (v_mgmt)", sendValue: guidedSessionId ? "mgmt" : (baseQ ? baseQ + " theo sổ quản trị" : "Theo sổ quản trị"), displayText: "Theo Sổ quản trị (v_mgmt)", isGuidedSlot: Boolean(guidedSessionId) },
-          { label: "Sổ thuế (v_tax)", sendValue: guidedSessionId ? "tax" : (baseQ ? baseQ + " theo sổ thuế" : "Theo sổ thuế"), displayText: "Theo Sổ thuế (v_tax)", isGuidedSlot: Boolean(guidedSessionId) }
+          { label: "Sổ quản trị", sendValue: guidedSessionId ? "mgmt" : (baseQ ? baseQ + " theo sổ quản trị" : "Theo sổ quản trị"), displayText: "Theo Sổ quản trị", isGuidedSlot: Boolean(guidedSessionId) },
+          { label: "Sổ thuế", sendValue: guidedSessionId ? "tax" : (baseQ ? baseQ + " theo sổ thuế" : "Theo sổ thuế"), displayText: "Theo Sổ thuế", isGuidedSlot: Boolean(guidedSessionId) }
         );
       } else if (slots.includes("metric") && /lợi nhuận|profit/.test(text + " " + baseQ.toLowerCase())) {
         items.push(
@@ -765,15 +805,26 @@
     const sendBtn = $("send");
     if (sendBtn && sendBtn.disabled) return;
 
+    const requestVersion = conversationVersion;
     const displayQuestion = opts.displayQuestion || trimmed;
     const isClarificationTurn = Boolean(opts.clarificationSessionId || activeClarification);
     const effectiveSessionId = opts.clarificationSessionId || activeClarification?.sessionId || sessionId;
+
+    const followUp = isClarificationTurn || opts.composed ? null : composeFollowUp(trimmed);
+    if (followUp?.pair) {
+      await ask(followUp.pair[0], { displayQuestion: displayQuestion + " (Sổ quản trị)", composed: true });
+      if (requestVersion !== conversationVersion) return;
+      await ask(followUp.pair[1], { displayQuestion: displayQuestion + " (Sổ thuế)", composed: true });
+      return;
+    }
+    const sendText = followUp?.text || trimmed;
+    const originalQuestion = activeClarification?.originalQuestion || null;
 
     const thread = $("thread");
     if (thread) {
       thread.append(el("li", { class: "msg user" }, displayQuestion));
     }
-    const bot = el("li", { class: "msg bot pending" }, el("div", { class: "answer" }, "Đang tra cứu sổ cái và kiểm duyệt SQL…"));
+    const bot = el("li", { class: "msg bot pending" }, el("div", { class: "answer" }, "Đang tra cứu và đối chiếu số liệu…"));
     if (thread) {
       thread.append(bot);
       bot.scrollIntoView({ block: "end" });
@@ -781,7 +832,9 @@
     if (sendBtn) sendBtn.disabled = true;
 
     try {
-      let { ok, res } = await postAgent4Query(trimmed, effectiveSessionId, isClarificationTurn, opts.selectedChoiceId || null);
+      let { ok, res } = await postAgent4Query(sendText, effectiveSessionId, isClarificationTurn, opts.selectedChoiceId || null);
+
+      if (requestVersion !== conversationVersion) return;
 
       // Resilient fallback if an un-upgraded backend treats session_id strictly as single-use clarification token
       if (
@@ -790,7 +843,8 @@
         res?.error?.stage === "clarification" &&
         res?.error?.code === "invalid_request"
       ) {
-        const retry = await postAgent4Query(trimmed, null, false, null);
+        const retry = await postAgent4Query(sendText, null, false, null);
+        if (requestVersion !== conversationVersion) return;
         ok = retry.ok;
         res = retry.res;
       }
@@ -815,9 +869,18 @@
         ? res
         : { status: "error", answer: errorText(res?.error) || "Yêu cầu không thành công." };
       bot.replaceChildren(...botMessage(payloadToRender, displayQuestion));
+      if (followUp?.text) {
+        bot.prepend(el("div", { class: "followup-note" }, "Hiểu theo ngữ cảnh: “" + sendText + "”"));
+      }
+      if (res?.status === "ready") {
+        const answered = isClarificationTurn ? originalQuestion : sendText;
+        if (answered) lastAnswered = { question: answered };
+      }
     } catch (err) {
+      if (requestVersion !== conversationVersion) return;
       bot.replaceChildren(...botMessage({ status: "error", answer: "Không kết nối được máy chủ Portal: " + err.message }, displayQuestion));
     } finally {
+      if (requestVersion !== conversationVersion) return;
       bot.classList.remove("pending");
       if (sendBtn) sendBtn.disabled = false;
       bot.scrollIntoView({ block: "end" });

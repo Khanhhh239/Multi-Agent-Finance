@@ -1,0 +1,198 @@
+{
+  "company": "DEMO_DAIPHAT",
+  "legal_name": "Đại Phát — doanh nghiệp mô phỏng",
+  "synthetic": true,
+  "cutoff": "2026-11-18",
+  "opening_balance": 424000000,
+  "cash_floor": 200000000,
+  "confirmed_weeks": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "files": [
+    {
+      "kind": "invoices",
+      "file": "01_invoices.csv",
+      "rows": 12786,
+      "sha256": "c2e703065f9d09616b6aa8713c41056db8c8b6f3854c351db06595ed2055fae4"
+    },
+    {
+      "kind": "bank",
+      "file": "02_bank.csv",
+      "rows": 17648,
+      "sha256": "89602f974c5659e346efb0ab248cd4b61d1d8e199817c4f384a4d87a8b98c396"
+    },
+    {
+      "kind": "payments",
+      "file": "03_payments.csv",
+      "rows": 16258,
+      "sha256": "d86c49f2912c69fc8604f604f036fed2ffad681d3f525c84115d82a16912a138"
+    },
+    {
+      "kind": "statements",
+      "file": "04_statements.csv",
+      "rows": 143,
+      "sha256": "44d586baeb8ea52f1334ee8d00163ffc890692c2a8b42f798410370db29d1043"
+    },
+    {
+      "kind": "outflows",
+      "file": "05_outflows.csv",
+      "rows": 28,
+      "sha256": "28f4fc6d5a5164227cf79b3b7b5ef87ce1a9a11e089ce1d43f92388cbd5e6be7"
+    },
+    {
+      "kind": "expense_payments",
+      "file": "06_expense_payments.csv",
+      "rows": 1,
+      "sha256": "d6e34c1286db1c552b2e1f2d7f716731e0f8526763909e75d2e88414ac66c8f0"
+    },
+    {
+      "kind": "actions",
+      "file": "07_actions.csv",
+      "rows": 5003,
+      "sha256": "1f410dfe8a9b64bf16f09a734cb2baaa998c761ac3408c054b633e7af35b9e51"
+    }
+  ],
+  "phases": [
+    {
+      "id": "01_lich_su",
+      "files": [
+        {
+          "kind": "invoices",
+          "file": "01_lich_su/01_invoices.csv",
+          "rows": 12780,
+          "sha256": "b8bd1e816e0c122bd4cfe37db1f92937b943552bce24677690e61b2eefb00b37"
+        },
+        {
+          "kind": "bank",
+          "file": "01_lich_su/02_bank.csv",
+          "rows": 17642,
+          "sha256": "2feaeb86f463d4ac9e82e80a291423041cd62b4dfc8b1d02a8ffbbf0ad27ada9"
+        },
+        {
+          "kind": "payments",
+          "file": "01_lich_su/03_payments.csv",
+          "rows": 16258,
+          "sha256": "d86c49f2912c69fc8604f604f036fed2ffad681d3f525c84115d82a16912a138"
+        },
+        {
+          "kind": "statements",
+          "file": "01_lich_su/04_statements.csv",
+          "rows": 142,
+          "sha256": "f56ee60aa680531f3809946fa0cdea06dd9442ca3fb79bfe41aef1f11f7c2b7c"
+        },
+        {
+          "kind": "actions",
+          "file": "01_lich_su/05_actions.csv",
+          "rows": 5001,
+          "sha256": "bfb5c460d18e58761fe6e2ff3e43df3241815fe6fd6fb68d2c9f66c77901d912"
+        }
+      ]
+    },
+    {
+      "id": "02_phat_sinh_moi",
+      "files": [
+        {
+          "kind": "invoices",
+          "file": "02_phat_sinh_moi/01_invoices.csv",
+          "rows": 6,
+          "sha256": "397fe9cdf9723fcdbff4d7307c17d058ea35b95305f2082529771d6210b73967"
+        },
+        {
+          "kind": "bank",
+          "file": "02_phat_sinh_moi/02_bank.csv",
+          "rows": 6,
+          "sha256": "c202ae73278f20519dd2265f3686804c2ae1b550dca42cdf17eda37039be7802"
+        },
+        {
+          "kind": "statements",
+          "file": "02_phat_sinh_moi/03_statements.csv",
+          "rows": 1,
+          "sha256": "927b47f956dbcf12892e5865a100a46e2f17e563a30a9725624b3fec472a3b0a"
+        },
+        {
+          "kind": "actions",
+          "file": "02_phat_sinh_moi/04_actions.csv",
+          "rows": 2,
+          "sha256": "f5f0d848035db510930c0f8f5adb6a4b0672c1cc71a3c4e21c83e3205e25bf7d"
+        }
+      ]
+    },
+    {
+      "id": "03_lich_chi",
+      "files": [
+        {
+          "kind": "outflows",
+          "file": "03_lich_chi/01_outflows.csv",
+          "rows": 28,
+          "sha256": "28f4fc6d5a5164227cf79b3b7b5ef87ce1a9a11e089ce1d43f92388cbd5e6be7"
+        },
+        {
+          "kind": "expense_payments",
+          "file": "03_lich_chi/02_expense_payments.csv",
+          "rows": 1,
+          "sha256": "d6e34c1286db1c552b2e1f2d7f716731e0f8526763909e75d2e88414ac66c8f0"
+        }
+      ]
+    }
+  ],
+  "source_files": [
+    {
+      "file": "01_invoices.csv",
+      "sha256": "b8bd1e816e0c122bd4cfe37db1f92937b943552bce24677690e61b2eefb00b37"
+    },
+    {
+      "file": "02_bank.csv",
+      "sha256": "1b625af699122bd431f77ab76c00f3cfe69753d295de010b53076641dbcc04c8"
+    },
+    {
+      "file": "03_payments.csv",
+      "sha256": "d86c49f2912c69fc8604f604f036fed2ffad681d3f525c84115d82a16912a138"
+    },
+    {
+      "file": "04_statements.csv",
+      "sha256": "f56ee60aa680531f3809946fa0cdea06dd9442ca3fb79bfe41aef1f11f7c2b7c"
+    },
+    {
+      "file": "05_outflows.csv",
+      "sha256": "58874c6ceaa0527cf8096e786ba5de1e9207bd1e8e0b5d20977c9aff23a080ee"
+    },
+    {
+      "file": "06_actions.csv",
+      "sha256": "bfb5c460d18e58761fe6e2ff3e43df3241815fe6fd6fb68d2c9f66c77901d912"
+    }
+  ],
+  "history_cutoff": "2026-10-31",
+  "history_counts": {
+    "invoices": 12780,
+    "bank": 17642,
+    "payments": 16258,
+    "statements": 142,
+    "actions": 5001
+  },
+  "pending_bank_ids": [
+    "DP-B-DUNG",
+    "DP-B-MOTPHAN",
+    "DP-B-GOP",
+    "DP-B-KIEMTRA",
+    "DP-B-CHUARO"
+  ],
+  "assumptions": [
+    "Full fictional Dai Phat ledger retained: all 12,780 invoices, all historical bank/payment rows and original supplier settlements. Future source schedule is not scaled down.",
+    "No additional business movements between 2026-11-01 and cutoff except six explicitly generated bank rows.",
+    "The 13-week declared schedule is complete for this synthetic AR/T5 demonstration; new sales are excluded.",
+    "The 40m rent prepayment is already included in the 424m opening balance; only 60m remains.",
+    "No real-world forecast accuracy or causal benefit is claimed."
+  ]
+}

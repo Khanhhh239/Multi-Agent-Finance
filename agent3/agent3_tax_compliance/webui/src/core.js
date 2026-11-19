@@ -197,20 +197,16 @@ export function sonHeader(breadcrumb, title, eyebrow = 'KHÔNG GIAN DOANH NGHI�
   const stripHtml = (s) => String(s || '').replace(/<[^>]*>/g, '').trim();
   const cleanSub = stripHtml(subtitle) || DEFAULT_SUBTITLES[breadcrumb] || '';
 
-  let metaParts = [];
-  if (!isOverview && cleanName) metaParts.push(cleanName);
+  const metaParts = [];
   if (taxCode) metaParts.push(`MST ${taxCode}`);
   if (state.report?.meta?.as_of) metaParts.push(`Kỳ phân tích: ${dmy(state.report.meta.as_of)}`);
-
-  const h1Inner = isOverview && cleanName
-    ? `<span class="a3-h1-main">${esc(title)}</span><span class="a3-h1-sep"> · </span><span class="a3-h1-company">${esc(cleanName)}</span>`
-    : `<span class="a3-h1-main">${esc(title)}</span>`;
+  const h1Inner = `<span class="a3-h1-main">${esc(title)}</span>`;
 
   return `
     <div class="page-heading a3-compact-header son-illustrated">
       <div class="a3-header-main">
         <div class="eyebrow"><span class="a3-eyebrow-pill">${esc(eyebrow)}</span><span class="a3-eyebrow-dot">·</span><span id="breadcrumb">${esc(breadcrumb)}</span></div>
-        <h1 class="page">${h1Inner}</h1>
+        <h1 class="page">${h1Inner}</h1>${cleanName ? `<p class="a3-company-line">${esc(cleanName)}</p>` : ''}
         ${(cleanSub || metaParts.length) ? `<p class="a3-header-sub">${cleanSub ? `<span class="a3-sub-desc">${esc(cleanSub)}</span>` : ''}${metaParts.length ? `<span class="a3-sub-meta">${cleanSub ? ' · ' : ''}${esc(metaParts.join(' · '))}</span>` : ''}</p>` : ''}
       </div>
     </div>

@@ -9,6 +9,7 @@
     cleanUrl.hash = "overview";
     history.replaceState(null, "", cleanUrl.href);
   }
+  const expectedPortalCompany = new URLSearchParams(location.search).get("company");
   const fmt = new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 0 });
   const short = (n) =>
     Math.abs(n) >= 1e9
@@ -21,6 +22,7 @@
     overview: "Tổng quan",
     data: "Dữ liệu doanh nghiệp",
     records: "Sổ dữ liệu và lịch sử nạp",
+    reconciliation: "Đối soát công nợ",
     training: "Cập nhật dự báo",
     forecast: "Dự báo và kịch bản",
     guide: "Hướng dẫn dữ liệu",
@@ -266,7 +268,29 @@
         + (result.counts.review ? ` · ${result.counts.review} cần kiểm tra` : "")
       : `${result.updates} dòng sẽ cập nhật`);
   }
+  function portalPage(view) {
+    const supplied = new URLSearchParams(location.search).get("portal");
+    if (!supplied) return null;
+    try {
+      const portal = new URL(supplied);
+      if (portal.protocol !== "http:" || !["127.0.0.1", "localhost"].includes(portal.hostname) ||
+          portal.username || portal.password || portal.origin === location.origin) return null;
+      return portal.origin + "/#" + view;
+    } catch {
+      return null;
+    }
+  }
+  function showCompanySyncError(message) {
+    const target = portalPage("config");
+    if (!target) return false;
+    $("company-sync-message").textContent = message;
+    $("company-sync-link").href = target;
+    $("company-sync-error").hidden = false;
+    $("connection-state").textContent = "Cần kết nối lại";
+    return true;
+  }
   function connect() {
+    if (showCompanySyncError("Mở lại Agent 1 từ Trang chung để nhận phiên của doanh nghiệp đang chọn.")) return;
     $("connect-error").textContent = "";
     if (!$("connect-dialog").open) $("connect-dialog").showModal();
   }
@@ -297,19 +321,23 @@
         connected = false;
         connect();
       }
-      throw Array.isArray(detail) ? apiValidationError(detail, path) : new Error(String(detail));
+      const error = Array.isArray(detail) ? apiValidationError(detail, path) : new Error(String(detail));
+      if (path === "/workspace" && [409, 503].includes(response.status)) showCompanySyncError(error.message);
+      throw error;
     }
     return response.headers.get("Content-Type")?.includes("application/json")
       ? response.json()
       : response.blob();
   }
-  async function action(fn, button) {
+  async function action(fn, button, onError = null) {
     const disabled = button?.disabled;
     if (button) button.disabled = true;
     try {
       await fn();
     } catch (err) {
-      notice(err.message || "Không kết nối được máy chủ.", true);
+      const message = err.message || "Không kết nối được máy chủ.";
+      if (onError) onError(message);
+      else notice(message, true);
       if (err.fieldErrors?.length) showFieldErrors(err.fieldErrors);
     } finally {
       if (button)
@@ -327,39 +355,93 @@
                 : disabled;
     }
   }
-  function switchView(view) {
-    if (!titles[view]) return;
+  function updateActiveCompanyBadge(companyName, taxCode, status) {
+    const tax = $("company-tax-code");
+    $("company-name").textContent = companyName;
+    tax.textContent = taxCode ? "MST " + taxCode : "";
+    tax.hidden = !taxCode;
+    $("connection-state").textContent = status;
+    $("active-company").title = [companyName, tax.textContent].filter(Boolean).join(" · ");
+  }
+  function showConfirmModal({ title, message, detail = "", confirmText = "Xác nhận xóa" }) {
+    const dialog = $("confirm-modal");
+    if (dialog.open) return Promise.resolve(false);
+    $("confirm-title").textContent = title || "Xác nhận xóa";
+    $("confirm-message").textContent = message || "";
+    $("confirm-detail").textContent = detail || "";
+    $("confirm-proceed").textContent = confirmText || "Xác nhận xóa";
+    return new Promise((resolve) => {
+      const handleClose = () => {
+        dialog.removeEventListener("close", handleClose);
+        resolve(dialog.returnValue === "confirmed");
+      };
+      dialog.addEventListener("close", handleClose);
+      $("confirm-form").onsubmit = (e) => {
+        e.preventDefault();
+        dialog.close(e.submitter?.value || "cancelled");
+      };
+      dialog.returnValue = "cancelled";
+      dialog.showModal();
+    });
+  }
+  function switchView(route, { updateHash = true, load = true } = {}) {
+    let [view, section] = route.split("/");
+    if (!Object.hasOwn(titles, view)) return;
+    if (view === "data" && portalPage("data")) {
+      view = route = "reconciliation";
+      history.replaceState(null, "", "#" + route);
+    }
     if (view !== currentView) $("notice").hidden = true;
     currentView = view;
     document
       .querySelectorAll(".view")
       .forEach((e) => (e.hidden = e.id !== "view-" + view));
-    document.querySelectorAll("nav button").forEach((e) => {
-      e.classList.toggle("active", e.dataset.view === view);
-      e.setAttribute(
-        "aria-current",
-        e.dataset.view === view ? "page" : "false",
-      );
+    const buttons = [...document.querySelectorAll(".rail nav button")];
+    const active = buttons.find(button => routeFor(button) === route) || buttons.find(button => routeFor(button) === view);
+    buttons.forEach((button) => {
+      button.classList.toggle("active", button === active);
+      if (button === active) button.setAttribute("aria-current", "page");
+      else button.removeAttribute("aria-current");
     });
-    $("breadcrumb").textContent = titles[view];
-    document.querySelector(".nav-more").open = ["overview", "training", "guide"].includes(view);
-    location.hash = view;
+    if (updateHash && location.hash !== "#" + route) history.pushState(null, "", "#" + route);
     drawVisibleChart();
-    window.scrollTo({ top: 0, behavior: "instant" });
-    if (view === "records" && (token || connected)) action(async () => {
-      await Promise.all([loadRecords(), loadImportHistory()]);
-    });
+    window.scrollTo({ top: 0 });
+    if (view === "records") {
+      const kind = $("records-kind");
+      if (section && [...kind.options].some(option => option.value === section) && kind.value !== section) {
+        kind.value = section;
+        resetRecordFilters();
+      }
+      updateRecordLinks();
+      if (load && (token || connected)) action(async () => {
+        await Promise.all([loadRecords(), loadImportHistory()]);
+      });
+    } else if (view === "reconciliation" && load && (token || connected)) {
+      action(loadReconciliation);
+    } else if (view === "forecast" && section === "scenarios") {
+      const scenario = $("scenario-preset");
+      const options = scenario.closest("details");
+      if (options) options.open = true;
+      scenario.focus({preventScroll:true});
+      scenario.scrollIntoView({block:"center"});
+    }
   }
-  document
-    .querySelectorAll("[data-view]")
-    .forEach((button) =>
-      button.addEventListener("click", () => switchView(button.dataset.view)),
-    );
-  window.addEventListener("hashchange", () => {
-    const name = location.hash.slice(1);
-    if (name !== currentView) switchView(name);
+  function routeFor(button) {
+    return [button.dataset.view, button.dataset.table || button.dataset.sub].filter(Boolean).join("/");
+  }
+  function openIntake() {
+    const target = portalPage("data");
+    if (target) window.top.location.href = target;
+    else switchView("data");
+    return Boolean(target);
+  }
+  document.querySelectorAll("[data-view]").forEach(button => {
+    button.addEventListener("click", () => button.dataset.view === "data" ? openIntake() : switchView(routeFor(button)));
   });
-  $("connect-top").onclick = $("connect-open").onclick = connect;
+  window.addEventListener("hashchange", () => {
+    if (location.hash !== "#main") switchView(location.hash.slice(1) || "overview", {updateHash:false});
+  });
+  $("connect-top").onclick = connect;
   $("connect-cancel").onclick = () => $("connect-dialog").close();
   async function connectWithKey(key, expectedCompany = null) {
     token = key;
@@ -374,13 +456,11 @@
       token = window.parent !== window ? key : "";
       if (access.role === "reader") {
         document.body.classList.add("reader-mode");
-        $("company-name").textContent = access.company;
-        $("mode-badge").textContent = access.company;
-        $("connection-state").textContent = "Chỉ xem kế hoạch đã lưu";
+        updateActiveCompanyBadge(access.company, null, "Chỉ xem kế hoạch");
         $("connect-top").hidden = true;
         $("logout").hidden = false;
         switchView("forecast");
-        $("saved-plans").click();
+        notice("Phiên chỉ đọc. Kế toán phụ trách có thể xuất và gửi kết quả dự báo mới.");
       } else await refresh();
       $("token-input").value = "";
       $("connect-dialog").close();
@@ -409,7 +489,7 @@
   };
   async function redeemPortalTicket(ticket) {
     const submit = $("connect-form").querySelector("button[type=submit]");
-    for (const button of [$("connect-top"), $("connect-open"), submit]) button.disabled = true;
+    $("connect-top").disabled = submit.disabled = true;
     notice("Đang kết nối với doanh nghiệp từ trang chung…");
     try {
       const response = await fetch("/v1/portal-connect/redeem", {
@@ -422,11 +502,13 @@
       if (!result.key || !result.company) throw new Error("Kết nối thiếu thông tin doanh nghiệp. Mở lại tab từ trang chung.");
       await connectWithKey(result.key, result.company);
     } catch (err) {
-      connect();
-      $("connect-error").textContent = err.message;
-      notice(err.message, true);
+      if (!showCompanySyncError(err.message)) {
+        connect();
+        $("connect-error").textContent = err.message;
+        notice(err.message, true);
+      }
     } finally {
-      for (const button of [$("connect-top"), $("connect-open"), submit]) button.disabled = false;
+      $("connect-top").disabled = submit.disabled = false;
     }
   }
   async function restoreSession() {
@@ -434,10 +516,11 @@
       const response = await fetch("/v1/access", { cache: "no-store", credentials: "same-origin" });
       if (!response.ok || connected || token) return;
       connected = true;
-      await connectWithKey("");
+      await connectWithKey("", expectedPortalCompany);
     } catch (err) {
       connected = false;
-      notice(err.message || "Không khôi phục được phiên kết nối.", true);
+      const message = err.message || "Không khôi phục được phiên kết nối.";
+      if (!showCompanySyncError(message)) notice(message, true);
     }
   }
   // Inside the platform shell: exchange its access key for a browser session.
@@ -445,9 +528,9 @@
     window.addEventListener("message", (event) => {
       const data = event.data || {};
       if (event.source !== window.parent || data.type !== "platform-access-key" || token || connected) return;
-      if (!/^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(event.origin)) return;
-      $("token-input").value = String(data.key || "");
-      $("connect-form").requestSubmit();
+      const portal = portalPage("overview");
+      if (!portal || new URL(portal).origin !== event.origin || typeof data.key !== "string" || !data.key) return;
+      connectWithKey(data.key, expectedPortalCompany).catch(error => showCompanySyncError(error.message));
     });
     window.parent.postMessage({ type: "platform-ready", agent: "agent1" }, "*");
   }
@@ -460,7 +543,10 @@
     clearTimeout(poll);
     location.reload();
   }, $("logout"));
-  $("refresh").onclick = () => action(refresh, $("refresh"));
+  $("refresh").onclick = () => action(async () => {
+    await refresh();
+    if (currentView === "reconciliation") await loadReconciliation();
+  }, $("refresh"));
   function clearForecast() {
     lastForecast = null;
     charts.forEach((chart) => chart.destroy());
@@ -505,6 +591,7 @@
   }
   async function refresh() {
     const next = await api("/workspace");
+    const initialLoad = !state;
     if (state && state.dataset_hash !== next.dataset_hash) {
       invalidateImportPreview();
       $("train-complete").checked = false;
@@ -523,9 +610,9 @@
       clearForecast();
     state = next;
     applyCompanyProfile(state.company_profile);
-    $("company-name").textContent = state.company;
-    $("mode-badge").textContent = state.synthetic_sandbox ? "DỮ LIỆU DIỄN TẬP" : state.company;
-    $("connection-state").textContent = "Đã kết nối · dữ liệu riêng";
+    $("company-sync-error").hidden = true;
+    $("mode-badge").hidden = !state.synthetic_sandbox;
+    updateActiveCompanyBadge(state.company_profile?.legal_name || state.company, state.company_profile?.tax_code, "Đã kết nối");
     $("connect-top").hidden = true;
     $("logout").hidden = false;
     $("kpi-records").textContent = fmt.format(state.counts.invoices);
@@ -555,21 +642,11 @@
         return el;
       }),
     );
-    if (state.needs_retraining) {
-      $("next-title").textContent = "Dữ liệu mới đã sẵn sàng.";
-      $("next-copy").textContent =
-        "Phiên bản đang dùng được học trên dữ liệu trước. Hãy kiểm định lại để cập nhật.";
-    } else if (state.counts.invoices) {
-      $("next-title").textContent =
-        "Sổ của bạn đã có " + fmt.format(state.counts.invoices) + " hóa đơn.";
-      $("next-copy").textContent = state.active_version
-        ? "Phiên bản đã chọn sẵn sàng. Nhập số dư thực tế để lập kế hoạch."
-        : "Tiếp tục nạp thanh toán, kiểm định hoặc lập dự báo theo lịch sử hiện có.";
-    }
     renderVersions();
     renderT1Updates();
     renderJobs();
     if (currentView === "records") await Promise.all([loadRecords(), loadImportHistory()]);
+    if (initialLoad && currentView === "reconciliation") await loadReconciliation();
     clearTimeout(poll);
     if (state.jobs.some((j) => ["queued", "running"].includes(j.status)))
       poll = setTimeout(() => action(refresh), 3000);
@@ -636,8 +713,21 @@
       status:value => statusLabels[value] || value, direction:value => value === "in" ? "Thu" : "Chi",
       identity_status:value => value === "identified" ? "Đủ định danh" : "Cần bổ sung định danh",
     });
+    if (kind === "bank") grid.querySelector("thead tr").append(node("th", "Đối soát công nợ"));
     Array.from(grid.querySelectorAll("tbody tr")).forEach((row, index) => {
-      row.cells[0].replaceChildren(recordLink(kind, result.rows[index].identifier));
+      const item = result.rows[index];
+      row.cells[0].replaceChildren(recordLink(kind, item.identifier));
+      if (kind === "bank") {
+        const cell = node("td");
+        if (["pending", "partial", "allocated"].includes(item.status)) {
+          const review = node("button", "Mở đối soát", "link-button");
+          review.type = "button";
+          review.setAttribute("aria-label", "Mở đối soát cho " + item.identifier);
+          review.onclick = () => action(() => openBankReview(item), review);
+          cell.append(review);
+        }
+        row.append(cell);
+      }
     });
     $("records-table").replaceChildren(grid);
     $("records-status-text").textContent = result.total ? fmt.format(result.total) + " bản ghi phù hợp. Bấm mã để xem chi tiết và liên kết." : "Không có bản ghi phù hợp.";
@@ -725,10 +815,23 @@
     target.scrollIntoView({behavior:"smooth", block:"start"});
   }
   $("records-filter").onsubmit = event => { event.preventDefault(); recordsOffset = 0; action(loadRecords, event.submitter); };
-  $("records-kind").onchange = () => {
+  function resetRecordFilters() {
     recordsOffset = importsOffset = 0; $("records-status").replaceChildren(new Option("Tất cả", ""));
     $("record-detail-panel").hidden = true; $("import-history-detail").replaceChildren();
-    action(async () => { await Promise.all([loadRecords(), loadImportHistory()]); });
+  }
+  function updateRecordLinks() {
+    const kind = $("records-kind").value;
+    $("records-reconciliation").hidden = kind !== "bank";
+    const tax = $("records-tax");
+    const target = kind === "outflows" && portalPage("agent3");
+    tax.hidden = !target;
+    if (target) tax.href = target;
+  }
+  $("records-kind").onchange = () => {
+    resetRecordFilters();
+    const kind = $("records-kind").value;
+    const route = location.hash === "#records" ? "records" : "records/" + kind;
+    switchView(route);
   };
   $("records-prev").onclick = () => { recordsOffset = Math.max(0, recordsOffset - 25); action(loadRecords); };
   $("records-next").onclick = () => { recordsOffset += 25; action(loadRecords); };
@@ -782,6 +885,7 @@
       }
     });
   $("import-allocations").onclick = () => {
+    if (openIntake()) return;
     $("table-kind").value = "payments";
     $("import-file").value = "";
     resetPreview();
@@ -792,8 +896,7 @@
     try { return fmt.format(BigInt(String(value))); }
     catch { return String(value ?? "—"); }
   }
-  function reconciliationReviewer() {
-    const input = $("reconciliation-reviewer");
+  function reconciliationReviewer(input = $("reconciliation-reviewer")) {
     if (!input.value.trim()) {
       input.focus();
       throw new Error("Nhập tên người xử lý trước khi xác nhận.");
@@ -866,16 +969,18 @@
         return option;
       }));
       if (!r.pending_count)
-        $("pending-rows").replaceChildren(node("p", "Các khoản thu trong phạm vi đã được ghép. Bạn không cần phân bổ thêm."));
+        $("pending-rows").replaceChildren(node("p", String(r.total_received) === "0"
+          ? "Chưa có khoản thu trên sao kê trong kỳ."
+          : "Không còn khoản thu nào chờ phân bổ."));
       else {
       const grid = table(r.pending, ["bank_id", "account", "date", "amount", "unallocated"], {amount:exactMoney, unallocated:exactMoney});
       const header = grid.querySelector("thead tr");
       if (header) header.append(node("th", "Xử lý ngoại lệ"));
       grid.querySelectorAll("tbody tr").forEach((tr, i) => {
         const item = r.pending[i];
-        const cell = node("td"), choose = node("button", "Ghép khoản này", "link-button");
+        const cell = node("td"), choose = node("button", "Mở đối soát", "link-button");
         choose.type = "button";
-        choose.onclick = () => chooseAllocation(item);
+        choose.onclick = () => openPendingReview(item);
         const edit = node("button", "Sửa dòng sao kê", "link-button"); edit.type = "button";
         edit.onclick = () => openBankCorrection(item.bank_id);
         const actions = node("div", undefined, "pending-actions");
@@ -913,79 +1018,203 @@
     if (reviewCases.length > 100) target.append(node("p", "Đang hiện 100 / " + reviewCases.length + " khoản đối soát. Sau khi xử lý, chạy lại để xem các khoản tiếp theo."));
     for (const item of reviewCases.slice(0, 100)) {
       const card = node("article", undefined, "reconciliation-case");
-      const nonAr = item.reason === "non_ar_bank_movement";
-      const status = nonAr ? "Ngoài công nợ" : {auto:"Có đề xuất", review:"Cần kiểm tra", unmatched:"Chưa ghép", rejected:"Đã từ chối"}[item.status] || item.status;
+      const status = {auto:"Có đề xuất", review:"Cần kiểm tra", unmatched:"Chưa ghép", rejected:"Đã từ chối"}[item.status] || item.status;
+      const open = node("button", "Mở đối soát", "button");
+      open.type = "button";
+      open.setAttribute("aria-label", "Mở đối soát cho " + item.bank_id);
+      open.onclick = () => openProposalReview(item, proposal);
       card.append(node("h4", item.bank_id + " · " + status),
-        node("p", displayDate(item.date) + " · " + item.account + " · " + (nonAr ? "giao dịch ngân hàng " : "chưa phân bổ ") + exactMoney(item.available_minor) + " VND"),
-        node("p", item.reason_text), node("p", item.memo || "Sao kê chưa có nội dung chuyển khoản", "muted"));
-      if (nonAr) card.append(node("p", "Không thuộc hàng chờ ghép công nợ. Nếu phân loại sai, sửa dữ liệu nguồn của dòng sao kê này.", "helper"));
-      else if (item.status === "review" && item.reason === "ambiguous_subset")
-        card.append(node("p", "Có nhiều phương án: mở danh sách ứng viên, đối chiếu chứng từ rồi ghép thủ công. Có thể để khoản này chờ nếu chưa đủ bằng chứng.", "helper"));
-      else if (item.status === "review" && item.reason === "unknown_party")
-        card.append(node("p", "Chưa rõ người chuyển: chỉ ghép thủ công khi đã xác nhận khách hàng và có bằng chứng; nếu chưa rõ, để khoản này chờ.", "helper"));
-      if (item.allocations.length) {
-        const allocations = node("ul");
-        for (const a of item.allocations) allocations.append(node("li", a.invoice_id + " · " + exactMoney(a.amount_minor) + " VND"));
-        card.append(allocations);
-      }
-      if (!nonAr && item.candidates.length) {
-        const details = node("details"), list = node("div", undefined, "reconciliation-candidates");
-        details.append(node("summary", "Ứng viên và điểm gợi ý · tối đa 10"));
-        for (const candidate of item.candidates) {
-          const row = node("div");
-          row.append(node("span", candidate.invoice_id + " · " + candidate.customer_id + " · điểm " + candidate.score.toFixed(2) + " · còn " + exactMoney(candidate.amount_open_minor) + " VND"),
-            node("small", candidate.evidence.join(" · ")));
-          const button = node("button", "Chọn để ghép thủ công", "link-button"); button.type = "button";
-          button.disabled = Boolean(proposal.stale);
-          button.onclick = () => {
-            const pending = reconciliationState?.pending.find(r => r.bank_id === item.bank_id)
-              || {bank_id:item.bank_id, unallocated:item.available_minor};
-            const amount = BigInt(String(pending.unallocated)) < BigInt(String(candidate.amount_open_minor)) ? pending.unallocated : candidate.amount_open_minor;
-            chooseAllocation(pending, candidate.invoice_id, amount);
-          };
-          row.append(button); list.append(row);
-        }
-        details.append(list, node("p", "Có thể nhập mã hóa đơn khác ở phần phân bổ thủ công nếu danh sách gợi ý chưa có hóa đơn cần tìm.", "helper")); card.append(details);
-      }
-      if (item.status === "rejected") {
-        card.append(node("p", "Người xử lý: " + item.reviewed_by + " · Lý do: " + item.note));
-      } else if (!proposal.stale && item.reason !== "non_ar_bank_movement") {
-        const form = node("form", undefined, "reconciliation-review"), label = node("label", "Ghi chú / lý do từ chối"), note = node("textarea");
-        note.maxLength = 2000; label.append(note); form.append(label);
-        const controls = node("div", undefined, "reconciliation-actions");
-        if (item.allocations.length) {
-          const accept = node("button", "Duyệt phân bổ", "button primary"); accept.type = "submit"; accept.value = "accept"; controls.append(accept);
-        }
-        if (item.status === "review" && ["ambiguous_subset", "unknown_party"].includes(item.reason)) {
-          const manual = node("button", "Ghép thủ công khi có bằng chứng", "button"); manual.type = "button";
-          manual.onclick = () => {
-            const pending = reconciliationState?.pending.find(r => r.bank_id === item.bank_id);
-            if (pending) chooseAllocation(pending);
-          };
-          controls.append(manual);
-        }
-        const reject = node("button", "Từ chối và lưu lý do", "button"); reject.type = "submit"; reject.value = "reject"; controls.append(reject);
-        form.append(controls);
-        const keys = {accept:crypto.randomUUID(), reject:crypto.randomUUID()};
-        form.onsubmit = event => {
-          event.preventDefault(); const kind = event.submitter.value;
-          action(async () => {
-            const actor = reconciliationReviewer();
-            if (kind === "reject" && !note.value.trim()) { note.focus(); throw new Error("Nhập lý do từ chối để lưu lịch sử."); }
-            if (reconciliationState?.proposal?.id !== proposal.id) throw new Error("Đề xuất đã đổi. Tải lại trước khi duyệt.");
-            await api("/reconciliation/" + kind, {method:"POST", body:JSON.stringify({
-              idempotency_key:keys[kind], proposal_id:proposal.id, bank_id:item.bank_id, reviewed_by:actor, note:note.value.trim(),
-            })});
-            await refreshReconciliationAfterChange(kind === "accept"
-              ? "Đã duyệt riêng " + item.bank_id + " và cập nhật công nợ."
-              : "Đã lưu lý do từ chối cho " + item.bank_id + ". Khoản thu vẫn chưa phân bổ.");
-          }, event.submitter);
-        };
-        card.append(form);
-      }
+        node("p", displayDate(item.date) + " · " + item.account + " · Chưa phân bổ " + exactMoney(item.available_minor) + " VND"),
+        node("p", item.reason_text), open);
       target.append(card);
     }
     if (outsideAr.length) target.append(renderOutsideAr(outsideAr));
+  }
+  function showReconciliationDrawer(title) {
+    const dialog = $("reconciliation-drawer");
+    const header = node("div", undefined, "drawer-header");
+    const heading = node("h2", title);
+    heading.id = "reconciliation-drawer-title";
+    const close = node("button", "Đóng", "button");
+    close.type = "button";
+    close.onclick = () => dialog.close();
+    header.append(heading, close);
+    const body = node("div", undefined, "drawer-body");
+    const footer = node("div", undefined, "drawer-footer");
+    dialog.replaceChildren(header, body, footer);
+    return {dialog, body, footer};
+  }
+  function addReviewer(body) {
+    const label = node("label", "Người xử lý");
+    const input = node("input");
+    input.value = $("reconciliation-reviewer").value;
+    input.maxLength = 200;
+    input.autocomplete = "name";
+    input.required = true;
+    label.append(input);
+    body.append(label);
+    return input;
+  }
+  function reviewDecisionForm({dialog, body, footer}, choices, noteLabel, submit) {
+    const form = node("form", undefined, "drawer-decision");
+    const input = addReviewer(body);
+    const label = node("label", noteLabel);
+    const note = node("textarea");
+    note.maxLength = 2000;
+    label.append(note);
+    const error = node("p", "", "error-text");
+    error.setAttribute("role", "alert");
+    body.append(label, error);
+    const keys = {}, buttons = [];
+    for (const [kind, label, className] of choices) {
+      const button = node("button", label, "button " + className);
+      button.type = "submit";
+      button.value = kind;
+      keys[kind] = crypto.randomUUID();
+      buttons.push(button);
+      footer.append(button);
+    }
+    form.append(body, footer);
+    dialog.append(form);
+    let submitting = false;
+    form.onsubmit = event => {
+      event.preventDefault();
+      const kind = event.submitter?.value;
+      if (submitting || !Object.hasOwn(keys, kind)) return;
+      error.textContent = "";
+      return action(async () => {
+        const actor = reconciliationReviewer(input);
+        const reason = note.value.trim();
+        if (kind !== "accept" && !reason) {
+          note.focus();
+          throw new Error(kind === "reject" ? "Nhập lý do từ chối để lưu lịch sử." : "Nhập lý do đảo phân bổ.");
+        }
+        submitting = true;
+        buttons.forEach(button => { button.disabled = true; });
+        try {
+          const message = await submit(kind, {idempotency_key:keys[kind], reviewed_by:actor, note:reason});
+          $("reconciliation-reviewer").value = actor;
+          if (form.parentNode === dialog && dialog.open) dialog.close();
+          await refreshReconciliationAfterChange(message);
+        } finally {
+          submitting = false;
+          buttons.forEach(button => { button.disabled = false; });
+        }
+      }, null, message => { error.textContent = message; });
+    };
+  }
+  function openProposalReview(item, proposal, pending = null, decisions = []) {
+    const drawer = showReconciliationDrawer("Đối soát · " + item.bank_id);
+    const {dialog, body, footer} = drawer;
+    body.append(node("p", displayDate(item.date) + " · " + item.account + " · " + exactMoney(item.available_minor) + " VND"),
+      node("p", item.reason_text), node("p", item.memo || "Sao kê chưa có nội dung chuyển khoản", "muted"));
+    if (["ambiguous_subset", "unknown_party"].includes(item.reason)) {
+      body.append(node("p", "Chỉ ghép thủ công khi đã xác định đúng khách hàng, hóa đơn và có bằng chứng. Có thể để khoản này chờ kiểm tra.", "helper"));
+    }
+    pending ||= reconciliationState?.pending?.find(row => row.bank_id === item.bank_id);
+    if (!pending && proposal) pending = {bank_id:item.bank_id, unallocated:item.available_minor};
+    function manual(candidate) {
+      const amount = candidate && BigInt(String(candidate.amount_open_minor)) < BigInt(String(pending.unallocated))
+        ? candidate.amount_open_minor : pending.unallocated;
+      dialog.close();
+      if (currentView !== "reconciliation") switchView("reconciliation", {load:false});
+      chooseAllocation(pending, candidate?.invoice_id, amount);
+    }
+    if (item.allocations?.length) {
+      const allocations = node("ul");
+      for (const row of item.allocations) allocations.append(node("li", row.invoice_id + " · " + exactMoney(row.amount_minor) + " VND"));
+      body.append(node("h3", "Phân bổ được đề xuất"), allocations);
+    }
+    if (item.candidates?.length) {
+      const list = node("div", undefined, "reconciliation-candidates");
+      for (const candidate of item.candidates) {
+        const row = node("div");
+        row.append(node("span", candidate.invoice_id + " · " + candidate.customer_id + " · điểm " + candidate.score.toFixed(2) + " · còn " + exactMoney(candidate.amount_open_minor) + " VND"),
+          node("small", candidate.evidence.join(" · ")));
+        const choose = node("button", "Chọn để ghép thủ công", "link-button");
+        choose.type = "button";
+        choose.onclick = () => manual(candidate);
+        row.append(choose);
+        list.append(row);
+      }
+      body.append(node("h3", "Hóa đơn ứng viên"), list);
+    }
+    if (pending) {
+      const choose = node("button", "Ghép thủ công", "button");
+      choose.type = "button";
+      choose.onclick = () => manual();
+      footer.append(choose);
+    }
+    if (!proposal && pending) {
+      const find = node("button", "Tìm đề xuất", "button primary");
+      find.type = "button";
+      find.onclick = () => {
+        dialog.close();
+        switchView("reconciliation", {load:false});
+        $("run-reconciliation").focus();
+        $("run-reconciliation").click();
+      };
+      footer.append(find);
+    }
+    for (const decision of decisions) {
+      const reverse = node("button", "Đảo phân bổ · " + displayDate(decision.known_at), "button");
+      reverse.type = "button";
+      reverse.onclick = () => openReversalDrawer(decision);
+      body.append(reverse);
+    }
+    if (item.status === "rejected") body.append(node("p", "Đã từ chối bởi " + item.reviewed_by + " · " + item.note));
+    if (proposal && item.status !== "rejected") {
+      const choices = [["reject", "Từ chối đề xuất", ""]];
+      if (item.allocations.length) choices.unshift(["accept", "Duyệt phân bổ", "primary"]);
+      reviewDecisionForm(drawer, choices, "Ghi chú / lý do từ chối", async (kind, review) => {
+        const latest = reconciliationState?.proposal;
+        if (latest?.id !== proposal.id || latest.stale) throw new Error("Đề xuất đã đổi. Tải lại trước khi duyệt.");
+        await api("/reconciliation/" + kind, {method:"POST", body:JSON.stringify({
+          ...review, proposal_id:proposal.id, bank_id:item.bank_id,
+        })});
+        return kind === "accept" ? "Đã duyệt riêng " + item.bank_id + " và cập nhật công nợ."
+          : "Đã lưu lý do từ chối cho " + item.bank_id + ". Khoản thu vẫn chưa phân bổ.";
+      });
+    }
+    if (!dialog.open) dialog.showModal();
+  }
+  function openPendingReview(item, decisions = []) {
+    const proposal = reconciliationState.proposal;
+    const match = !proposal?.stale && proposal?.cases.find(row => row.bank_id === item.bank_id && row.reason !== "non_ar_bank_movement");
+    if (match) return openProposalReview(match, proposal, item.unallocated != null ? item : null, decisions);
+    if (item.unallocated == null && decisions.length === 1) return openReversalDrawer(decisions[0]);
+    const reason = item.unallocated == null ? "Khoản thu đã phân bổ. Xem các quyết định còn hiệu lực bên dưới."
+      : "Chưa có đề xuất hiện hành cho dòng sao kê này. Tìm đề xuất ở trang Đối soát công nợ hoặc ghép thủ công khi đã có chứng từ.";
+    openProposalReview({...item, available_minor:item.unallocated ?? item.amount, reason_text:reason}, null,
+      item.unallocated != null ? item : null, decisions);
+  }
+  async function openBankReview(row) {
+    const request = recordsRequest;
+    const [, detail] = await Promise.all([loadReconciliation(), api("/records/bank/" + encodeURIComponent(row.identifier))]);
+    if (request !== recordsRequest || currentView !== "records" || $("records-kind").value !== "bank" || $("reconciliation-drawer").open) return;
+    const decisions = detail.decisions.filter(item => item.status === "committed" && item.bank_id === row.identifier);
+    if (detail.deleted) throw new Error("Dòng sao kê đã bị xóa. Tải lại sổ dữ liệu.");
+    const pending = reconciliationState.pending.find(item => item.bank_id === row.identifier);
+    const fallback = {bank_id:row.identifier, date:detail.record.date, account:detail.record.account,
+      amount:detail.record.amount, memo:detail.record.memo};
+    if (!pending && ["pending", "partial"].includes(row.status)) fallback.unallocated = row.remaining_amount;
+    if (!pending && fallback.unallocated == null && !decisions.length) {
+      throw new Error("Dòng sao kê không có đề xuất hoặc quyết định trong danh sách hiện hành. Mở trang Đối soát công nợ để tìm đề xuất mới.");
+    }
+    openPendingReview(pending || fallback, decisions);
+  }
+  function openReversalDrawer(item) {
+    const drawer = showReconciliationDrawer("Đảo phân bổ · " + (item.bank_id || item.decision_id));
+    drawer.body.append(node("p", "Đảo phân bổ sẽ cập nhật lại công nợ và mở lại khoản thu chưa phân bổ."),
+      node("p", "Quyết định " + item.decision_id + " · " + displayDate(item.known_at)));
+    const allocations = node("ul");
+    for (const row of item.allocations) allocations.append(node("li", row.invoice_id + " · " + exactMoney(row.amount_minor) + " VND"));
+    drawer.body.append(allocations);
+    reviewDecisionForm(drawer, [["reverse", "Xác nhận đảo phân bổ", "danger"]], "Lý do đảo phân bổ", async (kind, review) => {
+      await api("/reconciliation/" + kind, {method:"POST", body:JSON.stringify({...review, decision_id:item.decision_id})});
+      return "Đã đảo phân bổ. Công nợ và số tiền chưa phân bổ đã cập nhật.";
+    });
+    if (!drawer.dialog.open) drawer.dialog.showModal();
   }
   function renderOutsideAr(items) {
     const details = node("details", undefined, "reconciliation-case"), body = node("div");
@@ -1036,19 +1265,10 @@
       for (const a of item.allocations) row.append(node("p", a.payment_id + " → " + a.invoice_id + " · " + exactMoney(a.amount_minor) + " VND"));
       if (item.reversal) row.append(node("p", "Đảo bởi " + item.reversal.reviewed_by + " · " + displayDate(item.reversal.known_at) + " · " + item.reversal.note));
       if (item.status === "committed") {
-        const form = node("form", undefined, "reconciliation-review"), label = node("label", "Lý do đảo phân bổ"), note = node("textarea"), button = node("button", "Đảo quyết định", "button danger");
-        note.required = true; note.maxLength = 2000; label.append(note); form.append(label, button);
-        const key = crypto.randomUUID();
-        form.onsubmit = event => {
-          event.preventDefault();
-          action(async () => {
-            if (!note.value.trim()) { note.focus(); throw new Error("Nhập lý do đảo phân bổ."); }
-            await api("/reconciliation/reverse", {method:"POST", body:JSON.stringify({idempotency_key:key,
-              decision_id:item.decision_id, reviewed_by:reconciliationReviewer(), note:note.value.trim()})});
-            await refreshReconciliationAfterChange("Đã đảo phân bổ. Công nợ và số tiền chưa phân bổ đã cập nhật.");
-          }, event.submitter);
-        };
-        row.append(form);
+        const button = node("button", "Đảo phân bổ", "button");
+        button.type = "button";
+        button.onclick = () => openReversalDrawer(item);
+        row.append(button);
       }
       target.append(row);
     }
@@ -1179,35 +1399,6 @@
     $("source-correction-status").textContent = "Đã sửa nguồn và đảo " + result.reversed_count + " quyết định. Tìm đề xuất đối soát để duyệt lại các khoản cần phân bổ.";
     notice("Đã lưu phiên bản sửa; lịch sử và các kế hoạch đã lưu được giữ.");
   }, $("commit-source-correction"));
-  $("saved-plans").onclick = () =>
-    action(async () => {
-      const plans = await api("/forecasts");
-      $("plans-list").replaceChildren(
-        ...plans.map((x) => {
-          const btn = node(
-            "button",
-            displayDate(x.cutoff) +
-              " · " +
-              (x.created_at
-                ? displayDate(x.created_at) + " " + new Date(x.created_at).toLocaleTimeString("vi-VN", {hour:"2-digit", minute:"2-digit"})
-                : "Bản lưu cũ") +
-              " · số dư thấp nhất " +
-              short(x.minimum_balance),
-            "button",
-          );
-          btn.onclick = () =>
-            action(async () => {
-              lastForecast = await api("/forecasts/" + x.id);
-              $("saved-plans").closest("details").open = false;
-              restoreForecastInputs(lastForecast);
-              renderForecast();
-            });
-          return btn;
-        }),
-      );
-      if (!plans.length) notice("Chưa có kế hoạch đã lưu.");
-    });
-
   $("date-format").onchange = $("number-format").onchange = invalidateImportPreview;
   $("imported-by").addEventListener("input", invalidateImportPreview);
   $("xml-known-at").value = localDate;
@@ -1419,11 +1610,22 @@
     event.preventDefault();
     const kind = $("delete-kind").value,
       id = $("delete-id").value.trim();
-    if (!confirm("Xóa bản ghi " + id + " khỏi dữ liệu hiện tại?")) return;
     action(async () => {
-      await api("/records/" + kind + "/" + encodeURIComponent(id), {
-        method: "DELETE",
+      const path = "/records/" + kind + "/" + encodeURIComponent(id);
+      const result = await api(path);
+      if (result.deleted) throw new Error("Bản ghi này đã được xóa. Xem lịch sử trong Sổ dữ liệu.");
+      const record = result.record;
+      const date = record.issue_date || record.payment_date || record.date || record.end_date;
+      const summary = [labels[kind] || kind, id, date && displayDate(date),
+        record.amount != null && exactMoney(record.amount) + " VND"].filter(Boolean).join(" · ");
+      const confirmed = await showConfirmModal({
+        title: "Xác nhận xóa bản ghi",
+        message: summary,
+        detail: (kind === "invoices" ? "Hóa đơn đã hạch toán kế toán không thể xóa. " : "") +
+          "Bản ghi sẽ bị loại khỏi dữ liệu hiện tại. Lịch sử thay đổi được lưu để kiểm toán.",
       });
+      if (!confirmed) return;
+      await api(path, {method:"DELETE"});
       await refresh();
       notice("Đã xóa bản ghi " + id + ".");
       $("delete-id").value = "";
@@ -1656,14 +1858,13 @@
         );
         discard.onclick = () =>
           action(async () => {
-            if (
-              !confirm(
-                "Xóa phiên bản " +
-                  version.id +
-                  "? Không thể hoàn tác. Phiên bản của kế hoạch đã lưu sẽ được giữ.",
-              )
-            )
-              return;
+            const confirmed = await showConfirmModal({
+              title: "Xác nhận xóa phiên bản",
+              message: "Xóa phiên bản " + version.id + "? Không thể hoàn tác.",
+              detail: "Phiên bản của kế hoạch đã lưu sẽ được giữ.",
+              confirmText: "Xác nhận xóa",
+            });
+            if (!confirmed) return;
             await api(
               "/models/" +
                 version.id +
@@ -1711,33 +1912,6 @@
     $("scenario-custom").disabled = !custom;
   };
   $("scenario-preset").onchange();
-  function restoreForecastInputs(plan) {
-    clearFormErrors($("forecast-form"));
-    if (plan.cutoff) setDate("forecast-cutoff", plan.cutoff);
-    else { $("forecast-cutoff").value = ""; delete $("forecast-cutoff").dataset.iso; }
-    $("opening-balance").value = plan.opening_balance ?? "";
-    $("cash-floor").value = plan.cash_floor ?? "";
-    $("horizon-weeks").value = plan.horizon_weeks ?? plan.weeks?.length ?? 13;
-    $("confirmed-weeks").value = (plan.confirmed_weeks || []).join(",");
-    $("include-operating").checked = Boolean(plan.operating_included);
-    const scenario = plan.scenario || {};
-    const delay = scenario.delay_days ?? 0, multiplier = scenario.expense_multiplier ?? 1;
-    const shared = Boolean(scenario.shared_customer_risk);
-    const customer = scenario.delay_customer || "";
-    const preset = !customer && Object.entries(presets).find(([, [d, expense, risk]]) =>
-      d === delay && 1 + expense / 100 === multiplier && risk === shared);
-    $("delay-days").value = delay;
-    $("expense-change").value = Number(((multiplier - 1) * 100).toPrecision(15));
-    $("delay-customer").value = customer;
-    $("common-risk").checked = shared;
-    $("scenario-preset").value = preset ? preset[0] : "custom";
-    $("scenario-preset").onchange();
-    $("forecast-complete").checked = false;
-    const missing = ["opening_balance", "cash_floor", "scenario", "confirmed_weeks"].some(key => plan[key] == null);
-    $("forecast-input-context").textContent = (missing ? "Bản lưu chưa có đủ tham số; kiểm tra lại các ô trước khi lập mới. " : "Đã điền tham số từ kế hoạch đã lưu. ") +
-      "Xác nhận lại phạm vi thanh toán trước khi lập dự báo mới bằng dữ liệu và phiên bản hiện tại. Kết quả đang xem vẫn là bản đã lưu.";
-    $("forecast-input-context").hidden = false;
-  }
   $("forecast-form").onsubmit = (event) => {
     event.preventDefault();
     action(async () => {
@@ -1978,11 +2152,14 @@
       return panel;
     }
     const excluded = policy.eligibility || {};
+    const rules = node("details");
+    rules.append(node("summary", "Cách tính điểm và kiểm định"),
+      node("p", "Điểm = " + policy.formula + "."),
+      node("p", policy.selection.message, "muted"));
     panel.append(node("p", "Chính sách: " + policy.label + " · Hiển thị " + policy.displayed_count +
       "/" + policy.eligible_count + " khoản đủ điều kiện."),
-      node("p", "Điểm = " + policy.formula + ". " + policy.selection.message, "muted"),
       node("p", "Loại khỏi danh sách: " + (excluded.writeoff_excluded || 0) + " khoản đã xóa nợ; " +
-        (excluded.recent_contact_or_skip_excluded || 0) + " khoản vừa liên hệ hoặc tạm bỏ qua chưa đủ 7 ngày.", "muted"));
+        (excluded.recent_contact_or_skip_excluded || 0) + " khoản vừa liên hệ hoặc tạm bỏ qua chưa đủ 7 ngày.", "muted"), rules);
     return panel;
   }
   function renderRankingExplanation(invoice, plan) {
@@ -2300,7 +2477,9 @@
     } else {
       message = `Chưa có cảnh báo dưới ngưỡng trong kỳ. Số dư kỳ vọng thấp nhất ở tuần ${f.week} (${displayDate(f.date)}).`;
     }
-    risk.append(node("h3", "Vì sao cần chú ý tuần " + f.week + "?"), node("p", message));
+    const riskHeading = f.trigger === "expected_shortfall" || f.trigger === "simulation_only"
+      ? "Cảnh báo tuần " + f.week : "Mốc số dư kỳ vọng thấp nhất";
+    risk.append(node("h3", riskHeading), node("p", message));
     const bridge = node("div", undefined, "cash-bridge");
     [["Số dư đầu", f.opening_balance], ["+ Thu đến tuần " + f.week, f.cumulative_cash_in],
       ["− Chi đến tuần " + f.week, f.cumulative_cash_out], ["= Số dư tuần " + f.week, f.balance]].forEach(([label, value]) => {
@@ -2309,7 +2488,7 @@
     risk.append(bridge);
     const customers = f.largest_unreceived_customers.filter(row => row.unreceived > 0.000001);
     if (customers.length) risk.append(node("p", "Dư nợ chưa dự thu đến hết tuần này: " + money(f.unreceived_ar) + ". Các khách có phần chưa thu lớn nhất: " +
-      customers.map(row => row.customer_id + " · " + money(row.unreceived)).join("; ") + ". Kế hoạch còn phụ thuộc vào việc thu các khoản này."));
+      customers.map(row => row.customer_id + " · " + money(row.unreceived)).join("; ") + "."));
     if (f.largest_scheduled_outflows.length) risk.append(node("p", "Các khoản chi đã biết lớn nhất đến tuần này: " +
       f.largest_scheduled_outflows.map(row => row.expense_id + " · " + displayDate(row.date) + " · " + money(row.amount)).join("; ") + "."));
     if (f.unknown_outflow_weeks.length) risk.append(node("p", "Chưa xác nhận đủ lịch chi ở tuần " + f.unknown_outflow_weeks.join(", ") + "; số dư có thể thiếu các khoản chi chưa nạp.", "warning-box"));
@@ -2328,11 +2507,20 @@
     const summary = node("p"), receipts = node("div"), expenses = node("div");
     const expenseDetails = node("details", undefined, "cash-details");
     expenseDetails.append(node("summary", "Lịch chi đã biết và số tiền sau kịch bản"), expenses);
+    const hasAmount = field => d.weeks.some(row => Boolean(row[field]));
+    const incomeSources = [["ar_in", "Công nợ mở"]];
+    if (plan.operating_included || hasAmount("cash_sale_in")) incomeSources.push(["cash_sale_in", "Bán thu ngay"]);
+    if (plan.new_credit_included || hasAmount("new_credit_in")) incomeSources.push(["new_credit_in", "Bán chịu mới"]);
+    if (d.inflows?.length || hasAmount("obligation_in")) incomeSources.push(["obligation_in", "Hoàn theo hồ sơ"]);
+    const expenseSources = [["scheduled_out", "Lịch chi đã biết"]];
+    if (plan.operating_included || hasAmount("variable_cost_topup")) expenseSources.push(["variable_cost_topup", "Chi biến đổi bổ sung"]);
     const renderRows = () => {
       const week = weekSelect.value === "all" ? null : Number(weekSelect.value);
       const selected = week ? [d.weeks[week - 1]] : d.weeks;
       const sum = field => selected.reduce((total, row) => total + (row[field] || 0), 0);
-      summary.textContent = "Dự thu " + money(sum("cash_in")) + " = công nợ mở " + money(sum("ar_in")) + " + bán thu ngay " + money(sum("cash_sale_in")) + " + bán chịu mới " + money(sum("new_credit_in")) + " + hoàn theo hồ sơ " + money(sum("obligation_in")) + ". Dự chi " + money(sum("cash_out")) + " = lịch đã biết " + money(sum("scheduled_out")) + " + chi biến đổi bổ sung " + money(sum("variable_cost_topup")) + ".";
+      const breakdown = sources => sources.map(([field, label]) => label + " " + money(sum(field))).join(" + ");
+      summary.textContent = "Dự thu " + money(sum("cash_in")) + " (" + breakdown(incomeSources) + "). Dự chi " +
+        money(sum("cash_out")) + " (" + breakdown(expenseSources) + ").";
       const byCustomer = group.value === "customers", query = search.value.trim().toLocaleLowerCase("vi");
       const source = (byCustomer ? d.customers : d.invoices).filter(row =>
         ((row.invoice_id || "") + " " + row.customer_id).toLocaleLowerCase("vi").includes(query));
@@ -2349,7 +2537,7 @@
     };
     weekSelect.value = "all"; group.value = "invoices"; search.value = "";
     weekSelect.onchange = group.onchange = search.oninput = renderRows;
-    panel.append(filters, summary, receipts, node("p", "Số tiền là kỳ vọng phân bổ theo tuần, không phải cam kết thu hoặc xác suất tất toán 4 tuần. Thu hoạt động và hóa đơn chưa phát hành nằm ở nhóm riêng.", "muted"), expenseDetails);
+    panel.append(filters, summary, receipts, node("p", "Bảng hiển thị số tiền kỳ vọng thu từ công nợ đang mở tại ngày chốt.", "muted"), expenseDetails);
     renderRows();
     if (d.inflows?.length) {
       const refunds = node("details", undefined, "cash-details"), content = node("div");
@@ -2360,8 +2548,11 @@
     }
     const weekly = node("details", undefined, "cash-details"), weeklyScroll = node("div", undefined, "table-scroll");
     weekly.append(node("summary", "Đối chiếu thu, chi và thay đổi số dư từng tuần"), weeklyScroll);
-    weeklyScroll.append(cashDetailTable(["Tuần", "Số dư đầu tuần", "+ Công nợ mở", "+ Bán thu ngay", "+ Bán chịu mới", "+ Hoàn theo hồ sơ", "− Lịch chi", "− Chi biến đổi bổ sung", "Thay đổi số dư", "Số dư cuối tuần"],
-      d.weeks.map(w => [w.week, ...[w.opening_balance, w.ar_in, w.cash_sale_in, w.new_credit_in, w.obligation_in || 0, w.scheduled_out, w.variable_cost_topup, w.net_change, w.balance].map(money)])));
+    const components = [...incomeSources, ...expenseSources];
+    weeklyScroll.append(cashDetailTable(["Tuần", "Số dư đầu tuần",
+      ...incomeSources.map(([, label]) => "+ " + label), ...expenseSources.map(([, label]) => "− " + label),
+      "Thay đổi số dư", "Số dư cuối tuần"],
+      d.weeks.map(w => [w.week, ...[w.opening_balance, ...components.map(([field]) => w[field] || 0), w.net_change, w.balance].map(money)])));
     panel.append(weekly);
     panel.append(renderT10Evidence(plan), renderT10Scenarios(plan));
     const assumptions = node("details", undefined, "cash-details");
@@ -2517,6 +2708,10 @@
     charts.get(target.id)?.destroy();
     target.replaceChildren();
     const weeks = lastForecast.weeks;
+    const dates = weeks.map(w => Date.parse(w.date + "T00:00:00Z") / 1000);
+    const labelCount = Math.min(dates.length, Math.max(2, Math.floor((target.clientWidth - 80) / 75) + 1));
+    const dateTicks = labelCount <= 1 ? dates : Array.from({length: labelCount}, (_, index) =>
+      dates[Math.round(index * (dates.length - 1) / (labelCount - 1))]);
     const theme = getComputedStyle(target);
     const color = (token, fallback) => theme.getPropertyValue(token).trim() || fallback;
     const axisFont = "11px " + theme.fontFamily;
@@ -2577,6 +2772,7 @@
             ticks: { show: false },
             font: axisFont,
             space: 70,
+            splits: (_u, _axis, min, max) => dateTicks.filter(date => date >= min && date <= max),
             values: (_u, ticks) =>
               ticks.map((t) => displayDate(new Date(t * 1000).toISOString())),
           },
@@ -2593,7 +2789,7 @@
         cursor: { drag: { x: false, y: false } },
       },
       [
-        weeks.map((w) => Date.parse(w.date + "T00:00:00Z") / 1000),
+        dates,
         weeks.map((w) => w.balance),
         weeks.map((w) => w.low),
         weeks.map((w) => w.high),
@@ -2613,9 +2809,8 @@
     const blob = await api("/forecasts/" + encodeURIComponent(lastForecast.id) + "/xlsx");
     download(blob, "agent1-ke-hoach-" + displayDate(lastForecast.cutoff) + "-" + lastForecast.weeks.length + "t.xlsx");
   }, $("export-forecast"));
-  switchView(
-    titles[location.hash.slice(1)] ? location.hash.slice(1) : "overview",
-  );
+  const initialRoute = location.hash.slice(1);
+  switchView(Object.hasOwn(titles, initialRoute.split("/")[0]) ? initialRoute : "overview", {updateHash:false});
   if (hasPortalTicket) redeemPortalTicket(portalTicket);
   else restoreSession();
 })();
