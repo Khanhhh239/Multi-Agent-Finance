@@ -418,6 +418,7 @@ Kết quả này đạt target memory `<=400 MiB` cho workload đã chạy, như
 - Route duy nhất public là `/healthz`, `/readyz` và CORS preflight; `/health`, `/v1/*`, `/api/agent4/*` cần Bearer token.
 - Rate limit bounded theo IP và tenant/user; lỗi trả code tổng quát, không trả token/provider detail.
 - 10 gateway/vertical-slice contract tests pass; ruff và syntax checks pass.
+- Regression matrix sau commit: **100 tests passed**, gồm cloud artifact/deployment/gateway/pipeline/vertical slice, cache/recovery, Neon adapter, remote selection và intake/auth/catalog.
 
 IdP thật chưa được cấp trong workspace, nên chưa có verified-user browser test hoặc JWKS rotation rehearsal. Đây là **CONDITIONAL**, không được ghi là auth production pass.
 
