@@ -1,0 +1,3428 @@
+{
+  "schema": "finance-project-cleanup-v1",
+  "date": "2026-10-31",
+  "timezone": "Asia/Saigon",
+  "status": "completed",
+  "policy": "Delete exact duplicate payloads from old T0 staging runs only, retaining complete final v2/v3/v4 runs and all reports/metadata; remove generated caches and the incomplete local environment.",
+  "duplicate_payloads": [
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/test/clean-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/test/clean-9101/payments.jsonl",
+      "bytes": 22654,
+      "sha256": "9fd026815b6982a6a17173ab000af7fa140f4402b2b3b02b8a3b38890effd866",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/test/clean-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/test/clean-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/test/clean-9102/payments.jsonl",
+      "bytes": 22635,
+      "sha256": "9fdc2689419d0d620d839db0bab898b41bd7c2b4d3df0db336b23cfffcf6106e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/test/clean-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/test/masked-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/test/masked-9101/payments.jsonl",
+      "bytes": 21663,
+      "sha256": "9e260ef3850e94d8ba80289d682f677af335039ddecafa4e498405276d685273",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/test/masked-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/test/masked-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/test/masked-9102/payments.jsonl",
+      "bytes": 21862,
+      "sha256": "3582ebc8b6f6d53462607237391b10edb0581d5483c22a695855e8af65c620fe",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/test/masked-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/validation/clean-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/validation/clean-2101/payments.jsonl",
+      "bytes": 22645,
+      "sha256": "c8b9a92831ad417eae6212049c1390fcd9eb838e80140cc94b7c6ed85ccb23ff",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/validation/clean-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/validation/clean-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/validation/clean-2102/payments.jsonl",
+      "bytes": 22637,
+      "sha256": "70e91cf2ade97872aad054decb6ee942c6512599a13438b728d8e9d277d3077a",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/validation/clean-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/validation/masked-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/validation/masked-2101/payments.jsonl",
+      "bytes": 21766,
+      "sha256": "b1eaaed5a69b3d69ab3d5fc1c41fca3bc834cfdbada518d83dc23db93d0886c8",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/validation/masked-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/validation/masked-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/validation/masked-2102/payments.jsonl",
+      "bytes": 21736,
+      "sha256": "30b23e1f473e33e04c044d022e28e478b1c2ac72d0e5c5324548574e112561bb",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ar/datasets/validation/masked-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finbalance/predictions.json",
+      "bytes": 294311,
+      "sha256": "0a7a134dbea884573b78c2819f7e5d76a67bbe70f9c1d43d667f476db77ea9e1",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finbalance/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finrca/clean/bank.jsonl",
+      "bytes": 2254523,
+      "sha256": "94cf19c96f70a6beb41dd4c9b39007a093cb7f4e228454fa270ffb9a3725727c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finrca/clean/invoices.jsonl",
+      "bytes": 3485990,
+      "sha256": "304583772b20d5eace50d2ff6f4ec47c850a8cc667d4f32c14392e4f8cee77f6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finrca/clean/observed_allocations.jsonl",
+      "bytes": 2250341,
+      "sha256": "00e0f532ce17f36174d7c5cdaeff4d285fcb6c4e3ce6d6fd22cd6ada4b449cf3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finrca/clean/payments.jsonl",
+      "bytes": 2469999,
+      "sha256": "cb189b4820c6b449ab24dc15370bc81129382f57dfca8c7a2d01e1bd4b747b61",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finrca/clean/predictions.json",
+      "bytes": 6342428,
+      "sha256": "97135ec001ded15d615fbaf1210ae38d4bedc9c4db404f6c65cdd19c3adf6fed",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finrca/clean/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finrca/clean/quarantine.jsonl",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finrca/corrupted/bank.jsonl",
+      "bytes": 2360542,
+      "sha256": "fec5fad60ef634e1fef41ce68c2e69642c5a3511aa76a359bc79601708026aae",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finrca/corrupted/invoices.jsonl",
+      "bytes": 3569880,
+      "sha256": "11913bdef01e239d4b86e40e2ad53df2f74b602a529bf9a64172d823c8abda6f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finrca/corrupted/observed_allocations.jsonl",
+      "bytes": 2323036,
+      "sha256": "c11b9646ae513022085d1b8d93b2ec08fc625c0b9fe9b541eee30905df6fb129",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finrca/corrupted/payments.jsonl",
+      "bytes": 2583309,
+      "sha256": "1c7936d178a660e411bb71f0f74bc5a157ed9ce2ffba8dce4be9b9e7c72c7fc6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finrca/corrupted/predictions.json",
+      "bytes": 6473125,
+      "sha256": "f870615043c1a65abde79de3525638df2b4d42d411014e683c3311aaaf638fc9",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finrca/corrupted/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/finrca/corrupted/quarantine.jsonl",
+      "bytes": 31242,
+      "sha256": "8e4994a3748e3423fb555642f6ac087d2bfb4d8f049c351b547e2ff44409b57f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/ledger/commands.jsonl",
+      "bytes": 2701,
+      "sha256": "7b523d337e2e223a6217cb6b5625fca4d6ccef14360d71609c608af5184ad5c3",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/ledger/commands.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-review-2026-10-21/recbench/predictions.json",
+      "bytes": 4620271,
+      "sha256": "67256926b4ff1c20a65861f8f20569b0bb54b88077638479931d105edc85e835",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/recbench/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/test/clean-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/test/clean-9101/payments.jsonl",
+      "bytes": 22654,
+      "sha256": "9fd026815b6982a6a17173ab000af7fa140f4402b2b3b02b8a3b38890effd866",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/test/clean-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/test/clean-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/test/clean-9102/payments.jsonl",
+      "bytes": 22635,
+      "sha256": "9fdc2689419d0d620d839db0bab898b41bd7c2b4d3df0db336b23cfffcf6106e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/test/clean-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/test/masked-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/test/masked-9101/payments.jsonl",
+      "bytes": 21663,
+      "sha256": "9e260ef3850e94d8ba80289d682f677af335039ddecafa4e498405276d685273",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/test/masked-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/test/masked-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/test/masked-9102/payments.jsonl",
+      "bytes": 21862,
+      "sha256": "3582ebc8b6f6d53462607237391b10edb0581d5483c22a695855e8af65c620fe",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/test/masked-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/validation/clean-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/validation/clean-2101/payments.jsonl",
+      "bytes": 22645,
+      "sha256": "c8b9a92831ad417eae6212049c1390fcd9eb838e80140cc94b7c6ed85ccb23ff",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/validation/clean-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/validation/clean-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/validation/clean-2102/payments.jsonl",
+      "bytes": 22637,
+      "sha256": "70e91cf2ade97872aad054decb6ee942c6512599a13438b728d8e9d277d3077a",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/validation/clean-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/validation/masked-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/validation/masked-2101/payments.jsonl",
+      "bytes": 21766,
+      "sha256": "b1eaaed5a69b3d69ab3d5fc1c41fca3bc834cfdbada518d83dc23db93d0886c8",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/validation/masked-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/validation/masked-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/validation/masked-2102/payments.jsonl",
+      "bytes": 21736,
+      "sha256": "30b23e1f473e33e04c044d022e28e478b1c2ac72d0e5c5324548574e112561bb",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ar/datasets/validation/masked-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finbalance/predictions.json",
+      "bytes": 294311,
+      "sha256": "0a7a134dbea884573b78c2819f7e5d76a67bbe70f9c1d43d667f476db77ea9e1",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finbalance/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finrca/clean/bank.jsonl",
+      "bytes": 2254523,
+      "sha256": "94cf19c96f70a6beb41dd4c9b39007a093cb7f4e228454fa270ffb9a3725727c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finrca/clean/invoices.jsonl",
+      "bytes": 3485990,
+      "sha256": "304583772b20d5eace50d2ff6f4ec47c850a8cc667d4f32c14392e4f8cee77f6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finrca/clean/observed_allocations.jsonl",
+      "bytes": 2250341,
+      "sha256": "00e0f532ce17f36174d7c5cdaeff4d285fcb6c4e3ce6d6fd22cd6ada4b449cf3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finrca/clean/payments.jsonl",
+      "bytes": 2469999,
+      "sha256": "cb189b4820c6b449ab24dc15370bc81129382f57dfca8c7a2d01e1bd4b747b61",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finrca/clean/predictions.json",
+      "bytes": 6342428,
+      "sha256": "97135ec001ded15d615fbaf1210ae38d4bedc9c4db404f6c65cdd19c3adf6fed",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finrca/clean/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finrca/clean/quarantine.jsonl",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finrca/corrupted/bank.jsonl",
+      "bytes": 2360542,
+      "sha256": "fec5fad60ef634e1fef41ce68c2e69642c5a3511aa76a359bc79601708026aae",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finrca/corrupted/invoices.jsonl",
+      "bytes": 3569880,
+      "sha256": "11913bdef01e239d4b86e40e2ad53df2f74b602a529bf9a64172d823c8abda6f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finrca/corrupted/observed_allocations.jsonl",
+      "bytes": 2323036,
+      "sha256": "c11b9646ae513022085d1b8d93b2ec08fc625c0b9fe9b541eee30905df6fb129",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finrca/corrupted/payments.jsonl",
+      "bytes": 2583309,
+      "sha256": "1c7936d178a660e411bb71f0f74bc5a157ed9ce2ffba8dce4be9b9e7c72c7fc6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finrca/corrupted/predictions.json",
+      "bytes": 6473125,
+      "sha256": "f870615043c1a65abde79de3525638df2b4d42d411014e683c3311aaaf638fc9",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finrca/corrupted/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/finrca/corrupted/quarantine.jsonl",
+      "bytes": 31242,
+      "sha256": "8e4994a3748e3423fb555642f6ac087d2bfb4d8f049c351b547e2ff44409b57f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/ledger/commands.jsonl",
+      "bytes": 2701,
+      "sha256": "7b523d337e2e223a6217cb6b5625fca4d6ccef14360d71609c608af5184ad5c3",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/ledger/commands.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21/recbench/predictions.json",
+      "bytes": 4620271,
+      "sha256": "67256926b4ff1c20a65861f8f20569b0bb54b88077638479931d105edc85e835",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/recbench/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/test/clean-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/test/clean-9101/payments.jsonl",
+      "bytes": 22654,
+      "sha256": "9fd026815b6982a6a17173ab000af7fa140f4402b2b3b02b8a3b38890effd866",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/test/clean-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/test/clean-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/test/clean-9102/payments.jsonl",
+      "bytes": 22635,
+      "sha256": "9fdc2689419d0d620d839db0bab898b41bd7c2b4d3df0db336b23cfffcf6106e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/test/clean-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/test/masked-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/test/masked-9101/payments.jsonl",
+      "bytes": 21663,
+      "sha256": "9e260ef3850e94d8ba80289d682f677af335039ddecafa4e498405276d685273",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/test/masked-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/test/masked-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/test/masked-9102/payments.jsonl",
+      "bytes": 21862,
+      "sha256": "3582ebc8b6f6d53462607237391b10edb0581d5483c22a695855e8af65c620fe",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/test/masked-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/validation/clean-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/validation/clean-2101/payments.jsonl",
+      "bytes": 22645,
+      "sha256": "c8b9a92831ad417eae6212049c1390fcd9eb838e80140cc94b7c6ed85ccb23ff",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/validation/clean-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/validation/clean-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/validation/clean-2102/payments.jsonl",
+      "bytes": 22637,
+      "sha256": "70e91cf2ade97872aad054decb6ee942c6512599a13438b728d8e9d277d3077a",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/validation/clean-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/validation/masked-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/validation/masked-2101/payments.jsonl",
+      "bytes": 21766,
+      "sha256": "b1eaaed5a69b3d69ab3d5fc1c41fca3bc834cfdbada518d83dc23db93d0886c8",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/validation/masked-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/validation/masked-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/validation/masked-2102/payments.jsonl",
+      "bytes": 21736,
+      "sha256": "30b23e1f473e33e04c044d022e28e478b1c2ac72d0e5c5324548574e112561bb",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ar/datasets/validation/masked-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/finrca/clean/bank.jsonl",
+      "bytes": 2254523,
+      "sha256": "94cf19c96f70a6beb41dd4c9b39007a093cb7f4e228454fa270ffb9a3725727c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/finrca/clean/invoices.jsonl",
+      "bytes": 3485990,
+      "sha256": "304583772b20d5eace50d2ff6f4ec47c850a8cc667d4f32c14392e4f8cee77f6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/finrca/clean/observed_allocations.jsonl",
+      "bytes": 2250341,
+      "sha256": "00e0f532ce17f36174d7c5cdaeff4d285fcb6c4e3ce6d6fd22cd6ada4b449cf3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/finrca/clean/payments.jsonl",
+      "bytes": 2469999,
+      "sha256": "cb189b4820c6b449ab24dc15370bc81129382f57dfca8c7a2d01e1bd4b747b61",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/finrca/clean/predictions.json",
+      "bytes": 6342428,
+      "sha256": "97135ec001ded15d615fbaf1210ae38d4bedc9c4db404f6c65cdd19c3adf6fed",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finrca/clean/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/finrca/clean/quarantine.jsonl",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/finrca/corrupted/bank.jsonl",
+      "bytes": 2360542,
+      "sha256": "fec5fad60ef634e1fef41ce68c2e69642c5a3511aa76a359bc79601708026aae",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/finrca/corrupted/invoices.jsonl",
+      "bytes": 3569880,
+      "sha256": "11913bdef01e239d4b86e40e2ad53df2f74b602a529bf9a64172d823c8abda6f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/finrca/corrupted/observed_allocations.jsonl",
+      "bytes": 2323036,
+      "sha256": "c11b9646ae513022085d1b8d93b2ec08fc625c0b9fe9b541eee30905df6fb129",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/finrca/corrupted/payments.jsonl",
+      "bytes": 2583309,
+      "sha256": "1c7936d178a660e411bb71f0f74bc5a157ed9ce2ffba8dce4be9b9e7c72c7fc6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/finrca/corrupted/predictions.json",
+      "bytes": 6473125,
+      "sha256": "f870615043c1a65abde79de3525638df2b4d42d411014e683c3311aaaf638fc9",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finrca/corrupted/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-initial/ledger/commands.jsonl",
+      "bytes": 2701,
+      "sha256": "7b523d337e2e223a6217cb6b5625fca4d6ccef14360d71609c608af5184ad5c3",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/ledger/commands.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/test/clean-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/test/clean-9101/payments.jsonl",
+      "bytes": 22654,
+      "sha256": "9fd026815b6982a6a17173ab000af7fa140f4402b2b3b02b8a3b38890effd866",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/test/clean-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/test/clean-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/test/clean-9102/payments.jsonl",
+      "bytes": 22635,
+      "sha256": "9fdc2689419d0d620d839db0bab898b41bd7c2b4d3df0db336b23cfffcf6106e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/test/clean-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/test/masked-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/test/masked-9101/payments.jsonl",
+      "bytes": 21663,
+      "sha256": "9e260ef3850e94d8ba80289d682f677af335039ddecafa4e498405276d685273",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/test/masked-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/test/masked-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/test/masked-9102/payments.jsonl",
+      "bytes": 21862,
+      "sha256": "3582ebc8b6f6d53462607237391b10edb0581d5483c22a695855e8af65c620fe",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/test/masked-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/validation/clean-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/validation/clean-2101/payments.jsonl",
+      "bytes": 22645,
+      "sha256": "c8b9a92831ad417eae6212049c1390fcd9eb838e80140cc94b7c6ed85ccb23ff",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/validation/clean-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/validation/clean-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/validation/clean-2102/payments.jsonl",
+      "bytes": 22637,
+      "sha256": "70e91cf2ade97872aad054decb6ee942c6512599a13438b728d8e9d277d3077a",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/validation/clean-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/validation/masked-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/validation/masked-2101/payments.jsonl",
+      "bytes": 21766,
+      "sha256": "b1eaaed5a69b3d69ab3d5fc1c41fca3bc834cfdbada518d83dc23db93d0886c8",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/validation/masked-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/validation/masked-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/validation/masked-2102/payments.jsonl",
+      "bytes": 21736,
+      "sha256": "30b23e1f473e33e04c044d022e28e478b1c2ac72d0e5c5324548574e112561bb",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ar/datasets/validation/masked-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finbalance/predictions.json",
+      "bytes": 294311,
+      "sha256": "0a7a134dbea884573b78c2819f7e5d76a67bbe70f9c1d43d667f476db77ea9e1",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finbalance/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finrca/clean/bank.jsonl",
+      "bytes": 2254523,
+      "sha256": "94cf19c96f70a6beb41dd4c9b39007a093cb7f4e228454fa270ffb9a3725727c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finrca/clean/invoices.jsonl",
+      "bytes": 3485990,
+      "sha256": "304583772b20d5eace50d2ff6f4ec47c850a8cc667d4f32c14392e4f8cee77f6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finrca/clean/observed_allocations.jsonl",
+      "bytes": 2250341,
+      "sha256": "00e0f532ce17f36174d7c5cdaeff4d285fcb6c4e3ce6d6fd22cd6ada4b449cf3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finrca/clean/payments.jsonl",
+      "bytes": 2469999,
+      "sha256": "cb189b4820c6b449ab24dc15370bc81129382f57dfca8c7a2d01e1bd4b747b61",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finrca/clean/predictions.json",
+      "bytes": 6342428,
+      "sha256": "97135ec001ded15d615fbaf1210ae38d4bedc9c4db404f6c65cdd19c3adf6fed",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finrca/clean/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finrca/clean/quarantine.jsonl",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finrca/corrupted/bank.jsonl",
+      "bytes": 2360542,
+      "sha256": "fec5fad60ef634e1fef41ce68c2e69642c5a3511aa76a359bc79601708026aae",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finrca/corrupted/invoices.jsonl",
+      "bytes": 3569880,
+      "sha256": "11913bdef01e239d4b86e40e2ad53df2f74b602a529bf9a64172d823c8abda6f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finrca/corrupted/observed_allocations.jsonl",
+      "bytes": 2323036,
+      "sha256": "c11b9646ae513022085d1b8d93b2ec08fc625c0b9fe9b541eee30905df6fb129",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finrca/corrupted/payments.jsonl",
+      "bytes": 2583309,
+      "sha256": "1c7936d178a660e411bb71f0f74bc5a157ed9ce2ffba8dce4be9b9e7c72c7fc6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finrca/corrupted/predictions.json",
+      "bytes": 6473125,
+      "sha256": "f870615043c1a65abde79de3525638df2b4d42d411014e683c3311aaaf638fc9",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finrca/corrupted/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/finrca/corrupted/quarantine.jsonl",
+      "bytes": 31242,
+      "sha256": "8e4994a3748e3423fb555642f6ac087d2bfb4d8f049c351b547e2ff44409b57f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/ledger/commands.jsonl",
+      "bytes": 2701,
+      "sha256": "7b523d337e2e223a6217cb6b5625fca4d6ccef14360d71609c608af5184ad5c3",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/ledger/commands.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-review/recbench/predictions.json",
+      "bytes": 4620271,
+      "sha256": "67256926b4ff1c20a65861f8f20569b0bb54b88077638479931d105edc85e835",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/recbench/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/test/clean-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/test/clean-9101/payments.jsonl",
+      "bytes": 22654,
+      "sha256": "9fd026815b6982a6a17173ab000af7fa140f4402b2b3b02b8a3b38890effd866",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/test/clean-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/test/clean-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/test/clean-9102/payments.jsonl",
+      "bytes": 22635,
+      "sha256": "9fdc2689419d0d620d839db0bab898b41bd7c2b4d3df0db336b23cfffcf6106e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/test/clean-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/test/masked-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/test/masked-9101/payments.jsonl",
+      "bytes": 21663,
+      "sha256": "9e260ef3850e94d8ba80289d682f677af335039ddecafa4e498405276d685273",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/test/masked-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/test/masked-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/test/masked-9102/payments.jsonl",
+      "bytes": 21862,
+      "sha256": "3582ebc8b6f6d53462607237391b10edb0581d5483c22a695855e8af65c620fe",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/test/masked-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/validation/clean-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/validation/clean-2101/payments.jsonl",
+      "bytes": 22645,
+      "sha256": "c8b9a92831ad417eae6212049c1390fcd9eb838e80140cc94b7c6ed85ccb23ff",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/validation/clean-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/validation/clean-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/validation/clean-2102/payments.jsonl",
+      "bytes": 22637,
+      "sha256": "70e91cf2ade97872aad054decb6ee942c6512599a13438b728d8e9d277d3077a",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/validation/clean-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/validation/masked-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/validation/masked-2101/payments.jsonl",
+      "bytes": 21766,
+      "sha256": "b1eaaed5a69b3d69ab3d5fc1c41fca3bc834cfdbada518d83dc23db93d0886c8",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/validation/masked-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/validation/masked-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/validation/masked-2102/payments.jsonl",
+      "bytes": 21736,
+      "sha256": "30b23e1f473e33e04c044d022e28e478b1c2ac72d0e5c5324548574e112561bb",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ar/datasets/validation/masked-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finbalance/predictions.json",
+      "bytes": 294311,
+      "sha256": "0a7a134dbea884573b78c2819f7e5d76a67bbe70f9c1d43d667f476db77ea9e1",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finbalance/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finrca/clean/bank.jsonl",
+      "bytes": 2254523,
+      "sha256": "94cf19c96f70a6beb41dd4c9b39007a093cb7f4e228454fa270ffb9a3725727c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finrca/clean/invoices.jsonl",
+      "bytes": 3485990,
+      "sha256": "304583772b20d5eace50d2ff6f4ec47c850a8cc667d4f32c14392e4f8cee77f6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finrca/clean/observed_allocations.jsonl",
+      "bytes": 2250341,
+      "sha256": "00e0f532ce17f36174d7c5cdaeff4d285fcb6c4e3ce6d6fd22cd6ada4b449cf3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finrca/clean/payments.jsonl",
+      "bytes": 2469999,
+      "sha256": "cb189b4820c6b449ab24dc15370bc81129382f57dfca8c7a2d01e1bd4b747b61",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finrca/clean/predictions.json",
+      "bytes": 6342428,
+      "sha256": "97135ec001ded15d615fbaf1210ae38d4bedc9c4db404f6c65cdd19c3adf6fed",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finrca/clean/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finrca/clean/quarantine.jsonl",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finrca/corrupted/bank.jsonl",
+      "bytes": 2360542,
+      "sha256": "fec5fad60ef634e1fef41ce68c2e69642c5a3511aa76a359bc79601708026aae",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finrca/corrupted/invoices.jsonl",
+      "bytes": 3569880,
+      "sha256": "11913bdef01e239d4b86e40e2ad53df2f74b602a529bf9a64172d823c8abda6f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finrca/corrupted/observed_allocations.jsonl",
+      "bytes": 2323036,
+      "sha256": "c11b9646ae513022085d1b8d93b2ec08fc625c0b9fe9b541eee30905df6fb129",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finrca/corrupted/payments.jsonl",
+      "bytes": 2583309,
+      "sha256": "1c7936d178a660e411bb71f0f74bc5a157ed9ce2ffba8dce4be9b9e7c72c7fc6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finrca/corrupted/predictions.json",
+      "bytes": 6473125,
+      "sha256": "f870615043c1a65abde79de3525638df2b4d42d411014e683c3311aaaf638fc9",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/finrca/corrupted/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/finrca/corrupted/quarantine.jsonl",
+      "bytes": 31242,
+      "sha256": "8e4994a3748e3423fb555642f6ac087d2bfb4d8f049c351b547e2ff44409b57f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/ledger/commands.jsonl",
+      "bytes": 2701,
+      "sha256": "7b523d337e2e223a6217cb6b5625fca4d6ccef14360d71609c608af5184ad5c3",
+      "retained_path": "data/T0/processed/offline-v2-2026-10-21-final/ledger/commands.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v2-2026-10-21-verified/recbench/predictions.json",
+      "bytes": 4620271,
+      "sha256": "67256926b4ff1c20a65861f8f20569b0bb54b88077638479931d105edc85e835",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/recbench/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/test/clean-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/test/clean-9101/payments.jsonl",
+      "bytes": 22654,
+      "sha256": "9fd026815b6982a6a17173ab000af7fa140f4402b2b3b02b8a3b38890effd866",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/test/clean-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/test/clean-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/test/clean-9102/payments.jsonl",
+      "bytes": 22635,
+      "sha256": "9fdc2689419d0d620d839db0bab898b41bd7c2b4d3df0db336b23cfffcf6106e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/test/clean-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/test/masked-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/test/masked-9101/payments.jsonl",
+      "bytes": 21663,
+      "sha256": "9e260ef3850e94d8ba80289d682f677af335039ddecafa4e498405276d685273",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/test/masked-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/test/masked-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/test/masked-9102/payments.jsonl",
+      "bytes": 21862,
+      "sha256": "3582ebc8b6f6d53462607237391b10edb0581d5483c22a695855e8af65c620fe",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/test/masked-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/validation/clean-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/validation/clean-2101/payments.jsonl",
+      "bytes": 22645,
+      "sha256": "c8b9a92831ad417eae6212049c1390fcd9eb838e80140cc94b7c6ed85ccb23ff",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/validation/clean-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/validation/clean-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/validation/clean-2102/payments.jsonl",
+      "bytes": 22637,
+      "sha256": "70e91cf2ade97872aad054decb6ee942c6512599a13438b728d8e9d277d3077a",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/validation/clean-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/validation/masked-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/validation/masked-2101/payments.jsonl",
+      "bytes": 21766,
+      "sha256": "b1eaaed5a69b3d69ab3d5fc1c41fca3bc834cfdbada518d83dc23db93d0886c8",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/validation/masked-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/validation/masked-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/validation/masked-2102/payments.jsonl",
+      "bytes": 21736,
+      "sha256": "30b23e1f473e33e04c044d022e28e478b1c2ac72d0e5c5324548574e112561bb",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ar/datasets/validation/masked-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/finrca/clean/bank.jsonl",
+      "bytes": 2254523,
+      "sha256": "94cf19c96f70a6beb41dd4c9b39007a093cb7f4e228454fa270ffb9a3725727c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/finrca/clean/invoices.jsonl",
+      "bytes": 3485990,
+      "sha256": "304583772b20d5eace50d2ff6f4ec47c850a8cc667d4f32c14392e4f8cee77f6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/finrca/clean/observed_allocations.jsonl",
+      "bytes": 2250341,
+      "sha256": "00e0f532ce17f36174d7c5cdaeff4d285fcb6c4e3ce6d6fd22cd6ada4b449cf3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/finrca/clean/payments.jsonl",
+      "bytes": 2469999,
+      "sha256": "cb189b4820c6b449ab24dc15370bc81129382f57dfca8c7a2d01e1bd4b747b61",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/finrca/clean/predictions.json",
+      "bytes": 6326531,
+      "sha256": "4296d1bda5e1b3f6eb7d092535d384e4ac813e37005ce9ac3a04fa74be59c82a",
+      "retained_path": "data/T0/processed/offline-v3-2026-10-21-final/finrca/clean/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/finrca/clean/quarantine.jsonl",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/finrca/corrupted/bank.jsonl",
+      "bytes": 2360542,
+      "sha256": "fec5fad60ef634e1fef41ce68c2e69642c5a3511aa76a359bc79601708026aae",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/finrca/corrupted/invoices.jsonl",
+      "bytes": 3569880,
+      "sha256": "11913bdef01e239d4b86e40e2ad53df2f74b602a529bf9a64172d823c8abda6f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/finrca/corrupted/observed_allocations.jsonl",
+      "bytes": 2323036,
+      "sha256": "c11b9646ae513022085d1b8d93b2ec08fc625c0b9fe9b541eee30905df6fb129",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/finrca/corrupted/payments.jsonl",
+      "bytes": 2583309,
+      "sha256": "1c7936d178a660e411bb71f0f74bc5a157ed9ce2ffba8dce4be9b9e7c72c7fc6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/finrca/corrupted/predictions.json",
+      "bytes": 6457837,
+      "sha256": "11a18d8e9299d872673c55489c6f4235a2a31c8d2cc9b4c9c5234df87a394c04",
+      "retained_path": "data/T0/processed/offline-v3-2026-10-21-final/finrca/corrupted/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/finrca/corrupted/quarantine.jsonl",
+      "bytes": 31242,
+      "sha256": "8e4994a3748e3423fb555642f6ac087d2bfb4d8f049c351b547e2ff44409b57f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/ledger/commands.jsonl",
+      "bytes": 3165,
+      "sha256": "ec1f93afcf44e1246317a52ead28cfcf7752bd81e83ec1afce3d37a94138525f",
+      "retained_path": "data/T0/processed/offline-v3-2026-10-21-final/ledger/commands.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/recbench/predictions.json",
+      "bytes": 4620271,
+      "sha256": "67256926b4ff1c20a65861f8f20569b0bb54b88077638479931d105edc85e835",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/recbench/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/clean-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/clean-19201/payments.jsonl",
+      "bytes": 38050,
+      "sha256": "dc4c02c82981fac2320d065848b116964aabbd86faa3df803c11e7d2b1f26546",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/clean-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/clean-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/clean-19202/payments.jsonl",
+      "bytes": 38073,
+      "sha256": "a8ad23d3c57ba9820cb6fbcc4a74b1968dfc2b73688e337ac29b84bde6daf008",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/clean-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/masked-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/masked-19201/payments.jsonl",
+      "bytes": 36325,
+      "sha256": "09c70b885aa349d61c45f3d50c9028fac1809a152c514e42be75f1f80862aea1",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/masked-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/masked-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/masked-19202/payments.jsonl",
+      "bytes": 35705,
+      "sha256": "b3d2411b488ac092429631b74e559f4142a88c2d42692dc3acf01eb034e61b6c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/masked-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/noisy-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/noisy-19201/payments.jsonl",
+      "bytes": 37364,
+      "sha256": "84882626de6c4af9356ede900d1bbbeacdaf0a664588d233ffa450e026ba3f45",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/noisy-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/noisy-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/noisy-19202/payments.jsonl",
+      "bytes": 37237,
+      "sha256": "db27dc8af569859c242aeb3f0fa8ac7cfe9ab254faf87e11dde6ef3e296698c2",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/noisy-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/stress-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/stress-19201/payments.jsonl",
+      "bytes": 36055,
+      "sha256": "42704cf8fbc5e321818ea8a84391ecf640623a7bd13978f0f7e0a540cea8e546",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/stress-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/stress-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/stress-19202/payments.jsonl",
+      "bytes": 35701,
+      "sha256": "15ac0cce94e00930c633bfe140344f1da3652d9b22a720546e39b7574a595c4b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/test/stress-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/clean-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/clean-3201/payments.jsonl",
+      "bytes": 37778,
+      "sha256": "91b493e7ac74d4e9dab7a25530df6f8be66a6c2f49629cafb732ae7da551d87f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/clean-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/clean-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/clean-3202/payments.jsonl",
+      "bytes": 37804,
+      "sha256": "70c3f44a2ac66c4c9dbb930e71c81c4ed809d93c9f96f3cc67a1832c97b95b57",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/clean-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/masked-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/masked-3201/payments.jsonl",
+      "bytes": 35963,
+      "sha256": "0cec5b003cb8a010a7af4deb85ccb508b7df14fb0b169f90e312948fd70d27ed",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/masked-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/masked-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/masked-3202/payments.jsonl",
+      "bytes": 35942,
+      "sha256": "883864f95146dd74c4c270ddd762d2f03d2e45fd271fe372e4afd5b5c96fb5f0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/masked-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/noisy-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/noisy-3201/payments.jsonl",
+      "bytes": 36702,
+      "sha256": "e4de01889becd409b420c5f643ae011fb2b4a9037b5f2b83fb0db36d6a86a7f2",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/noisy-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/noisy-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/noisy-3202/payments.jsonl",
+      "bytes": 37279,
+      "sha256": "ba1da397c46474c5f2b5be93fabe9b514821a6816648f52ecc21a3337155192f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/noisy-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/stress-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/stress-3201/payments.jsonl",
+      "bytes": 35714,
+      "sha256": "e3f66ec9dde0815151de7d89dd0114f2f0430a790bd38af67c10b31cdd057a68",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/stress-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/stress-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/stress-3202/payments.jsonl",
+      "bytes": 35181,
+      "sha256": "64372b02245ad493040dd14ea4a7d065697d1c9054ca5d6bddef0c13736d5e5c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v3-2026-10-21/robustness/datasets/validation/stress-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/test/clean-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/test/clean-9101/payments.jsonl",
+      "bytes": 22654,
+      "sha256": "9fd026815b6982a6a17173ab000af7fa140f4402b2b3b02b8a3b38890effd866",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/test/clean-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/test/clean-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/test/clean-9102/payments.jsonl",
+      "bytes": 22635,
+      "sha256": "9fdc2689419d0d620d839db0bab898b41bd7c2b4d3df0db336b23cfffcf6106e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/test/clean-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/test/masked-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/test/masked-9101/payments.jsonl",
+      "bytes": 21663,
+      "sha256": "9e260ef3850e94d8ba80289d682f677af335039ddecafa4e498405276d685273",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/test/masked-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/test/masked-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/test/masked-9102/payments.jsonl",
+      "bytes": 21862,
+      "sha256": "3582ebc8b6f6d53462607237391b10edb0581d5483c22a695855e8af65c620fe",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/test/masked-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/validation/clean-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/validation/clean-2101/payments.jsonl",
+      "bytes": 22645,
+      "sha256": "c8b9a92831ad417eae6212049c1390fcd9eb838e80140cc94b7c6ed85ccb23ff",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/validation/clean-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/validation/clean-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/validation/clean-2102/payments.jsonl",
+      "bytes": 22637,
+      "sha256": "70e91cf2ade97872aad054decb6ee942c6512599a13438b728d8e9d277d3077a",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/validation/clean-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/validation/masked-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/validation/masked-2101/payments.jsonl",
+      "bytes": 21766,
+      "sha256": "b1eaaed5a69b3d69ab3d5fc1c41fca3bc834cfdbada518d83dc23db93d0886c8",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/validation/masked-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/validation/masked-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/validation/masked-2102/payments.jsonl",
+      "bytes": 21736,
+      "sha256": "30b23e1f473e33e04c044d022e28e478b1c2ac72d0e5c5324548574e112561bb",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ar/datasets/validation/masked-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finbalance/predictions.json",
+      "bytes": 380570,
+      "sha256": "a407329fc0cbadb1ceddc498893e5a52aec885e0a090446ceeda67b5b15f3a61",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finbalance/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finrca/clean/bank.jsonl",
+      "bytes": 2254523,
+      "sha256": "94cf19c96f70a6beb41dd4c9b39007a093cb7f4e228454fa270ffb9a3725727c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finrca/clean/invoices.jsonl",
+      "bytes": 3485990,
+      "sha256": "304583772b20d5eace50d2ff6f4ec47c850a8cc667d4f32c14392e4f8cee77f6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finrca/clean/observed_allocations.jsonl",
+      "bytes": 2250341,
+      "sha256": "00e0f532ce17f36174d7c5cdaeff4d285fcb6c4e3ce6d6fd22cd6ada4b449cf3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finrca/clean/payments.jsonl",
+      "bytes": 2469999,
+      "sha256": "cb189b4820c6b449ab24dc15370bc81129382f57dfca8c7a2d01e1bd4b747b61",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finrca/clean/predictions.json",
+      "bytes": 6610655,
+      "sha256": "807ee732c05022547755040574ecde157d462ef56527d56f5c30a0c9b2e1dbc2",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finrca/clean/quarantine.jsonl",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finrca/corrupted/bank.jsonl",
+      "bytes": 2360542,
+      "sha256": "fec5fad60ef634e1fef41ce68c2e69642c5a3511aa76a359bc79601708026aae",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finrca/corrupted/invoices.jsonl",
+      "bytes": 3569880,
+      "sha256": "11913bdef01e239d4b86e40e2ad53df2f74b602a529bf9a64172d823c8abda6f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finrca/corrupted/observed_allocations.jsonl",
+      "bytes": 2323036,
+      "sha256": "c11b9646ae513022085d1b8d93b2ec08fc625c0b9fe9b541eee30905df6fb129",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finrca/corrupted/payments.jsonl",
+      "bytes": 2583309,
+      "sha256": "1c7936d178a660e411bb71f0f74bc5a157ed9ce2ffba8dce4be9b9e7c72c7fc6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finrca/corrupted/predictions.json",
+      "bytes": 6730473,
+      "sha256": "a13da27808ad9c021afc7be56f5edb7cf326c1cf157d514bdb71765956509317",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/finrca/corrupted/quarantine.jsonl",
+      "bytes": 31242,
+      "sha256": "8e4994a3748e3423fb555642f6ac087d2bfb4d8f049c351b547e2ff44409b57f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/ledger/commands.jsonl",
+      "bytes": 3502,
+      "sha256": "f22388fb213547a7bd8691afabf899b99bc32fb43cbe849c51309c252554262b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ledger/commands.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/recbench/predictions.json",
+      "bytes": 4620271,
+      "sha256": "67256926b4ff1c20a65861f8f20569b0bb54b88077638479931d105edc85e835",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/recbench/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/clean-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/clean-19201/payments.jsonl",
+      "bytes": 38050,
+      "sha256": "dc4c02c82981fac2320d065848b116964aabbd86faa3df803c11e7d2b1f26546",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/clean-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/clean-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/clean-19202/payments.jsonl",
+      "bytes": 38073,
+      "sha256": "a8ad23d3c57ba9820cb6fbcc4a74b1968dfc2b73688e337ac29b84bde6daf008",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/clean-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/masked-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/masked-19201/payments.jsonl",
+      "bytes": 36325,
+      "sha256": "09c70b885aa349d61c45f3d50c9028fac1809a152c514e42be75f1f80862aea1",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/masked-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/masked-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/masked-19202/payments.jsonl",
+      "bytes": 35705,
+      "sha256": "b3d2411b488ac092429631b74e559f4142a88c2d42692dc3acf01eb034e61b6c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/masked-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/noisy-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/noisy-19201/payments.jsonl",
+      "bytes": 37364,
+      "sha256": "84882626de6c4af9356ede900d1bbbeacdaf0a664588d233ffa450e026ba3f45",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/noisy-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/noisy-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/noisy-19202/payments.jsonl",
+      "bytes": 37237,
+      "sha256": "db27dc8af569859c242aeb3f0fa8ac7cfe9ab254faf87e11dde6ef3e296698c2",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/noisy-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/stress-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/stress-19201/payments.jsonl",
+      "bytes": 36055,
+      "sha256": "42704cf8fbc5e321818ea8a84391ecf640623a7bd13978f0f7e0a540cea8e546",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/stress-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/stress-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/stress-19202/payments.jsonl",
+      "bytes": 35701,
+      "sha256": "15ac0cce94e00930c633bfe140344f1da3652d9b22a720546e39b7574a595c4b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/test/stress-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/clean-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/clean-3201/payments.jsonl",
+      "bytes": 37778,
+      "sha256": "91b493e7ac74d4e9dab7a25530df6f8be66a6c2f49629cafb732ae7da551d87f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/clean-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/clean-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/clean-3202/payments.jsonl",
+      "bytes": 37804,
+      "sha256": "70c3f44a2ac66c4c9dbb930e71c81c4ed809d93c9f96f3cc67a1832c97b95b57",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/clean-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/masked-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/masked-3201/payments.jsonl",
+      "bytes": 35963,
+      "sha256": "0cec5b003cb8a010a7af4deb85ccb508b7df14fb0b169f90e312948fd70d27ed",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/masked-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/masked-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/masked-3202/payments.jsonl",
+      "bytes": 35942,
+      "sha256": "883864f95146dd74c4c270ddd762d2f03d2e45fd271fe372e4afd5b5c96fb5f0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/masked-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/noisy-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/noisy-3201/payments.jsonl",
+      "bytes": 36702,
+      "sha256": "e4de01889becd409b420c5f643ae011fb2b4a9037b5f2b83fb0db36d6a86a7f2",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/noisy-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/noisy-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/noisy-3202/payments.jsonl",
+      "bytes": 37279,
+      "sha256": "ba1da397c46474c5f2b5be93fabe9b514821a6816648f52ecc21a3337155192f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/noisy-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/stress-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/stress-3201/payments.jsonl",
+      "bytes": 35714,
+      "sha256": "e3f66ec9dde0815151de7d89dd0114f2f0430a790bd38af67c10b31cdd057a68",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/stress-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/stress-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/stress-3202/payments.jsonl",
+      "bytes": 35181,
+      "sha256": "64372b02245ad493040dd14ea4a7d065697d1c9054ca5d6bddef0c13736d5e5c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-2026-10-21-verified/robustness/datasets/validation/stress-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/test/clean-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/test/clean-9101/payments.jsonl",
+      "bytes": 22654,
+      "sha256": "9fd026815b6982a6a17173ab000af7fa140f4402b2b3b02b8a3b38890effd866",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/test/clean-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/test/clean-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/test/clean-9102/payments.jsonl",
+      "bytes": 22635,
+      "sha256": "9fdc2689419d0d620d839db0bab898b41bd7c2b4d3df0db336b23cfffcf6106e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/test/clean-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/test/masked-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/test/masked-9101/payments.jsonl",
+      "bytes": 21663,
+      "sha256": "9e260ef3850e94d8ba80289d682f677af335039ddecafa4e498405276d685273",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/test/masked-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/test/masked-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/test/masked-9102/payments.jsonl",
+      "bytes": 21862,
+      "sha256": "3582ebc8b6f6d53462607237391b10edb0581d5483c22a695855e8af65c620fe",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/test/masked-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/validation/clean-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/validation/clean-2101/payments.jsonl",
+      "bytes": 22645,
+      "sha256": "c8b9a92831ad417eae6212049c1390fcd9eb838e80140cc94b7c6ed85ccb23ff",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/validation/clean-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/validation/clean-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/validation/clean-2102/payments.jsonl",
+      "bytes": 22637,
+      "sha256": "70e91cf2ade97872aad054decb6ee942c6512599a13438b728d8e9d277d3077a",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/validation/clean-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/validation/masked-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/validation/masked-2101/payments.jsonl",
+      "bytes": 21766,
+      "sha256": "b1eaaed5a69b3d69ab3d5fc1c41fca3bc834cfdbada518d83dc23db93d0886c8",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/validation/masked-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/validation/masked-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/validation/masked-2102/payments.jsonl",
+      "bytes": 21736,
+      "sha256": "30b23e1f473e33e04c044d022e28e478b1c2ac72d0e5c5324548574e112561bb",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ar/datasets/validation/masked-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/finrca/clean/bank.jsonl",
+      "bytes": 2254523,
+      "sha256": "94cf19c96f70a6beb41dd4c9b39007a093cb7f4e228454fa270ffb9a3725727c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/finrca/clean/invoices.jsonl",
+      "bytes": 3485990,
+      "sha256": "304583772b20d5eace50d2ff6f4ec47c850a8cc667d4f32c14392e4f8cee77f6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/finrca/clean/observed_allocations.jsonl",
+      "bytes": 2250341,
+      "sha256": "00e0f532ce17f36174d7c5cdaeff4d285fcb6c4e3ce6d6fd22cd6ada4b449cf3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/finrca/clean/payments.jsonl",
+      "bytes": 2469999,
+      "sha256": "cb189b4820c6b449ab24dc15370bc81129382f57dfca8c7a2d01e1bd4b747b61",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/finrca/clean/predictions.json",
+      "bytes": 6610655,
+      "sha256": "807ee732c05022547755040574ecde157d462ef56527d56f5c30a0c9b2e1dbc2",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/finrca/clean/quarantine.jsonl",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/finrca/corrupted/bank.jsonl",
+      "bytes": 2360542,
+      "sha256": "fec5fad60ef634e1fef41ce68c2e69642c5a3511aa76a359bc79601708026aae",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/finrca/corrupted/invoices.jsonl",
+      "bytes": 3569880,
+      "sha256": "11913bdef01e239d4b86e40e2ad53df2f74b602a529bf9a64172d823c8abda6f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/finrca/corrupted/observed_allocations.jsonl",
+      "bytes": 2323036,
+      "sha256": "c11b9646ae513022085d1b8d93b2ec08fc625c0b9fe9b541eee30905df6fb129",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/finrca/corrupted/payments.jsonl",
+      "bytes": 2583309,
+      "sha256": "1c7936d178a660e411bb71f0f74bc5a157ed9ce2ffba8dce4be9b9e7c72c7fc6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/finrca/corrupted/predictions.json",
+      "bytes": 6730473,
+      "sha256": "a13da27808ad9c021afc7be56f5edb7cf326c1cf157d514bdb71765956509317",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/finrca/corrupted/quarantine.jsonl",
+      "bytes": 31242,
+      "sha256": "8e4994a3748e3423fb555642f6ac087d2bfb4d8f049c351b547e2ff44409b57f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/ledger/commands.jsonl",
+      "bytes": 3165,
+      "sha256": "ec1f93afcf44e1246317a52ead28cfcf7752bd81e83ec1afce3d37a94138525f",
+      "retained_path": "data/T0/processed/offline-v3-2026-10-21-final/ledger/commands.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/recbench/predictions.json",
+      "bytes": 4620271,
+      "sha256": "67256926b4ff1c20a65861f8f20569b0bb54b88077638479931d105edc85e835",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/recbench/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/clean-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/clean-19201/payments.jsonl",
+      "bytes": 38050,
+      "sha256": "dc4c02c82981fac2320d065848b116964aabbd86faa3df803c11e7d2b1f26546",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/clean-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/clean-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/clean-19202/payments.jsonl",
+      "bytes": 38073,
+      "sha256": "a8ad23d3c57ba9820cb6fbcc4a74b1968dfc2b73688e337ac29b84bde6daf008",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/clean-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/masked-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/masked-19201/payments.jsonl",
+      "bytes": 36325,
+      "sha256": "09c70b885aa349d61c45f3d50c9028fac1809a152c514e42be75f1f80862aea1",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/masked-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/masked-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/masked-19202/payments.jsonl",
+      "bytes": 35705,
+      "sha256": "b3d2411b488ac092429631b74e559f4142a88c2d42692dc3acf01eb034e61b6c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/masked-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/noisy-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/noisy-19201/payments.jsonl",
+      "bytes": 37364,
+      "sha256": "84882626de6c4af9356ede900d1bbbeacdaf0a664588d233ffa450e026ba3f45",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/noisy-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/noisy-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/noisy-19202/payments.jsonl",
+      "bytes": 37237,
+      "sha256": "db27dc8af569859c242aeb3f0fa8ac7cfe9ab254faf87e11dde6ef3e296698c2",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/noisy-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/stress-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/stress-19201/payments.jsonl",
+      "bytes": 36055,
+      "sha256": "42704cf8fbc5e321818ea8a84391ecf640623a7bd13978f0f7e0a540cea8e546",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/stress-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/stress-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/stress-19202/payments.jsonl",
+      "bytes": 35701,
+      "sha256": "15ac0cce94e00930c633bfe140344f1da3652d9b22a720546e39b7574a595c4b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/test/stress-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/clean-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/clean-3201/payments.jsonl",
+      "bytes": 37778,
+      "sha256": "91b493e7ac74d4e9dab7a25530df6f8be66a6c2f49629cafb732ae7da551d87f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/clean-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/clean-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/clean-3202/payments.jsonl",
+      "bytes": 37804,
+      "sha256": "70c3f44a2ac66c4c9dbb930e71c81c4ed809d93c9f96f3cc67a1832c97b95b57",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/clean-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/masked-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/masked-3201/payments.jsonl",
+      "bytes": 35963,
+      "sha256": "0cec5b003cb8a010a7af4deb85ccb508b7df14fb0b169f90e312948fd70d27ed",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/masked-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/masked-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/masked-3202/payments.jsonl",
+      "bytes": 35942,
+      "sha256": "883864f95146dd74c4c270ddd762d2f03d2e45fd271fe372e4afd5b5c96fb5f0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/masked-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/noisy-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/noisy-3201/payments.jsonl",
+      "bytes": 36702,
+      "sha256": "e4de01889becd409b420c5f643ae011fb2b4a9037b5f2b83fb0db36d6a86a7f2",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/noisy-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/noisy-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/noisy-3202/payments.jsonl",
+      "bytes": 37279,
+      "sha256": "ba1da397c46474c5f2b5be93fabe9b514821a6816648f52ecc21a3337155192f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/noisy-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/stress-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/stress-3201/payments.jsonl",
+      "bytes": 35714,
+      "sha256": "e3f66ec9dde0815151de7d89dd0114f2f0430a790bd38af67c10b31cdd057a68",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/stress-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/stress-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/stress-3202/payments.jsonl",
+      "bytes": 35181,
+      "sha256": "64372b02245ad493040dd14ea4a7d065697d1c9054ca5d6bddef0c13736d5e5c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/offline-v4-development-2026-10-21/robustness/datasets/validation/stress-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/test/clean-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/test/clean-9101/payments.jsonl",
+      "bytes": 22654,
+      "sha256": "9fd026815b6982a6a17173ab000af7fa140f4402b2b3b02b8a3b38890effd866",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/test/clean-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/test/clean-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/test/clean-9102/payments.jsonl",
+      "bytes": 22635,
+      "sha256": "9fdc2689419d0d620d839db0bab898b41bd7c2b4d3df0db336b23cfffcf6106e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/test/clean-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/clean-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/test/masked-9101/invoices.jsonl",
+      "bytes": 37016,
+      "sha256": "24ae3ec504e2db941fee170d4fc3233f2af19d71fa32761a9176f0006889f234",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/test/masked-9101/payments.jsonl",
+      "bytes": 21663,
+      "sha256": "9e260ef3850e94d8ba80289d682f677af335039ddecafa4e498405276d685273",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/test/masked-9101/truth.jsonl",
+      "bytes": 19830,
+      "sha256": "289643d3ddd898c13a3d3aea1f5f370c7eac5beef76d089a58f44a18730a80a0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/test/masked-9102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "f9fcc930554a0ae0af4e30adc54cc32dfa63b9f4957932d79f6b633f5671abd9",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/test/masked-9102/payments.jsonl",
+      "bytes": 21862,
+      "sha256": "3582ebc8b6f6d53462607237391b10edb0581d5483c22a695855e8af65c620fe",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/test/masked-9102/truth.jsonl",
+      "bytes": 19813,
+      "sha256": "407c17b5a7d47e4f4c04c24f8944c298e6e8ecd21d0febba50294ec77930cfda",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/test/masked-9102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/validation/clean-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/validation/clean-2101/payments.jsonl",
+      "bytes": 22645,
+      "sha256": "c8b9a92831ad417eae6212049c1390fcd9eb838e80140cc94b7c6ed85ccb23ff",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/validation/clean-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/validation/clean-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/validation/clean-2102/payments.jsonl",
+      "bytes": 22637,
+      "sha256": "70e91cf2ade97872aad054decb6ee942c6512599a13438b728d8e9d277d3077a",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/validation/clean-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/clean-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/validation/masked-2101/invoices.jsonl",
+      "bytes": 37006,
+      "sha256": "0232d025c86600ad83794be5ab86f473748baf54d2340f44ee3a370bb4d9aca6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/validation/masked-2101/payments.jsonl",
+      "bytes": 21766,
+      "sha256": "b1eaaed5a69b3d69ab3d5fc1c41fca3bc834cfdbada518d83dc23db93d0886c8",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/validation/masked-2101/truth.jsonl",
+      "bytes": 19822,
+      "sha256": "89ed48ef8dadea03666de7e1ff2bebd6d612a85afedb76c45ed3104724b604ec",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2101/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/validation/masked-2102/invoices.jsonl",
+      "bytes": 36996,
+      "sha256": "25e263c9ea593446f50f497888b978791dd6969dec0f223c8f54c629672e9b4e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/validation/masked-2102/payments.jsonl",
+      "bytes": 21736,
+      "sha256": "30b23e1f473e33e04c044d022e28e478b1c2ac72d0e5c5324548574e112561bb",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ar/datasets/validation/masked-2102/truth.jsonl",
+      "bytes": 19815,
+      "sha256": "939abf0c464c06d3810821511ee4abe7aab440bd2af83d25d05e11411a9113f3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ar/datasets/validation/masked-2102/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finbalance/predictions.json",
+      "bytes": 380570,
+      "sha256": "a407329fc0cbadb1ceddc498893e5a52aec885e0a090446ceeda67b5b15f3a61",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finbalance/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finrca/clean/bank.jsonl",
+      "bytes": 2254523,
+      "sha256": "94cf19c96f70a6beb41dd4c9b39007a093cb7f4e228454fa270ffb9a3725727c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finrca/clean/invoices.jsonl",
+      "bytes": 3485990,
+      "sha256": "304583772b20d5eace50d2ff6f4ec47c850a8cc667d4f32c14392e4f8cee77f6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finrca/clean/observed_allocations.jsonl",
+      "bytes": 2250341,
+      "sha256": "00e0f532ce17f36174d7c5cdaeff4d285fcb6c4e3ce6d6fd22cd6ada4b449cf3",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finrca/clean/payments.jsonl",
+      "bytes": 2469999,
+      "sha256": "cb189b4820c6b449ab24dc15370bc81129382f57dfca8c7a2d01e1bd4b747b61",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finrca/clean/predictions.json",
+      "bytes": 6610655,
+      "sha256": "807ee732c05022547755040574ecde157d462ef56527d56f5c30a0c9b2e1dbc2",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finrca/clean/quarantine.jsonl",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/clean/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finrca/corrupted/bank.jsonl",
+      "bytes": 2360542,
+      "sha256": "fec5fad60ef634e1fef41ce68c2e69642c5a3511aa76a359bc79601708026aae",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/bank.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finrca/corrupted/invoices.jsonl",
+      "bytes": 3569880,
+      "sha256": "11913bdef01e239d4b86e40e2ad53df2f74b602a529bf9a64172d823c8abda6f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finrca/corrupted/observed_allocations.jsonl",
+      "bytes": 2323036,
+      "sha256": "c11b9646ae513022085d1b8d93b2ec08fc625c0b9fe9b541eee30905df6fb129",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/observed_allocations.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finrca/corrupted/payments.jsonl",
+      "bytes": 2583309,
+      "sha256": "1c7936d178a660e411bb71f0f74bc5a157ed9ce2ffba8dce4be9b9e7c72c7fc6",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finrca/corrupted/predictions.json",
+      "bytes": 6730473,
+      "sha256": "a13da27808ad9c021afc7be56f5edb7cf326c1cf157d514bdb71765956509317",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/finrca/corrupted/quarantine.jsonl",
+      "bytes": 31242,
+      "sha256": "8e4994a3748e3423fb555642f6ac087d2bfb4d8f049c351b547e2ff44409b57f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/finrca/corrupted/quarantine.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/ledger/commands.jsonl",
+      "bytes": 3502,
+      "sha256": "f22388fb213547a7bd8691afabf899b99bc32fb43cbe849c51309c252554262b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/ledger/commands.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/recbench/predictions.json",
+      "bytes": 4620271,
+      "sha256": "67256926b4ff1c20a65861f8f20569b0bb54b88077638479931d105edc85e835",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/recbench/predictions.json"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/clean-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/clean-19201/payments.jsonl",
+      "bytes": 38050,
+      "sha256": "dc4c02c82981fac2320d065848b116964aabbd86faa3df803c11e7d2b1f26546",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/clean-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/clean-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/clean-19202/payments.jsonl",
+      "bytes": 38073,
+      "sha256": "a8ad23d3c57ba9820cb6fbcc4a74b1968dfc2b73688e337ac29b84bde6daf008",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/clean-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/clean-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/masked-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/masked-19201/payments.jsonl",
+      "bytes": 36325,
+      "sha256": "09c70b885aa349d61c45f3d50c9028fac1809a152c514e42be75f1f80862aea1",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/masked-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/masked-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/masked-19202/payments.jsonl",
+      "bytes": 35705,
+      "sha256": "b3d2411b488ac092429631b74e559f4142a88c2d42692dc3acf01eb034e61b6c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/masked-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/masked-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/noisy-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/noisy-19201/payments.jsonl",
+      "bytes": 37364,
+      "sha256": "84882626de6c4af9356ede900d1bbbeacdaf0a664588d233ffa450e026ba3f45",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/noisy-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/noisy-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/noisy-19202/payments.jsonl",
+      "bytes": 37237,
+      "sha256": "db27dc8af569859c242aeb3f0fa8ac7cfe9ab254faf87e11dde6ef3e296698c2",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/noisy-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/noisy-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/stress-19201/invoices.jsonl",
+      "bytes": 54506,
+      "sha256": "d5861604c1a2492af8ac0cd9665e52771190e0369ccb3838c9aedde990cca395",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/stress-19201/payments.jsonl",
+      "bytes": 36055,
+      "sha256": "42704cf8fbc5e321818ea8a84391ecf640623a7bd13978f0f7e0a540cea8e546",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/stress-19201/truth.jsonl",
+      "bytes": 35997,
+      "sha256": "02627a1bec81c990a5cc577a90027c513cfb98640697666e24c81ed72e061736",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/stress-19202/invoices.jsonl",
+      "bytes": 54536,
+      "sha256": "3fd5e18e313dead98a7c0df3ee89091325656b1c5ca12fc0fc80c5990b2bf32f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/stress-19202/payments.jsonl",
+      "bytes": 35701,
+      "sha256": "15ac0cce94e00930c633bfe140344f1da3652d9b22a720546e39b7574a595c4b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/test/stress-19202/truth.jsonl",
+      "bytes": 36017,
+      "sha256": "641cf92b09e00cb62306f701c6904d1f695ad0004858afd52eef26f07948fedc",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/test/stress-19202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/clean-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/clean-3201/payments.jsonl",
+      "bytes": 37778,
+      "sha256": "91b493e7ac74d4e9dab7a25530df6f8be66a6c2f49629cafb732ae7da551d87f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/clean-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/clean-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/clean-3202/payments.jsonl",
+      "bytes": 37804,
+      "sha256": "70c3f44a2ac66c4c9dbb930e71c81c4ed809d93c9f96f3cc67a1832c97b95b57",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/clean-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/clean-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/masked-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/masked-3201/payments.jsonl",
+      "bytes": 35963,
+      "sha256": "0cec5b003cb8a010a7af4deb85ccb508b7df14fb0b169f90e312948fd70d27ed",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/masked-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/masked-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/masked-3202/payments.jsonl",
+      "bytes": 35942,
+      "sha256": "883864f95146dd74c4c270ddd762d2f03d2e45fd271fe372e4afd5b5c96fb5f0",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/masked-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/masked-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/noisy-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/noisy-3201/payments.jsonl",
+      "bytes": 36702,
+      "sha256": "e4de01889becd409b420c5f643ae011fb2b4a9037b5f2b83fb0db36d6a86a7f2",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/noisy-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/noisy-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/noisy-3202/payments.jsonl",
+      "bytes": 37279,
+      "sha256": "ba1da397c46474c5f2b5be93fabe9b514821a6816648f52ecc21a3337155192f",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/noisy-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/noisy-3202/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/stress-3201/invoices.jsonl",
+      "bytes": 54122,
+      "sha256": "62e50f4f8b27efdb191ca75c73b3b9508f03c0b03de68462f4217c6613b75e24",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3201/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/stress-3201/payments.jsonl",
+      "bytes": 35714,
+      "sha256": "e3f66ec9dde0815151de7d89dd0114f2f0430a790bd38af67c10b31cdd057a68",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3201/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/stress-3201/truth.jsonl",
+      "bytes": 35773,
+      "sha256": "fdd2535647ff037ee8fc024416ab77f9d238505caf5d3f50d4e44dd96033d74b",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3201/truth.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/stress-3202/invoices.jsonl",
+      "bytes": 54152,
+      "sha256": "a9617c1e270c5280b414103b9d9a2eeccb6eba9f11025ab4d7092aee49d15e0e",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3202/invoices.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/stress-3202/payments.jsonl",
+      "bytes": 35181,
+      "sha256": "64372b02245ad493040dd14ea4a7d065697d1c9054ca5d6bddef0c13736d5e5c",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3202/payments.jsonl"
+    },
+    {
+      "path": "data/T0/processed/python-json-review-2026-10-21/offline/robustness/datasets/validation/stress-3202/truth.jsonl",
+      "bytes": 35796,
+      "sha256": "d15060c80efeaf6ce3b6e28e475e69fa1cd3fdfcac01b530b50eea7ff94b4481",
+      "retained_path": "data/T0/processed/offline-v4-2026-10-21-final/robustness/datasets/validation/stress-3202/truth.jsonl"
+    }
+  ],
+  "generated_paths_removed": [
+    {
+      "path": ".venv",
+      "files": 3826,
+      "bytes": 123067561,
+      "reason": "Incomplete dependency environment: only Lib/site-packages remains; no Scripts/python.exe or pyvenv.cfg."
+    },
+    {
+      "path": "agent1_service/__pycache__",
+      "files": 5,
+      "bytes": 53787,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "agent1_service/ingest/__pycache__",
+      "files": 10,
+      "bytes": 73490,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "agent1_service/jobs/__pycache__",
+      "files": 4,
+      "bytes": 18151,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "agent1/__pycache__",
+      "files": 5,
+      "bytes": 20507,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "agent1/data/__pycache__",
+      "files": 9,
+      "bytes": 100827,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "agent1/eval/__pycache__",
+      "files": 16,
+      "bytes": 66915,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "agent1/jobs/__pycache__",
+      "files": 2,
+      "bytes": 12524,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "agent1/models/__pycache__",
+      "files": 26,
+      "bytes": 257633,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "agent1/rules/__pycache__",
+      "files": 4,
+      "bytes": 21479,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "agent1/synth/__pycache__",
+      "files": 8,
+      "bytes": 187477,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "agent1/text/__pycache__",
+      "files": 3,
+      "bytes": 5187,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "analysis/__pycache__",
+      "files": 2,
+      "bytes": 32675,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "experiments/t1_competing_v5/__pycache__",
+      "files": 5,
+      "bytes": 48843,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "pilot/__pycache__",
+      "files": 1,
+      "bytes": 5741,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "reference_notebooks/__pycache__",
+      "files": 2,
+      "bytes": 45592,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "scripts/__pycache__",
+      "files": 18,
+      "bytes": 334388,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "scripts/data_audit/__pycache__",
+      "files": 3,
+      "bytes": 74419,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "scripts/sprint1/__pycache__",
+      "files": 4,
+      "bytes": 30766,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "t0/__pycache__",
+      "files": 52,
+      "bytes": 708953,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": "tests/__pycache__",
+      "files": 127,
+      "bytes": 1696292,
+      "reason": "Generated Python bytecode cache, ignored by Git."
+    },
+    {
+      "path": ".pytest_cache",
+      "files": 5,
+      "bytes": 42622,
+      "reason": "Generated pytest node IDs and last-failure cache, ignored by Git."
+    }
+  ],
+  "empty_directories_removed": [
+    "t0",
+    "reference_notebooks"
+  ],
+  "verification": {
+    "duplicate_sources_sha256_checked": 538,
+    "retained_paths_checked": 94,
+    "original_files_scanned": 6350,
+    "unchanged_original_files": 5809,
+    "unchanged_python_source_files": 320,
+    "edited_original_files": [
+      "docs/02_Data/README.md",
+      "outputs/README.md",
+      "scripts/README.md"
+    ],
+    "complete_t0_final_runs": [
+      {
+        "dir": "offline-v2-2026-10-21-final",
+        "files": 125
+      },
+      {
+        "dir": "offline-v3-2026-10-21-final",
+        "files": 223
+      },
+      {
+        "dir": "offline-v4-2026-10-21-final",
+        "files": 223
+      }
+    ],
+    "legacy_backups_sha256_verified": 181,
+    "v4_snapshot_entries_sha256_verified": 192,
+    "restore_verify_only_entries": 538,
+    "restore_safety_checks": {
+      "verify_only": true,
+      "what_if": true,
+      "roundtrip_sha256": true,
+      "idempotent": true,
+      "conflict_protection": true,
+      "source_corruption_protection": true,
+      "path_traversal_protection": true
+    },
+    "local_links_checked": 49,
+    "new_missing_local_links": 0,
+    "unexpected_missing_or_changed_original_files": [],
+    "python_tests_rerun": false,
+    "python_tests_note": "No Python interpreter was available; no Python source was changed during cleanup.",
+    "post_cleanup": "passed"
+  },
+  "summary": {
+    "duplicate_files": 538,
+    "duplicate_bytes": 361552974,
+    "generated_files": 4137,
+    "generated_bytes": 126905829,
+    "total_files": 4675,
+    "total_bytes": 488458803,
+    "total_mib": 465.83
+  }
+}

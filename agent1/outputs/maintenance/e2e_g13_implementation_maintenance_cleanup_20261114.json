@@ -1,0 +1,1521 @@
+{
+  "date": "2026-11-14",
+  "status": "verified",
+  "scopes": [
+    "agent1/outputs/e2e",
+    "agent1/outputs/g13",
+    "agent1/outputs/implementation",
+    "agent1/outputs/maintenance"
+  ],
+  "before_files": 104,
+  "removed_files": 50,
+  "removed_bytes": 12926449.0,
+  "retained_existing_files": 54,
+  "files": [
+    {
+      "path": "agent1/outputs/e2e/protocol/input_protocol.json",
+      "bytes": 578,
+      "sha256": "59f078d822340c1568de938ee04b86f2d9435153e225a701fba4a3bb603277b8",
+      "reason": "Retired 52-week copula/cure/estimated-T9 benchmark run metadata or alert-policy result; not World generator configuration and not read by current partial-paths runtime/retraining"
+    },
+    {
+      "path": "agent1/outputs/e2e/protocol/run_metadata.json",
+      "bytes": 570,
+      "sha256": "841141415ce353ba46f54ed7f816b1273d6fc01a3dec97fe191e9bb924b9a734",
+      "reason": "Retired 52-week copula/cure/estimated-T9 benchmark run metadata or alert-policy result; not World generator configuration and not read by current partial-paths runtime/retraining"
+    },
+    {
+      "path": "agent1/outputs/e2e/protocol/oracle_equal_budget/run_metadata.json",
+      "bytes": 590,
+      "sha256": "809e2135af2d20305ebaed4cc107a023eed2dcdea960b1f0393710e629cfe235",
+      "reason": "Retired 52-week copula/cure/estimated-T9 benchmark run metadata or alert-policy result; not World generator configuration and not read by current partial-paths runtime/retraining"
+    },
+    {
+      "path": "agent1/outputs/g13/policy_choice.json",
+      "bytes": 1291,
+      "sha256": "97b214904aceaf2fb86b6bad109a33d3d895bde43452d3bd525a0c1da6412b34",
+      "reason": "Retired 52-week copula/cure/estimated-T9 benchmark run metadata or alert-policy result; not World generator configuration and not read by current partial-paths runtime/retraining"
+    },
+    {
+      "path": "agent1/outputs/g13/src_backtest/run_metadata.json",
+      "bytes": 579,
+      "sha256": "06d8ef1b4fb0552efb397f37efa3ece4c225cf966f1caf4a174a5e15fff85af1",
+      "reason": "Retired 52-week copula/cure/estimated-T9 benchmark run metadata or alert-policy result; not World generator configuration and not read by current partial-paths runtime/retraining"
+    },
+    {
+      "path": "agent1/outputs/implementation/t1_global_local_v1_20261113/adaptive_tests.xml",
+      "bytes": 54580,
+      "sha256": "00694099fbcfc7f62a693cd5be01229048b312d1712c3f3ed24cd4dfb1085a40",
+      "reason": "Superseded pre-partial-v2 integration smoke, temporary model or test/report output; current catalog hash differs and current evidence is under t1_partial_bundle_v2, t6_partial_paths and t10_bundle"
+    },
+    {
+      "path": "agent1/outputs/implementation/t1_global_local_v1_20261113/historical_runner_tests.xml",
+      "bytes": 3216,
+      "sha256": "e641fa9b86e9bbe0c30b509593877ebde87b0ddae06eda94d6001a3bee6ed44a",
+      "reason": "Superseded pre-partial-v2 integration smoke, temporary model or test/report output; current catalog hash differs and current evidence is under t1_partial_bundle_v2, t6_partial_paths and t10_bundle"
+    },
+    {
+      "path": "agent1/outputs/implementation/t1_global_local_v1_20261113/REPORT.md",
+      "bytes": 4757,
+      "sha256": "01e5846ac170f1d2466a50fb0798fef40fd75604a60a62b4215cdf7c6e4aef1d",
+      "reason": "Superseded pre-partial-v2 integration smoke, temporary model or test/report output; current catalog hash differs and current evidence is under t1_partial_bundle_v2, t6_partial_paths and t10_bundle"
+    },
+    {
+      "path": "agent1/outputs/implementation/t1_global_local_v1_20261113/runtime_smoke.json",
+      "bytes": 11012,
+      "sha256": "f08877838abc32378801c2f0585f388a15d5a58ab0033c142c57565addb312aa",
+      "reason": "Superseded pre-partial-v2 integration smoke, temporary model or test/report output; current catalog hash differs and current evidence is under t1_partial_bundle_v2, t6_partial_paths and t10_bundle"
+    },
+    {
+      "path": "agent1/outputs/implementation/t1_global_local_v1_20261113/service_regression_tests.xml",
+      "bytes": 15169,
+      "sha256": "264a5785af8a69f6bebbada394ae5e572da3f89b0457b103a6bcd64ac858b49f",
+      "reason": "Superseded pre-partial-v2 integration smoke, temporary model or test/report output; current catalog hash differs and current evidence is under t1_partial_bundle_v2, t6_partial_paths and t10_bundle"
+    },
+    {
+      "path": "agent1/outputs/implementation/t1_global_local_v1_20261113/smoke_bundle.pkl",
+      "bytes": 359293,
+      "sha256": "ac18e5095e0c52512bf4bd4e805eeb208e34861dbeed5e38b5cbdb051688d7b5",
+      "reason": "Superseded pre-partial-v2 integration smoke, temporary model or test/report output; current catalog hash differs and current evidence is under t1_partial_bundle_v2, t6_partial_paths and t10_bundle"
+    },
+    {
+      "path": "agent1/outputs/implementation/t1_global_local_v1_20261113/smoke_runtime.py",
+      "bytes": 3584,
+      "sha256": "f455a7f4d96f473b0f1e9df2746356ab4ff22092bf6fdd3927ca096e147bc887",
+      "reason": "Superseded pre-partial-v2 integration smoke, temporary model or test/report output; current catalog hash differs and current evidence is under t1_partial_bundle_v2, t6_partial_paths and t10_bundle"
+    },
+    {
+      "path": "agent1/outputs/implementation/t1_global_local_v1_20261113/verification.json",
+      "bytes": 4469,
+      "sha256": "e465c2f02ee022d0adcc7b387b551b2d940653d936f5c359cd95eb849b62df9c",
+      "reason": "Superseded pre-partial-v2 integration smoke, temporary model or test/report output; current catalog hash differs and current evidence is under t1_partial_bundle_v2, t6_partial_paths and t10_bundle"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/synthetic_company_0.json",
+      "bytes": 505541,
+      "sha256": "24ef3904e55bb034ae660e812801d95e0e896c8a50bdf0c500dcf159cc4e5f53",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/synthetic_company_1.json",
+      "bytes": 428175,
+      "sha256": "822b1a3a3c627439b2af7106c14462803f8951a46d458f228f52f5b0b0aca248",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/verification.json",
+      "bytes": 4715,
+      "sha256": "d23ed540ed7050269e333047bf38832a7c2c2dbbb3ae78984b8b0216bf32af0a",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/company_5577159c3d42208b/adapted.json",
+      "bytes": 737697,
+      "sha256": "15a46f01ef9f08e2fb29ae06264c904a67b1d35549853d68746875191f86243c",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/company_5577159c3d42208b/global.json",
+      "bytes": 737697,
+      "sha256": "15a46f01ef9f08e2fb29ae06264c904a67b1d35549853d68746875191f86243c",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/company_5577159c3d42208b/receipt.json",
+      "bytes": 1827,
+      "sha256": "9df73821e4a1b0cb4c2a5410c1f1b7c00ea98af57c5e8833dbd8bcd06f099124",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/company_5577159c3d42208b/scores.json",
+      "bytes": 1984,
+      "sha256": "fe54a2f2bf97af5e63eafab161e64d5d042854cf217fc5c6098386aac8262963",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/company_d1a0c2a30b31bccb/adapted.json",
+      "bytes": 668015,
+      "sha256": "98728c8b7fe7acb60b07a213376bfb2999c5923246577e8d2048bb69ddf6c3cb",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/company_d1a0c2a30b31bccb/global.json",
+      "bytes": 668015,
+      "sha256": "98728c8b7fe7acb60b07a213376bfb2999c5923246577e8d2048bb69ddf6c3cb",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/company_d1a0c2a30b31bccb/receipt.json",
+      "bytes": 1826,
+      "sha256": "aa67e4f26e00e932920ac2dee197baa23d2afce91fc17eeb5a83ca688b8be660",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/company_d1a0c2a30b31bccb/scores.json",
+      "bytes": 1992,
+      "sha256": "fe8d2da5b40765780b80ef235d6fc4cf4417094374c57cfaccb2be2182c75f20",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/synthetic_company_0.json",
+      "bytes": 505541,
+      "sha256": "24ef3904e55bb034ae660e812801d95e0e896c8a50bdf0c500dcf159cc4e5f53",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/synthetic_company_1.json",
+      "bytes": 428175,
+      "sha256": "822b1a3a3c627439b2af7106c14462803f8951a46d458f228f52f5b0b0aca248",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/verification.json",
+      "bytes": 4719,
+      "sha256": "fe3c04086fde7f6f3dcaa1a991c5b0a7f632a726a859613041044b4f3087323f",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/company_5577159c3d42208b/adapted.json",
+      "bytes": 737697,
+      "sha256": "15a46f01ef9f08e2fb29ae06264c904a67b1d35549853d68746875191f86243c",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/company_5577159c3d42208b/global.json",
+      "bytes": 737697,
+      "sha256": "15a46f01ef9f08e2fb29ae06264c904a67b1d35549853d68746875191f86243c",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/company_5577159c3d42208b/receipt.json",
+      "bytes": 1827,
+      "sha256": "31ed11c46b6000bd406438ae370d9740f92dc0a038ed9906d18840342fbca0b2",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/company_5577159c3d42208b/scores.json",
+      "bytes": 1986,
+      "sha256": "5d2be07751058cb607f0fa09a7476b479317d9fa97058002a7124e37bf1d14be",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/company_d1a0c2a30b31bccb/adapted.json",
+      "bytes": 668015,
+      "sha256": "98728c8b7fe7acb60b07a213376bfb2999c5923246577e8d2048bb69ddf6c3cb",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/company_d1a0c2a30b31bccb/global.json",
+      "bytes": 668015,
+      "sha256": "98728c8b7fe7acb60b07a213376bfb2999c5923246577e8d2048bb69ddf6c3cb",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/company_d1a0c2a30b31bccb/receipt.json",
+      "bytes": 1826,
+      "sha256": "49e4ccf714a8c8d7445a17590f6b882def54c7336d5c3f3e5115799071f42435",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/company_d1a0c2a30b31bccb/scores.json",
+      "bytes": 1994,
+      "sha256": "7f6d47d4ce0ab36ea6a431abdd470cb8e23bb81923d2ee08a9d1e21239ab2784",
+      "reason": "Intermediate T6 toy dataset, prediction, receipt or score superseded by fresh_synthetic_final; identical input datasets retained in final, old generation-seed protocols preserved"
+    },
+    {
+      "path": "agent1/outputs/maintenance/analysis_prepare_helpers_cleanup_20261106.json",
+      "bytes": 65249,
+      "sha256": "ffddf18a56536510c2c080d024fd85c3cc2a828d43160b8bf4acce43848cdc2e",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/cleanup_2026-10-31.md",
+      "bytes": 5136,
+      "sha256": "57e7e324f4922c4ad2d08d15eb599d68cb8a1934bc4d36c31c42a2b69836cb16",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/docs_02_03_consolidation_20261106.json",
+      "bytes": 680713,
+      "sha256": "2a25510cdbf1e9ee2c0f4a2cf524a28a64af798c5a218f5e6ebb522b64201762",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/docs_04_consolidation_20261106.json",
+      "bytes": 679123,
+      "sha256": "578a7de8e302da66535db3b4f05cb24fc8d8edb7e4b5eb0cc8e265d2e845cb8b",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/docs_05_consolidation_20261106.json",
+      "bytes": 676247,
+      "sha256": "0d2781ebadc0fda2111703eb436ab9d661417ca1cdfd70af3d6077d3a9fd116b",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/outputs_transient_cleanup_20261106.json",
+      "bytes": 1327376,
+      "sha256": "32d4c573bdb322b9c3d6fd1ebd31f1aa7d356e5bceba621f412172bbd66e70e8",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/scripts_launcher_cleanup_20261106.json",
+      "bytes": 1331621,
+      "sha256": "4f9a4e12745689e1f51afac36a3f9f623dab437465f8fde784e965177e41266e",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/t0_t9_t1_change_description_20261106.md",
+      "bytes": 3202,
+      "sha256": "eb5c198667af447f9f7c50f3cad2330123e376ea39631007c92e90e8c8094bd8",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/t0_t9_t1_final_review_20261106.json",
+      "bytes": 3963,
+      "sha256": "c7aef66d38e2236ab0b1f28261dc7ca7fa44770d441a167ec6cb93cfa1767577",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/t0_t9_t1_publish_followup_20261106.json",
+      "bytes": 3708,
+      "sha256": "cef7cd943cefeb4b81d2a001ca9103d569d17933979b10204ede563f75042c7b",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/t0_t9_t1_rebuild_cleanup_20261106.json",
+      "bytes": 9443,
+      "sha256": "0067949bc32985b36e6c5ba1b0c0106c82557474a2c93a27ae2e597a7aa1a826",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/t0_t9_t1_rebuild_inventory_20261106.json",
+      "bytes": 46080,
+      "sha256": "fcbeca14cb9e41a07c10632785e671c07665c566e6e3e76dbbbe872b0ad9d94e",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/t0_t9_t1_removed_artifacts_20261106.json",
+      "bytes": 459,
+      "sha256": "c8d132fd098507397d316ad0a8562ee4f509c288caad2a5b72b10dfb95d22803",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/t0_t9_t1_synthetic_source_audit_20261106.json",
+      "bytes": 16366,
+      "sha256": "f05b6e484a1c8e83aa54de82fd3d73798a21606609cbc0f47a4b957c269d7fc8",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    },
+    {
+      "path": "agent1/outputs/maintenance/unified_v1_removal_20261104.json",
+      "bytes": 103099,
+      "sha256": "a6de0fb90c8ef33eb2d7f6e157caaf56e18b18e6ef9b7cd0c3633ef6f2bbdafe",
+      "reason": "Obsolete 2026-10-31/11-04/11-06 cleanup prose, review, publication, doc consolidation or integrity inventory; contains no World generation recipe or operational recovery mapping"
+    }
+  ],
+  "retained": [
+    {
+      "path": "agent1/outputs/implementation/gates.csv",
+      "bytes": 3278,
+      "sha256": "ec02094b90079704788ff4316046008af9e8587a9cf6d8c2759ee4b4bac7a88e",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/publish_manifest.json",
+      "bytes": 202858,
+      "sha256": "61a2d62bbfb276f07718f52bcdf4ebd06b64f3c9a96966f24a3361af4424661c",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/real_v2_gate_registration.json",
+      "bytes": 394,
+      "sha256": "e071599a999fb2aca1c97b860662b034a4d68922521c82043682307cf394220e",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t9_canonical_runtime_verification.json",
+      "bytes": 3889,
+      "sha256": "788facc8f8a8c74254d69eeb20706b4a59aa7ed27f55af2997279d6e4f647aab",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/checks_summary.json",
+      "bytes": 504,
+      "sha256": "bba0bce2faf906b37e772f44c1fc548e2f5f446499ee2ade66695298773e09ec",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/collect_checks.py",
+      "bytes": 1836,
+      "sha256": "3b026f0c548328167a9593954e350cdb80121cfb990f182bb9db3674ede3eb9c",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/README.md",
+      "bytes": 4204,
+      "sha256": "f82f9ec0cf0969d2cb559deec8956b0b8cd5c69cafc8ce98df5a165481b2a8dc",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/recheck.xml",
+      "bytes": 23222,
+      "sha256": "7419cd33fed5869d4007e55e3ace782f1a3201d4372644955e2dd7357e458306",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/ruff.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/tests.xml",
+      "bytes": 64866,
+      "sha256": "3f572d9fb3083e10c743804f6a7215c6dd8bc2adf1a85777b1a4390affe730b2",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/ui.xml",
+      "bytes": 7954,
+      "sha256": "908b0a10c8ceb325ef34cc0253512a31e588bfea96a4f01c24c4ed8ce462adc6",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/example/customer_delay.json",
+      "bytes": 93254,
+      "sha256": "5c34c8bf883a168a2650adc2d4b424547522cbd2269e6b2484d526eccc1ff534",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/example/expense_deferral.json",
+      "bytes": 94620,
+      "sha256": "eda9830f0df974d8843ac40a73ad0c8574ff1597a929f486861cb1150e606755",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/example/forecast.json",
+      "bytes": 131712,
+      "sha256": "6b28a3e82c5f4b61116bc6a08211e3d20de407922e07275983a716f03fb624ea",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/example/forecast.xlsx",
+      "bytes": 35251,
+      "sha256": "f77f1d4bd201617b6c10f8f84c77484496aa3058761164302873ec9ff43ee1f3",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/example/noop.json",
+      "bytes": 94567,
+      "sha256": "21b7363d16aa81f864f00ccca45d57aec975316f1e1f6d32849e6d0a323b336f",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t10_bundle_20261113/example/verification.json",
+      "bytes": 1223,
+      "sha256": "efcd823b68e8a04bcc0c0aac4821b02c5c76b714b04473b86f9e18e37574051d",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t1_partial_bundle_v2_20261113/F013_pipeline_audit.json",
+      "bytes": 19234,
+      "sha256": "9850295f10390bdc4f87516057de6488b89c0fe530002d80c48f22dc3f0c8e41",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t1_partial_bundle_v2_20261113/verification.json",
+      "bytes": 1184,
+      "sha256": "84e766f04ba18ca6d45991b88f6a03213bc7e6b7e52c790404c25573ea5e44b1",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/checks_summary.json",
+      "bytes": 622,
+      "sha256": "d1b9bf18f0db39c089ae5125e7b582a578d238ead6af65f77636803c94bd99e0",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/final_cash.xml",
+      "bytes": 5124,
+      "sha256": "4bf02ef5006799abe4f575e3b02c90c79c3ef09f0e28fa829cb97284c9a9e325",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/periodic_and_joint.xml",
+      "bytes": 3453,
+      "sha256": "46d6b5d67d7bbc77e61d839287b91de23b86e2f23073b42192ae56dbb77c8c80",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/README.md",
+      "bytes": 1644,
+      "sha256": "e4ca4f89729c5e4f00e37fbbd35ab95ccc15ff7e0cb3772aecb16f6a0004ffbc",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/recheck.xml",
+      "bytes": 4445,
+      "sha256": "b090e56919b08cc56a2f0fdefeece1b5b2139508f55b3f4bc3bda6fd536d69a4",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/ruff.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/summarize_checks.py",
+      "bytes": 2006,
+      "sha256": "6f51d7970dc5bdd7550023ac7d65fc475d6f9669d32b299de0952ff21a10d332",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/tests.xml",
+      "bytes": 63468,
+      "sha256": "70cb7229a2281d869c249e48c0fd2b4d3bcca43d71e3cb2f810909d35a41f91b",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/ui.xml",
+      "bytes": 7211,
+      "sha256": "4480f368a161f47d17ded57e172b1a41f21a8ba72b986970882e446c3d569520",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/protocol.json",
+      "bytes": 3016,
+      "sha256": "a2ed68e0a225ceecbcad1b6aa886e3542fd148f435dbdf428abb1ff80c017d0a",
+      "reason": "Locked generator seeds, datasets, policies and protocol; preserve original path/content"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/protocol.json",
+      "bytes": 3028,
+      "sha256": "8ce3b10bc814564a8131bdf25fe5f41b2b808dc9a01262bea916674028447be1",
+      "reason": "Locked generator seeds, datasets, policies and protocol; preserve original path/content"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/summary.json",
+      "bytes": 1057,
+      "sha256": "22446b2726c27ed8a4d7d41a47a31b3029ea82c6af423c538bddfeb1657e3eaf",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/synthetic_company_0.json",
+      "bytes": 505541,
+      "sha256": "24ef3904e55bb034ae660e812801d95e0e896c8a50bdf0c500dcf159cc4e5f53",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/synthetic_company_1.json",
+      "bytes": 428175,
+      "sha256": "822b1a3a3c627439b2af7106c14462803f8951a46d458f228f52f5b0b0aca248",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/verification.json",
+      "bytes": 4719,
+      "sha256": "2a8806ee6f755f3dd6c85a0baee9f3c716b8aeddc129118e6d613e1e2063af19",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/company_5577159c3d42208b/adapted.json",
+      "bytes": 737758,
+      "sha256": "8277c572b36a6c6b378947e0478bc84467880ed2f665a1a7209ed8062f4d354c",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/company_5577159c3d42208b/global.json",
+      "bytes": 737758,
+      "sha256": "8277c572b36a6c6b378947e0478bc84467880ed2f665a1a7209ed8062f4d354c",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/company_5577159c3d42208b/receipt.json",
+      "bytes": 1827,
+      "sha256": "fc8b0a6cdb675ba0ccbb1b5ff11b9944190b3432b4c5d0f87a49cb774603628e",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/company_5577159c3d42208b/scores.json",
+      "bytes": 1986,
+      "sha256": "25b701942919a750521494a491de0bc5241d06523a5e9b310d4d3e9af9abf10e",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/company_d1a0c2a30b31bccb/adapted.json",
+      "bytes": 668076,
+      "sha256": "a016536c23c792b332cc3dd9e7b4522468e4c4678b93952dd945cdabf2573dcc",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/company_d1a0c2a30b31bccb/global.json",
+      "bytes": 668076,
+      "sha256": "a016536c23c792b332cc3dd9e7b4522468e4c4678b93952dd945cdabf2573dcc",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/company_d1a0c2a30b31bccb/receipt.json",
+      "bytes": 1826,
+      "sha256": "63286a7096f8fd4ffc6bf7d4d1306896e2b782e06ab03a70e7b2d5572bc77c0c",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_final/company_d1a0c2a30b31bccb/scores.json",
+      "bytes": 1994,
+      "sha256": "ef5b7c161534e2493411f318fa12229b4760e0e58a975783010e0a49aac13c66",
+      "reason": "Current partial-v2/T6/T10 evidence, complete final score inputs, publish manifest or gate/T9 provenance linked by current documentation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/protocol.json",
+      "bytes": 3034,
+      "sha256": "4fab822f0c127dca1ab85c5015a94e125820a8286d05df9e95890d11eb69dbb9",
+      "reason": "Locked generator seeds, datasets, policies and protocol; preserve original path/content"
+    },
+    {
+      "path": "agent1/outputs/maintenance/analysis_cleanup_20261114.json",
+      "bytes": 59726,
+      "sha256": "f7b1ca883bc33e2a42d8649bc0334d35feaa8daf60d7af73fc8327ea46abcff8",
+      "reason": "Current cleanup evidence referenced by output index; not an old maintenance run"
+    },
+    {
+      "path": "agent1/outputs/maintenance/benchrec_zip_cleanup_20261106.json",
+      "bytes": 1017855,
+      "sha256": "deabaca7e930a2566f1c3d2ef04938a343de3da940998a0266a00a54672aa99f",
+      "reason": "Recovery/deduplication manifest: retained mappings and hashes for existing maintenance tooling or data restoration; preserve byte-for-byte even where original payloads are missing"
+    },
+    {
+      "path": "agent1/outputs/maintenance/cleanup_2026-10-31.json",
+      "bytes": 194775,
+      "sha256": "d3531032c7ea2093ada5dc243a395e1d2fb006cfb2c6a334cbd6eb046ca88055",
+      "reason": "Recovery/deduplication manifest: retained mappings and hashes for existing maintenance tooling or data restoration; preserve byte-for-byte even where original payloads are missing"
+    },
+    {
+      "path": "agent1/outputs/maintenance/current_pipeline_cleanup_20261114_tests.xml",
+      "bytes": 7352,
+      "sha256": "0ea7933c8ed183011c20dc7c4049f6951983a617b103597a3c5981e3331d1ebb",
+      "reason": "Current cleanup evidence referenced by output index; not an old maintenance run"
+    },
+    {
+      "path": "agent1/outputs/maintenance/current_pipeline_cleanup_20261114.json",
+      "bytes": 2645437,
+      "sha256": "03e8fb95c96c67057a23926a080809c2125d8ef0a5960a88355db70e7fe814dd",
+      "reason": "Current cleanup evidence referenced by output index; not an old maintenance run"
+    },
+    {
+      "path": "agent1/outputs/maintenance/data_cleanup_20261114.json",
+      "bytes": 83935,
+      "sha256": "6bb0753501c1cc9f8864c2f5e8a0df05d0cd33f0f42c1f1adeafe87abffd0064",
+      "reason": "Current cleanup evidence referenced by output index; not an old maintenance run"
+    },
+    {
+      "path": "agent1/outputs/maintenance/practical_v6_dedup_cleanup_20261105.json",
+      "bytes": 23040,
+      "sha256": "3b92c2f07982cd8a3944eff3c5c7e09e367a11c07643353878283d5305bb5bbe",
+      "reason": "Recovery/deduplication manifest: retained mappings and hashes for existing maintenance tooling or data restoration; preserve byte-for-byte even where original payloads are missing"
+    },
+    {
+      "path": "agent1/outputs/maintenance/research_hardlink_dedup_20261105.json",
+      "bytes": 1296699,
+      "sha256": "5b06a8ec7487321df6dc7242282390c56552535520b2d97b9024f67ee2751443",
+      "reason": "Recovery/deduplication manifest: retained mappings and hashes for existing maintenance tooling or data restoration; preserve byte-for-byte even where original payloads are missing"
+    },
+    {
+      "path": "agent1/outputs/maintenance/small_hardlink_dedup_20261105.json",
+      "bytes": 2505668,
+      "sha256": "6d88ecd622fda2895540565058e9eff1f90707b97ec53bab3d98a055d4a0ff9e",
+      "reason": "Recovery/deduplication manifest: retained mappings and hashes for existing maintenance tooling or data restoration; preserve byte-for-byte even where original payloads are missing"
+    },
+    {
+      "path": "agent1/outputs/maintenance/t0_staging_cleanup_20261105.json",
+      "bytes": 1457158,
+      "sha256": "368181531e50679ae0821b938a932c980328308eae7beb2fac07640b59616e49",
+      "reason": "Recovery/deduplication manifest: retained mappings and hashes for existing maintenance tooling or data restoration; preserve byte-for-byte even where original payloads are missing"
+    },
+    {
+      "path": "agent1/outputs/maintenance/unified_v2_hardlink_dedup_20261105.json",
+      "bytes": 110718,
+      "sha256": "ecce62b5978f6f78490b0527f868871c56057cb4370cb75fc4a0e5bed455b8f3",
+      "reason": "Recovery/deduplication manifest: retained mappings and hashes for existing maintenance tooling or data restoration; preserve byte-for-byte even where original payloads are missing"
+    }
+  ],
+  "outside_guards": [
+    {
+      "path": "agent1/data/__pycache__/__init__.cpython-313.pyc",
+      "bytes": 178,
+      "sha256": "cb0f0030f2c9bcc30fd1ff475dd56d5f57647d46d5297ff8d0af8b6e66ea23d5",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/__pycache__/accounting.cpython-313.pyc",
+      "bytes": 7816,
+      "sha256": "1977045608709eca5d93128e9061ddbfed07266881c29c4b2f713e00a3a2b777",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/__pycache__/contracts.cpython-313.pyc",
+      "bytes": 31077,
+      "sha256": "0b4e8ae8eec0121fc1e5133ed4e93473811996c52aee3601b1f908848a22e533",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/__pycache__/dr_comparison.cpython-313.pyc",
+      "bytes": 3596,
+      "sha256": "06869a9532382356e07acf82fe96a89fbe175ba1e0c92b62be776b9c0b2548b3",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/__pycache__/real_loaders.cpython-313.pyc",
+      "bytes": 26356,
+      "sha256": "161f6ad96352e5f89b25ffc079e97672237e693d5aa35403fbd6a006ffaa2148",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/__pycache__/sba_macro.cpython-313.pyc",
+      "bytes": 4742,
+      "sha256": "22ed00c334615b44d872c4092930af8b0016bfb2c8b1a0bee4d347cd7c0ed4f7",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/__pycache__/scaling.cpython-313.pyc",
+      "bytes": 7522,
+      "sha256": "107c456746775c5896f81ca1da34f1a6472e68ae9df1c27cec2618327ab25082",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/__pycache__/schema.cpython-313.pyc",
+      "bytes": 5557,
+      "sha256": "714a6058ba1c8e7df4805390f2cf2bd303354ca076883be15f8c3a625fcbf9ba",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/__pycache__/t4_weekly.cpython-313.pyc",
+      "bytes": 10811,
+      "sha256": "9755bb96aec0f918121c21c7b8de069f155412d1fb5f9b95e3e2e00aea3090b8",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/__pycache__/world_manifest.cpython-313.pyc",
+      "bytes": 13983,
+      "sha256": "f86a96b1b7e2587398096a7a368c1925a0b34d8c2293252e2edfc28cea59dc8a",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/calibration_fit.json",
+      "bytes": 4632,
+      "sha256": "d924dbe2dd6e34d1cc9e0289b8528bdef767e80fc2912c08c2254b8291220f31",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/practical_v6_20261105_aug_supported_000/config.json",
+      "bytes": 2782,
+      "sha256": "c4ffe0afbfaa09f1a9cc013c59e1a2d6a5ed8bfb2a3177d3df9ab9cfe5cca73a",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/practical_v6_20261105_aug_supported_000/manifest.json",
+      "bytes": 4800,
+      "sha256": "397032e6ec915b6bd97c95b0d8aed1a8c2e5e65a597bb916cbe19f037a2fd651",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/practical_v6_20261105_aug_supported_001/config.json",
+      "bytes": 2780,
+      "sha256": "a03b2a572ec10ba07d97f5337b7943a02bb182d49ceecf08698decaace66dbd0",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/practical_v6_20261105_aug_supported_001/manifest.json",
+      "bytes": 4798,
+      "sha256": "ae6e93e3e2fa400de92b5f712859fbbbbcf180262777ead8d463e517d4bbc5d5",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/practical_v6_20261105_fresh_000/config.json",
+      "bytes": 2229,
+      "sha256": "72c2eda7200a31ad064f34b0acb37fb4f308fff15db87934571d822bd713350c",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/practical_v6_20261105_fresh_000/manifest.json",
+      "bytes": 4201,
+      "sha256": "97536f7cb404616fe707d1211c0384b473f8c2a12185b32cd3a68c45b73cf760",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/practical_v6_20261105_fresh_001/config.json",
+      "bytes": 2226,
+      "sha256": "9b260dbc6c5b955d59a556a3d6fade1da3173a9133746009e37d96e1557e04d1",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/practical_v6_20261105_fresh_001/manifest.json",
+      "bytes": 4198,
+      "sha256": "24a7064dc39d9940ef88db19df9930e53352f187d2feecab3fcf8726dff4bf66",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/practical_v6_20261105_fresh_002/config.json",
+      "bytes": 2529,
+      "sha256": "1312bcb0857697fe5cdfc83a88bdda19fa73d08435a9a003754dfcbdb8c203b7",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/practical_v6_20261105_fresh_002/manifest.json",
+      "bytes": 4523,
+      "sha256": "67de8023b581ba6bb0218932841a329e3bf8dc9b4f14c580c65e8b57a2634921",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/practical_v6_20261105_fresh_003/config.json",
+      "bytes": 2175,
+      "sha256": "7435d0584ecd630891e654d96f2c41b866f92dbbeedcbb0833a3d746d5614fb1",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/practical_v6_20261105_fresh_003/manifest.json",
+      "bytes": 4141,
+      "sha256": "713be2822bdaf91303b4774e4107fdcfc7cc7435750af6baf22375e54d501f01",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/unified_v2_holdout_20261104_000/config.json",
+      "bytes": 3843,
+      "sha256": "bd9e13d1c394525c504624a2ca3f19219561b6ca9021b7ea9c04d43a209ada45",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/unified_v2_holdout_20261104_000/manifest.json",
+      "bytes": 6032,
+      "sha256": "baa20752faa840bc417752c071c730d52c075c08c3010912a6b8c491c127e7f7",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/unified_v2_holdout_20261104_001/config.json",
+      "bytes": 3666,
+      "sha256": "901f047f68973c440e99a816946eab1aba3804edbc60d3e28935ec2c44d056b4",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/unified_v2_holdout_20261104_001/manifest.json",
+      "bytes": 5843,
+      "sha256": "a6ef4aaa7f4fb030dff6a7cee89fbb5d8c55ee7e8fdabafa715d74fe2625a784",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/unified_v2_holdout_20261104_002/config.json",
+      "bytes": 3278,
+      "sha256": "dee99f184fd3d8c2bd27aeed28fd430f56e8d374040da168f840b9863c0c8d18",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/unified_v2_holdout_20261104_002/manifest.json",
+      "bytes": 5423,
+      "sha256": "5c52565715f4e34688e425f4961bf4920c3e8d2e38bb8084bc79d63b159e206e",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/unified_v2_holdout_20261104_003/config.json",
+      "bytes": 3278,
+      "sha256": "40cd3ba1494dfa3d7b4dabe3b2078c1c9fe58feb45451bbcfa73c91cb4d05cb0",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/unified_v2_holdout_20261104_003/manifest.json",
+      "bytes": 5423,
+      "sha256": "6888808ffd441d04827ed0c1ddd4e8f91b9d49568c14c80bf9d1ac4e5c7e83f4",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_cohort.json",
+      "bytes": 2237,
+      "sha256": "b8448695225b78ca29f202f7167def653aaf515c1adc03fc62d281365eef0155",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_design.json",
+      "bytes": 2549,
+      "sha256": "7c12c98a5b637a797c23bbc938da2a4418a151388571a9ba0cfba1ce4ec7029a",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_smoke/config.json",
+      "bytes": 3282,
+      "sha256": "5ee5df5e66ee59e53a3df3aa3e1a059cc32978b6f9f0ce21e8fbdfac28a8fb90",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_smoke/manifest.json",
+      "bytes": 5425,
+      "sha256": "fc60fa8380b07f538295a5c69cf758b4f6549b50dc327d88ac6886f7c86adaa0",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_test_000/config.json",
+      "bytes": 3845,
+      "sha256": "148badd9c4cf1cafe451d4669b0ce0e0b093d544a311104235585b5213148429",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_test_000/manifest.json",
+      "bytes": 6035,
+      "sha256": "7e5378ad023a95609caf8d6a38985c2ca507f61fff30ed3445ea9a9c650d7078",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_test_001/config.json",
+      "bytes": 3668,
+      "sha256": "e5fa707918f72181affd122ec1ca35c38f2c3c36ba28b479b282731f892601a9",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_test_001/manifest.json",
+      "bytes": 5846,
+      "sha256": "e0c6a5d58cda3c94326c4522c8671a2030e3bae2f4c51d4cd8535060a42fa6f1",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_train_000/config.json",
+      "bytes": 3278,
+      "sha256": "e4eaefdb71c8b7d8273047c05d746ded527db62424547bc66ef6d44043f27aa7",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_train_000/manifest.json",
+      "bytes": 5425,
+      "sha256": "e316bf81f70ec059ff975634c4168ba01afe887ebcb2511992d76a83ce379f2b",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_train_001/config.json",
+      "bytes": 3279,
+      "sha256": "a63e8167ffa597cbae21f9765bf117d0f9ef606093241da951c196bb34731167",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_train_001/manifest.json",
+      "bytes": 5426,
+      "sha256": "2d71fa68f619c898e9d2d7606941b09a2fac2b2a9808c7c0ccfd5ec06ebf4ef8",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_train_002/config.json",
+      "bytes": 3283,
+      "sha256": "058e472917faeaf002d5c5ccc97dcd4ac88cf0975de1cb4a04e46be053a74d6c",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_train_002/manifest.json",
+      "bytes": 5430,
+      "sha256": "afcb03283ce0e853fdc3f0190445bcfed8ab8899ba4e83249fc8f444590a90ea",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_train_003/config.json",
+      "bytes": 3276,
+      "sha256": "0f69d50ef47e37b50424df494d730c7e3258dc9df902e1152142df6cb27c03d5",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_train_003/manifest.json",
+      "bytes": 5423,
+      "sha256": "912dca0ed9fcda4f4bd5c4b2bae7d20daeca8bad540df20e38253e072b13a52a",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_validation_000/config.json",
+      "bytes": 3286,
+      "sha256": "778be411faa62264bb79bcc5fd06116fde6c19474be2a2ad0272a87e07a3669e",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_validation_000/manifest.json",
+      "bytes": 5438,
+      "sha256": "686aceb99299bc45c659bee51bc6ad38631462f37de6d76cce266cdf660cffd4",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_validation_001/config.json",
+      "bytes": 3286,
+      "sha256": "3f5968749ac1649143d40fe3ce320218ba6646a4e76ebe4a089785c63d2c3727",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v4_shortpay_4shock_20261028_validation_001/manifest.json",
+      "bytes": 5438,
+      "sha256": "9f18a17cd9b494acc3642068e1aa159af28d3daf5f00cb26034ffb2d74cd3be0",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v6_holdout_20261101_000/config.json",
+      "bytes": 3836,
+      "sha256": "b4ed8ff6b0fde09fee201237eed30310699ddca1398ce6d2c46e44d67703f50a",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v6_holdout_20261101_000/manifest.json",
+      "bytes": 6017,
+      "sha256": "951e9228bd816acd7ad44b02d3982eea183c3611081cccb5375df7cb6d4de28b",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v6_holdout_20261101_001/config.json",
+      "bytes": 3659,
+      "sha256": "5fd71d81ddaee595f0701859340ae38bff6c121ca4654ef1948c9f0a7d2481f1",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/data/synthetic/v6_holdout_20261101_001/manifest.json",
+      "bytes": 5828,
+      "sha256": "bb8d2334e994b6ece2f86cb4787e6aed67b876411cf6208187bb5a91f8050e2e",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/analysis/t1_khanh_vs_v6_detail_20261105/share/MANIFEST.json",
+      "bytes": 6474,
+      "sha256": "045317068408cd57e8cc39523f3100d5928c1e461462be109c606e5cdadda7b2",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/analysis/t1_v6_final_vs_khanh_20261105/share/MANIFEST.json",
+      "bytes": 3263,
+      "sha256": "db17258743edbd79afb9b4f7f2a1d9fd901fd2f7303e0f91aa9bf6a94cf59def",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/analysis/t1_v6_vs_khanh_only_20261105/share/MANIFEST.json",
+      "bytes": 1019,
+      "sha256": "f4128a6ce8fe645a20ae859a8d7ce04c0964a1119fb6a30dd50a36c246512a32",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_00_weight_validation/config.json",
+      "bytes": 3271,
+      "sha256": "4bf11e94df60960a78d2afdd3d1972ab65cebd660b6085e2118c71a85ab5d17a",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_00_weight_validation/manifest.json",
+      "bytes": 4784,
+      "sha256": "fb19e8a15876da40a472459d09621b75ead949ab5ef6b31d565b46f4d592bc86",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_01_weight_validation/config.json",
+      "bytes": 4251,
+      "sha256": "714ef84848aeed3ba984e1641f79d17966092c5a003738de4fa4e98cd947908e",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_01_weight_validation/manifest.json",
+      "bytes": 5837,
+      "sha256": "185d52e855ee522aec53d42ca511f46b8ba6b8a1651e9b557f2d988fcb785ebb",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_02_audit/config.json",
+      "bytes": 3259,
+      "sha256": "fd883e5b14112352880f89a98c18f80bb0bfdb439ccd3c97d4f6619a7472e4f0",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_02_audit/manifest.json",
+      "bytes": 4772,
+      "sha256": "03112be5124bee7c943974145911f0cf9f2b1d5e3a7c5afb848a7f6d739995e7",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_03_audit/config.json",
+      "bytes": 4239,
+      "sha256": "228edd8b2625bd5330ce932b8e5f1bdd48b951db4717ab0a0a43aa8a881ec903",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_03_audit/manifest.json",
+      "bytes": 5825,
+      "sha256": "e44ce56d1e06c44f2166559bae5516e7b93785861787d27587a26b2220ac8607",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_04_fresh_test/config.json",
+      "bytes": 3264,
+      "sha256": "40b5ce1a28ed55b677ee9d4897779b2a5406bf92bf95012fe9e7ef4e93752110",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_04_fresh_test/manifest.json",
+      "bytes": 4778,
+      "sha256": "7748e97f8ff66f35f2514c7986a1c30d6c165c0e6c47014ffcbf75ffbd7c5060",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_05_fresh_test/config.json",
+      "bytes": 4244,
+      "sha256": "6cdc693bb46f1cca5df0541e947efc41d104050da2b894c62adbecfd4424dfd7",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_05_fresh_test/manifest.json",
+      "bytes": 5828,
+      "sha256": "94de30b35ab8ea1d493665a1cba71389a9115529cb32beaabf8f858ccf935f29",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_06_fresh_test/config.json",
+      "bytes": 4244,
+      "sha256": "cf7882ef71dd8f5e4c7d99f5a60dc06b5030795c7904b1468659556256a7b432",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_06_fresh_test/manifest.json",
+      "bytes": 5828,
+      "sha256": "5bb4791a5618bb91e6d0773ea878737cbf68c007ea739a4ba871467b47762c74",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_07_fresh_test_onboarding/config.json",
+      "bytes": 1563,
+      "sha256": "9ccf05aa0368d7eb5e59737567d62506a3147b048539e44593e63b2d47c42bea",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/aligned_refit_20261112/worlds/refit_07_fresh_test_onboarding/manifest.json",
+      "bytes": 2939,
+      "sha256": "64877ea98160267d39c4da571efda7a70a88107eb817580ee9c994b795a1be37",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/retained_manifest_audit.json",
+      "bytes": 19328,
+      "sha256": "e6edf8407071a5db23c9c9bf5f549b73a1e31ab09b5dc0cf41ec8296bd397946",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/runtime_source/experiments/t1_compact/audit_manifests.py",
+      "bytes": 3510,
+      "sha256": "96ecbd1389848f665b98a5c975489f57189ab3244a16f2e302d052d9f1273589",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_00_train/config.json",
+      "bytes": 3257,
+      "sha256": "23ef47c3e22bd04e0e3feeda199af8c71535852a464b3084414509236ae9d670",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_00_train/replay_manifest.json",
+      "bytes": 5498,
+      "sha256": "87ce7a415f05cc56bdbd6e08fe406be2780dfa6a99f42662e3f0d569e2ccb492",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_01_train/config.json",
+      "bytes": 3258,
+      "sha256": "a4e4e5b41abb9001b89b8fe1792ea54cc3f8f441855cac6947b094085ae00492",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_01_train/replay_manifest.json",
+      "bytes": 5499,
+      "sha256": "84e9b83fe8562817c1b40b88288f50c430529840c02a16fb2074c4a89c6db948",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_02_train/config.json",
+      "bytes": 3262,
+      "sha256": "bc771879b0f339736cea7f5ce756e96429b4c0b610cffd2ab142d17581fc0b89",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_02_train/replay_manifest.json",
+      "bytes": 5503,
+      "sha256": "2f13003aed9663ec424be29e5f7ec0ca3565fad4511b83724f247a6db868e203",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_03_train/config.json",
+      "bytes": 3255,
+      "sha256": "afddad207cd0744a2666dc0a8a78325e7c703a6192d16c2c9367d9e91ff0f6a5",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_03_train/replay_manifest.json",
+      "bytes": 5496,
+      "sha256": "1dee08d1dc29ab038c5cadcb754fdba348189dc2266ac8b85901e6f11fa19ec9",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_04_validation/config.json",
+      "bytes": 3265,
+      "sha256": "0ba94a49a197e67bd5672d649ff04db4733975e58e4e9072e1b477e133461bb4",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_04_validation/replay_manifest.json",
+      "bytes": 5461,
+      "sha256": "673288655c655cb7110b111eca9150b55639726a9f3a45b733747268a87c1494",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_05_validation/config.json",
+      "bytes": 3265,
+      "sha256": "c5e7391eaee1973d9cfba0f02661ffef6a49aa4f7f7efd1061de074f3bd578f1",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_05_validation/replay_manifest.json",
+      "bytes": 5463,
+      "sha256": "2cbadd623d60e3e38a3a16f0c4801a8126ef4b51902171969e4ab4b717c11915",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_06_test/config.json",
+      "bytes": 3824,
+      "sha256": "6b47cc1ed56fa0fde5bf73afc1ea816a19e28ff724d6472d4a400c6d066d92eb",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_06_test/replay_manifest.json",
+      "bytes": 6055,
+      "sha256": "d2cf182e452e7a2929fdc7c6b49e2baa9c86dbee179d671862ae30f41eb6fb08",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_07_test/config.json",
+      "bytes": 3647,
+      "sha256": "f48bdfa8cb055161bff64b77b0168a6cf6d1c24157bf2363dc1ceb720fd722eb",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_07_test/replay_manifest.json",
+      "bytes": 5866,
+      "sha256": "cdb197d4cda70b2ccb6bbc0182d15e15e8c1b53ef7af7e14e3094069cd034e3d",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_08_train/config.json",
+      "bytes": 2759,
+      "sha256": "ca7b93a50322ac13e4945852408bed7a4005fe4ebfdc5f7c3fe4a33a2fb43e56",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_08_train/replay_manifest.json",
+      "bytes": 4927,
+      "sha256": "f9989a88eb5ce44d67601af193e2fdbcfb49bd8ddba8433fe3417f2993617399",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_09_train/config.json",
+      "bytes": 2757,
+      "sha256": "c941eda6941073f6bd7a759e4f31e9d0518cbc832bae66fc88363321fc0e1f20",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_09_train/replay_manifest.json",
+      "bytes": 4924,
+      "sha256": "0e68ada14fa453b1c347a818022743de2af1cbaa7cca2e8156fd8be76f50aed9",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_10_train/config.json",
+      "bytes": 4217,
+      "sha256": "996fcfa1f0aa2b8a498f7f2b127aac9cc667688341f4bb800276a8cd0252c07b",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_10_train/replay_manifest.json",
+      "bytes": 6581,
+      "sha256": "ed61374ea95809c3f09142bfdfe19314af2a0fb73b6c4f29c5dad4286e72bb82",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_11_train/config.json",
+      "bytes": 4219,
+      "sha256": "04cc28f5167ae29db997dfe64ef134b1e7e4ad6374efde2a1784b54e76e1b35b",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_11_train/replay_manifest.json",
+      "bytes": 6584,
+      "sha256": "b06e2d5b02bdcfda2fbd701f995edd8c587c722a66e6e1ca085002487246df80",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_12_validation/config.json",
+      "bytes": 4228,
+      "sha256": "5f780c3049f8f51fa95074e5678d39b3f522772376eda26960f6c1c4b4e095bf",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_12_validation/replay_manifest.json",
+      "bytes": 6598,
+      "sha256": "388cd8a21f7c245b337297afa317b337ebb4a7b80204d68a45d70fd4cb5232b4",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_13_test/config.json",
+      "bytes": 4214,
+      "sha256": "a25949e25b6561d63b89e39066b8f6bed2d2e8da335d0476480498ff73bba2a8",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/compact_world_20261112/worlds/compact_13_test/replay_manifest.json",
+      "bytes": 6575,
+      "sha256": "09fa7710cb1ea2785b103d599922d5fe015dc8f2258493b372f71ad43a6c5d9f",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/dai_phat_adaptation_20261113/inputs/manifest.json",
+      "bytes": 975,
+      "sha256": "c98918ef138ab5fceb5268ed03f8204f6f978983000ff5dfbe8f91d0954c120b",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/dai_phat_adaptation_20261113/runtime_source/agent1/data/world_manifest.py",
+      "bytes": 9102,
+      "sha256": "36fb75bcd8d7409847df7c4f251a591ede94976d44e6d655353b5de5d0666c60",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/dai_phat_adaptation_20261113/runtime_source/agent1/eval/cash_cohort.py",
+      "bytes": 867,
+      "sha256": "d9e89f2b136a31af5387968c27bde2aab11e4f4380b659e14429793a4df79b38",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/dai_phat_adaptation_20261113/runtime_source/experiments/t1_compact/audit_manifests.py",
+      "bytes": 3510,
+      "sha256": "96ecbd1389848f665b98a5c975489f57189ab3244a16f2e302d052d9f1273589",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/global_local_families_20261113/source_snapshot/experiments/t1_compact/audit_manifests.py",
+      "bytes": 3510,
+      "sha256": "96ecbd1389848f665b98a5c975489f57189ab3244a16f2e302d052d9f1273589",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/neural_data_ablation_20261113/source_snapshot/experiments/t1_compact/audit_manifests.py",
+      "bytes": 3510,
+      "sha256": "96ecbd1389848f665b98a5c975489f57189ab3244a16f2e302d052d9f1273589",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/scaling_data_manifest.json",
+      "bytes": 1849,
+      "sha256": "2f0b1738bcc5cb92f3f6a092d28dabb6c895a14ced11d481e85ab519d7cc5ca2",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/catalog.json",
+      "bytes": 6015,
+      "sha256": "5436f856b457beeafd0ba781c774a7764a3ecb129d9ddbde8451baba612d1c46",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/default/member_0/metadata.json",
+      "bytes": 941,
+      "sha256": "820f194a56fed02a8a7a51bea8dc4ed47329bb8189355ce89841d8a2eaded1f3",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/default/member_0/model.joblib",
+      "bytes": 43041,
+      "sha256": "f453bd06a10efa509d1382e82720224c771035c2f26052379719844ee116121b",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/default/member_1/metadata.json",
+      "bytes": 2646,
+      "sha256": "6adf5d54dc008a4e21dbb8feace359815bcb37eb4290ece68dd1265c8ccd16bf",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/default/metadata.json",
+      "bytes": 1846,
+      "sha256": "c3730dc824c990954bdef5985def77171f68a1479b1237b23fbb9695ad78d440",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/lightgbm/metadata.json",
+      "bytes": 1203,
+      "sha256": "5ab50e6c9087e6a8ab33e384660fe390f02bc932ad99b2a283f2640fb0b07094",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/lightgbm/model.joblib",
+      "bytes": 88341,
+      "sha256": "50e38533f7c90b5ce9414e1fa77a1ffc51da2b1784638ec4f5825dabf3c594a2",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/neural/metadata.json",
+      "bytes": 1201,
+      "sha256": "79f623101d7f8081a32caa2c4a81874d79e0741881bfc19c0d51a9d213ef7a49",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/neural/model.joblib",
+      "bytes": 43041,
+      "sha256": "f453bd06a10efa509d1382e82720224c771035c2f26052379719844ee116121b",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/partial.json",
+      "bytes": 12568,
+      "sha256": "a1cb01de2a6cfed1d5708406783ebd717552beba47c537b7ef6c463f48cbe470",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/replay.npz",
+      "bytes": 311331,
+      "sha256": "ae98182d70d672ac4f9c589320e3d34e5d44fb44cf56899ba2795026dbf92924",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/xgboost/metadata.json",
+      "bytes": 1202,
+      "sha256": "ff374e474fa9b42a596bc64b812eeb49b4b352930187fecaec16fc9c5cda5590",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t1/settlement_partial_catalog_v2_20261113/xgboost/model.joblib",
+      "bytes": 53548,
+      "sha256": "4243491a079b2d9044499150ef0661b0039682f7c6a756e9ad140dd54d55104e",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t6/baseline_workspace_20261112_frozen/inputs/manifest.json",
+      "bytes": 975,
+      "sha256": "c98918ef138ab5fceb5268ed03f8204f6f978983000ff5dfbe8f91d0954c120b",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t6/baseline_workspace_20261112_frozen/runtime_source/agent1/data/world_manifest.py",
+      "bytes": 9102,
+      "sha256": "36fb75bcd8d7409847df7c4f251a591ede94976d44e6d655353b5de5d0666c60",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t6/baseline_workspace_20261112_frozen/runtime_source/agent1/eval/cash_cohort.py",
+      "bytes": 867,
+      "sha256": "d9e89f2b136a31af5387968c27bde2aab11e4f4380b659e14429793a4df79b38",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t6/baseline_workspace_trained_t1_20261112/inputs/manifest.json",
+      "bytes": 975,
+      "sha256": "c98918ef138ab5fceb5268ed03f8204f6f978983000ff5dfbe8f91d0954c120b",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t6/baseline_workspace_trained_t1_20261112/runtime_source/agent1/data/world_manifest.py",
+      "bytes": 9102,
+      "sha256": "36fb75bcd8d7409847df7c4f251a591ede94976d44e6d655353b5de5d0666c60",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t6/baseline_workspace_trained_t1_20261112/runtime_source/agent1/eval/cash_cohort.py",
+      "bytes": 867,
+      "sha256": "d9e89f2b136a31af5387968c27bde2aab11e4f4380b659e14429793a4df79b38",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t6/global_scope_no_new_credit_20261113/inputs/manifest.json",
+      "bytes": 975,
+      "sha256": "c98918ef138ab5fceb5268ed03f8204f6f978983000ff5dfbe8f91d0954c120b",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t6/global_scope_no_new_credit_20261113/runtime_source/agent1/data/world_manifest.py",
+      "bytes": 9102,
+      "sha256": "36fb75bcd8d7409847df7c4f251a591ede94976d44e6d655353b5de5d0666c60",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    },
+    {
+      "path": "agent1/outputs/t6/global_scope_no_new_credit_20261113/runtime_source/agent1/eval/cash_cohort.py",
+      "bytes": 867,
+      "sha256": "d9e89f2b136a31af5387968c27bde2aab11e4f4380b659e14429793a4df79b38",
+      "reason": "Source data/config/manifest or serving catalog outside cleanup scopes; untouched"
+    }
+  ],
+  "reasons": [
+    "Previous pass retained whole implementation evidence trees and all historical maintenance reports.",
+    "Keep current partial-v2/T6/T10 evidence and final synthetic results with their full receipts and inputs.",
+    "Retain seven recovery/dedup manifests and four current-cleanup records; delete obsolete maintenance narratives and inventories.",
+    "No current adaptive runtime, agent1_service, scripts/business training inputs or t1_compact generation input reads a removed file."
+  ],
+  "intermediate_duplicates": "Both intermediate T6 runs have byte-identical synthetic_company_0/1 datasets to final; their saved predictions are byte-identical to each other. Final predictions are distinct after corrections and remain complete.",
+  "verification": {
+    "retained_and_guards_checked": 187,
+    "protected_changed": [],
+    "deletion_targets_remaining": 0,
+    "post_index_updates_checked": 187,
+    "unexpected_changes_after_index_updates": []
+  },
+  "runtime_validation": {
+    "serving_catalog_sha256": "5436f856b457beeafd0ba781c774a7764a3ecb129d9ddbde8451baba612d1c46",
+    "serving_catalog_load": "passed",
+    "current_t1_partial_t6_t10_forecast_13_weeks": "passed",
+    "final_t6_protocol_spec_and_catalog_hash": "passed",
+    "final_t6_datasets_checked": 2,
+    "frozen_t6_predictions_hash_checked": 4,
+    "locked_source_sha256": "9ccb7c581a27a10e2b8ea27cdfa416d213b24e62361e76e799829383af2aa166",
+    "current_source_sha256": "71cfa7a07e1cf5c1241c7eeca7952abbdff147799e4e287f17d0fae435c0bbf8",
+    "locked_source_matches_current": false,
+    "signature_files_removed_by_cleanup": 0,
+    "saved_test_summaries_recomputed": {
+      "t10_bundle_20261113": {
+        "python_unique_cases": 404,
+        "python_passed": 401,
+        "python_failed": 0,
+        "python_skipped": 3,
+        "ui_passed": 31,
+        "ui_failed": 0,
+        "lint_issues": 0
+      },
+      "t6_partial_paths_20261113": {
+        "python_unique_cases": 389,
+        "python_passed": 386,
+        "python_failed": 0,
+        "python_skipped": 3,
+        "ui_passed": 28,
+        "ui_failed": 0,
+        "lint_issues": 0
+      }
+    },
+    "note": "Existing final evidence is intact, but its source lock differs from current code/runtime; current read_protocol correctly refuses replay. No lock was rewritten and historical forecasts were not re-scored with a different engine. Functional suites were not rerun; a new in-memory runtime forecast passed."
+  },
+  "removed_empty_directories": [
+    "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/company_d1a0c2a30b31bccb",
+    "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic_verified/company_5577159c3d42208b",
+    "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/company_d1a0c2a30b31bccb",
+    "agent1/outputs/implementation/t6_partial_paths_20261113/fresh_synthetic/company_5577159c3d42208b",
+    "agent1/outputs/implementation/t1_global_local_v1_20261113",
+    "agent1/outputs/e2e/protocol/oracle_equal_budget",
+    "agent1/outputs/g13/src_backtest",
+    "agent1/outputs/e2e/protocol",
+    "agent1/outputs/g13",
+    "agent1/outputs/e2e"
+  ],
+  "updated_indexes": [
+    {
+      "path": "agent1/outputs/README.md",
+      "before_sha256": "c6893a665d4dc187f622e63387325a728953795f39e2b3b50998d21946a29b15",
+      "after_sha256": "24ee892ff848e6de808d9b674f040a0acd5af341e5e17ae9bb12ab78d5f78841",
+      "reason": "Update current evidence location, removed intermediate outputs and observed source-lock limitation"
+    },
+    {
+      "path": "agent1/outputs/implementation/t6_partial_paths_20261113/README.md",
+      "before_sha256": "e4ca4f89729c5e4f00e37fbbd35ab95ccc15ff7e0cb3772aecb16f6a0004ffbc",
+      "after_sha256": "4220cefd8b74bca1fffd02d853e5fc2e2eacde78bc8ec73ef24e3d60cc9d33d8",
+      "reason": "Update current evidence location, removed intermediate outputs and observed source-lock limitation"
+    },
+    {
+      "path": "agent1/agent1/adaptive/README.md",
+      "before_sha256": "6123d091b8d991a46f9f9226253b72c74ae39e4cc3dab414ca81bb6f6ff4403d",
+      "after_sha256": "d35bdec2717df04a7a943446f3db498e051f9048fa392100de4fbc384eba5c9b",
+      "reason": "Update current evidence location, removed intermediate outputs and observed source-lock limitation"
+    }
+  ]
+}

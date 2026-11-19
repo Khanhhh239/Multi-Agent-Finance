@@ -1,0 +1,14 @@
+{
+  "purpose": "Minimal accounting and fee regression fixture; not a training or benchmark cohort",
+  "case_id": "collection_accounting_regression_20261104",
+  "origin": "2024-10-07",
+  "firms": [
+    "F000",
+    "F003"
+  ],
+  "hashes": {
+    "daily_cash.parquet": "13ecf53f8cd9fa4ec0258f800ed34f548bb0f924318175867729f5d9f24e4e5d",
+    "bank_txns.parquet": "072a81361b1e56d4aaf8482cd729db60762138581db3ed4587f0a027e0fb7f4f",
+    "payments.parquet": "f6c50ff55dfad03db6c3b43eb889c02adde029a20e1ed30dd803766822e2f680"
+  }
+}

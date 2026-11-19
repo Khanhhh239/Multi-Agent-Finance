@@ -1,0 +1,166 @@
+{
+  "version": "unified_collection_v2_20261104_r3",
+  "implementation_revision": "r3 places source selection after the fixed v6 training-label end and confirmation after source-selection follow-up; identical prefit collection weights are reused by hash; r2 source comparisons remain retrospective diagnostics, no fresh Worlds were created",
+  "source_cohort": "data/synthetic/v4_shortpay_4shock_20261028_cohort.json",
+  "v6_directory": "outputs/data/t1_competing_v6_20261101",
+  "output_directory": "outputs/data/unified_collection_v2_20261104_r3",
+  "reuse_expanded_cache_from": "outputs/data/unified_collection_v2_20261104_r2",
+  "cache_reuse_partitions": [
+    "fit",
+    "calibration_fit"
+  ],
+  "reuse_models_from": "outputs/data/unified_collection_v2_20261104_r2",
+  "seed": 20261105,
+  "horizon_weeks": 13,
+  "train_label_end": "2024-07-01",
+  "source_label_end": "2025-01-06",
+  "candidate_anchor_budgets": [
+    20000,
+    50000,
+    200000
+  ],
+  "rounds": 160,
+  "partial_fraction_edges": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "calibration_fit_cutoffs": [
+    "2023-10-02"
+  ],
+  "source_selection_cutoffs": [
+    "2024-07-01",
+    "2024-10-07"
+  ],
+  "bank_diagnostic_cutoffs": [
+    "2025-01-06",
+    "2025-07-07"
+  ],
+  "source_selection_firms_per_world": 4,
+  "source_paths": 250,
+  "source_mc_seeds": [
+    11,
+    29
+  ],
+  "rho_grid": [
+    [
+      0.0,
+      0.0
+    ],
+    [
+      0.15,
+      0.15
+    ],
+    [
+      0.3,
+      0.15
+    ]
+  ],
+  "calibration": {
+    "penalty": 0.002,
+    "max_iterations": 80,
+    "cash_bias_absolute_tolerance": 0.01
+  },
+  "lightgbm": {
+    "objective": "multiclass",
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "min_data_in_leaf": 100,
+    "feature_fraction": 0.85,
+    "bagging_fraction": 0.85,
+    "bagging_freq": 1,
+    "lambda_l2": 8.0,
+    "verbose": -1,
+    "seed": 20261105,
+    "num_threads": 4,
+    "deterministic": true,
+    "force_col_wise": true
+  },
+  "simulation": {
+    "paths": 1000,
+    "mc_seeds": [
+      101,
+      211,
+      307
+    ],
+    "max_invoices": 2000,
+    "batch_rows": 20000
+  },
+  "t4": {
+    "rounds": 64,
+    "origin_stride_weeks": 8,
+    "fit_end": "2025-01-06"
+  },
+  "evaluation_cutoffs": [
+    "2025-01-06",
+    "2025-07-07"
+  ],
+  "bootstrap_replicates": 400,
+  "fresh_holdouts": [
+    {
+      "name": "unified_v2_holdout_20261104_000",
+      "template": "v4_shortpay_4shock_20261028_test_000",
+      "seed": 106110501,
+      "n_firms": 8
+    },
+    {
+      "name": "unified_v2_holdout_20261104_001",
+      "template": "v4_shortpay_4shock_20261028_test_001",
+      "seed": 106110502,
+      "n_firms": 8
+    },
+    {
+      "name": "unified_v2_holdout_20261104_002",
+      "template": "v4_shortpay_4shock_20261028_validation_000",
+      "seed": 106110503,
+      "n_firms": 8
+    },
+    {
+      "name": "unified_v2_holdout_20261104_003",
+      "template": "v4_shortpay_4shock_20261028_validation_001",
+      "seed": 106110504,
+      "n_firms": 8
+    }
+  ],
+  "acceptance": {
+    "minimum_relative_crps_improvement": 0.05,
+    "max_relative_brier_worsening": 0.02,
+    "near_zero_brier": 0.0001,
+    "absolute_brier_tolerance": 0.002,
+    "coverage_min": 0.7,
+    "coverage_max": 0.9,
+    "max_relative_interval_score_worsening": 0.02,
+    "max_latency_seconds_1000x2000": 120,
+    "max_rss_increment_mib": 2000,
+    "source_ar_crps_relative_worsening_stop": 0.02,
+    "money_tolerance_vnd": 1.0
+  },
+  "policy": {
+    "scope": "operating_bank_account including non-AR financing/internal/cash deposits/external/unclassified; no service promotion",
+    "selection": "train Worlds only; disjoint source firms; candidate and rho chosen by cumulative AR-applied CRPS normalized by origin open amount",
+    "sampling": "nested deterministic per-firm anchor quotas, never outcome stratification",
+    "calibration": "week bands 1, 2-4, 5-13; source logloss selection guarded by cash bias and positive/full Brier",
+    "context": "v6 origin features and v1 accounting reused unchanged; fresh conditional factors each week",
+    "cash_bridge": "AR applied extinguishes face balance; bank receipt is AR applied minus fee; historical as-of fee/gross ratio",
+    "intraweek": "observed positive-week daily cash proportions, as-of only; same allocation profiles shared by comparators",
+    "revenue_weeks": "Tuesday-Monday, first target (origin, origin+7]; origins must be Monday",
+    "new_invoice_cash": "T4 gross issuance convolved with dated partial-receipt kernel from mature as-of cohorts",
+    "other_flows": "joint contiguous 13-week blocks from last 730 observed days; preserve classes; never called revenue",
+    "outflows": "historical recurring schedule shifted one year with observed recent scaling; supplier/capex jointly block-bootstrapped; explicit known_at obligations override recurrence",
+    "owner_draw": "daily quarter-end order; target/cap bounds inferred from observed history, cap sampled within identified bounds",
+    "no_draw_history": "no draw inferred, explicitly marked unidentified; no latent buffer/cap inputs",
+    "within_class": "retain feasible train representative; measure recursive class replay before adding variation",
+    "stop": "no fresh Worlds if source AR gate, ledger audit, latency or memory fails",
+    "old_holdouts": "v1/v6 test Worlds may be used for accounting regression only, never selection",
+    "fresh": "four predeclared new seeds; evaluate once after source lock, pool three MC replicates; ACI off",
+    "unknown_classes": "reported explicitly, never claimed learned",
+    "prohibited": [
+      "future cash as feature",
+      "latent stress or buffer/cap as feature",
+      "test selection",
+      "writes to v1/v4/v5/v6"
+    ]
+  }
+}

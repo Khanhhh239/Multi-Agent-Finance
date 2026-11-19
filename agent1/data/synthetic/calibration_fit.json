@@ -1,0 +1,197 @@
+{
+  "ontime_shift": {
+    "steel_metals": 1.5852874021663275,
+    "textile_clothing": 1.0254328453817796,
+    "plastic_rubber": 0.4981237163147021,
+    "wholesale": 0.9554614515383556,
+    "food_processing": 0.8536614581650509,
+    "services": 0.748668172289366
+  },
+  "pd_mult": {
+    "steel_metals": 1.954499983273107,
+    "textile_clothing": 4.267202900663197,
+    "plastic_rubber": 2.382829554266311,
+    "wholesale": 3.8283931925208767,
+    "food_processing": 3.1096513347049903,
+    "services": 5.2324558945666295
+  },
+  "history": [
+    {
+      "iter": 0,
+      "steel_metals": {
+        "ontime": 0.515,
+        "target_ontime": 0.63,
+        "bad": 0.0074,
+        "target_bad": 0.02
+      },
+      "textile_clothing": {
+        "ontime": 0.575,
+        "target_ontime": 0.62,
+        "bad": 0.0123,
+        "target_bad": 0.04
+      },
+      "plastic_rubber": {
+        "ontime": 0.542,
+        "target_ontime": 0.49,
+        "bad": 0.0149,
+        "target_bad": 0.04
+      },
+      "wholesale": {
+        "ontime": 0.597,
+        "target_ontime": 0.58,
+        "bad": 0.009,
+        "target_bad": 0.03
+      },
+      "food_processing": {
+        "ontime": 0.567,
+        "target_ontime": 0.6,
+        "bad": 0.0125,
+        "target_bad": 0.03
+      },
+      "services": {
+        "ontime": 0.566,
+        "target_ontime": 0.57,
+        "bad": 0.0149,
+        "target_bad": 0.03
+      }
+    },
+    {
+      "iter": 1,
+      "steel_metals": {
+        "ontime": 0.558,
+        "target_ontime": 0.63,
+        "bad": 0.0113,
+        "target_bad": 0.02
+      },
+      "textile_clothing": {
+        "ontime": 0.507,
+        "target_ontime": 0.62,
+        "bad": 0.0412,
+        "target_bad": 0.04
+      },
+      "wholesale": {
+        "ontime": 0.517,
+        "target_ontime": 0.58,
+        "bad": 0.0205,
+        "target_bad": 0.03
+      },
+      "food_processing": {
+        "ontime": 0.594,
+        "target_ontime": 0.6,
+        "bad": 0.0276,
+        "target_bad": 0.03
+      },
+      "services": {
+        "ontime": 0.509,
+        "target_ontime": 0.57,
+        "bad": 0.0201,
+        "target_bad": 0.03
+      }
+    },
+    {
+      "iter": 2,
+      "steel_metals": {
+        "ontime": 0.602,
+        "target_ontime": 0.63,
+        "bad": 0.0252,
+        "target_bad": 0.02
+      },
+      "textile_clothing": {
+        "ontime": 0.593,
+        "target_ontime": 0.62,
+        "bad": 0.0528,
+        "target_bad": 0.04
+      },
+      "plastic_rubber": {
+        "ontime": 0.505,
+        "target_ontime": 0.49,
+        "bad": 0.0474,
+        "target_bad": 0.04
+      },
+      "wholesale": {
+        "ontime": 0.51,
+        "target_ontime": 0.58,
+        "bad": 0.0455,
+        "target_bad": 0.03
+      },
+      "services": {
+        "ontime": 0.539,
+        "target_ontime": 0.57,
+        "bad": 0.0229,
+        "target_bad": 0.03
+      }
+    },
+    {
+      "iter": 3,
+      "steel_metals": {
+        "ontime": 0.629,
+        "target_ontime": 0.63,
+        "bad": 0.0222,
+        "target_bad": 0.02
+      },
+      "textile_clothing": {
+        "ontime": 0.672,
+        "target_ontime": 0.62,
+        "bad": 0.0156,
+        "target_bad": 0.04
+      },
+      "plastic_rubber": {
+        "ontime": 0.548,
+        "target_ontime": 0.49,
+        "bad": 0.0358,
+        "target_bad": 0.04
+      },
+      "wholesale": {
+        "ontime": 0.582,
+        "target_ontime": 0.58,
+        "bad": 0.0297,
+        "target_bad": 0.03
+      },
+      "food_processing": {
+        "ontime": 0.541,
+        "target_ontime": 0.6,
+        "bad": 0.0276,
+        "target_bad": 0.03
+      },
+      "services": {
+        "ontime": 0.672,
+        "target_ontime": 0.57,
+        "bad": 0.0182,
+        "target_bad": 0.03
+      }
+    },
+    {
+      "iter": 4,
+      "steel_metals": {
+        "ontime": 0.549,
+        "target_ontime": 0.63,
+        "bad": 0.0296,
+        "target_bad": 0.02
+      },
+      "plastic_rubber": {
+        "ontime": 0.399,
+        "target_ontime": 0.49,
+        "bad": 0.0342,
+        "target_bad": 0.04
+      },
+      "wholesale": {
+        "ontime": 0.584,
+        "target_ontime": 0.58,
+        "bad": 0.0182,
+        "target_bad": 0.03
+      },
+      "food_processing": {
+        "ontime": 0.62,
+        "target_ontime": 0.6,
+        "bad": 0.0206,
+        "target_bad": 0.03
+      },
+      "services": {
+        "ontime": 0.512,
+        "target_ontime": 0.57,
+        "bad": 0.0246,
+        "target_bad": 0.03
+      }
+    }
+  ]
+}

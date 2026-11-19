@@ -500,7 +500,6 @@
     $("intake-summary-agents").textContent = targets.size
       ? "Nghiệp vụ nhận tệp: " + [...targets].map((aid) => AGENT_LABEL[aid]).join(", ")
       : "Chưa có tệp sẵn sàng để phân phối.";
-    $("intake-next").disabled = !ready.length || Boolean(intakeActivity || pendingCheck());
     $("reason-field").hidden = !state.package;
     const button = $("commit");
     button.disabled = !ready.length || Boolean(intakeActivity || pendingCheck());
@@ -526,15 +525,12 @@
     const [title, description] = {
       choose: ["Nạp dữ liệu chung", "Tiếp nhận tệp một lần cho các nghiệp vụ sử dụng dữ liệu chung."],
       review: ["Kiểm tra tệp", "Xem loại tệp, kỳ dữ liệu và kết quả kiểm tra theo từng agent."],
-      confirm: ["Xác nhận và nạp toàn bộ dữ liệu", "Kiểm tra danh sách tệp và nghiệp vụ nhận dữ liệu trước khi ghi."],
       history: ["Lịch sử dữ liệu", "Xem các phiên bản đã niêm phong và kết quả ghi vào từng agent."],
     }[stage];
     $("h-intake").textContent = title;
     $("intake-lead").textContent = description;
     $("intake-choose").hidden = stage !== "choose";
-    $("intake-queue").hidden = stage !== "review" && stage !== "confirm";
-    $("intake-next").hidden = stage !== "review";
-    $("commit-bar").hidden = stage !== "confirm";
+    $("intake-queue").hidden = stage !== "review";
     $("intake-history").hidden = stage !== "history";
     $("intake-versions").hidden = stage !== "history";
     for (const button of $("intake-tabs").querySelectorAll("button")) {
@@ -1720,7 +1716,6 @@
     const button = event.target.closest("[data-intake-stage]");
     if (button && state?.intake.unlocked) showIntakeStage(button.dataset.intakeStage);
   });
-  $("intake-next").addEventListener("click", () => showIntakeStage("confirm", true));
   $("file-input").addEventListener("change", (e) => {
     if (e.target.files.length) upload([...e.target.files]);
     e.target.value = "";

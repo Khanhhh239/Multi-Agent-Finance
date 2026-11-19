@@ -1,0 +1,26 @@
+[
+  {
+    "name": "unified_v2_holdout_20261104_000",
+    "role": "fresh_test",
+    "seed": 106110501,
+    "manifest_sha256": "baa20752faa840bc417752c071c730d52c075c08c3010912a6b8c491c127e7f7"
+  },
+  {
+    "name": "unified_v2_holdout_20261104_001",
+    "role": "fresh_test",
+    "seed": 106110502,
+    "manifest_sha256": "a6ef4aaa7f4fb030dff6a7cee89fbb5d8c55ee7e8fdabafa715d74fe2625a784"
+  },
+  {
+    "name": "unified_v2_holdout_20261104_002",
+    "role": "fresh_test",
+    "seed": 106110503,
+    "manifest_sha256": "5c52565715f4e34688e425f4961bf4920c3e8d2e38bb8084bc79d63b159e206e"
+  },
+  {
+    "name": "unified_v2_holdout_20261104_003",
+    "role": "fresh_test",
+    "seed": 106110504,
+    "manifest_sha256": "6888808ffd441d04827ed0c1ddd4e8f91b9d49568c14c80bf9d1ac4e5c7e83f4"
+  }
+]

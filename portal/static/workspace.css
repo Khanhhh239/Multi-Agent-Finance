@@ -1257,8 +1257,6 @@ button.primary:hover,.btn.primary:hover { background:var(--kt-accent-strong); }
 .page-head h1, #view-config .profile-heading h1 { font-size: var(--paper-title); line-height: 1.1; letter-spacing: -.035em; color: var(--kt-accent-strong); }
 #view-config .profile-heading, #intake .head-split { min-height: 101px; margin: 0; padding: 12px 0 8px !important; display: block; }
 #view-config .profile-heading::after, #intake .head-split::after { width: min(47%, 580px); height: 100%; top: 0; transform: none; mask-image: linear-gradient(90deg,transparent,#000 22%); }
-#intake[data-stage="confirm"] .head-split::after { width: min(39%, 500px); }
-#intake[data-stage="confirm"] .head-split > div:first-child { max-width: 65%; }
 #view-config .profile-heading > div, #intake .head-split > div:first-child { position: relative; z-index: 1; max-width: 72%; }
 #view-config .profile-lead, #intake .lead { font-size: 17px; line-height: 1.4; margin: 5px 0 0; color: var(--kt-text); max-width: none; }
 .paper-tabs { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 0; border-bottom: 1px solid var(--kt-accent); margin: 0 0 14px; }
@@ -1352,7 +1350,7 @@ button.primary:hover,.btn.primary:hover { background:var(--kt-accent-strong); }
   .content { padding-inline: 14px; }
   .masthead-period { display: none; }
   .company-name { max-width: calc(100vw - 85px); font-size: 14px; }
-  #view-config .profile-heading > div, #intake .head-split > div:first-child, #intake[data-stage="confirm"] .head-split > div:first-child { max-width: none; }
+  #view-config .profile-heading > div, #intake .head-split > div:first-child { max-width: none; }
   #view-config .profile-heading::after, #intake .head-split::after, #view-data .gate-intro::before { opacity: .12; }
   .paper-tabs button { padding-inline: 9px; font-size: 13px; }
   #view-config .form .row, #view-config #profile-accounting .row, .intake-choose, .intake-review-grid { grid-template-columns: minmax(0, 1fr); }
@@ -2321,10 +2319,10 @@ button.primary:hover,.btn.primary:hover { background:var(--kt-accent-strong); }
   background: var(--kt-accent-strong) !important;
 }
 
-/* 4-Stage Stepper (#intake-tabs) */
+/* Intake steps */
 #intake .intake-stepper {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   border-bottom: 0;
   margin: 0 0 18px;
@@ -2589,7 +2587,6 @@ button.primary:hover,.btn.primary:hover { background:var(--kt-accent-strong); }
   margin: 0 0 14px;
 }
 
-#intake #intake-next,
 #intake #commit {
   width: 100%;
   min-height: 40px;

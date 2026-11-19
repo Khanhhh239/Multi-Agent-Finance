@@ -1,0 +1,14 @@
+[
+  {
+    "name": "v6_holdout_20261101_000",
+    "role": "fresh_test",
+    "manifest_sha256": "951e9228bd816acd7ad44b02d3982eea183c3611081cccb5375df7cb6d4de28b",
+    "seed": 106110101
+  },
+  {
+    "name": "v6_holdout_20261101_001",
+    "role": "fresh_test",
+    "manifest_sha256": "bb8d2334e994b6ece2f86cb4787e6aed67b876411cf6208187bb5a91f8050e2e",
+    "seed": 106110102
+  }
+]
