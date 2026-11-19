@@ -250,9 +250,9 @@ html[data-agent="2"].compact-workbench main { margin-left: 0; }
 [data-agent="3"] .cds--side-nav__link[aria-current="page"] { background: var(--cds-layer-selected); }
 @media (max-width: 1056px) {
   [data-agent="3"] #app { margin-left: 0; }
-  [data-agent="3"] .cds--side-nav.side { visibility: hidden; transform: translateX(-100%); width: min(256px, 85vw); }
-  [data-agent="3"] body.nav-open .cds--side-nav.side { visibility: visible; transform: none; }
-  [data-agent="3"] .cds--header .menu-toggle { display: inline-flex; }
+  [data-agent="3"]:not(.in-platform) .cds--side-nav.side { visibility: hidden; transform: translateX(-100%); width: min(256px, 85vw); }
+  [data-agent="3"]:not(.in-platform) body.nav-open .cds--side-nav.side { visibility: visible; transform: none; }
+  [data-agent="3"]:not(.in-platform) .cds--header .menu-toggle { display: inline-flex; }
   [data-agent="3"] #app :is(.welcome-grid, .grid2) { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 520px) {
