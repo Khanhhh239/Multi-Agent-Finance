@@ -17,27 +17,8 @@ export async function explainBox(el, index) {
 
 // AI jobs compact toolbar (review page)
 export async function aiToolbar(el) {
-  const signal = pageSignal();
-  const s = await api(`/api/workspaces/${state.ws}/ai`);
-  if (signal.aborted || !el.isConnected) return;
-  const job = s.job;
-  const running = job && job.running;
-  el.innerHTML = `<div class="a3-ai-compact-bar">
-    <span class="a3-ai-label">AI nội bộ (${esc(s.model)}):</span>
-    <div class="a3-ai-actions">
-      ${button(running && job.task === 'phân loại dòng hàng' ? `Đang phân loại ${job.done}/${job.total}` : `Phân loại dòng hàng (${s.labelled_invoices} HĐ, ${s.flagged_invoices} cần xem)`, 'tertiary', `id="ai-cls" class="cds--btn--sm" ${running ? 'disabled' : ''}`)}
-      ${button(running && job.task === 'đọc nội dung chuyển khoản' ? 'Đang đọc nội dung CK...' : `Đọc nội dung chuyển khoản (${s.proposals.length} đề xuất)`, 'tertiary', `id="ai-bank" class="cds--btn--sm" ${running ? 'disabled' : ''}`)}
-      ${s.proposals.length ? button('Mở đề xuất ghép tại Sao kê →', 'ghost', 'data-go="#/ngan-hang" class="cds--btn--sm"') : ''}
-    </div>
-    ${job && job.error ? notice('error', 'Việc AI bị lỗi', job.error) : ''}${job && !job.running && job.result ? `<span class="muted small">Hoàn tất: ${esc(job.task)}</span>` : ''}
-  </div>`;
-  const start = async (path) => { try { await post(`/api/workspaces/${state.ws}/ai/${path}`); aiToolbar(el); } catch (err) { el.insertAdjacentHTML('beforeend', notice('error', 'Không chạy được', err.message)); } };
-  $('#ai-cls').onclick = () => start('classify');
-  $('#ai-bank').onclick = () => start('bank');
-  const finished = el.dataset.wasRunning === '1' && !running;
-  el.dataset.wasRunning = running ? '1' : '0';
-  if (finished && !document.querySelector('.drawer')) rerender();
-  else if (running) { const timer = setTimeout(() => { if (document.body.contains(el)) aiToolbar(el).catch(() => {}); }, 3000); onPageLeave(() => clearTimeout(timer)); }
+  // Enrichment starts when the assistant opens; its controls no longer duplicate the review workflow.
+  el.replaceChildren();
 }
 
 // A2 proposals (bank page)

@@ -5,6 +5,7 @@ Every AI output is stored with model and version under ws/ai/, and becomes a fin
 or a person's decision.
 """
 import csv
+import hashlib
 import io
 import json
 import threading
@@ -97,6 +98,93 @@ def _proposals(ws):
     rejected = {(r['txn_id'], r['invoice_key']) for r in _read(ws / 'ai/bank_rejected.json', [])}
     rejected.update((r['txn_id'], r['invoice_key']) for r in decision_store.history(ws) if r['action'] == 'REJECT_BANK_PROPOSAL')
     return [p for p in _read(ws / 'ai/bank_links.json', []) if p['txn_id'] not in used and (p['txn_id'], p['invoice_key']) not in rejected]
+
+
+# Automatically prepare optional AI enrichment once per input/model version.
+# The existing GPU queue serializes this with manual AI work; UI requests never wait on inference.
+_auto_lock = threading.Lock()
+
+
+def _auto_fingerprint(ws, rep):
+    files = []
+    for folder in ('invoices', 'bank', 'portal'):
+        for path in sorted((ws / folder).rglob('*')):
+            if path.is_file():
+                stat = path.stat()
+                files.append((str(path.relative_to(ws)), stat.st_size, stat.st_mtime_ns))
+    inputs = dict(files=files, decisions=decision_store.history(ws), rejected=_read(ws / 'ai/bank_rejected.json', []),
+                  pack=_read(ws / 'pack.json', {}), model=ai_mod.MODEL, version=2)
+    return hashlib.sha256(json.dumps(inputs, sort_keys=True, ensure_ascii=False, default=str).encode()).hexdigest()
+
+
+@app.post('/api/workspaces/{wid}/ai/auto')
+def ai_auto(wid: str, retry: bool = False):
+    ws = ws_path(wid)
+    rep = _report(ws)
+    fingerprint = _auto_fingerprint(ws, rep)
+    with _auto_lock:
+        cache = _read(ws / 'ai/auto_cache.json', {})
+        if cache.get('fingerprint') == fingerprint:
+            return _json(dict(cached=True, running=False))
+        job = _jobs.get(wid)
+        if job and job.get('running'):
+            return _json(dict(cached=False, running=True))
+        # Failed versions are not retried automatically until inputs change.
+        if not retry and job and job.get('auto_fingerprint') == fingerprint and job.get('error'):
+            return _json(dict(cached=False, running=False, error=job['error']))
+        pack = _read(ws / 'pack.json', {})
+        industry = pack.get('profile', {}).get('industry', [])
+        extra = tuple((c['name'], c['description']) for c in pack.get('ai_categories', []))
+        invoices = [i for i in rep['invoices'] if i['role'] == 'PURCHASE' and not i.get('duplicate_of')]
+
+        def work(job):
+            job['auto_fingerprint'] = fingerprint
+            # Stale enrichment must not affect the baseline report while fresh inference is pending.
+            with writing():
+                held = LOCK_HELD.set(True)
+                try:
+                    _web.bridge.require(wid)
+                    if _auto_fingerprint(ws, _report(ws)) != fingerprint:
+                        job['result'] = dict(discarded=True)
+                        return
+                    _write(ws / 'ai/line_labels.json', {})
+                    _write(ws / 'ai/bank_links.json', [])
+                finally:
+                    LOCK_HELD.reset(held)
+            _run(ws)
+            current = _report(ws)
+            if _auto_fingerprint(ws, current) != fingerprint:
+                job['result'] = dict(discarded=True)
+                return
+            model = ai_mod.AI()
+            labels = {}
+            invoices = [i for i in current['invoices'] if i['role'] == 'PURCHASE' and not i.get('duplicate_of')]
+            job['total'] = len(invoices) + 1
+            for n, inv in enumerate(invoices, 1):
+                if inv.get('descriptions'):
+                    labels[inv['key']] = ai_mod.classify_lines(model, inv, industry, extra)
+                job['done'] = n
+            used = {t for m in current['matches'] if m['status'] == 'MATCHED' for t in m['txn_ids']}
+            settled = {k for m in current['matches'] if m['status'] == 'MATCHED' for k in m['invoice_keys']}
+            rejected = {(r['txn_id'], r['invoice_key']) for r in _read(ws / 'ai/bank_rejected.json', [])}
+            proposals = ai_mod.bank_proposals(model, current['transactions'], invoices, used, settled)
+            with writing():
+                held = LOCK_HELD.set(True)
+                try:
+                    _web.bridge.require(wid)
+                    if _auto_fingerprint(ws, _report(ws)) != fingerprint:
+                        job['result'] = dict(discarded=True)
+                        return
+                    _write(ws / 'ai/line_labels.json', labels)
+                    _write(ws / 'ai/bank_links.json', [p for p in proposals if (p['txn_id'], p['invoice_key']) not in rejected])
+                    _run(ws)
+                    _write(ws / 'ai/auto_cache.json', dict(fingerprint=fingerprint, model=ai_mod.MODEL))
+                finally:
+                    LOCK_HELD.reset(held)
+            job['done'] = job['total']
+            job['result'] = dict(prepared=True)
+
+        return _json(_start(wid, 'chuẩn bị kết quả hỗ trợ', work))
 
 
 # ----------------------------------------------------------------------------- A4

@@ -41,6 +41,7 @@ try:
     HAS_CRYPTOGRAPHY = True
 except ImportError:
     HAS_CRYPTOGRAPHY = False
+from concurrent.futures import ThreadPoolExecutor
 from decimal import Decimal, InvalidOperation
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -345,6 +346,22 @@ def health(aid):
         return False
 
 
+# Dashboard polling must not start duplicate slow health probes per browser.
+# Launch and import checks still call health() directly for a fresh result.
+_HEALTH_CACHE = {}
+_HEALTH_LOCKS = {aid: threading.Lock() for aid in AGENTS}
+
+
+def dashboard_health(aid):
+    with _HEALTH_LOCKS[aid]:
+        cached = _HEALTH_CACHE.get(aid)
+        if cached and time.monotonic() - cached[0] < 2.0:
+            return cached[1]
+        healthy = health(aid)
+        _HEALTH_CACHE[aid] = (time.monotonic(), healthy)
+        return healthy
+
+
 def _he_runtime(env=None):
     global HE_RUNTIME, HE_RUNTIME_SETTINGS
     env=env or launch_spec('agent2')[2]
@@ -384,7 +401,7 @@ def agent_state(aid):
     proc = PROCS.get(aid)
     owned = proc is not None and proc.poll() is None
     listening = port_open(agent_port(aid))
-    if listening and health(aid):
+    if listening and dashboard_health(aid):
         state = 'running'
     elif owned:
         state = 'starting'
@@ -407,6 +424,14 @@ def agent_state(aid):
             if runtime:value['dependency']=runtime.state()
         except ValueError as error:value['dependency']=dict(status='unavailable',owned=False,can_recover=False,message=str(error))
     return value
+
+
+
+def dashboard_agents():
+    # Independent probes run together so one slow service cannot stall the
+    # dashboard behind the sum of all four service timeouts.
+    with ThreadPoolExecutor(max_workers=len(AGENTS), thread_name_prefix='portal-health') as pool:
+        return list(pool.map(agent_state, AGENTS))
 
 
 def start_agent(aid):
@@ -1893,7 +1918,7 @@ class Handler(BaseHTTPRequestHandler):
             if path == '/api/state':
                 left = session_left(self.token(), touch=False)
                 recs = pending() if left else []
-                return self.send(200, dict(company=company(), agents=[agent_state(a) for a in AGENTS], origin=ORIGIN,
+                return self.send(200, dict(company=company() if left else {key: (value if key in ('code', 'legal_name') else '') for key, value in company().items()}, agents=dashboard_agents(), origin=ORIGIN,
                                            intake=dict(configured=configured(), unlocked=bool(left), seconds_left=left, has_biometric=has_biometric()),
                                            package=package_summary(), slots=slots_state(recs), pending=recs,
                                            batches=list(reversed(current_batches()))[:30] if left else []))
@@ -1980,7 +2005,7 @@ class Handler(BaseHTTPRequestHandler):
                 audit('lock', {})
             return self.send(200, dict(ok=True))
         if method == 'PUT' and path == '/api/company':
-            if current_batches() or has_biometric():
+            if configured() or has_biometric():
                 try:
                     self.need_session()
                 except AuthError:

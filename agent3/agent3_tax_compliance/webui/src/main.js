@@ -3,7 +3,7 @@ import '@fontsource/be-vietnam-pro/400.css';
 import '@fontsource/be-vietnam-pro/500.css';
 import '@fontsource/be-vietnam-pro/600.css';
 import './app.css';
-import { $, app, beginPage, esc, loadWorkspaces, notice, needWorkspace, state, store } from './core.js';
+import { $, app, beginPage, esc, loadWorkspaces, notice, needWorkspace, post, state, store } from './core.js';
 import { decoratePage, installValidation, portalOrigin } from './interactions.js';
 import { pageIntake, pageBankFormats, pageDataWorkspace } from './pages_intake.js';
 import { pageOverview, pageReview } from './pages_work.js';
@@ -63,7 +63,7 @@ async function route() {
   $('#modal-root').innerHTML = '';
   const entry = NAV.find(([h]) => h === cur) || HIDDEN.find(([h]) => h === cur) || NAV[0];
   const page = entry[2];
-  document.title = `${entry[1]} · Agent 3 Trợ lý thuế`;
+  document.title = `${entry[1]} · Trợ lý Thuế`;
   try { if (needWorkspace()) return; await page(); } catch (err) { if (signal.aborted) return; app().innerHTML = `<h1 class="page">${esc(entry[1])}</h1>` + notice('error', 'Có lỗi khi tải trang', err.message); }
   if (!signal.aborted) { decoratePage(app()); if (!document.querySelector('.drawer')) app().focus({ preventScroll: true }); }
 }
@@ -99,7 +99,7 @@ document.addEventListener('keydown', (e) => {
   if ($('#modal-root').innerHTML) $('#modal-root').innerHTML = '';
   else if (document.body.classList.contains('nav-open')) { document.body.classList.remove('nav-open'); $('.menu-toggle').setAttribute('aria-expanded', 'false'); $('.menu-toggle').focus(); }
 });
-loadWorkspaces().then(route).catch((err) => { app().innerHTML = notice('error', 'Không kết nối được máy chủ Agent 3', err.message); });
+loadWorkspaces().then(async () => { await route(); prepareAI(); }).catch((err) => { app().innerHTML = notice('error', 'Không kết nối được máy chủ Agent 3', err.message); });
 
 let checkingContext = false;
 async function refreshContext() {
@@ -130,3 +130,21 @@ async function refreshContext() {
 setInterval(refreshContext, 4000);
 document.addEventListener('visibilitychange', refreshContext);
 window.addEventListener('agent3-context-stale', refreshContext);
+
+// Poll in the background without re-rendering inputs or holding route requests open.
+let aiPreparing = false;
+async function prepareAI(retry = false) {
+  if (aiPreparing || !state.ws || document.hidden) return;
+  aiPreparing = true;
+  const wid = state.ws;
+  try {
+    const result = await post(`/api/workspaces/${wid}/ai/auto${retry === true ? '?retry=true' : ''}`, {}, {signal: new AbortController().signal});
+    if (result.running && state.ws === wid) setTimeout(prepareAI, 5000);
+    if (result.error && state.ws === wid && !document.getElementById('ai-background-status')) app().insertAdjacentHTML('beforeend', `<div id="ai-background-status">${notice('warning', 'Chưa hoàn tất hỗ trợ tự động', 'Kết quả phân loại bổ sung chưa sẵn sàng. Bạn vẫn có thể rà soát chứng từ và xem số liệu.')}<button type="button" class="cds--btn cds--btn--tertiary cds--btn--sm" id="ai-retry">Thử lại hỗ trợ tự động</button></div>`);
+    const retryButton = document.getElementById('ai-retry');
+    if (retryButton) retryButton.onclick = () => { document.getElementById('ai-background-status')?.remove(); prepareAI(true); };
+  } catch { /* Optional enrichment must not prevent the accounting screens from loading. */ }
+  finally { aiPreparing = false; }
+}
+setInterval(prepareAI, 60000);
+document.addEventListener('visibilitychange', () => prepareAI());

@@ -15,83 +15,56 @@ function section(source, start, end) {
   return source.slice(begin, finish);
 }
 
-function popup() {
-  const trace = [], messages = [];
-  const agent = { state: "running", url: "http://127.0.0.1:8011/workspace" };
-  const result = { company: "TEST_A", url: "http://127.0.0.1:8011/workspace?portal=http%3A%2F%2Flocalhost%3A9912#portal-connect=synthetic-ticket" };
-  const tab = { opener: {}, closed: false, document: { body: {} }, location: { replace(url) { trace.push(["navigate", url]); } }, close() { this.closed = true; } };
-  const scope = {
-    currentAgent: "agent1", state: { company: { code: "TEST_A" } }, agentById: () => agent,
-    location: { href: "http://localhost:9912/#agent1", origin: "http://localhost:9912" }, URL,
-    window: { open() { trace.push(["open"]); return tab; } },
-    toast: text => messages.push(text),
-    api: async (url, options) => { assert.equal(tab.opener, null); trace.push(["request", url, options]); return result; },
-  };
-  vm.createContext(scope);
-  vm.runInContext(section(portalSource, "  async function openAgent1Tab(", "  async function toggleAgent("), scope);
-  let prevented = false;
-  return { scope, agent, result, tab, trace, messages, event: { preventDefault() { prevented = true; } }, prevented: () => prevented };
-}
-
-test("portal opens immediately, disconnects opener and navigates after issuing the ticket", async () => {
-  const p = popup();
-  await p.scope.openAgent1Tab(p.event);
-  assert.equal(p.prevented(), true);
-  assert.deepEqual(p.trace.map(x => x[0]), ["open", "request", "navigate"]);
-  assert.equal(p.trace[1][1], "/api/agents/agent1/connect-link");
-  assert.equal(p.trace[1][2].json.company, "TEST_A");
-  assert.equal(p.tab.opener, null);
-  assert.equal(p.tab.closed, false);
-});
-
-test("blocked popup does not issue a ticket", async () => {
-  const p = popup();
-  p.scope.window.open = () => null;
-  await p.scope.openAgent1Tab(p.event);
-  assert.equal(p.trace.length, 0);
-  assert.equal(p.messages.length, 1);
-});
-
-test("agents without a dedicated handoff retain their ordinary new-tab links", async () => {
-  for (const agent of ["agent3", "agent4"]) {
-    const p = popup();
-    p.scope.currentAgent = agent;
-    await p.scope.openAgent1Tab(p.event);
-    assert.equal(p.prevented(), false);
-    assert.equal(p.trace.length, 0);
+test("all assistants stay embedded without a popup action or a separate-tab handler", () => {
+  const html = fs.readFileSync(path.join(root, "portal/static/index.html"), "utf8");
+  assert.equal(html.includes('id="agent-newtab"'), false);
+  assert.equal(html.includes("Mở tab riêng"), false);
+  assert.equal(portalSource.includes("window.open("), false);
+  assert.equal(portalSource.includes("async function openAgent1Tab("), false);
+  for (const id of ["agent1", "agent2", "agent3", "agent4"]) {
+    assert.ok(html.includes(`id="agent-frame-${id}"`), "Assistant still has its embedded workspace");
   }
 });
 
-test("stopped Agent 1 does not open a blank tab", async () => {
-  const p = popup();
-  p.agent.state = "stopped";
-  await p.scope.openAgent1Tab(p.event);
-  assert.equal(p.trace.length, 0);
-  assert.equal(p.messages.length, 1);
+function embeddedHandoff() {
+  const calls = [], sent = [];
+  let listener;
+  const frame = {contentWindow:{postMessage:(data, origin)=>sent.push([data,origin])}};
+  const scope = {
+    window:{addEventListener:(name, handler)=>{ assert.equal(name,"message"); listener=handler; }},
+    state:{}, authVersion:0, agentById:()=>({url:"http://127.0.0.1:8011/workspace"}),
+    $: id => id === "agent-frame-agent1" ? frame : null, URL,
+    api:async url=>{calls.push(url);return {key:"synthetic-key"};}, toast() {}
+  };
+  vm.createContext(scope);
+  vm.runInContext(section(portalSource, '  window.addEventListener("message",', '  // ------------------------------------------------------------------ wire up'),scope);
+  return {calls,sent,frame,listener};
+}
+
+test("embedded Agent 1 receives its key only from its own frame and origin", async () => {
+  const ui=embeddedHandoff();
+  await ui.listener({data:{type:"platform-ready"},source:ui.frame.contentWindow,origin:"https://unexpected.example"});
+  await ui.listener({data:{type:"platform-ready"},source:{},origin:"http://127.0.0.1:8011"});
+  assert.equal(ui.calls.length,0);
+  await ui.listener({data:{type:"platform-ready"},source:ui.frame.contentWindow,origin:"http://127.0.0.1:8011"});
+  assert.deepEqual(ui.calls,["/api/agents/agent1/key"]);
+  assert.equal(ui.sent[0][0].type,"platform-access-key");
+  assert.equal(ui.sent[0][0].key,"synthetic-key");
+  assert.equal(ui.sent[0][1],"http://127.0.0.1:8011");
 });
 
-test("company change during the request closes the new tab", async () => {
-  const p = popup();
-  p.scope.api = async () => { p.scope.state.company.code = "TEST_B"; return p.result; };
-  await p.scope.openAgent1Tab(p.event);
-  assert.equal(p.tab.closed, true);
-  assert.equal(p.trace.some(x => x[0] === "navigate"), false);
-});
-
-test("unexpected redirect target is rejected", async () => {
-  const p = popup();
-  p.result.url = "https://example.com/workspace";
-  await p.scope.openAgent1Tab(p.event);
-  assert.equal(p.tab.closed, true);
-  assert.equal(p.trace.some(x => x[0] === "navigate"), false);
-});
-
-test("failed ticket issuance closes only the newly opened tab", async () => {
-  const p = popup();
-  p.scope.api = async () => { throw Error("Agent unavailable"); };
-  await p.scope.openAgent1Tab(p.event);
-  assert.equal(p.tab.closed, true);
-  assert.deepEqual(p.messages, ["Agent unavailable"]);
+test("changing the Portal session clears both assistant frames for a fresh handoff", () => {
+  const frames = Object.fromEntries(["agent1", "agent2"].map(id => [id, {
+    dataset: {src: id}, removeAttribute(name) { assert.equal(name, "src"); this.removed = true; }
+  }]));
+  const scope = { token: "old", authVersion: 0, agent2RouteEpoch: 0,
+    $: id => frames[id.replace("agent-frame-", "")],
+    sessionStorage: {setItem(){}, removeItem(){}} };
+  vm.createContext(scope);
+  vm.runInContext(section(portalSource, "  function setToken(", "  function el("), scope);
+  scope.setToken("new");
+  for (const frame of Object.values(frames)) { assert.equal(frame.removed, true); assert.equal(frame.dataset.src, undefined); }
+  assert.equal(scope.authVersion, 1);
 });
 
 test("ticket is removed from the address before authentication while portal context is retained", () => {
@@ -254,7 +227,7 @@ test("manual allocation sends VND text without rounding through a JavaScript num
     api: async (url, options) => calls.push([url, JSON.parse(options.body)]) };
   vm.createContext(scope);
   vm.runInContext(section(agentSource, "  let reconciliationProposalRefresh =", "  async function loadReconciliation("), scope);
-  vm.runInContext(section(agentSource, '  $("allocate-form").onsubmit =', '  $("saved-plans").onclick ='), scope);
+  vm.runInContext(section(agentSource, '  $("allocate-form").onsubmit =', '  function invalidateSourceCorrection('), scope);
   $("allocate-form").onsubmit({ preventDefault() {} });
   await pending;
   assert.equal(calls[0][0], "/allocations");
@@ -369,7 +342,7 @@ function sourceCorrectionUI() {
     refresh:async()=>trace.push("refresh"), loadReconciliation:async()=>trace.push("reload"), notice() {} };
   vm.createContext(scope);
   vm.runInContext(section(agentSource, "  function invalidateSourceCorrection(", "  function renderSourceCorrectionPreview("), scope);
-  vm.runInContext(section(agentSource, '  $("source-correction-form").onsubmit =', '  $("saved-plans").onclick ='), scope);
+  vm.runInContext(section(agentSource, '  $("source-correction-form").onsubmit =', '  $("date-format").onchange ='), scope);
   return { scope, $, calls, trace, wait:()=>pending };
 }
 

@@ -680,9 +680,14 @@ def law_search(q: str, as_of: str | None = None, k: int = 10):
     if not LAW_DB.exists():
         raise HTTPException(404, 'chưa có kho luật; hãy đồng bộ')
     c = Corpus(LAW_DB)
+    # Interactive lookup stays CPU-only; grounded Q&A retains hybrid retrieval and reranking.
+    c.hybrid = False
+    c.rerank = False
+    q = q.strip()[:500]
+    k = max(1, min(k, 20))
     try:
         return [dict(doc_id=r['doc_id'], doc_num=r['doc_num'], doc_type=r['doc_type'], path=r['path'], text=c.unit_text(r['doc_id'], r['prov_id']),
-                     eff_from=r['eff_from'], status=r['status_name'], score=round(r['rank'], 3), url=c.db.execute(
+                     eff_from=r['eff_from'], status=r['status_name'], retrieval_method='keyword_coverage', score=round(r['rank'], 3), url=c.db.execute(
                          'SELECT url FROM documents WHERE doc_id=?', (r['doc_id'],)).fetchone()[0])
                 for r in c.search(q, date.fromisoformat(as_of) if as_of else date.today(), k)]
     finally:
@@ -696,7 +701,7 @@ def law_docs(q: str = ''):
         rows = c.db.execute("SELECT d.doc_id, d.doc_num, d.doc_type, d.title, d.issue_date, d.eff_from, d.eff_to, d.status_name, d.n_provisions, "
                             "d.n_chunks, d.structure, d.url, d.indexed, d.core, v.eff_to AS ended_on, v.by_doc_num AS ended_by "
                             "FROM documents d LEFT JOIN validity v USING(doc_id) WHERE (d.doc_num LIKE ? OR d.title LIKE ?) "
-                            "ORDER BY d.indexed DESC, d.issue_date DESC LIMIT 400", (f'%{q}%', f'%{q}%'))
+                            "ORDER BY d.indexed DESC, d.issue_date DESC", (f'%{q}%', f'%{q}%'))
         return [dict(r) for r in rows]
     finally:
         c.close()

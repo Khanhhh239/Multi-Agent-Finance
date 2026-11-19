@@ -608,8 +608,8 @@ html body input.son-box { background-color: var(--kt-surface); border: 1px solid
 [data-agent="2"] .a2-product .intro h1 { font-size: clamp(24px, 2.5vw, 30px); font-weight: 600; line-height: 1.3; margin: 0 0 8px; letter-spacing: -.025em; }
 [data-agent="2"] .a2-product .intro p { margin: 0; color: var(--kt-muted); max-width: 72ch; font-size: 14px; }
 [data-agent="2"] .a2-product .intro .eyebrow { margin-bottom: 8px; color: var(--kt-accent); font-size: 11px; letter-spacing: .12em; font-weight: 600; }
-[data-agent="2"] .a2-product .son-illustrated { min-height: 0; padding: 0 !important; }
-[data-agent="2"] .a2-product .son-illustrated::after { display: none; }
+
+
 [data-agent="2"] .a2-product :is(.panel, .transaction, .group, .rem-box) { padding: 22px 24px; margin: 0 0 20px; border: 1px solid var(--kt-line); border-radius: 10px; background: var(--kt-surface); box-shadow: var(--a2-shadow); min-width: 0; }
 [data-agent="2"] .a2-product h2 { margin: 0 0 16px; font-size: 18px; font-weight: 600; color: var(--kt-ink); line-height: 1.4; }
 [data-agent="2"] .a2-product h3 { font-size: 15px; font-weight: 600; color: var(--kt-ink); }
@@ -681,4 +681,73 @@ html.in-platform[data-agent="2"] body.a2-product .a2-main { margin: 0; padding-t
   [data-agent="2"] .a2-product .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   [data-agent="2"] .a2-product .metric { padding: 14px; }
   [data-agent="2"] .a2-product .actions > button { flex: 1 1 auto; }
+}
+
+/* One masthead for all accounting assistants, using the tax assistant's established layout. */
+html[data-agent] body .son-page-header.son-illustrated.son-illustrated {
+  position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;
+  box-sizing:border-box;width:100%;min-height:142px;max-width:100%;
+  padding:18px 250px 18px 22px!important;margin:0 0 20px!important;
+  background:linear-gradient(135deg,#fffdf9 0%,#f9f0e8 65%,#f4e6dc 100%);
+  border:1px solid #e2d1d1;border-left:4px solid #97162d;border-radius:14px;
+  box-shadow:0 2px 10px rgb(41 23 27 / 4%);overflow:hidden;gap:12px;
+}
+html[data-agent] body .son-page-header.son-illustrated.son-illustrated::after {
+  display:block!important;content:"";position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  width:220px!important;height:98px!important;background-image:var(--son-art);
+  background-size:100% 600%;background-position:center var(--son-row,0%);background-repeat:no-repeat;
+  opacity:.9!important;mix-blend-mode:multiply;pointer-events:none;
+  mask-image:linear-gradient(90deg,transparent,#000 18%);
+}
+html[data-agent] .son-page-header :is(.son-heading-copy,.a3-header-main) {
+  position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;
+  width:100%;min-width:0;gap:7px;max-width:100%;
+}
+html[data-agent] .son-page-header h1 {
+  display:block!important;min-height:0!important;padding:0!important;margin:0!important;
+  font-family:var(--kt-font-body,"Be Vietnam Pro",system-ui,sans-serif)!important;font-size:clamp(26px,2.6vw,36px)!important;
+  line-height:1.24!important;font-weight:650!important;letter-spacing:-.015em;color:#29171b;
+  max-width:100%;overflow-wrap:anywhere;text-wrap:balance;
+}
+html[data-agent] .son-page-header h1::after {display:none!important}
+html[data-agent] .son-page-header .eyebrow {
+  margin:0!important;color:#97162d;font-size:11px!important;line-height:1.5;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+html[data-agent] .son-page-header :is(.son-heading-company,.a3-company-line) {
+  margin:0!important;display:block;font-family:var(--kt-font-body,inherit);font-size:18px!important;
+  font-weight:500;line-height:1.5;color:#5b333c;overflow-wrap:anywhere;
+}
+html[data-agent] .son-page-header p:not(.son-heading-company):not(.a3-company-line):not(.eyebrow) {
+  margin:0!important;font-size:14px;line-height:1.6;color:#735c62;max-width:100%;
+}
+html[data-agent] .son-page-header :is(.heading-controls,.forecast-actions){display:flex;flex-wrap:wrap;gap:8px;width:100%;margin:0}
+html[data-agent] body:is(.a2-dark,.cds--g100) .son-page-header.son-illustrated {
+  background:linear-gradient(135deg,#1b1417,#24191d);border-color:#3b282e;border-left-color:#e05268;
+}
+html[data-agent] body:is(.a2-dark,.cds--g100) .son-page-header :is(h1,.son-heading-company,.a3-company-line){color:#f9f3eb}
+html[data-agent] body:is(.a2-dark,.cds--g100) .son-page-header.son-illustrated::after{mix-blend-mode:normal;opacity:.35!important}
+html.in-platform[data-agent="2"] .a2-header .a2-nav{flex-wrap:wrap;overflow:visible;gap:0;align-items:stretch}
+html.in-platform[data-agent="2"] .a2-header .a2-nav a{display:flex;align-items:center;min-height:48px;padding:12px 16px;font-size:14px;font-weight:500;line-height:24px;box-sizing:border-box}
+html[data-agent="1"] .rail nav button{font-size:14px;font-weight:500;line-height:24px;min-height:48px}
+html[data-agent] :is(.paper,.panel){border-radius:14px;border-color:var(--kt-line)}
+@media(max-width:700px){
+ html[data-agent] body .son-page-header.son-illustrated.son-illustrated{padding:16px 18px!important;min-height:0}
+ html[data-agent] .son-page-header :is(.son-heading-copy,.a3-header-main){padding-top:80px}
+ html[data-agent] body .son-page-header.son-illustrated.son-illustrated::after{right:14px;top:10px;transform:none;width:166px!important;height:74px!important}
+ html[data-agent] .son-page-header h1{font-size:24px!important}
+ html[data-agent] .son-page-header :is(.son-heading-company,.a3-company-line){font-size:14px!important}
+}
+
+html[data-agent] .son-page-header .son-heading-copy > .eyebrow{display:inline-flex;align-self:flex-start;padding:2px 8px;border-radius:5px;background:rgb(151 22 45 / 9%);border:1px solid rgb(151 22 45 / 18%)}
+
+/* Embedded navigation remains visible and wraps within the portal at phone widths. */
+html.in-platform[data-agent="3"] body .cds--side-nav.side{visibility:visible!important;transform:none!important;position:relative!important;inset:auto!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;padding:0!important;overflow:visible!important}
+html.in-platform[data-agent="3"] body .side .cds--side-nav__items{display:flex!important;flex-wrap:wrap!important;align-items:stretch;overflow:visible!important;padding:0 14px!important;gap:0!important}
+html.in-platform[data-agent="3"] body .side .cds--side-nav__link{display:flex;align-items:center;min-height:48px;height:48px;padding:12px 14px;font-size:14px;font-weight:500;line-height:24px;box-sizing:border-box}
+@media(max-width:900px){
+ html[data-agent="1"] body .rail{height:auto!important;min-height:0;width:100%;max-width:100%;box-sizing:border-box}
+ html[data-agent="1"] body .rail nav{display:block!important;width:100%;max-width:100%;overflow:visible!important}
+ html[data-agent="1"] body .rail .nav-group{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;max-width:100%;min-width:0;gap:2px;margin:0}
+ html[data-agent="1"] body .rail nav button{width:100%!important;min-width:0;max-width:100%;white-space:normal!important;text-align:left;padding:10px 12px;box-sizing:border-box}
 }

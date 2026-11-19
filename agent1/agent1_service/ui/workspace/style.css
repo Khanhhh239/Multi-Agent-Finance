@@ -1912,3 +1912,11 @@ main { max-width: 1580px; padding: 24px 24px 0; }
   .cash-pagination { flex-wrap:wrap; }
   .cash-pagination span { flex-basis:100%; order:-1; text-align:center; }
 }
+
+/* Embedded assistant uses the portal identity; navigation wraps without page overflow. */
+.in-platform .topbar{display:none!important}
+.in-platform .rail{top:0;height:100vh}
+.in-platform .shell{padding-top:0}
+.overview-grid{grid-template-columns:minmax(0,1fr)}
+.shell,main,.view,.forecast-workbench{min-width:0;max-width:100%}
+@media(max-width:900px){.rail nav,.nav-group{flex-wrap:wrap!important}.rail nav{overflow:visible!important}}
