@@ -263,3 +263,26 @@ Ruff trên `agent4/api.py` và test contract: pass. Không thay đổi Agent 1, 
 - G4: API ASGI non-demo query với claims/policy và smoke artifact đạt contract; external provider latency/failure vẫn OPEN.
 - G8: deny-by-default, policy scope, no demo persona, no wildcard CORS đã có contract test; xác minh Gateway/IdP, session/CSRF và production-origin browser flow vẫn OPEN.
 - G3/G5/G6/G9: Render image, Neon/object artifact, quota và rollback chưa thay đổi.
+
+## Phase 1 implementation evidence — CM-020 Neon bootstrap
+
+Ngày đo: 2026-11-19
+
+Đã thêm migration additive và adapter lazy:
+
+- `database/migrations/001_agent4_cloud_control_plane.sql` bật pgvector, schema `cloud`, tenant/policy/catalog/audit/job-adjacent metadata, immutable warehouse manifest và bounded `vector(4096)` table.
+- `agent4/scripts/migrate_neon.py --dry-run` chỉ in version/size/SHA-256; `--apply` mới đọc `DATABASE_URL`/`NEON_DATABASE_URL`, dùng transaction và kiểm tra checksum đã áp dụng.
+- `agent4/agent4/persistence/neon.py` không mở connection khi import; pool `psycopg_pool` lazy và giới hạn mặc định 1–2 connection. Adapter chỉ ghi bounded metadata, không lưu prompt/SQL/rows/secret.
+
+Evidence:
+
+    ./.venv/bin/pytest -q tests/contracts/test_neon_persistence.py
+    python scripts/migrate_neon.py --dry-run
+
+Kết quả: `4 passed`; dry-run tạo plan cho migration `001`. Chưa có Neon credential/driver trong workspace nên chưa tuyên bố migration/pgvector/pool production pass.
+
+### Gate update
+
+- G5: schema/adapter contract đã có; apply trên Neon branch, pooled connection, storage budget và restore rehearsal vẫn OPEN.
+- G9: checksum mismatch/forward-fix và rollback hướng dẫn đã có; chưa diễn tập branch/snapshot thật.
+- G3/G6/G8: không thay đổi; Render image, object storage, provider quota và transfer budget vẫn OPEN.
