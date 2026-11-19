@@ -516,10 +516,15 @@
     const notes = $("intake-selection-notes");
     notes.hidden = !extras.length;
     notes.replaceChildren(...extras.map((item) => el("li", {}, item.name + " — " + item.message)));
+    // Every selected file is already in the sealed package: nothing to write, so the step is complete rather than stuck.
+    const allRecorded = !ready.length && !rows.length && extras.length > 0 && extras.every((item) => item.done);
     $("intake-summary-agents").textContent = targets.size
       ? "Nghiệp vụ nhận tệp: " + [...targets].map((aid) => AGENT_LABEL[aid]).join(", ")
-      : "Chưa có tệp sẵn sàng để phân phối.";
-    $("intake-next").disabled = !ready.length || Boolean(intakeActivity || pendingCheck());
+      : allRecorded
+        ? "Cả " + extras.length + " tệp đã được ghi trước đó, không cần ghi lại. Bấm tiếp tục để xem lịch sử phiên bản."
+        : "Chưa có tệp sẵn sàng để phân phối.";
+    $("intake-next").dataset.allRecorded = allRecorded ? "1" : "";
+    $("intake-next").disabled = (!ready.length && !allRecorded) || Boolean(intakeActivity || pendingCheck());
     $("reason-field").hidden = !state.package;
     const button = $("commit");
     button.disabled = !ready.length || Boolean(intakeActivity || pendingCheck());
@@ -1785,7 +1790,14 @@
     const button = event.target.closest("[data-intake-stage]");
     if (button && state?.intake.unlocked) showIntakeStage(button.dataset.intakeStage);
   });
-  $("intake-next").addEventListener("click", () => showIntakeStage("confirm", true));
+  $("intake-next").addEventListener("click", () => {
+    if ($("intake-next").dataset.allRecorded) {
+      toast("Các tệp đã có trong gói đã niêm phong; không ghi lại.");
+      showIntakeStage("history", true);
+      return;
+    }
+    showIntakeStage("confirm", true);
+  });
   $("file-input").addEventListener("change", (e) => {
     if (e.target.files.length) upload([...e.target.files]);
     e.target.value = "";
