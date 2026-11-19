@@ -11,6 +11,7 @@ function section(start, end) {
 class Element {
   constructor(tag, text) { this.tag = tag; this.textContent = text; this.children = []; this.attributes = {}; }
   append(...nodes) { nodes.forEach(n => { n.parent = this; this.children.push(n); }); }
+  replaceChildren(...nodes) { this.children = []; this.append(...nodes); }
   setAttribute(key, value) { this.attributes[key] = value; }
   after(node) { node.parent = this.parent; this.parent.children.splice(this.parent.children.indexOf(this) + 1, 0, node); }
   querySelector(selector) {
@@ -242,7 +243,7 @@ test("the row button opens only its saved explanation in a native dialog and cle
   assert.equal(detail.tag, "dialog");
   assert.equal(detail.open, true);
   assert.equal(button.attributes["aria-expanded"], "true");
-  assert.ok(text(detail).includes("37,25%"));
+  assert.ok(text(detail).includes("Tạo kế hoạch mới"));
   detail.children[0].onclick();
   assert.equal(detail.open, false);
   assert.equal(scope.document.body.children.length, 0);
@@ -282,18 +283,13 @@ function rankingExplanation() {
     business_rules: ["Loại xóa nợ; tạm bỏ qua liên hệ chưa đủ 7 ngày."], limitation: "Không phải tiền tăng thêm do liên hệ."};
 }
 
-test("ranking explanation shows its score, peer comparison and distinct probability source", () => {
+test("ranking explanation shows priority and business facts without scores or model metadata", () => {
   const scope = ui(), panel = scope.renderRankingExplanation({ranking_explanation: rankingExplanation()}, {model_version: "NEW"});
   const content = text(panel);
-  for (const expected of ["1/3", "70.000 VND", "50.000 VND", "100.000 VND", "SAVED-RANK-MODEL", "30%", "80%",
-    "khác nguồn", "không áp dụng kịch bản", "Tranh chấp: Có", "Không đổi điểm", "20%", "7 ngày"]) {
+  for (const expected of ["1/3", "100.000 VND", "Tranh chấp: Có", "20%", "số tiền còn phải thu"]) {
     assert.ok(content.includes(expected), expected);
   }
-  const details = panel.children.find(n => n.tag === "details" && n.children[0].textContent === "Vì sao có khả năng tất toán này?");
-  assert.ok(text(details).includes("chưa giải thích toàn bộ thứ tự ưu tiên"));
-  assert.ok(text(details).includes("30%"));
-  assert.ok(!text(details).includes("SHAP"));
-  assert.ok(!text(details).includes("NEW") && !text(details).includes("SAVED-RANK-MODEL"));
+  for (const hidden of ["70.000 VND", "50.000 VND", "SAVED-RANK-MODEL", "Công thức", "Nguồn xác suất", "SHAP", "Không đổi điểm"]) assert.ok(!content.includes(hidden), hidden);
   assert.ok(!panel.children.some(n => n.tag === "script"));
 });
 
@@ -302,9 +298,10 @@ test("score ties and amount-only policies do not invent probability-based orderi
   e.next.tied = true; e.next.score = e.score; e.tie_break = {group_size: 2, position: 1};
   e.policy = "amount"; e.uses_probability = false; delete e.probability_explanation;
   const content = text(ui().renderRankingExplanation({ranking_explanation: e}, {}));
-  assert.ok(content.includes("Cùng điểm"));
-  assert.ok(content.includes("thứ tự bản ghi"));
-  assert.ok(content.includes("các xác suất không tham gia điểm"));
+  assert.ok(content.includes("Cùng mức ưu tiên"));
+  assert.ok(content.includes("Thứ tự được giữ"));
+  assert.ok(content.includes("còn phải thu nhiều tiền hơn"));
+  assert.ok(!content.includes("nguy cơ khách chưa trả hết"));
   assert.ok(!content.includes("vì điểm cao hơn"));
 });
 
@@ -312,7 +309,7 @@ test("ranking has its own dialog and old forecasts remain readable", () => {
   const scope = ui(), e = rankingExplanation();
   const table = scope.renderCollections({collections: [{invoice_id: "I1", priority_score: 70000,
     collection_rank: 1, payment_probability_4w: 0.8, ranking_explanation: e}], collection_ranking: {score_unit: "VND"}});
-  table.querySelector("tbody").children[0].children.at(-2).children[0].onclick();
+  table.querySelector("tbody").children[0].children.at(-1).children[0].onclick();
   const dialog = scope.document.body.children[0];
   assert.equal(dialog.id, "ranking-explanation-0");
   assert.ok(text(dialog).includes("Vì sao khoản này được ưu tiên trước"));
@@ -324,7 +321,7 @@ test("policy summary shows eligibility counts and audit status without claiming 
   const p = {label: "Dư nợ lớn trước", displayed_count: 30, eligible_count: 40, formula: "Dư nợ",
     selection: {message: "Chưa đủ lịch sử kiểm định."}, eligibility: {writeoff_excluded: 2, recent_contact_or_skip_excluded: 3}};
   const content = text(ui().renderCollectionPolicy(p));
-  for (const expected of ["30/40", "Chưa đủ lịch sử", "2 khoản đã xóa nợ", "3 khoản vừa liên hệ"]) assert.ok(content.includes(expected));
+  for (const expected of ["30/40", "2 khoản đã xóa nợ", "3 khoản vừa liên hệ"]) assert.ok(content.includes(expected));
 });
 
 test("large VND and fractional priority scores retain their digits in the table and explanation", () => {
@@ -333,8 +330,8 @@ test("large VND and fractional priority scores retain their digits in the table 
   e.factors[0].value = "9007199254741009";
   const content = text(scope.renderRankingExplanation({ranking_explanation: e}, {}));
   assert.ok(content.includes("9.007.199.254.741.009 VND"));
-  assert.ok(content.includes("9.007.199.254.741.008 VND"));
-  assert.ok(!content.includes("Cùng điểm"));
+  assert.ok(!content.includes("9.007.199.254.741.008 VND"));
+  assert.ok(!content.includes("Cùng mức ưu tiên"));
   assert.equal(scope.rankingNumber("4503599627370504.5", "VND"), "4.503.599.627.370.504,5 VND");
   assert.equal(scope.rankingNumber("9999999999999999.999", "VND"), "10.000.000.000.000.000 VND");
   const table = scope.renderCollections({collections: [{invoice_id: "LARGE", outstanding: "9007199254741009",
@@ -357,4 +354,18 @@ test("an empty contact queue distinguishes deferred debt, no debt and legacy unk
   deferred.collection_ranking.eligibility.open_before_rules = 4;
   deferred.collection_ranking.eligibility.writeoff_excluded = 1;
   assert.ok(text(scope.renderCollections(deferred)).includes("Còn 3 hóa đơn đang mở"));
+});
+
+test("future promises appear in a separate waiting group without a contact rank", () => {
+  const scope = ui();
+  const data = {collections:[{invoice_id:"DUE", outstanding:100, payment_probability_4w:.5, contact_status:"promise_due_today"}],
+    collection_ranking:{waiting_for_promise:[{invoice_id:"WAIT", customer_id:"C", outstanding:"9007199254741009",
+      promised_date:"2026-11-26", contact_on:"2026-11-26"}]}};
+  const panel = scope.renderCollections(data);
+  assert.ok(text(panel.children[0]).includes("DUE"));
+  assert.ok(!text(panel.children[0]).includes("WAIT"));
+  assert.ok(text(panel.children[1]).includes("Chờ ngày khách hứa (1)"));
+  assert.ok(text(panel.children[1]).includes("2026-11-26"));
+  assert.ok(text(panel.children[1]).includes("9.007.199.254.741.009 VND"));
+  assert.ok(text(scope.renderCollections({...data, collections:[]})).includes("Chưa có khoản cần liên hệ hôm nay"));
 });

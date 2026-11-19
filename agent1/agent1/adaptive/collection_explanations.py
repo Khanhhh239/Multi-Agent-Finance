@@ -2,8 +2,9 @@
 
 from collections import Counter
 from decimal import Decimal, InvalidOperation, localcontext
+from datetime import date as calendar_date
 
-PROTOCOL = "collection-ranking-v2"
+PROTOCOL = "collection-ranking-v3"
 POLICIES = {
     "amount": {
         "label": "Dư nợ lớn trước",
@@ -119,32 +120,58 @@ def rank_with_explanations(
     limit=30,
     probability_source=None,
 ):
-    """Retain descending score and the original snapshot order for exact ties.
+    """Schedule contacts by promises, then rank within each contact group.
 
-    The live triage estimator is always a separate customer-history baseline
-    fitted at the forecast cutoff, without the displayed forecast's delay shift.
-    Dispute/promise flags are workflow context, not extra score adjustments.
+    Future promises wait until their agreed date. Missed promises precede
+    promises due today, followed by the remaining eligible invoices. Policy
+    scores retain their original meaning and break ties within these groups.
     """
     requested_policy = policy
     policy = policy if policy in POLICIES else "amount"
     spec = POLICIES[policy]
+    today = calendar_date.fromisoformat(cutoff)
+    waiting, eligible = [], []
+    for original in rows:
+        row = dict(original)
+        promised = row.get("promised_date")
+        days = (today - calendar_date.fromisoformat(promised)).days if promised else None
+        row["contact_status"] = (
+            "waiting_for_promise" if days is not None and days < 0
+            else "promise_overdue" if days is not None and days > 0
+            else "promise_due_today" if days == 0 else "contact"
+        )
+        row["contact_on"] = promised if days is not None and days < 0 else cutoff
+        row["promise_overdue_days"] = max(0, days or 0)
+        if row["contact_status"] == "waiting_for_promise":
+            row["outstanding"] = _number(Decimal(str(row["outstanding"])))
+            row["reason"] = "Chờ ngày khách hứa"
+            row["collection_rank"] = None
+            waiting.append(row)
+        else:
+            eligible.append(row)
+    waiting.sort(key=lambda row: row["promised_date"])
+
+    def contact_group(row):
+        return {"promise_overdue": 0, "promise_due_today": 1}.get(row["contact_status"], 2)
+
     try:
         scored = sorted(
-            ((row, _score(row, policy)) for row in rows),
-            key=lambda pair: pair[1],
-            reverse=True,
+            ((row, _score(row, policy)) for row in eligible),
+            key=lambda pair: (contact_group(pair[0]), pair[1].copy_negate()),
         )
     except InvalidOperation as exc:
         raise ValueError("Điểm xếp hạng thu nợ phải hữu hạn") from exc
     ranked = [row for row, _ in scored]
     scores = [score for _, score in scored]
-    ties, seen = Counter(scores), Counter()
+    ties = Counter((contact_group(row), score) for row, score in scored)
+    seen = Counter()
     selection = _selection(policy, requested_policy, evaluation, has_serving_model)
     rules = [
         "Loại hóa đơn đã ghi nhận xóa nợ tại ngày dự báo.",
-        "Tạm loại hóa đơn có lần liên hệ hoặc tạm bỏ qua gần nhất chưa đủ 7 ngày.",
-        "Tranh chấp, lời hứa và ngày quá hạn không cộng/trừ điểm riêng.",
-        "Điểm giảm dần; khi bằng điểm giữ thứ tự bản ghi trong snapshot dữ liệu.",
+        "Khoản chưa có ngày hứa được tạm hoãn 7 ngày sau lần liên hệ hoặc tạm bỏ qua.",
+        "Chưa đến ngày hứa: chờ đúng ngày khách hứa để liên hệ.",
+        "Ưu tiên khoản trễ hẹn, tiếp theo là khoản đến ngày hứa hôm nay.",
+        "Trong cùng nhóm liên hệ, xếp theo điểm giảm dần; bằng điểm giữ thứ tự đã lưu.",
     ]
     meta = {
         "protocol": PROTOCOL,
@@ -156,6 +183,8 @@ def rank_with_explanations(
         "selection": selection,
         "eligible_count": len(ranked),
         "displayed_count": min(limit, len(ranked)),
+        "waiting_for_promise": waiting,
+        "waiting_count": len(waiting),
         "limit": limit,
         "eligibility": eligibility or {},
         "business_rules": rules,
@@ -163,7 +192,8 @@ def rank_with_explanations(
     }
     for i, row in enumerate(ranked[:limit]):
         score = scores[i]
-        seen[score] += 1
+        tie_key = (contact_group(row), score)
+        seen[tie_key] += 1
         row["outstanding"] = _number(Decimal(str(row["outstanding"])))
         row["amount_at_risk_4w"] = _number(_score(row, "amount_at_risk"))
         date = row.get("promised_date")
@@ -238,7 +268,7 @@ def rank_with_explanations(
                 "state": promise_state,
                 "reliability": row.get("promise_reliability"),
                 "affects_score": False,
-                "message": "Kiểm tra lời hứa đã đến hạn; không đổi điểm."
+                "message": "Liên hệ theo ngày hứa đã đến hạn."
                 if promise_state in ("overdue", "due_today")
                 else "Theo dõi ngày hứa; chưa đến hạn và không đổi điểm."
                 if promise_state == "upcoming"
@@ -257,7 +287,7 @@ def rank_with_explanations(
                 "rank": index + 1,
                 "score": _number(scores[index], spec["score_unit"]),
                 "score_difference": _number(difference, spec["score_unit"]),
-                "tied": reference_score == scores[index],
+                "tied": contact_group(row) == contact_group(ranked[index]) and reference_score == scores[index],
             }
 
         row.update(
@@ -267,18 +297,19 @@ def rank_with_explanations(
             priority_policy=policy,
         )
         row["reason"] = (
-            "Chờ giải quyết tranh chấp"
-            if row.get("disputed")
-            else "Kiểm tra lời hứa đã đến hạn"
-            if promise_state in ("overdue", "due_today")
-            else spec["label"]
+            f'Trễ hẹn {row["promise_overdue_days"]} ngày'
+            if promise_state == "overdue" else "Đến ngày khách hứa hôm nay"
+            if promise_state == "due_today" else spec["label"]
         )
+        if row.get("disputed"):
+            row["reason"] += " · Cần giải quyết tranh chấp"
         row["ranking_explanation"] = {
             "protocol": PROTOCOL,
             "cutoff": cutoff,
             "policy": policy,
             **spec,
             "rank": i + 1,
+            "contact_status": row["contact_status"],
             "eligible_count": len(ranked),
             "score": _number(score, spec["score_unit"]),
             "selection": selection,
@@ -289,8 +320,8 @@ def rank_with_explanations(
             "factors": factors,
             "tie_break": {
                 "rule": "snapshot_order",
-                "group_size": ties[score],
-                "position": seen[score],
+                "group_size": ties[tie_key],
+                "position": seen[tie_key],
             },
             "previous": peer(i - 1),
             "next": peer(i + 1),

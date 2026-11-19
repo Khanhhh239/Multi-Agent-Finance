@@ -191,28 +191,57 @@ test("moving from Agent 1 to shared intake leaves its current view intact", () =
   assert.deepEqual(calls, ["data"]);
 });
 
-test("a record shortcut selects its own menu item and URL", () => {
+test("record shortcuts stay scoped with their own import history; the legacy catalog route still opens all history", () => {
   function button(view, table) {
     return {dataset:{view, table}, classList:{toggle() {}},
       setAttribute(name, value) { this[name] = value; }, removeAttribute(name) { delete this[name]; }};
   }
-  const buttons = [button("records"), button("records", "bank"), button("records", "outflows")];
-  const kind = {value:"invoices", options:[{value:"bank"}, {value:"outflows"}]};
+  const buttons = [button("records", "invoices"), button("records", "outflows"), button("records", "bank")];
+  const elements = new Map();
+  const $ = id => {
+    if (!elements.has(id)) elements.set(id, {replaceChildren(...options) { this.options = options; }});
+    return elements.get(id);
+  };
+  const kind = $("records-kind");
   const location = {hash:"#overview"};
-  let resets = 0;
-  const scope = {Object, location, currentView:"overview", titles:{records:"Sổ dữ liệu"}, token:"", connected:false,
+  const requests = [];
+  const window = {scrollTo() {}};
+  window.parent = window;
+  const scope = {Object, location, currentView:"overview", recordsRoute:"", titles:{records:"Sổ dữ liệu"}, token:"", connected:true,
     document:{querySelectorAll: selector => selector === ".view" ? [] : buttons},
-    $: id => id === "records-kind" ? kind : {}, history:{pushState(_state, _title, url) { location.hash = url; }},
-    drawVisibleChart() {}, updateRecordLinks() {}, resetRecordFilters() { resets++; }, window:{scrollTo() {}}};
+    $, labels:{}, Option:function(_text, value) { this.value = value; },
+    history:{pushState(_state, _title, url) { location.hash = url; }},
+    action: load => load(), loadRecords: () => requests.push(kind.value), loadImportHistory: () => requests.push("imports"),
+    drawVisibleChart() {}, updateRecordLinks() {}, resetRecordFilters() {}, window};
   vm.createContext(scope);
   vm.runInContext(section(agentSource, "  function switchView(", "  function openIntake("), scope);
-  for (const [index, table] of [[1, "bank"], [2, "outflows"]]) {
+  vm.runInContext(section(agentSource, "  const recordSections =", "  function recordLink("), scope);
+  const receivables = ["invoices", "payments", "actions", "invoice_events"];
+  for (const [index, table, expectedOptions, title] of [
+    [0, "invoices", receivables, "Công nợ (AR)"],
+    [0, "actions", receivables, "Công nợ (AR)"],
+    [2, "bank", ["bank", "statements"], "Sao kê tài khoản"],
+    [2, "statements", ["bank", "statements"], "Sao kê tài khoản"],
+    [1, "outflows", ["outflows", "expense_payments"], "Lịch chi (AP)"],
+  ]) {
     scope.switchView("records/" + table);
     assert.equal(location.hash, "#records/" + table);
     assert.equal(kind.value, table);
+    assert.deepEqual(kind.options.map(option => option.value), expectedOptions);
+    assert.equal($("records-title").textContent, title);
+    assert.equal($("import-history").hidden, false);
+    assert.equal($("records-results").hidden, false);
     assert.deepEqual(buttons.map(item => item["aria-current"]), buttons.map((_, i) => i === index ? "page" : undefined));
   }
-  assert.equal(resets, 2);
+  scope.switchView("records");
+  assert.equal(location.hash, "#records");
+  assert.deepEqual(buttons.map(item => item["aria-current"]), buttons.map(() => undefined));
+  assert.equal(kind.value, "");
+  assert.equal(kind.options.length, 9);
+  assert.equal($("records-title").textContent, "Sổ dữ liệu");
+  assert.equal($("records-results").hidden, true);
+  assert.equal($("import-history").hidden, false);
+  assert.deepEqual(requests, ["invoices", "imports", "actions", "imports", "bank", "imports", "statements", "imports", "outflows", "imports", "imports"]);
 });
 
 test("manual allocation sends VND text without rounding through a JavaScript number", async () => {

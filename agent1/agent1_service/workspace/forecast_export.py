@@ -206,6 +206,8 @@ def workbook_bytes(plan, company):
             ("overdue_days", "Ngày quá hạn"),
             ("due_date", "Hạn trả"),
             ("promised_date", "Ngày hứa trả"),
+            ("contact_on", "Ngày liên hệ"),
+            ("promise_overdue_days", "Trễ hẹn (ngày)"),
             ("promise_reliability", "Độ tin cậy lời hứa"),
             ("disputed", "Tranh chấp"),
             ("payment_probability_4w", "Xác suất tất toán 4 tuần"),
@@ -234,6 +236,13 @@ def workbook_bytes(plan, company):
             for row in plan.get("collections", [])
         ),
     )
+    waiting = (plan.get("collection_ranking") or {}).get("waiting_for_promise", [])
+    if waiting:
+        _write_table(workbook.create_sheet("Chờ ngày khách hứa"), [
+            ("invoice_id", "Hóa đơn"), ("customer_id", "Khách hàng"),
+            ("outstanding", "Còn phải thu (VND)"), ("promised_date", "Ngày hứa trả"),
+            ("contact_on", "Ngày liên hệ"), ("reason", "Trạng thái"),
+        ], waiting)
     if decomposition:
         _cash_sheets(workbook, decomposition)
     if plan.get("t10"):

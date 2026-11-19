@@ -1714,7 +1714,8 @@ main { max-width: 1580px; padding: 24px 24px 0; }
 .paper { border-radius: 6px; box-shadow: none; }
 .records-filter { display:flex; flex-wrap:wrap; align-items:end; gap:12px; margin-bottom:16px; }
 .records-filter label { flex:1 1 145px; margin:0; }
-.records-filter label:nth-child(2) { flex:2 1 240px; }
+.records-search { display:contents; }
+.records-search label:first-child { flex:2 1 240px; }
 .records-filter .button { min-height:44px; }
 .records-pagination { display:flex; align-items:center; justify-content:flex-end; flex-wrap:wrap; gap:12px; margin-top:12px; }
 .record-links { display:flex; flex-wrap:wrap; gap:8px 20px; }
