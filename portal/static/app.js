@@ -403,7 +403,7 @@
   function renderOverview() {
     const c = state.company;
     $("h-overview").textContent = c.legal_name || "Sổ Son";
-    $("overview-company-fullname").textContent = "Không gian kế toán số";
+    $("overview-company-fullname").textContent = "Dòng tiền, giám sát, thuế và hỏi đáp trong cùng một không gian làm việc.";
     const running = state.agents.filter(a => a.state === "running").length;
     $("exec-agents-val").textContent = running + " / 4 phân hệ sẵn sàng";
     $("exec-sec-val").textContent = state.intake.unlocked ? "Phiên đang mở khóa" : "Đã khóa bảo vệ";
@@ -413,9 +413,11 @@
     $("agent-grid").dataset.signature = signature;
     $("agent-grid").replaceChildren(...state.agents.map(a => {
       const info = WORKSTATION_INFO[a.id];
+      const icon = el("span", {class:"ws-assistant-icon", "aria-hidden":"true"});
+      icon.innerHTML = info.icon;
       return el("a", {class:"workstation-card ws-theme-"+a.id,href:"#"+a.id},
-        el("div",{class:"ws-card-top"},el("span",{class:"ws-num-watermark"},a.number),el("span",{class:"ws-status-pill"},a.state === "running" ? "Sẵn sàng" : STATE_TEXT[a.state])),
-        el("h3",{class:"ws-title"},info.title),el("p",{class:"ws-desc"},info.desc),el("span",{class:"ws-enter-label"},"Mở"));
+        el("div",{class:"ws-card-top"},icon,el("span",{class:"ws-status-pill"},a.state === "running" ? "Sẵn sàng" : STATE_TEXT[a.state])),
+        el("h3",{class:"ws-title"},info.title),el("p",{class:"ws-desc"},info.desc),el("span",{class:"ws-enter-label"},"Mở trợ lý",el("span",{"aria-hidden":"true"},"→")));
     }));
   }
 

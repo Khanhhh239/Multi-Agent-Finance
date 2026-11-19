@@ -88,12 +88,53 @@
     toolTabs();
     const root = document.documentElement;
     const agent = root.dataset.agent;
-    const headings = agent ? document.querySelectorAll('main h1, #main h1, .intro h1, #app h1') : document.querySelectorAll('#view-config .profile-heading, #intake .page-head');
+    const headings = agent ? document.querySelectorAll('main h1, #main h1, .intro h1, #app h1, .a2-hero h1') : document.querySelectorAll('#view-config .profile-heading, #intake .page-head');
     for (const heading of headings) {
-      if (heading.id === 'h-data' || heading.closest('[role="dialog"], dialog')) continue;
-      const banner = heading.closest('.page-heading') || heading;
+      if (heading.id === 'h-data' || heading.closest('[role="dialog"], dialog, .drawer, .empty')) continue;
+      let banner = heading.closest('.page-heading, .intro, .a2-hero, .son-page-header');
+      if (!banner && ['1', '2', '3'].includes(agent)) {
+        banner = document.createElement('div');
+        banner.className = 'son-page-header';
+        const description = heading.nextElementSibling;
+        heading.before(banner);
+        banner.append(heading);
+        if (description?.matches('p:not(.notice):not([role])')) banner.append(description);
+      }
+      banner ||= heading;
       if (banner !== heading) heading.classList.remove('son-illustrated');
       banner.classList.add('son-illustrated');
+      if (!['1', '2', '3'].includes(agent)) continue;
+      banner.classList.add('son-page-header');
+      let copy = banner.querySelector(':scope > .son-heading-copy, :scope > .a3-header-main');
+      if (!copy) {
+        const parent = heading.parentElement;
+        if (parent !== banner && parent.parentElement === banner) {
+          copy = parent;
+          copy.classList.add('son-heading-copy');
+        } else {
+          copy = document.createElement('div');
+          copy.className = 'son-heading-copy';
+          const content = [...banner.children].filter(el => el === heading || el.matches('.eyebrow, p, .lead'));
+          banner.prepend(copy);
+          for (const el of content) copy.append(el);
+        }
+      }
+      if (!copy.querySelector('.eyebrow')) {
+        const eyebrow = document.createElement('div');
+        eyebrow.className = 'eyebrow son-heading-eyebrow';
+        eyebrow.textContent = agent === '1' ? 'TRỢ LÝ DÒNG TIỀN' : agent === '2' ? 'TRỢ LÝ GIÁM SÁT' : 'TRỢ LÝ THUẾ';
+        copy.prepend(eyebrow);
+      }
+      if (agent !== '3') {
+        const selected = document.querySelector('#ws-company, #company, #bw-company');
+        const company = agent === '1' ? document.getElementById('company-name')?.textContent?.trim()
+          : selected?.selectedOptions?.[0]?.value ? selected.selectedOptions[0].textContent.trim() : '';
+        let line = copy.querySelector('.son-heading-company');
+        if (company && !/^(Doanh nghiệp của bạn|Chọn doanh nghiệp)/i.test(company)) {
+          if (!line) { line = document.createElement('p'); line.className = 'son-heading-company'; heading.after(line); }
+          if (line.textContent !== company) line.textContent = company;
+        } else if (line) line.remove();
+      }
     }
     if (root.classList.contains('in-platform')) {
       const navigation = document.querySelector('[data-agent="1"] .nav-more');
@@ -169,7 +210,7 @@
     skip.className = 'a2-skip'; skip.href = '#' + main.id; skip.textContent = 'Đến nội dung chính';
     document.body.prepend(skip);
     const brand = header.querySelector('.brand');
-    if (brand) { brand.textContent = 'Agent 2 · Kiểm tra giao dịch'; brand.classList.add('a2-brand'); }
+    if (brand) { brand.textContent = 'Trợ lý Giám sát'; brand.classList.add('a2-brand'); }
     let nav = header.querySelector('nav');
     if (!nav) { nav = document.createElement('nav'); header.append(nav); }
     nav.classList.add('a2-nav'); nav.id = 'a2-navigation'; nav.setAttribute('aria-label', 'Chức năng Agent 2');
@@ -177,10 +218,11 @@
     const page = a => new URL(a.href, location.href).pathname.replace(/\/+$/, '').split('/').pop();
     const here = location.pathname.replace(/\/+$/, '').split('/').pop() ||
       (document.getElementById('bw-company') ? 'pipeline-workspace' : 'data-import');
-    const primary = [['pipeline-workspace', 'Việc cần kiểm tra'], ['data-import', 'Nhập dữ liệu'], ['workspace', 'Kết quả và công việc']];
+    const primary = [['data-import', 'Nhập dữ liệu'], ['workspace', 'Kết quả và công việc']];
     const extras = { 'status': 'T\u00ecnh tr\u1ea1ng h\u1ec7 th\u1ed1ng', 'encrypted-analysis': 'Phân tích bảo mật', 'label-verification': 'Xác nhận kết quả giao dịch',
       'batch-training': 'Hướng dẫn hệ thống học', 'pipeline-releases': 'Quản lý phiên bản phân tích', 'analysis-settings': 'Thiết lập phân tích' };
     if (extras[here] && ![...nav.querySelectorAll('a[href]')].some(a => page(a) === here)) { const self = document.createElement('a'); self.href = here + location.hash; self.textContent = extras[here]; nav.append(self); }
+    for (const link of nav.querySelectorAll('a[href]')) if (page(link) === 'pipeline-workspace') link.remove();
     let previous = null;
     for (const [route, label] of primary) {
       let link = [...nav.querySelectorAll('a[href]')].find(a => page(a) === route);

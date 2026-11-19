@@ -88,12 +88,53 @@
     toolTabs();
     const root = document.documentElement;
     const agent = root.dataset.agent;
-    const headings = agent ? document.querySelectorAll('main h1, #main h1, .intro h1, #app h1') : document.querySelectorAll('#view-config .profile-heading, #intake .page-head');
+    const headings = agent ? document.querySelectorAll('main h1, #main h1, .intro h1, #app h1, .a2-hero h1') : document.querySelectorAll('#view-config .profile-heading, #intake .page-head');
     for (const heading of headings) {
-      if (heading.id === 'h-data' || heading.closest('[role="dialog"], dialog')) continue;
-      const banner = heading.closest('.page-heading') || heading;
+      if (heading.id === 'h-data' || heading.closest('[role="dialog"], dialog, .drawer, .empty')) continue;
+      let banner = heading.closest('.page-heading, .intro, .a2-hero, .son-page-header');
+      if (!banner && ['1', '2', '3'].includes(agent)) {
+        banner = document.createElement('div');
+        banner.className = 'son-page-header';
+        const description = heading.nextElementSibling;
+        heading.before(banner);
+        banner.append(heading);
+        if (description?.matches('p:not(.notice):not([role])')) banner.append(description);
+      }
+      banner ||= heading;
       if (banner !== heading) heading.classList.remove('son-illustrated');
       banner.classList.add('son-illustrated');
+      if (!['1', '2', '3'].includes(agent)) continue;
+      banner.classList.add('son-page-header');
+      let copy = banner.querySelector(':scope > .son-heading-copy, :scope > .a3-header-main');
+      if (!copy) {
+        const parent = heading.parentElement;
+        if (parent !== banner && parent.parentElement === banner) {
+          copy = parent;
+          copy.classList.add('son-heading-copy');
+        } else {
+          copy = document.createElement('div');
+          copy.className = 'son-heading-copy';
+          const content = [...banner.children].filter(el => el === heading || el.matches('.eyebrow, p, .lead'));
+          banner.prepend(copy);
+          for (const el of content) copy.append(el);
+        }
+      }
+      if (!copy.querySelector('.eyebrow')) {
+        const eyebrow = document.createElement('div');
+        eyebrow.className = 'eyebrow son-heading-eyebrow';
+        eyebrow.textContent = agent === '1' ? 'TRỢ LÝ DÒNG TIỀN' : agent === '2' ? 'TRỢ LÝ GIÁM SÁT' : 'TRỢ LÝ THUẾ';
+        copy.prepend(eyebrow);
+      }
+      if (agent !== '3') {
+        const selected = document.querySelector('#ws-company, #company, #bw-company');
+        const company = agent === '1' ? document.getElementById('company-name')?.textContent?.trim()
+          : selected?.selectedOptions?.[0]?.value ? selected.selectedOptions[0].textContent.trim() : '';
+        let line = copy.querySelector('.son-heading-company');
+        if (company && !/^(Doanh nghiệp của bạn|Chọn doanh nghiệp)/i.test(company)) {
+          if (!line) { line = document.createElement('p'); line.className = 'son-heading-company'; heading.after(line); }
+          if (line.textContent !== company) line.textContent = company;
+        } else if (line) line.remove();
+      }
     }
     if (root.classList.contains('in-platform')) {
       const navigation = document.querySelector('[data-agent="1"] .nav-more');
