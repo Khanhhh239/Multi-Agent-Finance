@@ -106,6 +106,34 @@ def bundle(partial_probability=0.0):
     }
 
 
+@pytest.mark.parametrize("promised, status", [
+    ("2026-02-17", "waiting_for_promise"),
+    ("2026-02-10", "promise_due_today"),
+    ("2026-02-09", "promise_overdue"),
+])
+def test_promise_contact_schedule_keeps_all_cash_receipts(book, promised, status):
+    options = dict(horizon_weeks=4, simulation_paths=100, shap_limit=0)
+    before = forecast(book, CUTOFF, 100, bundle(), **options)
+    book["actions"].append(dict(event_id="PROMISE", invoice_id="A", date="2026-02-08",
+        known_at="2026-02-08", kind="promise", promise_date=promised))
+    after = forecast(book, CUTOFF, 100, bundle(), **options)
+    waiting = after["collection_ranking"]["waiting_for_promise"]
+    if status == "waiting_for_promise":
+        assert "A" not in {r["invoice_id"] for r in after["collections"]}
+        assert waiting[0]["invoice_id"] == "A"
+        assert waiting[0]["contact_on"] == promised
+    else:
+        assert after["collections"][0]["invoice_id"] == "A"
+        assert after["collections"][0]["contact_status"] == status
+        assert not waiting
+    assert after["outstanding"] == before["outstanding"]
+    assert after["cash_decomposition"]["invoices"] == before["cash_decomposition"]["invoices"]
+    np.testing.assert_allclose([r["cash_in"] for r in after["weeks"]], [r["cash_in"] for r in before["weeks"]])
+    if waiting:
+        wb = load_workbook(BytesIO(workbook_bytes(after, "TEST")))
+        assert wb["Chờ ngày khách hứa"].cell(2, 1).value == "A"
+
+
 def test_full_ledger_contributions_reconcile_to_served_path_and_do_not_follow_queue(
     book,
 ):
@@ -524,19 +552,19 @@ def test_browser_cash_breakdown_filters_groups_and_compares_on_desktop_and_mobil
                 playwright.expect(page.locator("#connection-state")).to_contain_text(
                     "Đã kết nối"
                 )
-                page.locator(".history-menu > summary").click()
-                page.locator("#saved-plans").click()
-                page.locator("#plans-list button").first.click()
+                page.route("**/v1/predict", lambda route: route.fulfill(status=200, json=response.json()))
+                page.locator("#forecast-cutoff").fill("10-02-26")
+                page.locator("#opening-balance").fill("100")
+                page.locator("#horizon-weeks").fill("4")
+                page.locator("#forecast-complete").check()
+                page.locator("#forecast-submit").click()
                 panel = page.locator("#cash-decomposition")
-                playwright.expect(panel).to_contain_text("Vì sao dự kiến thu được tiền?")
+                playwright.expect(panel).to_contain_text("Dự thu từng hóa đơn theo tuần")
                 playwright.expect(panel).to_contain_text("Nếu khách trả chậm hoặc dời khoản chi?")
                 playwright.expect(panel).to_contain_text("không giới hạn 30")
-                playwright.expect(panel).to_contain_text("Bảng hiển thị số tiền kỳ vọng thu từ công nợ đang mở tại ngày chốt.")
+                playwright.expect(panel).to_contain_text("Danh sách xếp theo số tiền dự thu từ cao xuống thấp.")
                 playwright.expect(panel.get_by_text("Bán chịu mới", exact=False)).to_have_count(0)
-                audit = page.locator("#collection-policy details")
-                assert audit.get_attribute("open") is None
-                audit.locator("summary").click()
-                playwright.expect(audit).to_contain_text("Điểm =")
+                playwright.expect(page.locator("#collection-policy")).not_to_contain_text("Điểm =")
                 expected_dates = {
                     week["date"][8:10] + "-" + week["date"][5:7] + "-" + week["date"][2:4]
                     for week in response.json()["weeks"]
@@ -554,22 +582,22 @@ def test_browser_cash_breakdown_filters_groups_and_compares_on_desktop_and_mobil
                 page.get_by_label("Tìm khoản dự thu").fill("")
                 page.get_by_label("Kỳ phân rã dòng tiền").select_option("1")
                 panel.get_by_text(
-                    "Lịch chi đã biết và số tiền sau kịch bản", exact=True
+                    "Lịch chi và số tiền đưa vào dự báo", exact=True
                 ).click()
-                expenses = panel.get_by_text("Lịch chi đã biết và số tiền sau kịch bản", exact=True).locator("..")
+                expenses = panel.get_by_text("Lịch chi và số tiền đưa vào dự báo", exact=True).locator("..")
                 playwright.expect(expenses).to_contain_text("E1")
                 assert "E2" not in expenses.inner_text()
-                panel.get_by_text("Vì sao dự kiến thu được tiền?", exact=True).click()
+                panel.get_by_text("Dự thu từng hóa đơn theo tuần", exact=True).click()
                 page.get_by_label("Hóa đơn cần xem cách dự thu").select_option("A")
-                playwright.expect(panel).to_contain_text("Dư nợ tại ngày chốt 800 VND")
+                playwright.expect(panel).to_contain_text("Dư nợ tại ngày chốt: 800 VND")
                 panel.get_by_text("Nếu khách trả chậm hoặc dời khoản chi?", exact=True).click()
                 page.get_by_label("Khách trả chậm", exact=True).select_option("C1")
                 page.get_by_label("Số tuần trả chậm thêm").fill("2")
                 page.get_by_label("Khoản chi cần dời", exact=True).select_option("E1")
                 page.get_by_label("Số tuần dời chi thêm").fill("1")
                 page.get_by_role("button", name="So sánh với kế hoạch đã lưu", exact=True).click()
-                playwright.expect(panel).to_contain_text("Khả năng thiếu tiền ít nhất một tuần")
-                playwright.expect(panel).to_contain_text("Δ P50")
+                playwright.expect(panel).to_contain_text("Nguy cơ thiếu tiền trong kỳ")
+                playwright.expect(panel).not_to_contain_text("Δ P50")
                 assumptions = page.get_by_label("Giả định của kết quả kịch bản", exact=True)
                 saved_summary = "Khách C1 trả chậm thêm 2 tuần; Khoản chi E1 dời thêm 1 tuần."
                 playwright.expect(assumptions).to_contain_text(saved_summary)

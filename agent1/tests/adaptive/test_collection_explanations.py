@@ -71,7 +71,7 @@ def test_each_policy_reports_its_actual_score_and_comparison(
         }
 
 
-def test_disputes_promises_and_overdue_flags_do_not_invent_score_adjustments(rows):
+def test_promises_schedule_contacts_without_changing_policy_scores(rows):
     plain, _ = rank_with_explanations(
         deepcopy(rows), policy="amount_at_risk", cutoff="2026-11-11"
     )
@@ -83,19 +83,25 @@ def test_disputes_promises_and_overdue_flags_do_not_invent_score_adjustments(row
     )
     rows[1].update(promised_date="2026-11-11")
     rows[2].update(promised_date="2026-11-12")
-    flagged, _ = rank_with_explanations(
+    flagged, meta = rank_with_explanations(
         rows, policy="amount_at_risk", cutoff="2026-11-11"
     )
-    assert [(r["invoice_id"], r["priority_score"]) for r in plain] == [
-        (r["invoice_id"], r["priority_score"]) for r in flagged
-    ]
+    assert [r["invoice_id"] for r in flagged] == ["A", "C"]
+    original_scores = {r["invoice_id"]: r["priority_score"] for r in plain}
+    assert all(r["priority_score"] == original_scores[r["invoice_id"]] for r in flagged)
+    waiting = meta["waiting_for_promise"]
+    assert [r["invoice_id"] for r in waiting] == ["B"]
+    assert waiting[0]["contact_on"] == "2026-11-12"
+    assert waiting[0]["contact_status"] == "waiting_for_promise"
+    assert flagged[0]["promise_overdue_days"] == 1
+    assert "Trễ hẹn 1 ngày" in flagged[0]["reason"]
+    assert flagged[1]["contact_status"] == "promise_due_today"
     factors = {
         r["invoice_id"]: {f["feature"]: f for f in r["ranking_explanation"]["factors"]}
         for r in flagged
     }
     assert factors["A"]["promised_date"]["state"] == "overdue"
     assert factors["C"]["promised_date"]["state"] == "due_today"
-    assert factors["B"]["promised_date"]["state"] == "upcoming"
     assert factors["A"]["promised_date"]["reliability"] == 0.2
     assert factors["A"]["disputed"]["value"] is True
     assert all(
@@ -119,6 +125,22 @@ def test_ties_keep_snapshot_order_and_compare_to_candidate_beyond_display_limit(
     assert last["next"]["invoice_id"] == candidates[30]["invoice_id"]
     assert last["tie_break"]["group_size"] == 32 and last["tie_break"]["position"] == 30
     assert last["next"]["tied"] and last["next"]["score_difference"] == 0
+
+
+def test_waiting_promises_do_not_use_contact_slots_and_release_on_the_agreed_day(rows):
+    waiting = [dict(rows[0], invoice_id=f"WAIT-{i}", promised_date="2026-11-26") for i in range(35)]
+    due = dict(rows[1], invoice_id="TODAY", promised_date="2026-11-19", outstanding=1)
+    overdue = dict(rows[2], invoice_id="LATE", promised_date="2026-11-18", outstanding=1)
+    ranked, meta = rank_with_explanations([*waiting, rows[0], due, overdue], policy="amount", cutoff="2026-11-19")
+    assert [r["invoice_id"] for r in ranked] == ["LATE", "TODAY", "A"]
+    assert meta["eligible_count"] == meta["displayed_count"] == 3
+    assert meta["waiting_count"] == 35
+    assert not ranked[0]["ranking_explanation"]["next"]["tied"]
+    assert all(r["contact_on"] == "2026-11-26" for r in meta["waiting_for_promise"])
+    released, after = rank_with_explanations(waiting, policy="amount", cutoff="2026-11-26")
+    assert len(released) == 30 and after["eligible_count"] == 35
+    assert after["waiting_count"] == 0
+    assert all(r["contact_status"] == "promise_due_today" for r in released)
 
 
 @pytest.mark.parametrize("policy", ["amount", "amount_at_risk", "risk"])
@@ -342,7 +364,7 @@ def test_rules_filter_asof_actions_and_release_contact_at_seven_days(book):
         },
     ]
     plan = forecast(book, "2026-02-10", 0)
-    assert [r["invoice_id"] for r in plan["collections"]] == ["OLD", "B", "C", "A"]
+    assert [r["invoice_id"] for r in plan["collections"]] == ["B", "OLD", "C", "A"]
     assert plan["collection_ranking"]["eligibility"] == {
         "open_before_rules": 7,
         "writeoff_excluded": 1,
@@ -413,6 +435,8 @@ def test_browser_ranking_uses_saved_policy_and_separate_shap_on_both_screen_size
             "promise_date": "2026-02-10",
         },
     ]
+    book["actions"].append(dict(event_id="WAIT", invoice_id="A", date="2026-02-09",
+        known_at="2026-02-09", kind="promise", promise_date="2026-02-17"))
     app = create_app(
         state_dir=tmp_path / "data",
         key_dir=tmp_path / "keys",
@@ -480,7 +504,8 @@ def test_browser_ranking_uses_saved_policy_and_separate_shap_on_both_screen_size
         assert response.status_code == 200, response.text
         plan = response.json()
         scores = [Decimal(str(r["priority_score"])) for r in plan["collections"]]
-        assert scores == sorted(scores, reverse=True)
+        assert plan["collections"][0]["invoice_id"] == "B"
+        assert plan["collection_ranking"]["waiting_count"] == 1
         assert all(
             r["triage_probability_4w"] == r["payment_probability_4w"]
             for r in plan["collections"]
@@ -507,25 +532,21 @@ def test_browser_ranking_uses_saved_policy_and_separate_shap_on_both_screen_size
                 playwright.expect(page.locator("#connection-state")).to_contain_text(
                     "Đã kết nối"
                 )
-                page.locator(".history-menu > summary").click()
-                page.locator("#saved-plans").click()
-                page.locator("#plans-list button").first.click()
-                playwright.expect(page.locator("#collection-policy")).to_contain_text(
-                    "Dư nợ × nguy cơ"
-                )
-                button = page.locator(
-                    '#collections-table button[aria-controls="ranking-explanation-0"]'
-                )
+                page.route("**/v1/predict", lambda route: route.fulfill(status=200, json=plan))
+                page.locator("#forecast-cutoff").fill("10-02-26")
+                page.locator("#opening-balance").fill("0")
+                page.locator("#forecast-complete").check()
+                page.locator("#forecast-submit").click()
+                playwright.expect(page.locator("#collection-policy")).to_contain_text("1 khoản đang chờ")
+                waiting = page.locator("#collections-table details.cash-details")
+                waiting.locator("summary").click()
+                playwright.expect(waiting).to_contain_text("17-02-26")
+                button = page.locator('#collections-table button[aria-controls="ranking-explanation-0"]')
                 button.click()
                 dialog = page.locator("#ranking-explanation-0")
-                playwright.expect(dialog).to_contain_text(plan["model_version"])
-                playwright.expect(dialog).to_contain_text("T1 đang dùng")
-                dialog.locator("summary").filter(has_text="Vì sao có khả năng tất toán này?").click()
-                shap = dialog.locator("details .t1-explanation")
-                playwright.expect(shap).to_contain_text("Nhóm thông tin")
-                assert "RANK-MODEL" not in shap.inner_text()
-                assert shap.locator("table").count() == 1
-                assert "SHAP" not in shap.inner_text()
+                playwright.expect(dialog).to_contain_text("Đến ngày khách hứa hôm nay")
+                playwright.expect(dialog).not_to_contain_text("SHAP")
+                playwright.expect(dialog).not_to_contain_text(plan["model_version"])
                 for width in (1500, 390):
                     page.set_viewport_size({"width": width, "height": 960})
                     page.wait_for_function(
@@ -606,7 +627,7 @@ def test_large_vnd_roundtrips_from_csv_through_api_saved_plan_and_excel(tmp_path
         assert large["outstanding"] == large["priority_score"] == "9007199254741009"
         assert large["ranking_explanation"]["next"]["score_difference"] == 1
         assert not large["ranking_explanation"]["next"]["tied"]
-        assert large["ranking_explanation"]["protocol"] == "collection-ranking-v2"
+        assert large["ranking_explanation"]["protocol"] == "collection-ranking-v3"
         factor = next(
             f
             for f in large["payment_explanation"]["factors"]
@@ -720,11 +741,14 @@ def test_browser_exact_priority_and_deferred_queue_on_both_screen_sizes(
                 )
 
                 def open_plan(identifier):
-                    page.locator(".history-menu > summary").click()
-                    page.locator("#saved-plans").click()
-                    page.locator("#plans-list button").nth(
-                        0 if identifier == deferred["id"] else 1
-                    ).click()
+                    selected = precise if identifier == precise["id"] else deferred
+                    page.unroute("**/v1/predict")
+                    page.route("**/v1/predict", lambda route: route.fulfill(status=200, json=selected))
+                    page.locator("#forecast-cutoff").fill("10-02-26")
+                    page.locator("#opening-balance").fill("0")
+                    page.locator("#forecast-complete").check()
+                    page.locator("#forecast-submit").click()
+                    playwright.expect(page.locator("#forecast-output")).to_be_visible()
 
                 for width in (1500, 390):
                     page.set_viewport_size({"width": width, "height": 960})
@@ -741,7 +765,7 @@ def test_browser_exact_priority_and_deferred_queue_on_both_screen_sizes(
                     playwright.expect(dialog).to_contain_text(
                         "9.007.199.254.741.009 VND"
                     )
-                    playwright.expect(dialog).to_contain_text(
+                    playwright.expect(dialog).not_to_contain_text(
                         "9.007.199.254.741.008 VND"
                     )
                     assert "Cùng điểm" not in dialog.inner_text()
@@ -750,16 +774,7 @@ def test_browser_exact_priority_and_deferred_queue_on_both_screen_sizes(
                     )
                     dialog.screenshot(path=str(output / f"priority_{width}.png"))
                     page.keyboard.press("Escape")
-                    first.locator(
-                        'button[aria-controls="payment-explanation-0"]'
-                    ).click()
-                    shap = page.locator("#payment-explanation-0")
-                    # Two invoices cannot support stability checks; neutral
-                    # amount attribution must not be presented as a reason.
-                    playwright.expect(shap).to_contain_text("Chưa đủ cơ sở")
-                    assert shap.locator("table").count() == 1
-                    assert shap.locator("details").count() == 0
-                    page.keyboard.press("Escape")
+                    assert first.locator('button[aria-controls="payment-explanation-0"]').count() == 0
                     open_plan(deferred["id"])
                     queue = page.locator("#collections-table")
                     playwright.expect(queue).to_contain_text("Còn 3 hóa đơn đang mở")

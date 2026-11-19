@@ -88,7 +88,23 @@ def main():
                     require(set(y.tolist()) == {0, 1}, 'LABEL_DOMAIN')
                 else:
                     require(type(request.get('initialize_weights')) is bool, 'INITIAL_WEIGHTS_FLAG')
-                values = client.encrypt(None, y.astype(np.int64), np.zeros(3, dtype=np.int64) if initialize else None)
+                init_w = request.get('initial_weights')
+                if initialize and init_w is not None:
+                    w_lo, w_hi = prof['weight_domain']
+                    b_lo, b_hi = prof['bias_domain']
+                    require(
+                        isinstance(init_w, list)
+                        and len(init_w) == 3
+                        and all(type(v) is int for v in init_w)
+                        and w_lo <= init_w[0] <= w_hi
+                        and w_lo <= init_w[1] <= w_hi
+                        and b_lo <= init_w[2] <= b_hi,
+                        'INITIAL_WEIGHTS_DOMAIN',
+                    )
+                    w_arr = np.asarray(init_w, dtype=np.int64)
+                else:
+                    w_arr = np.zeros(3, dtype=np.int64)
+                values = client.encrypt(None, y.astype(np.int64), w_arr if initialize else None)
                 y_ser = values[1].serialize()
                 result = dict(
                     y_cipher=encode(y_ser),

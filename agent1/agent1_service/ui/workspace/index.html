@@ -54,7 +54,7 @@
           <button data-view="guide"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Hướng dẫn</button>
         </div>
       </nav>
-      <div class="side-foot">Dữ liệu dòng tiền xử lý nội bộ. Kịch bản P10-P90 mang tính tham mưu tài chính.</div>
+      <div class="side-foot">Theo dõi công nợ, lịch chi và kế hoạch dòng tiền.</div>
     </aside>
     <div class="shell">
       <main id="main" tabindex="-1">
@@ -134,41 +134,43 @@
         </section>
 
         <section class="view" id="view-records" hidden>
-          <div class="page-heading"><div><span class="eyebrow">DỮ LIỆU DOANH NGHIỆP</span><h1>Sổ dữ liệu và lịch sử nạp</h1>
-            <p>Tìm bản ghi, xem chứng từ liên quan và các lần nạp đã thực hiện.</p></div>
+          <div class="page-heading"><div><h1 id="records-title">Sổ dữ liệu và lịch sử nạp</h1>
+            <p id="records-description">Tra cứu các bảng dữ liệu doanh nghiệp và kiểm tra lịch sử nạp tệp.</p></div>
             <div class="heading-controls">
               <button type="button" class="button" id="records-reconciliation" data-view="reconciliation" hidden>Đối soát công nợ</button>
               <a class="button" id="records-tax" target="_top" hidden>Mở rà soát thuế ở Agent 3</a>
               <button type="button" class="button primary" data-view="data">Nạp dữ liệu</button>
             </div></div>
           <article class="paper">
-            <h2>Danh sách bản ghi</h2>
+            <h2 id="records-list-title">Tra cứu bản ghi</h2>
             <form id="records-filter" class="records-filter">
-              <label>Bảng<select id="records-kind"><option value="invoices">Hóa đơn</option><option value="payments">Thanh toán</option>
-                <option value="bank">Dòng sao kê</option><option value="statements">Kỳ sao kê</option>
-                <option value="outflows">Lịch chi đã biết</option><option value="expense_payments">Tiền đã trả / nhận theo lịch</option><option value="actions">Nhật ký thu nợ</option><option value="invoice_events">Sự kiện hóa đơn</option></select></label>
-              <label>Tìm kiếm<input id="records-query" maxlength="200" placeholder="Mã, khách hàng, tài khoản, nội dung…"></label>
-              <label>Trạng thái<select id="records-status"><option value="">Tất cả</option></select></label>
-              <label>Từ ngày<input id="records-from" type="date"></label><label>Đến ngày<input id="records-to" type="date"></label>
-              <button type="submit" class="button primary">Tìm bản ghi</button>
+              <label>Bảng<select id="records-kind"><option value="">Chọn bảng để tra cứu</option></select></label>
+              <div id="records-search" class="records-search" hidden>
+                <label>Tìm kiếm<input id="records-query" maxlength="200" placeholder="Mã, khách hàng, tài khoản, nội dung…"></label>
+                <label>Trạng thái<select id="records-status"><option value="">Tất cả</option></select></label>
+                <label>Từ ngày<input id="records-from" type="date"></label><label>Đến ngày<input id="records-to" type="date"></label>
+                <button type="submit" class="button primary">Tìm bản ghi</button>
+              </div>
             </form>
-            <p id="records-status-text" role="status">Kết nối doanh nghiệp để xem dữ liệu.</p>
-            <div id="records-table" class="table-scroll"></div>
-            <div class="records-pagination"><button id="records-prev" type="button" class="button" disabled>← Trước</button>
-              <span id="records-page"></span><button id="records-next" type="button" class="button" disabled>Sau →</button></div>
+            <div id="records-results" hidden>
+              <p id="records-status-text" role="status">Kết nối doanh nghiệp để xem dữ liệu.</p>
+              <div id="records-table" class="table-scroll"></div>
+              <div class="records-pagination"><button id="records-prev" type="button" class="button" disabled>← Trước</button>
+                <span id="records-page"></span><button id="records-next" type="button" class="button" disabled>Sau →</button></div>
+            </div>
           </article>
           <article id="record-detail-panel" class="paper record-detail" hidden>
             <div class="section-heading"><h2 id="record-detail-title">Chi tiết bản ghi</h2><button id="record-detail-close" type="button" class="link-button">Đóng chi tiết</button></div>
             <div id="record-detail-content"></div>
           </article>
-          <article class="paper">
+          <article class="paper" id="import-history">
             <div class="section-heading"><h2>Lịch sử từng lần nạp</h2><button id="reload-import-history" type="button" class="button">Tải lịch sử</button></div>
             <p class="helper">Nhật ký gồm các lần kiểm tra tệp và xác nhận lưu. Với phiên bản cũ, tên tệp, người nạp và kết quả xác nhận có thể chưa được ghi lại; dữ liệu đã lưu vẫn xem được trong danh sách bản ghi.</p>
             <p id="import-history-status" role="status"></p><div id="import-history-table" class="table-scroll"></div>
             <div class="records-pagination"><button id="imports-prev" type="button" class="button" disabled>← Trước</button>
               <span id="imports-page"></span><button id="imports-next" type="button" class="button" disabled>Sau →</button></div>
-            <div id="import-history-detail"></div>
           </article>
+          <article class="paper" id="import-history-detail" hidden></article>
         </section>
         <section class="view" id="view-data" hidden>
           <div class="page-heading compact">
@@ -441,11 +443,11 @@
         <section class="view" id="view-training" hidden>
           <div class="page-heading compact">
             <div>
-              <div class="eyebrow">03 / THIẾT LẬP và KIỂM ĐỊNH</div>
+              <div class="eyebrow">03 / CẬP NHẬT DỰ BÁO</div>
               <h1>Cập nhật dự báo</h1>
               <p>
-                Kiểm tra bằng lịch sử thu tiền của doanh nghiệp. Nếu dữ liệu chưa đủ
-                hoặc phương án mới chưa tốt hơn, tiếp tục dùng phiên bản hiện có.
+                Dùng lịch sử thu tiền mới nhất để cập nhật dự báo của doanh nghiệp.
+                Sau khi nạp dữ liệu, bấm Kiểm tra và cập nhật để bắt đầu.
               </p>
             </div>
           </div>
@@ -474,14 +476,10 @@
                     toán.</span
                   ></label
                 >
-                <details class="train-options"><summary>Điều kiện dữ liệu và tùy chọn học</summary><label class="check-row"
-                  ><input type="checkbox" id="try-deep" />Kiểm định mở rộng cho
-                  bán thu ngay và chi biến đổi nếu đủ lịch sử sao kê</label
-                ><p class="helper">
-                  Mặc định xem xét cập nhật mỗi 28 ngày. Các tuần đã quan sát
-                  được dùng để học; bài kiểm tra dự thu cần đủ 13 tuần.
-                  Khi thiếu lịch sử, hệ thống giữ phiên bản đang dùng hoặc mô hình nền.
-                </p></details>
+                <p class="helper">
+                  Nạp dữ liệu xong, bạn chủ động bấm cập nhật. Hệ thống tự chọn
+                  cách xử lý theo lịch sử hiện có. Các lần cập nhật cách nhau 28 ngày.
+                </p>
                 <button class="button primary" id="train-button">
                   Kiểm tra và cập nhật <span>↗</span>
                 </button>
@@ -519,13 +517,13 @@
               <form id="forecast-form">
                 <div class="two-fields">
                   <label>Ngày dự báo<input id="forecast-cutoff" placeholder="dd-mm-yy" maxlength="10" required></label>
-                  <label>Số tuần<input id="horizon-weeks" type="number" min="1" max="52" step="1" value="13" required></label>
+                  <label>Số tuần<input id="horizon-weeks" type="number" min="1" max="13" step="1" value="13" required><small>Dự báo từ 1 đến 13 tuần.</small></label>
                 </div>
                 <label>Số dư đầu kỳ (VND)<input id="opening-balance" type="number" required step="0.01" placeholder="Nhập theo sao kê"></label>
                 <div>
                   <div class="label-help">
                     <label for="cash-floor">Ngưỡng cảnh báo (VND)</label>
-                    <details class="field-help"><summary aria-label="Giải thích ngưỡng cảnh báo">?</summary><p>Cảnh báo khi số dư dự kiến dưới ngưỡng này hoặc ít nhất 25% đường mô phỏng xuống dưới ngưỡng.</p></details>
+                    <details class="field-help"><summary aria-label="Giải thích ngưỡng cảnh báo">?</summary><p>Mức tiền tối thiểu doanh nghiệp muốn duy trì. Hệ thống cảnh báo khi dự kiến thiếu tiền hoặc có nguy cơ xuống dưới mức này.</p></details>
                   </div>
                   <input id="cash-floor" type="number" step="0.01" value="0">
                 </div>
@@ -544,13 +542,13 @@
                     <label>Thay đổi chi (%)<input id="expense-change" type="number" min="-100" max="200" step="any" value="0" required></label>
                   </div>
                   <label>Mã khách chịu ảnh hưởng<input id="delay-customer" list="forecast-customers" placeholder="Để trống áp dụng mọi khách"><datalist id="forecast-customers"></datalist></label>
-                  <label class="check-row"><input type="checkbox" id="common-risk">Mô phỏng rủi ro chung theo khách</label>
+                  <label class="check-row"><input type="checkbox" id="common-risk">Xét tình huống nhiều hóa đơn của cùng khách bị trả chậm</label>
                 </fieldset>
                 <details class="form-options">
                   <summary>Phạm vi và tùy chọn</summary>
                   <label>Các tuần đã rà soát đủ lịch chi<input id="confirmed-weeks" placeholder="Ví dụ 1,2,3"></label>
-                  <label class="check-row"><input type="checkbox" id="include-operating">Ước lượng dòng tiền hoạt động</label>
-                  <details class="field-help"><summary aria-label="Giải thích phạm vi dự báo">?</summary><p>Chi theo lịch chỉ gồm các khoản chi theo lịch đã nạp, như lương, thuê, trả nợ định kỳ. Không yêu cầu lập bảng chi dự kiến khác. Nếu bật ước lượng hoạt động, mô hình bổ sung chi biến đổi từ lịch sử sao kê, tối đa 13 tuần đầu. Thu chậm được làm tròn lên theo tuần.</p></details>
+                  <label class="check-row"><input type="checkbox" id="include-operating">Ước tính thêm tiền bán thu ngay và chi hoạt động từ sao kê</label>
+                  <details class="field-help"><summary aria-label="Giải thích phạm vi dự báo">?</summary><p>Lịch chi gồm các khoản đã nạp như lương, thuê và trả nợ. Bật lựa chọn trên để ước tính thêm tiền bán thu ngay và các khoản chi thay đổi theo hoạt động kinh doanh từ lịch sử sao kê.</p></details>
                 </details>
                 <label class="check-row"><input type="checkbox" id="forecast-complete" required>Đã nạp đủ thanh toán đến ngày dự báo</label>
                 <button type="submit" class="button primary" id="forecast-submit">Lập dự báo</button>
@@ -571,7 +569,7 @@
                   <div id="forecast-chart" class="chart-slot"></div>
                   <p id="forecast-band-note" class="helper"></p>
                   <div id="forecast-alerts"></div>
-                  <details class="form-options"><summary>ⓘ Phạm vi, giả định và thời gian tính</summary><div id="forecast-assumptions" class="assumptions"></div></details>
+                  <details class="form-options"><summary>Dữ liệu đã tính trong kế hoạch</summary><div id="forecast-assumptions" class="assumptions"></div></details>
                 </article>
                 <article class="paper"><h2>Tiền dự thu và nguy cơ thiếu tiền</h2><div id="cash-decomposition"></div></article>
                 <article class="paper"><h2>Kế hoạch từng tuần</h2><div id="forecast-table" class="table-scroll"></div></article>
@@ -738,24 +736,19 @@
               </p>
             </details>
             <details>
-              <summary>Ai xem được dữ liệu và mô hình?</summary>
+              <summary>Dữ liệu được lưu ở đâu?</summary>
               <p>
-                Dữ liệu và phiên bản học được lưu mã hóa trên máy chủ của đơn vị
-                triển khai. Khóa truy cập chỉ giữ trong bộ nhớ phiên trình
-                duyệt. Trình duyệt nhận kết quả và chỉ số kiểm định, không nhận
-                trọng số hoặc mã nguồn mô hình. Người quản trị máy chủ có quyền
-                truy cập hệ thống; đây không phải cơ chế giấu mã với chủ máy.
+                Dữ liệu được lưu mã hóa trên máy chủ của đơn vị triển khai.
+                Người quản trị máy chủ quản lý quyền truy cập. Khóa truy cập
+                của bạn chỉ được giữ trong phiên trình duyệt.
               </p>
             </details>
             <details>
               <summary>Cập nhật hàng tháng như thế nào?</summary>
               <p>
-                Nạp hóa đơn và khoản thu mới bằng mã ổn định, rồi chạy kiểm định
-                khi đến lịch cập nhật. Hệ thống tự chuyển sang phiên bản mới
-                khi có đủ nhãn và vượt kiểm định; nếu chưa đạt thì giữ phiên
-                bản đang dùng. Ứng viên chờ đối chiếu cần đủ 13 tuần và dữ liệu
-                thanh toán đầy đủ. Xem quyết định ở trang kiểm định; nút chọn
-                phiên bản đã lưu cho phép quay về bản trước.
+                Nạp hóa đơn và khoản thu mới, rồi vào Cập nhật dự báo và bấm
+                Kiểm tra và cập nhật. Xem kết quả và ngày cập nhật tiếp trên
+                cùng màn hình. Có thể chọn lại phiên bản đã lưu khi cần.
               </p>
             </details>
           </article>
@@ -764,7 +757,7 @@
           <span
             >AGENT1 <span class="footer-dot">·</span> Sổ điều hành dòng
             tiền</span
-          ><span>Dữ liệu riêng. Kiểm định riêng. Quyết định của bạn.</span>
+          ><span>Công nợ · Thu chi · Dự báo</span>
         </footer>
       </main>
     </div>

@@ -38,18 +38,18 @@ test("cash band labels distinguish calibrated endpoints, raw quantiles and legac
   const scope = ui();
   const saved = {band_status:"calibrated_out_of_sample", weeks:[{low:-50, high:150, raw_low:0, raw_high:100}]};
   const calibrated = scope.cashBandPresentation(saved);
-  assert.equal(calibrated.low, "Cận dưới đã hiệu chỉnh");
-  assert.ok(calibrated.note.includes("không phải P10/P90"));
-  assert.equal(scope.cashBandPresentation({...saved, band_status:undefined}).high, "Cận trên đã hiệu chỉnh");
-  assert.equal(scope.cashBandPresentation({band_status:"raw_simulation", weeks:[{}]}).low, "Mô phỏng P10");
-  assert.equal(scope.cashBandPresentation({band_status:"insufficient_out_of_sample_errors", weeks:[{}]}).high, "Mô phỏng P90");
-  assert.equal(scope.cashBandPresentation({weeks:[{}]}).low, "Cận dưới dải số dư");
+  assert.equal(calibrated.low, "Mức số dư thấp");
+  assert.ok(calibrated.note.includes("chênh lệch với thực tế"));
+  assert.equal(scope.cashBandPresentation({...saved, band_status:undefined}).high, "Mức số dư cao");
+  assert.equal(scope.cashBandPresentation({band_status:"raw_simulation", weeks:[{}]}).low, "Mức số dư thấp");
+  assert.equal(scope.cashBandPresentation({band_status:"insufficient_out_of_sample_errors", weeks:[{}]}).high, "Mức số dư cao");
+  assert.equal(scope.cashBandPresentation({weeks:[{}]}).low, "Mức số dư thấp");
 });
 
 test("cash UI shows saved provenance, money bridge and T10 entry points safely as text", () => {
   const panel = ui().renderCashDecomposition(plan());
   const text = content(panel);
-  for (const expected of ["SAVED", "2026-02-10", "thiếu 90 VND", "Vì sao dự kiến thu được tiền?", "Nếu khách trả chậm hoặc dời khoản chi?", "<script>unsafe</script>", "<img onerror=unsafe>", "990 VND"]) assert.ok(text.includes(expected), expected);
+  for (const expected of ["2026-02-10", "thiếu 90 VND", "Dự thu từng hóa đơn theo tuần", "Nếu khách trả chậm hoặc dời khoản chi?", "<script>unsafe</script>", "<img onerror=unsafe>", "990 VND"]) assert.ok(text.includes(expected), expected);
   assert.equal(descendants(panel, node => node.tag === "script" || node.tag === "img").length, 0);
 });
 
@@ -64,21 +64,23 @@ function t10Plan() {
   return data;
 }
 
-test("adapter UI uses saved engine components and never fabricates missing partial support", () => {
+test("invoice receipts keep saved amounts and hide model diagnostics", () => {
   const panel = ui().renderT10Evidence(t10Plan()), text = content(panel);
-  for (const value of ["FROZEN-T1", "FROZEN-PARTIAL", "ENGINE-FORMULA", "30 VND", "10 VND", "20 VND", "Chưa ghi", "chưa tính SHAP của tiền thu"]) assert.ok(text.includes(value), value);
+  for (const value of ["30 VND", "1.000 VND", "970 VND"]) assert.ok(text.includes(value), value);
+  for (const value of ["FROZEN-T1", "FROZEN-PARTIAL", "ENGINE-FORMULA", "SHAP", "Ô profile", "Prior", "Strength"]) assert.ok(!text.includes(value), value);
   assert.ok(!text.includes("Có bằng chứng số tuần học"));
   assert.equal(descendants(panel, n => n.tag === "img" || n.tag === "script").length, 0);
 });
 
-test("risk comparison shows portfolio quantiles and probability changes as model sensitivity", () => {
+test("scenario comparison shows balances and risk without simulation diagnostics", () => {
   const baseline = {expected_balance:30, balance_quantiles:{"0.1":-10,"0.5":20,"0.9":60}, below_floor_probability:.2};
   const scenario = {expected_balance:10, balance_quantiles:{"0.1":-30,"0.5":0,"0.9":40}, below_floor_probability:.4};
   const panel = ui().renderT10ScenarioResult({baseline_any_shortfall_probability:.2, scenario_any_shortfall_probability:.4,
     delta_any_shortfall_probability:.2, delta_probability_mc_standard_error:.01, limitations:["Không cộng P10 hóa đơn."],
     weeks:[{week:1,baseline,scenario,delta:{expected_balance:-20,balance_quantiles:{"0.1":-20,"0.5":-20,"0.9":-20}, below_floor_probability:.2}}]});
   const text = content(panel);
-  for (const value of ["Δ P10", "Δ P50", "Δ P90", "20.00 điểm phần trăm", "MC thô", "chưa chứng minh tác động", "Không cộng P10 hóa đơn"]) assert.ok(text.includes(value), value);
+  for (const value of ["20.00%", "40.00%", "30 VND", "10 VND", "-20 VND"]) assert.ok(text.includes(value), value);
+  for (const value of ["Δ P10", "Δ P50", "Δ P90", "MC thô", "chưa chứng minh tác động", "Không cộng P10 hóa đơn"]) assert.ok(!text.includes(value), value);
 });
 
 test("scenario form sends assumptions against the saved forecast without replacing its seed or bundle", async () => {
@@ -131,7 +133,7 @@ test("saved scenarios identify their assumptions and restore the form without re
   const summary = get("Giả định của kết quả kịch bản");
   for (const expected of ["Khách CUSTOMER trả chậm thêm 2 tuần", "Khoản chi RENT dời thêm 3 tuần"])
     assert.ok(content(summary).includes(expected), expected);
-  for (const expected of ["SAVED", "2026-02-10"])
+  for (const expected of ["2026-02-10"])
     assert.ok(content(panel).includes(expected), expected);
   assert.equal(get("Khách trả chậm").value, "CUSTOMER");
   assert.equal(String(get("Số tuần trả chậm thêm").value), "2");
@@ -206,8 +208,30 @@ test("simulation-only risk and old plans never fabricate a cash shortfall decomp
   const scope = ui(), data = plan();
   data.cash_decomposition.risk_focus.trigger = "simulation_only";
   const text = content(scope.renderCashDecomposition(data));
-  assert.ok(text.includes("ít nhất 25% đường mô phỏng"));
-  assert.ok(text.includes("chưa phân rã xác suất"));
+  assert.ok(text.includes("có nguy cơ số dư xuống dưới mức tiền tối thiểu"));
+  assert.ok(!text.includes("đường mô phỏng"));
   assert.ok(!text.includes("thiếu 90 VND"));
   assert.ok(content(scope.renderCashDecomposition({})).includes("Tạo kế hoạch mới"));
+});
+
+test("business expense labels retain small amounts and do not mutate the saved plan", () => {
+  const scope = ui(), data = plan();
+  data.cash_decomposition.outflows = [
+    {expense_id:"VARIABLE", date:"2026-02-17", category:"variable_cost", original_amount:65000000, amount:65000000},
+    {expense_id:"SMALL", date:"2026-02-17", category:"rent_contract", original_amount:500000, amount:500000}
+  ];
+  const before = JSON.stringify(data), text = content(scope.renderCashDecomposition(data));
+  for (const value of ["Chi phí biến đổi", "Thuê theo hợp đồng", "65.000.000 VND", "500.000 VND", "Đưa vào dự báo", "thứ tự ưu tiên liên hệ"])
+    assert.ok(text.includes(value), value);
+  assert.ok(!text.includes("variable_cost"));
+  assert.equal(JSON.stringify(data), before);
+});
+
+test("forecast scope shows business coverage instead of saved algorithm notes", () => {
+  const scope = ui();
+  const notes = scope.forecastScopeNotes({cutoff:"2026-11-19", assumptions:["Adapter Gaussian copula SHAP"],
+    unknown_outflow_weeks:[2,3], operating_included:false});
+  assert.ok(notes.some(note => note.includes("2, 3")));
+  assert.ok(notes.some(note => note.includes("Chưa tính thêm tiền bán thu ngay")));
+  assert.ok(!notes.join(" ").includes("Adapter"));
 });

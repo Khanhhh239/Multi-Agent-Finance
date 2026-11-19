@@ -70,3 +70,35 @@ test("saved plan browsing and restore controls are removed from the workspace", 
   assert.equal(source.includes('function restoreForecastInputs('),false);
   assert.ok(html.includes('id="forecast-form"'),"New forecasts remain available");
 });
+
+test("forecast submission rejects more than 13 weeks before calling the API", async () => {
+  for (const weeks of [0, 14, 52, 1.5]) {
+    const scope = ui();
+    scope.$("horizon-weeks").value = String(weeks);
+    scope.api = () => assert.fail("Invalid horizon must not call the forecast API");
+    let submitted;
+    scope.action = fn => { submitted = fn(); };
+    vm.runInContext(section('  $("forecast-form").onsubmit', '  $("compare-actuals").onclick'), scope);
+    scope.$("forecast-form").onsubmit({preventDefault(){}});
+    await assert.rejects(submitted, error => error.fieldErrors[0].id === "horizon-weeks");
+  }
+});
+
+test("manual update works without the removed technical checkbox", async () => {
+  const scope = ui(), calls = [];
+  scope.inputDate = () => "2026-11-19";
+  scope.$("train-complete").checked = true;
+  const lookup = scope.$;
+  scope.$ = id => { assert.notEqual(id, "try-deep"); return lookup(id); };
+  scope.api = async (url, options) => calls.push([url, JSON.parse(options.body)]);
+  scope.refresh = async () => {};
+  scope.notice = () => {};
+  scope.currentView = "training";
+  scope.state = null;
+  let submitted;
+  scope.action = fn => { submitted = fn(); return submitted; };
+  vm.runInContext(section('  $("train-form").onsubmit', '  $("train-asof").addEventListener'), scope);
+  scope.$("train-form").onsubmit({preventDefault(){}});
+  await submitted;
+  assert.deepEqual(calls, [["/training", {asof: "2026-11-19", payments_complete: true}]]);
+});

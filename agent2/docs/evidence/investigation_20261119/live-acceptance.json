@@ -1,0 +1,45 @@
+{
+  "companies": [
+    {
+      "company": "C001",
+      "queue_status": 200,
+      "rows": 4,
+      "detail_status": 200,
+      "graph_nodes": 155,
+      "graph_edges": 293,
+      "score_available": true,
+      "source_matches": true
+    },
+    {
+      "company": "C002",
+      "queue_status": 200,
+      "rows": 3,
+      "detail_status": 200,
+      "graph_nodes": 173,
+      "graph_edges": 323,
+      "score_available": true,
+      "source_matches": true
+    }
+  ],
+  "assets": [
+    {
+      "file": "investigation.html",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "investigation.js",
+      "status": 200,
+      "matches": true
+    },
+    {
+      "file": "investigation.css",
+      "status": 200,
+      "matches": true
+    }
+  ],
+  "backed_up_databases": 14,
+  "new_analysis_or_fit": false,
+  "source_tables_unchanged": true,
+  "configs_unchanged": true
+}

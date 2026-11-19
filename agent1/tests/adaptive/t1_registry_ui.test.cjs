@@ -115,9 +115,32 @@ test("legacy missing data cutoff remains unknown instead of borrowing ready date
 test("completion messages distinguish missing history, pending outcomes and a chosen version", () => {
   const c = ui();
   const kept = c.updateDecisionMessage({status:"kept_incumbent",candidate_update_audit:{status:"insufficient_local_windows"}});
-  assert.match(kept,/Chưa đủ lịch sử/);
+  assert.match(kept,/Cần thêm lịch sử thanh toán/);
   assert.doesNotMatch(kept,/đang chờ|Đã chọn/);
-  assert.match(c.updateDecisionMessage({status:"pending_prospective_audit"}),/đang chờ đủ dữ liệu thực tế/);
+  assert.match(c.updateDecisionMessage({status:"pending_prospective_audit"}),/Đang đối chiếu với các khoản thu thực tế/);
   assert.match(c.updateDecisionMessage({status:"accepted_prospective_audit"}),/Đã chọn phiên bản mới/);
-  assert.match(c.jobMessage({status:"completed",message:"Ứng viên đang chờ",decision:{status:"kept_incumbent",audit:{status:"insufficient_local_windows"}}}),/Chưa đủ lịch sử/);
+  assert.match(c.jobMessage({status:"completed",message:"Ứng viên đang chờ",decision:{status:"kept_incumbent",audit:{status:"insufficient_local_windows"}}}),/Cần thêm lịch sử thanh toán/);
+});
+
+test("versions show update dates and outcomes without raw validation metrics", () => {
+  const c = ui();
+  c.state.versions = [{id:"V", update_asof:"2026-11-19", asof:"2026-11-19",
+    promotion_status:"accepted_historical_audit", train_n:6977, validation_n:536,
+    audit:{candidate:{score:0.0907}, baseline:{score:0.1029}, n:285}}];
+  c.state.active_version = "V";
+  c.renderVersions();
+  const text = content(c.elements["versions-list"]);
+  assert.ok(text.includes("2026-11-19") && text.includes("Đã chọn phiên bản mới") && text.includes("Đang sử dụng"));
+  for (const hidden of ["SAI SỐ", "SỐ MẪU", "0.0907", "0.1029", "6977", "536", "chưa kết luận"])
+    assert.ok(!text.includes(hidden), hidden);
+});
+
+test("update reasons distinguish improvement, insufficient history and waiting for actual payments", () => {
+  const c = ui();
+  assert.match(c.updateDecisionMessage({status:"accepted_historical_audit"}), /sát thực tế hơn khi kiểm tra lịch sử/);
+  assert.match(c.updateDecisionMessage({status:"accepted_prospective_audit", candidate_update_audit:{status:"insufficient_local_windows"}}), /sát các khoản thu thực tế hơn/);
+  assert.match(c.updateDecisionMessage({status:"kept_incumbent", audit:{status:"scored", accepted:false}}), /Bản mới chưa cải thiện/);
+  assert.match(c.updateDecisionMessage({status:"kept_incumbent", audit:{status:"insufficient_audit_outcomes"}}), /Cần thêm lịch sử thanh toán/);
+  assert.match(c.updateDecisionMessage({status:"pending_prospective_audit"}), /Đang đối chiếu với các khoản thu thực tế/);
+  assert.doesNotMatch(c.updateDecisionMessage({status:"kept_incumbent"}), /chưa cải thiện|sát thực tế hơn/);
 });

@@ -360,7 +360,7 @@ def forecast(
             triage_probability_4w=float(triage_p[i]),
         )
         for i, r in enumerate(opened.itertuples())
-        if not deferred.get(r.invoice_id)
+        if not deferred.get(r.invoice_id) or r.invoice_id in promises
     ]
     from .collection_explanations import rank_with_explanations
 
@@ -376,7 +376,7 @@ def forecast(
         eligibility={
             "open_before_rules": open_before_rules,
             "writeoff_excluded": writeoff_excluded,
-            "recent_contact_or_skip_excluded": sum(bool(deferred.get(i)) for i in opened.invoice_id),
+            "recent_contact_or_skip_excluded": sum(bool(deferred.get(i)) and i not in promises for i in opened.invoice_id),
             "cooldown_days": 7,
         },
         probability_source={

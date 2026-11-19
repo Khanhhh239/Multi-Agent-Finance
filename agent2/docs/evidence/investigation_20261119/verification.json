@@ -1,0 +1,77 @@
+{
+  "backend_tests": 24,
+  "portal_tests": 64,
+  "browser": {
+    "status": "pass",
+    "checks": [
+      "Queue reads saved real pipeline scores, sorted priorities, statuses and source-bound explanations",
+      "Node expansion and selected-edge evidence work without new scoring/fitting; graph uses frozen source identities",
+      "Related records, source evidence, saved score components and model/source trace are reachable",
+      "Start survives reload; attachment round-trip, conclusion, audit and response-loss retry persist exactly one review revision",
+      "Filters, unsaved-edit guard and company reload preserve isolation",
+      "Portal denies unauthenticated and cross-company reads; mobile 390px fits; no JavaScript errors"
+    ],
+    "synthetic_data": true,
+    "actual_fhe": false,
+    "live_state_changed": false
+  },
+  "live": {
+    "companies": [
+      {
+        "company": "C001",
+        "queue_status": 200,
+        "rows": 4,
+        "detail_status": 200,
+        "graph_nodes": 155,
+        "graph_edges": 293,
+        "score_available": true,
+        "source_matches": true
+      },
+      {
+        "company": "C002",
+        "queue_status": 200,
+        "rows": 3,
+        "detail_status": 200,
+        "graph_nodes": 173,
+        "graph_edges": 323,
+        "score_available": true,
+        "source_matches": true
+      }
+    ],
+    "assets": [
+      {
+        "file": "investigation.html",
+        "status": 200,
+        "matches": true
+      },
+      {
+        "file": "investigation.js",
+        "status": 200,
+        "matches": true
+      },
+      {
+        "file": "investigation.css",
+        "status": 200,
+        "matches": true
+      }
+    ],
+    "backed_up_databases": 14,
+    "new_analysis_or_fit": false,
+    "source_tables_unchanged": true,
+    "configs_unchanged": true
+  },
+  "source_sha256": {
+    "agent2/sme_fraud/investigation.py": "dae85491d87aa274530fbda7ca62d1c50a3a20dd6f01b5e2f7c3bb85387fd63d",
+    "agent2/sme_fraud/investigation_api.py": "7d1daeaf90b7b5a5eb3aabf997b6104d2977c7685087591c74fcf8cef561d2ac",
+    "agent2/sme_fraud/bundle_workspace_api.py": "48489370f308c80536e249d0b879d9e486985f8b7e5f793d4ac14a4472602dc6",
+    "agent2/sme_fraud/workbench.py": "97f866aae24dd883c6bbd9d6cd82b24116ad5dcdce7f6cfb89460ff3cd002981",
+    "agent2/sme_fraud/web/investigation.html": "a0129b4500a04ec359374ce2ce0ae0116e680d2ee944135866a94dbeeb742cd7",
+    "agent2/sme_fraud/web/investigation.js": "9d3a3a497d705f36667da2950085cf997f6443452d730e9233edf117dcd6629c",
+    "agent2/sme_fraud/web/investigation.css": "31dd22569b8da36f45d72e5299f3c47ea118fe6956fc43fc0caad1e15dd91817",
+    "portal/agent2_bridge.py": "35325ad34e390fd913a3e774b863b28aa07c7b9b87ef9c9c3e31c3b6889cfb8e",
+    "portal/static/app.js": "934ddba2e24502330f326195df34405f9ebbf7dde8177eedbb91009a9ae774a5"
+  },
+  "algorithms_weights_models_changed": false,
+  "live_reviews_written": false,
+  "deployment": "http://127.0.0.1:8800/#agent2"
+}

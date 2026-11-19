@@ -26,6 +26,10 @@ from .remediation_api import handle_remediation
 from .remediation_store import RemediationStore
 from .pipeline_release_api import handle_releases
 from .bundle_workspace_api import handle_bundle_workspace
+from .model_lifecycle import ModelLifecycle
+from .model_lifecycle_api import handle_model_lifecycle
+from .lr_fhe_training import LRFHETrainingService
+from .lr_registry import LRModelRegistry
 
 from pathlib import Path
 
@@ -99,6 +103,42 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
         if he_backend is not None and hasattr(he_backend.node.jobs,'submit_bound'):
             from .bundle_he import BundleHE
             release_service.he_executor=BundleHE(he_backend)
+    model_lifecycle=None
+    if snapshot_store is not None and analysis_resources is not None:
+        if release_service is not None:
+            lc_db=release_service.store.path.with_name('model-lifecycle.sqlite3')
+        elif analysis_resources.model_db is not None:
+            lc_db=Path(analysis_resources.model_db).with_name('model-lifecycle.sqlite3')
+        elif hasattr(snapshot_store,'path'):
+            lc_db=Path(snapshot_store.path).with_name('model-lifecycle.sqlite3')
+        else:
+            lc_db=default_workspace_dir()/'model-lifecycle.sqlite3'
+        model_lifecycle=ModelLifecycle(
+            lc_db,
+            snapshot_store=snapshot_store,
+            analysis_resources=analysis_resources,
+            authorizer=authorizer,
+            label_store=label_store,
+            case_queue_store=case_queue_store,
+            release_service=release_service,
+        )
+        lr_rt_cfg=getattr(batch_training,'runtime_config_path',None) or os.environ.get('AGENT2_BATCH_TRAINING_CONFIG')
+        model_lifecycle.lr_fhe=LRFHETrainingService(
+            lc_db.with_name('lr-fhe-jobs.sqlite3'),
+            snapshot_store=snapshot_store,
+            label_store=label_store,
+            model_lifecycle=model_lifecycle,
+            runtime_config_path=lr_rt_cfg,
+            portal_url=getattr(authorizer,'portal_url',None),
+            portal_bridge_secret=os.environ.get('AGENT2_PORTAL_BRIDGE_SECRET'),
+        )
+        model_lifecycle.lr_registry=LRModelRegistry(
+            lc_db.with_name('lr-model-registry.sqlite3'),
+            lr_fhe_service=model_lifecycle.lr_fhe,
+            model_lifecycle=model_lifecycle,
+            snapshot_store=snapshot_store,
+        )
+        model_lifecycle.lr_fhe.lr_registry=model_lifecycle.lr_registry
     class Handler(BaseHTTPRequestHandler):
         def respond(self,code,value,mime='application/json; charset=utf-8'):
             body=value if isinstance(value,bytes) else (json.dumps(value,ensure_ascii=False) if isinstance(value,dict) else value).encode('utf-8')
@@ -110,6 +150,7 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
             self.end_headers();self.wfile.write(body)
         def do_GET(self):
             if handle_workbench(self,authorizer,analysis_mode='four_encrypted_branches' if he_backend and hasattr(he_backend,'settings') else None,bundle_mode=release_service is not None):return
+            if handle_model_lifecycle(self,authorizer,model_lifecycle,'GET'):return
             if handle_releases(self,authorizer,release_service,'GET'):return
             if handle_bundle_workspace(self,authorizer,release_service,'GET'):return
             if handle_remediation(self,authorizer,remediation_store,'GET',case_queue_store=case_queue_store,snapshot_store=snapshot_store):return
@@ -135,6 +176,7 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
                 if 0<length<=65536:self.rfile.read(length)
             except (ValueError,OSError):pass
         def do_POST(self):
+            if handle_model_lifecycle(self,authorizer,model_lifecycle,'POST'):return
             if handle_releases(self,authorizer,release_service,'POST'):return
             if handle_bundle_workspace(self,authorizer,release_service,'POST'):return
             if handle_pipeline_benchmark(self,authorizer,snapshot_store,batch_training,'POST',analysis_resources):return
