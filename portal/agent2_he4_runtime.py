@@ -1,4 +1,4 @@
-"""Portal owns WSL via a supervisor pipe; no enterprise keys in this process."""
+﻿"""Portal owns WSL via a supervisor pipe; no enterprise keys in this process."""
 import hashlib
 import json
 import os
@@ -36,10 +36,10 @@ class LinuxRuntime:
     def preflight(self,keys_only=False):
         command=[self.python,'-X','utf8','-B','-m','experiments.he4.preflight','--node-config',str(self.node_config),'--config',str(self.he4_config)]
         if keys_only:command.append('--keys-only')
-        result=subprocess.run(command,cwd=self.agent_root,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=120,creationflags=subprocess.CREATE_NO_WINDOW)
+        result=subprocess.run(command,cwd=self.agent_root,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=600,creationflags=subprocess.CREATE_NO_WINDOW)
         try:value=json.loads(result.stdout)
-        except ValueError:raise ValueError('Chưa kiểm tra được khóa phân tích bốn nhánh.') from None
-        if result.returncode or value.get('status')!='ready':raise ValueError('Chưa sẵn sàng khóa, phiên bản hoặc kết nối phân tích bốn nhánh.')
+        except ValueError:raise ValueError('ChÆ°a kiá»ƒm tra Ä‘Æ°á»£c khÃ³a phÃ¢n tÃ­ch bá»‘n nhÃ¡nh.') from None
+        if result.returncode or value.get('status')!='ready':raise ValueError('ChÆ°a sáºµn sÃ ng khÃ³a, phiÃªn báº£n hoáº·c káº¿t ná»‘i phÃ¢n tÃ­ch bá»‘n nhÃ¡nh.')
 
     def health(self):
         try:
@@ -52,12 +52,16 @@ class LinuxRuntime:
         return dict(owned=owned,status='ready' if owned and self.verified and self.health() else 'unavailable',can_recover=True)
 
     def start(self):
+        # Re-opening Agent 2 while this worker is alive and already verified must not re-run the Concrete preflight
+        # (each run loads every company key vault in WSL: 1-2 minutes) â€” that was the lag on every unlock/restart.
+        if self.process is not None and self.process.poll() is None and self.verified and self.health():
+            return
         self.validate_bundle();self.preflight(keys_only=True)
         if self.process is not None and self.process.poll() is None:
             self.preflight();self.verified=True;return
         with socket.socket() as connection:
             connection.settimeout(.3)
-            if connection.connect_ex(('127.0.0.1',self.worker['port']))==0:raise ValueError('Cổng HE4 đang do tiến trình khác dùng; Portal không tự nhận hoặc dừng tiến trình đó.')
+            if connection.connect_ex(('127.0.0.1',self.worker['port']))==0:raise ValueError('Cá»•ng HE4 Ä‘ang do tiáº¿n trÃ¬nh khÃ¡c dÃ¹ng; Portal khÃ´ng tá»± nháº­n hoáº·c dá»«ng tiáº¿n trÃ¬nh Ä‘Ã³.')
         self.logs.mkdir(parents=True,exist_ok=True);self.token=secrets.token_hex(32)
         command=['wsl.exe','-d',self.worker['distro'],'--cd',linux_path(self.worker['bundle']),'--exec',self.worker['python'],'-B','-m','experiments.he4.runner','--config',linux_path(self.worker['config']),'--port',str(self.worker['port'])]
         with (self.logs/'agent2-he4-worker.log').open('ab') as log:
@@ -66,10 +70,10 @@ class LinuxRuntime:
         try:
             end=time.monotonic()+30
             while time.monotonic()<end:
-                if self.process.poll() is not None:raise ValueError('Worker HE4 chưa khởi động được.')
+                if self.process.poll() is not None:raise ValueError('Worker HE4 chÆ°a khá»Ÿi Ä‘á»™ng Ä‘Æ°á»£c.')
                 if self.health():break
                 time.sleep(.1)
-            else:raise ValueError('Worker HE4 chưa sẵn sàng.')
+            else:raise ValueError('Worker HE4 chÆ°a sáºµn sÃ ng.')
             self.preflight();self.verified=True
         except Exception:self.stop();raise
 
@@ -86,7 +90,7 @@ class LinuxRuntime:
                 process.kill();process.wait(timeout=5)
                 deadline=time.monotonic()+8
                 while self.health() and time.monotonic()<deadline:time.sleep(.2)
-                if self.health():raise ValueError('Chưa xác nhận được worker HE4 đã dừng. Giữ phiên và kiểm tra nhật ký.')
+                if self.health():raise ValueError('ChÆ°a xÃ¡c nháº­n Ä‘Æ°á»£c worker HE4 Ä‘Ã£ dá»«ng. Giá»¯ phiÃªn vÃ  kiá»ƒm tra nháº­t kÃ½.')
         if process is not None:
             # WSL's Windows forwarding listener may outlive the owned Linux
             # session briefly. Wait for release, never adopt or kill a listener.
@@ -106,7 +110,7 @@ class CombinedRuntime:
     def process(self):return self.legacy.process
     def state(self):
         a=self.legacy.state();b=self.extra.state();ready=a['status']=='ready' and b['status']=='ready'
-        return dict(status='ready' if ready else 'unavailable',owned=a['owned'] or b['owned'],can_recover=True,message='Bộ xử lý đã kết nối.' if ready else 'Một bộ xử lý mất kết nối. Kết nối lại để tiếp tục đúng yêu cầu đã lưu.')
+        return dict(status='ready' if ready else 'unavailable',owned=a['owned'] or b['owned'],can_recover=True,message='Bá»™ xá»­ lÃ½ Ä‘Ã£ káº¿t ná»‘i.' if ready else 'Má»™t bá»™ xá»­ lÃ½ máº¥t káº¿t ná»‘i. Káº¿t ná»‘i láº¡i Ä‘á»ƒ tiáº¿p tá»¥c Ä‘Ãºng yÃªu cáº§u Ä‘Ã£ lÆ°u.')
     def start(self):
         old_running=self.legacy.process is not None and self.legacy.process.poll() is None
         self.legacy.start()

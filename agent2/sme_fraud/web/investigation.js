@@ -927,7 +927,7 @@
     try {
       const out = await api('/api/v1/companies/' + encodeURIComponent(company) + '/model-lifecycle/analyze', { request_id: 'ui-analyze-' + crypto.randomUUID() });
       st.textContent = `Hoàn tất: ${out.admitted_cases} giao dịch cần kiểm tra trên ${out.total_cases} trường hợp.`;
-      run = ''; await load();
+      run = ''; await init();
     } catch (err) { st.textContent = ''; $('notice').textContent = err.message; $('notice').hidden = false; }
     finally { btn.disabled = false; }
   };
@@ -944,7 +944,7 @@
       company = ctx.companies.includes(hash.get('company')) ? hash.get('company') : ctx.companies[0] || '';
       $('company').replaceChildren(...ctx.companies.map(id => { const o = el('option', id); o.value = id; return o; }));
       $('company').value = company; $('company').disabled = !company;
-      run = hash.get('run') || '';
+      run = '';  // một lần đăng nhập = một doanh nghiệp; luôn mở lần phân tích mới nhất
       if (!company) { notice('Chưa được cấp quyền doanh nghiệp.'); return; }
       const old = await api(base());
       $('operations').hidden = !old.can_manage;

@@ -134,6 +134,21 @@ def build_contract(raw, tenant, company, company_name, *, name='transactions.csv
     header, row_iter = _iter_raw_rows(name, raw, xlsx_reader=xlsx_reader)
     if not header:
         raise IntakeError('Tệp giao dịch không có dòng nào.')
+    if 'transaction_id' in [str(h).strip() for h in header] and 'approver_id' in [str(h).strip() for h in header]:
+        # Full A2 export: keep every column and build the rule snapshot the investigation queue runs on.
+        try:
+            from . import agent2_rule_source as rule_source
+        except ImportError:
+            import agent2_rule_source as rule_source
+        keys = [str(h).strip() for h in header]
+        rows = [dict(zip(keys, values)) for values in row_iter if values and any(str(v).strip() for v in values if v is not None)]
+        try:
+            body, summary = rule_source.build(rows, tenant, company, company_name)
+        except (ValueError, TypeError) as exc:
+            raise IntakeError(f'Tệp giao dịch không hợp lệ: {exc}') from exc
+        if len(body) > MAX_BYTES:
+            raise IntakeError('Tệp sau khi chuyển đổi vượt 9 MB; chia nhỏ theo kỳ rồi nạp lại.')
+        return body, summary
     col_idx = {}
     for idx, col in enumerate(header):
         key = col.strip()

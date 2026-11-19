@@ -90,10 +90,14 @@
       <div id="algo-grid" class="algo-grid" role="radiogroup" aria-label="Chọn thuật toán huấn luyện"></div>
       <form id="train-form" class="train-form">
         <div class="form-grid-3">
-          <label>Bản dữ liệu huấn luyện (từ sảnh chung)
+          <label class="train-files">Tệp dữ liệu huấn luyện
+            <input id="train-files" type="file" accept=".csv,text/csv" multiple>
+            <span id="train-files-status" class="muted">Chọn tất cả tệp CSV trong thư mục dữ liệu huấn luyện.</span>
+          </label>
+          <label hidden>Bản dữ liệu huấn luyện
             <select id="train-snapshot"></select>
           </label>
-          <label>Bản dữ liệu đánh giá tách kỳ
+          <label hidden>Bản dữ liệu đánh giá tách kỳ
             <select id="train-eval-snapshot"></select>
           </label>
           <label hidden>Xử lý trường tùy chọn khuyết
@@ -103,7 +107,7 @@
             </select>
           </label>
         </div>
-        <details class="split-details">
+        <details class="split-details" hidden>
           <summary>Tùy chỉnh mốc thời gian tách kỳ (Train &lt; Tham chiếu ≤ Đánh giá)</summary>
           <div class="form-grid-3">
             <label>Bắt đầu huấn luyện<input id="train-h-start" type="text"></label>

@@ -2367,11 +2367,15 @@ def main():
     server = ThreadingHTTPServer((HOST, CFG['port']), Handler)
     print(f'Portal: {ORIGIN} (Ctrl+C to stop the portal and its agents)', flush=True)
     if autostart or start_agent2:
-        for aid in (AGENTS if autostart else ('agent2',)):
-            try:
-                start_agent(aid)
-            except ValueError as e:
-                print(f'{aid}: {e}')
+        # Serve the Portal immediately; agents come up in the background (Agent 3 loads models for minutes and used to
+        # block every page until it finished).
+        def autostart_agents():
+            for aid in (AGENTS if autostart else ('agent2',)):
+                try:
+                    start_agent(aid)
+                except Exception as e:  # one agent failing must not stop the others from starting
+                    print(f'{aid}: {type(e).__name__}: {e}', flush=True)
+        threading.Thread(target=autostart_agents, name='portal-autostart', daemon=True).start()
     try:
         server.serve_forever()
     except KeyboardInterrupt:

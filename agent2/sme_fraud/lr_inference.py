@@ -271,9 +271,11 @@ def verify_releasable_lr_model(
 class RiskScoringConfig:
     """Configurable 5-method risk scoring & validation-calibrated anti-double-counting weights."""
     rule_weight: float = 1.0
-    statistics_weight: float = 0.5
-    graph_weight: float = 0.0                # Context-only by default; does not auto-add points
-    unsupervised_ml_weight: float = 2.0
+    # Contribution follows method strength: deterministic rules strongest, then supervised LR (only when an approved
+    # model exists), unsupervised ML, statistics and the relationship graph.
+    statistics_weight: float = 0.6
+    graph_weight: float = 0.4
+    unsupervised_ml_weight: float = 0.8
     supervised_lr_weight: float = 1.0
     lr_max_points: float = 8.0               # Maximum LR contribution before overlap & precision dampening
     overlap_discount_factor: float = 0.70    # Discount overlapping LR feature share when same rule already fired

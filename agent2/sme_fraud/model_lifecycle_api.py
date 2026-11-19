@@ -11,7 +11,7 @@ from .snapshot_api import _key
 from .validation_api import authorize_request, read_json, respond_failure
 
 ROUTE = re.compile(
-    r'/api/v1/companies/([A-Za-z0-9_.:-]{1,128})/model-lifecycle(?:/(profile|train|evaluate|approve|rollback|score-queue|analyze|lr-fhe/(?:status|worker-health|worker-restart|prepare|train|resume|decrypt|promote)|federated/(?:status|contribute|run|job|approve)|lr-registry(?:/(?:register|validate|transition))?))?\Z'
+    r'/api/v1/companies/([A-Za-z0-9_.:-]{1,128})/model-lifecycle(?:/(profile|train|evaluate|approve|rollback|score-queue|analyze|training-data|lr-fhe/(?:status|worker-health|worker-restart|prepare|train|resume|decrypt|promote)|federated/(?:status|contribute|run|job|approve)|lr-registry(?:/(?:register|validate|transition))?))?\Z'
 )
 
 
@@ -119,7 +119,7 @@ def handle_model_lifecycle(handler, authorizer, lifecycle, method: str) -> bool:
             body = read_json(handler)
             sid = str((body or {}).get('snapshot_id') or '').strip() if isinstance(body, dict) else ''
             value = lifecycle.profile_snapshot(scope, sid, recheck)
-        elif method == 'POST' and action in ('train', 'evaluate', 'approve', 'rollback', 'score-queue', 'analyze'):
+        elif method == 'POST' and action in ('train', 'evaluate', 'approve', 'rollback', 'score-queue', 'analyze', 'training-data'):
             require_fit(scope)
             body = read_json(handler)
             if not isinstance(body, dict):
@@ -139,6 +139,8 @@ def handle_model_lifecycle(handler, authorizer, lifecycle, method: str) -> bool:
                     value = lifecycle.approve_and_activate(scope, body, idem, recheck)
                 elif action == 'rollback':
                     value = lifecycle.rollback_version(scope, body, idem, recheck)
+                elif action == 'training-data':
+                    value = lifecycle.ingest_training_files(scope, body, idem, recheck)
                 elif action == 'analyze':
                     value = lifecycle.analyze_latest(scope, header, body, idem, recheck)
                 else:

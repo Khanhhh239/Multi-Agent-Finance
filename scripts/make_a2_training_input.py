@@ -13,7 +13,7 @@ from pathlib import Path
 HEAD = ['transaction_id', 'posted_at', 'created_at', 'approved_at', 'txn_type', 'amount_vnd', 'approval_limit_vnd', 'creator_id', 'approver_id',
         'is_financial_entry', 'debit_account', 'credit_account', 'journal_signature', 'accounting_purpose', 'recognised_input_vat_vnd',
         'recognised_output_vat_vnd', 'writeoff_provision_vnd', 'production_cost_vnd', 'company_id', 'vendor_id', 'employee_id', 'customer_id',
-        'payment_channel', 'support_doc_count', 'goods_receipt_verified', 'evidence_on_file', 'journal_document_id', 'linked_document_id', 'business_purpose']
+        'payment_channel', 'support_doc_count', 'goods_receipt_verified', 'evidence_on_file', 'journal_document_id', 'linked_document_id', 'business_purpose', 'payroll_period']
 TZ = timezone(timedelta(hours=7))
 PERIODS = [('2026-07-01', 31), ('2026-08-01', 31), ('2026-09-01', 30), ('2026-10-01', 9)]  # 4 tệp, lịch sử trước kỳ đang rà soát
 
@@ -26,7 +26,7 @@ def rows_for(company, start, days, rng, serial):
         if day.weekday() >= 5:
             continue
         for _ in range(rng.randint(3, 6)):
-            kind = rng.choices(['customer_receipt', 'vendor_payment', 'rent', 'salary'], [55, 32, 3, 10])[0]
+            kind = rng.choices(['customer_receipt', 'vendor_payment', 'rent', 'payroll'], [55, 32, 3, 10])[0]
             hour = rng.choice([8, 9, 10, 11, 14, 15, 16])
             created = day.replace(hour=hour, minute=rng.choice([0, 10, 20, 30]))
             approved = created + timedelta(minutes=rng.randint(5, 55))
@@ -44,9 +44,11 @@ def rows_for(company, start, days, rng, serial):
                 amount += rng.choice([-37_000, 12_000, 54_000])  # tránh quá nhiều số tròn triệu trong lịch sử bình thường
             serial[0] += 1
             tid = f'{kind[:4].upper()}-{serial[0]:07d}'
+            employee = f'E{rng.randint(10, 30):06d}' if kind == 'payroll' else ''
+            period = (day.replace(day=1) - timedelta(days=1)).strftime('%Y-%m') if kind == 'payroll' else ''
             out.append([tid, posted.isoformat(), created.isoformat(), approved.isoformat(), kind, amount, 20_000_000, 'E000001', 'E000002',
-                        1, '112', '131', '112/131', purpose, 0, 0, 0, 0, company, vendor, '', customer, 'bank', docs,
-                        1 if kind != 'customer_receipt' else 0, 1 if docs else 0, tid, '', 'Dữ liệu mô phỏng'])
+                        1, '112', '131', '112/131', purpose, 0, 0, 0, 0, company, vendor, employee, customer, 'bank', docs,
+                        1 if kind != 'customer_receipt' else 0, 1 if docs else 0, tid, '', 'Dữ liệu mô phỏng', period])
     return out
 
 

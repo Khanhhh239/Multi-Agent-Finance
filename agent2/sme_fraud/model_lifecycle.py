@@ -1277,6 +1277,14 @@ class ModelLifecycle:
         # Immediately evaluate on held-out snapshot WITHOUT refitting
         eval_summary = self._evaluate_artifact(scope, method_id, artifact_id, manifest, eval_snapshot_id, recheck)
         selected_binding, _ = self.resources.selection(scope)
+        stats_artifact_id = selected_binding.get('statistics_artifact_id')
+        if not stats_artifact_id:
+            # The statistics branch is mandatory in scoring: fit its reference on the same history when none is bound.
+            stats_cfg = dict(fit_cfg, method_id='robust_z', profile_id='area-b-robust_z-v1', selected_columns=['log_abs_amount', 'round_million'])
+            stats_res = run_fit_job(self.snapshots, writable_store, self.authorizer, authorization, company, stats_cfg,
+                                    'mlc-fit-rz-' + digest(canonical([tenant, company, key]))[:37])
+            if stats_res.get('job', {}).get('status') == 'succeeded':
+                stats_artifact_id = stats_res['job']['artifact_id']
         now = _iso_now()
         data_profile = {
             'snapshot_id': snapshot_id,
@@ -1303,7 +1311,7 @@ class ModelLifecycle:
                 ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (
                     vid, tenant, company, vnum, vtag, method_id, artifact_id,
-                    selected_binding.get('statistics_artifact_id'), snapshot_id, eval_snapshot_id,
+                    stats_artifact_id, snapshot_id, eval_snapshot_id,
                     manifest['feature_contract']['version'],
                     manifest['feature_contract_fingerprint'],
                     manifest['preprocess_version'],
@@ -1544,6 +1552,37 @@ class ModelLifecycle:
             )
             return result
 
+    def ingest_training_files(self, scope: AccessScope, body: dict, key: str, recheck=None) -> dict:
+        """Combine the uploaded training CSV files (same columns as the A2 export) into one locked snapshot for training."""
+        import csv as _csv
+        from .csv_rule_source import build as build_rule_source
+        tenant, company = _require_company_scope(scope, recheck)
+        require_fit(scope)
+        files = body.get('files')
+        if not isinstance(files, list) or not 1 <= len(files) <= 24:
+            fail(400, 'TRAINING_FILES', 'Chọn từ 1 đến 24 tệp CSV dữ liệu huấn luyện.', 'Chọn tất cả tệp trong thư mục dữ liệu huấn luyện.')
+        rows, names = [], []
+        for f in files:
+            name, text = str((f or {}).get('name') or ''), (f or {}).get('text')
+            if not name.lower().endswith('.csv') or not isinstance(text, str) or len(text) > 9 * 1024 * 1024:
+                fail(400, 'TRAINING_FILE_INVALID', f'Tệp "{name}" không phải CSV hợp lệ (tối đa 9 MB).', 'Chọn đúng các tệp CSV huấn luyện.')
+            reader = _csv.DictReader(text.lstrip('﻿').splitlines())
+            if not {'transaction_id', 'posted_at', 'amount_vnd', 'approver_id'} <= set(reader.fieldnames or []):
+                fail(400, 'TRAINING_FILE_COLUMNS', f'Tệp "{name}" thiếu cột của sổ giao dịch Agent 2.', 'Dùng tệp mẫu trong thư mục input-A2-training.')
+            rows += list(reader)
+            names.append(name)
+        try:
+            raw, summary = build_rule_source(rows, tenant, company, company, purpose='training')
+        except (ValueError, TypeError) as exc:
+            fail(400, 'TRAINING_FILE_INVALID', f'Dữ liệu huấn luyện không hợp lệ: {exc}', 'Kiểm tra lại tệp.')
+        check = recheck or (lambda: scope)
+        draft = self.snapshots.upload(scope, raw, 'huan_luyen_' + company + '.json', key + '-up', check)
+        prev = self.snapshots.preview(scope, draft['import_id'], draft['revision'], check)
+        req = {k: prev[k] for k in ('preview_id', 'source_hash', 'mapping_hash', 'report_hash', 'context_hash')}
+        req.update(expected_revision=prev['revision'], acknowledge=True)
+        snap = self.snapshots.commit(scope, draft['import_id'], req, key + '-commit', check)['snapshot']
+        return dict(snapshot_id=snap['snapshot_id'], files=names, rows=summary['rows'], first=summary['first'], last=summary['last'])
+
     def analyze_latest(self, scope: AccessScope, authorization: str | None, body: dict, key: str, recheck=None) -> dict:
         """One-click analysis of the newest shared snapshot.
 
@@ -1553,17 +1592,35 @@ class ModelLifecycle:
         """
         tenant, company = _require_company_scope(scope, recheck)
         require_fit(scope)
-        snaps = self._list_snapshots(scope, recheck, limit=1)
-        if not snaps:
+        def source_id(sid):
+            try:
+                return str(loads(self.snapshots.get_snapshot(scope, sid, recheck, data=True)).get('source', {}).get('source_id') or '')
+            except Exception:
+                return ''
+        snaps = [s['snapshot_id'] for s in self._list_snapshots(scope, recheck, limit=30)]
+        work = [sid for sid in snaps if not source_id(sid).startswith('training-')]
+        training = [sid for sid in snaps if source_id(sid).startswith('training-')]
+        if not work:
             fail(409, 'ANALYZE_NO_DATA', 'Chưa có dữ liệu để phân tích.', 'Nạp dữ liệu ở màn hình Nạp dữ liệu của Portal rồi bấm Phân tích.')
-        snapshot_id = snaps[0]['snapshot_id']
+        snapshot_id = work[0]
         with self._tx(scope, recheck, write=False) as conn:
-            has_model = conn.execute(
-                "SELECT 1 FROM model_versions WHERE tenant_id=? AND company_id=? AND status IN ('active','shadow') AND approval_json IS NOT NULL LIMIT 1",
-                (tenant, company)).fetchone() is not None
+            current = conn.execute(
+                "SELECT snapshot_id FROM model_versions WHERE tenant_id=? AND company_id=? AND status IN ('active','shadow') AND approval_json IS NOT NULL "
+                "ORDER BY CASE status WHEN 'active' THEN 0 ELSE 1 END, version_number DESC LIMIT 1", (tenant, company)).fetchone()
+        has_model = False
+        if current is not None:
+            # A model fitted on another data contract cannot score this snapshot (its ML factor would be unavailable).
+            try:
+                has_model = (self.snapshots.get_snapshot(scope, current['snapshot_id'], recheck).get('contract_version')
+                             == self.snapshots.get_snapshot(scope, snapshot_id, recheck).get('contract_version'))
+            except Exception:
+                has_model = False
         baseline = False
         if not has_model:
-            trained = self.train_candidate(scope, authorization, {'snapshot_id': snapshot_id, 'method_id': 'isolation_forest', 'missing_policy': 'median_flags'}, key + '-train', recheck)
+            if not training:
+                fail(409, 'ANALYZE_MODEL_REQUIRED', 'Chưa có mô hình AI cho doanh nghiệp này.',
+                     'Vào tab Huấn luyện & mô hình, chọn các tệp dữ liệu huấn luyện và bấm Bắt đầu huấn luyện, sau đó phân tích lại.')
+            trained = self.train_candidate(scope, authorization, {'snapshot_id': training[0], 'method_id': 'isolation_forest', 'missing_policy': 'median_flags'}, key + '-train', recheck)
             version = trained['version']
             if version['status'] != 'pending_approval':
                 fail(409, 'ANALYZE_MODEL_NOT_READY', 'Dữ liệu hiện có chưa đủ để dựng mô hình nền.', 'Nạp thêm dữ liệu lịch sử của doanh nghiệp rồi phân tích lại.')
@@ -1685,9 +1742,9 @@ class ModelLifecycle:
         sc_in = body.get('scoring_config') if isinstance(body.get('scoring_config'), dict) else {}
         risk_cfg = RiskScoringConfig(
             rule_weight=float(sc_in.get('rule_weight', 1.0)),
-            statistics_weight=float(sc_in.get('statistics_weight', 0.5)),
-            graph_weight=float(sc_in.get('graph_weight', 0.0)),
-            unsupervised_ml_weight=float(sc_in.get('unsupervised_ml_weight', 2.0)),
+            statistics_weight=float(sc_in.get('statistics_weight', 0.6)),
+            graph_weight=float(sc_in.get('graph_weight', 0.4)),
+            unsupervised_ml_weight=float(sc_in.get('unsupervised_ml_weight', 0.8)),
             supervised_lr_weight=float(sc_in.get('supervised_lr_weight', 1.0)),
             lr_max_points=float(sc_in.get('lr_max_points', 8.0)),
             overlap_discount_factor=float(sc_in.get('overlap_discount_factor', 0.70)),
