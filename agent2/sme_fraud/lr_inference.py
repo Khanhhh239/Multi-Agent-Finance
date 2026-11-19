@@ -55,9 +55,9 @@ LR_RULE_OVERLAP_MAP = {
 }
 
 FIVE_METHOD_LABELS_VI = {
-    'rules': 'Luật nghiệp vụ (35 luật)',
-    'statistics': 'Thống kê lịch sử (RobustZ)',
-    'graph': 'Đồ thị quan hệ (PIT)',
+    'rules': 'Luật nghiệp vụ',
+    'statistics': 'Thống kê lịch sử',
+    'graph': 'Đồ thị quan hệ',
     'unsupervised_ml': 'ML không giám sát',
     'supervised_lr': 'Logistic Regression có giám sát',
 }
@@ -919,23 +919,30 @@ def build_five_method_row_assessment(
     unsup_version_tag: str | None,
     lr_dto: dict,
     config: RiskScoringConfig | None = None,
+    saved_score_breakdown: dict | None = None,
+    saved_case_weights: dict | None = None,
 ) -> dict:
     """Unify all 5 Agent2 detection sources (Rules, Statistics, Graph, Unsupervised ML, Supervised LR).
 
     Strictly preserves `unavailable -> score=None` (never converted to 0) and computes
-    a transparent weighted risk breakdown with anti-double-counting metadata.
+    a transparent weighted risk breakdown reconciled against saved case_policy weights.
     """
     cfg = config or RiskScoringConfig()
     branches = row.get('branches') or {}
     methods = row.get('methods') or {}
     rule_cov = row.get('rule_coverage') or {}
     rules_list = rule_cov.get('rules') or []
+    saved_sb = saved_score_breakdown if isinstance(saved_score_breakdown, dict) else {}
+    saved_w = saved_case_weights if isinstance(saved_case_weights, dict) else {}
 
-    # 1. Rules
+    # 1. Rules (reconcile row-level rules with saved case-level rule_score which includes group/batch rules like P1)
     r_branch = branches.get('rules') or {}
     r_hits = [e for e in rules_list if e.get('status') == 'evaluated_hit' and e.get('matched') is True]
     r_actionable_pts = sum(float(e.get('score') or 0) for e in r_hits if float(e.get('score') or 0) > 0)
-    r_available = bool(r_branch.get('available')) or r_branch.get('status') in ('available', 'partial')
+    saved_rule_pts = float(saved_sb['rule_score']) if _is_finite(saved_sb.get('rule_score')) else None
+    if saved_rule_pts is not None and saved_rule_pts > r_actionable_pts:
+        r_actionable_pts = saved_rule_pts
+    r_available = bool(r_branch.get('available')) or r_branch.get('status') in ('available', 'partial') or (saved_rule_pts is not None)
     rules_entry = {
         'method_id': 'rules',
         'method_label_vi': FIVE_METHOD_LABELS_VI['rules'],
@@ -1045,7 +1052,7 @@ def build_five_method_row_assessment(
     ml_details = ml_m.get('details') or {}
     unsup_entry = {
         'method_id': 'unsupervised_ml',
-        'method_label_vi': f'{FIVE_METHOD_LABELS_VI["unsupervised_ml"]} ({ml_key or "chưa cấu hình"})',
+        'method_label_vi': FIVE_METHOD_LABELS_VI['unsupervised_ml'],
         'algorithm_id': ml_key,
         'score': ml_score_val,
         'raw_score': round(float(ml_m['raw_score']), 4) if (ml_avail and _is_finite(ml_m.get('raw_score'))) else None,
@@ -1071,13 +1078,24 @@ def build_five_method_row_assessment(
     five_methods = [rules_entry, stat_entry, graph_entry, unsup_entry, lr_entry]
 
     # Weighted Risk Aggregation: SKIP any unavailable method (NEVER treat unavailable as 0!)
-    weights_map = {
-        'rules': cfg.rule_weight,
-        'statistics': cfg.statistics_weight,
-        'graph': cfg.graph_weight,
-        'unsupervised_ml': cfg.unsupervised_ml_weight,
-        'supervised_lr': cfg.supervised_lr_weight,
-    }
+    # When saved_case_weights from case_policy is supplied, align weights & inclusion strictly
+    # so the displayed per-method contributions reconcile exactly with the saved candidate_score!
+    if saved_w:
+        weights_map = {
+            'rules': float(saved_w.get('rule_weight', 1.0)),
+            'statistics': 0.0,  # Reference-only unless explicitly part of case_policy scoring
+            'graph': 0.0,       # Context-only in case_policy scoring
+            'unsupervised_ml': float(saved_w.get('ml_weight', 0.0)),
+            'supervised_lr': float(saved_w.get('calibrated_weight', 0.0)),
+        }
+    else:
+        weights_map = {
+            'rules': cfg.rule_weight,
+            'statistics': cfg.statistics_weight,
+            'graph': cfg.graph_weight,
+            'unsupervised_ml': cfg.unsupervised_ml_weight,
+            'supervised_lr': cfg.supervised_lr_weight,
+        }
     contributions = []
     total_score = 0.0
     any_scored = False
@@ -1086,7 +1104,10 @@ def build_five_method_row_assessment(
         mid = entry['method_id']
         w = float(weights_map[mid])
         is_unavail = entry['status'] == 'unavailable' or entry['score'] is None
+        entry['weight'] = w
+        entry['included_in_total'] = bool((not is_unavail) and w > 0.0)
         if is_unavail:
+            entry['contribution'] = None
             unavailable_methods.append({
                 'method_id': mid,
                 'method_label_vi': entry['method_label_vi'],
@@ -1104,9 +1125,17 @@ def build_five_method_row_assessment(
                 'error_code': entry.get('error_code'),
             })
         else:
-            contrib = round(float(entry['score']) * w, 4)
-            total_score += contrib
-            any_scored = True
+            raw_for_total = float(entry['score'])
+            if mid == 'unsupervised_ml' and _is_finite(saved_sb.get('ml_score')):
+                raw_for_total = float(saved_sb['ml_score'])
+                entry['score'] = round(raw_for_total, 4)
+            elif mid == 'supervised_lr' and _is_finite(saved_sb.get('lr_score')):
+                raw_for_total = float(saved_sb['lr_score'])
+            contrib = round(raw_for_total * w, 4) if w > 0.0 else 0.0
+            entry['contribution'] = contrib
+            if w > 0.0:
+                total_score += contrib
+                any_scored = True
             contributions.append({
                 'method_id': mid,
                 'name': entry['method_label_vi'],

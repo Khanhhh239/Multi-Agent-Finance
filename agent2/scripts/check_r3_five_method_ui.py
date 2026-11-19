@@ -116,8 +116,11 @@ def run(output: Path) -> dict:
                 # 4. Area A: Queue preview & open transaction detail
                 expect(page.locator('#rows .tx-row')).not_to_have_count(0, timeout=25000)
                 page.locator('#rows .tx-row').first.click()
-                expect(page.locator('#preview')).to_contain_text('5 phương pháp')
-                expect(page.locator('#preview')).to_contain_text('P(lớp 1)=')
+                expect(page.locator('#preview')).to_contain_text('Nguồn điểm')
+                expect(page.locator('#preview')).to_contain_text('Xác suất')
+                preview_txt = page.locator('#preview').inner_text()
+                for forbidden in ('(5 phương pháp)', '(35 luật)', '(RobustZ)', '(PIT)', '(isolation_forest)', 'Chưa khả dụng · Chưa khả dụng'):
+                    assert forbidden not in preview_txt, f'Forbidden jargon still in preview: {forbidden}'
                 page.locator('#open-investigation').click()
                 expect(page.locator('#investigation')).to_be_visible(timeout=20000)
 

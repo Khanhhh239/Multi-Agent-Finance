@@ -12,7 +12,8 @@
   const kinds = { vendor_payment: 'Thanh toán NCC', payment: 'Thanh toán NCC', customer_receipt: 'Thu tiền khách hàng', receipt: 'Thu tiền khách hàng', salary: 'Lương', payroll: 'Chi lương', adjustment: 'Điều chỉnh', advance: 'Tạm ứng' };
   const outcomes = { confirmed_risk: 'Vi phạm (Có vấn đề cần xử lý)', legitimate: 'Hợp lệ (Không phát hiện vấn đề)', inconclusive: 'Chưa đủ bằng chứng' };
   const methodStatusVi = { available: 'Khả dụng', partial: 'Có giới hạn', unavailable: 'Chưa khả dụng', not_applicable: 'Không áp dụng' };
-  const branchNamesVi = { rules: 'Luật nghiệp vụ', ml: 'ML không giám sát', statistics: 'Thống kê lịch sử', graph: 'Quan hệ đối tượng', supervised_lr: 'Logistic Regression có giám sát' };
+  const branchNamesVi = { rules: 'Luật nghiệp vụ', ml: 'ML không giám sát', unsupervised_ml: 'ML không giám sát', statistics: 'Thống kê lịch sử', graph: 'Đồ thị quan hệ', supervised_lr: 'Logistic Regression có giám sát' };
+  const cleanMethodLabel = m => branchNamesVi[m?.method_id] || m?.method_label_vi || m?.method_id || '';
   const nodeIcons = { transactions: '⇄', vendors: '🏪', employees: '👤', customers: '🏢', invoices: '📄', transaction_documents: '📎', bank: '🏦', phone: '☎', address: '📍' };
   const fieldLabels = {
     transaction_id: 'Mã giao dịch', record_id: 'Mã bản ghi', revision: 'Phiên bản',
@@ -176,22 +177,43 @@
     box.replaceChildren(el('h2', 'Vì sao cần kiểm tra?'), el('p', r.explanation.why));
     const signals = el('ul');
     for (const s of r.signals) signals.append(el('li', s.name + (s.context_only ? ' · Chỉ là bối cảnh' : '')));
-    box.append(signals, el('h3', 'Nguồn điểm (5 phương pháp)'));
+    box.append(signals, el('h3', 'Nguồn điểm'));
     const fm = r.explanation.five_methods;
     if (Array.isArray(fm) && fm.length) {
       for (const m of fm) {
+        const label = cleanMethodLabel(m);
         const stTxt = methodStatusVi[m.status] || m.status;
-        const extra = m.method_id === 'supervised_lr' && m.status === 'available' && m.probability != null
-          ? ` · P(lớp 1)=${fmtPct(m.probability)} · Dự đoán ${m.prediction} · +${fmtNum(m.score)} đ`
-          : (m.status === 'unavailable' || m.score == null ? ' · Chưa khả dụng (không quy về 0)' : ` · Điểm: ${fmtNum(m.score)}`);
-        box.append(el('p', `${m.method_label_vi} · ${stTxt}${extra}`));
+        if (m.status === 'unavailable' || m.score == null) {
+          box.append(el('p', `${label} · Chưa khả dụng (không quy về 0)`));
+          continue;
+        }
+        if (m.method_id === 'supervised_lr' && m.probability != null) {
+          const pts = m.contribution != null ? m.contribution : m.score;
+          box.append(el('p', `${label} · ${stTxt} · Xác suất ${fmtPct(m.probability)} · Dự đoán ${m.prediction} · +${fmtNum(pts)} điểm`));
+        } else if (m.included_in_total === false) {
+          if (m.method_id === 'graph') {
+            box.append(el('p', `${label} · ${stTxt} · Chỉ dùng đối chiếu bối cảnh (không cộng điểm)`));
+          } else {
+            box.append(el('p', `${label} · ${stTxt} · Mức bất thường ${fmtNum(m.score)} (tham khảo, không cộng vào tổng)`));
+          }
+        } else {
+          const pts = m.contribution != null ? m.contribution : m.score;
+          const weightDetail = (m.contribution != null && m.weight != null && Math.abs(m.weight - 1) > 1e-6 && Number(m.score) > 0)
+            ? ` (${fmtNum(m.score)} × ${fmtNum(m.weight)})`
+            : '';
+          box.append(el('p', `${label} · ${stTxt} · Điểm: ${fmtNum(pts)}${weightDetail}`));
+        }
       }
     } else {
       for (const b of r.explanation.branches) {
         box.append(el('p', (branchNamesVi[b.name] || b.name) + ' · ' + (methodStatusVi[b.status] || b.status)));
       }
     }
-    box.append(el('p', 'Điểm ' + score(r) + ' là điểm ưu tiên đã lưu, không phải xác suất gian lận.', 'footnote'));
+    const activeContribs = (r.explanation.contributions || []).filter(p => p.contribution != null && p.weight > 0);
+    const sumFormula = activeContribs.length
+      ? ' (= ' + activeContribs.map(p => `${p.name} ${fmtNum(p.contribution)}`).join(' + ') + ')'
+      : '';
+    box.append(el('p', 'Tổng điểm ưu tiên: ' + score(r) + sumFormula + '. Điểm ưu tiên không phải xác suất gian lận.', 'footnote'));
     const b = el('button', 'Mở điều tra'); b.id = 'open-investigation'; b.onclick = () => open(r);
     box.append(b);
     const source = el('details'); source.append(el('summary', 'Xem nguồn của giao dịch'), bindings(r));
@@ -504,10 +526,10 @@
     if (fiveMethods.length) {
       const fmCard = el('div', undefined, 'contrib-card');
       fmCard.id = 'five-methods-card';
-      fmCard.append(el('h3', 'Điểm từng phương pháp phát hiện (5 nguồn)'));
+      fmCard.append(el('h3', 'Điểm từng phương pháp phát hiện'));
       const scroll = el('div', undefined, 'table-scroll');
       const tbl = el('table', undefined, 'five-method-table');
-      tbl.innerHTML = '<thead><tr><th>Phương pháp</th><th>Trạng thái</th><th>Điểm quy đổi</th><th>Xác suất / Ghi chú</th><th>Phiên bản mô hình / mạch</th></tr></thead>';
+      tbl.innerHTML = '<thead><tr><th>Phương pháp</th><th>Trạng thái</th><th>Điểm cộng vào tổng</th><th>Xác suất / Ghi chú</th><th>Phiên bản mô hình / mạch</th></tr></thead>';
       const tb = el('tbody');
       for (const m of fiveMethods) {
         const tr = el('tr');
@@ -515,36 +537,48 @@
         const tdSt = el('td');
         tdSt.append(el('span', methodStatusVi[m.status] || m.status, 'method-pill ' + stCls));
 
-        const scoreTxt = (m.status === 'unavailable' || m.score == null)
-          ? 'Chưa khả dụng (không quy về 0)'
-          : fmtNum(m.score);
+        let scoreTxt;
+        if (m.status === 'unavailable' || m.score == null) {
+          scoreTxt = 'Chưa khả dụng (không quy về 0)';
+        } else if (m.included_in_total === false) {
+          scoreTxt = m.method_id === 'graph'
+            ? 'Không cộng điểm (bối cảnh)'
+            : `Không cộng tổng (mức ${fmtNum(m.score)})`;
+        } else {
+          const pts = m.contribution != null ? m.contribution : m.score;
+          scoreTxt = (m.contribution != null && m.weight != null && Math.abs(m.weight - 1) > 1e-6 && Number(m.score) > 0)
+            ? `${fmtNum(pts)} (${fmtNum(m.score)} × ${fmtNum(m.weight)})`
+            : fmtNum(pts);
+        }
 
         let noteTxt = '—';
         if (m.method_id === 'supervised_lr') {
           if (m.status === 'available' && m.probability != null) {
-            noteTxt = `P(lớp 1)=${fmtPct(m.probability)} · Ngưỡng ${fmtPct(m.threshold)} · Dự đoán ${m.prediction}`;
+            noteTxt = `Xác suất ${fmtPct(m.probability)} · Ngưỡng ${fmtPct(m.threshold)} · Dự đoán ${m.prediction}`;
           } else {
-            noteTxt = `${m.error_code || 'LR_UNAVAILABLE'}: ${m.message || 'Chưa có mô hình LR được phê duyệt.'}`;
+            noteTxt = m.message || 'Chưa có mô hình Logistic Regression được kích hoạt.';
           }
         } else if (m.method_id === 'rules') {
           const hits = m.confidence_metadata?.hit_count ?? 0;
-          noteTxt = hits ? `Kích hoạt ${hits} dấu hiệu luật (${m.confidence_metadata?.evaluated_count ?? 0}/${m.confidence_metadata?.total_count ?? 35} luật đánh giá)` : 'Không có luật kích hoạt';
+          const sigCount = (detail.signals || []).filter(s => !s.context_only).length;
+          const totalHits = Math.max(hits, sigCount);
+          noteTxt = totalHits ? `Kích hoạt ${totalHits} dấu hiệu luật` : 'Không có luật kích hoạt';
         } else if (m.method_id === 'statistics') {
           noteTxt = m.status === 'available'
-            ? `Hạng tham chiếu RobustZ (${fmtPct(m.score)})`
-            : `${m.error_code || 'STATISTICS_UNAVAILABLE'}`;
+            ? `Mức bất thường so với lịch sử (${fmtPct(m.score)}), dùng để tham khảo`
+            : 'Chưa đủ dữ liệu lịch sử để so sánh';
         } else if (m.method_id === 'graph') {
           const links = m.confidence_metadata?.link_count ?? 0;
-          noteTxt = m.status === 'unavailable' ? `${m.error_code || 'GRAPH_UNAVAILABLE'}` : `Bối cảnh đồ thị (${links} liên kết; không tự cộng điểm)`;
+          noteTxt = m.status === 'unavailable' ? 'Chưa đủ nguồn đối chiếu quan hệ' : `Đối chiếu quan hệ (${links} liên kết; không tự cộng điểm)`;
         } else if (m.method_id === 'unsupervised_ml') {
           noteTxt = m.status === 'available'
             ? `Hạng bất thường không giám sát (không phải xác suất)`
-            : `${m.error_code || 'UNSUPERVISED_ML_UNAVAILABLE'}`;
+            : 'Chưa có mô hình không giám sát phù hợp';
         }
 
         const verParts = [m.model_version, m.circuit_version ? `Mạch ${m.circuit_version}` : null].filter(Boolean);
         tr.append(
-          el('td', m.method_label_vi || m.method_id),
+          el('td', cleanMethodLabel(m)),
           tdSt,
           el('td', scoreTxt),
           el('td', noteTxt),

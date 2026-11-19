@@ -175,18 +175,47 @@ class Investigation:
                 output[-1]['explanation']['lr_model_version']=pipe.get('lr_model_version')
 
                 # R3 — Unified 5-method view (Rules, Statistics, Graph, Unsupervised ML, Supervised LR)
+                weights=pipe.get('case_policy',{}).get('scoring',{})
+                from .lr_inference import FIVE_METHOD_LABELS_VI,SupervisedLRAdapter,build_five_method_row_assessment
                 five_assess=row.get('five_method_assessment')
                 if not isinstance(five_assess,dict):
-                    from .lr_inference import SupervisedLRAdapter,build_five_method_row_assessment
                     lr_m=(row.get('methods') or {}).get('supervised_lr')
                     if not isinstance(lr_m,dict):
                         lr_m=SupervisedLRAdapter._unavailable_method_dto(
                             error_code='LR_NOT_INCLUDED_IN_RUN',
                             message='Lần phân tích này chạy trước khi bật mô hình Logistic Regression được phê duyệt.',
                             model_version=None,circuit_version=None)
-                    five_assess=build_five_method_row_assessment(row,unsup_method_id=None,unsup_version_tag=pipe.get('model_version_tag'),lr_dto=lr_m)
-                lr_entry=next((m for m in five_assess.get('five_methods',[]) if m.get('method_id')=='supervised_lr'),None)
-                output[-1]['explanation']['five_methods']=deepcopy(five_assess.get('five_methods',[]))
+                    five_assess=build_five_method_row_assessment(
+                        row,unsup_method_id=None,unsup_version_tag=pipe.get('model_version_tag'),
+                        lr_dto=lr_m,saved_score_breakdown=score,saved_case_weights=weights)
+                five_methods_copy=deepcopy(five_assess.get('five_methods',[]))
+                # Reconcile displayed method scores & weights against saved candidate score_breakdown (including group rules like P1)
+                w_map={'rules':number(weights.get('rule_weight')) or 0.0,'statistics':0.0,'graph':0.0,
+                       'unsupervised_ml':number(weights.get('ml_weight')) or 0.0,
+                       'supervised_lr':number(weights.get('calibrated_weight')) or 0.0}
+                for fm in five_methods_copy:
+                    mid=fm.get('method_id')
+                    if mid in FIVE_METHOD_LABELS_VI:
+                        fm['method_label_vi']=FIVE_METHOD_LABELS_VI[mid]
+                    w=w_map.get(mid,0.0)
+                    fm['weight']=w
+                    if mid=='rules':
+                        rs=number(score.get('rule_score'))
+                        if rs is not None and (fm.get('score') is None or rs>float(fm['score'])):
+                            fm['score']=round(rs,4)
+                    elif mid=='unsupervised_ml':
+                        ms=number(score.get('ml_score'))
+                        if ms is not None and fm.get('status')!='unavailable':
+                            fm['score']=round(ms,4)
+                    elif mid=='supervised_lr':
+                        ls=number(score.get('lr_score'))
+                        if ls is not None and fm.get('status')=='available':
+                            fm['score']=round(ls,4)
+                    is_unavail=(fm.get('status')=='unavailable' or fm.get('score') is None)
+                    fm['included_in_total']=bool((not is_unavail) and w>0)
+                    fm['contribution']=None if is_unavail else (round(float(fm['score'])*w,4) if w>0 else 0.0)
+                lr_entry=next((m for m in five_methods_copy if m.get('method_id')=='supervised_lr'),None)
+                output[-1]['explanation']['five_methods']=five_methods_copy
                 output[-1]['explanation']['unavailable_methods']=deepcopy(five_assess.get('unavailable_methods',[]))
                 output[-1]['explanation']['unavailable_treated_as_zero']=False
                 output[-1]['explanation']['supervised_lr']=deepcopy(lr_entry)
@@ -195,7 +224,7 @@ class Investigation:
                 output[-1]['lr_prediction']=lr_entry.get('prediction') if isinstance(lr_entry,dict) and lr_entry.get('status')=='available' else None
                 output[-1]['lr_status']=lr_entry.get('status') if isinstance(lr_entry,dict) else 'unavailable'
 
-                weights=pipe.get('case_policy',{}).get('scoring',{});parts=[]
+                parts=[]
                 for key,label,weight in [('rule_score','Luật nghiệp vụ','rule_weight'),('ml_score','ML không giám sát','ml_weight')]:
                     val=number(score.get(key));w=number(weights.get(weight))
                     parts.append(dict(name=label,raw_score=val,weight=w,contribution=round(val*w,6) if val is not None and w is not None else None))

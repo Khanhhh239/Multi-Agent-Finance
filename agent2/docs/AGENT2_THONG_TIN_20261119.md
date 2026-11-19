@@ -1,5 +1,7 @@
 # BIỂU MẪU THU THẬP THÔNG TIN AGENT
 
+> Bản lưu lịch sử trước lượt kiểm thử và push mới. Xem [biểu mẫu đã cập nhật theo commit ebadc6b](AGENT2_THONG_TIN_CAP_NHAT_20261119.md) để lấy hiện trạng mới nhất của báo cáo ngày 19/11/2026.
+
 **Dự án:** Multi-Agent System – AI Quantum Challenge 2026
 **Agent:** Agent2 – Hỗ trợ phát hiện và điều tra gian lận tài chính
 **Ngày lập:** 19/11/2026, giờ Việt Nam.
