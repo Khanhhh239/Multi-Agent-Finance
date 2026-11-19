@@ -90,3 +90,12 @@ Lệnh sẽ tự tạo 4 môi trường `.venv` riêng cho từng Agent, tải c
 - **Báo cổng đang bận (`8800` / `8011` / `8766` / `8640` / `8040`)**: Chỉ cần chạy lại `.\run_web.ps1`, script sẽ tự động dọn sạch tiến trình cũ trước khi bật mới.
 - **Quên mật khẩu mở khóa Nạp dữ liệu**: Xóa tệp `portal\workspace\intake_security.json`, tải lại trang `#data` để đặt mật khẩu mới.
 - **Dùng FaceID trên trình duyệt**: Chuẩn camera trình duyệt yêu cầu mở qua địa chỉ `http://localhost:8800` thay vì IP `127.0.0.1:8800` (giao diện sẽ tự gợi ý chuyển hướng khi bấm nút FaceID).
+
+
+## Mã hóa đồng cấu (HE) — tự thiết lập
+
+`run_web.bat` tự gọi `scripts/setup_he.py` ở lần chạy đầu (sau đó bỏ qua). Script này, trên chính máy chạy:
+cài TenSEAL; cài WSL Ubuntu-24.04 nếu thiếu (lần đầu có thể cần khởi động lại Windows rồi chạy lại); dựng `/opt/he4-venv` (Python 3.12, torch CPU, Concrete-Python 2.11.0);
+biên dịch các mạch TFHE vào `.runtime/he4`; sinh khóa node/worker (Windows DPAPI, riêng từng máy), dữ liệu mô phỏng C001/C002, cấu hình Portal;
+kích hoạt hàng đợi điều tra, mô hình và gói phát hành. Không có khóa hay bản dựng nào nằm trong git. Làm lại từ đầu: xóa `.runtime/he-ready.json` rồi chạy lại.
+Giao diện Agent 2 luôn là bản "Hàng đợi & điều tra" và "Huấn luyện & mô hình"; trang cũ (index/workspace) đã bị xóa.

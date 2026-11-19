@@ -72,6 +72,13 @@ if (-not (Test-Path -LiteralPath $py)) {
     $py = (Get-Command python -ErrorAction Stop).Source
 }
 
+# HE bắt buộc: lần đầu tự sinh khóa, mạch mã hóa, cấu hình và dữ liệu mẫu (scripts/setup_he.py), các lần sau bỏ qua.
+if (-not (Test-Path -LiteralPath '.runtime\he-ready.json')) {
+    Write-Host "[he] Thiết lập mã hóa đồng cấu (HE) lần đầu, có thể mất 10-20 phút..." -ForegroundColor Cyan
+    & $py -X utf8 scripts/setup_he.py
+    if ($LASTEXITCODE -ne 0) { throw "Thiết lập HE thất bại; xem thông báo phía trên." }
+}
+
 Write-Host "[sync] Đồng bộ cấu hình, dữ liệu và mô hình cho Portal + 4 Agent..." -ForegroundColor Cyan
 & $py -X utf8 data_pipeline/setup_runtime.py --mode auto
 
