@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
 import re
 import unicodedata
 from contextlib import contextmanager
@@ -50,6 +49,11 @@ class SelectionTrace:
     retrieval_result: dict[str, Any] | None = None
     selected_example_ids: list[str] = field(default_factory=list)
     stage_latency_ms: dict[str, float] = field(default_factory=dict)
+    stage_breakdown_ms: dict[str, float] = field(default_factory=dict)
+    stage_status: dict[str, str] = field(default_factory=dict)
+    stage_errors: dict[str, dict[str, Any]] = field(default_factory=dict)
+    stage_breakdown_status: dict[str, str] = field(default_factory=dict)
+    stage_breakdown_errors: dict[str, dict[str, Any]] = field(default_factory=dict)
     recovery_reason: str | None = None
     candidate_expanded: bool = False
     usage: dict[str, int] | None = None
@@ -62,13 +66,44 @@ class SelectionTrace:
 
     @contextmanager
     def measure(self, stage: str):
+        with self._measure(stage, detailed=False):
+            yield
+
+    @contextmanager
+    def measure_detail(self, stage: str):
+        with self._measure(stage, detailed=True):
+            yield
+
+    @contextmanager
+    def _measure(self, stage: str, *, detailed: bool):
         started = perf_counter()
+        latency = self.stage_breakdown_ms if detailed else self.stage_latency_ms
+        statuses = self.stage_breakdown_status if detailed else self.stage_status
+        errors = self.stage_breakdown_errors if detailed else self.stage_errors
         try:
             yield
+        except ContractError as exc:
+            statuses[stage] = "error"
+            errors[stage] = {
+                "code": exc.code,
+                "stage": exc.stage,
+                "retryable": exc.retryable,
+                "type": type(exc).__name__,
+            }
+            raise
+        except Exception as exc:
+            statuses[stage] = "error"
+            errors[stage] = {
+                "code": "unexpected_error",
+                "stage": stage,
+                "retryable": False,
+                "type": type(exc).__name__,
+            }
+            raise
+        else:
+            statuses[stage] = "ok"
         finally:
-            self.stage_latency_ms[stage] = (
-                self.stage_latency_ms.get(stage, 0.0) + (perf_counter() - started) * 1000
-            )
+            latency[stage] = latency.get(stage, 0.0) + (perf_counter() - started) * 1000
 
 
 def _candidate_ids(retrieval: dict[str, Any]) -> list[str]:
@@ -286,16 +321,15 @@ async def select_metrics_with_recovery(
         auth_context=auth_context,
         query_context=context,
         index=index,
+        trace=trace,
     )
     with trace.measure("retrieval_ms"):
-        if (
-            provider.config.provider in ("ollama", "openai")
-            and config.retrieval.mode in ("dense_only", "hybrid")
-            and config.retrieval.dense_enabled
-        ):
-            retrieval, revision = await asyncio.to_thread(retrieve, config=config)
-        else:
-            retrieval, revision = retrieve(config=config)
+        # The retrieval stack contains synchronous provider clients and NumPy
+        # index operations. Running it through asyncio.to_thread leaves the
+        # Future pending in the supported Python/DuckDB/httpx runtime after a
+        # provider call. The Free slice serializes the single expensive query;
+        # provider timeouts remain bounded by the selection config.
+        retrieval, revision = retrieve(config=config)
         trace.initial_retrieved_metric_ids = _candidate_ids(retrieval)
         status = retrieval["status"]
         if status == "retrieval_unavailable":
@@ -310,7 +344,7 @@ async def select_metrics_with_recovery(
                     "expansion": config.expansion.model_copy(update={"enabled": False}),
                 }
             )
-            retrieval, _ = await asyncio.to_thread(retrieve, config=lexical_config)
+            retrieval, _ = retrieve(config=lexical_config)
             if retrieval["status"] != "candidates_found":
                 raise _retrieval_unavailable()
             for candidate in retrieval["candidates"]:
@@ -348,6 +382,16 @@ async def select_metrics_with_recovery(
     )
     observations = asdict(trace)
     observations.pop("selection_cache_hit")
+    # Keep the public selection result contract stable. Detailed diagnostics
+    # remain available on the PipelineTrace used by the API logger.
+    for key in (
+        "stage_breakdown_ms",
+        "stage_status",
+        "stage_errors",
+        "stage_breakdown_status",
+        "stage_breakdown_errors",
+    ):
+        observations.pop(key, None)
     return {**validated, **observations, "recovery_triggered": trace.recovery_triggered}
 
 
@@ -456,8 +500,7 @@ async def _select_from_retrieval(
         examples = None
         if fewshot is not None:
             with trace.measure("fewshot_ms"):
-                examples = await asyncio.to_thread(
-                    _select_examples,
+                examples = _select_examples(
                     question,
                     locale,
                     trace.retrieved_metric_ids,
@@ -469,7 +512,7 @@ async def _select_from_retrieval(
                 )
                 trace.selected_example_ids = [example["example_id"] for example in examples]
         select = partial(selector.select, question, candidates, examples=examples, seed=seed)
-        with trace.measure("llm_ms"):
+        with trace.measure("llm_ms"), trace.measure_detail("llm_metric_selection"):
             try:
                 draft, trace.usage = await select()
             except SelectionFormatError as exc:
@@ -495,7 +538,9 @@ async def _select_from_retrieval(
                 if trace.recovery_reason is None:
                     trace.recovery_reason = "llm_unavailable"
                 degraded_llm = True
-                draft = GovernedLexicalSelector.select_draft(question, locale, candidates, catalog)
+                draft = GovernedLexicalSelector.select_draft(
+                    question, locale, candidates, catalog
+                )
 
     # Record only the schema-checked status and IDs the model was allowed to see.
     candidates = set(trace.retrieved_metric_ids)

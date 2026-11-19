@@ -2,14 +2,16 @@
 
 from __future__ import annotations
 
-import asyncio
 import logging
 import os
 import re
 import unicodedata
+from contextlib import contextmanager
 from dataclasses import asdict, dataclass, field
 from functools import cache
 from pathlib import Path
+from time import perf_counter
+from typing import Any
 from uuid import uuid4
 
 import duckdb
@@ -66,6 +68,39 @@ class PipelineTrace:
     catalog_hash: str | None = None
     policy_hash: str | None = None
     answer_validation_passed: bool | None = None
+    stage_latency_ms: dict[str, float] = field(default_factory=dict)
+    stage_status: dict[str, str] = field(default_factory=dict)
+    stage_errors: dict[str, dict[str, Any]] = field(default_factory=dict)
+
+    @contextmanager
+    def measure(self, stage: str):
+        started = perf_counter()
+        try:
+            yield
+        except ContractError as exc:
+            self.stage_status[stage] = "error"
+            self.stage_errors[stage] = {
+                "code": exc.code,
+                "stage": exc.stage,
+                "retryable": exc.retryable,
+                "type": type(exc).__name__,
+            }
+            raise
+        except Exception as exc:
+            self.stage_status[stage] = "error"
+            self.stage_errors[stage] = {
+                "code": "unexpected_error",
+                "stage": stage,
+                "retryable": False,
+                "type": type(exc).__name__,
+            }
+            raise
+        else:
+            self.stage_status[stage] = "ok"
+        finally:
+            self.stage_latency_ms[stage] = (
+                self.stage_latency_ms.get(stage, 0.0) + (perf_counter() - started) * 1000
+            )
 
 
 def build_final_response(
@@ -122,6 +157,14 @@ def build_observability_record(
         "dense_index_version": retrieval.get("dense_index_version"),
         "embedding_model": retrieval.get("embedding_model"),
         "stage_latencies_ms": dict(selection.stage_latency_ms),
+        "pipeline_stage_latencies_ms": dict(trace.stage_latency_ms),
+        "pipeline_stage_status": dict(trace.stage_status),
+        "pipeline_stage_errors": {key: dict(value) for key, value in trace.stage_errors.items()},
+        "selection_stage_breakdown_ms": dict(selection.stage_breakdown_ms),
+        "selection_stage_status": dict(selection.stage_breakdown_status),
+        "selection_stage_errors": {
+            key: dict(value) for key, value in selection.stage_breakdown_errors.items()
+        },
         "candidate_count": len(selection.retrieved_metric_ids),
         "selected_metric_ids": (trace.selected_metrics or {}).get("metric_ids", []),
         "selected_example_ids": list(selection.selected_example_ids),
@@ -218,10 +261,11 @@ async def _run(
     trace,
     seed,
 ) -> dict:
-    measure = trace.selection.measure
-    with measure("intake"):
+    measure = trace.measure
+    with measure("authentication"):
         auth = build_auth_context(claims, policy)
         trace.policy_hash = auth["policy_hash"]
+    with measure("request_validation"):
         query = query_intake(payload, app_config.max_question_length)
         options = query["options"]
         if options.get("use_cache") is False:
@@ -302,7 +346,7 @@ async def _run(
                     and tenant in warehouses
                     and warehouses[tenant].is_file()
                 ):
-                    wm = await asyncio.to_thread(_read_warehouse_watermark, warehouses[tenant])
+                    wm = _read_warehouse_watermark(warehouses[tenant])
                     if wm:
                         planning_context["data_watermark"] = wm
             draft = build_semantic_plan_draft(query, metrics, planning_context)
@@ -350,8 +394,12 @@ async def _run(
         "query_fingerprint": bound.fingerprint,
     }
     with measure("sql_execution"):
-        execution = await asyncio.to_thread(
-            execute_safe_sql,
+        # DuckDB's Python connection lifecycle is not safe through
+        # asyncio.to_thread in the supported runtime: the worker returns from
+        # the query but the asyncio Future can remain pending. The Free slice
+        # deliberately allows one expensive query, so keep this read-only
+        # operation synchronous and bounded by DuckDB's interrupt timer.
+        execution = execute_safe_sql(
             safe,
             timeout_ms=app_config.query_timeout_ms,
             use_cache=config.cache_enabled,

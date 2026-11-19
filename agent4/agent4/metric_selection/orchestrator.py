@@ -69,6 +69,7 @@ def _retrieve_with_revision(
     config: MetricSelectionConfig | None = None,
     query_context: dict[str, Any] | None = None,
     index: MetricVectorIndex | None = None,
+    trace: Any | None = None,
 ) -> tuple[dict[str, Any], str | None]:
     """Return a retrieval result and its scoped revision for downstream selection."""
     stage = "metric_retrieval"
@@ -109,7 +110,15 @@ def _retrieve_with_revision(
             return cached, key
 
     result = _retrieve(
-        normalized_query, catalog, auth_context, config, requested_view, provider, index, scope
+        normalized_query,
+        catalog,
+        auth_context,
+        config,
+        requested_view,
+        provider,
+        index,
+        scope,
+        trace=trace,
     )
     if result["status"] == "retrieval_unavailable":
         return result, None
@@ -160,6 +169,8 @@ def _retrieve(
     provider: EmbeddingProvider | None,
     index: MetricVectorIndex | None,
     scope: dict[str, Any] | None,
+    *,
+    trace: Any | None = None,
 ) -> dict[str, Any]:
     settings = config.retrieval
     question = normalized_query["question"]
@@ -208,7 +219,15 @@ def _retrieve(
     if provider is not None:
         try:
             if index is None:
-                index = load_or_build_index(catalog, provider, cache_enabled=config.cache_enabled)
+                if trace is None:
+                    index = load_or_build_index(
+                        catalog, provider, cache_enabled=config.cache_enabled
+                    )
+                else:
+                    with trace.measure_detail("dense_index"):
+                        index = load_or_build_index(
+                            catalog, provider, cache_enabled=config.cache_enabled
+                        )
             if index.is_stale(catalog_hash, provider) or not provider.normalize:
                 return {**result, "status": "retrieval_unavailable"}
             result.update(embedding_model=provider.model_id, dense_index_version=INDEX_VERSION)
@@ -217,43 +236,81 @@ def _retrieve(
                 if scope is not None and type(provider) is EmbeddingProvider
                 else {}
             )
-            vector = provider.embed(
-                {
-                    "texts": [query],
-                    "model_id": provider.model_id,
-                    "model_version": provider.model_version,
-                    "normalize": True,
-                },
-                input_type="query",
-                **cache_options,
-            )["vectors"][0]
-            dense = dense_retrieve(
-                {
-                    "query": query,
-                    "query_embedding": vector,
-                    "top_k": settings.dense_top_k,
-                    "catalog_hash": catalog_hash,
-                    "index_version": INDEX_VERSION,
-                },
-                catalog,
-                index,
-                allowed_metric_ids=allowed_ids,
-            )
+            if trace is None:
+                vector = provider.embed(
+                    {
+                        "texts": [query],
+                        "model_id": provider.model_id,
+                        "model_version": provider.model_version,
+                        "normalize": True,
+                    },
+                    input_type="query",
+                    **cache_options,
+                )["vectors"][0]
+                dense = dense_retrieve(
+                    {
+                        "query": query,
+                        "query_embedding": vector,
+                        "top_k": settings.dense_top_k,
+                        "catalog_hash": catalog_hash,
+                        "index_version": INDEX_VERSION,
+                    },
+                    catalog,
+                    index,
+                    allowed_metric_ids=allowed_ids,
+                )
+            else:
+                with trace.measure_detail("embedding"):
+                    vector = provider.embed(
+                        {
+                            "texts": [query],
+                            "model_id": provider.model_id,
+                            "model_version": provider.model_version,
+                            "normalize": True,
+                        },
+                        input_type="query",
+                        **cache_options,
+                    )["vectors"][0]
+                with trace.measure_detail("dense_retrieval"):
+                    dense = dense_retrieve(
+                        {
+                            "query": query,
+                            "query_embedding": vector,
+                            "top_k": settings.dense_top_k,
+                            "catalog_hash": catalog_hash,
+                            "index_version": INDEX_VERSION,
+                        },
+                        catalog,
+                        index,
+                        allowed_metric_ids=allowed_ids,
+                    )
         except ContractError as exc:
             if exc.code != "retrieval_unavailable":
                 raise
             return {**result, "status": "retrieval_unavailable"}
 
     if settings.lexical_enabled and settings.mode in ("lexical_only", "hybrid"):
-        lexical = lexical_retrieve(
-            {
-                "query": query,
-                "top_k": settings.lexical_top_k,
-                "index_version": LEXICAL_INDEX_VERSION,
-            },
-            catalog,
-            allowed_metric_ids=allowed_ids,
-        )
+        if trace is None:
+            lexical = lexical_retrieve(
+                {
+                    "query": query,
+                    "top_k": settings.lexical_top_k,
+                    "index_version": LEXICAL_INDEX_VERSION,
+                },
+                catalog,
+                allowed_metric_ids=allowed_ids,
+            )
+        else:
+            with trace.measure_detail("lexical_retrieval"):
+                lexical = lexical_retrieve(
+                    {
+                        "query": query,
+                        "top_k": settings.lexical_top_k,
+                        "index_version": LEXICAL_INDEX_VERSION,
+                    },
+                    catalog,
+                    allowed_metric_ids=allowed_ids,
+                )
         result["lexical_index_version"] = LEXICAL_INDEX_VERSION
 
     fused = fuse_candidates(dense, lexical, settings.rrf_k, mention_out=mentions)
@@ -264,25 +321,47 @@ def _retrieve(
         if mentions is not None:
             candidates = sorted(candidates, key=lambda row: -row.get("mention_score", 0))
         candidates = candidates[: settings.fusion_top_k]
-        candidates = expand_related_candidates(candidates, allowed_ids, config.expansion)
-        if config.reranking.metadata_enabled:
-            reranked = rerank_candidates(
-                normalized_query,
-                {**fused, "candidates": candidates},
-                catalog,
-                requested_view,
-                auth_context=auth_context,
-            )
-            by_id = {candidate["metric_id"]: candidate for candidate in candidates}
-            candidates = [
-                {
-                    **by_id[item["metric_id"]],
-                    "rank": item["rank"],
-                    "rerank_score": item["rerank_score"],
-                }
-                for item in reranked["ranked_candidates"]
-            ]
-            result["reranker_version"] = reranked["reranker_version"]
+        if trace is None:
+            candidates = expand_related_candidates(candidates, allowed_ids, config.expansion)
+            if config.reranking.metadata_enabled:
+                reranked = rerank_candidates(
+                    normalized_query,
+                    {**fused, "candidates": candidates},
+                    catalog,
+                    requested_view,
+                    auth_context=auth_context,
+                )
+                by_id = {candidate["metric_id"]: candidate for candidate in candidates}
+                candidates = [
+                    {
+                        **by_id[item["metric_id"]],
+                        "rank": item["rank"],
+                        "rerank_score": item["rerank_score"],
+                    }
+                    for item in reranked["ranked_candidates"]
+                ]
+                result["reranker_version"] = reranked["reranker_version"]
+        else:
+            with trace.measure_detail("reranking"):
+                candidates = expand_related_candidates(candidates, allowed_ids, config.expansion)
+                if config.reranking.metadata_enabled:
+                    reranked = rerank_candidates(
+                        normalized_query,
+                        {**fused, "candidates": candidates},
+                        catalog,
+                        requested_view,
+                        auth_context=auth_context,
+                    )
+                    by_id = {candidate["metric_id"]: candidate for candidate in candidates}
+                    candidates = [
+                        {
+                            **by_id[item["metric_id"]],
+                            "rank": item["rank"],
+                            "rerank_score": item["rerank_score"],
+                        }
+                        for item in reranked["ranked_candidates"]
+                    ]
+                    result["reranker_version"] = reranked["reranker_version"]
         if mentions is not None:
             candidates = _with_mentions(candidates, mentions)
         candidates = candidates[: config.reranking.final_top_k]
