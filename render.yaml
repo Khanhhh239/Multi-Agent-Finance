@@ -46,6 +46,22 @@ services:
         sync: false
       - key: AGENT4_CORS_ORIGINS
         sync: false
+      - key: AGENT4_OIDC_ISSUER
+        sync: false
+      - key: AGENT4_OIDC_AUDIENCE
+        sync: false
+      - key: AGENT4_OIDC_JWKS_URL
+        sync: false
+      - key: AGENT4_OIDC_ALGORITHMS
+        value: RS256
+      - key: AGENT4_OIDC_TENANT_CLAIM
+        value: tenant_id
+      - key: AGENT4_OIDC_LEEWAY_SECONDS
+        value: "30"
+      - key: AGENT4_AUTH_POLICY_JSON
+        sync: false
+      - key: AGENT4_RATE_LIMIT_PER_MINUTE
+        value: "30"
       - key: AGENT4_WAREHOUSE_TENANT_ID
         sync: false
       - key: AGENT4_LLM_API_KEY

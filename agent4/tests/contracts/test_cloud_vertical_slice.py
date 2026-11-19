@@ -98,6 +98,16 @@ async def test_cloud_query_and_catalog_use_only_trusted_gateway_context():
         assert body["data"]["row_count"] == 1
         assert "api_key" not in response.text.lower()
 
+        portal_shape = await client.post(
+            "/api/agent4/query",
+            headers={"X-Platform": "1"},
+            json={"question": "Doanh thu thuần tháng 08/2026?", "options": {"include_table": True}},
+        )
+        assert portal_shape.status_code == 200
+        assert portal_shape.json()["status"] == "ready"
+        portal_metrics = await client.get("/api/agent4/metrics")
+        assert portal_metrics.status_code == 200
+
 
 @pytest.mark.asyncio
 async def test_cloud_readiness_does_not_leak_artifact_path(tmp_path):

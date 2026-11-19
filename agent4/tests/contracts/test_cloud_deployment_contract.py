@@ -23,6 +23,7 @@ def test_render_blueprint_uses_single_free_web_service_and_healthz():
 
 
 def test_cloud_image_excludes_datagen_and_local_agents():
+    render = (_ROOT / "render.yaml").read_text(encoding="utf-8")
     dockerfile = (_ROOT / "cloud/Dockerfile").read_text(encoding="utf-8")
     requirements = (_ROOT / "agent4/requirements-cloud.txt").read_text(encoding="utf-8")
     entrypoint = (_ROOT / "cloud/entrypoint.sh").read_text(encoding="utf-8")
@@ -33,7 +34,11 @@ def test_cloud_image_excludes_datagen_and_local_agents():
     assert "pandas" not in requirements.lower()
     assert "--host 0.0.0.0" in entrypoint
     assert '"${PORT:-10000}"' in entrypoint
-    assert "create_cloud_app" in entrypoint
+    assert "agent4.gateway:create_gateway_app" in entrypoint
+    assert "create_cloud_app" not in entrypoint
+    assert "AGENT4_OIDC_ISSUER" in render
+    assert "AGENT4_OIDC_JWKS_URL" in render
+    assert "AGENT4_AUTH_POLICY_JSON" in render
 
 
 def test_vercel_build_contains_only_public_runtime_config(monkeypatch, tmp_path):

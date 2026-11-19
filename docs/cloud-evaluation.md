@@ -369,3 +369,89 @@ Pipeline trace có status ok cho request validation, authentication, request sco
 - G6 security: static artifact không có secret, UI không hiện agent chưa bật; Gateway/IdP, CSRF/session và browser CORS flow vẫn OPEN.
 - G7 functional: static packaging contract pass; Portal state/intake regression cloud chưa thể chạy khi thiếu Gateway. design/test_ui_ux_regression.py chạy 4/5 test pass nhưng test sync bị fail vì các asset Agent 1–3/Agent 2/Agent 3 out-of-date; không tự sửa trong slice này.
 - G5/G8/G9: Neon apply/restore, provider quota, Render quota và rollback rehearsal chưa thay đổi.
+
+## Phase 2 implementation evidence — external provider and bounded runtime
+
+Ngày đo: 2026-11-19. Workload đại diện: `Doanh thu thuần tháng 08/2026?`; warehouse demo được cấp quyền là artifact smoke, không ghi giá trị tài chính thô vào log.
+
+### Task 1 — real AI pipeline
+
+Một run configured trên host đã hoàn tất end-to-end với các API key hiện có:
+
+| Stage/metric | Evidence |
+|---|---:|
+| Status / row count | `ready` / 1 |
+| End-to-end | 1,426.114 ms |
+| Process peak RSS | 322,228 KB, khoảng 314.7 MiB |
+| Metric selection | 1,391.619 ms |
+| Dense index | 726.896 ms, `retrieval_unavailable`, retryable |
+| Lexical retrieval | 3.467 ms |
+| LLM metric selection | 657.783 ms, `ok` |
+| Reranking | 0.728 ms; metadata reranking, không có cross-encoder external |
+| SQL execution | 25.969 ms |
+| Answer generation | 0.325 ms |
+| Pipeline stage errors | none |
+
+Bằng chứng correctness không in số liệu: local deterministic baseline và configured external run đều chọn `net_revenue`, `row_count=1`, `status=ready` và có cùng `data_sha256=4e38104d11aded3968dd0a8907ec9b5f64f3bf57564409ea6af01e1923ba4985`. Đây là so sánh cấu trúc dữ liệu sau pipeline, không phải log số tiền.
+
+Provider failure cũng đã quan sát được trong run bị giới hạn tài nguyên: một warm request trả HTTP 503 với `llm_unavailable`, stage `llm_metric_selection`, `retryable=true`; một request đồng thời trả 503 `query_busy`. Direct embedding smoke tới OpenRouter trả HTTP 401, không ghi body. Vì vậy credential embedding hiện tại chưa hợp lệ hoặc chưa được cấp quyền cho model đã cấu hình; dense index không được coi là đạt. `cross_encoder_enabled=false` trong `config/selection_cloud.yaml`, nên chưa có external reranker để xác nhận.
+
+**Task 1 gate: FAIL / NO-GO cho full AI path.** LLM path có một lần thành công, nhưng embedding credential 401 và fallback lexical đang che lỗi dense retrieval. Không được triển khai public cho tới khi sửa credential/provider và chạy lại golden regression với dense index hợp lệ.
+
+### Task 2 — cgroup 512 MiB / 0.1 CPU / no swap
+
+Image đo: `multi-agent-fin-agent4:phase2-gateway`, logical image size 444,210,659 bytes (xấp xỉ 423.4 MiB). Command dùng `--memory=512m --memory-swap=512m --cpus=0.1`; số liệu peak đọc từ container cgroup, không phải chỉ từ process RSS.
+
+| Mode | Idle | Peak cgroup | Cold | Warm | Concurrent | OOM |
+|---|---:|---:|---:|---:|---|---|
+| Deterministic | 47.65 MiB | 58.75 MiB | 1,296.286 ms | 407.018–499.099 ms | 2 x 200 `ready` (ASGI harness không tạo yield giữa đoạn sync) | false / 0 kills |
+| Configured external | 46.66 MiB | 61.13 MiB | 7,127.801 ms `llm_unavailable` | 937.250 ms `llm_unavailable`, 1,307.708–1,731.224 ms `ready` | 1 x 503 `llm_unavailable`, 1 x 503 `query_busy` | false / 0 kills |
+
+Kết quả này đạt target memory `<=400 MiB` cho workload đã chạy, nhưng **chưa là GO production**: benchmark dùng trusted context harness thay cho OIDC/JWKS thật, dense index không được build vì embedding 401, và Render thực tế chưa được deploy. CPU 0.1 làm cold/warm latency tăng đáng kể; concurrency policy hiện tại đúng là bounded nhưng chỉ cho một query expensive.
+
+### Task 3 — authentication gateway
+
+Đã triển khai gateway trong `agent4/agent4/gateway.py` và đổi `cloud/entrypoint.sh` sang `agent4.gateway:create_gateway_app`:
+
+- OIDC JWT phải có signature JWKS, issuer, audience, `exp`, `iat`, `iss`, `sub`; JWKS chỉ nhận HTTPS và cache bounded.
+- Tenant/user phải có trong `AGENT4_AUTH_POLICY_JSON`, policy và roles lấy từ server-side map; JWT roles và mọi header `X-*` của browser không được dùng để nâng quyền.
+- Route duy nhất public là `/healthz`, `/readyz` và CORS preflight; `/health`, `/v1/*`, `/api/agent4/*` cần Bearer token.
+- Rate limit bounded theo IP và tenant/user; lỗi trả code tổng quát, không trả token/provider detail.
+- 10 gateway/vertical-slice contract tests pass; ruff và syntax checks pass.
+
+IdP thật chưa được cấp trong workspace, nên chưa có verified-user browser test hoặc JWKS rotation rehearsal. Đây là **CONDITIONAL**, không được ghi là auth production pass.
+
+### Task 4 — Neon and artifact evidence
+
+Artifact hiện tại được xác minh lại:
+
+- `portal/workspace/datasets/enterprise-x10-v3-smoke/warehouse.duckdb`
+- size `24,391,680` bytes
+- SHA-256 `d9eeb66ea65bd5ddc9188a48ca618fa68c62969c3aea5cf5219041f7689c37ec`
+
+Chưa có `DATABASE_URL`/Neon test database credential trong workspace, nên chưa apply migration `001_agent4_cloud_control_plane.sql`, chưa test PostgreSQL adapter/restart/backup/restore và chưa chứng minh policy lookup từ Neon. Migration contract/dry-run và adapter tests vẫn pass từ Phase 1; đây là **BLOCKER** cho durable cloud deployment.
+
+### Task 5 — frontend/deployment boundary
+
+Agent 4 cloud API có alias `/api/agent4/query` và `/api/agent4/metrics` cho UI hiện có; alias chuyển payload Portal sang contract `api_version=v1` mà không chạm claims/policy. CORS đã cho phép `Authorization`, `Content-Type`, `X-Request-ID`, `X-Platform` với allowlist explicit. Static build contract vẫn pass và chỉ bật Agent 4.
+
+Vercel preview, Render service và authenticated browser flow chưa được deploy vì thiếu IdP/JWKS, Neon connection string, production provider credentials hợp lệ và quyền dashboard. Không có preview URL để báo cáo.
+
+### Phase 2 gate summary
+
+| Gate | Result | Reason |
+|---|---|---|
+| Real external pipeline | **FAIL** | Embedding HTTP 401; only lexical fallback can complete; cross-encoder disabled |
+| Resource budget | **CONDITIONAL PASS** | cgroup peak 62.68 MiB and no OOM in measured workload; real Render not deployed |
+| Authentication | **CONDITIONAL** | Gateway contract implemented; real IdP/JWKS and browser flow unavailable |
+| Neon durability | **BLOCKED** | No authorized Neon test database/credential |
+| Frontend/deployment | **BLOCKED** | No Vercel/Render access and no end-to-end authenticated preview |
+| Overall decision | **NO-GO** | Failed external embedding gate and missing Neon/IdP deployment evidence |
+
+## Phase 2 exact environment inventory
+
+Tên biến được dùng trong cloud contract; không ghi giá trị:
+
+`PORT`, `AGENT4_CLOUD_MODE`, `AGENT4_DEMO_MODE`, `AGENT4_SELECTION_CONFIG`, `AGENT4_MAX_CONCURRENT_QUERIES`, `AGENT4_QUERY_TIMEOUT_MS`, `AGENT4_LLM_PROVIDER`, `AGENT4_LLM_BASE_URL`, `AGENT4_LLM_MODEL`, `AGENT4_LLM_API_KEY`, `AGENT4_EMBED_PROVIDER`, `AGENT4_EMBED_BASE_URL`, `AGENT4_EMBED_MODEL`, `AGENT4_EMBED_DIMENSIONS`, `AGENT4_EMBED_API_KEY`, `AGENT4_RETRIEVAL_MODE`, `AGENT4_WAREHOUSE_MAX_BYTES`, `AGENT4_WAREHOUSE_PATH`, `AGENT4_WAREHOUSE_URL`, `AGENT4_WAREHOUSE_SHA256`, `AGENT4_CORS_ORIGINS`, `AGENT4_OIDC_ISSUER`, `AGENT4_OIDC_AUDIENCE`, `AGENT4_OIDC_JWKS_URL`, `AGENT4_OIDC_ALGORITHMS`, `AGENT4_OIDC_TENANT_CLAIM`, `AGENT4_OIDC_LEEWAY_SECONDS`, `AGENT4_AUTH_POLICY_JSON`, `AGENT4_RATE_LIMIT_PER_MINUTE`, `AGENT4_WAREHOUSE_TENANT_ID`, `DATABASE_URL`.
+
+Vercel public build chỉ dùng `MAF_API_BASE_URL`, `MAF_ENABLED_AGENTS`; không đưa API key, `DATABASE_URL`, JWT hoặc policy vào static artifact.

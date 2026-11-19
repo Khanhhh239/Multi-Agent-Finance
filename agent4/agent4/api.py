@@ -131,7 +131,7 @@ def create_app(
             allow_origins=list(configured_origins),
             allow_credentials=False,
             allow_methods=["GET", "POST", "OPTIONS"],
-            allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
+            allow_headers=["Authorization", "Content-Type", "X-Request-ID", "X-Platform"],
             max_age=600,
         )
 
@@ -144,7 +144,7 @@ def create_app(
             response.headers.setdefault(
                 "Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'; base-uri 'none'"
             )
-            if request.url.path.startswith("/v1/"):
+            if request.url.path.startswith(("/v1/", "/api/agent4/")):
                 response.headers.setdefault("Cache-Control", "no-store")
         return response
 
@@ -203,6 +203,7 @@ def create_app(
     if cloud_mode:
 
         @app.get("/v1/metrics", response_model=None)
+        @app.get("/api/agent4/metrics", response_model=None, include_in_schema=False)
         async def cloud_metrics(request: Request) -> JSONResponse | list[dict]:
             try:
                 auth = build_auth_context(
@@ -246,6 +247,17 @@ def create_app(
             payload = await request.json()
         except ValueError:
             payload = None
+        if cloud_mode and request.url.path == "/api/agent4/query" and isinstance(payload, dict):
+            # Keep the existing Portal chat contract while the cloud API remains
+            # explicit and versioned. This adapter copies only query data; it can
+            # never add identity, tenant or authorization claims.
+            payload = {
+                "api_version": "v1",
+                "question": payload.get("question"),
+                "locale": payload.get("locale", "vi-VN"),
+                **({"session_id": payload["session_id"]} if "session_id" in payload else {}),
+                **({"options": payload["options"]} if "options" in payload else {}),
+            }
         if cloud_mode:
             if query_slots.locked():
                 busy = ContractError(
@@ -297,6 +309,14 @@ def create_app(
             response,
             status_code=status,
             headers={"Cache-Control": "no-store"} if demo_mode else None,
+        )
+
+    if cloud_mode:
+        app.add_api_route(
+            "/api/agent4/query",
+            query,
+            methods=["POST"],
+            include_in_schema=False,
         )
 
     return app
