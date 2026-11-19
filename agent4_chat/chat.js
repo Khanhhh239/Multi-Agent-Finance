@@ -260,6 +260,8 @@
   let sessionId = loadOrCreateSessionId();
   let conversationVersion = 0;
   let activeClarification = null;
+  const conversations = new Map();
+  let currentConversation = generateSessionId();
 
   function renderSessionHeader() {
     const badge = $("session-badge");
@@ -305,6 +307,54 @@
   // A short follow-up ("Còn theo sổ thuế thì sao?", "Chi tiết theo từng chi nhánh?") is therefore rewritten here
   // into a complete question from the last answered one before it is sent.
   let lastAnswered = null;
+
+  function saveConversation() {
+    const current = conversations.get(currentConversation);
+    if (!current) return;
+    current.sessionId = sessionId;
+    current.clarification = activeClarification;
+    current.lastAnswered = lastAnswered;
+    current.nodes = Array.from($("thread").children);
+  }
+
+  function updateConversationList() {
+    const list = $("session-list");
+    if (!list) return;
+    list.replaceChildren(...Array.from(conversations, ([id, item]) => {
+      const option = el("option", { value: id }, item.title);
+      option.selected = id === currentConversation;
+      return option;
+    }));
+  }
+
+  function openConversation(id) {
+    if (!conversations.has(id) || id === currentConversation) return;
+    conversationVersion += 1;
+    const pending = $("thread").querySelector(".msg.pending");
+    if (pending) pending.replaceChildren(el("div", { class: "answer" }, "Yêu cầu đã dừng khi chuyển hội thoại. Hãy gửi lại câu hỏi."));
+    pending?.classList.remove("pending");
+    saveConversation();
+    currentConversation = id;
+    const item = conversations.get(id);
+    sessionId = item.sessionId;
+    activeClarification = item.clarification;
+    lastAnswered = item.lastAnswered;
+    saveSessionId(sessionId);
+    $("thread").replaceChildren(...item.nodes);
+    $("send").disabled = false;
+    $("question").value = "";
+    syncComposerRows($("question"));
+    renderSessionHeader();
+    updateConversationList();
+    $("thread").scrollTop = $("thread").scrollHeight;
+  }
+
+  function newConversation() {
+    const id = generateSessionId();
+    conversations.set(id, { title: "Hội thoại " + (conversations.size + 1), sessionId: generateSessionId(),
+      clarification: null, lastAnswered: null, nodes: [buildIntroElement()] });
+    openConversation(id);
+  }
   const FOLLOW_RE = /^(?:vậy |thế )?(?:còn|nếu)\s+(.+?)(?:\s+thì sao)?\s*\??$/i;
   const DETAIL_RE = /^(?:chi tiết|tách|phân)\s+(?:theo\s+)?(.+?)\s*\??$/i;
   const COMPARE_RE = /^so sánh hai sổ/i;
@@ -352,6 +402,7 @@
     if (thread) {
       thread.replaceChildren(buildIntroElement());
     }
+    saveConversation();
     const box = $("question");
     if (box) {
       box.value = "";
@@ -807,6 +858,12 @@
 
     const requestVersion = conversationVersion;
     const displayQuestion = opts.displayQuestion || trimmed;
+    const conversation = conversations.get(currentConversation);
+    if (conversation && !conversation.named) {
+      conversation.title = displayQuestion.slice(0, 55);
+      conversation.named = true;
+      updateConversationList();
+    }
     const isClarificationTurn = Boolean(opts.clarificationSessionId || activeClarification);
     const effectiveSessionId = opts.clarificationSessionId || activeClarification?.sessionId || sessionId;
 
@@ -972,6 +1029,8 @@
     );
   }
   $("reset-session")?.addEventListener("click", resetConversation);
+  $("new-session")?.addEventListener("click", newConversation);
+  $("session-list")?.addEventListener("change", (event) => openConversation(event.target.value));
   $("cancel-clarification")?.addEventListener("click", () => {
     clearActiveClarification();
     $("question")?.focus();
@@ -997,6 +1056,9 @@
     ask(q);
   });
 
+  conversations.set(currentConversation, { title: "Hội thoại 1", sessionId, clarification: null,
+    lastAnswered: null, nodes: Array.from($("thread").children) });
+  updateConversationList();
   renderSessionHeader();
   loadMetrics();
 })();

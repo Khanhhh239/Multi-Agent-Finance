@@ -99,6 +99,25 @@ class SharedBankTest(unittest.TestCase):
             self.assertEqual(responses[0][0], 400)
             self.assertIn('Đang kiểm tra', responses[0][1]['error'])
 
+    def test_commit_allows_agent_session_callback_without_second_writer(self):
+        forbidden = []
+
+        def write(method):
+            self.assertTrue(server.COMMITTING)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+                # Agent 2 calls back from a different request thread.
+                self.assertEqual(pool.submit(server.session_left, 'unknown-session', False).result(timeout=2), 0)
+            second_writer = SimpleNamespace(path='/api/inbox/commit',
+                route=lambda method: self.fail('Must not start a second writer'),
+                send=lambda status, body: forbidden.append(status))
+            server.Handler.handle_one(second_writer, 'POST')
+
+        handler = SimpleNamespace(path='/api/inbox/commit', route=write,
+            send=lambda status, body: self.fail(f'Unexpected status: {status}'))
+        server.Handler.handle_one(handler, 'POST')
+        self.assertEqual(forbidden, [400])
+        self.assertFalse(server.COMMITTING)
+
     def test_interrupted_check_becomes_retryable_instead_of_spinning_forever(self):
         with tempfile.TemporaryDirectory() as tmp, patch.object(server, 'company', return_value=CONTEXT), patch.object(server, 'PENDING', Path(tmp)):
             record = dict(id='interrupted', name='03_payments.csv', added_at='2026-11-18 10:00:00',

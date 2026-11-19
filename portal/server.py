@@ -42,6 +42,7 @@ try:
 except ImportError:
     HAS_CRYPTOGRAPHY = False
 from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime
 from decimal import Decimal, InvalidOperation
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -89,6 +90,7 @@ LOGS = WORK / 'logs'
 for folder in (PENDING, LOGS):
     folder.mkdir(parents=True, exist_ok=True)
 LOCK = threading.RLock()
+COMMITTING = False
 SESSION_CTX = threading.local()                    # the operator's portal session, forwarded to Agent 2 during intake
 AGENT4_TOKEN = secrets.token_urlsafe(24)          # lives only as long as this shell; the chat never sees it
 AGENT3_TOKEN = secrets.token_urlsafe(32)          # backend bridge only; never returned in portal state
@@ -1368,6 +1370,10 @@ def period_of(name, raw, kind):
         return None
 
 
+class AlreadyRecorded(ValueError):
+    pass
+
+
 def add_file(name, raw):
     context = intake_context()
     if not context['code']:
@@ -1376,6 +1382,8 @@ def add_file(name, raw):
     classification = classify(clean, raw)
     digest = hashlib.sha256(raw).hexdigest()
     with LOCK:
+        if COMMITTING:
+            raise ValueError('Đang ghi dữ liệu. Chờ hoàn tất trước khi chọn thêm tệp.')
         if context != intake_context():
             raise ValueError('Doanh nghiệp đã đổi. Tải lại trang trước khi nạp tệp.')
         if classification['kind'] == 'shared_bank' or classification['kind'].startswith('a1:'):
@@ -1388,7 +1396,7 @@ def add_file(name, raw):
                         and item.get('intake_context') == context
                         for aid, result in item.get('results', {}).items() if result.get('state') == 'done'}
             if set(received) >= set(classification['targets']):
-                raise ValueError('Sao kê này đã được ghi vào cả Agent 1 và Agent 3 cho doanh nghiệp đang chọn.')
+                raise AlreadyRecorded('Sao kê này đã được ghi vào cả Agent 1 và Agent 3 cho doanh nghiệp đang chọn.')
         fid = uuid.uuid4().hex[:12]
         (PENDING / f'{fid}.bin').write_bytes(raw)
         record = dict(id=fid, name=clean, size=len(raw), added_at=time.strftime('%Y-%m-%d %H:%M:%S'),
@@ -1429,11 +1437,13 @@ def _finish_check(record, raw):
             CHECKING.discard(record['id'])
 
 
-def recheck(fid):
+def recheck(fid, *, during_commit=False):
     context = intake_context()
     if not context['code']:
         raise ValueError('Lưu hồ sơ doanh nghiệp trước khi kiểm tra tệp.')
     with LOCK:
+        if COMMITTING and not during_commit:
+            raise ValueError('Đang ghi dữ liệu. Chờ hoàn tất trước khi kiểm tra lại.')
         if context != intake_context():
             raise ValueError('Doanh nghiệp đã đổi. Tải lại trang trước khi kiểm tra tệp.')
         record = pending_file(fid, context)
@@ -1591,9 +1601,20 @@ def commit(fids, reason=''):
     reason = (reason or '').strip()
     if prior and len(reason) < 10:
         raise ValueError('Gói đã được niêm phong. Bổ sung hoặc thay thế cần lý do, ít nhất 10 ký tự.')
-    entries = []
-    completed = []
+    order = {'a1:invoices': 0, 'shared_bank': 1, 'a1:bank': 1, 'a1:outflows': 2,
+             'a1:statements': 3, 'a1:payments': 4, 'a1:actions': 4, 'a1:expense_payments': 4}
+    dependencies = {'a1:statements': {'shared_bank', 'a1:bank'},
+                    'a1:payments': {'a1:invoices', 'shared_bank', 'a1:bank'},
+                    'a1:actions': {'a1:invoices'}, 'a1:expense_payments': {'a1:outflows', 'shared_bank', 'a1:bank'}}
+    entries, completed, failures = [], [], []
+    written_kinds = set()
+    # Check the whole selection before writing anything, then process parent
+    # tables before the files that reference them.
     for record in records:
+        source = (PENDING / f'{record["id"]}.bin').read_bytes()
+        if record.get('sha256') and hashlib.sha256(source).hexdigest() != record['sha256']:
+            raise ValueError('Nội dung tệp nguồn đã thay đổi: ' + record['name'] + '. Nạp lại tệp để kiểm tra trước khi ghi.')
+    for record in sorted(records, key=lambda item: order.get(item['kind'], 2)):
         fid = record['id']
         raw = (PENDING / f'{fid}.bin').read_bytes()
         if record.get('sha256') and hashlib.sha256(raw).hexdigest() != record['sha256']:
@@ -1603,6 +1624,7 @@ def commit(fids, reason=''):
         applied = record.get('applied', {})
         if shared:
             if not all(aid in applied or record['checks'].get(aid, {}).get('state') == 'ready' for aid in record['targets']):
+                failures.append(record['name'])
                 continue
             bank_rows = shared_bank_rows(record, raw)
             # Keep the original once per company, including when a downstream write needs a retry.
@@ -1617,6 +1639,12 @@ def commit(fids, reason=''):
                 outcome[aid] = applied[aid]
                 continue
             chk = record.get('checks', {}).get(aid, {})
+            if aid == 'agent1' and chk.get('state') == 'error' and dependencies.get(record['kind'], set()) & written_kinds:
+                # The original preview used the database before the parent
+                # tables were written. Re-run normal validation on current data.
+                chk = check(aid, record, raw)
+                record['checks'][aid] = chk
+                write_json(PENDING / f'{fid}.json', record)
             if chk.get('state') != 'ready':
                 outcome[aid] = dict(state='skipped', message='Chưa qua kiểm tra nên không ghi.')
                 continue
@@ -1652,12 +1680,17 @@ def commit(fids, reason=''):
                                 else dict(state='error', message=res.get('error', f'Lỗi {status}')))
             elif aid == 'agent2':
                 try:
+                    expiry = chk.get('preview', {}).get('preview', {}).get('expires_at')
+                    if expiry and time.time() + 10 >= datetime.fromisoformat(expiry.replace('Z', '+00:00')).timestamp():
+                        chk = check(aid, record, raw)
+                        if chk.get('state') != 'ready':
+                            raise agent2_intake.IntakeError(chk.get('message', 'Kiểm tra lại không đạt.'), chk.get('detail'))
                     snap = agent2_intake.commit(call, lambda path: agent_url('agent2', path), getattr(SESSION_CTX, 'token', ''),
                                                 agent2_company(), chk['preview'])
                     outcome[aid] = dict(state='done', snapshot_id=snap.get('snapshot_id', ''), company_id=agent2_company(),
                                         message=f'Đã lưu snapshot {str(snap.get("snapshot_id", ""))[:18]} cho Agent 2.')
                 except agent2_intake.IntakeError as e:
-                    outcome[aid] = dict(state='error', message=str(e))
+                    outcome[aid] = dict(state='error', message=str(e), detail=e.details)
             elif aid == 'agent3':
                 ws = ensure_agent3_workspace()
                 if ws['state'] == 'ok' and intake_context() != context:
@@ -1685,6 +1718,17 @@ def commit(fids, reason=''):
                 write_json(PENDING / f'{fid}.json', record)
                 if outcome[aid]['state'] != 'done':
                     break
+        if outcome.get('agent1', {}).get('state') == 'done':
+            written_kinds.add(record['kind'])
+        fully_written = bool(record['targets']) and all(
+            outcome.get(aid, {}).get('state') == 'done' for aid in record['targets'])
+        if not fully_written:
+            failures.append(record['name'])
+            if not shared:
+                for aid, result in outcome.items():
+                    if result['state'] == 'error':
+                        record['checks'][aid] = result
+                write_json(PENDING / f'{fid}.json', record)
         if any(v['state'] == 'done' for v in outcome.values()):
             entries.append(dict(name=record['name'], label=record['label'], size=record['size'], sha256=record.get('sha256')
                                 or hashlib.sha256(raw).hexdigest(), kind=record['kind'], slot=record.get('slot', ''), period=record.get('period'),
@@ -1696,6 +1740,7 @@ def commit(fids, reason=''):
         raise ValueError('Không tệp nào được ghi. Xem kết quả kiểm tra của từng tệp.')
     manifest = hashlib.sha256('\n'.join(sorted(f'{e["name"]}:{e["sha256"]}' for e in entries)).encode('utf-8')).hexdigest()
     batch = dict(id=uuid.uuid4().hex[:10], company=context['code'], version=len(prior) + 1, kind='bổ sung' if prior else 'gốc',
+                 requested_count=len(records), written_count=len(records) - len(failures), remaining_files=failures,
                  sealed_at=time.strftime('%Y-%m-%d %H:%M:%S'), reason=reason, files=entries, manifest=manifest)
     with LOCK:
         write_json(BATCH_FILE, batches() + [batch])
@@ -1705,8 +1750,13 @@ def commit(fids, reason=''):
         remove_file(fid)
     # Files that failed only because they point at rows written just now (payments after invoices) pass on a new check.
     for record in pending():
-        if record.get('intake_context') == context and any(s.get('state') != 'ready' for s in record.get('checks', {}).values()):
-            recheck(record['id'])
+        if (record['id'] not in fids or record['kind'] == 'shared_bank') and record.get('intake_context') == context and any(s.get('state') != 'ready' for s in record.get('checks', {}).values()):
+            try:
+                recheck(record['id'], during_commit=True)
+            except (ValueError, OSError):
+                # The version is already sealed. A failed follow-up check
+                # must not turn a successful commit into a failed response.
+                continue
     return batch
 
 
@@ -1856,7 +1906,8 @@ class Handler(BaseHTTPRequestHandler):
         if not isinstance(body,dict) or set(body)!={'session'} or not isinstance(body['session'],str) or not re.fullmatch(r'[A-Za-z0-9_-]{32,128}',body['session']):
             raise AuthError('Phiên Portal không hợp lệ.')
         token = body['session']
-        # No LOCK here: an intake request holds it while it calls Agent 2, and Agent 2 calls back to this endpoint.
+        # The intake writer releases LOCK while calling agents so this
+        # callback can revalidate the session.
         if not session_left(token,touch=False):raise AuthError('Phiên Portal đã khóa hoặc hết hạn.')
         expires_at = SESSIONS.get(token)
         if expires_at is None:raise AuthError('Phiên Portal đã khóa hoặc hết hạn.')
@@ -2040,7 +2091,10 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError('Thiếu tên tệp.')
             if query.get('company', company()['code']) != company()['code']:
                 raise ValueError('Doanh nghiệp đã đổi. Tải lại trang trước khi nạp tệp.')
-            record = add_file(name, self.body(300 * 1024 * 1024))
+            try:
+                record = add_file(name, self.body(300 * 1024 * 1024))
+            except AlreadyRecorded as e:
+                return self.send(200, dict(already_recorded=True, message=str(e)))
             audit('upload', dict(company=record['intake_context']['code'], name=record['name'], size=record['size'],
                                  sha256=record['sha256'][:16]))
             return self.send(200, record)
@@ -2049,11 +2103,24 @@ class Handler(BaseHTTPRequestHandler):
             self.need_session()
             fid, action = m.groups()
             if action == 'delete':
-                pending_file(fid, intake_context())
+                if pending_file(fid, intake_context()).get('applied'):
+                    raise ValueError('Tệp đã ghi một phần. Hãy kiểm tra và ghi tiếp vào trợ lý còn thiếu.')
                 remove_file(fid)
                 audit('discard', dict(id=fid))
                 return self.send(200, dict(ok=True))
             return self.send(200, recheck(fid))
+        if method == 'POST' and path == '/api/inbox/clear':
+            self.need_session()
+            if self.json_body().get('company') != company()['code'] or not company()['code']:
+                raise ValueError('Doanh nghiệp đã đổi. Tải lại trang trước khi xóa tệp chờ.')
+            records = pending()
+            removable = [r for r in records if not r.get('applied')]
+            if any(r['id'] in CHECKING for r in removable):
+                raise ValueError('Đang kiểm tra tệp. Chờ kết quả trước khi xóa hàng chờ.')
+            for record in removable:
+                remove_file(record['id'])
+            audit('discard_all', dict(company=company()['code'], files=len(removable)))
+            return self.send(200, dict(removed=len(removable), retained=len(records) - len(removable)))
         if method == 'POST' and path == '/api/inbox/commit':
             self.need_session()
             b = self.json_body()
@@ -2081,12 +2148,28 @@ class Handler(BaseHTTPRequestHandler):
         self.send(404, {'error': 'Không có địa chỉ này.'})
 
     def handle_one(self, method):
+        global COMMITTING
         try:
             path = urlsplit(self.path).path
+            if method == 'POST' and path == '/api/inbox/commit':
+                with LOCK:
+                    if CHECKING:
+                        raise ValueError('Đang kiểm tra tệp. Chờ kết quả trước khi ghi dữ liệu.')
+                    if COMMITTING:
+                        raise ValueError('Đang ghi dữ liệu. Chờ lượt hiện tại hoàn tất.')
+                    COMMITTING = True
+                try:
+                    self.route(method)
+                finally:
+                    with LOCK:
+                        COMMITTING = False
+                return
             checking_route = method == 'POST' and (path == '/api/inbox' or
                              re.fullmatch(r'/api/inbox/[0-9a-f]{12}/check', path))
             if method != 'GET' and not checking_route and (path in ('/api/company', '/api/agent3/workspace', '/api/agents/agent1/connect-link') or path.startswith('/api/inbox')):
                 with LOCK:
+                    if COMMITTING:
+                        raise ValueError('Đang ghi dữ liệu. Chờ hoàn tất trước khi thay đổi hồ sơ hoặc hàng chờ.')
                     if CHECKING and path in ('/api/company', '/api/agent3/workspace', '/api/agents/agent1/connect-link', '/api/inbox/commit'):
                         raise ValueError('Đang kiểm tra tệp. Chờ kết quả trước khi đổi hồ sơ hoặc ghi dữ liệu.')
                     self.route(method)
