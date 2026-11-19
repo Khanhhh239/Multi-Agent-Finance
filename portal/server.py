@@ -97,6 +97,8 @@ AGENT3_TOKEN = secrets.token_urlsafe(32)          # backend bridge only; never r
 AGENT2_TOKEN = secrets.token_urlsafe(32)          # introspection channel only, never a user credential
 HE_RUNTIME = None
 HE_RUNTIME_SETTINGS = None
+HE_TRAINING_RUNTIME = None
+HE_TRAINING_RUNTIME_SETTINGS = None
 
 
 def path_of(value, default):
@@ -399,6 +401,33 @@ def he_runtime(env=None):
     with LOCK:return _he_runtime(env)
 
 
+def _he_training_runtime():
+    global HE_TRAINING_RUNTIME, HE_TRAINING_RUNTIME_SETTINGS
+    worker = agent_cfg('agent2').get('he_training_worker')
+    if not isinstance(worker, dict):
+        return None
+    worker = dict(worker)
+    for name in ('bundle', 'config'):
+        if name in worker:
+            worker[name] = str(path_of(worker[name], worker[name]).resolve())
+    settings = (json.dumps(worker, sort_keys=True), str(LOGS))
+    if HE_TRAINING_RUNTIME is None or HE_TRAINING_RUNTIME_SETTINGS != settings:
+        if HE_TRAINING_RUNTIME is not None and HE_TRAINING_RUNTIME.state()['owned']:
+            raise ValueError('Cấu hình worker huấn luyện FHE đã đổi. Tắt Agent2 trước khi áp dụng cấu hình mới.')
+        try:
+            from .agent2_he_training_runtime import TrainingLinuxRuntime
+        except ImportError:
+            from agent2_he_training_runtime import TrainingLinuxRuntime
+        HE_TRAINING_RUNTIME = TrainingLinuxRuntime(worker, LOGS)
+        HE_TRAINING_RUNTIME_SETTINGS = settings
+    return HE_TRAINING_RUNTIME
+
+
+def he_training_runtime():
+    with LOCK:
+        return _he_training_runtime()
+
+
 def agent_state(aid):
     proc = PROCS.get(aid)
     owned = proc is not None and proc.poll() is None
@@ -425,6 +454,10 @@ def agent_state(aid):
             runtime=he_runtime()
             if runtime:value['dependency']=runtime.state()
         except ValueError as error:value['dependency']=dict(status='unavailable',owned=False,can_recover=False,message=str(error))
+        try:
+            tr=he_training_runtime()
+            if tr:value['he_training_worker']=tr.state()
+        except ValueError as error:value['he_training_worker']=dict(status='unavailable',ready=False,owned=False,can_recover=False,message=str(error))
     return value
 
 
@@ -439,13 +472,23 @@ def dashboard_agents():
 def start_agent(aid):
     with LOCK:
         runtime=None
+        training_rt=None
         if aid=='agent2':
             runtime=he_runtime()
-            if runtime:
+            training_rt=he_training_runtime()
+            if runtime or training_rt:
                 existing=PROCS.get(aid)
                 if port_open(agent_port(aid)) and (existing is None or existing.poll() is not None):
                     raise ValueError('Agent2 đang chạy ngoài phiên Portal này. Người quản lý cần kiểm tra trước khi bật.')
-                runtime.start()
+                if runtime:
+                    runtime.start()
+                if training_rt:
+                    try:
+                        training_rt.start()
+                    except Exception:
+                        if runtime:
+                            runtime.stop()
+                        raise
         if agent_state(aid)['state'] in ('running', 'starting'):
             return agent_state(aid)
         if port_open(agent_port(aid)):
@@ -460,7 +503,7 @@ def start_agent(aid):
                 flags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
                 PROCS[aid] = subprocess.Popen(cmd, cwd=cwd, env=env, stdout=log, stderr=subprocess.STDOUT,
                                               stdin=subprocess.DEVNULL, creationflags=flags)
-            if runtime:
+            if runtime or training_rt:
                 deadline=time.monotonic()+30
                 while time.monotonic()<deadline:
                     if PROCS[aid].poll() is not None:
@@ -469,8 +512,10 @@ def start_agent(aid):
                     time.sleep(.1)
                 else:raise ValueError('Agent2 chưa sẵn sàng. Thử bật lại sau khi kiểm tra kết nối.')
         except Exception:
-            if runtime:
-                stop_owned(PROCS.pop(aid,None));runtime.stop()
+            if runtime or training_rt:
+                stop_owned(PROCS.pop(aid,None))
+                if training_rt:training_rt.stop()
+                if runtime:runtime.stop()
             raise
         return agent_state(aid)
 
@@ -479,8 +524,10 @@ def stop_agent(aid):
     with LOCK:
         proc = PROCS.pop(aid, None)
         runtime=HE_RUNTIME if aid=='agent2' else None
-        if aid=='agent2' and (proc is not None or runtime is not None and runtime.process is not None):
+        training_rt=HE_TRAINING_RUNTIME if aid=='agent2' else None
+        if aid=='agent2' and (proc is not None or (runtime is not None and runtime.process is not None) or (training_rt is not None and training_rt.process is not None)):
             stop_owned(proc)
+            if training_rt:training_rt.stop()
             if runtime:runtime.stop()
             return agent_state(aid)
         if proc is None or proc.poll() is not None:
@@ -511,6 +558,7 @@ def stop_all():
             stop_agent(aid)
         except ValueError:
             pass
+    if HE_TRAINING_RUNTIME is not None:HE_TRAINING_RUNTIME.stop()
     if HE_RUNTIME is not None:HE_RUNTIME.stop()
 
 
@@ -1963,6 +2011,22 @@ class Handler(BaseHTTPRequestHandler):
         if path == '/api/internal/agent2/identity':
             if method!='POST' or url.query:return self.send(405,{'error':'Phương thức không được hỗ trợ.'})
             return self.agent2_identity()
+        if path == '/api/internal/agent2/he-training-worker':
+            if method!='POST' or url.query:return self.send(405,{'error':'Phương thức không được hỗ trợ.'})
+            self.agent2_host()
+            values = self.headers.get_all('Authorization',[])
+            if self.headers.get_all('Origin',[]) or len(values)!=1 or not hmac.compare_digest(values[0],'Bearer '+AGENT2_TOKEN):
+                raise PermissionError('Kênh điều khiển worker Agent2 không được phép.')
+            if self.headers.get('Content-Type') != 'application/json':raise ValueError('Cần JSON.')
+            body = json.loads(self.body(4096))
+            action = str(body.get('action') or 'status') if isinstance(body, dict) else 'status'
+            if action not in ('status', 'restart'):
+                raise ValueError('Thao tác worker không hợp lệ.')
+            tr = he_training_runtime()
+            if tr is None:
+                return self.send(200, {'configured': False, 'status': 'not_configured', 'ready': False, 'message': 'Chưa cấu hình he_training_worker.'})
+            res = tr.restart() if action == 'restart' else tr.state()
+            return self.send(200, dict(configured=True, **res))
         if path.startswith('/agent2/'):
             return self.agent2_proxy(method,path[len('/agent2'):],url.query)
         if method == 'GET':
@@ -1986,6 +2050,12 @@ class Handler(BaseHTTPRequestHandler):
                 self.guard_read()
                 self.require_auth_if_enrolled()
                 return self.send(200, dict(key=agent1_key()))
+            if path == '/api/agents/agent2/he-training-worker':
+                self.guard_read()
+                tr = he_training_runtime()
+                if tr is None:
+                    return self.send(200, {'configured': False, 'status': 'not_configured', 'ready': False, 'message': 'Chưa cấu hình he_training_worker.'})
+                return self.send(200, dict(configured=True, **tr.state()))
             m = re.fullmatch(r'/api/agents/(agent[1-4])/log', path)
             if m:
                 self.guard_read()
@@ -2075,6 +2145,12 @@ class Handler(BaseHTTPRequestHandler):
             if not password:
                 raise ValueError('Nhập mật khẩu quản trị Agent 3.')
             return self.send(200, ensure_agent3_workspace(password))
+        if method == 'POST' and path == '/api/agents/agent2/he-training-worker/restart':
+            self.need_session()
+            tr = he_training_runtime()
+            if tr is None:
+                raise ValueError('Chưa cấu hình he_training_worker trong portal/config.local.json.')
+            return self.send(200, dict(configured=True, **tr.restart()))
         if method=='POST' and path=='/api/agents/agent2/recover':
             self.need_session()
             return self.send(200,start_agent('agent2'))

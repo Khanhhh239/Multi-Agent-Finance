@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="vi" data-agent="2">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Agent2 · Huấn luyện và quản lý mô hình</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/platform-theme.css">
+  <link rel="stylesheet" href="assets/model-management.css">
+  <script defer src="assets/model-management.js"></script>
+</head>
+<body>
+  <header class="a2-top">
+    <div class="a2-top-row">
+      <div class="a2-brand-wrap">
+        <strong class="a2-brand">Agent2 · Giám sát</strong>
+        <nav class="a2-area-tabs" aria-label="Khu vực chức năng Agent2">
+          <a id="nav-queue" href="pipeline-workspace">Hàng đợi &amp; điều tra</a>
+          <a id="nav-models" href="model-management" aria-current="page">Huấn luyện &amp; mô hình</a>
+        </nav>
+      </div>
+      <div class="a2-top-meta">
+        <span id="source-env-badge" class="env-badge" hidden>DỮ LIỆU MÔ PHỎNG</span>
+        <label class="inline-select">
+          <span>Doanh nghiệp</span>
+          <select id="company" disabled></select>
+        </label>
+        <button id="refresh" type="button" class="btn-outline">Tải lại</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="mm-main">
+    <div id="notice" role="alert" hidden></div>
+    <div id="success-banner" role="status" hidden></div>
+
+    <div class="mm-page-head">
+      <div>
+        <h1>Huấn luyện &amp; quản lý mô hình</h1>
+        <p class="mm-sub">Học từ dữ liệu doanh nghiệp, đánh giá trước khi đưa vào sử dụng.</p>
+      </div>
+      <span id="role-badge" class="role-badge">Quyền quản trị mô hình</span>
+    </div>
+
+    <section class="mm-hero-cards" aria-label="Tổng quan mô hình và nguồn dữ liệu">
+      <article class="hero-card" id="active-model-card">
+        <div class="hero-icon" aria-hidden="true">❖</div>
+        <div class="hero-body">
+          <span id="active-status-pill" class="status-pill status-idle">Chưa kích hoạt</span>
+          <strong id="active-model-title" class="hero-title">Chưa có mô hình đang dùng</strong>
+          <span id="active-model-meta" class="hero-meta">Huấn luyện và phê duyệt phiên bản đầu tiên bên dưới.</span>
+        </div>
+        <div class="hero-action">
+          <button id="btn-view-active" type="button" class="btn-outline" disabled>Xem phiên bản</button>
+        </div>
+      </article>
+
+      <article class="hero-card" id="shared-data-card">
+        <div class="hero-icon" aria-hidden="true">▤</div>
+        <div class="hero-body">
+          <span class="hero-kicker">Dữ liệu từ sảnh chung</span>
+          <strong id="shared-data-count" class="hero-title">Đang tải…</strong>
+          <span id="shared-data-meta" class="hero-meta">Đọc từ bản dữ liệu đã chuẩn hóa &amp; khóa tại sảnh chung.</span>
+        </div>
+        <div class="hero-action">
+          <button id="btn-inspect-data" type="button" class="btn-link">Xem chất lượng dữ liệu ›</button>
+        </div>
+      </article>
+    </section>
+
+    <nav class="stepper" aria-label="Quy trình 5 bước huấn luyện và phê duyệt mô hình">
+      <button type="button" class="step-pill" data-step="1"><span class="step-num">1</span> Chọn dữ liệu</button>
+      <span class="step-arrow" aria-hidden="true">→</span>
+      <button type="button" class="step-pill" data-step="2"><span class="step-num">2</span> Chuẩn bị đặc trưng</button>
+      <span class="step-arrow" aria-hidden="true">→</span>
+      <button type="button" class="step-pill" data-step="3"><span class="step-num">3</span> Huấn luyện</button>
+      <span class="step-arrow" aria-hidden="true">→</span>
+      <button type="button" class="step-pill active" data-step="4" aria-current="step"><span class="step-num">4</span> Đánh giá</button>
+      <span class="step-arrow" aria-hidden="true">→</span>
+      <button type="button" class="step-pill" data-step="5"><span class="step-num">5</span> Phê duyệt</button>
+    </nav>
+
+    <!-- STEP 1: SHARED DATA SELECTION & QUALITY PROFILE -->
+    <section id="step-panel-1" class="mm-card step-panel" hidden>
+      <div class="card-head">
+        <div>
+          <h2>Bước 1 · Tiếp nhận &amp; kiểm tra chất lượng dữ liệu từ sảnh chung</h2>
+          <p class="muted">Agent2 chỉ đọc bản dữ liệu đã được kiểm tra và niêm phong tại sảnh chung, không tạo lại luồng tải tệp.</p>
+        </div>
+        <div class="head-actions">
+          <label class="inline-select">
+            <span>Bản dữ liệu đã khóa</span>
+            <select id="profile-snapshot"></select>
+          </label>
+          <button id="btn-run-profile" type="button" class="btn-outline">Phân tích chất lượng</button>
+        </div>
+      </div>
+      <div id="profile-kpis" class="kpi-strip"></div>
+      <div id="profile-warnings" class="warn-list"></div>
+      <div class="two-col-even">
+        <div>
+          <h3>Phạm vi nguồn và độ phủ bảng</h3>
+          <div id="profile-tables" class="table-scroll"></div>
+        </div>
+        <div>
+          <h3>Phân bố loại nghiệp vụ &amp; tách kỳ đề xuất</h3>
+          <div id="profile-split-box" class="info-box"></div>
+        </div>
+      </div>
+      <div class="step-footer">
+        <button id="btn-to-step-2" type="button" class="btn-primary">Tiếp sang bước 2: Chuẩn bị đặc trưng →</button>
+      </div>
+    </section>
+
+    <!-- STEP 2: 33-FEATURE PREPARATION & MISSINGNESS -->
+    <section id="step-panel-2" class="mm-card step-panel" hidden>
+      <div class="card-head">
+        <div>
+          <h2>Bước 2 · Chuẩn bị đặc trưng tài chính &amp; quan hệ (33 đặc trưng theo thời điểm)</h2>
+          <p class="muted">Mọi đặc trưng chỉ sử dụng dữ kiện đã biết tại thời điểm giao dịch; loại bỏ hoàn toàn nhãn, mã định danh và điểm luật khỏi biến đầu vào ML.</p>
+        </div>
+        <span id="feature-contract-badge" class="pill-soft"></span>
+      </div>
+      <div id="feature-summary-strip" class="kpi-strip"></div>
+      <div id="feature-table-wrap" class="table-scroll"></div>
+      <div id="feature-exclusions" class="muted-note"></div>
+      <div class="step-footer">
+        <button id="btn-back-step-1" type="button" class="btn-outline">← Bước 1</button>
+        <button id="btn-to-step-3" type="button" class="btn-primary">Tiếp sang bước 3: Chọn &amp; huấn luyện mô hình →</button>
+      </div>
+    </section>
+
+    <!-- STEP 3: UNSUPERVISED MODEL TRAINING -->
+    <section id="step-panel-3" class="mm-card step-panel" hidden>
+      <div class="card-head">
+        <div>
+          <h2>Bước 3 · Huấn luyện phiên bản mô hình mới</h2>
+          <p class="muted">Ưu tiên các phương pháp không giám sát phù hợp với dữ liệu doanh nghiệp (Isolation Forest, Autoencoder). Chạy ngoại tuyến, không bao giờ tự fit khi chấm điểm.</p>
+        </div>
+      </div>
+      <div id="algo-grid" class="algo-grid" role="radiogroup" aria-label="Chọn thuật toán huấn luyện"></div>
+      <form id="train-form" class="train-form">
+        <div class="form-grid-3">
+          <label>Bản dữ liệu huấn luyện (từ sảnh chung)
+            <select id="train-snapshot"></select>
+          </label>
+          <label>Bản dữ liệu đánh giá tách kỳ
+            <select id="train-eval-snapshot"></select>
+          </label>
+          <label>Xử lý trường tùy chọn khuyết
+            <select id="train-missing-policy">
+              <option value="median_flags">Điền trung vị tập train + ghi nhận khuyết riêng (Khuyến nghị)</option>
+              <option value="strict">Nghiêm ngặt — chỉ chấm khi đủ 100% trường</option>
+            </select>
+          </label>
+        </div>
+        <details class="split-details">
+          <summary>Tùy chỉnh mốc thời gian tách kỳ (Train &lt; Tham chiếu ≤ Đánh giá)</summary>
+          <div class="form-grid-3">
+            <label>Bắt đầu huấn luyện<input id="train-h-start" type="text"></label>
+            <label>Kết thúc huấn luyện<input id="train-h-end" type="text"></label>
+            <label>Bắt đầu tham chiếu<input id="train-r-start" type="text"></label>
+            <label>Kết thúc tham chiếu<input id="train-r-end" type="text"></label>
+            <label>Bắt đầu đánh giá<input id="train-e-start" type="text"></label>
+          </div>
+        </details>
+        <div class="step-footer">
+          <button id="btn-back-step-2" type="button" class="btn-outline">← Bước 2</button>
+          <button id="btn-train" type="submit" class="btn-primary">Bắt đầu huấn luyện ứng viên</button>
+          <span id="train-status" class="muted" role="status"></span>
+        </div>
+      </form>
+
+      <!-- R2: LOGISTIC REGRESSION (LOCAL QUANTIZED REFERENCE & FHE CIPHERTEXT VIA WORKER 8870) -->
+      <div id="lr-fhe-panel" class="lr-panel" hidden>
+        <div class="lr-banner-grid">
+          <div class="lr-status-card" id="lr-worker-card">
+            <div class="lr-card-top">
+              <strong>Trạng thái Worker FHE (cổng 8870)</strong>
+              <span id="lr-worker-pill" class="status-pill status-idle">Đang kiểm tra…</span>
+            </div>
+            <p id="lr-worker-meta" class="muted small-note">Đang kiểm tra kết nối và health check worker huấn luyện mã hóa…</p>
+            <div class="inline-actions">
+              <button id="btn-lr-health" type="button" class="btn-outline btn-sm">Kiểm tra Worker</button>
+              <button id="btn-lr-restart" type="button" class="btn-outline btn-sm">Khởi động lại Worker 8870</button>
+            </div>
+          </div>
+
+          <div class="lr-status-card" id="lr-circuit-card">
+            <div class="lr-card-top">
+              <strong>Phiên bản mạch FHE &amp; khóa doanh nghiệp</strong>
+              <span id="lr-crypto-pill" class="status-pill status-idle">Đang tải…</span>
+            </div>
+            <dl id="lr-circuit-meta" class="lr-kv-list"></dl>
+          </div>
+        </div>
+
+        <div class="lr-section">
+          <h3>1. Chọn chế độ huấn luyện Logistic Regression</h3>
+          <div class="lr-mode-grid" role="radiogroup" aria-label="Chế độ huấn luyện Logistic Regression">
+            <button id="lr-mode-local" type="button" class="lr-mode-btn" data-lr-mode="local_quantized_reference" aria-checked="false">
+              <strong>Huấn luyện tham chiếu local trên dữ liệu thử nghiệm</strong>
+              <span>Chạy đúng số học lượng tử hóa của mạch tại máy doanh nghiệp (kèm đối chiếu LR số thực tham chiếu).</span>
+            </button>
+            <button id="lr-mode-fhe" type="button" class="lr-mode-btn selected" data-lr-mode="fhe_cloud_ciphertext" aria-checked="true">
+              <strong>Huấn luyện FHE trên ciphertext (Worker 8870)</strong>
+              <span>Mã hóa cục bộ bằng khóa doanh nghiệp, gửi chỉ bản mã sang Worker 8870 (Concrete TFHE), không có plaintext fallback.</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="lr-section">
+          <h3>2. Cấu hình dữ liệu &amp; giới hạn đặc trưng mạch FHE</h3>
+          <div class="form-grid-3">
+            <label>Nguồn dữ liệu có nhãn hợp lệ
+              <select id="lr-source-mode">
+                <option value="verified_test_dataset">Tập dữ liệu thử nghiệm có nhãn hợp lệ (của doanh nghiệp)</option>
+                <option value="snapshot_verified">Snapshot từ sảnh chung + gói nhãn đã khóa</option>
+                <option value="verified_reviews_next_cycle">Nhãn đã xác minh từ hàng đợi rà soát (chu kỳ tiếp theo)</option>
+              </select>
+            </label>
+            <label>Số batch huấn luyện (4 mẫu/batch)
+              <select id="lr-batch-count">
+                <option value="2">2 batch (8 mẫu train)</option>
+                <option value="3">3 batch (12 mẫu train)</option>
+                <option value="4">4 batch (16 mẫu train)</option>
+              </select>
+            </label>
+            <label>Số epoch (batch × epoch ≤ 4 bước mạch)
+              <select id="lr-epochs">
+                <option value="1">1 epoch</option>
+                <option value="2">2 epoch</option>
+              </select>
+            </label>
+          </div>
+
+          <div id="lr-feature-lock-box" class="lr-feature-lock" aria-label="Khóa đặc trưng mạch FHE">
+            <div class="lr-feature-lock-head">
+              <strong>Đặc trưng được mạch FHE hỗ trợ: <span id="lr-feature-ratio">2 / 33</span></strong>
+              <span class="pill-rose">Khóa cứng theo mạch · Không cho chọn 33 đặc trưng</span>
+            </div>
+            <div id="lr-locked-feature-list" class="lr-feature-chips"></div>
+            <p class="muted small-note">31 đặc trưng còn lại bị vô hiệu hóa ở chế độ FHE LR vì mạch Concrete hiện tại chỉ biên dịch cho 2 đặc trưng nhị phân. Để dùng đủ 33 đặc trưng, hãy chọn Isolation Forest hoặc Autoencoder ở trên.</p>
+          </div>
+
+          <div id="lr-dataset-kpis" class="lr-kpi-grid"></div>
+          <p id="lr-verified-reviews-note" class="muted small-note" hidden></p>
+        </div>
+
+        <div class="lr-section">
+          <h3>3. Chạy huấn luyện, tiến trình &amp; quản lý Checkpoint</h3>
+          <div class="lr-action-bar">
+            <button id="btn-lr-train" type="button" class="btn-primary">Bắt đầu huấn luyện LR (FHE Worker 8870)</button>
+            <button id="btn-lr-resume" type="button" class="btn-outline" disabled>Tiếp tục (Resume idempotent)</button>
+            <button id="btn-lr-decrypt" type="button" class="btn-outline" disabled>Giải mã &amp; đối chiếu tại local</button>
+            <span id="lr-action-status" class="muted" role="status"></span>
+          </div>
+
+          <div id="lr-job-progress-box" class="lr-job-box" hidden>
+            <div class="lr-card-top">
+              <div>
+                <strong id="lr-job-title">Phiên huấn luyện</strong>
+                <div id="lr-job-sub" class="muted small-note"></div>
+              </div>
+              <span id="lr-stage-badge" class="status-pill status-shadow">Train checkpoint</span>
+            </div>
+            <div class="lr-progress-track" aria-label="Tiến trình cập nhật theo batch">
+              <div id="lr-progress-fill" class="lr-progress-fill"></div>
+            </div>
+            <div id="lr-progress-meta" class="lr-progress-meta"></div>
+            <div id="lr-job-error" class="warn-item" hidden></div>
+
+            <h4>Danh sách Checkpoint theo batch (phân biệt Train Checkpoint vs Model phát hành)</h4>
+            <div class="table-scroll">
+              <table class="mm-table" id="lr-checkpoints-table">
+                <thead>
+                  <tr>
+                    <th>Bước (Cursor)</th>
+                    <th>Epoch / Batch</th>
+                    <th>Loại bản lưu</th>
+                    <th>Mã băm trọng số (weights_hash)</th>
+                    <th>Thời điểm commit</th>
+                  </tr>
+                </thead>
+                <tbody id="lr-checkpoints-body"></tbody>
+              </table>
+            </div>
+
+            <div id="lr-validation-box" hidden>
+              <h4>Kết quả Validation &amp; phân tách sai số lượng tử hóa vs lỗi triển khai</h4>
+              <div id="lr-error-split-grid" class="two-col-even"></div>
+              <div class="table-scroll">
+                <table class="mm-table" id="lr-compare-table">
+                  <thead>
+                    <tr>
+                      <th>Nguồn mô hình</th>
+                      <th>Trọng số (w0, w1, b)</th>
+                      <th>BCE Loss</th>
+                      <th>Độ chính xác</th>
+                      <th>Ghi chú kỹ thuật</th>
+                    </tr>
+                  </thead>
+                  <tbody id="lr-compare-body"></tbody>
+                </table>
+              </div>
+              <div id="lr-pred-table-wrap" class="table-scroll"></div>
+            </div>
+
+            <div id="lr-promote-box" class="lr-promote-box" hidden>
+              <h4>Phê duyệt thành Model có thể phát hành</h4>
+              <p class="muted small-note">Train checkpoint chỉ là trạng thái trung gian đã mã hóa và <strong>chưa thể phát hành</strong>. Chỉ sau khi giải mã tại local đúng quyền hạn và đạt kiểm tra đối chiếu số học lượng tử hóa mới được phê duyệt thành <strong>Model có thể phát hành</strong>.</p>
+              <label>Căn cứ phê duyệt phát hành (tối thiểu 10 ký tự)
+                <textarea id="lr-promote-reason" rows="2" placeholder="Ví dụ: Đã kiểm tra sai số triển khai FHE = 0.0, sai số lượng tử hóa trong ngưỡng và đối chiếu kết quả validation."></textarea>
+              </label>
+              <label class="checkbox-row">
+                <input id="lr-promote-checked" type="checkbox">
+                <span>Tôi xác nhận đã kiểm tra checkpoint, kết quả giải mã local và kết quả validation.</span>
+              </label>
+              <div class="inline-actions">
+                <button id="btn-lr-promote" type="button" class="btn-primary" disabled>Phê duyệt thành Model có thể phát hành</button>
+              </div>
+              <div id="lr-promoted-summary" class="score-result" hidden></div>
+              <div id="lr-score-queue-box" class="inline-actions" hidden>
+                <label class="inline-select">
+                  <span>Bản dữ liệu chấm 5 phương pháp</span>
+                  <select id="lr-score-snapshot"></select>
+                </label>
+                <button id="btn-lr-score-queue" type="button" class="btn-outline">Chấm vào hàng đợi bằng 5 phương pháp (có LR)</button>
+              </div>
+              <div id="lr-score-queue-result" class="score-result" hidden></div>
+            </div>
+          </div>
+
+          <div id="lr-history-wrap" class="lr-history-wrap" hidden>
+            <h4>Lịch sử các phiên huấn luyện LR của doanh nghiệp</h4>
+            <div class="table-scroll">
+              <table class="mm-table" id="lr-jobs-table">
+                <thead>
+                  <tr>
+                    <th>Job ID</th>
+                    <th>Chế độ</th>
+                    <th>Tiến trình</th>
+                    <th>Giai đoạn artifact</th>
+                    <th>Validation BCE Loss</th>
+                  </tr>
+                </thead>
+                <tbody id="lr-jobs-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- R5: VALIDATION, 4-WAY COMPARISON, QUALITY GATE & 9-STATE MODEL REGISTRY -->
+        <div id="lr-registry-section" class="lr-section">
+          <div class="lr-card-top">
+            <div>
+              <h3>4. R5 · Đánh giá chất lượng (9 metrics), So sánh 4 mốc &amp; LR Model Registry</h3>
+              <p class="muted small-note">Model LR chỉ được đưa vào pipeline <strong>ACTIVE</strong> khi có bằng chứng chất lượng (<code>quality_approved = true</code>), đủ mẫu dương đại diện, không vượt ngưỡng cảnh báo sai (FP / 1.000 GD) và đi đúng vòng đời <code>TRAINING → VALIDATING → CANDIDATE → SHADOW → APPROVED → ACTIVE</code>.</p>
+            </div>
+            <span id="lr-reg-active-badge" class="status-pill status-idle">Chưa có LR ACTIVE</span>
+          </div>
+
+          <div class="lr-action-bar">
+            <button id="btn-lr-reg-register" type="button" class="btn-outline" disabled>Đăng ký Job LR hiện tại vào Registry</button>
+            <label class="inline-select">
+              <span>Tập đánh giá R5</span>
+              <select id="lr-reg-eval-mode">
+                <option value="representative_sme_benchmark">Tập kiểm thử đại diện SME (200 GD · 24 dương tính · mô phỏng)</option>
+                <option value="small_job_holdout">Tập holdout nhỏ (4 GD · 2 dương tính · kiểm chứng chặn thiếu mẫu)</option>
+              </select>
+            </label>
+            <button id="btn-lr-reg-validate" type="button" class="btn-primary" disabled>Chạy Validation R5 &amp; So sánh 4 mốc</button>
+            <span id="lr-reg-status" class="muted" role="status"></span>
+          </div>
+
+          <div id="lr-reg-detail-box" class="lr-job-box" hidden>
+            <div class="lr-card-top">
+              <div>
+                <strong id="lr-reg-title">Phiên bản LR</strong>
+                <div id="lr-reg-sub" class="muted small-note"></div>
+              </div>
+              <div class="inline-actions">
+                <span id="lr-reg-state-pill" class="status-pill status-idle">VALIDATING</span>
+                <span id="lr-reg-qa-pill" class="status-pill status-review">quality_approved = false</span>
+              </div>
+            </div>
+
+            <div id="lr-reg-stepper" class="lr-lifecycle-stepper" aria-label="Vòng đời LR Model Registry"></div>
+
+            <div id="lr-reg-metrics-wrap" hidden>
+              <h4>9 Metrics bắt buộc &amp; Cổng chất lượng R5</h4>
+              <div id="lr-reg-metrics-grid" class="lr-kpi-grid r5-metrics-grid"></div>
+              <div id="lr-reg-gate-grid" class="checklist-grid r5-gate-grid"></div>
+
+              <h4>So sánh 4 mốc &amp; Giá trị bổ sung thực sự của LR</h4>
+              <div id="lr-reg-incremental-box" class="lr-incremental-box"></div>
+              <div class="table-scroll">
+                <table class="mm-table" id="lr-reg-compare-table">
+                  <thead>
+                    <tr>
+                      <th>Mô hình / Pipeline</th>
+                      <th>Recall lớp 1</th>
+                      <th>Precision lớp 1</th>
+                      <th>F1-score</th>
+                      <th>PR-AUC</th>
+                      <th>FP / 1.000 GD</th>
+                      <th>Confusion (TP/FP/TN/FN)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="lr-reg-compare-body"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <details class="eval-details" open>
+              <summary>Metadata lưu trữ Registry (Schema hash, Circuit, Provenance công bố, Approval, Activation &amp; Rollback target)</summary>
+              <dl id="lr-reg-meta-dl" class="lr-kv-list"></dl>
+            </details>
+
+            <div id="lr-reg-transition-box" class="lr-promote-box">
+              <h4>Điều khiển chuyển trạng thái vòng đời (R5 Governance)</h4>
+              <label>Lý do chuyển trạng thái / phê duyệt (tối thiểu 10 ký tự)
+                <textarea id="lr-reg-reason" rows="2" placeholder="Ví dụ: Đã kiểm tra đủ 9 metrics, Recall > 90%, FP/1000 trong ngưỡng và giá trị bổ sung dương trên pipeline 5 phương pháp."></textarea>
+              </label>
+              <label class="checkbox-row">
+                <input id="lr-reg-reviewed" type="checkbox">
+                <span>Tôi xác nhận đã xem đầy đủ 9 metrics bắt buộc, bảng so sánh 4 mốc, FP/1.000 GD và cổng chất lượng trước khi phê duyệt.</span>
+              </label>
+              <div class="lr-action-bar">
+                <button id="btn-lr-tr-shadow" type="button" class="btn-outline" data-target-state="SHADOW" disabled>Chuyển SHADOW</button>
+                <button id="btn-lr-tr-approve" type="button" class="btn-primary" data-target-state="APPROVED" disabled>Phê duyệt (APPROVED)</button>
+                <button id="btn-lr-tr-activate" type="button" class="btn-primary" data-target-state="ACTIVE" disabled>Kích hoạt (ACTIVE)</button>
+                <button id="btn-lr-tr-rollback" type="button" class="btn-outline" data-target-state="ROLLED_BACK" disabled>Hoàn nguyên (ROLLED_BACK)</button>
+                <button id="btn-lr-tr-block" type="button" class="btn-outline" data-target-state="BLOCKED" disabled>Khóa (BLOCKED)</button>
+                <button id="btn-lr-tr-reject" type="button" class="btn-outline" data-target-state="REJECTED" disabled>Từ chối (REJECTED)</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="lr-reg-list-wrap" class="lr-history-wrap" hidden>
+            <h4>Danh sách phiên bản trong LR Model Registry</h4>
+            <div class="table-scroll">
+              <table class="mm-table" id="lr-reg-table">
+                <thead>
+                  <tr>
+                    <th>Phiên bản</th>
+                    <th>Trạng thái vòng đời</th>
+                    <th>Cổng chất lượng</th>
+                    <th>Recall lớp 1</th>
+                    <th>FP / 1.000 GD</th>
+                    <th>Kích hoạt / Rollback target</th>
+                  </tr>
+                </thead>
+                <tbody id="lr-reg-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-footer">
+          <button id="btn-lr-back-step-2" type="button" class="btn-outline">← Bước 2</button>
+          <span class="muted small-note">Chế độ FHE trên ciphertext tuyệt đối không tự rơi về huấn luyện plaintext khi worker 8870 hoặc khóa không sẵn sàng.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEPS 4 & 5: EVALUATION COMPARISON, VERSION HISTORY & APPROVAL (DEFAULT VIEW) -->
+    <section id="step-panel-45" class="mm-grid">
+      <div class="mm-left-col">
+        <article class="mm-card">
+          <div class="card-head">
+            <div class="head-title-inline">
+              <h2>So sánh phiên bản ứng viên</h2>
+              <span id="compare-sim-badge" class="pill-rose" hidden>Ví dụ mô phỏng</span>
+              <span class="muted small-note">Cùng kỳ dữ liệu, cùng 5 lượt kiểm tra. Chưa chứng minh hiệu quả thực tế.</span>
+            </div>
+            <button id="btn-new-train" type="button" class="btn-outline btn-sm">+ Huấn luyện thêm</button>
+          </div>
+
+          <div class="table-scroll">
+            <table class="mm-table" id="candidates-table">
+              <thead>
+                <tr>
+                  <th>Mô hình</th>
+                  <th>Kỳ đánh giá</th>
+                  <th>Kết quả rà hữu ích</th>
+                  <th>Thời gian xử lý</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody id="candidates-body"></tbody>
+            </table>
+            <p id="candidates-empty" class="empty-msg" hidden>Chưa có phiên bản ứng viên nào. Chuyển sang bước 3 để huấn luyện mô hình từ dữ liệu sảnh chung.</p>
+          </div>
+
+          <div class="checklist-section">
+            <h3>Kiểm tra chất lượng trước phê duyệt</h3>
+            <div id="checklist-grid" class="checklist-grid"></div>
+          </div>
+
+          <details id="eval-deep-details" class="eval-details">
+            <summary>Xem chỉ số đánh giá không nhãn, đặc trưng đóng góp &amp; đánh giá lại trên kỳ khác</summary>
+            <div class="reeval-bar">
+              <label class="inline-select">
+                <span>Chấm đánh giá lại trên bản dữ liệu</span>
+                <select id="reeval-snapshot"></select>
+              </label>
+              <button id="btn-reeval" type="button" class="btn-outline btn-sm">Chạy đánh giá (không fit lại)</button>
+            </div>
+            <div id="eval-metrics-detail"></div>
+          </details>
+        </article>
+
+        <article class="mm-card">
+          <div class="card-head">
+            <h2>Lịch sử phiên bản</h2>
+            <button id="btn-rollback" type="button" class="btn-outline btn-sm" disabled>↺ Hoàn nguyên phiên bản</button>
+          </div>
+          <div class="table-scroll">
+            <table class="mm-table" id="history-table">
+              <thead>
+                <tr>
+                  <th>Phiên bản</th>
+                  <th>Mô hình</th>
+                  <th>Thời điểm</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody id="history-body"></tbody>
+            </table>
+          </div>
+          <div id="rollback-box" class="rollback-box" hidden>
+            <label>Chọn phiên bản đã duyệt trước đó để hoàn nguyên
+              <select id="rollback-target"></select>
+            </label>
+            <label>Lý do hoàn nguyên (tối thiểu 10 ký tự)
+              <input id="rollback-reason" type="text" placeholder="Ví dụ: Hoàn nguyên về bản ổn định trước sau khi đối chiếu kết quả chạy thử.">
+            </label>
+            <div class="inline-actions">
+              <button id="btn-confirm-rollback" type="button" class="btn-primary btn-sm">Xác nhận hoàn nguyên</button>
+              <button id="btn-cancel-rollback" type="button" class="btn-outline btn-sm">Hủy</button>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <aside class="mm-right-col">
+        <article class="mm-card approval-card" id="approval-panel">
+          <h2>Xác nhận đưa vào sử dụng</h2>
+          <dl class="kv-list" id="approval-summary">
+            <dt>Mô hình</dt><dd id="ap-model">—</dd>
+            <dt>Bản chụp dữ liệu</dt><dd id="ap-snapshot">—</dd>
+            <dt>Phiên bản đặc trưng</dt><dd id="ap-features">—</dd>
+          </dl>
+
+          <div class="mode-row">
+            <span class="mode-label">Chế độ chạy</span>
+            <div class="mode-toggle" role="group" aria-label="Chọn chế độ chạy">
+              <button type="button" id="mode-shadow" class="mode-btn active" data-mode="shadow">Chạy thử</button>
+              <button type="button" id="mode-active" class="mode-btn" data-mode="active">Đang dùng</button>
+            </div>
+          </div>
+
+          <form id="approve-form">
+            <label class="field-block">Ý kiến phê duyệt
+              <textarea id="approve-reason" rows="3" maxlength="1000" placeholder="Nhập ý kiến, ghi chú phục vụ phê duyệt chạy thử hoặc đưa vào sử dụng…"></textarea>
+            </label>
+            <label class="check-row">
+              <input id="approve-checked" type="checkbox">
+              <span>Tôi đã xem kết quả đánh giá</span>
+            </label>
+            <button id="btn-approve" type="submit" class="btn-primary btn-block" disabled>Phê duyệt chạy thử</button>
+          </form>
+
+          <div class="queue-connect-box" id="queue-connect-box">
+            <h3>Kết nối kết quả ML vào hàng đợi</h3>
+            <p class="muted small-note">Dùng mô hình đã phê duyệt kết hợp 35 luật &amp; đồ thị quan hệ để tạo lượt ưu tiên kiểm tra (không huấn luyện lại).</p>
+            <label class="field-block">Bản dữ liệu cần chấm
+              <select id="score-snapshot"></select>
+            </label>
+            <button id="btn-score-queue" type="button" class="btn-outline btn-block" disabled>Chấm vào hàng đợi điều tra</button>
+            <div id="score-queue-result" class="score-result" hidden></div>
+          </div>
+
+          <button id="btn-limits" type="button" class="btn-outline btn-block">Xem giải thích &amp; giới hạn</button>
+        </article>
+      </aside>
+    </section>
+
+    <!-- INLINE DETAIL / LIMITS DRAWER -->
+    <section id="detail-drawer" class="mm-card drawer-card" hidden>
+      <div class="card-head">
+        <h2 id="drawer-title">Chi tiết phiên bản</h2>
+        <button id="btn-close-drawer" type="button" class="btn-outline btn-sm">Đóng</button>
+      </div>
+      <div id="drawer-content"></div>
+    </section>
+
+    <footer class="guardrail-bar" role="note">
+      <span class="guardrail-icon" aria-hidden="true">ⓘ</span>
+      <span>Dữ liệu chưa rà không được tự gán là hợp lệ. Không tự huấn luyện khi chấm giao dịch. Điểm ML chỉ dùng để xếp ưu tiên kiểm tra, không phải xác suất gian lận khi chưa hiệu chuẩn.</span>
+    </footer>
+  </main>
+</body>
+</html>

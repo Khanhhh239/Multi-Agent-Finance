@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="vi" data-agent="2">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Agent2 · Hàng đợi và điều tra</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/platform-theme.css">
+  <link rel="stylesheet" href="assets/investigation.css">
+  <script defer src="assets/investigation.js"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <div class="brand-wrap">
+        <strong>Agent2 · Giám sát</strong>
+        <nav aria-label="Chức năng Agent2">
+          <a id="nav-queue" href="pipeline-workspace" aria-current="page">Hàng đợi &amp; điều tra</a>
+          <a id="nav-models" href="model-management" hidden>Huấn luyện &amp; mô hình</a>
+        </nav>
+      </div>
+      <div class="top-right">
+        <span id="env-badge" class="env-badge" hidden>DỮ LIỆU MÔ PHỎNG</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="notice" role="alert" hidden></div>
+
+    <div class="toolbar">
+      <label>Doanh nghiệp<select id="company" disabled></select></label>
+      <label>Nguồn kết quả<select id="run"><option value="">Lần phân tích mới nhất của từng vụ</option></select></label>
+      <button id="refresh" class="secondary">Tải lại</button>
+      <a id="operations" href="pipeline-operations" class="link-pill" hidden>Quản lý lần phân tích</a>
+    </div>
+
+    <section id="queue">
+      <div class="page-intro">
+        <div>
+          <h1>Giao dịch cần kiểm tra</h1>
+          <p class="muted">Ưu tiên việc quan trọng, đối chiếu bằng chứng và quan hệ đối tượng trước khi kết luận.</p>
+        </div>
+      </div>
+
+      <div id="counts" class="metrics"></div>
+      <p id="source" class="muted"></p>
+
+      <div class="filters">
+        <input id="search" aria-label="Tìm giao dịch" placeholder="Tìm mã giao dịch, nội dung, dấu hiệu…">
+        <select id="status" aria-label="Trạng thái">
+          <option value="">Tất cả trạng thái</option>
+          <option value="new">Chưa kiểm tra</option>
+          <option value="in_review">Đang kiểm tra</option>
+          <option value="waiting_evidence">Cần bổ sung bằng chứng</option>
+          <option value="concluded">Đã kết luận</option>
+        </select>
+        <select id="priority" aria-label="Ưu tiên">
+          <option value="">Mọi mức ưu tiên</option>
+          <option value="mandatory">Bắt buộc rà</option>
+          <option value="scored">Có điểm khả dụng</option>
+          <option value="unavailable">Chưa có điểm</option>
+        </select>
+        <span>Điểm ưu tiên giảm dần</span>
+      </div>
+
+      <div class="split">
+        <div class="panel table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Giao dịch / thời gian</th>
+                <th>Loại / số tiền</th>
+                <th>Điểm</th>
+                <th>Ưu tiên</th>
+                <th>Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+          <p id="empty" hidden></p>
+        </div>
+        <aside class="panel" id="preview">
+          <h2>Vì sao cần kiểm tra?</h2>
+          <p>Chọn một giao dịch trong danh sách.</p>
+        </aside>
+      </div>
+
+      <p class="footnote">Điểm chỉ dùng để ưu tiên điều tra, không phải xác suất gian lận. Ngân sách và phiếu xử lý vẫn được quản lý theo vụ.</p>
+    </section>
+
+    <section id="investigation" hidden>
+      <div class="section-heading inv-head">
+        <div>
+          <span id="breadcrumb" class="breadcrumb">Hàng đợi</span>
+          <h1 id="detail-title"></h1>
+        </div>
+        <button id="back" class="secondary">← Quay lại hàng đợi</button>
+      </div>
+
+      <div id="tx-summary" class="panel summary"></div>
+
+      <div class="split investigate">
+        <section class="panel main-inv-panel">
+          <nav class="tabs" aria-label="Nội dung điều tra">
+            <button data-tab="relations" aria-selected="true">Quan hệ</button>
+            <button data-tab="related">Giao dịch liên quan</button>
+            <button data-tab="evidence">Bằng chứng</button>
+            <button data-tab="explanation">Giải thích điểm</button>
+            <button data-tab="history">Lịch sử</button>
+          </nav>
+
+          <div id="relations" class="tab">
+            <div class="graph-tools">
+              <div class="zoom-group">
+                <button id="zoom-out" class="secondary" aria-label="Thu nhỏ">−</button>
+                <button id="zoom-in" class="secondary" aria-label="Phóng to">+</button>
+                <button id="fit" class="secondary">Vừa màn hình</button>
+              </div>
+              <div class="search-group">
+                <input id="graph-search" aria-label="Tìm đối tượng" placeholder="Tìm đối tượng theo mã hoặc tên…">
+                <button id="find-node" class="secondary">Tìm</button>
+              </div>
+            </div>
+            <div class="graph-scroll">
+              <svg id="graph" role="group" aria-label="Sơ đồ quan hệ có thể mở rộng"></svg>
+            </div>
+            <div class="graph-footer">
+              <p class="legend">━━ Nét liền: dữ kiện từ nguồn &nbsp;&nbsp; ┄┄ Nét đứt: liên kết bối cảnh, cần đối chiếu</p>
+              <p id="graph-status" class="muted" role="status"></p>
+            </div>
+            <div id="inline-related" class="inline-related"></div>
+          </div>
+
+          <div id="related" class="tab" hidden></div>
+          <div id="evidence" class="tab" hidden></div>
+          <div id="explanation" class="tab" hidden></div>
+          <div id="history" class="tab" hidden></div>
+        </section>
+
+        <aside id="relation-evidence" class="panel">
+          <h2>Căn cứ của liên kết</h2>
+          <p class="muted">Chọn nút hoặc đường nối trên sơ đồ để xem nguồn.</p>
+        </aside>
+      </div>
+
+      <section id="review" class="panel">
+        <div class="section-heading">
+          <h2>Ghi nhận kết quả</h2>
+          <span id="review-status" class="pill"></span>
+        </div>
+        <p id="review-context" class="muted"></p>
+        <div class="actions">
+          <button id="start">Bắt đầu rà</button>
+          <span id="timer" class="timer-pill"></span>
+        </div>
+        <form id="review-form">
+          <fieldset id="review-fields">
+            <div class="review-grid">
+              <label>Kết quả đối chiếu
+                <select id="outcome">
+                  <option value="">Chọn kết quả</option>
+                  <option value="confirmed_risk">Vi phạm (Có vấn đề cần xử lý)</option>
+                  <option value="legitimate">Hợp lệ (Không phát hiện vấn đề)</option>
+                  <option value="inconclusive">Chưa đủ bằng chứng</option>
+                </select>
+              </label>
+              <label>Đã kiểm tra và giải thích được điều gì?
+                <textarea id="notes" maxlength="4000" rows="3" required placeholder="Ghi chú ngắn gọn kết quả đối chiếu chứng từ…"></textarea>
+              </label>
+              <label>Hành động tiếp theo
+                <textarea id="action" maxlength="4000" rows="3" placeholder="Đề xuất xử lý hoặc yêu cầu bổ sung…"></textarea>
+              </label>
+              <label>Tài liệu còn thiếu
+                <textarea id="missing" maxlength="4000" rows="3" placeholder="Ghi rõ chứng từ gốc còn thiếu nếu chưa đủ căn cứ…"></textarea>
+              </label>
+            </div>
+            <label class="check">
+              <input id="checks" type="checkbox">
+              <span>Đã đối chiếu đủ căn cứ cho kết luận này</span>
+            </label>
+            <div id="evidence-selection"></div>
+          </fieldset>
+          <div class="actions">
+            <button id="save" disabled>Lưu kết quả rà</button>
+            <span id="save-status" role="status"></span>
+          </div>
+        </form>
+        <div class="attachments">
+          <label>Đính kèm bằng chứng <input id="file" type="file" accept=".pdf,.png,.jpg,.jpeg"></label>
+          <button id="attach" class="secondary">Lưu tệp bằng chứng</button>
+          <p id="attachment-status" role="status"></p>
+          <div id="attachment-list"></div>
+        </div>
+        <p class="footnote">ⓘ Liên kết cần đối chiếu, chưa phải kết luận gian lận. Chỉ giao dịch đã xác nhận <strong>Vi phạm</strong> hoặc <strong>Hợp lệ</strong> kèm đối chiếu chứng từ mới đủ điều kiện đưa vào dữ liệu supervised cho chu kỳ huấn luyện LR tiếp theo (không dùng <em>Chưa đủ bằng chứng</em> hoặc giao dịch chưa rà).</p>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
