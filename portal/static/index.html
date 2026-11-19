@@ -18,20 +18,10 @@
 <body>
 <div id="top-progress" class="kt-top-progress" aria-hidden="true"></div>
 <a class="skip-link" href="#content">Đến nội dung chính</a>
-<header class="topbar">
-  <button type="button" class="menu-toggle" id="menu-toggle" aria-controls="sidebar" aria-expanded="true" aria-label="Thu gọn menu điều hướng" title="Thu gọn menu điều hướng">
+<button type="button" class="menu-toggle" id="menu-toggle" aria-controls="sidebar" aria-expanded="true" aria-label="Thu gọn menu điều hướng" title="Thu gọn menu điều hướng">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
     <span>Menu</span>
   </button>
-  <div class="top-right">
-    <a class="chip" id="package-chip" href="#data" hidden></a>
-    <a class="company" id="company-chip" href="#config">
-      <span class="company-name" id="company-name">Chưa cấu hình doanh nghiệp</span>
-      <span class="company-meta" id="company-meta">Bấm để nhập thông tin</span>
-    </a>
-    <span class="masthead-period" id="masthead-period"></span>
-  </div>
-</header>
 
 <div class="shell">
   <nav class="sidebar" id="sidebar" aria-label="Điều hướng">
@@ -72,157 +62,13 @@
   <main class="content" id="content" tabindex="-1">
     <!-- Overview -->
     <section class="view" id="view-overview" aria-labelledby="h-overview">
-      <!-- 1. Minimalist Executive Header -->
-      <header class="overview-header">
-        <div class="company-brand-box">
-          <div class="company-monogram-brand" id="overview-monogram">SS</div>
-          <div class="company-meta-col">
-            <div class="company-tagline-row">
-              <h1 id="h-overview" class="overview-company-title">Sổ Son</h1>
-              <span class="mst-pill" id="overview-tax-badge">MST: —</span>
-              <span class="meta-badge" id="overview-vat-badge" hidden></span>
-              <span class="meta-badge" id="overview-period-badge" hidden></span>
-            </div>
-            <p class="overview-company-sub" id="overview-company-fullname">Không gian kế toán số đa tác tử</p>
-          </div>
-        </div>
-        <div class="header-right-controls">
-          <div class="live-status-badge" id="overview-status-pill">
-            <span class="pulse-dot"></span>
-            <span id="overview-system-status">Đang tải...</span>
-          </div>
-          <a href="#data" class="btn-secondary-smart" id="overview-data-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            <span id="overview-package-label">Nạp dữ liệu</span>
-          </a>
-          <button type="button" class="btn-primary-smart" id="start-all">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            <span>Bật các agent</span>
-          </button>
-        </div>
-      </header>
-
-      <!-- 1b. Executive Summary Strip (Live System & Accounting Governance) -->
-      <div class="exec-summary-grid" id="exec-summary-grid" aria-label="Tóm tắt điều hành phòng kế toán số">
-        <a href="#agent-grid" class="exec-kpi-card">
-          <span class="exec-kpi-kicker">HỆ THỐNG ĐA TÁC TỬ</span>
-          <strong class="exec-kpi-val" id="exec-agents-val">—/4 sẵn sàng</strong>
-          <span class="exec-kpi-sub" id="exec-agents-sub">Đang kiểm tra các phân hệ AI…</span>
-        </a>
-        <a href="#config" class="exec-kpi-card">
-          <span class="exec-kpi-kicker">CHẾ ĐỘ THUẾ &amp; KỲ SỔ</span>
-          <strong class="exec-kpi-val" id="exec-regime-val">Chưa cấu hình</strong>
-          <span class="exec-kpi-sub" id="exec-regime-sub">Khai báo MST &amp; kỳ kế toán</span>
-        </a>
-        <a href="#data" class="exec-kpi-card">
-          <span class="exec-kpi-kicker">CHỨNG TỪ &amp; NIÊM PHONG</span>
-          <strong class="exec-kpi-val" id="exec-pkg-val">Chưa niêm phong</strong>
-          <span class="exec-kpi-sub" id="exec-pkg-sub">Nạp sao kê, hóa đơn XML &amp; sổ</span>
-        </a>
-        <a href="#data" class="exec-kpi-card">
-          <span class="exec-kpi-kicker">AN NINH &amp; SINH TRẮC HỌC</span>
-          <strong class="exec-kpi-val" id="exec-sec-val">Khóa bảo vệ</strong>
-          <span class="exec-kpi-sub" id="exec-sec-sub">FaceID 3 khung · Chuỗi SHA-256</span>
-        </a>
+      <header class="overview-header"><div><div class="overview-eyebrow"><span>Sổ Son</span> · Không gian điều hành</div><h1 id="h-overview">Sổ Son</h1><p id="overview-company-fullname"></p></div></header>
+      <div class="exec-summary-grid" id="exec-summary-grid">
+        <div class="exec-kpi-card"><span class="exec-kpi-kicker">Hệ thống đa tác tử</span><strong class="exec-kpi-val" id="exec-agents-val"></strong><button type="button" id="start-all">Bật tất cả</button></div>
+        <a href="#data" class="exec-kpi-card"><span class="exec-kpi-kicker">An ninh và sinh trắc học</span><strong class="exec-kpi-val" id="exec-sec-val"></strong></a>
       </div>
-
-      <!-- 2. Pure Aesthetic Central Vietnam Gallery (Chỉ trang trí nghệ thuật, không gắn với Agent) -->
-      <section class="heritage-showcase" aria-label="Bộ ảnh di sản miền Trung">
-        <div class="showcase-header">
-          <span class="showcase-badge">Cảm hứng Di sản Miền Trung</span>
-          <span class="showcase-date" id="today"></span>
-        </div>
-        <div class="showcase-gallery">
-          <figure class="gallery-card card-main">
-            <img src="/places/hoi-an.webp" width="1200" height="800" alt="Phố cổ Hội An" loading="eager" fetchpriority="high">
-            <figcaption class="card-location-pill">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span>Hội An · Quảng Nam</span>
-            </figcaption>
-          </figure>
-          <figure class="gallery-card">
-            <img src="/places/quy-nhon.webp" width="1200" height="643" alt="Eo Gió Quy Nhơn" loading="lazy">
-            <figcaption class="card-location-pill">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span>Eo Gió · Quy Nhơn</span>
-            </figcaption>
-          </figure>
-          <figure class="gallery-card">
-            <img src="/places/quang-ngai.webp" width="1200" height="800" alt="Đảo Bé Lý Sơn" loading="lazy">
-            <figcaption class="card-location-pill">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span>Đảo Bé · Lý Sơn</span>
-            </figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <!-- 3. Sleek Minimalist Agent Cards (4 Trạm Nghiệp vụ — Gọn, Ít chữ) -->
-      <div class="workstations-header">
-        <h2 class="workstations-title">Phân hệ Nghiệp vụ Sổ Son</h2>
-        <span class="workstations-hint" id="workstations-hint">Dự báo dòng tiền · Kiểm soát gian lận &amp; FHE · Rà soát thuế &amp; HĐĐT · Hỏi đáp CFO hai sổ</span>
-      </div>
+      <div class="workstations-header"><h2 class="workstations-title">Phân hệ Nghiệp vụ Sổ Son</h2></div>
       <div class="agents workstations-grid" id="agent-grid"></div>
-
-      <!-- 4. Compact 3-Step Setup Strip & Quick-Start Demo Guide -->
-      <div class="setup-progress-card">
-        <div class="setup-card-header">
-          <h3 class="setup-title">Thiết lập nhanh &amp; Lộ trình trải nghiệm</h3>
-          <div class="setup-progress-meter">
-            <span class="meter-label" id="setup-progress-text">3/3 hoàn tất</span>
-            <div class="meter-track">
-              <div class="meter-bar" id="meter-bar" data-done="0"></div>
-            </div>
-          </div>
-        </div>
-        <ol class="steps setup-steps-grid" id="steps">
-          <li data-step="config" class="setup-step-card">
-            <span class="step-num-badge">1</span>
-            <div class="step-card-body">
-              <div class="step-card-name">Hồ sơ đơn vị</div>
-              <div class="step-card-desc" id="step-config-desc">Chưa cấu hình</div>
-            </div>
-            <a href="#config" class="step-action-link">Mở</a>
-          </li>
-          <li data-step="agents" class="setup-step-card">
-            <span class="step-num-badge">2</span>
-            <div class="step-card-body">
-              <div class="step-card-name">Hệ thống Agent</div>
-              <div class="step-card-desc" id="step-agents-status">4/4 sẵn sàng</div>
-            </div>
-            <a href="#agent-grid" class="step-action-link" id="step-agents-link">Bật</a>
-          </li>
-          <li data-step="data" class="setup-step-card">
-            <span class="step-num-badge">3</span>
-            <div class="step-card-body">
-              <div class="step-card-name">Gói chứng từ</div>
-              <div class="step-card-desc" id="step-data-desc">Chưa nạp tệp</div>
-            </div>
-            <a href="#data" class="step-action-link">Nạp</a>
-          </li>
-        </ol>
-        <details class="demo-guide-details" id="demo-guide">
-          <summary>Hướng dẫn thao tác nhanh cho Kế toán trưởng &amp; Ban giám khảo (60 giây)</summary>
-          <div class="demo-guide-grid">
-            <div class="demo-guide-item" data-requires-agents="agent1,agent2,agent3">
-              <strong>01 · Định danh &amp; FaceID 3 khung</strong>
-              <p>Kiểm tra MST, kỳ thuế tại <a href="#config">Hồ sơ doanh nghiệp</a> và mở khóa bằng mật khẩu hoặc quét 3 khung hình FaceID liên tiếp tại <a href="#data">Nạp dữ liệu</a>.</p>
-            </div>
-            <div class="demo-guide-item" data-requires-agents="agent1,agent2,agent3">
-              <strong>02 · Nạp một cửa &amp; Niêm phong</strong>
-              <p>Thả sao kê CSV, hóa đơn XML/ZIP hoặc sổ bút toán để Portal tự phân luồng cho Agent 1–3 và đóng dấu chuỗi băm SHA-256.</p>
-            </div>
-            <div class="demo-guide-item" data-requires-agents="agent1,agent2,agent3">
-              <strong>03 · Dòng tiền · Gian lận FHE · Thuế</strong>
-              <p>Chuyển mượt giữa <a href="#agent1">Dự báo dòng tiền</a>, <a href="#agent2">Kiểm soát gian lận &amp; FHE</a> và <a href="#agent3">Rà soát thuế &amp; HĐĐT</a>.</p>
-            </div>
-            <div class="demo-guide-item" data-requires-agents="agent4">
-              <strong>04 · Hỏi đáp CFO hai sổ đa lượt</strong>
-              <p>Mở <a href="#agent4">Hỏi đáp CFO hai sổ</a> để truy vấn tiếng Việt trên Sổ quản trị (<code>v_mgmt</code>) &amp; Sổ thuế (<code>v_tax</code>) kèm bằng chứng SQL tất định.</p>
-            </div>
-          </div>
-        </details>
-      </div>
 
       <!-- Hidden container for workspace-stats to maintain backward compatibility -->
       <div id="workspace-stats" hidden aria-hidden="true"></div>
@@ -236,28 +82,22 @@
           <p class="profile-lead" id="profile-lead">Thông tin pháp lý, thuế, kỳ kế toán và thiết lập định dạng dùng chung cho 4 phân hệ.</p>
         </div>
       </div>
-      <nav class="paper-tabs profile-tabs" id="profile-tabs" aria-label="Các mục hồ sơ">
-        <button type="button" data-profile-section="all" aria-current="location">Tất cả mục</button>
-        <button type="button" data-profile-section="profile-legal">Thông tin chung</button>
-        <button type="button" data-profile-section="profile-accounting">Thiết lập kế toán</button>
-        <button type="button" data-profile-section="profile-format">Định dạng tệp</button>
-        <button type="button" data-profile-section="profile-connections">Kết nối tác nghiệp</button>
-        <button type="button" data-profile-section="profile-sync">Lần lưu gần nhất</button>
-      </nav>
+
       <div class="profile-lock" id="config-lock" hidden>
         <div>
           <strong>Hồ sơ đang được bảo vệ</strong>
-          <p>Gói dữ liệu đã niêm phong. Mở khóa tại mục Nạp dữ liệu trước khi chỉnh sửa hồ sơ.</p>
+          <p>Mở khóa bằng mật khẩu hoặc FaceID để xem và chỉnh sửa thông tin doanh nghiệp.</p>
         </div>
-        <a class="btn" href="#data">Mở khóa để chỉnh sửa</a>
+        <button type="button" id="profile-lock-now" hidden>Khóa hồ sơ</button>
       </div>
+      <div id="config-gate"></div>
       <div class="config-layout">
         <form id="company-form" class="form" novalidate>
           <div id="profile-errors" class="profile-errors" tabindex="-1" role="alert" hidden></div>
 
           <fieldset class="profile-section" id="profile-legal" data-section-group="profile-legal">
             <legend>
-              <span aria-hidden="true">01</span>
+
               Thông tin pháp lý
               <button type="button" class="profile-inline-btn" id="profile-fill-demo">Điền mẫu chuẩn</button>
             </legend>
@@ -290,7 +130,7 @@
           </fieldset>
 
           <fieldset class="profile-section" id="profile-accounting" data-section-group="profile-accounting">
-            <legend><span aria-hidden="true">02</span> Thuế và kỳ kế toán</legend>
+            <legend> Thuế và kỳ kế toán</legend>
             <p class="profile-section-note">Thiết lập phương pháp thuế và kỳ kế toán áp dụng cho doanh nghiệp.</p>
             <div class="row">
               <label class="field" for="profile-vat">
@@ -328,7 +168,7 @@
           </fieldset>
 
           <fieldset class="profile-section" id="profile-format" data-section-group="profile-format">
-            <legend><span aria-hidden="true">03</span> Định dạng</legend>
+            <legend> Định dạng</legend>
             <p class="profile-section-note">Chọn cách viết trong tệp nguồn. Ngày được dùng cho Agent 1 và 2; số tiền được dùng cho Agent 1.</p>
             <div class="row">
               <label class="field" for="profile-date">
@@ -346,38 +186,13 @@
                 </select>
               </label>
             </div>
-            <div class="profile-preview">
-              <div><span>Ví dụ ngày</span><strong id="profile-date-preview">31/12/2026</strong></div>
-              <div><span>Ví dụ số tiền</span><strong id="profile-number-preview">1.250.000,50</strong></div>
-              <p>Chỉ xem trước định dạng, không thay đổi dữ liệu trong tệp.</p>
-            </div>
           </fieldset>
 
-          <details class="profile-extra" id="profile-extra-agent2" data-section-group="profile-connections">
-            <summary>Mã liên kết riêng cho Agent 2</summary>
-            <fieldset class="profile-section">
-              <legend class="sr-only">Liên kết hệ thống</legend>
-              <p class="profile-section-note">Dùng mã riêng khi danh mục doanh nghiệp của Agent 2 có định danh khác.</p>
-              <label class="field" for="profile-agent2">
-                <span class="label">Mã doanh nghiệp ở Agent 2 <span class="profile-optional">Không bắt buộc</span></span>
-                <input id="profile-agent2" name="agent2_company" placeholder="Để trống để dùng mã chung" aria-describedby="profile-agent2-help">
-                <span class="hint" id="profile-agent2-help">Doanh nghiệp cần có sẵn trong danh mục Agent 2. Bộ demo dùng C001 hoặc C002.</span>
-              </label>
-            </fieldset>
-          </details>
+          <input type="hidden" id="profile-agent2" name="agent2_company">
 
-          <section class="profile-sync" id="profile-sync" data-section-group="profile-sync" aria-labelledby="profile-sync-title">
-            <div class="profile-sync-head">
-              <div>
-                <h2 id="profile-sync-title">Lần lưu gần nhất & đồng bộ tác nghiệp</h2>
-                <p id="profile-sync-lead">Trạng thái lưu hồ sơ và kết nối dữ liệu với 4 phân hệ Agent.</p>
-              </div>
-              <button type="button" class="profile-inline-btn" id="profile-sync-now">Đồng bộ lại với 4 Agent</button>
-            </div>
-            <ul class="sync" id="sync-result" aria-live="polite"></ul>
-          </section>
 
-          <div class="form-actions profile-actions">
+
+          <div class="form-actions profile-actions"><button type="button" id="profile-lock">Khóa hồ sơ</button>
             <div class="profile-action-note">
               <strong id="profile-save-note" role="status">Thông tin được lưu trên máy này</strong>
               <span class="saved" id="saved-at"></span>
@@ -389,42 +204,7 @@
           </div>
         </form>
 
-        <aside class="profile-summary" id="profile-summary-aside" aria-labelledby="profile-summary-title">
-          <div class="profile-summary-top" data-focus-field="profile-legal-name" title="Nhấn để chỉnh sửa thông tin pháp lý">
-            <span class="profile-summary-icon company-monogram" id="profile-monogram" aria-hidden="true">—</span>
-            <div>
-              <h2 id="profile-summary-title">Chưa có doanh nghiệp</h2>
-              <p data-focus-field="profile-code">Mã dùng chung <b id="profile-summary-code">—</b></p>
-              <p data-focus-field="profile-tax-code">Mã số thuế <b id="profile-summary-tax">—</b></p>
-            </div>
-          </div>
-          <dl class="profile-summary-values">
-            <dt data-focus-field="profile-address">Địa chỉ</dt>
-            <dd id="profile-summary-address" data-focus-field="profile-address" title="Nhấn để sửa địa chỉ">—</dd>
-            <dt data-focus-field="profile-industry">Ngành nghề</dt>
-            <dd id="profile-summary-industry" data-focus-field="profile-industry" title="Nhấn để sửa ngành nghề">—</dd>
-            <dt data-focus-field="profile-filing">Kỳ kê khai thuế</dt>
-            <dd id="profile-summary-filing" data-focus-field="profile-filing" title="Nhấn để đổi kỳ kê khai">—</dd>
-            <dt data-focus-field="profile-year-end">Năm tài chính</dt>
-            <dd id="profile-summary-year" data-focus-field="profile-year-end" title="Nhấn để đổi tháng kết thúc năm tài chính">—</dd>
-            <dt data-focus-field="profile-vat">Phương pháp thuế GTGT</dt>
-            <dd id="profile-summary-vat" data-focus-field="profile-vat" title="Nhấn để đổi phương pháp tính thuế GTGT">—</dd>
-            <dt data-focus-field="profile-date">Định dạng ngày / số</dt>
-            <dd id="profile-summary-format" data-focus-field="profile-date" title="Nhấn để đổi định dạng ngày và số">—</dd>
-          </dl>
-          <div class="profile-consumers" id="profile-connections">
-            <div class="profile-consumers-head">
-              <h3>Kết nối tác nghiệp (A1 – A4)</h3>
-              <button type="button" class="profile-inline-btn" id="profile-start-all-inline">Bật tất cả</button>
-            </div>
-            <p>Nhấn vào từng phân hệ để mở hoặc bật dịch vụ tại chỗ.</p>
-            <ul id="profile-agent-list"></ul>
-          </div>
-          <div class="profile-saved" id="profile-saved" data-focus-section="profile-sync" title="Nhấn để xem chi tiết lần lưu gần nhất">
-            <span id="profile-summary-state"></span>
-            <span class="profile-status" id="profile-status" role="status">Đang tải hồ sơ</span>
-          </div>
-        </aside>
+
       </div>
     </section>
 
@@ -432,14 +212,10 @@
     <section class="view" id="view-data" aria-labelledby="h-data" hidden>
       <div class="gate" id="gate" hidden>
         <div class="gate-intro" data-son-sheet="3" data-son-row="3">
-          <p class="gate-eyebrow">Cổng kiểm soát &amp; Niêm phong chứng từ</p>
-          <h2>Nạp dữ liệu chung</h2>
-          <p>Xác thực quyền quản trị để tiếp nhận chứng từ, phân luồng tự động đến 4 Agent và niêm phong sổ cái bất biến.</p>
-          <div class="gate-security-pills" aria-label="Chuẩn bảo mật áp dụng">
-            <span class="gate-sec-pill">Mã hóa Scrypt 256-bit</span>
-            <span class="gate-sec-pill">Sinh trắc học AI 128 chiều</span>
-            <span class="gate-sec-pill">Nhật ký băm SHA-256</span>
-          </div>
+          <p class="gate-eyebrow" id="gate-eyebrow">Cổng dữ liệu doanh nghiệp</p>
+          <h2 id="gate-title">Nạp dữ liệu chung</h2>
+          <p id="gate-description">Mở khóa để tiếp nhận và kiểm tra chứng từ doanh nghiệp.</p>
+
         </div>
 
         <div class="gate-auth-grid">
@@ -533,53 +309,23 @@
           <span id="intake-progress-time" aria-live="off"></span>
         </div>
 
+        <p class="intake-summary-stat" id="intake-result" role="status" hidden></p>
         <section id="intake-choose" class="intake-choose">
           <div class="intake-choose-main">
-            <div class="intake-company-row">
-              <div class="intake-company-meta">
-                <span class="intake-company-label">Đơn vị tiếp nhận chứng từ</span>
-                <p id="intake-company"></p>
-              </div>
-              <a class="intake-sample-link" href="/samples/sao-ke-chung.csv" download>Tải mẫu sao kê chuẩn (CSV)</a>
-            </div>
             <label class="drop" id="drop">
               <input type="file" id="file-input" data-son-file="1" multiple accept=".csv,.xlsx,.xml,.zip,.json,.txt">
               <span class="drop-kicker">KHU VỰC TIẾP NHẬN CHỨNG TỪ GỐC</span>
               <span class="drop-title">Thả toàn bộ tệp chứng từ tại đây</span>
               <span class="drop-action-line">hoặc <strong class="drop-pick">chọn tệp từ máy tính</strong> để hệ thống tự động nhận dạng</span>
-              <div class="drop-formats" aria-hidden="true">
-                <span>XML Hóa đơn</span>
-                <span>ZIP Lô hóa đơn</span>
-                <span>CSV / XLSX Sao kê &amp; Sổ</span>
-                <span>JSON Hợp đồng A2</span>
-              </div>
+
               <span class="drop-sub">Hỗ trợ chọn nhiều tệp cùng lúc · Tối đa 300 MB mỗi tệp · Tự động kiểm tra cấu trúc trước khi ghi</span>
             </label>
           </div>
-          <aside class="intake-kinds">
-            <div class="intake-card-header">
-              <span class="intake-card-kicker">QUY CHUẨN ĐỊNH TUYẾN</span>
-              <h2>Dữ liệu thường nạp</h2>
-            </div>
-            <dl class="intake-kind-list">
-              <div class="intake-kind-item">
-                <dt>Hóa đơn điện tử gốc <span class="kind-route">Agent 3</span></dt>
-                <dd>Tệp <code>.xml</code> hoặc gói nén <code>.zip</code> chứa hóa đơn GTGT đầu vào, đầu ra.</dd>
-              </div>
-              <div class="intake-kind-item">
-                <dt>Sao kê ngân hàng dùng chung <span class="kind-route">Agent 1 · Agent 3</span></dt>
-                <dd>Tệp <code>.csv</code> hoặc <code>.xlsx</code> nạp một lần, hệ thống tự tách dòng tiền cho A1 và đối chiếu thuế cho A3.</dd>
-              </div>
-              <div class="intake-kind-item">
-                <dt>Sổ nghiệp vụ &amp; Giao dịch <span class="kind-route">Agent 1 · Agent 2</span></dt>
-                <dd>Sổ công nợ, lịch thanh toán chuẩn Agent 1; sổ bút toán giao dịch kiểm soát nội bộ chuẩn Agent 2.</dd>
-              </div>
-            </dl>
-          </aside>
+
         </section>
 
         <div id="intake-queue">
-          <p class="banner warn" id="period-warning" hidden></p>
+
           <div class="intake-review-grid">
             <div class="intake-queue-list">
               <div class="table-wrap">
@@ -589,17 +335,19 @@
                 </table>
               </div>
               <p class="empty" id="queue-empty">Chưa có tệp nào trong hàng đợi kiểm tra. Hãy quay lại Bước 01 để chọn tệp.</p>
+              <button type="button" class="secondary" id="clear-intake" hidden>Xóa tất cả tệp chờ</button>
             </div>
             <aside class="intake-summary">
               <span class="intake-card-kicker">BẢNG QUYẾT ĐỊNH NIÊM PHONG</span>
               <h2>Tóm tắt nạp dữ liệu</h2>
               <p class="intake-summary-stat" id="intake-summary-count" aria-live="polite"></p>
               <p class="intake-summary-routes" id="intake-summary-agents"></p>
+              <ul class="checks" id="intake-selection-notes" hidden></ul>
               <button type="button" class="primary" id="intake-next">Xác nhận và tiếp tục</button>
               <div class="commit-bar" id="commit-bar">
                 <label class="field" id="reason-field" hidden><span class="label">Lý do bổ sung hoặc thay thế</span>
                   <input id="reason" maxlength="300" placeholder="Nhập lý do cập nhật gói (ít nhất 10 ký tự)..."></label>
-                <button type="button" class="primary" id="commit" disabled>Ghi toàn bộ dữ liệu</button>
+                <button type="button" class="primary" id="commit" disabled>Nạp cả bộ</button>
               </div>
             </aside>
           </div>
@@ -618,19 +366,7 @@
           </details>
         </div>
 
-        <details class="routing">
-          <summary>Bảng quy chiếu chi tiết: Agent nào nhận loại tệp nào</summary>
-          <table class="table compact">
-            <thead><tr><th>Loại tệp chứng từ</th><th>Phân hệ tiếp nhận</th><th>Quy tắc xử lý &amp; Lưu ý</th></tr></thead>
-            <tbody>
-              <tr><td>Sao kê dùng chung (CSV hoặc XLSX) · <a href="/samples/sao-ke-chung.csv" download>Tải mẫu CSV</a></td><td>Agent 1 và Agent 3</td><td>Mỗi tệp nạp một lần. Cần mã giao dịch duy nhất, tài khoản của doanh nghiệp, ngày và số tiền. Nên có nội dung và đối tác để ghép hóa đơn.</td></tr>
-              <tr><td>Sổ hóa đơn bán, tiền khách trả, khoản chi, kỳ sao kê, hứa trả (CSV hoặc XLSX theo mẫu Agent 1)</td><td>Agent 1</td><td>Gộp theo mã dòng, không xóa dữ liệu cũ.</td></tr>
-              <tr><td>Sổ giao dịch chuẩn Agent 2 (CSV, XLSX hoặc JSON hợp đồng)</td><td>Agent 2</td><td>Trích xuất bút toán dòng tiền ngân hàng, kiểm tra hợp đồng dữ liệu và tạo snapshot cố định mới (không ghi đè bản cũ). Ánh xạ bảng nâng cao 35 luật có thêm trực tiếp trong <a href="#agent2">Agent 2</a>.</td></tr>
-              <tr><td>Hóa đơn XML, ZIP hóa đơn, bảng kê cổng thuế và sao kê theo mẫu thuế cũ</td><td>Agent 3</td><td>Dùng mẫu sao kê chung ở trên nếu cần cả Agent 1.</td></tr>
-              <tr><td>Kho dữ liệu truy vấn CFO</td><td>Agent 4</td><td>Truy vấn chỉ đọc trên kho DuckDB đồng bộ theo bộ dữ liệu doanh nghiệp.</td></tr>
-            </tbody>
-          </table>
-        </details>
+        <details class="routing" open><summary>Bảng quy chiếu chi tiết và mẫu chứng từ</summary><p id="csv-format-help" class="hint"></p><div class="table-wrap"><table class="table"><thead><tr><th>Loại tệp chứng từ</th><th>Định dạng</th><th>Input</th><th>Định dạng mẫu</th></tr></thead><tbody><tr><td>Hóa đơn bán</td><td>CSV</td><td>Agent 1</td><td><a href="/samples/01_hoa_don_ban_A1.csv" download>Tải mẫu CSV</a></td></tr><tr><td>Sao kê ngân hàng</td><td>CSV</td><td>Agent 1, Agent 3</td><td><a href="/samples/02_sao_ke_chung_A1_A3.csv" download>Tải mẫu CSV</a></td></tr><tr><td>Tiền khách trả</td><td>CSV</td><td>Agent 1</td><td><a href="/samples/03_tien_khach_tra_A1.csv" download>Tải mẫu CSV</a></td></tr><tr><td>Kỳ sao kê</td><td>CSV</td><td>Agent 1</td><td><a href="/samples/04_ky_sao_ke_A1.csv" download>Tải mẫu CSV</a></td></tr><tr><td>Lịch chi cố định</td><td>CSV</td><td>Agent 1</td><td><a href="/samples/05_lich_chi_co_dinh_A1.csv" download>Tải mẫu CSV</a></td></tr><tr><td>Nhắc nợ và hứa trả</td><td>CSV</td><td>Agent 1</td><td><a href="/samples/06_nhac_no_hua_tra_A1.csv" download>Tải mẫu CSV</a></td></tr><tr><td>Sổ giao dịch ngân hàng</td><td>CSV</td><td>Agent 2</td><td><a href="/samples/07_so_giao_dich_ngan_hang_A2.csv" download>Tải mẫu CSV</a></td></tr><tr><td>Bảng kê cổng thuế</td><td>CSV</td><td>Agent 3</td><td><a href="/samples/09_bang_ke_cong_thue_A3.csv" download>Tải mẫu CSV</a></td></tr><tr><td>Hóa đơn bổ sung</td><td>CSV</td><td>Agent 1</td><td><a href="/samples/01_hoa_don_bo_sung_A1.csv" download>Tải mẫu CSV</a></td></tr><tr><td>Sao kê bổ sung</td><td>CSV</td><td>Agent 1, Agent 3</td><td><a href="/samples/02_sao_ke_chung_bo_sung_A1_A3.csv" download>Tải mẫu CSV</a></td></tr><tr><td>Danh sách mã số thuế rủi ro <small>Nạp trực tiếp tại Trợ lý Thuế.</small></td><td>CSV</td><td>Agent 3</td><td><a href="/samples/Agent3_Danh_Sach_MST_Rui_Ro.csv" download>Tải mẫu CSV</a></td></tr><tr><td>Hóa đơn điện tử</td><td>ZIP chứa hóa đơn XML điện tử gốc, mỗi hóa đơn một tệp XML; không dùng PDF hoặc ảnh.</td><td>Agent 3</td><td>XML từ hệ thống hóa đơn điện tử</td></tr><tr><td>Kho dữ liệu truy vấn</td><td>Cơ sở dữ liệu</td><td>Agent 4</td><td></td></tr></tbody></table></div></details>
 
         <div id="intake-versions" hidden>
           <h2 class="section-title">Các phiên bản niêm phong của gói</h2>
@@ -652,49 +388,7 @@
     </section>
 
     <!-- Agent frame -->
-    <section class="view agent-view" id="view-agent" aria-labelledby="agent-name" hidden>
-      <div class="agent-bar">
-        <div class="agent-brand-col">
-          <div class="agent-title">
-            <span class="agent-no" id="agent-no">A3</span>
-            <div class="agent-headings">
-              <div class="agent-name-row">
-                <h1 id="agent-name">Agent 3</h1>
-                <span class="agent-subtag" id="agent-subtag">Rà soát thuế &amp; HĐĐT</span>
-                <span class="status status-pill" id="agent-status"></span>
-              </div>
-              <div class="agent-source-wrap">
-                <svg class="agent-source-icon" viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true">
-                  <path d="M1.75 2.5h4.086a1.25 1.25 0 0 1 .884.366l1.414 1.414a.25.25 0 0 0 .177.07h5.939c.69 0 1.25.56 1.25 1.25v7.15c0 .69-.56 1.25-1.25 1.25H1.75C1.06 14 .5 13.44.5 12.75V3.75c0-.69.56-1.25 1.25-1.25z"/>
-                </svg>
-                <a class="agent-source" id="agent-source" href="#data"></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <nav class="agent-quick-switch" id="agent-quick-switch" aria-label="Chuyển nhanh giữa 4 phân hệ"></nav>
-        <div class="agent-actions">
-          <a class="btn btn-ghost" id="agent-back" href="#overview" title="Quay lại trang tổng quan">
-            <svg class="btn-icon" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M10 13L5 8l5-5"/>
-            </svg>
-            <span>Tổng quan</span>
-          </a>
-          <button type="button" class="btn btn-power" id="agent-toggle" title="Bật hoặc tắt agent">
-            <svg class="btn-icon" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M8 2v6M3.5 4.5a6.5 6.5 0 1 0 9 0"/>
-            </svg>
-            <span class="btn-text"></span>
-          </button>
-          <button type="button" class="btn" id="agent2-recover" hidden>Kết nối lại phân tích</button>
-          <a class="btn btn-popout" id="agent-newtab" target="_blank" rel="noopener" title="Mở rộng sang tab mới">
-            <svg class="btn-icon" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 9v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h4M10 2h4v4M6.5 9.5L14 2"/>
-            </svg>
-            <span>Mở tab riêng</span>
-          </a>
-        </div>
-      </div>
+    <section class="view agent-view" id="view-agent" aria-label="Không gian nghiệp vụ" hidden>
       <div class="agent-body">
         <p id="agent2-dependency" class="banner" role="status" hidden></p>
         <iframe id="agent-frame-agent1" class="agent-frame" title="Giao diện Agent 1" hidden></iframe>

@@ -35,13 +35,13 @@ def preview_invoice(client, content, **formats):
     )
 
 
-def test_workspace_receives_only_agent1_settings(profile_client):
+def test_workspace_receives_company_identity_and_import_settings(profile_client):
     client, path = profile_client
-    write_profile(path, legal_name="Private name", tax_code="Private tax code", filing_period="QUARTER")
+    write_profile(path, legal_name="Công ty thử nghiệm", tax_code="0999999905", filing_period="QUARTER")
     response = client.get("/v1/workspace")
     assert response.status_code == 200
-    assert response.json()["company_profile"] == dict(code="SME", date_format="iso", number_format="plain", managed=True)
-    assert "Private" not in response.text
+    assert response.json()["company_profile"] == dict(code="SME", date_format="iso", number_format="plain", managed=True,
+                                                        legal_name="Công ty thử nghiệm", tax_code="0999999905")
     assert client.get("/v1/workspace", headers={"Authorization": "Bearer wrong"}).status_code == 401
 
 
@@ -60,6 +60,7 @@ def test_template_and_preview_follow_company_formats(profile_client, date_format
     assert preview.json()["can_commit"]
     assert preview.json()["sample"][0]["issue_date"] == "2026-01-01"
     assert preview.json()["sample"][0]["amount"] == 15000000
+    write_profile(path, date_format=date_format, number_format=number_format, legal_name="Tên hồ sơ được cập nhật")
     assert client.post("/v1/imports/" + preview.json()["id"] + "/commit").status_code == 200
 
 
@@ -115,7 +116,8 @@ def test_portal_publishes_scoped_profiles_and_rejects_invalid_formats(tmp_path, 
     company = dict(code="TEST_A", legal_name="Test company", date_format="iso", number_format="plain")
     portal.save_company(company)
     path_a = tmp_path / "agent1_profiles" / "TEST_A.json"
-    assert json.loads(path_a.read_text()) == dict(code="TEST_A", date_format="iso", number_format="plain")
+    assert json.loads(path_a.read_text()) == dict(code="TEST_A", date_format="iso", number_format="plain",
+                                                 legal_name="Test company", tax_code="")
     portal.save_company(dict(company, code="TEST_B", date_format="dmy"))
     assert json.loads(path_a.read_text())["code"] == "TEST_A"
     for changes in [dict(date_format="bad"), dict(number_format="bad")]:

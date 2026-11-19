@@ -144,8 +144,8 @@
       wrap.append(sec);
     };
 
-    buildGroup('Danh sách batch train', 'Batch train', tCount, existingReq?.training_batches);
-    buildGroup('Danh sách batch đánh giá giữ riêng', 'Batch đánh giá', eCount, existingReq?.evaluation_batches);
+    buildGroup("Danh sách nhóm dùng để học", 'Batch train', tCount, existingReq?.training_batches);
+    buildGroup("Danh sách nhóm dữ liệu đánh giá giữ riêng", "Nhóm dữ liệu đánh giá", eCount, existingReq?.evaluation_batches);
     customJsonEdited = false;
     syncRequestJsonFromForm();
   }
@@ -203,13 +203,13 @@
     iss.replaceChildren();
     const ps = sess?.plan_summary;
     if (!ps) {
-      ov.append(node('p', 'Chưa ghim kế hoạch cho doanh nghiệp này. Chọn dữ liệu và bấm "Kiểm tra và ghim kế hoạch".', 'hint'));
+      ov.append(node('p', 'Chưa ghim kế hoạch cho doanh nghiệp này. Chọn dữ liệu và bấm "Kiểm tra và lưu kế hoạch".', 'hint'));
       $('bt-step1-tech').textContent = '';
       return;
     }
     const statusText = ps.status === 'ready'
-      ? `Kế hoạch hợp lệ (ready) · ${ps.training_rows} giao dịch train (${ps.training_batch_count} batch) · ${ps.evaluation_rows} giao dịch đánh giá (${ps.evaluation_batch_count} batch)`
-      : `Kế hoạch bị từ chối (rejected) · Phát hiện ${ps.issues.length} lỗi nguồn/feature`;
+      ? `Kế hoạch hợp lệ (ready) · ${ps.training_rows} giao dịch học từ dữ liệu (${ps.training_batch_count} batch) · ${ps.evaluation_rows} giao dịch đánh giá (${ps.evaluation_batch_count} batch)`
+      : `Kế hoạch bị từ chối (rejected) · Phát hiện ${ps.issues.length} lỗi nguồn/thông tin dùng để phân tích`;
     ov.append(node('p', statusText, ps.status === 'ready' ? 'callout' : 'issue'));
 
     const tbl = document.createElement('table');
@@ -221,7 +221,7 @@
     ps.batches.forEach(b => {
       const tr = document.createElement('tr');
       tr.append(
-        node('td', b.partition === 'training' ? 'Tập train' : 'Tập đánh giá giữ riêng'),
+        node('td', b.partition === 'training' ? "Tập học từ dữ liệu" : 'Tập đánh giá giữ riêng'),
         node('td', `#${b.batch_index + 1}`),
         node('td', b.row_count),
         node('td', b.row_ids.join(', ')),
@@ -234,7 +234,7 @@
 
     if (ps.issues && ps.issues.length) {
       const list = node('div', null, 'issue');
-      list.append(node('strong', 'Lỗi nguồn/feature cần xử lý trước khi tiếp tục:'));
+      list.append(node('strong', "Lỗi nguồn/thông tin dùng để phân tích cần xử lý trước khi tiếp tục:"));
       ps.issues.forEach(item => {
         list.append(node('p', `[${item.partition} #${item.batch_index + 1} · ${item.record_id}] ${item.code}: ${item.message} (${item.remediation})`));
       });
@@ -256,13 +256,13 @@
     tblWrap.replaceChildren();
     const ls = sess?.label_status;
     if (!ls || !ls.created) {
-      ov.append(node('p', 'Chưa tạo gói xác minh nhãn cho kế hoạch hiện tại.', 'hint'));
+      ov.append(node('p', "Chưa tạo gói xác nhận kết quả giao dịch cho kế hoạch hiện tại.", 'hint'));
       $('bt-step2-tech').textContent = '';
       return;
     }
     const allPkts = [...(ls.training_packets || []), ...(ls.evaluation_packets || [])];
     const summaryText = ls.ready_to_confirm
-      ? `Tất cả ${ls.training_packets.length} batch train đã khóa nhãn đầy đủ và có đủ 2 lớp {0, 1}.`
+      ? `Tất cả ${ls.training_packets.length} nhóm dùng để học đã khóa nhãn đầy đủ và có có cả giao dịch đã xác nhận gian lận và đã xác nhận không gian lận.`
       : `Trạng thái nhãn: ${ls.blocking_reasons.join(' ')}`;
     ov.append(node('p', summaryText, ls.ready_to_confirm ? 'callout' : 'hint'));
 
@@ -275,11 +275,11 @@
     allPkts.forEach(p => {
       const tr = document.createElement('tr');
       const linkTd = document.createElement('td');
-      const a = node('a', 'Mở xác minh nhãn');
+      const a = node('a', "Mở xác nhận kết quả giao dịch");
       a.href = `label-verification#company=${encodeURIComponent(company)}&packet=${encodeURIComponent(p.packet_id)}`;
       linkTd.append(a);
       tr.append(
-        node('td', p.partition === 'training' ? 'Batch train' : 'Batch đánh giá'),
+        node('td', p.partition === 'training' ? 'Batch train' : "Nhóm dữ liệu đánh giá"),
         node('td', `#${p.batch_index + 1}`),
         node('td', p.row_ids.join(', ')),
         node('td', `${p.labelled_count}/${p.row_count}` + (p.missing_count ? ` (trống ${p.missing_count})` : '')),
@@ -318,10 +318,10 @@
     const pairs = [
       ['Doanh nghiệp', company],
       ['Snapshot', ps.snapshot?.snapshot_id || '—'],
-      ['Số dòng train / đánh giá', `${ps.training_rows} dòng train / ${ps.evaluation_rows} dòng đánh giá giữ riêng`],
-      ['Số batch', `${ps.training_batch_count} batch train / ${ps.evaluation_batch_count} batch đánh giá`],
-      ['Số epoch', `${chosenEpochs} epoch (tổng ${ps.training_batch_count * chosenEpochs}/4 bước cập nhật)`],
-      ['Tình trạng nhãn', ls?.ready_to_confirm ? 'Đã khóa đủ các batch train, không còn nhãn trống, đủ 2 lớp {0, 1}' : 'Chưa đủ điều kiện xác nhận train'],
+      ["Số dòng học từ dữ liệu / đánh giá", `${ps.training_rows} dòng học từ dữ liệu / ${ps.evaluation_rows} dòng đánh giá giữ riêng`],
+      ["Số nhóm dữ liệu", `${ps.training_batch_count} batch train / ${ps.evaluation_batch_count} nhóm dữ liệu đánh giá`],
+      ["Số vòng học", `${chosenEpochs} vòng học (tổng ${ps.training_batch_count * chosenEpochs}/4 bước cập nhật)`],
+      ['Tình trạng nhãn', ls?.ready_to_confirm ? "Đã khóa đủ các nhóm dùng để học, không còn nhãn trống, có cả giao dịch đã xác nhận gian lận và đã xác nhận không gian lận" : "Chưa đủ điều kiện xác nhận học từ dữ liệu"],
     ];
     pairs.forEach(([k, v]) => {
       dl.append(node('dt', k), node('dd', v));
@@ -343,7 +343,7 @@
     const bar = $('bt-progress-bar');
     const cnt = $('bt-progress-counts');
     if (!sess || !sess.job_id) {
-      st.textContent = 'Chưa bắt đầu phiên train trên worker.';
+      st.textContent = "Chưa bắt đầu phiên học từ dữ liệu trên máy xử lý.";
       bar.hidden = true;
       cnt.textContent = '';
       $('bt-step4-tech').textContent = '';
@@ -356,7 +356,7 @@
     bar.hidden = false;
     bar.max = Math.max(1, total);
     bar.value = Math.min(done, total);
-    cnt.textContent = `Tiến độ cập nhật bản mã: ${done}/${total} bước cập nhật hoàn tất (Epoch hoàn tất: ${wj.completed_epochs ?? 0}/${wj.epochs ?? sess.epochs ?? 1})`
+    cnt.textContent = `Tiến độ cập nhật bản mã: ${done}/${total} bước cập nhật hoàn tất (Vòng học hoàn tất: ${wj.completed_epochs ?? 0}/${wj.epochs ?? sess.epochs ?? 1})`
       + (wj.inflight_update !== null && wj.inflight_update !== undefined ? ` · Đang dở bước cập nhật #${wj.inflight_update}` : '');
     $('bt-step4-tech').textContent = JSON.stringify({
       phase: sess.phase,
@@ -374,11 +374,11 @@
     const st = $('bt-candidate-status');
     const cand = sess?.candidate;
     if (!cand) {
-      st.textContent = 'Chưa nhận model ứng viên tại doanh nghiệp.';
+      st.textContent = "Chưa nhận bộ phân tích ứng viên tại doanh nghiệp.";
       $('bt-step5-tech').textContent = '';
       return;
     }
-    st.textContent = `${cand.status_label} · Đối chiếu oracle: ${cand.validation} · Chưa tự thay thế model đang chạy (operational_activation=false).`;
+    st.textContent = `${cand.status_label} · Đối chiếu oracle: ${cand.validation} · Chưa tự thay thế bộ phân tích đang chạy (operational_activation=false).`;
     $('bt-step5-tech').textContent = JSON.stringify(cand, null, 2);
   }
 
@@ -394,13 +394,13 @@
       return;
     }
     sum.append(node('p',
-      `Nguồn đánh giá: Snapshot ${ev.snapshot_id || sess.plan_summary?.snapshot?.snapshot_id} · Số dòng giữ riêng: ${ev.evaluation_rows} giao dịch · `
-      + `Tách biệt khỏi tập train: ${ev.held_out_from_training ? 'Có' : 'Không'} · Điểm chưa hiệu chỉnh (uncalibrated=true, accuracy=null).`
+      `Nguồn đánh giá: Bản dữ liệu ${ev.snapshot_id || sess.plan_summary?.snapshot?.snapshot_id} · Số dòng giữ riêng: ${ev.evaluation_rows} giao dịch · `
+      + `Tách biệt khỏi tập học từ dữ liệu: ${ev.held_out_from_training ? 'Có' : 'Không'} · Điểm chưa hiệu chỉnh (chưa điều chỉnh điểm=true, accuracy=null).`
     ));
     const tbl = document.createElement('table');
     const thead = document.createElement('thead');
     const hr = document.createElement('tr');
-    ['Batch giữ riêng', 'Mã giao dịch', 'Điểm đối chiếu (chưa hiệu chỉnh)', 'Nhãn xác minh (chỉ đối chiếu, ngoài fit)'].forEach(h => hr.append(node('th', h)));
+    ["Nhóm dữ liệu giữ riêng", 'Mã giao dịch', 'Điểm đối chiếu (chưa hiệu chỉnh)', 'Nhãn xác minh (chỉ đối chiếu, ngoài fit)'].forEach(h => hr.append(node('th', h)));
     thead.append(hr);
     const tbody = document.createElement('tbody');
     (ev.rows || []).forEach(r => {
@@ -428,25 +428,25 @@
     shWrap.replaceChildren();
     const app = sess?.approval;
     if (!app) {
-      sum.append(node('p', 'Model ứng viên chưa được phê duyệt dùng shadow. Mọi yêu cầu chấm shadow sẽ bị chặn cho tới khi phê duyệt.', 'hint'));
-      $('bt-step7-btn').textContent = 'Phê duyệt dùng đối chiếu shadow';
+      sum.append(node('p', "Bộ phân tích ứng viên chưa được phê duyệt dùng để kiểm tra thử. Mọi yêu cầu chấm chạy thử sẽ bị chặn cho tới khi phê duyệt.", 'hint'));
+      $('bt-step7-btn').textContent = "Phê duyệt dùng kiểm tra thử";
     } else {
       sum.append(node('p',
-        `Đã phê duyệt dùng đối chiếu shadow bởi ${app.actor_id} lúc ${new Date(app.at).toLocaleString('vi-VN')} · Lý do: "${app.reason}" · `
-        + `Chỉ chạy đối chiếu shadow (shadow_only=true, active_model_replaced=false, operational_queue_changed=false).`,
+        `Đã phê duyệt dùng kiểm tra thử bởi ${app.actor_id} lúc ${new Date(app.at).toLocaleString('vi-VN')} · Lý do: "${app.reason}" · `
+        + `Chỉ chạy kiểm tra thử (shadow_only=true, active_model_replaced=false, operational_queue_changed=false).`,
         'callout'
       ));
       $('bt-approve-reason').value = app.reason;
-      $('bt-step7-btn').textContent = 'Chạy đối chiếu shadow trên tập giữ riêng';
+      $('bt-step7-btn').textContent = "Chạy kiểm tra thử trên tập giữ riêng";
     }
     if (sess?.shadow) {
       const sh = sess.shadow;
-      shWrap.append(node('h3', 'Kết quả chấm đối chiếu shadow trên tập giữ riêng'));
-      shWrap.append(node('p', `Số giao dịch chấm shadow: ${sh.rows?.length || 0} · Model đang chạy và hàng đợi nghiệp vụ được giữ nguyên.`));
+      shWrap.append(node('h3', "Kết quả kiểm tra thử trên tập giữ riêng"));
+      shWrap.append(node('p', `Số giao dịch chấm chạy thử: ${sh.rows?.length || 0} · Bộ phân tích đang chạy và hàng đợi nghiệp vụ được giữ nguyên.`));
       const tbl = document.createElement('table');
       const thead = document.createElement('thead');
       const hr = document.createElement('tr');
-      ['Mã giao dịch', 'Điểm shadow (chưa hiệu chỉnh)'].forEach(h => hr.append(node('th', h)));
+      ['Mã giao dịch', "Điểm chạy thử (chưa hiệu chỉnh)"].forEach(h => hr.append(node('th', h)));
       thead.append(hr);
       const tbody = document.createElement('tbody');
       (sh.rows || []).forEach(r => {
@@ -522,8 +522,8 @@
     const prevSort = preserveSelection ? ($('bt-shadow-sort').value || saved?.sort || 'score_desc') : (saved?.sort || 'score_desc');
 
     const defaultModelOpt = node('option', approvedModels.length
-      ? '-- Chọn phiên bản model đã phê duyệt shadow --'
-      : '-- Chưa có model nào được phê duyệt shadow --');
+      ? "-- Chọn phiên bản bộ phân tích đã phê duyệt chạy thử --"
+      : "-- Chưa có bộ phân tích nào được phê duyệt chạy thử --");
     defaultModelOpt.value = '';
     modelSel.replaceChildren(defaultModelOpt, ...approvedModels.map(m => {
       const label = `${m.model_run_id} · cipher=${(m.model_cipher_sha256 || '').slice(0, 12)}… · hợp đồng ${m.feature_contract?.version || '—'} · duyệt bởi ${m.approved_by || '—'}`;
@@ -539,12 +539,12 @@
     }
 
     const defaultSnapOpt = node('option', snapshots.length
-      ? '-- Chọn snapshot của doanh nghiệp --'
-      : '-- Doanh nghiệp chưa có snapshot --');
+      ? "-- Chọn bản dữ liệu của doanh nghiệp --"
+      : "-- Doanh nghiệp chưa có bản dữ liệu --");
     defaultSnapOpt.value = '';
     const selModel = selectedApprovedModelObj();
     snapSel.replaceChildren(defaultSnapOpt, ...snapshots.map(s => {
-      const tag = selModel && selModel.training_snapshot_id === s.snapshot_id ? ' [Snapshot lúc train]' : '';
+      const tag = selModel && selModel.training_snapshot_id === s.snapshot_id ? " [Bản dữ liệu lúc học từ dữ liệu]" : '';
       const o = node('option', `${s.snapshot_id}${tag} (${s.transaction_count} giao dịch · ${s.contract_version} · as_of ${s.source_as_of || s.created_at})`);
       o.value = s.snapshot_id;
       return o;
@@ -570,7 +570,7 @@
 
     const defaultHistOpt = node('option', shadowRuns.length
       ? `-- Chọn lần chạy đã lưu để xem lại (${shadowRuns.length} lần chạy) --`
-      : '-- Chưa có lần chạy shadow nào được lưu --');
+      : "-- Chưa có lần chạy thử nào được lưu --");
     defaultHistOpt.value = '';
     histSel.replaceChildren(defaultHistOpt, ...shadowRuns.map(r => {
       const o = node('option',
@@ -615,13 +615,13 @@
     const selModel = selectedApprovedModelObj();
     if (!currentShadowView) {
       if (!approvedModels.length) {
-        runBanner.append(node('p', 'Doanh nghiệp chưa có model nào được phê duyệt dùng đối chiếu shadow. Hãy hoàn tất Bước 7 trước.', 'hint'));
+        runBanner.append(node('p', "Doanh nghiệp chưa có bộ phân tích nào được phê duyệt dùng kiểm tra thử. Hãy hoàn tất Bước 7 trước.", 'hint'));
       } else if (!selModel) {
-        runBanner.append(node('p', 'Hãy chọn rõ một phiên bản model đã phê duyệt shadow và snapshot mục tiêu, sau đó bấm "Kiểm tra tương thích" hoặc "Chạy chấm shadow và lưu kết quả".', 'hint'));
+        runBanner.append(node('p', "Hãy chọn rõ một phiên bản bộ phân tích đã phê duyệt chạy thử và bản dữ liệu mục tiêu, sau đó bấm \"Kiểm tra tương thích\" hoặc \"Chạy thử và lưu kết quả\".", 'hint'));
       } else {
         runBanner.append(node('p',
-          `Đang chọn Model ${selModel.model_run_id} (cipher=${(selModel.model_cipher_sha256 || '').slice(0, 16)}…, approval=${(selModel.approval_sha256 || '').slice(0, 16)}…, hợp đồng=${selModel.feature_contract?.version || '—'}). `
-          + `Bấm "Kiểm tra tương thích" hoặc "Chạy chấm shadow và lưu kết quả".`,
+          `Đang chọn Bộ phân tích ${selModel.model_run_id} (cipher=${(selModel.model_cipher_sha256 || '').slice(0, 16)}…, approval=${(selModel.approval_sha256 || '').slice(0, 16)}…, hợp đồng=${selModel.feature_contract?.version || '—'}). `
+          + `Bấm "Kiểm tra tương thích" hoặc "Chạy thử và lưu kết quả".`,
           'hint'
         ));
       }
@@ -645,28 +645,28 @@
     bannerBox.append(
       node('p', `${modeTitle} · Trạng thái: ${v.status_label || v.status}`),
       node('p',
-        `Snapshot mục tiêu: ${snap.snapshot_id} (${snap.contract_version}) · data_checksum=${(snap.data_checksum || '').slice(0, 16)}… · `
-        + `Thời điểm chốt as_of=${snap.as_of} · ${snap.same_as_training_snapshot ? 'Cùng snapshot lúc train (đã gắn nhãn phân biệt giao dịch train/holdout)' : 'Snapshot khác với snapshot lúc train'}`
+        `Bản dữ liệu mục tiêu: ${snap.snapshot_id} (${snap.contract_version}) · data_checksum=${(snap.data_checksum || '').slice(0, 16)}… · `
+        + `Thời điểm chốt thời điểm chốt dữ liệu=${snap.as_of} · ${snap.same_as_training_snapshot ? "Cùng bản dữ liệu lúc học từ dữ liệu (đã gắn nhãn phân biệt giao dịch học từ dữ liệu/dữ liệu đánh giá giữ riêng)" : "Bản dữ liệu khác với bản dữ liệu lúc học từ dữ liệu"}`
       ),
       node('p',
-        `Model đã ghim: ${mod.model_run_id} · model_cipher_sha256=${(mod.model_cipher_sha256 || '').slice(0, 16)}… · `
-        + `approval_sha256=${(mod.approval_sha256 || '').slice(0, 16)}… · Snapshot lúc train: ${mod.training_snapshot_id || '—'} · `
+        `Bộ phân tích đã ghim: ${mod.model_run_id} · model_cipher_sha256=${(mod.model_cipher_sha256 || '').slice(0, 16)}… · `
+        + `approval_sha256=${(mod.approval_sha256 || '').slice(0, 16)}… · Bản dữ liệu lúc học từ dữ liệu: ${mod.training_snapshot_id || '—'} · `
         + `plan_sha256=${(mod.training_plan_sha256 || '').slice(0, 16)}…`
       ),
       node('p',
-        `Thực thi: ${disc.execution_location || 'enterprise_node_decrypted_candidate'} · Nguồn tạo feature: ${bex.input_mode || 'backend_snapshot_feature_builder'} `
+        `Thực thi: ${disc.execution_location || 'enterprise_node_decrypted_candidate'} · Nguồn tạo thông tin dùng để phân tích: ${bex.input_mode || 'backend_snapshot_feature_builder'} `
         + `(manual_features_accepted=${String(!!bex.manual_features_accepted)}) · Giới hạn mỗi lần gọi predict_batch_shadow: tối đa ${bex.max_rows_per_call || 64} dòng/lần `
-        + `(số lần gọi=${bex.call_count ?? 0}, giới hạn 4 dòng của train áp dụng=${String(!!bex.training_four_row_limit_applied)}, cắt ngầm 64 dòng=${String(!!bex.truncated_to_64)}).`
+        + `(số lần gọi=${bex.call_count ?? 0}, giới hạn 4 dòng của học từ dữ liệu áp dụng=${String(!!bex.training_four_row_limit_applied)}, cắt ngầm 64 dòng=${String(!!bex.truncated_to_64)}).`
       )
     );
     runBanner.append(bannerBox);
 
     const compatBox = node('div', '', 'callout');
     compatBox.append(
-      node('p', `Kiểm tra hợp đồng feature & mapping (${compat.code || ''}): ${compat.message || ''}`),
+      node('p', `Kiểm tra quy định về dữ liệu đầu vào & mapping (${compat.code || ''}): ${compat.message || ''}`),
       node('p',
-        `Hợp đồng model: ${compat.expected_mapping?.source_contract_version || '—'} (fp=${(compat.expected_mapping?.source_contract_fingerprint || '').slice(0, 12)}…) · `
-        + `Hợp đồng snapshot: ${compat.actual_mapping?.source_contract_version || '—'} (fp=${(compat.actual_mapping?.source_contract_fingerprint || '').slice(0, 12)}…) · `
+        `Hợp đồng bộ phân tích: ${compat.expected_mapping?.source_contract_version || '—'} (fp=${(compat.expected_mapping?.source_contract_fingerprint || '').slice(0, 12)}…) · `
+        + `Hợp đồng bản dữ liệu: ${compat.actual_mapping?.source_contract_version || '—'} (fp=${(compat.actual_mapping?.source_contract_fingerprint || '').slice(0, 12)}…) · `
         + `Mapping: ${(compat.actual_mapping?.columns || []).join(', ')} (fp=${(v.mapping_fingerprint || '').slice(0, 12)}…)`
       )
     );
@@ -683,11 +683,11 @@
     compatBanner.append(compatBox);
 
     sumCards.append(node('p',
-      `Tổng số giao dịch trong snapshot: ${sum.total_rows ?? 0} · `
+      `Tổng số giao dịch trong bản dữ liệu: ${sum.total_rows ?? 0} · `
       + `Đủ điều kiện: ${sum.eligible_rows ?? 0} · Đã chấm điểm: ${sum.scored_rows ?? 0} · `
-      + `Unavailable: ${sum.unavailable_rows ?? 0} (sau mốc as_of: ${sum.post_cutoff_rows ?? 0}, thiếu nguồn feature: ${sum.missing_feature_rows ?? 0}) · `
+      + `Unavailable: ${sum.unavailable_rows ?? 0} (sau mốc thời điểm chốt dữ liệu: ${sum.post_cutoff_rows ?? 0}, thiếu dữ liệu thông tin dùng để phân tích: ${sum.missing_feature_rows ?? 0}) · `
       + `Không tương thích: ${sum.incompatible_rows ?? 0} · `
-      + `Giao dịch mới: ${sum.new_transaction_rows ?? 0} · Đã xuất hiện trong tập train: ${sum.seen_in_training_rows ?? 0} · Đã xuất hiện trong tập holdout: ${sum.seen_in_evaluation_rows ?? 0}`
+      + `Giao dịch mới: ${sum.new_transaction_rows ?? 0} · Đã xuất hiện trong tập học từ dữ liệu: ${sum.seen_in_training_rows ?? 0} · Đã xuất hiện trong tập dữ liệu đánh giá giữ riêng: ${sum.seen_in_evaluation_rows ?? 0}`
     ));
 
     const sortMode = $('bt-shadow-sort')?.value || 'score_desc';
@@ -715,11 +715,11 @@
       'Mã giao dịch',
       'Thời điểm giao dịch / Ghi nhận',
       'Số tiền (VND)',
-      'Phân loại nguồn (Mới / Train / Holdout)',
-      'Feature từ backend (round_million, creator_equals_approver)',
+      "Phân loại nguồn (Mới / Học từ dữ liệu / Dữ liệu đánh giá giữ riêng)",
+      "Thông tin dùng để phân tích từ hệ thống xử lý (round_million, creator_equals_approver)",
       'Trạng thái',
-      'Điểm shadow (uncalibrated)',
-      'Lý do thiếu nguồn / Hướng xử lý',
+      "Điểm chạy thử (chưa điều chỉnh điểm)",
+      "Lý do thiếu dữ liệu / Hướng xử lý",
     ].forEach(h => hr.append(node('th', h)));
     thead.append(hr);
 
@@ -736,7 +736,7 @@
       const scoreTxt = r.score !== null && r.score !== undefined ? Number(r.score).toFixed(6) : '—';
       const issueTxt = (r.issues && r.issues.length)
         ? r.issues.map(i => `[${i.code}] ${i.message}${i.remediation ? ' → ' + i.remediation : ''}`).join(' | ')
-        : 'Đủ nguồn hợp lệ tại thời điểm chốt as_of.';
+        : "Đủ nguồn hợp lệ tại thời điểm chốt thời điểm chốt dữ liệu.";
       tr.append(
         node('td', rankTxt),
         node('td', `${r.record_id} (rev ${r.revision})`),
@@ -791,13 +791,13 @@
     $('bt-permission').textContent = `Tài khoản: ${val.actor_id} · Quyền: `
       + [
         perms.can_import ? 'nhập/xem (data.import)' : null,
-        perms.can_verify ? 'xác minh nhãn (evidence.verify)' : null,
-        perms.can_fit ? 'huấn luyện & phê duyệt shadow (model.fit)' : null,
+        perms.can_verify ? "xác nhận kết quả giao dịch (evidence.verify)" : null,
+        perms.can_fit ? "hướng dẫn hệ thống học và phê duyệt chạy thử (quản lý bộ phân tích)" : null,
       ].filter(Boolean).join(', ');
     const sess = val.session;
     $('bt-overall-status').textContent = sess
       ? `Phiên hiện tại: v${sess.revision} · ${sess.status_label}`
-      : 'Chưa có phiên huấn luyện batch nào cho doanh nghiệp này.';
+      : "Chưa có phiên huấn luyện nhóm dữ liệu nào cho doanh nghiệp này.";
 
     if (rebuildForm) {
       $('bt-snapshot').replaceChildren(...snapshots.map(s => {
@@ -820,7 +820,7 @@
         $('bt-snapshot').value = snapshots[0].snapshot_id;
         populateDefaultBatchesFromSnapshot(snapshots[0]);
       } else {
-        $('bt-batch-selectors').replaceChildren(node('p', 'Doanh nghiệp chưa có snapshot đã chốt. Hãy nhập và chốt snapshot trước.', 'hint'));
+        $('bt-batch-selectors').replaceChildren(node('p', "Doanh nghiệp chưa có bản dữ liệu đã chốt. Hãy nhập và chốt bản dữ liệu trước.", 'hint'));
       }
       populateShadowSelectors(false);
     } else {
@@ -929,13 +929,13 @@
     if (state?.session) renderConfirmSection(state.session);
   });
 
-  // Bước 1: Kiểm tra và ghim kế hoạch
+  // Bước 1: Kiểm tra và lưu kế hoạch
   $('bt-step1-btn').addEventListener('click', () => runTask(async e => {
     let request;
     try {
       request = buildRequestFromForm();
     } catch {
-      throw new Error('JSON request kế hoạch không hợp lệ.');
+      throw new Error('yêu cầu dạng JSON kế hoạch không hợp lệ.');
     }
     const val = await api(base() + '/preview', {
       expected_revision: state?.revision || 0,
@@ -944,8 +944,8 @@
     if (e === epoch) {
       renderAll(val, false);
       notice(val.session?.plan_summary?.status === 'ready'
-        ? 'Đã kiểm tra và ghim kế hoạch dữ liệu. Tiếp tục Bước 2 để tạo danh sách xác minh nhãn.'
-        : 'Kế hoạch có lỗi nguồn/feature. Vui lòng xem chi tiết lỗi và điều chỉnh trước khi tiếp tục.');
+        ? "Đã kiểm tra và ghim kế hoạch dữ liệu. Tiếp tục Bước 2 để tạo danh sách xác nhận kết quả giao dịch."
+        : "Kế hoạch có lỗi nguồn/thông tin dùng để phân tích. Vui lòng xem chi tiết lỗi và điều chỉnh trước khi tiếp tục.");
     }
   }));
 
@@ -958,7 +958,7 @@
     });
     if (e === epoch) {
       renderAll(val, false);
-      notice('Đã tạo/đồng bộ gói xác minh nhãn cho các batch trong kế hoạch. Mở liên kết từng batch để xác minh và khóa nhãn.');
+      notice("Đã tạo/đồng bộ gói xác nhận kết quả giao dịch cho các nhóm dữ liệu trong kế hoạch. Mở liên kết từng nhóm dữ liệu để xác minh và khóa nhãn.");
     }
   }));
 
@@ -976,8 +976,8 @@
     if (e === epoch) {
       renderAll(val, false);
       notice(val.session?.phase === 'completed_waiting_receive'
-        ? 'Đã hoàn tất huấn luyện trên bản mã. Chuyển sang Bước 5 để nhận và kiểm tra kỹ thuật model.'
-        : 'Đã ghi nhận yêu cầu train. Xem tiến độ ở Bước 4.');
+        ? "Đã hoàn tất huấn luyện trên bản mã. Chuyển sang Bước 5 để nhận và kiểm tra kỹ thuật bộ phân tích."
+        : "Đã ghi nhận yêu cầu học từ dữ liệu. Xem tiến độ ở Bước 4.");
     }
   }));
 
@@ -1002,7 +1002,7 @@
     });
     if (e === epoch) {
       renderAll(val, false);
-      notice('Model ứng viên đã nhận và kiểm tra kỹ thuật tại doanh nghiệp.');
+      notice("Bộ phân tích ứng viên đã nhận và kiểm tra kỹ thuật tại doanh nghiệp.");
     }
   }));
 
@@ -1014,7 +1014,7 @@
     });
     if (e === epoch) {
       renderAll(val, false);
-      notice('Đã hoàn tất đánh giá model ứng viên trên tập giữ riêng.');
+      notice("Đã hoàn tất đánh giá bộ phân tích ứng viên trên tập giữ riêng.");
     }
   }));
 
@@ -1031,7 +1031,7 @@
       });
       if (e === epoch) {
         renderAll(val, false);
-        notice('Đã phê duyệt model ứng viên cho chế độ đối chiếu shadow.');
+        notice("Đã phê duyệt bộ phân tích ứng viên cho chế độ kiểm tra thử.");
       }
     } else {
       const val = await api(base() + '/shadow', {
@@ -1039,7 +1039,7 @@
       });
       if (e === epoch) {
         renderAll(val, false);
-        notice('Đã chạy đối chiếu shadow trên tập giữ riêng. Model đang chạy và hàng đợi nghiệp vụ không thay đổi.');
+        notice("Đã chạy kiểm tra thử trên tập giữ riêng. Bộ phân tích đang chạy và hàng đợi nghiệp vụ không thay đổi.");
       }
     }
   }));
@@ -1131,8 +1131,8 @@
       const c = res.check?.compatibility;
       const s = res.check?.summary || {};
       notice(c?.compatible
-        ? `Kiểm tra tương thích đạt: ${s.eligible_rows}/${s.total_rows} giao dịch đủ điều kiện chấm shadow (${s.unavailable_rows} dòng unavailable).`
-        : `Model không tương thích hợp đồng feature/mapping với snapshot đã chọn (${(c?.mismatches || []).map(m => m.field).join(', ')}).`);
+        ? `Kiểm tra tương thích đạt: ${s.eligible_rows}/${s.total_rows} giao dịch đủ điều kiện chấm chạy thử (${s.unavailable_rows} dòng unavailable).`
+        : `Bộ phân tích không tương thích quy định về dữ liệu đầu vào/mapping với bản dữ liệu đã chọn (${(c?.mismatches || []).map(m => m.field).join(', ')}).`);
     }
   }));
 
@@ -1159,8 +1159,8 @@
       renderShadowRunSection();
       const s = res.shadow_run?.summary || {};
       notice(res.reused_existing
-        ? `Đã tải lại đúng lần chạy shadow đã lưu ${res.shadow_run.shadow_run_id} (không tạo bản ghi trùng).`
-        : `Đã lưu lần chạy shadow ${res.shadow_run.shadow_run_id}: ${s.scored_rows}/${s.total_rows} giao dịch đã chấm (${s.unavailable_rows} unavailable).`);
+        ? `Đã tải lại đúng lần chạy thử đã lưu ${res.shadow_run.shadow_run_id} (không tạo bản ghi trùng).`
+        : `Đã lưu lần chạy thử ${res.shadow_run.shadow_run_id}: ${s.scored_rows}/${s.total_rows} giao dịch đã chấm (${s.unavailable_rows} unavailable).`);
     }
   }));
 

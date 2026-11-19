@@ -1,5 +1,7 @@
 portal/config.local.json
 portal/workspace/
+DATA_TEST_SAN_SANG/
+HUONG_DAN_NAP_DATA_VA_TEST_TINH_NANG.pdf
 /*.log
 /.runtime/
 agent2/.runtime/

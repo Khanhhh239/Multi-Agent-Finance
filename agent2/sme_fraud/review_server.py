@@ -126,7 +126,7 @@ def make_server(port=8766,authorizer=None,snapshot_store=None,analysis_resources
             if self.headers.get('Host') not in {f'127.0.0.1:{self.server.server_port}',f'localhost:{self.server.server_port}'}:
                 return self.respond(403,dict(error='Chỉ truy cập qua localhost.'))
             path=urlsplit(self.path).path
-            if path=='/api/health':return self.respond(200,dict(status='ok',mode='import_snapshots' if snapshot_store else 'validation_only',milestone='R1',pipeline_ready=False,work_area_ready=snapshot_store is not None and authorizer.configured,analysis_configured=he_backend is not None,release_gate='full_spec_not_approved',active_delivery=False,validation_auth_configured=authorizer.configured,snapshot_storage_configured=snapshot_store is not None))
+            if path in ('/api/health','/health'):return self.respond(200,dict(status='ok',mode='import_snapshots' if snapshot_store else 'validation_only',milestone='R1',pipeline_ready=False,work_area_ready=snapshot_store is not None and authorizer.configured,analysis_configured=he_backend is not None,release_gate='full_spec_not_approved',active_delivery=False,validation_auth_configured=authorizer.configured,snapshot_storage_configured=snapshot_store is not None))
             if path=='/status':return self.respond(200,PAGE,'text/html; charset=utf-8')
             self.respond(410,dict(error='Luồng Agent2 cũ đã được lưu trữ. API pipeline v2.1 chưa được triển khai.',mode='core_only'))
         def _drain_small_body(self):
