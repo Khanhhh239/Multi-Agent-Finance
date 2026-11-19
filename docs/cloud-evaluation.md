@@ -231,3 +231,35 @@ Selection breakdown hiện ghi nhận được gồm llm_metric_selection, dense
 - G4 query: đạt cho local deterministic path; external embedding/LLM latency và failure budget vẫn OPEN.
 - G7 functional: đạt các test subset trên; full suite và golden external-provider regression vẫn OPEN.
 - G3/G5/G6/G8/G9: chưa thay đổi; deployment foundation, Neon persistence, auth/CORS, quota và rollback vẫn OPEN.
+
+## Phase 1 implementation evidence — CM-011 Agent 4 cloud boundary
+
+Ngày đo: 2026-11-19
+
+Đã bổ sung `create_cloud_app` trong `agent4/agent4/api.py` cho slice non-demo:
+
+- Không đọc `AGENT4_DEMO_MODE` trong cloud factory; nếu biến này bật thì startup bị từ chối.
+- Không dùng `X-Demo-Persona`; thiếu claims hoặc server policy trả 403 trước metric selection/SQL.
+- Claims và policy chỉ được lấy từ `request.state`, tức boundary của Gateway đã xác thực; browser không được gửi policy để nâng quyền.
+- `/healthz` không cần auth/provider/artifact; `/readyz` trả 503 nếu config hoặc immutable warehouse artifact thiếu và không lộ absolute path.
+- `/v1/metrics` ở cloud mode yêu cầu auth context và chỉ trả metadata catalog đã lọc theo policy; không trả `sql_expr`, API key hoặc provider endpoint.
+- CORS chỉ bật khi có `AGENT4_CORS_ORIGINS` explicit; wildcard bị từ chối và credentials không được bật.
+- Cloud admission mặc định chỉ một expensive query; request kế tiếp nhận 503 retryable với `Retry-After: 1`.
+- Bổ sung security headers `X-Content-Type-Options`, `Referrer-Policy`, CSP API và `Cache-Control: no-store` cho API cloud.
+
+### Evidence
+
+Command:
+
+    ./.venv/bin/pytest -q tests/contracts/test_cloud_vertical_slice.py
+
+Kết quả: `6 passed`. Test dùng `httpx.ASGITransport` với smoke warehouse hiện có, kiểm tra health/readiness, deny-by-default, trusted Gateway claims/policy, query trả `ready` một dòng, admission 503, readiness không rò path và CORS allow-list.
+
+Ruff trên `agent4/api.py` và test contract: pass. Không thay đổi Agent 1, Agent 2 hoặc Agent 3.
+
+### Gate update
+
+- G2: cloud boundary không thêm local model/torch/transformers; memory/query benchmark CM-002 vẫn là evidence hiện hành, container benchmark còn OPEN.
+- G4: API ASGI non-demo query với claims/policy và smoke artifact đạt contract; external provider latency/failure vẫn OPEN.
+- G8: deny-by-default, policy scope, no demo persona, no wildcard CORS đã có contract test; xác minh Gateway/IdP, session/CSRF và production-origin browser flow vẫn OPEN.
+- G3/G5/G6/G9: Render image, Neon/object artifact, quota và rollback chưa thay đổi.
