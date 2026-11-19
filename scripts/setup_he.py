@@ -111,6 +111,8 @@ def stage_runtime():
         env=dict(os.environ, AGENT2_WSL_DISTRO=DISTRO, AGENT2_HE_PYTHON=LINUX_PY, PYTHONUTF8='1'))
 
 
+
+
 def main():
     force = '--force' in sys.argv
     if READY.is_file() and not force:

@@ -32,6 +32,8 @@ FEATURE_LABELS_VI = {
     'creator_equals_approver': 'Người lập đồng thời là người phê duyệt',
 }
 BATCH = 4
+EPOCHS_PER_ROUND = 20
+LEARNING_RATE = 2.0
 MIN_ROWS = 20
 TARGET_RECALL = 0.90
 MAX_ROUNDS = 4
@@ -70,10 +72,15 @@ class FederatedLRService:
         self.authorizer = authorizer
         self._lock = threading.RLock()
         self._thread = None
+        self.key_root = self.path.with_name('he-training-companies')
         with closing(self._conn()) as c:
             c.executescript(
                 'CREATE TABLE IF NOT EXISTS contributions(company TEXT PRIMARY KEY, rows TEXT NOT NULL, source TEXT NOT NULL, updated_at TEXT NOT NULL);'
-                'CREATE TABLE IF NOT EXISTS runs(run_id TEXT PRIMARY KEY, state TEXT NOT NULL, doc TEXT NOT NULL, updated_at TEXT NOT NULL);')
+                'CREATE TABLE IF NOT EXISTS runs(run_id TEXT PRIMARY KEY, state TEXT NOT NULL, doc TEXT NOT NULL, updated_at TEXT NOT NULL);'
+                'CREATE TABLE IF NOT EXISTS submissions(company TEXT PRIMARY KEY, submitted_at TEXT NOT NULL, rows INTEGER NOT NULL, label_1 INTEGER NOT NULL);'
+                'CREATE TABLE IF NOT EXISTS models(version INTEGER PRIMARY KEY, run_id TEXT NOT NULL, doc TEXT NOT NULL, accepted_at TEXT NOT NULL);'
+                'CREATE TABLE IF NOT EXISTS syncs(company TEXT PRIMARY KEY, version INTEGER NOT NULL, synced_at TEXT NOT NULL);'
+                'CREATE TABLE IF NOT EXISTS packages(company TEXT PRIMARY KEY, doc TEXT NOT NULL, created_at TEXT NOT NULL);')
 
     def _conn(self):
         c = sqlite3.connect(self.path, timeout=30)
@@ -115,6 +122,71 @@ class FederatedLRService:
     def _save_rows(self, company, rows, source):
         with closing(self._conn()) as c, c:
             c.execute('INSERT OR REPLACE INTO contributions VALUES(?,?,?,?)', (company, json.dumps(rows), source, _now()))
+            c.execute('DELETE FROM submissions WHERE company=?', (company,))  # new data must be sent again
+
+    # ---- company -> station ------------------------------------------------------------------------------------
+    def submit(self, company):
+        """Company encrypts its rows with its own CKKS key and sends ciphertexts + labels to the station."""
+        from .he_lr_ckks import CompanyNode, package
+        rows, _, _ = self._rows(company)
+        if not rows:
+            fail(409, 'FED_NO_DATA', 'Chưa nạp dữ liệu huấn luyện.', 'Nạp tệp CSV có nhãn trước khi gửi lên trạm.')
+        train, hold = _split(rows)
+        node = CompanyNode(self.key_root, company)
+        pkg = package(node, train, hold, FEATURES)
+        with closing(self._conn()) as c, c:
+            c.execute('INSERT OR REPLACE INTO packages VALUES(?,?,?)', (company, json.dumps(pkg), _now()))
+            c.execute('INSERT OR REPLACE INTO submissions VALUES(?,?,?,?)', (company, _now(), len(rows), sum(r['y'] for r in rows)))
+        return self.company_status(company)
+
+    def current_model(self):
+        with closing(self._conn()) as c:
+            row = c.execute('SELECT version, run_id, doc, accepted_at FROM models ORDER BY version DESC LIMIT 1').fetchone()
+        return dict(version=row['version'], run_id=row['run_id'], accepted_at=row['accepted_at'], **json.loads(row['doc'])) if row else None
+
+    def company_status(self, company):
+        with closing(self._conn()) as c:
+            sub = c.execute('SELECT * FROM submissions WHERE company=?', (company,)).fetchone()
+            syn = c.execute('SELECT * FROM syncs WHERE company=?', (company,)).fetchone()
+        model = self.current_model()
+        view = self.company_view(company)
+        view.update(submitted_at=sub['submitted_at'] if sub else None, synced_version=syn['version'] if syn else None,
+                    synced_at=syn['synced_at'] if syn else None,
+                    station_model=None if model is None else dict(version=model['version'], accepted_at=model['accepted_at'],
+                                                                  summary=model['summary'], companies=model['companies']))
+        return view
+
+    def sync(self, company, scope):
+        model = self.current_model()
+        if model is None:
+            fail(409, 'FED_NO_MODEL', 'Trạm chưa có mô hình chung nào được chấp nhận.', 'Chờ trạm huấn luyện xong rồi đồng bộ.')
+        record = self.lr.install_federated_model(scope, model)
+        with closing(self._conn()) as c, c:
+            c.execute('INSERT OR REPLACE INTO syncs VALUES(?,?,?)', (company, model['version'], _now()))
+        out = self.company_status(company)
+        out['installed_model'] = dict(model_id=record['model_id'], version_tag=record['version_tag'], threshold=record['threshold'])
+        return out
+
+    # ---- station view --------------------------------------------------------------------------------------------
+    def station_status(self):
+        with closing(self._conn()) as c:
+            subs = {r['company']: dict(r) for r in c.execute('SELECT * FROM submissions')}
+            enrolled = sorted({r['company'] for r in c.execute('SELECT company FROM contributions')} | set(subs))
+            models = [dict(version=r['version'], run_id=r['run_id'], accepted_at=r['accepted_at'], summary=json.loads(r['doc'])['summary'])
+                      for r in c.execute('SELECT * FROM models ORDER BY version DESC LIMIT 10')]
+            latest = c.execute('SELECT doc FROM runs ORDER BY updated_at DESC LIMIT 1').fetchone()
+            history = [json.loads(r['doc']) for r in c.execute('SELECT doc FROM runs ORDER BY updated_at DESC LIMIT 10')]
+        return dict(enrolled_companies=enrolled, worker=dict(status='ok', scheme='CKKS (TenSEAL)'),
+                    contributions=[dict(company_id=cid, submitted=cid in subs, submitted_at=subs.get(cid, {}).get('submitted_at'),
+                                        rows=subs.get(cid, {}).get('rows', 0), label_1=subs.get(cid, {}).get('label_1', 0)) for cid in enrolled],
+                    current_model=self.current_model(), models=models, latest=json.loads(latest['doc']) if latest else None,
+                    history=[dict(run_id=h['run_id'], state=h['state'], created_at=h.get('created_at'), accepted=(h.get('result') or {}).get('accepted'),
+                                  summary=(h.get('result') or {}).get('summary')) for h in history],
+                    limits=dict(batch_size=BATCH, max_rounds=MAX_ROUNDS, holdout_share=0.1, target_recall=TARGET_RECALL))
+
+    def submitted_companies(self):
+        with closing(self._conn()) as c:
+            return sorted(r['company'] for r in c.execute('SELECT company FROM submissions'))
 
     def _rows(self, company):
         with closing(self._conn()) as c:
@@ -123,9 +195,7 @@ class FederatedLRService:
 
     def company_view(self, company):
         rows, source, at = self._rows(company)
-        cfg = self.lr._discover_runtime_cfg()
-        enrolled = any(g.get('company_id') == company and g.get('active') for g in cfg.get('_worker_grants', []))
-        view = dict(company_id=company, enrolled=enrolled, rows=0, source=source, updated_at=at)
+        view = dict(company_id=company, enrolled=True, has_key=(self.key_root / company / 'ckks-secret.ctx').is_file(), rows=0, source=source, updated_at=at)
         if rows:
             train, hold = _split(rows)
             view.update(rows=len(rows), label_1=sum(r['y'] for r in rows), label_0=sum(1 - r['y'] for r in rows), train_rows=len(train), holdout_rows=len(hold))
@@ -168,132 +238,116 @@ class FederatedLRService:
 
     # ---- run -------------------------------------------------------------------------------------------------
     def start(self, scopes_for, body):
-        """scopes_for(company) -> AccessScope with model.fit; raises if the caller may not train for that company."""
+        """Station starts a joint run on every company that has sent its encrypted package."""
         with self._lock:
             if self._thread is not None and self._thread.is_alive():
                 fail(409, 'FED_RUN_ACTIVE', 'Đang có một lần huấn luyện chung chạy.', 'Chờ lần hiện tại hoàn tất.')
-            cfg = self.lr._discover_runtime_cfg()
-            enrolled = {g['company_id'] for g in cfg.get('_worker_grants', []) if g.get('active')}
-            wanted = body.get('companies')
-            companies = sorted(set(wanted) if isinstance(wanted, list) and wanted else enrolled)
-            companies = [c for c in companies if c in enrolled]
+            with closing(self._conn()) as c:
+                pkgs = {r['company']: json.loads(r['doc']) for r in c.execute('SELECT company, doc FROM packages')}
+            companies = sorted(pkgs)
             rounds = int(body.get('rounds') or 2)
             if not 1 <= rounds <= MAX_ROUNDS:
                 fail(400, 'FED_ROUNDS_INVALID', f'Số vòng phải từ 1 đến {MAX_ROUNDS}.', 'Chọn số vòng hợp lệ.')
             if len(companies) < 2:
-                fail(409, 'FED_PARTICIPANTS_REQUIRED', 'Cần ít nhất 2 doanh nghiệp đã đăng ký khóa.', 'Chạy thiết lập HE huấn luyện rồi thử lại.')
-            data, scopes = {}, {}
-            for cid in companies:
-                rows, _, _ = self._rows(cid)
-                if not rows:
-                    fail(409, 'FED_NO_DATA', f'Doanh nghiệp {cid} chưa nạp dữ liệu huấn luyện.', 'Nạp CSV hoặc dùng dữ liệu mô phỏng cho từng doanh nghiệp.')
-                scopes[cid] = scopes_for(cid)
-                data[cid] = _split(rows)
+                fail(409, 'FED_PARTICIPANTS_REQUIRED', 'Cần ít nhất 2 doanh nghiệp đã gửi dữ liệu.', 'Chờ các doanh nghiệp gửi dữ liệu lên trạm.')
             doc = dict(run_id='fed_' + secrets.token_hex(8), state='running', stage='prepare', created_at=_now(), rounds=rounds,
-                       companies=companies, events=[], features=list(FEATURES), result=None, simulated=all(self._rows(c)[1] == 'simulated' for c in companies))
-            self._event(doc, 'prepare', f'Khởi tạo: {len(companies)} doanh nghiệp, {rounds} vòng. Chia 9:1 cục bộ tại từng doanh nghiệp.')
-            self._thread = threading.Thread(target=self._run, args=(doc, cfg, scopes, data), daemon=True)
+                       companies=companies, events=[], features=list(FEATURES), result=None,
+                       simulated=all(self._rows(c)[1] in ('simulated', 'upload') for c in companies))
+            self._event(doc, 'prepare', f'Khởi tạo: {len(companies)} doanh nghiệp, {rounds} vòng × {EPOCHS_PER_ROUND} lượt. Trạm chỉ có bản mã và nhãn.')
+            self._thread = threading.Thread(target=self._run, args=(doc, None, scopes_for, pkgs), daemon=True)
             self._thread.start()
             return doc
 
-    def _run(self, doc, cfg, scopes, data):
-        work = Path(cfg['enterprise_root']).resolve().parent / 'runs' / doc['run_id']
+    def _run(self, doc, cfg, scopes_for, pkgs):
         try:
-            self._execute(doc, cfg, scopes, data, work)
+            self._execute(doc, pkgs)
         except Exception as error:
             doc['state'] = 'failed'
             doc['error'] = f'{type(error).__name__}: {error}'[:400]
             self._event(doc, 'failed', 'Huấn luyện dừng: ' + doc['error'])
-        finally:
-            shutil.rmtree(work, ignore_errors=True)
 
-    def _execute(self, doc, cfg, scopes, data, work):
-        from experiments.he_training import federated_r4 as r4
+    def _execute(self, doc, pkgs):
+        import math
+        from .he_lr_ckks import CompanyNode, StationView
         companies = doc['companies']
-        build = Path(cfg['build']).resolve()
-        executors, parts = {}, {}
-        for i, cid in enumerate(companies, 1):
-            scope = scopes[cid]
-            executors[cid] = ConcreteFHEEnterpriseExecutor(
-                tenant_id=scope.tenant_id, company_id=cid, enterprise_base_dir=Path(cfg['enterprise_root']) / cid, session_work_dir=work / cid,
-                build_dir=build, worker_url=cfg['worker_url'], worker_verify_key=cfg['worker_verify_key'],
-                linux_python=cfg.get('linux_python'), distro=cfg.get('distro'), scope=scope)
-            e = executors[cid]
-            parts[cid] = FederatedEnterpriseParticipant(
-                tenant_id=scope.tenant_id, company_id=cid, key_epoch=e.key_epoch, evaluation_keys_sha256=e.evaluation_keys_sha256,
-                signing_key=e.signing_key, participant_index=i, fhe_executor=e)
-            self._event(doc, 'keys', f'{cid}: khóa bí mật riêng nằm trên máy doanh nghiệp (epoch {e.key_epoch[:10]}…); cloud chỉ nhận khóa đánh giá công khai.')
-        first = executors[companies[0]]
-        policy = FederationPolicy(
-            session_id=doc['run_id'], tenant_id=scopes[companies[0]].tenant_id, min_participants=len(companies), worker_verify_key=cfg['worker_verify_key'],
-            weight_scale=first.profile_spec['weight_scale'], bias_scale=first.profile_spec['bias_scale'],
-            weight_domain=tuple(first.profile_spec['weight_domain']), bias_domain=tuple(first.profile_spec['bias_domain']))
-        coord = FederatedCloudCoordinator(policy, [p.enrollment for p in parts.values()])
-        last = {}
+        views = {c: StationView(pkgs[c]) for c in companies}          # station side: public context + ciphertexts only
+        nodes = {c: CompanyNode(self.key_root, c) for c in companies}  # company side: secret key, decrypt aggregates only
+        for c in companies:
+            self._event(doc, 'keys', f'{c}: trạm nhận {len(pkgs[c]["train_y"])} dòng đã mã hóa + nhãn; khóa giải mã vẫn ở doanh nghiệp.', company=c)
+        d = len(FEATURES)
+        w, b = [0.0] * d, 0.0
+        n_total = sum(len(pkgs[c]['train_y']) for c in companies)
         t0 = time.monotonic()
         for rnd in range(1, doc['rounds'] + 1):
-            init = list(coord.global_weights_code)
-            fhe = {}
-            for cid in companies:
-                train = data[cid][0]
-                # rotate through the company's training rows: one encrypted round = up to 4 batches of 4 rows
-                start = ((rnd - 1) * BATCH * 4) % max(1, len(train))
-                window = [train[(start + k) % len(train)] for k in range(BATCH * 4)]
-                batches = [dict(index=b, row_ids=[r['record_id'] + f'#r{rnd}' for r in window[b * BATCH:(b + 1) * BATCH]],
-                                x=[r['x'] for r in window[b * BATCH:(b + 1) * BATCH]], y=[r['y'] for r in window[b * BATCH:(b + 1) * BATCH]]) for b in range(4)]
-                hold = data[cid][1]
-                eval_rows = [hold[k % len(hold)] for k in range(BATCH)]
-                eval_batches = [dict(index=0, row_ids=[r['record_id'] + f'#e{rnd}{k}' for k, r in enumerate(eval_rows)], x=[r['x'] for r in eval_rows], y=[r['y'] for r in eval_rows])]
-                self._event(doc, 'encrypt', f'Vòng {rnd} · {cid}: mã hóa 16 dòng cục bộ và gửi bản mã lên worker cloud…', round=rnd, company=cid)
-                s = time.monotonic()
-                fhe[cid] = executors[cid].run_fhe_round(round_id=rnd, train_batches=batches, eval_batches=eval_batches, initial_weights_code=init, epochs=1)
-                if not fhe[cid]['native_fhe_executed']:
-                    raise RuntimeError('Worker không chạy Concrete FHE thật; không chấp nhận chế độ dự phòng.')
-                self._event(doc, 'fhe', f'Vòng {rnd} · {cid}: cloud tính SGD trên bản mã xong ({time.monotonic() - s:.1f} giây); {cid} giải mã riêng trọng số của mình.',
-                            round=rnd, company=cid, seconds=round(time.monotonic() - s, 1), delta=fhe[cid]['delta_float'])
-            self._event(doc, 'secagg', f'Vòng {rnd}: các doanh nghiệp che bản cập nhật bằng mặt nạ cặp (secure aggregation) rồi gửi lên bộ điều phối.', round=rnd)
-            for cid in companies:
-                coord.accept_key_advertisement(rnd, parts[cid].advertise_round_keys(policy.session_id, rnd))
-            ads = coord.get_round_advertisements(rnd)
-            for cid in companies:
-                parts[cid].generate_encrypted_shamir_shares(session_id=policy.session_id, round_id=rnd, verified_peer_ads=ads, enrollments=coord.enrollments, threshold=coord.shamir_threshold)
-            for cid in companies:
-                packet = parts[cid].create_masked_update_packet(
-                    session_id=policy.session_id, round_id=rnd, delta_float=fhe[cid]['delta_float'], sample_count=fhe[cid]['sample_count'],
-                    max_delta_linf=policy.max_delta_linf, use_double_mask=False,
-                    fhe_proof={'signed_worker_result': fhe[cid]['signed_worker_result'], 'model_cipher_sha256': fhe[cid]['model_cipher_sha256']})
-                coord.accept_masked_update(rnd, packet)
-            record = coord.finalize_round(rnd)
-            last = fhe
-            self._event(doc, 'aggregate', f'Vòng {rnd}: trọng số chung = {[round(v, 3) for v in coord.global_weights_float]}.', round=rnd,
-                        weights=list(coord.global_weights_float), record={k: record[k] for k in record if k in ('status', 'participants', 'total_samples')})
-        weights = list(coord.global_weights_float)
-        self._event(doc, 'evaluate', 'Đánh giá trên tập kiểm định 10% gộp từ các doanh nghiệp (không dùng để huấn luyện).')
-        pooled = [r for cid in companies for r in data[cid][1]]
-        untrained = [0.0, 0.0, 0.0]
-        base = _metrics(untrained, pooled, 0.5)
-        raw = evaluate_model_on_rows(weights, pooled)
-        tau = select_validation_threshold([{'y_true': r['y'], 'score': p} for r, p in zip(pooled, raw['per_sample_probs'])])
-        trained = _metrics(weights, pooled, tau['threshold'])
-        per_company = {}
-        for cid in companies:
-            per_company[cid] = dict(holdout_rows=len(data[cid][1]), untrained=_metrics(untrained, data[cid][1], 0.5), trained=_metrics(weights, data[cid][1], tau['threshold']))
-        audit = None
-        if len(companies) >= 2:
-            a, b = companies[0], companies[1]
-            probe = executors[a].attempt_decrypt_foreign_ciphertext(last[b]['model_cipher'], last[b]['model_cipher_sha256'])
-            audit = dict(company_reads_other=f'{a} → {b}', rejected=bool(probe.get('rejected')) or probe.get('decrypted_value') != last[b]['updated_weights_code'])
+            for ep in range(EPOCHS_PER_ROUND):
+                grad = [0.0] * (d + 1)
+                for c in companies:
+                    enc = views[c].gradient(w, b)                       # computed on ciphertext at the station
+                    dec = nodes[c].decrypt_aggregate(enc, d + 1)        # company returns only the summed gradient
+                    grad = [g + x for g, x in zip(grad, dec)]
+                w = [w[j] - LEARNING_RATE * grad[j] / n_total for j in range(d)]
+                b = b - LEARNING_RATE * grad[d] / n_total
+            self._event(doc, 'fhe', f'Vòng {rnd}: tính gradient trên bản mã của {len(companies)} doanh nghiệp ({EPOCHS_PER_ROUND} lượt). '
+                                    f'Trọng số = {[round(v, 3) for v in w]}, b = {round(b, 3)}.', round=rnd, weights=list(w) + [b])
+        self._event(doc, 'evaluate', 'Đánh giá trên tập kiểm định 10% của từng doanh nghiệp (không dùng để huấn luyện).')
+        scored = []
+        for c in companies:
+            z = nodes[c].decrypt_aggregate(views[c].holdout_scores(w, b), 1)[:len(pkgs[c]['holdout_y'])]
+            scored += [(c, 1.0 / (1.0 + math.exp(-zi)), y) for zi, y in zip(z, pkgs[c]['holdout_y'])]
+        weights = list(w) + [b]
+        pooled = [dict(x=None, y=y) for _, _, y in scored]
+        # Threshold: the strictest cut that still keeps recall >= target on validation (fewest false alerts); best F1 otherwise.
+        cands = sorted({round(p, 6) for _, p, _ in scored} | {0.5}, reverse=True)
+        def rec_prec(t):
+            tp = sum(1 for _, p, y in scored if p >= t and y == 1); fp = sum(1 for _, p, y in scored if p >= t and y == 0)
+            pos = sum(1 for _, _, y in scored if y == 1)
+            return tp / max(1, pos), tp / max(1, tp + fp)
+        ok = [t for t in cands if rec_prec(t)[0] >= TARGET_RECALL]
+        if ok:
+            chosen, basis = max(ok, key=lambda t: (rec_prec(t)[1], t)), 'max_precision_at_target_recall'
+        else:
+            chosen, basis = max(cands, key=lambda t: (lambda r, pr: 2 * r * pr / (r + pr) if r + pr else 0)(*rec_prec(t))), 'best_f1'
+        tau = dict(threshold=chosen, selection_basis=basis, target_recall=TARGET_RECALL)
+
+        def metrics(rows, threshold):
+            tp = sum(1 for p, y in rows if p >= threshold and y == 1)
+            fp = sum(1 for p, y in rows if p >= threshold and y == 0)
+            fn = sum(1 for p, y in rows if p < threshold and y == 1)
+            tn = len(rows) - tp - fp - fn
+            eps = 1e-12
+            bce = sum(-(y * math.log(max(eps, p)) + (1 - y) * math.log(max(eps, 1 - p))) for p, y in rows) / max(1, len(rows))
+            prec, rec = tp / max(1, tp + fp), tp / max(1, tp + fn)
+            return dict(sample_count=len(rows), threshold=threshold, bce_loss=round(bce, 6), accuracy=round((tp + tn) / max(1, len(rows)), 4),
+                        precision=round(prec, 4), recall=round(rec, 4), f1=round(2 * prec * rec / (prec + rec), 4) if prec + rec else 0.0, tp=tp, fp=fp, tn=tn, fn=fn)
+        trained_rows = [(p, y) for _, p, y in scored]
+        untrained_rows = [(0.5, y) for _, _, y in scored]
+        trained, base = metrics(trained_rows, tau['threshold']), metrics(untrained_rows, 0.5)
+        per_company = {c: dict(holdout_rows=len(pkgs[c]['holdout_y']), untrained=metrics([(0.5, y) for cc, _, y in scored if cc == c], 0.5),
+                               trained=metrics([(p, y) for cc, p, y in scored if cc == c], tau['threshold'])) for c in companies}
         summary = dict(recall=trained['recall'], precision=trained['precision'], f1=trained['f1'], accuracy=trained['accuracy'],
                        untrained_recall=base['recall'], untrained_precision=base['precision'], untrained_bce=base['bce_loss'], bce=trained['bce_loss'],
                        threshold=tau['threshold'], target_recall=TARGET_RECALL, recall_target_met=trained['recall'] >= TARGET_RECALL,
-                       holdout_rows=len(pooled), train_rows=sum(len(data[c][0]) for c in companies), seconds=round(time.monotonic() - t0, 1))
-        doc['result'] = dict(weights=dict(w=weights[:2], b=weights[2], codes=list(coord.global_weights_code), features=list(FEATURES)), summary=summary,
-                             untrained=base, trained=trained, per_company=per_company, threshold=tau, privacy=dict(
-                                 cloud_holds_secret_keys=False, cloud_saw_plaintext=False, individual_updates_visible_to_cloud=False, cross_company_decrypt=audit,
-                                 execution='Concrete TFHE 2.11.0 native', secure_aggregation='X25519 pairwise masking + Shamir', worker_url=cfg['worker_url']),
+                       holdout_rows=len(scored), train_rows=n_total, seconds=round(time.monotonic() - t0, 1))
+        codes = [int(round(v * 16)) for v in w] + [int(round(b * 16))]
+        doc['result'] = dict(weights=dict(w=list(w), b=b, codes=codes, features=list(FEATURES)), summary=summary, untrained=base, trained=trained,
+                             per_company=per_company, threshold=tau, privacy=dict(
+                                 cloud_holds_secret_keys=False, cloud_saw_plaintext_features=False, labels_visible_to_station=True,
+                                 company_sees=f'chỉ tổng gradient {d + 1} số của chính mình', execution='CKKS (TenSEAL 0.3.18), N=16384'),
                              approval=None, simulated=doc['simulated'])
+        current = self.current_model()
+        better = current is None or (summary['f1'], summary['recall']) > (current['summary']['f1'], current['summary']['recall'])
+        doc['result']['accepted'] = better
+        if better:
+            with closing(self._conn()) as c, c:
+                version = (c.execute('SELECT COALESCE(MAX(version), 0) FROM models').fetchone()[0] or 0) + 1
+                c.execute('INSERT INTO models VALUES(?,?,?,?)', (version, doc['run_id'], json.dumps(dict(
+                    weights=doc['result']['weights'], summary=summary, threshold=tau['threshold'], companies=companies)), _now()))
+            doc['result']['model_version'] = version
+            self._event(doc, 'accepted', f'Mô hình mới tốt hơn trên tập kiểm định nên được cập nhật thành phiên bản v{version}.')
+        else:
+            self._event(doc, 'kept', 'Mô hình mới chưa tốt hơn phiên bản v%d nên trạm giữ trọng số cũ.' % current['version'])
         doc['state'] = 'completed'
-        self._event(doc, 'completed', f'Hoàn tất: recall {trained["recall"]:.0%} (chưa huấn luyện {base["recall"]:.0%}, độ chính xác {trained["precision"]:.0%}). Mục tiêu recall ≥ {TARGET_RECALL:.0%}: {"đạt" if summary["recall_target_met"] else "chưa đạt"}.')
+        self._event(doc, 'completed', f'Hoàn tất: recall {trained["recall"]:.0%}, precision {trained["precision"]:.0%} (mô hình chưa huấn luyện: recall {base["recall"]:.0%}, precision {base["precision"]:.0%}). Mục tiêu recall ≥ {TARGET_RECALL:.0%}: {"đạt" if summary["recall_target_met"] else "chưa đạt"}.')
 
     def approve(self, run_id, actor, reason):
         doc = self.job(run_id)

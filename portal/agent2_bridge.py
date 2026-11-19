@@ -95,7 +95,7 @@ API = re.compile(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/(?:imports/(?:upload
 
 def allowed_path(path):
     if '..' in path or '//' in path:return False
-    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/model-lifecycle(?:/(?:profile|train|evaluate|approve|rollback|score-queue|analyze|training-data|lr-fhe(?:/(?:status|worker-health|worker-restart|prepare|train|resume|decrypt|promote))?|federated/(?:status|contribute|run|job|approve)|lr-registry(?:/(?:register|validate|transition))?))?',path):return True
+    if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/model-lifecycle(?:/(?:profile|train|evaluate|approve|rollback|score-queue|analyze|training-data|lr-fhe(?:/(?:status|worker-health|worker-restart|prepare|train|resume|decrypt|promote))?|federated/(?:status|contribute|submit|sync)|lr-registry(?:/(?:register|validate|transition))?))?',path):return True
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-workspace/(?:runs/[A-Za-z0-9_.:-]{8,128}/)?investigation(?:/[A-Za-z0-9_.:%-]{1,384}(?:/reviews/rvw_[a-f0-9]{64})?(?:/(?:start|heartbeat|save|attachments))?)?',path):return True
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-workspace/backlog(?:/(?:reevaluate|active|shadow))?',path):return True
     if re.fullmatch(r'/api/v1/companies/[A-Za-z0-9_.:-]{1,128}/pipeline-workspace/runs/[A-Za-z0-9_.:-]{8,128}/reviews/rvw_[a-f0-9]{64}/remediation(?:/documents/doc_[a-f0-9]{24}/versions/[1-9][0-9]{0,3})?',path):return True

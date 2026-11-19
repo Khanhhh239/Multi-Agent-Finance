@@ -11,7 +11,7 @@ from .snapshot_api import _key
 from .validation_api import authorize_request, read_json, respond_failure
 
 ROUTE = re.compile(
-    r'/api/v1/companies/([A-Za-z0-9_.:-]{1,128})/model-lifecycle(?:/(profile|train|evaluate|approve|rollback|score-queue|analyze|training-data|lr-fhe/(?:status|worker-health|worker-restart|prepare|train|resume|decrypt|promote)|federated/(?:status|contribute|run|job|approve)|lr-registry(?:/(?:register|validate|transition))?))?\Z'
+    r'/api/v1/companies/([A-Za-z0-9_.:-]{1,128})/model-lifecycle(?:/(profile|train|evaluate|approve|rollback|score-queue|analyze|training-data|lr-fhe/(?:status|worker-health|worker-restart|prepare|train|resume|decrypt|promote)|federated/(?:status|contribute|submit|sync)|lr-registry(?:/(?:register|validate|transition))?))?\Z'
 )
 
 
@@ -74,25 +74,18 @@ def handle_model_lifecycle(handler, authorizer, lifecycle, method: str) -> bool:
                 fail(503, 'FEDERATED_NOT_CONFIGURED', 'Chưa cấu hình huấn luyện chung nhiều doanh nghiệp.', 'Chạy thiết lập HE huấn luyện.')
             sub = action.split('/', 1)[1]
             if method == 'GET' and sub == 'status':
-                value = fed.status()
-            elif method == 'POST' and sub in ('contribute', 'run', 'job', 'approve'):
+                value = fed.company_status(company)
+            elif method == 'POST' and sub in ('contribute', 'submit', 'sync'):
+                require_fit(scope)
                 body = read_json(handler)
                 if not isinstance(body, dict):
                     fail(400, 'MODEL_LIFECYCLE_BODY', 'Nội dung yêu cầu không hợp lệ.', 'Điền đúng thông tin trên màn hình.')
-                if sub == 'job':
-                    value = fed.job(str(body.get('run_id') or ''))
+                if sub == 'contribute':
+                    value = fed.contribute(company, body)
+                elif sub == 'submit':
+                    value = fed.submit(company)
                 else:
-                    require_fit(scope)
-                    if sub == 'contribute':
-                        value = fed.simulate(company, int(body.get('count') or 48)) if body.get('simulate') else fed.contribute(company, body)
-                    elif sub == 'approve':
-                        value = fed.approve(str(body.get('run_id') or ''), scope.actor_id, body.get('reason'))
-                    else:
-                        def scopes_for(cid):
-                            sc = authorizer.authorize_director(header, cid)
-                            require_fit(sc)
-                            return sc
-                        value = fed.start(scopes_for, body)
+                    value = fed.sync(company, scope)
             else:
                 fail(405, 'METHOD_NOT_ALLOWED', 'Thao tác huấn luyện chung không hợp lệ.', 'Dùng đúng phương thức GET/POST.')
         elif action and (action == 'lr-registry' or action.startswith('lr-registry/')):

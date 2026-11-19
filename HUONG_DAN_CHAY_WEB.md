@@ -99,3 +99,26 @@ cài TenSEAL; cài WSL Ubuntu-24.04 nếu thiếu (lần đầu có thể cần 
 biên dịch các mạch TFHE vào `.runtime/he4`; sinh khóa node/worker (Windows DPAPI, riêng từng máy), dữ liệu mô phỏng C001/C002, cấu hình Portal;
 kích hoạt hàng đợi điều tra, mô hình và gói phát hành. Không có khóa hay bản dựng nào nằm trong git. Làm lại từ đầu: xóa `.runtime/he-ready.json` rồi chạy lại.
 Giao diện Agent 2 luôn là bản "Hàng đợi & điều tra" và "Huấn luyện & mô hình"; trang cũ (index/workspace) đã bị xóa.
+
+## Agent 2 — Phân tích, huấn luyện và máy trạm huấn luyện mã hóa
+
+`run_web.bat` bật luôn máy trạm huấn luyện ở **http://127.0.0.1:8890** cùng web chung 8800. Muốn bật riêng máy trạm (khi web chung đã chạy):
+
+```
+agent2\.venv\Scripts\python.exe station\server.py --port 8890
+```
+
+Máy trạm gọi backend Agent 2 qua cổng nội bộ 8766 bằng khóa trạm tự sinh (`agent2/.runtime/station-secret.txt`), nên cần bật web chung trước.
+
+**1. Phân tích rủi ro (tab Tổng quan)**
+- Nạp gói 9 tệp ở "Nạp dữ liệu" (tệp `07_so_giao_dich_ngan_hang_A2.csv` được giữ đủ cột để chạy luật).
+- Lần đầu: vào tab "Huấn luyện & mô hình", bước 2, bấm chọn **tất cả** tệp trong `DATA_TEST_MAF_SOSON\input-A2-training` rồi "Bắt đầu huấn luyện", sau đó phê duyệt ở bước 3.
+- Về tab "Tổng quan", bấm "Phân tích dữ liệu mới nhất". Điểm gồm luật, thống kê, đồ thị, ML không nhãn; mô hình có nhãn chỉ tham gia khi doanh nghiệp đã đồng bộ mô hình chung.
+
+**2. Đóng góp huấn luyện chung (3 doanh nghiệp)** — làm theo `DATA_TEST_MAF_SOSON\input-A2-dong-gop\00_HUONG_DAN.txt`:
+- Mỗi doanh nghiệp (MPX10, C001, C002): tab "Đóng góp huấn luyện" → chọn tệp CSV của mình → "Mã hóa và gửi lên trạm".
+  Dữ liệu được mã hóa CKKS bằng khóa riêng của doanh nghiệp (khóa nằm ở `agent2/.runtime/.../he-training-companies/<mã DN>`); trạm chỉ nhận bản mã và nhãn.
+- Mở máy trạm 8890 → thấy các doanh nghiệp "Đã gửi" → "Huấn luyện trên dữ liệu đã mã hóa". Trạm tính gradient trên bản mã, mỗi doanh nghiệp chỉ giải mã tổng gradient của mình; kiểm định trên 10% dữ liệu giữ lại; chỉ cập nhật phiên bản trọng số khi tốt hơn (ngưỡng chọn để recall ≥ 90%).
+- Quay lại từng doanh nghiệp → "Đồng bộ mô hình về doanh nghiệp" → bấm Phân tích lại ở tab Tổng quan.
+
+Sinh lại dữ liệu demo: `python scripts/make_a2_training_input.py <thư mục> MPX10` và `python scripts/make_a2_contribution_input.py <thư mục>`.
