@@ -2852,11 +2852,106 @@ body > .menu-toggle { position: fixed; z-index: 30; left: 16px; bottom: 16px; ba
 .exec-summary-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
 .overview-header { margin-bottom: 24px; }
 .overview-header h1 { overflow-wrap: anywhere; line-height: 1.35; }
-.config-layout { display: block; max-width: 1040px; }
-#company-form { max-width: none; border: 1px solid var(--kt-line); border-radius: 12px; padding: 26px; background: var(--kt-surface); }
-#company-form[hidden] { display: none; }
-#company-form .profile-section { border: 0; padding: 0; margin: 0 0 22px; background: transparent; box-shadow: none; }
-#company-form .profile-section legend { font-size: 16px; margin-bottom: 14px; }
+#view-config { max-width: 1040px; }
+#view-config .profile-heading {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 112px;
+  margin: 0 0 20px !important;
+  padding: 22px min(38%, 340px) 22px 26px !important;
+  background: linear-gradient(135deg, #fffdf9 0%, #f9f0e8 65%, #f4e6dc 100%);
+  border: 1px solid #e2d1d1;
+  border-left: 4px solid var(--kt-accent);
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgb(41 23 27 / 4%);
+  overflow: hidden;
+}
+#view-config .profile-heading::after {
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(38%, 340px);
+  height: 104px;
+  opacity: 0.9;
+  mix-blend-mode: multiply;
+  mask-image: linear-gradient(90deg, transparent, #000 22%);
+}
+#view-config .profile-heading > div {
+  position: relative;
+  z-index: 1;
+  max-width: 100%;
+}
+#view-config .profile-heading h1 {
+  font-size: clamp(24px, 2.3vw, 32px);
+  line-height: 1.22;
+  margin: 0;
+}
+#view-config .profile-lead {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #6b585e;
+  margin: 8px 0 0;
+}
+#view-config .config-layout { display: block; max-width: 1040px; }
+#view-config #company-form.form {
+  max-width: none;
+  border: 1px solid #e5d8d3;
+  border-radius: 14px;
+  padding: 28px 32px 24px;
+  background: var(--kt-surface);
+  box-shadow: 0 4px 16px rgba(41, 23, 27, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+#view-config #company-form[hidden] { display: none; }
+#view-config #company-form .profile-section {
+  border: 0;
+  border-bottom: 1px solid #efe4df;
+  border-radius: 0;
+  padding: 0 0 18px;
+  margin: 0 0 22px !important;
+  background: transparent;
+  box-shadow: none;
+}
+#view-config #company-form .profile-section:last-of-type {
+  border-bottom: 0;
+  padding-bottom: 4px;
+  margin-bottom: 12px !important;
+}
+#view-config #company-form .profile-section > legend {
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--kt-ink);
+  margin: 0 0 6px;
+}
+#view-config #company-form .profile-section-note {
+  font-size: 13.5px;
+  color: var(--kt-muted);
+  margin: 0 0 18px;
+}
+#view-config #company-form .field {
+  margin: 0 0 14px;
+}
+#view-config #company-form .profile-actions {
+  border: 0;
+  border-top: 1px solid #eadad4;
+  background: transparent;
+  padding: 18px 0 0;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+#view-config #company-form .profile-actions button {
+  min-height: 38px;
+  padding: 7px 16px;
+  border-radius: 8px;
+}
 .intake-choose { display: block; }
 .routing > summary { font-size: 20px; font-weight: 700; padding: 12px 0; }
 .routing .table td { vertical-align: top; overflow-wrap: anywhere; }
@@ -2867,7 +2962,13 @@ body > .menu-toggle { position: fixed; z-index: 30; left: 16px; bottom: 16px; ba
 #queue .file-sub { display: block; margin-top: 6px; }
 #history td { overflow-wrap: anywhere; }
 .workstation-card .ws-card-top { min-height: 44px; }
-@media(max-width:700px) { #company-form { padding: 18px; } .exec-summary-grid { grid-template-columns:1fr; } .sidebar { top:0; } }
+@media(max-width:700px) {
+  #view-config .profile-heading { padding: 18px 20px !important; min-height: 0; }
+  #view-config .profile-heading::after { width: 180px; height: 70px; opacity: 0.14; top: 10px; transform: none; }
+  #view-config #company-form.form { padding: 20px 18px 18px; }
+  .exec-summary-grid { grid-template-columns:1fr; }
+  .sidebar { top:0; }
+}
 
 /* Overview follows the assistants' warm paper mastheads and quiet burgundy borders. */
 #view-overview { max-width: 1500px; padding-top: 0; }
