@@ -21,7 +21,6 @@ DOWNLOADS_COPY = Path(r'C:\Users\Admin\Downloads\DATA_TEST_MAF_SOSON')
 
 MPX_NAME = 'Công ty Cổ phần Phân phối và Dịch vụ Minh Phát — MÔ PHỎNG'
 MPX_TAX = '0999999905'
-MPX_WRONG_TAX = '0999999906'   # intentional 1-digit typo for invoice 00000714 warning test
 ACCOUNT = '11211'
 
 
@@ -42,15 +41,16 @@ def write_csv(path: Path, rows: list[dict], fieldnames: list[str] | None = None)
 def adapt_sv_xml(xml_text: str) -> str:
     # Remove cryptographic signature block (<DSCKS>...</DSCKS>) since MPX10 workspace is simulated=True
     xml_text = re.sub(r'<DSCKS>.*?</DSCKS>', '', xml_text, flags=re.DOTALL)
-    # Invoice 00000714 intentionally had wrong buyer MST 0317776667 (vs 0317776666)
-    xml_text = xml_text.replace('<MST>0317776667</MST>', f'<MST>{MPX_WRONG_TAX}</MST>')
-    xml_text = xml_text.replace('<MST>0317776666</MST>', f'<MST>{MPX_TAX}</MST>')
+    # The first-load kit contains only invoices assigned to the simulated
+    # enterprise. The original Sao Viet fixtures keep their negative cases.
+    for simulated_tax_id in ('0317776666', '0317776667', '0317779995'):
+        xml_text = xml_text.replace(f'<MST>{simulated_tax_id}</MST>', f'<MST>{MPX_TAX}</MST>')
     xml_text = xml_text.replace('Công ty TNHH Phần mềm Sao Việt', MPX_NAME)
     xml_text = xml_text.replace('<STKNHang>0451000123456</STKNHang>', f'<STKNHang>{ACCOUNT}</STKNHang>')
     return xml_text
 
 
-def build_pack_01(pack_dir: Path) -> None:
+def build_invoice_zip(pack_dir: Path) -> None:
     pack_dir.mkdir(parents=True, exist_ok=True)
 
     # 1. Agent 3 XMLs adapted to MPX10 (17 purchase + 3 sales = 20 XMLs)
@@ -69,6 +69,10 @@ def build_pack_01(pack_dir: Path) -> None:
     with zipfile.ZipFile(zip_path, 'w', compression=zipfile.ZIP_DEFLATED) as zf:
         for fname, data in xml_entries:
             zf.writestr(fname, data)
+
+
+def build_pack_01(pack_dir: Path) -> None:
+    build_invoice_zip(pack_dir)
 
     # 2. Agent 3 Tax Portal Purchase List (09_bang_ke_cong_thue_A3.csv)
     shutil.copyfile(SV / 'A_tha_vao_Nap_nhanh/4_bang_ke_cong_thue.csv', pack_dir / '09_bang_ke_cong_thue_A3.csv')
