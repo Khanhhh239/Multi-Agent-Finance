@@ -1,9 +1,0 @@
-{
-  "version": "rule-bridge-model-demo-inputs/1.0.0",
-  "tenant_id": "demo",
-  "is_simulated": true,
-  "files": {
-    "agent2/examples/rule_bridge_models/C001_5_giao_dich.json": "1da1cf3ffa197d683084bb115abbdfeb3cd3f81cf2e8bfc93d7c93e9cbd756ee",
-    "agent2/examples/rule_bridge_models/C002_5_giao_dich.json": "88f9899c545e1f20d8462bedd31b31e4c2cb23301defb97a2c7997c6bf8e2545"
-  }
-}
