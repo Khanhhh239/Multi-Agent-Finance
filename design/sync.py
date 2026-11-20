@@ -28,8 +28,8 @@ TARGETS = {
         agent='2', query=False,
         dest='agent2/sme_fraud/web', url='assets/',
         pages=[f'agent2/sme_fraud/web/{n}.html' for n in (
-            'index', 'workspace', 'bundle-workspace', 'analysis-settings',
-            'pipeline-releases', 'label-verification', 'batch-training', 'he-analysis', 'status',
+            'index', 'workspace', 'bundle-workspace', 'investigation', 'model-management',
+            'analysis-settings', 'pipeline-releases', 'label-verification', 'batch-training', 'he-analysis', 'status',
         )],
     ),
     'agent2_legacy': dict(

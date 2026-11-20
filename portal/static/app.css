@@ -197,6 +197,8 @@ input:hover, select:hover { border-color: var(--kt-muted); }
 .checks .ready, .checks .done { color: var(--kt-ok); }
 .checks .error { color: var(--kt-err); }
 .checks .offline, .checks .skipped { color: var(--kt-muted); }
+/* Selection notes are one "name — message" line, not the two-column who/result pair used by history rows. */
+#intake-selection-notes li { display: block; overflow-wrap: anywhere; }
 .checks .warn { color: var(--kt-warn); }
 .checks .detail { grid-column: 2; color: var(--kt-muted); }
 .queue-actions { display: flex; justify-content: flex-end; gap: 12px; }

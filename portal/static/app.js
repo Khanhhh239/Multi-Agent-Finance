@@ -409,14 +409,47 @@
     renderConfig();
   }
 
+  const POPOUT_SVG = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h4M10 2h4v4M6.5 9.5L14 2"/></svg>`;
+
+  function agentPageUrl(a) {
+    const page = new URL(a.url, location.href);
+    if (a.id !== "agent2") page.searchParams.set("portal", location.origin);
+    if (a.id === "agent1") page.searchParams.set("company", state.company.code || "SME");
+    return page.href;
+  }
+
+  function agentNeedsUnlock(a) {
+    return (a.id === "agent2" || (a.id === "agent1" && (state.intake.configured || state.intake.has_biometric))) && (!token || !state.intake.unlocked);
+  }
+
+  function makePopoutIcon() {
+    const span = el("span", { class: "popout-icon", "aria-hidden": "true" });
+    span.innerHTML = POPOUT_SVG;
+    return span;
+  }
+
   function renderNav() {
-    const signature = state.agents.map((a) => [a.id, a.name, a.state].join(":" )).join("|");
+    const signature = state.agents.map((a) => [a.id, a.name, a.state, a.url].join(":")).join("|") + "::" + (state.company.code || "");
     if ($("nav-agents").dataset.signature === signature) { markCurrent(); return; }
     $("nav-agents").dataset.signature = signature;
     $("nav-agents").replaceChildren(
-      ...state.agents.map((a) =>
-        el("a", { class: "nav-link", href: "#" + a.id, "data-view": a.id },
-          el("span", { class: "num", "aria-hidden": "true" }, "A" + a.number), WORKSPACE_LABEL[a.id], el("span", { class: "dot " + a.state, title: STATE_TEXT[a.state] }))));
+      ...state.agents.map((a) => {
+        const label = "Mở " + WORKSPACE_LABEL[a.id] + " ở tab riêng";
+        return el("div", { class: "nav-agent-row", "data-agent-row": a.id },
+          el("a", { class: "nav-link", href: "#" + a.id, "data-view": a.id },
+            el("span", { class: "num", "aria-hidden": "true" }, "A" + a.number),
+            el("span", { class: "nav-label" }, WORKSPACE_LABEL[a.id]),
+            el("span", { class: "dot " + a.state, title: STATE_TEXT[a.state] })),
+          el("a", {
+            class: "nav-popout" + (a.state !== "running" ? " is-offline" : ""),
+            href: agentPageUrl(a),
+            target: "_blank",
+            rel: "noopener",
+            title: label,
+            "aria-label": label,
+            onclick: (event) => openAgentStandaloneTab(a.id, event)
+          }, makePopoutIcon()));
+      }));
 
     markCurrent();
   }
@@ -467,16 +500,30 @@
     $("start-all").hidden = agentCount > 0 && running === agentCount;
     $("start-all").disabled = !state.agents.some(a => a.state === "stopped");
     $("start-all").textContent = agentCount === 1 ? "Bật " + (WORKSPACE_LABEL[state.agents[0].id] || state.agents[0].name) : "Bật tất cả";
-    const signature = JSON.stringify(state.agents.map(a => [a.id,a.state]));
+    const signature = JSON.stringify([state.company.code || "", state.agents.map((a) => [a.id, a.state, a.url])]);
     if ($("agent-grid").dataset.signature === signature) return;
     $("agent-grid").dataset.signature = signature;
-    $("agent-grid").replaceChildren(...state.agents.map(a => {
+    $("agent-grid").replaceChildren(...state.agents.map((a) => {
       const info = WORKSTATION_INFO[a.id];
-      const icon = el("span", {class:"ws-assistant-icon", "aria-hidden":"true"});
+      const icon = el("span", { class: "ws-assistant-icon", "aria-hidden": "true" });
       icon.innerHTML = info.icon;
-      return el("a", {class:"workstation-card ws-theme-"+a.id,href:"#"+a.id},
-        el("div",{class:"ws-card-top"},icon,el("span",{class:"ws-status-pill"},a.state === "running" ? "Sẵn sàng" : STATE_TEXT[a.state])),
-        el("h3",{class:"ws-title"},info.title),el("p",{class:"ws-desc"},info.desc),el("span",{class:"ws-enter-label"},"Mở trợ lý",el("span",{"aria-hidden":"true"},"→")));
+      const statusCls = "ws-status-pill" + (a.state === "starting" ? " is-starting" : a.state !== "running" ? " is-stopped" : "");
+      const popoutLabel = "Mở " + info.title + " ở tab riêng";
+      return el("article", { class: "workstation-card ws-theme-" + a.id },
+        el("div", { class: "ws-card-top" }, icon, el("span", { class: statusCls }, a.state === "running" ? "Sẵn sàng" : STATE_TEXT[a.state])),
+        el("h3", { class: "ws-title" }, info.title),
+        el("p", { class: "ws-desc" }, info.desc),
+        el("div", { class: "ws-card-actions" },
+          el("a", { class: "ws-enter-link", href: "#" + a.id }, "Mở trợ lý", el("span", { "aria-hidden": "true" }, "→")),
+          el("a", {
+            class: "ws-popout-btn" + (a.state !== "running" ? " is-offline" : ""),
+            href: agentPageUrl(a),
+            target: "_blank",
+            rel: "noopener",
+            title: popoutLabel,
+            "aria-label": popoutLabel,
+            onclick: (event) => { event.stopPropagation(); openAgentStandaloneTab(a.id, event); }
+          }, makePopoutIcon(), el("span", {}, "Tab riêng"))));
     }));
   }
 
@@ -571,10 +618,13 @@
     const notes = $("intake-selection-notes");
     notes.hidden = !extras.length;
     notes.replaceChildren(...extras.map((item) => el("li", {}, item.name + " — " + item.message)));
+    // Every selected file is already in the sealed package: nothing to write, so the step is complete rather than stuck.
+    const allRecorded = !ready.length && !rows.length && extras.length > 0 && extras.every((item) => item.done);
     $("intake-summary-agents").textContent = targets.size
       ? "Nghiệp vụ nhận tệp: " + [...targets].map((aid) => AGENT_LABEL[aid]).join(", ")
-      : "Chưa có tệp sẵn sàng để phân phối.";
-    $("intake-next").disabled = !ready.length || Boolean(intakeActivity || pendingCheck());
+      : allRecorded
+        ? "Cả " + extras.length + " tệp đã được ghi trước đó, không cần ghi lại. Xem ở Lịch sử dữ liệu."
+        : "Chưa có tệp sẵn sàng để phân phối.";
     $("reason-field").hidden = !state.package;
     const button = $("commit");
     button.disabled = !ready.length || Boolean(intakeActivity || pendingCheck());
@@ -599,15 +649,12 @@
     const [title, description] = {
       choose: ["Nạp dữ liệu chung", "Tiếp nhận tệp một lần cho các nghiệp vụ sử dụng dữ liệu chung."],
       review: ["Kiểm tra tệp", "Xem loại tệp, kỳ dữ liệu và kết quả kiểm tra theo từng agent."],
-      confirm: ["Xác nhận và nạp toàn bộ dữ liệu", "Kiểm tra danh sách tệp và nghiệp vụ nhận dữ liệu trước khi ghi."],
       history: ["Lịch sử dữ liệu", "Xem các phiên bản đã niêm phong và kết quả ghi vào từng agent."],
     }[stage];
     $("h-intake").textContent = title;
     $("intake-lead").textContent = description;
     $("intake-choose").hidden = stage !== "choose";
-    $("intake-queue").hidden = stage !== "review" && stage !== "confirm";
-    $("intake-next").hidden = stage !== "review";
-    $("commit-bar").hidden = stage !== "confirm";
+    $("intake-queue").hidden = stage !== "review";
     $("intake-history").hidden = stage !== "history";
     $("intake-versions").hidden = stage !== "history";
     for (const button of $("intake-tabs").querySelectorAll("button")) {
@@ -802,10 +849,15 @@
       source.href = a.id !== "agent4" && !state.company.code ? "#config" : "#data";
     }
 
-    const page = new URL(a.url, location.href);
-    if (a.id !== "agent2") page.searchParams.set("portal", location.origin);
-    if (a.id === "agent1") page.searchParams.set("company", state.company.code || "SME");
-    const pageUrl = page.href;
+    const pageUrl = agentPageUrl(a);
+    const popoutFab = $("agent-popout-fab");
+    if (popoutFab) {
+      const popoutLabel = "Mở " + WORKSPACE_LABEL[a.id] + " ở tab riêng";
+      popoutFab.href = pageUrl;
+      popoutFab.dataset.agent = a.id;
+      popoutFab.title = popoutLabel;
+      popoutFab.setAttribute("aria-label", popoutLabel);
+    }
 
 
     const toggleBtn = $("agent-toggle");
@@ -830,8 +882,9 @@
     }
 
     // Grace period: keep frame visible during temporary glitches (< 3 poll cycles = 12s)
-    const needsUnlock = (a.id === "agent2" || (a.id === "agent1" && (state.intake.configured || state.intake.has_biometric))) && (!token || !state.intake.unlocked);
+    const needsUnlock = agentNeedsUnlock(a);
     const isOnline = (a.state === "running" || (frame.dataset.src && a.state === "starting" && offlineFailures[a.id] < 3)) && !needsUnlock;
+    if (popoutFab) popoutFab.hidden = !isOnline;
 
     for (const id of ["agent1", "agent2", "agent3", "agent4"]) {
       const f = $("agent-frame-" + id);
@@ -853,7 +906,7 @@
               return;
             }
             frame.src = target;
-
+            if (popoutFab && currentAgent === "agent2") popoutFab.href = target;
           });
         }
         const onLoad = () => {
@@ -936,6 +989,8 @@
     const view = location.hash.slice(1) || "overview";
     document.querySelectorAll(".nav-link").forEach((a) =>
       a.dataset.view === view ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
+    document.querySelectorAll(".nav-agent-row").forEach((row) =>
+      row.classList.toggle("is-active", row.dataset.agentRow === view));
   }
 
   const TITLES = { overview: "Tổng quan", config: "Cấu hình", data: "Nạp dữ liệu" };
@@ -963,6 +1018,8 @@
       }
       const singleFrame = $("agent-frame");
       if (singleFrame) singleFrame.hidden = true;
+      const popoutFab = $("agent-popout-fab");
+      if (popoutFab) popoutFab.hidden = true;
     }
     currentAgent = isAgent ? view : null;
     if (sidebarMedia.matches) setSidebarOpen(false, $("sidebar").contains(document.activeElement));
@@ -972,6 +1029,78 @@
   }
 
   // ------------------------------------------------------------------ actions
+
+  async function openAgentStandaloneTab(aid, event) {
+    const a = state && agentById(aid);
+    if (!a) {
+      event?.preventDefault();
+      return;
+    }
+    if (a.state !== "running") {
+      event?.preventDefault();
+      toast(
+        a.state === "starting"
+          ? AGENT_LABEL[aid] + " đang khởi động, vui lòng đợi thêm giây lát rồi mở tab riêng."
+          : "Bật " + AGENT_LABEL[aid] + " rồi mở tab riêng.",
+        true
+      );
+      return;
+    }
+    if (agentNeedsUnlock(a)) {
+      event?.preventDefault();
+      location.hash = "data";
+      toast("Mở khóa phiên làm việc để mở " + WORKSPACE_LABEL[aid] + " ở tab riêng.", true);
+      return;
+    }
+    if (aid === "agent2") {
+      event?.preventDefault();
+      const tab = window.open("about:blank", "_blank");
+      if (!tab) { toast("Trình duyệt đã chặn tab mới. Cho phép mở tab rồi bấm lại.", true); return; }
+      try {
+        const version = authVersion;
+        const target = await agent2ResumeUrl(new URL("/agent2/", location.href).href);
+        if (version !== authVersion || !token || !state.intake.unlocked) { tab.close(); return; }
+        tab.sessionStorage.setItem("kt-session", token);
+        for (const key of ["agent2.company.selection", "agent2.workbench"]) {
+          const value = sessionStorage.getItem(key);
+          if (value) tab.sessionStorage.setItem(key, value);
+        }
+        tab.opener = null;
+        if (!tab.closed) tab.location.replace(target);
+      } catch (err) {
+        if (!tab.closed) tab.close();
+        toast("Không mở được Agent 2 ở tab riêng. Dùng Agent 2 ngay trong Portal.", true);
+      }
+      return;
+    }
+    if (aid === "agent1") {
+      event?.preventDefault();
+      const company = state.company.code || "SME";
+      const agentOrigin = new URL(a.url, location.href).origin;
+      // Open synchronously during the click, then sever the opener before any navigation.
+      const tab = window.open("about:blank", "_blank");
+      if (!tab) { toast("Trình duyệt đã chặn tab mới. Cho phép mở tab rồi bấm lại.", true); return; }
+      try {
+        tab.opener = null;
+        tab.document.title = "Đang kết nối Agent 1";
+        if (tab.document.body) tab.document.body.textContent = "Đang kết nối Agent 1 với doanh nghiệp của bạn…";
+        const result = await api("/api/agents/agent1/connect-link", { method: "POST", json: { company } });
+        if ((state.company.code || "SME") !== company || result.company !== company) {
+          throw new Error("Doanh nghiệp đã đổi. Mở lại tab từ trang chung.");
+        }
+        const target = new URL(result.url);
+        if (target.origin !== agentOrigin || target.pathname !== "/workspace" || target.searchParams.get("portal") !== location.origin) {
+          throw new Error("Địa chỉ kết nối không khớp Agent 1 đang mở.");
+        }
+        if (!tab.closed) tab.location.replace(target.href);
+      } catch (err) {
+        if (!tab.closed) tab.close();
+        toast(err.message, true);
+      }
+      return;
+    }
+    // Agent 3 and Agent 4 open directly via href with target="_blank" rel="noopener".
+  }
 
   async function toggleAgent(a) {
     const action = a.state === "running" || a.state === "starting" ? "stop" : "start";
@@ -1510,7 +1639,7 @@
           const query = new URLSearchParams({ name: file.name, company: code });
           const result = await api("/api/inbox?" + query, { method: "POST", body: file, headers: { "Content-Type": "application/octet-stream" }, signal: AbortSignal.timeout(660000) });
           if (result.already_recorded) extras.push({ name: file.name, done: true, message: "Đã ghi trước đó" });
-          else if (received.has(result.id)) extras.push({ name: file.name, done: false, message: "Trùng với tệp khác trong lượt chọn" });
+          else if (received.has(result.id)) extras.push({ name: file.name, done: true, message: "Tệp trùng trong lượt chọn; giữ một bản." });
           else { received.add(result.id); uploaded++; }
         } catch (err) {
           extras.push({ name: file.name, message: err.message });
@@ -1613,7 +1742,7 @@
       }
       $("reason").value = "";
       const written = res.batch.written_count ?? res.batch.files.length;
-      const already = extras.filter((item) => item.done).length;
+      const already = (res.batch.already_count || 0) + extras.filter((item) => item.done).length;
       const total = ids.length + extras.length;
       const remaining = total - written - already;
       intakeStage = remaining ? "review" : "history";
@@ -1707,6 +1836,10 @@
   });
   $("menu-toggle").addEventListener("click", () => {
     setSidebarOpen($("menu-toggle").getAttribute("aria-expanded") !== "true");
+  });
+  $("agent-popout-fab")?.addEventListener("click", (event) => {
+    if (currentAgent) openAgentStandaloneTab(currentAgent, event);
+    else event.preventDefault();
   });
   $("nav-backdrop").addEventListener("click", () => setSidebarOpen(false, true));
   $("sidebar").addEventListener("click", (event) => {
@@ -1845,7 +1978,6 @@
     const button = event.target.closest("[data-intake-stage]");
     if (button && state?.intake.unlocked) showIntakeStage(button.dataset.intakeStage);
   });
-  $("intake-next").addEventListener("click", () => showIntakeStage("confirm", true));
   $("file-input").addEventListener("change", (e) => {
     if (e.target.files.length) upload([...e.target.files]);
     e.target.value = "";

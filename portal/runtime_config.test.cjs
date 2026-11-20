@@ -75,6 +75,7 @@ for (const count of [1, 4]) {
       WORKSPACE_LABEL: { agent4: "Trợ lý hỏi đáp" }, STATE_TEXT: { stopped: "Đang tắt" },
       WORKSTATION_INFO: Object.fromEntries(ids.map(id => [id, { icon: "", title: id, desc: id }])),
       el: (tag, attrs, ...children) => ({ tag, attrs, children }),
+      agentPageUrl: (a) => "/" + a.id, makePopoutIcon: () => ({}), openAgentStandaloneTab() {},
     };
     vm.createContext(scope);
     vm.runInContext(section("  function renderOverview()", "  function checkLines("), scope);
