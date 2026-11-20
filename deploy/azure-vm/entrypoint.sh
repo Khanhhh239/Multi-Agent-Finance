@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-mkdir -p /state/home /state/portal /state/agent1 /state/agent2 /state/agent2/secrets /state/agent3/workspaces /state/agent3/law-cache /state/demo
+mkdir -p /state/home /state/portal /state/agent1 /state/agent2 /state/agent2/secrets /state/agent3/workspaces /state/agent3/law-cache /state/agent4/cache /state/demo
 chmod 700 /state/agent2/secrets
 
 # Agent 2's investigation queue (the "Phân tích" button) needs a release store sealed with a

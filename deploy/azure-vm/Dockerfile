@@ -97,10 +97,13 @@ COPY --chown=maf-demo:maf-demo deploy/azure-vm/portal-config.json /app/deploy/az
 COPY --chown=maf-demo:maf-demo deploy/azure-vm/entrypoint.sh /app/deploy/azure-vm/entrypoint.sh
 
 # Only the parent directories (not recursive) and the empty /state tree change owner here.
+# Agent 4 writes its embedding index to /app/agent4/.cache. The container runs as MAF_UID, which cannot
+# write to /app/agent4, so the cache lives in /state (created by entrypoint.sh) and survives restarts.
 RUN mkdir -p /state/portal /state/agent1 /state/agent2 /state/agent3 /state/demo \
     && chmod +x /app/deploy/azure-vm/entrypoint.sh \
     && chown maf-demo:maf-demo /app /app/agent1 /app/agent2 /app/agent3 /app/deploy /app/deploy/azure-vm \
-    && chown -R maf-demo:maf-demo /state
+    && chown -R maf-demo:maf-demo /state \
+    && ln -s /state/agent4/cache /app/agent4/.cache
 
 USER maf-demo
 EXPOSE 8800 8011 8640 8890

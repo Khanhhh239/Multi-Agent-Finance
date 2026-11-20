@@ -112,6 +112,16 @@ body {
   background: var(--accent-soft);
   border-color: var(--accent);
 }
+.chat-header select {
+  max-width: min(320px, 45vw);
+  min-height: 34px;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
 
 /* Main Grid */
 .chat {
@@ -225,28 +235,70 @@ body {
   flex-direction: column;
   gap: 16px;
 }
-.intro {
-  max-width: 820px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-top: 3px solid var(--accent);
-  border-radius: var(--radius);
-  padding: 18px 20px;
+.thread > .intro, .thread > .msg { flex: 0 0 auto; min-width: 0; }
+.intro,
+html[data-agent="4"] .intro.son-illustrated {
+  position: relative;
+  width: 100%;
+  max-width: 920px;
+  min-height: 136px;
+  background: linear-gradient(135deg, #fffdf9 0%, #f9f0e8 65%, #f4e6dc 100%);
+  border: 1px solid #e2d1d1;
+  border-left: 4px solid var(--accent);
+  border-radius: 14px;
+  padding: 22px min(38%, 340px) 22px 26px !important;
+  box-shadow: 0 2px 10px rgb(41 23 27 / 4%);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+html[data-agent="4"] .intro.son-illustrated::after {
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(36%, 300px) !important;
+  height: 112px !important;
+  opacity: 0.9;
+  mix-blend-mode: multiply;
+  mask-image: linear-gradient(90deg, transparent, #000 22%);
+}
+.intro > * {
+  position: relative;
+  z-index: 1;
 }
 .intro-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 6px;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 .intro h1 {
   color: var(--kt-accent-strong);
-  margin: 4px 0 8px;
+  font-size: clamp(24px, 2.5vw, 32px);
+  line-height: 1.22;
+  margin: 0 0 10px;
 }
 .intro p {
   margin: 0;
   color: var(--text);
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.62;
+  max-width: 58ch;
+}
+@media (max-width: 820px) {
+  .intro,
+  html[data-agent="4"] .intro.son-illustrated {
+    padding: 18px 20px 18px 22px !important;
+    min-height: 0;
+  }
+  html[data-agent="4"] .intro.son-illustrated::after {
+    width: 180px !important;
+    height: 70px !important;
+    opacity: 0.16;
+    top: 10px;
+    transform: none;
+  }
 }
 .intro .data-badge {
   display: inline-block;

@@ -26,3 +26,7 @@ portal/workspace
 agent3/agent3_tax_compliance/data/lawbase/cache
 deploy/azure-vm/.env
 deploy/azure-vm/state
+# Provider keys reach the VM container through deploy/azure-vm/.env (env_file), never the image.
+**/.env
+# Agent 4 embedding cache: the image links /app/agent4/.cache to /state, so a local copy must not be copied in.
+agent4/.cache

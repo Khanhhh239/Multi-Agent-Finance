@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hỏi đáp CFO hai sổ · Sổ Son</title>
+<title>Trợ lý hỏi đáp · Sổ Son</title>
 <link rel="stylesheet" href="/design/platform-theme.css">
 <link rel="stylesheet" href="chat.css">
 <script src="/design/platform-theme.js"></script>
@@ -13,15 +13,10 @@
 </head>
 <body>
 <header class="chat-header">
-  <a class="kt-portal-return" data-portal-return href="/#overview" target="_top" aria-label="Quay về trang chung" title="Quay về trang chung"><span aria-hidden="true">←</span><span class="kt-return-label">Trang chung</span></a>
-  <div class="chat-brand-group">
-    <strong class="chat-brand-title">Agent 4 · Hỏi đáp CFO hai sổ</strong>
-    <span class="dual-book-pill">Sổ quản trị (v_mgmt) · Sổ thuế (v_tax)</span>
-  </div>
-  <div class="chat-session-controls">
-    <span class="session-badge" id="session-badge" title="Mã phiên hội thoại đa lượt hiện tại">Phiên mới</span>
-    <button type="button" class="session-reset-btn" id="reset-session" title="Làm mới hội thoại và mở phiên mới">Làm mới hội thoại</button>
-  </div>
+  <label for="session-list">Hội thoại</label>
+  <select id="session-list" aria-label="Chọn hội thoại"></select>
+  <button type="button" class="session-reset-btn" id="new-session">+ Hội thoại mới</button>
+  <button type="button" class="session-reset-btn" id="reset-session" title="Làm mới hội thoại">Làm mới hội thoại</button>
 </header>
 <div class="chat">
   <aside class="side" aria-label="Gợi ý câu hỏi và danh mục chỉ tiêu">
@@ -41,10 +36,10 @@
       <li class="intro" id="chat-intro">
         <div class="intro-badges">
           <span class="data-badge">Một sổ cái · Hai góc nhìn</span>
-          <span class="data-badge gov">SQL tất định chỉ đọc</span>
+
         </div>
-        <h1>Hỏi đáp CFO hai sổ</h1>
-        <p>Đặt câu hỏi bằng tiếng Việt về doanh thu, lợi nhuận, công nợ, dòng tiền hay chi phí theo <strong>Sổ quản trị (v_mgmt)</strong> hoặc <strong>Sổ thuế (v_tax)</strong>. Hỗ trợ hỏi nối tiếp trong cùng phiên (ví dụ: <em>“Còn theo sổ thuế thì sao?”</em>, <em>“Chi tiết theo từng chi nhánh?”</em>) kèm bằng chứng đối chiếu minh bạch.</p>
+        <h1>Trợ lý hỏi đáp</h1>
+        <p>Đặt câu hỏi bằng tiếng Việt về doanh thu, lợi nhuận, công nợ, dòng tiền hay chi phí theo <strong>Sổ quản trị</strong> hoặc <strong>Sổ thuế</strong>. Hỗ trợ hỏi nối tiếp trong cùng phiên (ví dụ: <em>“Còn theo sổ thuế thì sao?”</em>, <em>“Chi tiết theo từng chi nhánh?”</em>) kèm bằng chứng đối chiếu minh bạch.</p>
       </li>
     </ol>
     <div class="clarification-bar" id="clarification-bar" hidden>
