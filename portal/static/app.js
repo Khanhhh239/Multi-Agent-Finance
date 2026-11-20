@@ -625,7 +625,8 @@
       : allRecorded
         ? "Cả " + extras.length + " tệp đã được ghi trước đó, không cần ghi lại. Xem ở Lịch sử dữ liệu."
         : "Chưa có tệp sẵn sàng để phân phối.";
-    $("reason-field").hidden = !state.package;
+    // A reason is only needed when something will actually be written into the sealed package.
+    $("reason-field").hidden = !state.package || !ready.length;
     const button = $("commit");
     button.disabled = !ready.length || Boolean(intakeActivity || pendingCheck());
     button.textContent = intakeActivity?.kind === "commit" ? "Đang nạp dữ liệu…" : "Nạp cả bộ";
