@@ -217,26 +217,33 @@ section.cfg { scroll-margin-top: 6rem; }
 .msg-bot .table-wrap { margin-top: .6rem; }
 
 /* Portal-managed company context; no local enterprise selector. */
-[data-agent="3"] #active-company { display:block; max-width:30vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; line-height:3rem; }
+[data-agent="3"] #active-company { max-width:30vw; min-width:0; line-height:3rem; }
+[data-agent="3"] .company-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 [data-agent="3"] #company-profile-link { display:flex; align-items:center; }
+[data-agent="3"] #company-profile-link[hidden] { display:none !important; }
 [data-agent="3"] #company-profile-link a { min-height:3rem; padding:.75rem; font-size:13px; }
-@media(max-width:600px) { [data-agent="3"] #active-company { max-width:35vw; padding:0 .5rem; font-size:13px; } }
+[data-agent="3"] #company-profile-link svg { display:none; }
 @media(max-width:600px) {
-  /* The unified topbar always shows the brand; keep only the A3 badge so the company name has room. */
   [data-agent="3"] .cds--header .kt-agent-brand > span:not(.kt-agent-badge) { display:none; }
   [data-agent="3"] .cds--header__global { position:static; flex:1; min-width:0; }
-  [data-agent="3"] .ws-picker { flex:1; min-width:0; }
-  [data-agent="3"] #active-company { max-width:none; width:100%; }
-  [data-agent="3"] .cds--header__action { flex:0 0 2.5rem; width:2.5rem; }
-  [data-agent="3"] #company-profile-link a { padding:.75rem .5rem; }
+  [data-agent="3"] .ws-picker { flex:1; min-width:0; overflow:hidden; }
+  html[data-agent="3"]:not(.in-platform) .cds--header #active-company { max-width:none; width:100%; }
   [data-agent="3"] .shared-profile .kv { grid-template-columns:minmax(0,1fr); gap:4px; }
   [data-agent="3"] .shared-profile .kv dd { margin-bottom:12px; }
-  [data-agent="3"] .ws-picker { overflow:hidden; }
 }
-@media(max-width:360px) {
-  /* The shared topbar pads these with !important; tighten them so the company name never runs under the profile link. */
+@media(max-width:440px) {
+  html[data-agent="3"]:not(.in-platform) body .cds--header { gap:4px; padding-inline:4px; }
+  html[data-agent="3"]:not(.in-platform) body .cds--header__global { gap:4px; }
   html[data-agent="3"]:not(.in-platform) .cds--header #active-company { padding-inline:4px !important; }
-  html[data-agent="3"]:not(.in-platform) body .cds--header #company-profile-link a { padding-inline:6px !important; font-size:12px !important; }
+  [data-agent="3"] .company-name {
+    display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2;
+    white-space:normal; overflow-wrap:anywhere; line-height:14px;
+  }
+  html[data-agent="3"]:not(.in-platform) body .cds--header #company-profile-link a {
+    width:32px; min-width:32px; justify-content:center; padding:0 !important;
+  }
+  [data-agent="3"] :is(.company-tax-code, #company-profile-link a > span) { display:none; }
+  [data-agent="3"] #company-profile-link svg { display:block; }
 }
 
 /* Seamless transition when embedded in portal */

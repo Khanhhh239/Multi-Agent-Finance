@@ -1,13 +1,12 @@
 // Isolated synthetic API + Chrome CDP checks. Never calls the user's running backend.
 import http from 'node:http';
 import fs from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 const root = fileURLToPath(new URL('../../src/assistant/static/', import.meta.url));
-const output = fileURLToPath(new URL('../.qa/', import.meta.url));
-fs.mkdirSync(output, { recursive: true });
 const invoices = Array.from({ length: 65 }, (_, n) => ({ key: 'invoice-' + n, number: String(n + 1).padStart(6, '0'), template: '1', symbol: 'C26TAA', role: n % 3 ? 'PURCHASE' : 'SALE', issue_date: '2026-09-15', seller_name: 'Nhà cung cấp mô phỏng ' + n, seller_tax_id: '0109999982', buyer_name: 'Doanh nghiệp mô phỏng', gross: '11000000', vat: '1000000', guard_errors: [], signed: true, descriptions: ['Hàng hóa thử nghiệm'], file: n + '.xml' }));
 const items = invoices.map((inv, n) => ({ finding_id:'finding-'+n, txn_ids:[], code: 'R02_PAYMENT', invoice_keys: [inv.key], title: 'Cần bổ sung chứng từ thanh toán', status: n % 2 ? 'REVIEW' : 'AT_RISK', amount: '1000000', detail: 'Chưa có chứng từ thanh toán phù hợp.', action: 'Kiểm tra và bổ sung chứng từ.', basis: ['Căn cứ mô phỏng, không dùng để tư vấn thuế'] }));
 const report = { meta: { schema_version:2, report_revision:'report-v2', as_of: '2026-10-15', period: ['2026-09-01', '2026-09-30'] }, invoices, items, matches: [], transactions: [], calendar: [], totals: { series:[], at_risk_vat: '33000000', at_risk_invoices: 33, penalty_estimate: '6600000', penalty_rate: .2, review_vat: '32000000', review_invoices: 32, opportunity_vat: '0' } };
@@ -62,8 +61,10 @@ await new Promise((r) => server.listen(0,'127.0.0.1',r));
 const origin = 'http://127.0.0.1:' + server.address().port;
 if (process.argv.includes('--serve')) { console.log(origin); } else {
   const chromePath = process.env.CHROME_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
-  const profile = path.join(output, 'chrome-test-' + Date.now());
+  fs.accessSync(chromePath, fs.constants.X_OK);
+  const profile = fs.mkdtempSync(path.join(tmpdir(), 'agent3-ui-check-'));
   const chrome = spawn(chromePath, ['--headless=new','--disable-gpu','--disable-renderer-backgrounding','--no-first-run','--no-default-browser-check','--remote-debugging-port=0','--user-data-dir='+profile,'about:blank'], { stdio:'ignore', windowsHide:true });
+  const chromeClosed = new Promise(resolve => chrome.once('close', resolve));
   let ws;
   const sleep = (n) => new Promise((r) => setTimeout(r,n));
   const errors = [], results = [];
@@ -92,10 +93,14 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
     const check = (name,value) => { assert.ok(value,name); results.push(name); console.log('PASS',name); };
     for (const asset of ['platform-theme.css','platform-theme.js','agent3-product.css','platform-fonts/bvp-vietnamese-400.woff2','platform-fonts/bvp-vietnamese-500.woff2','platform-fonts/bvp-vietnamese-600.woff2']) check('build asset '+asset,(await fetch(origin+'/assets/'+asset)).ok);
     await send('Page.enable'); await send('Runtime.enable');
-    await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-color-scheme',value:'light'}]});
-    await send('Page.navigate',{url:origin+'/#/?dn=demo-a'});
+    await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-color-scheme',value:'dark'}]});
+    await send('Page.navigate',{url:origin+'/?portal=http://127.0.0.1:8800#/?dn=demo-a'});
     await wait('document.querySelector("#run")');
     check('overview workspace', await evaluate('document.querySelector("h1").textContent.includes("DEMO-A")'));
+    check('standalone return uses the portal overview', await evaluate(`(() => {
+      const link = document.querySelector('[data-portal-return]');
+      return !link.hidden && link.href === 'http://127.0.0.1:8800/#overview';
+    })()`));
     // design/sync.py loads product styles first so the shared workspace tokens stay authoritative.
     check('shared theme loads after product stylesheet',await evaluate('(()=>{const s=[...document.querySelectorAll("link[rel=stylesheet]")].map(l=>l.href);return s.at(-1).includes("platform-theme.css") && s.findIndex(h=>h.includes("agent3-product"))>=0 && s.findIndex(h=>h.includes("agent3-product"))<s.length-1;})()'));
     const widths=[1440,1024,768,390,320];
@@ -103,8 +108,18 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
       await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
       await sleep(80);
       check('overview no page overflow '+width,await evaluate('document.documentElement.scrollWidth<=innerWidth'));
-      const shot=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false}); fs.writeFileSync(path.join(output,'overview-'+width+'.png'),Buffer.from(shot.data,'base64'));
     }
+    check('320px header shows the full sample company name and keeps the profile link', await evaluate(`(async () => {
+      await document.fonts.ready;
+      const label = document.querySelector('#active-company .company-name');
+      const range = document.createRange();
+      range.selectNodeContents(label.querySelector('.company-legal-name'));
+      const bounds = label.getBoundingClientRect();
+      const profile = document.querySelector('#company-profile-link a');
+      return label.clientWidth >= 100 && [...range.getClientRects()].every(rect => rect.right <= bounds.right + 1 && rect.bottom <= bounds.bottom + 1)
+        && getComputedStyle(profile.querySelector('svg')).display !== 'none'
+        && profile.getAttribute('aria-label') === 'Hồ sơ chung' && profile.href === 'http://127.0.0.1:8800/#config';
+    })()`));
     await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
     await go('#/hoa-don'); await wait('document.querySelector("#ilist tbody")');
     check('invoice page size 50',await evaluate('document.querySelectorAll("#ilist tbody tr").length===50'));
@@ -163,7 +178,6 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
     check('unified A3 topbar',await evaluate('!!document.querySelector(".kt-agent-brand .kt-agent-badge") && Math.round(document.querySelector(".cds--header").getBoundingClientRect().height)===52'));
     await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
     check('reduced motion',await evaluate('getComputedStyle(document.querySelector("#run")).transitionDuration==="0s"'));
-    const dark=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(output,"light.png"),Buffer.from(dark.data,'base64'));
     await evaluate('document.documentElement.style.zoom="2"');await sleep(100);
     check('200 percent reflow',await evaluate('document.documentElement.scrollWidth<=innerWidth'));
     await evaluate('document.documentElement.style.zoom=""');
@@ -178,7 +192,6 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
         check('mobile header does not overlap '+width,await evaluate('document.querySelector("#active-company").getBoundingClientRect().right<=document.querySelector("#company-profile-link").getBoundingClientRect().left+1'));
         check('mobile profile values readable '+width,await evaluate('document.querySelector(".shared-profile dd").clientWidth>120'));
       }
-      const shot=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});fs.writeFileSync(path.join(output,'managed-setup-'+width+'.png'),Buffer.from(shot.data,'base64'));
     }
     await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
     await go('#/thiet-lap?buoc=5');await wait('document.querySelector("#setup-msg")');
@@ -189,12 +202,17 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
     check('shared profile is read only',await evaluate('!document.querySelector("#f-profile") && document.querySelector("#cfg-ho-so a").href.endsWith("/#config")'));
     contextState='missing_profile';await evaluate('window.dispatchEvent(new Event("agent3-context-stale"))');await sleep(200);
     check('no profile routes to portal',await evaluate('!document.querySelector("#run") && !document.querySelector("#demo") && document.querySelector("h1").textContent.includes("Kết nối hồ sơ")'));
-    const empty=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(output,'managed-no-profile.png'),Buffer.from(empty.data,'base64'));
     contextState='ready';
     await send('Page.navigate',{url:origin+'/frame'});
     await wait(`!!document.querySelector('iframe')?.contentDocument?.querySelector('a[href="http://127.0.0.1:8800/#data"]')`);
     check('embedded intake uses validated portal link',await evaluate(`Array.from(document.querySelector('iframe').contentDocument.querySelectorAll('a')).some(a => a.href === 'http://127.0.0.1:8800/#data')`));
     check('no uncaught browser errors',errors.length===0);
-    fs.writeFileSync(path.join(output,'ui-results.json'),JSON.stringify({passed:results,errors,asks,decisions,origin},null,2));
-  } finally { ws?.close(); chrome.kill(); server.close(); }
+    console.log(`${results.length} checks passed`);
+  } finally {
+    ws?.close();
+    chrome.kill();
+    server.close();
+    await chromeClosed;
+    fs.rmSync(profile, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
+  }
 }

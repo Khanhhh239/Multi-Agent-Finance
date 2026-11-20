@@ -326,21 +326,35 @@ export async function loadWorkspaces() {
   state.workspaces = state.ws ? await api('/api/workspaces') : [];
   const company = $('#active-company');
   if (company) {
-    company.textContent = state.platform.profile ? `${state.platform.profile.legal_name} · MST ${state.platform.profile.tax_code}` : 'Chưa kết nối doanh nghiệp';
-    company.title = company.textContent;
+    const profile = state.platform.profile;
+    const name = profile?.legal_name || 'Chưa kết nối doanh nghiệp';
+    const taxCode = profile?.tax_code ? ` · MST ${profile.tax_code}` : '';
+    company.querySelector('.company-legal-name').textContent = name;
+    company.querySelector('.company-tax-code').textContent = taxCode;
+    company.title = name + taxCode;
   }
-  const link = $('#company-profile-link');
-  if (link) { link.innerHTML = portalLink('config', 'Hồ sơ chung'); }
+  const profileLink = $('#company-profile-link a');
+  if (profileLink) {
+    const href = portalHref('config');
+    if (href) profileLink.href = href;
+    else profileLink.removeAttribute('href');
+    profileLink.parentElement.hidden = !href;
+  }
 }
 
-export function portalLink(section = 'config', label = 'Mở hồ sơ chung tại portal') {
+function portalHref(section) {
   try {
     const u = new URL(state.platform?.portal_url);
     const securePortal = u.protocol === 'https:';
     const localPortal = u.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(u.hostname);
     if ((securePortal || localPortal) && !u.username && !u.password)
-      return `<a class="cds--btn cds--btn--tertiary" href="${esc(u.origin)}/#${esc(section)}" target="_top">${esc(label)}</a>`;
+      return `${u.origin}/#${section}`;
   } catch { /* No trusted portal connection. */ }
+}
+
+export function portalLink(section = 'config', label = 'Mở hồ sơ chung tại portal') {
+  const href = portalHref(section);
+  if (href) return `<a class="cds--btn cds--btn--tertiary" href="${esc(href)}" target="_top">${esc(label)}</a>`;
   return '<p class="muted">Khởi động Agent 3 từ portal để kết nối hồ sơ doanh nghiệp chung.</p>';
 }
 

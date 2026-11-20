@@ -13,13 +13,9 @@ function platformAssets() {
   return {
     name: 'agent3-platform-assets',
     transformIndexHtml: { order: 'post', handler(html) {
-      for (const [name, bytes] of files()) {
-        if (!name.startsWith('platform-theme')) continue;
-        const hash = createHash('sha256').update(bytes).digest('hex').slice(0, 8);
-        html = html.replace(new RegExp('/assets/' + name.replace('.', '\\.') + '(?:\\?v=[a-f0-9]+)?', 'g'), '/assets/' + name + '?v=' + hash);
-      }
-      const hash = (name) => createHash('sha256').update(files().get(name)).digest('hex').slice(0, 8);
-      return html.replace('</head>', `<link rel="stylesheet" href="/assets/platform-theme.css?v=${hash('platform-theme.css')}">\n<script src="/assets/platform-theme.js?v=${hash('platform-theme.js')}"></script>\n<link rel="stylesheet" href="/assets/agent3-product.css?v=${hash('agent3-product.css')}">\n</head>`);
+      const assets = files();
+      const hash = (name) => createHash('sha256').update(assets.get(name)).digest('hex').slice(0, 8);
+      return html.replace('</head>', `<script src="/assets/platform-theme.js?v=${hash('platform-theme.js')}"></script>\n<link rel="stylesheet" href="/assets/agent3-product.css?v=${hash('agent3-product.css')}">\n<link rel="stylesheet" href="/assets/platform-theme.css?v=${hash('platform-theme.css')}">\n</head>`);
     } },
     generateBundle() {
       for (const [name, source] of files()) this.emitFile({ type: 'asset', fileName: 'assets/' + name, source });
@@ -39,7 +35,8 @@ function platformAssets() {
 export default defineConfig({
   base: '/',
   plugins: [{ name: 'agent3-theme-links', transformIndexHtml: { order: 'pre', handler(html) {
-    return html.replace(/<link[^>]+href="\/assets\/platform-theme\.css[^>]*>/g, '').replace(/<script[^>]+src="\/assets\/platform-theme\.js[^>]*><\/script>/g, '');
+    return html.replace(/^[ \t]*<link[^>]+href="\/assets\/platform-theme\.css[^>]*>\r?\n/gm, '')
+      .replace(/^[ \t]*<script[^>]+src="\/assets\/platform-theme\.js[^>]*><\/script>\r?\n/gm, '');
   } } }, platformAssets()],
   build: { outDir: '../src/assistant/static', emptyOutDir: true, assetsDir: 'assets' },
   server: { proxy: { '/api': 'http://127.0.0.1:8640' } },
