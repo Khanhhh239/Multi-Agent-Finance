@@ -22,4 +22,14 @@ if [ -n "${AGENT3_LAW_DB:-}" ] && [ ! -f "$AGENT3_LAW_DB" ] \
   cp /app/agent3/agent3_tax_compliance/data/lawbase/legal_corpus.sqlite3 "$AGENT3_LAW_DB"
 fi
 
+# Training station (Agent 2 joint encrypted training). It talks to Agent 2 on 127.0.0.1:8766 with the
+# station secret Agent 2 writes to $AGENT2_STATION_SECRET_FILE, and is restarted if it ever exits.
+# It listens inside the container only; Caddy publishes it behind basic auth.
+(
+  while :; do
+    python -X utf8 /app/station/server.py --host 0.0.0.0 --port 8890 || true
+    sleep 2
+  done
+) &
+
 exec python -m portal.server --start-all

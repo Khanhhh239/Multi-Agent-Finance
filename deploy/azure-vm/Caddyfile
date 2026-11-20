@@ -1,6 +1,18 @@
 {$PORTAL_HOST} {
 	encode zstd gzip
-	reverse_proxy maf-demo:8800
+
+	# Agent 2 training station: operator-only, so it sits behind its own login.
+	redir /station /station/
+	handle_path /station/* {
+		basic_auth {
+			{$STATION_USER} {$STATION_PASSWORD_HASH}
+		}
+		reverse_proxy maf-demo:8890
+	}
+
+	handle {
+		reverse_proxy maf-demo:8800
+	}
 }
 
 {$AGENT1_HOST} {

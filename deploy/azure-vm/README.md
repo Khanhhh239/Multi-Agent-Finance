@@ -11,6 +11,7 @@ All four agents have public URLs. Agent 1 and Agent 3 use additional HTTPS hostn
 | Agent 2 | `https://<PORTAL_HOST>/agent2/` |
 | Agent 3 | `https://<AGENT3_HOST>/` |
 | Agent 4 | `https://<PORTAL_HOST>/agent4/` |
+| Agent 2 training station | `https://<PORTAL_HOST>/station/` (separate login) |
 
 Agent 1's usable link includes a short-lived Portal connection ticket, and Agent 2 checks the Portal session. Judges should enter through Portal so those two agents receive the right company and session context.
 
@@ -49,6 +50,14 @@ cp .env.example .env
 
 Edit `.env` and replace the three `example.com` names with the DNS names that point to this VM. Set `MAF_UID` and `MAF_GID` to the output of `id -u` and `id -g` for the account running Docker. Add the four Agent 3/4 API keys.
 
+Set the training station login. `STATION_USER` is any name; `STATION_PASSWORD_HASH` is the output of:
+
+```sh
+docker run --rm caddy:2-alpine caddy hash-password --plaintext 'choose-a-strong-password'
+```
+
+Put the hash in single quotes in `.env` (it contains `$`). Compose refuses to start while either value is missing.
+
 If the database artifacts were not included in the checkout, copy them to the VM before the next step:
 
 ```text
@@ -74,6 +83,8 @@ docker compose -f compose.yaml logs -f maf-demo
 
 Once Caddy has issued certificates, open `https://<PORTAL_HOST>`. The Portal page includes Agent 1–4. Agent 3 and Agent 4 will remain offline until their API keys are set and both demo data files exist. Agent 2's interactive access also needs the demo access policy and snapshot/model data configured in the persistent state.
 
+The Agent 2 joint training flow works like the local `run_web.bat` setup: each company opens Agent 2 → "Đóng góp huấn luyện", loads its CSV and presses "Mã hóa và gửi lên trạm"; the operator then opens `https://<PORTAL_HOST>/station/`, signs in with the station login and presses "Huấn luyện trên dữ liệu đã mã hóa"; each company finally syncs the accepted model. The station runs inside the app container on port 8890 and is reachable only through Caddy.
+
 Give judges only the Portal URL. They do not need a browser pointed at the VM's ports or your computer turned on. The VM itself must stay running for the public link to work.
 
 ## Stop and remove after the competition
@@ -86,6 +97,6 @@ This stops the containers and leaves the VM, its disk, state folder, and Caddy c
 
 ## Scope and limits
 
-This is a competition-demo setup, not a production security or availability profile. Agent 2's runtime and Concrete dependencies are Linux-capable, but HE workers remain opt-in: they need Linux-generated circuit bundles, key contexts, and worker configs before Portal will start them. Agent 2 also needs its access policy and demo snapshot/model data. Agent 4 currently uses the demo API and the warehouse file provided above.
+This is a competition-demo setup, not a production security or availability profile. Agent 2's joint training station uses CKKS (TenSEAL) inside the Agent 2 process and needs no extra worker. Concrete HE workers are opt-in, as in the local setup: they need Linux-generated circuit bundles, key contexts, and worker configs before Portal will start them. Agent 2 also needs its access policy and demo snapshot/model data. Agent 4 currently uses the demo API and the warehouse file provided above.
 
 The app container persists Portal state, Agent 1 state, Agent 2 databases, Agent 3 workspaces, and the Agent 3 legal database under `state/`. Keep a backup before rebuilding or deleting the VM.

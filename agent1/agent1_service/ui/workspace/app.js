@@ -697,11 +697,11 @@
     invoice_events:["identifier", "invoice_id", "event_type", "event_date", "known_at"],
   };
   const recordSections = [
-    {kinds:["invoices", "payments"], title:"Công nợ (AR)", description:"Tra cứu hóa đơn, số tiền còn phải thu và các khoản thanh toán đã ghi nhận."},
+    {kinds:["invoices", "payments", "actions", "invoice_events"], title:"Công nợ (AR)", description:"Tra cứu hóa đơn, số tiền còn phải thu, thanh toán đã ghi nhận, nhật ký thu nợ và sự kiện hủy hóa đơn."},
     {kinds:["outflows", "expense_payments"], title:"Lịch chi (AP)", description:"Theo dõi các khoản đến hạn, số tiền còn lại và chứng từ thanh toán theo lịch."},
     {kinds:["bank", "statements"], title:"Sao kê tài khoản", description:"Tra cứu giao dịch thực tế, số dư theo kỳ sao kê và mở đối soát từ từng khoản thu."},
   ];
-  const catalogKinds = [...recordSections.flatMap(section => section.kinds), "actions", "invoice_events"];
+  const catalogKinds = recordSections.flatMap(section => section.kinds);
   function showRecordSection(route, section) {
     const shortcut = recordSections.find(item => item.kinds.includes(section));
     const kind = $("records-kind");
@@ -716,7 +716,7 @@
     $("records-description").textContent = shortcut?.description || "Tra cứu các bảng dữ liệu doanh nghiệp và kiểm tra lịch sử nạp tệp.";
     $("records-list-title").textContent = shortcut ? labels[kind.value] : "Tra cứu bản ghi";
     $("records-search").hidden = $("records-results").hidden = !kind.value;
-    $("import-history").hidden = Boolean(shortcut);
+    $("import-history").hidden = false;
     updateRecordLinks();
     return shortcut ? "records/" + shortcut.kinds[0] : "records";
   }
@@ -884,7 +884,7 @@
     if (target) tax.href = target;
   }
   $("records-kind").onchange = () => {
-    if ($("import-history").hidden) {
+    if (recordsRoute.startsWith("records/")) {
       switchView("records/" + $("records-kind").value);
     } else {
       resetRecordFilters();
@@ -1639,7 +1639,7 @@
       notice(
         "Đã lưu " +
           fmt.format(result.accepted) +
-        " dòng: " + result.new + " mới, " + result.changed + " sửa, " + result.unchanged + " trùng giữ nguyên. Xem Sổ dữ liệu để tra cứu.",
+        " dòng: " + result.new + " mới, " + result.changed + " sửa, " + result.unchanged + " trùng giữ nguyên. Xem trong mục Sổ sách để tra cứu.",
       );
     }, $("commit-import"));
   function download(blob, name) {
@@ -1674,7 +1674,7 @@
     action(async () => {
       const path = "/records/" + kind + "/" + encodeURIComponent(id);
       const result = await api(path);
-      if (result.deleted) throw new Error("Bản ghi này đã được xóa. Xem lịch sử trong Sổ dữ liệu.");
+      if (result.deleted) throw new Error("Bản ghi này đã được xóa. Xem lịch sử nạp trong mục Sổ sách.");
       const record = result.record;
       const date = record.issue_date || record.payment_date || record.date || record.end_date;
       const summary = [labels[kind] || kind, id, date && displayDate(date),

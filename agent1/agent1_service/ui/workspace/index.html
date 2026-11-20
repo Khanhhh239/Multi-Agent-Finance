@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="/workspace-assets/style.css" />
     <script defer src="/workspace-assets/vendor/uPlot.iife.min.js"></script>
     <script defer src="/workspace-assets/app.js"></script>
-<script src="/workspace-assets/platform-theme.js?v=f3d5ceee"></script>
-<link rel="stylesheet" href="/workspace-assets/platform-theme.css?v=50232e20">
+<script src="/workspace-assets/platform-theme.js?v=d509add9"></script>
+<link rel="stylesheet" href="/workspace-assets/platform-theme.css?v=842bc44d">
 </head>
   <body>
     <a class="skip" href="#main">Đến nội dung</a>
@@ -41,17 +41,16 @@
           <button data-view="forecast"><img src="/workspace-assets/vendor/chart-line.svg" alt="">Dự báo dòng tiền</button>
         </div>
         <div class="nav-group">
+          <div class="nav-group-title">HỆ THỐNG</div>
+          <button data-view="training"><img src="/workspace-assets/vendor/refresh.svg" alt="">Cập nhật mô hình</button>
+          <button data-view="guide"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Hướng dẫn</button>
+        </div>
+        <div class="nav-group">
           <div class="nav-group-title">SỔ SÁCH</div>
           <button data-view="records" data-table="invoices"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Công nợ (AR)</button>
           <button data-view="records" data-table="outflows"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Lịch chi (AP)</button>
           <button data-view="records" data-table="bank"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Sao kê tài khoản</button>
           <button data-view="reconciliation">Đối soát công nợ</button>
-        </div>
-        <div class="nav-group">
-          <div class="nav-group-title">DỮ LIỆU & HỆ THỐNG</div>
-          <button data-view="records"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Sổ dữ liệu</button>
-          <button data-view="training"><img src="/workspace-assets/vendor/refresh.svg" alt="">Cập nhật mô hình</button>
-          <button data-view="guide"><img src="/workspace-assets/vendor/file-spreadsheet.svg" alt="">Hướng dẫn</button>
         </div>
       </nav>
       <div class="side-foot">Theo dõi công nợ, lịch chi và kế hoạch dòng tiền.</div>
@@ -596,6 +595,16 @@
               </p>
             </div>
           </div>
+          <article class="paper">
+            <h2>Quy trình sử dụng</h2>
+            <ol>
+              <li><strong>Nạp dữ liệu</strong> qua trang nạp chung của Portal (nút Nạp dữ liệu đưa bạn tới đó): hóa đơn, sao kê, thanh toán, kỳ sao kê, nhật ký thu nợ, lịch chi.</li>
+              <li><strong>Sổ sách</strong>: tra cứu bản ghi và lịch sử nạp ở Công nợ (AR), Lịch chi (AP), Sao kê tài khoản.</li>
+              <li><strong>Đối soát công nợ</strong>: tìm đề xuất, duyệt hoặc ghép thủ công khoản thu với hóa đơn.</li>
+              <li><strong>Cập nhật mô hình</strong> (mỗi 28 ngày): học lại từ lịch sử thu tiền sau khi đã đối soát.</li>
+              <li><strong>Dự báo dòng tiền</strong>: lập kế hoạch 1–13 tuần, xem khoản cần chú ý, thử kịch bản, xuất Excel và đối chiếu với sao kê thực tế.</li>
+            </ol>
+          </article>
           <div class="guide-grid">
             <article class="paper">
               <span class="chapter">01</span>
@@ -746,7 +755,7 @@
             <details>
               <summary>Cập nhật hàng tháng như thế nào?</summary>
               <p>
-                Nạp hóa đơn và khoản thu mới, rồi vào Cập nhật dự báo và bấm
+                Nạp hóa đơn và khoản thu mới, rồi vào Cập nhật mô hình và bấm
                 Kiểm tra và cập nhật. Xem kết quả và ngày cập nhật tiếp trên
                 cùng màn hình. Có thể chọn lại phiên bản đã lưu khi cần.
               </p>

@@ -85,6 +85,8 @@ COPY --chown=maf-demo:maf-demo agent1 /app/agent1
 # Docs, examples, scripts, tests, requirement files and local .runtime state stay out of the image.
 COPY --chown=maf-demo:maf-demo agent2/sme_fraud /app/agent2/sme_fraud
 COPY --chown=maf-demo:maf-demo agent2/experiments /app/agent2/experiments
+# Training station web (port 8890): stdlib only; Caddy serves it at https://<PORTAL_HOST>/station/ behind a login.
+COPY --chown=maf-demo:maf-demo station/server.py station/index.html station/app.js station/style.css /app/station/
 COPY --chown=maf-demo:maf-demo agent3/agent3_tax_compliance /app/agent3/agent3_tax_compliance
 COPY --chown=maf-demo:maf-demo agent4 /app/agent4
 COPY --chown=maf-demo:maf-demo agent4_chat /app/agent4_chat
@@ -101,6 +103,6 @@ RUN mkdir -p /state/portal /state/agent1 /state/agent2 /state/agent3 /state/demo
     && chown -R maf-demo:maf-demo /state
 
 USER maf-demo
-EXPOSE 8800 8011 8640
+EXPOSE 8800 8011 8640 8890
 ENTRYPOINT ["tini", "--"]
 CMD ["/app/deploy/azure-vm/entrypoint.sh"]

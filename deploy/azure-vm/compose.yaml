@@ -26,12 +26,14 @@ services:
       AGENT3_LAW_DB: /state/agent3/legal_corpus.sqlite3
       AGENT3_LAW_CACHE: /state/agent3/law-cache
       AGENT4_DB_PATH: /state/demo/warehouse.duckdb
+      AGENT2_STATION_SECRET_FILE: /state/agent2/station-secret.txt
     volumes:
       - ./state:/state
     expose:
       - "8800"
       - "8011"
       - "8640"
+      - "8890"
     networks:
       - edge
 
@@ -45,6 +47,8 @@ services:
       PORTAL_HOST: ${PORTAL_HOST}
       AGENT1_HOST: ${AGENT1_HOST}
       AGENT3_HOST: ${AGENT3_HOST}
+      STATION_USER: ${STATION_USER:?set STATION_USER in .env}
+      STATION_PASSWORD_HASH: ${STATION_PASSWORD_HASH:?set STATION_PASSWORD_HASH in .env (caddy hash-password)}
     ports:
       - "80:80"
       - "443:443"

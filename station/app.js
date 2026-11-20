@@ -25,7 +25,7 @@
   }
 
   async function load() {
-    const s = await api('/api/status');
+    const s = await api('api/status');
     const ok = s.worker && (s.worker.status === 'ok' || s.worker.ok || s.worker.healthy || s.worker.reachable);
     $('worker').textContent = ok ? 'Máy tính toán mã hóa sẵn sàng' : 'Máy tính toán mã hóa đang tắt (tự bật khi huấn luyện)';
     $('contrib').replaceChildren(...s.contributions.map(c => { const tr = el('tr'); tr.append(el('td', c.company_id), el('td', c.submitted ? 'Đã gửi' : 'Chưa gửi', c.submitted ? 'ok' : 'muted'), el('td', c.rows || '—'), el('td', c.submitted ? c.label_1 : '—'), el('td', time(c.submitted_at))); return tr; }));
@@ -39,7 +39,7 @@
   async function poll() {
     if (!active) return;
     try {
-      const doc = await api('/api/job', { run_id: active });
+      const doc = await api('api/job', { run_id: active });
       renderRun(doc);
       if (doc.state === 'running') { setTimeout(poll, 2000); return; }
       active = null; if (doc.state === 'failed') notice(doc.error); await load();
@@ -48,7 +48,7 @@
 
   $('run').onclick = async () => {
     notice(''); $('run').disabled = true;
-    try { const doc = await api('/api/run', { rounds: Number($('rounds').value) }); active = doc.run_id; renderRun(doc); poll(); }
+    try { const doc = await api('api/run', { rounds: Number($('rounds').value) }); active = doc.run_id; renderRun(doc); poll(); }
     catch (e) { notice(e.message); $('run').disabled = false; }
   };
   load().catch(e => notice(e.message));

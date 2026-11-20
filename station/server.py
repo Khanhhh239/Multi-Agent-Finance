@@ -3,7 +3,8 @@
 Giao diện tối giản cho người vận hành trạm: doanh nghiệp nào đã gửi dữ liệu (đã mã hóa), số nhãn, nút huấn luyện,
 tiến độ, kết quả kiểm định và lịch sử phiên bản trọng số (chỉ cập nhật khi tốt hơn).
 Trạm gọi backend Agent 2 qua cổng loopback bằng khóa trạm cục bộ; trạm không có khóa giải mã của doanh nghiệp.
-Chạy: python station/server.py [--port 8890]
+Chạy: python station/server.py [--port 8890] [--host 127.0.0.1]
+Mặc định chỉ nghe trên 127.0.0.1. Bản deploy nghe trong container và đặt sau Caddy có đăng nhập (deploy/azure-vm/Caddyfile).
 """
 import argparse
 import json
@@ -64,6 +65,9 @@ class Handler(BaseHTTPRequestHandler):
         self.send(404, {'error': 'Không có trang này.'})
 
     def do_POST(self):
+        # Chỉ nhận JSON: form của trang khác không gửi được kiểu này nếu không qua preflight CORS (trạm không cho phép).
+        if (self.headers.get('Content-Type') or '').split(';')[0].strip().lower() != 'application/json':
+            return self.send(415, {'error': 'Yêu cầu phải là JSON.'})
         length = int(self.headers.get('Content-Length') or 0)
         body = json.loads(self.rfile.read(length) or b'{}') if 0 < length < 65536 else {}
         if self.path == '/api/run':
@@ -76,9 +80,10 @@ class Handler(BaseHTTPRequestHandler):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--port', type=int, default=8890)
+    p.add_argument('--host', default=os.environ.get('AGENT2_STATION_BIND_HOST', '127.0.0.1'))
     a = p.parse_args()
-    server = ThreadingHTTPServer(('127.0.0.1', a.port), Handler)
-    print(f'Trạm huấn luyện: http://127.0.0.1:{a.port}', flush=True)
+    server = ThreadingHTTPServer((a.host, a.port), Handler)
+    print(f'Trạm huấn luyện: http://{a.host}:{a.port}', flush=True)
     server.serve_forever()
 
 
