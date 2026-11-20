@@ -15,7 +15,7 @@ details.guide .guide-body { padding: 0 1rem 0.75rem; font-size: 0.875rem; }
 details.guide ol, details.guide ul { margin: 0.25rem 0 0.75rem 1.25rem; padding: 0; }
 .plain { background: var(--cds-layer-accent, #e8e8e8); border-left: 3px solid var(--cds-support-info, #0043ce); padding: 0.75rem 1rem; margin: 0 0 1rem; font-size: 0.9375rem; }
 .app { margin-left: 16rem; padding: 4rem 2rem 4rem; min-height: 100vh; box-sizing: border-box; max-width: none; width: calc(100% - 16rem); }
-.side { top: 3rem; width: 16rem; display: flex; flex-direction: column; }
+.side { top: var(--kt-topbar-h, 52px); width: 16rem; display: flex; flex-direction: column; }
 .side .cds--side-nav__items { flex: 1; overflow-y: auto; }
 .side-foot { padding: 1rem; font-size: 0.75rem; line-height: 1.33; color: var(--cds-text-secondary); border-top: 1px solid var(--cds-border-subtle); }
 .cds--side-nav__link[aria-current='page'] { background: var(--cds-layer-selected); }
@@ -72,7 +72,7 @@ tr.clickable:hover td { background: var(--cds-layer-hover); }
 .law-prov.l3 { font-weight: 600; margin-top: 0.75rem; }
 .law-prov.l4 { padding-left: 1rem; }
 .law-prov.l5 { padding-left: 2rem; }
-.drawer { position: fixed; top: 3rem; right: 0; bottom: 0; width: min(40rem, 100%); background: var(--cds-layer); border-left: 1px solid var(--cds-border-subtle);
+.drawer { position: fixed; top: var(--kt-topbar-h, 52px); right: 0; bottom: 0; width: min(40rem, 100%); background: var(--cds-layer); border-left: 1px solid var(--cds-border-subtle);
   box-shadow: -2px 0 6px rgba(0,0,0,.2); z-index: 8000; overflow-y: auto; padding: 1.5rem; box-sizing: border-box; }
 .drawer h2 { font-size: 1.25rem; font-weight: 400; margin: 0 4.5rem 1rem 0; }
 .drawer .close { position: absolute; top: 1rem; right: 1rem; }
@@ -222,7 +222,8 @@ section.cfg { scroll-margin-top: 6rem; }
 [data-agent="3"] #company-profile-link a { min-height:3rem; padding:.75rem; font-size:13px; }
 @media(max-width:600px) { [data-agent="3"] #active-company { max-width:35vw; padding:0 .5rem; font-size:13px; } }
 @media(max-width:600px) {
-  [data-agent="3"] .cds--header__name { display:none; }
+  /* The unified topbar always shows the brand; keep only the A3 badge so the company name has room. */
+  [data-agent="3"] .cds--header .kt-agent-brand > span:not(.kt-agent-badge) { display:none; }
   [data-agent="3"] .cds--header__global { position:static; flex:1; min-width:0; }
   [data-agent="3"] .ws-picker { flex:1; min-width:0; }
   [data-agent="3"] #active-company { max-width:none; width:100%; }
@@ -230,6 +231,12 @@ section.cfg { scroll-margin-top: 6rem; }
   [data-agent="3"] #company-profile-link a { padding:.75rem .5rem; }
   [data-agent="3"] .shared-profile .kv { grid-template-columns:minmax(0,1fr); gap:4px; }
   [data-agent="3"] .shared-profile .kv dd { margin-bottom:12px; }
+  [data-agent="3"] .ws-picker { overflow:hidden; }
+}
+@media(max-width:360px) {
+  /* The shared topbar pads these with !important; tighten them so the company name never runs under the profile link. */
+  html[data-agent="3"]:not(.in-platform) .cds--header #active-company { padding-inline:4px !important; }
+  html[data-agent="3"]:not(.in-platform) body .cds--header #company-profile-link a { padding-inline:6px !important; font-size:12px !important; }
 }
 
 /* Seamless transition when embedded in portal */

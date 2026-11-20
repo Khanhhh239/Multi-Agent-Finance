@@ -96,7 +96,8 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
     await send('Page.navigate',{url:origin+'/#/?dn=demo-a'});
     await wait('document.querySelector("#run")');
     check('overview workspace', await evaluate('document.querySelector("h1").textContent.includes("DEMO-A")'));
-    check('product stylesheet follows shared theme',await evaluate('[...document.querySelectorAll("link[rel=stylesheet]")].at(-1).href.includes("agent3-product")'));
+    // design/sync.py loads product styles first so the shared workspace tokens stay authoritative.
+    check('shared theme loads after product stylesheet',await evaluate('(()=>{const s=[...document.querySelectorAll("link[rel=stylesheet]")].map(l=>l.href);return s.at(-1).includes("platform-theme.css") && s.findIndex(h=>h.includes("agent3-product"))>=0 && s.findIndex(h=>h.includes("agent3-product"))<s.length-1;})()'));
     const widths=[1440,1024,768,390,320];
     for(const width of widths){
       await send('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});
@@ -158,11 +159,11 @@ if (process.argv.includes('--serve')) { console.log(origin); } else {
     check('server failure distinct from missing report',await evaluate('document.querySelector("#app").textContent.includes("Lỗi máy chủ mô phỏng")'));
     reportMode='normal';await go('#/hoa-don');
     await go('#/');await wait('document.querySelector("#run")');
-    await evaluate('document.querySelector(".theme-toggle").click()');
-    check('dark mode',await evaluate('document.body.classList.contains("cds--g100")'));
+    check('light theme only (no dark toggle)',await evaluate('!document.querySelector(".theme-toggle") && document.body.className==="cds--g10" && !document.querySelector(".cds--header.cds--g100")'));
+    check('unified A3 topbar',await evaluate('!!document.querySelector(".kt-agent-brand .kt-agent-badge") && Math.round(document.querySelector(".cds--header").getBoundingClientRect().height)===52'));
     await send('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
     check('reduced motion',await evaluate('getComputedStyle(document.querySelector("#run")).transitionDuration==="0s"'));
-    const dark=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(output,'dark.png'),Buffer.from(dark.data,'base64'));
+    const dark=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(output,"light.png"),Buffer.from(dark.data,'base64'));
     await evaluate('document.documentElement.style.zoom="2"');await sleep(100);
     check('200 percent reflow',await evaluate('document.documentElement.scrollWidth<=innerWidth'));
     await evaluate('document.documentElement.style.zoom=""');
