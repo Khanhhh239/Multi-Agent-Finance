@@ -20,7 +20,7 @@ if [ -f "$law_db" ]; then
   cp -n "$law_db" "$HERE/state/agent3/legal_corpus.sqlite3"
   echo "Copied Agent 3 legal corpus."
 else
-  echo "Agent 3 legal corpus not found at $law_db; copy it to deploy/azure-vm/state/agent3/legal_corpus.sqlite3 before starting." >&2
+  echo "Agent 3 legal corpus not found at $law_db; Agent 3 will build it from vbpl.vn on first start (core documents, a few minutes)."
 fi
 
 agent2_files="snapshots-v2.sqlite3 models-v2.sqlite3 case-queue.sqlite3 remediation.sqlite3 analysis-bindings.json"

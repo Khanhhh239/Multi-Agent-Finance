@@ -21,7 +21,7 @@ Agent 1's usable link includes a short-lived Portal connection ticket, and Agent
 - Three DNS A records pointing to the VM: one for Portal, one for Agent 1, and one for Agent 3.
 - In the Azure network security group, allow inbound TCP 80 and 443. Limit SSH (22) to your own IP. Do not open ports 8011, 8040, 8640, 8766, or 8800.
 - Provider API credentials for Agent 3 and Agent 4. Their variables are listed in `.env.example`.
-- The Agent 4 demo warehouse and Agent 3 legal corpus. `bootstrap-data.sh` copies them from the current checkout when those local artifacts are present.
+- The Agent 4 demo warehouse. `bootstrap-data.sh` copies it (and an Agent 3 legal corpus, if one exists locally) from the current checkout. The Agent 3 legal corpus does not have to be copied: when `state/agent3/legal_corpus.sqlite3` is missing, Agent 3 downloads the core tax documents from vbpl.vn on first start (about 2 minutes, needs outbound HTTPS) and then embeds them with the configured embedding API. A full sync can be started later from Agent 3's legal corpus page. Set `AGENT3_LAW_AUTOBUILD=0` to turn this off.
 
 The repository's current resource note recommends 8 vCPU, 32 GB RAM, and 200 GB SSD for the full workload. A smaller VM may start the interfaces but has not been verified for all analysis paths. The container build also needs outbound access to download Python, Node, CPU PyTorch, and Concrete packages.
 
@@ -62,10 +62,10 @@ If the database artifacts were not included in the checkout, copy them to the VM
 
 ```text
 deploy/azure-vm/state/demo/warehouse.duckdb
-deploy/azure-vm/state/agent3/legal_corpus.sqlite3
+deploy/azure-vm/state/agent3/legal_corpus.sqlite3   (optional: built automatically when missing)
 ```
 
-Run the bootstrap helper from `deploy/azure-vm`. It copies only those two demo artifacts; it does not copy Portal accounts, passwords, agent keys, or local state.
+Run the bootstrap helper from `deploy/azure-vm`. It copies only those two demo artifacts when present; it does not copy Portal accounts, passwords, agent keys, or local state.
 
 ```sh
 ./bootstrap-data.sh

@@ -25,6 +25,7 @@ services:
       AGENT1_REPORT_DIR: /state/agent1/reports
       AGENT3_LAW_DB: /state/agent3/legal_corpus.sqlite3
       AGENT3_LAW_CACHE: /state/agent3/law-cache
+      AGENT3_ADMIN_STORE: /state/agent3/admin.json
       AGENT4_DB_PATH: /state/demo/warehouse.duckdb
       AGENT2_STATION_SECRET_FILE: /state/agent2/station-secret.txt
     volumes:
