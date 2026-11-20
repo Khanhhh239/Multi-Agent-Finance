@@ -21,7 +21,8 @@ SYSTEM = (
     'Không dùng hiểu biết bên ngoài, không suy diễn, không bịa số liệu hay số hiệu văn bản. '
     'Mỗi câu trả lời phải ghi mã đoạn làm căn cứ trong trường sources và chép nguyên văn cụm từ làm căn cứ vào trường quote '
     '(chép đúng từng chữ, không sửa). Nếu các đoạn không đủ để trả lời, đặt abstain = true và ghi trong trường missing điều còn thiếu. '
-    'Trả lời bằng tiếng Việt, ngắn gọn, mỗi câu một ý.')
+    'Trả lời bằng tiếng Việt, ngắn gọn, mỗi câu một ý. '
+    'Trả về JSON {"abstain": false, "answer": [{"text": "...", "sources": ["P1"], "quote": "..."}], "missing": ""}.')
 
 SCHEMA = {
     'type': 'object',

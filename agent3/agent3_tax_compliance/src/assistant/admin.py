@@ -22,10 +22,12 @@ from fastapi import HTTPException, Request
 from fastapi.responses import JSONResponse
 
 PROJECT = Path(__file__).resolve().parents[2]
-STORE = Path(os.environ.get('AGENT3_ADMIN_STORE') or PROJECT / 'data/admin.json')   # override only for interface tests
+STORE = Path(os.environ.get('AGENT3_ADMIN_STORE') or PROJECT / 'data/admin.json')   # deploy keeps it on the state volume
 COOKIE = 'agent3_admin'
 TTL = 30 * 60
 MIN_LEN = 8
+# Public demo shared by many viewers: one fixed password from the ignored .env, never from the source repository.
+FIXED_PASSWORD = os.environ.get('AGENT3_ADMIN_PASSWORD', '')
 _sessions: dict[str, float] = {}
 _fails = dict(n=0, until=0.0)
 
@@ -111,6 +113,11 @@ def install(app):
 
     app.middleware('http')(middleware)
 
+    # With AGENT3_ADMIN_PASSWORD set, the password is rewritten at every start and cannot be changed on the site, so nobody
+    # can claim it by opening the site first. Without it (a single office computer) the first-run setup page is used.
+    if FIXED_PASSWORD:
+        set_password(FIXED_PASSWORD)
+
     @app.get('/api/admin/status')
     def admin_status(request: Request):
         return dict(configured=configured(), logged_in=is_admin(request), ttl_minutes=TTL // 60)
@@ -140,6 +147,8 @@ def install(app):
 
     @app.post('/api/admin/password')
     def admin_password(old: str = Body(...), new: str = Body(...)):
+        if FIXED_PASSWORD:
+            raise HTTPException(403, 'Bản demo dùng mật khẩu quản trị cố định; không đổi được trên trang này.')
         if not check(old):
             raise HTTPException(401, 'mật khẩu hiện tại không đúng')
         set_password(new)

@@ -52,6 +52,7 @@ for (const css of ['platform-theme.css', 'agent3-product.css', ...fs.readdirSync
   const text = fs.readFileSync(path.join(build, 'assets', css), 'utf8');
   for (const [, url] of text.matchAll(/url\(["']?(\/assets\/[^)'"?]+)["']?\)/g)) assert.ok(fs.existsSync(path.join(build, url)), url);
 }
-assert.ok(html.indexOf('/assets/agent3-product.css') > html.indexOf('/assets/platform-theme.css'));
+// The shared platform theme loads last so the unified topbar overrides Agent 3's own header styles.
+assert.ok(html.indexOf('/assets/agent3-product.css') < html.indexOf('/assets/platform-theme.css'));
 assert.deepEqual(fs.readFileSync(path.join(build, 'assets/agent3-product.css')), fs.readFileSync(new URL('../src/product.css', import.meta.url)));
 console.log('PASS build assets, content hashes, local fonts and Agent 3 stylesheet order');

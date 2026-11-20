@@ -1,6 +1,7 @@
 """Legal corpus commands.
 
-  python -m src.lawbase.cli sync [--limit N] [--core-only]
+  python -m src.lawbase.cli sync [--limit N] [--core-only] [--no-embed]   tải và dựng kho, rồi dựng vectơ
+  python -m src.lawbase.cli embed         chỉ dựng vectơ còn thiếu (hoặc dựng lại khi đổi mô hình embedding)
   python -m src.lawbase.cli status
   python -m src.lawbase.cli search "câu hỏi" [--as-of YYYY-MM-DD] [-k 5]
   python -m src.lawbase.cli show 108/2025/QH15 [--article 16]
@@ -26,6 +27,8 @@ def main(argv=None):
     s.add_argument('--limit', type=int)
     s.add_argument('--core-only', action='store_true')
     s.add_argument('--reparse', action='store_true', help='phân tích lại từ bộ nhớ đệm, không tải lại')
+    s.add_argument('--no-embed', action='store_true', help='không dựng vectơ sau khi đồng bộ')
+    sub.add_parser('embed')
     sub.add_parser('status')
     q = sub.add_parser('search')
     q.add_argument('query')
@@ -49,6 +52,16 @@ def main(argv=None):
                          ensure_ascii=False))
         for f in rep.failed[:10]:
             print('LỖI', f)
+        if a.no_embed:
+            return 0
+        a.cmd = 'embed'
+    if a.cmd == 'embed':
+        from .dense import build
+        try:
+            print('đã thêm', build(DEFAULT_DB, progress=lambda m: print(m, flush=True)), 'vectơ')
+        except Exception as e:  # noqa: BLE001 - keyword search works without vectors; rerun to continue
+            print(f'Dựng vectơ chưa xong (chạy lại lệnh embed để tiếp tục): {e}')
+            return 1
         return 0
     c = Corpus(DEFAULT_DB)
     try:

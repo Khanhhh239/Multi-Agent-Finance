@@ -718,24 +718,65 @@ def law_doc(doc_id: str):
         c.close()
 
 
-@app.post('/api/law/sync')
-def law_sync_start(core_only: bool = False):
-    with _lock:
-        if _law_job['running']:
-            return _law_job
-        if running_sync(LAW_DB):
-            raise HTTPException(409, 'một lần đồng bộ khác đang chạy (từ dòng lệnh); chờ xong rồi thử lại')
-        _law_job.update(running=True, done=0, last='', result=None, error=None)
-
-    def work():
-        try:
+def _law_work(core_only: bool, fetch: bool = True):
+    """Sync the corpus from vbpl.vn (unless fetch is False), then embed the chunks that have no vector yet.
+    Embedding needs the API key and may stop at a rate limit; keyword search works without it and the
+    next run continues where this one stopped."""
+    from ..lawbase import dense
+    try:
+        if fetch:
             rep = law_sync(core_only=core_only, progress=lambda n, m: _law_job.update(done=n, last=f'{m["doc_type"]} {m["doc_num"]}'))
             _law_job['result'] = dict(fetched=rep.fetched, unchanged=rep.unchanged, failed=len(rep.failed), changes=len(rep.changes))
-        except Exception as e:  # noqa: BLE001
-            _law_job['error'] = f'{type(e).__name__}: {e}'
-        finally:
-            _law_job['running'] = False
-    threading.Thread(target=work, daemon=True).start()
+        _law_job['last'] = 'đang dựng vectơ cho tìm kiếm ngữ nghĩa'
+        try:
+            added = dense.build(LAW_DB, progress=lambda msg: _law_job.update(last=f'vectơ: {msg}'))
+            _law_job['result'] = dict(_law_job['result'] or {}, embedded=added)
+            _law_job['last'] = ''
+        except Exception as e:  # noqa: BLE001 - the corpus is usable with keyword search alone
+            _law_job['last'] = ''
+            _law_job['error'] = f'Dựng vectơ chưa xong (tìm theo từ khoá vẫn chạy): {type(e).__name__}: {e}'
+    except Exception as e:  # noqa: BLE001
+        _law_job['error'] = f'{type(e).__name__}: {e}'
+    finally:
+        _law_job['running'] = False
+
+
+def _start_law_job(core_only: bool, fetch: bool = True) -> bool:
+    with _lock:
+        if _law_job['running'] or running_sync(LAW_DB):
+            return False
+        _law_job.update(running=True, done=0, last='', result=None, error=None)
+    threading.Thread(target=_law_work, args=(core_only, fetch), daemon=True).start()
+    return True
+
+
+@app.on_event('startup')
+def law_corpus_startup():
+    """A missing corpus is built from vbpl.vn (core documents first, a few minutes); an existing one gets vectors
+    for chunks that lack them, or new vectors when the embedding model changed. AGENT3_LAW_AUTOBUILD=0 turns this off."""
+    if os.environ.get('AGENT3_LAW_AUTOBUILD', '1') == '0':
+        return
+    try:
+        empty = not LAW_DB.exists()
+        if not empty:
+            c = Corpus(LAW_DB)
+            try:
+                empty = not c.db.execute('SELECT 1 FROM documents LIMIT 1').fetchone()
+            finally:
+                c.close()
+        _start_law_job(core_only=True, fetch=empty)
+    except Exception as e:  # noqa: BLE001 - never block the web start
+        _law_job['error'] = f'Không tự dựng được kho luật: {type(e).__name__}: {e}'
+
+
+@app.post('/api/law/sync')
+def law_sync_start(core_only: bool = False):
+    if _law_job['running']:
+        return _law_job
+    if not _start_law_job(core_only):
+        if _law_job['running']:
+            return _law_job
+        raise HTTPException(409, 'một lần đồng bộ khác đang chạy (từ dòng lệnh); chờ xong rồi thử lại')
     return _law_job
 
 

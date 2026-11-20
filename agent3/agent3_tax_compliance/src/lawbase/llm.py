@@ -8,6 +8,8 @@ import urllib.request
 from ..runtime_config import env
 
 CHARS_PER_TOKEN = 3.2
+# Cloudflare in front of some providers (Groq) answers 403 "error code: 1010" to urllib's default Python-urllib agent.
+USER_AGENT = 'agent3-tax-assistant/1.0'
 
 
 class LLMUnavailable(RuntimeError):
@@ -50,7 +52,7 @@ class OpenAICompatible:
         req = urllib.request.Request(
             self._endpoint(),
             data=json.dumps(body).encode(),
-            headers={'Content-Type': 'application/json', 'Authorization': f'Bearer {self.api_key}'},
+            headers={'Content-Type': 'application/json', 'Authorization': f'Bearer {self.api_key}', 'User-Agent': USER_AGENT},
         )
         started = time.time()
         try:
