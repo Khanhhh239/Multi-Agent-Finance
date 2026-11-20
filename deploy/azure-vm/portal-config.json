@@ -10,6 +10,7 @@
     },
     "agent2": {
       "root": "/app/agent2",
+      "python": "/app/agent2/.he-venv/bin/python",
       "port": 8766,
       "snapshot_db": "/state/agent2/snapshots-v2.sqlite3",
       "model_db": "/state/agent2/models-v2.sqlite3",
@@ -18,6 +19,9 @@
       "env": {
         "AGENT2_CASE_QUEUE_DB": "/state/agent2/case-queue.sqlite3",
         "AGENT2_REMEDIATION_DB": "/state/agent2/remediation.sqlite3",
+        "AGENT2_WORKSPACE_DIR": "/state/agent2/workspace",
+        "AGENT2_STATION_SECRET_FILE": "/state/agent2/station-secret.txt",
+        "AGENT2_RELEASE_CONFIG": "/state/agent2/release-runtime.json",
         "AGENT2_HE_PYTHON": "/app/agent2/.he-venv/bin/python"
       }
     },

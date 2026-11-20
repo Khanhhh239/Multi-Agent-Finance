@@ -1,9 +1,0 @@
-envs/
-artifacts/models/
-artifacts/cache/
-runs/
-reports/figures/
-*.pyc
-__pycache__/
-.pytest_cache/
-

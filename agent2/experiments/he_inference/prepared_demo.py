@@ -173,7 +173,7 @@ def worker_service(root, state_dir=None):
                    '--config',str(service_config),'--port','0','--ready-file',str(ready)]
         with (Path(temp)/'worker.log').open('wb') as log:
             process = subprocess.Popen(command, cwd=bundle, env=env, stdout=log, stderr=subprocess.STDOUT,
-                creationflags=subprocess.CREATE_NO_WINDOW)
+                creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
             try:
                 deadline=time.monotonic()+25
                 while not ready.exists():

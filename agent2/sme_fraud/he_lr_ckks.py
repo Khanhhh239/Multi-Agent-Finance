@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import base64
 import json
+import os
 from pathlib import Path
 
 import tenseal as ts
@@ -39,9 +40,14 @@ class CompanyNode:
 
     def __init__(self, root, company: str):
         self.dir = Path(root) / company
-        self.dir.mkdir(parents=True, exist_ok=True)
+        self.dir.mkdir(parents=True, exist_ok=True, mode=0o700)
         self.company = company
         self.secret_file = self.dir / 'ckks-secret.ctx'
+        if os.name != 'nt':
+            # The secret key must stay owner-only on a shared Linux host (mkdir's mode is reduced by umask).
+            os.chmod(self.dir, 0o700)
+            if self.secret_file.is_file():
+                os.chmod(self.secret_file, 0o600)
         if self.secret_file.is_file():
             self.ctx = ts.context_from(self.secret_file.read_bytes())
         else:
@@ -49,7 +55,11 @@ class CompanyNode:
             ctx.global_scale = SCALE
             ctx.generate_galois_keys()
             ctx.generate_relin_keys()
-            self.secret_file.write_bytes(ctx.serialize(save_secret_key=True))
+            temporary = self.dir / '.ckks-secret.ctx.tmp'
+            fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | getattr(os, 'O_BINARY', 0), 0o600)
+            with os.fdopen(fd, 'wb') as stream:
+                stream.write(ctx.serialize(save_secret_key=True))
+            os.replace(temporary, self.secret_file)
             self.ctx = ctx
 
     def public_context(self) -> bytes:

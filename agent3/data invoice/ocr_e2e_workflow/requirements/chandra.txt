@@ -1,4 +1,0 @@
-chandra-ocr[hf]>=2
-Pillow>=10
-PyYAML==6.0.3
-tqdm>=4.66,<5

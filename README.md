@@ -65,4 +65,4 @@ Lệnh `.\run_web.ps1` tự động thực hiện trọn gói:
 ## Lưu ý bảo mật & phạm vi dữ liệu
 
 - Toàn bộ số liệu đi kèm (`MPX10`, `C001`, `C002`, `Đại Phát`, `Sao Việt`) là **dữ liệu mô phỏng** phục vụ kiểm thử và trình diễn kỹ thuật.
-- Hệ thống mặc định chỉ lắng nghe trên `127.0.0.1` (cục bộ), dữ liệu không rời khỏi máy của doanh nghiệp. Khi triển khai lên máy chủ tập trung, tham khảo thêm [docs/DEPLOY_SERVER.md](docs/DEPLOY_SERVER.md).
+- Hệ thống mặc định chỉ lắng nghe trên `127.0.0.1` (cục bộ), dữ liệu không rời khỏi máy của doanh nghiệp. Khi triển khai lên máy chủ, xem [deploy/azure-vm/README.md](deploy/azure-vm/README.md).

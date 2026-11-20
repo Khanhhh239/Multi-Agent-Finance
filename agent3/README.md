@@ -5,7 +5,6 @@ Phân hệ kiểm tra hóa đơn điện tử, đối chiếu chứng từ thanh
 ## Cấu trúc thư mục
 
 - **`agent3_tax_compliance/`**: Ứng dụng FastAPI chính đang phục vụ trên nền tảng Sổ Son (cổng `8640`), bao gồm bộ đọc hóa đơn XML/ZIP, đối chiếu sao kê & bảng kê thuế, kho luật `lawbase` và trợ lý hỏi đáp điều khoản luật.
-- **`data invoice/` & `scripts/`**: Mô-đun bóc tách chứng từ ảnh/PDF (OCR) phục vụ mở rộng đầu vào hóa đơn quét.
 
 ## Chạy trong nền tảng chung (Khuyên dùng)
 

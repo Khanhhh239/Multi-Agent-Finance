@@ -12,14 +12,8 @@ Tạo `agent3/.env` từ [`.env.example`](../.env.example), điền `AGENT3_LLM_
 | `src/lawbase/` | Kho văn bản pháp luật thuế: thu thập, tách điều khoản, tìm kiếm lai (BM25 + Dense Vector) và xếp hạng lại qua API |
 | `rules/`, `configs/` | Bộ quy tắc rủi ro thuế và danh mục quy định chi tiêu, ngày nghỉ |
 | `webui/` | Mã nguồn giao diện (đã biên dịch sẵn vào `src/assistant/static/`) |
-| `demo/` | Bộ chứng từ mẫu (`DN_Phan_mem_Sao_Viet`) |
-| `tests/` | Bộ kiểm thử tự động |
+| `migrations/` | Lược đồ SQLite |
 
-## Chạy & Kiểm thử
+## Chạy
 
-Khi dùng chung nền tảng, chạy `.\run_web.ps1` ở thư mục gốc dự án. Để chạy kiểm thử riêng của Agent 3:
-
-```powershell
-Set-Location agent3\agent3_tax_compliance
-..\.venv\Scripts\python.exe -m pytest tests/assistant tests/lawbase tests/xml_v1 -q
-```
+Khi dùng chung nền tảng, chạy `.\run_web.ps1` ở thư mục gốc dự án. Chạy riêng Agent 3: `chay_agent3.bat` (mở `http://127.0.0.1:8640`).

@@ -20,9 +20,7 @@ Từ thư mục gốc repo:
 - Agent 2 chạy tại cổng `8766` và kết nối qua cầu bảo mật của Portal tại `http://127.0.0.1:8800/#agent2`.
 - Tệp giao dịch (`CSV`, `XLSX` hoặc `JSON` hợp đồng) có thể nạp ngay tại mục **Nạp dữ liệu chung** của Portal hoặc nạp bảng đa nguồn 35 luật trực tiếp trong giao diện Agent 2.
 
-## Kiểm thử tự động
+## Triển khai lên máy chủ Linux
 
-```powershell
-Set-Location agent2
-.\.venv\Scripts\python.exe -m unittest discover -s tests -p "test_*.py"
-```
+Nhánh `deploy` chỉ giữ phần chạy thật của Agent 2 (`sme_fraud/`, `experiments/`); bộ kiểm thử và tài liệu nội bộ nằm ở nhánh `main`.
+Xem [deploy/azure-vm/README.md](../deploy/azure-vm/README.md).

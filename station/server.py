@@ -7,13 +7,15 @@ Chạy: python station/server.py [--port 8890]
 """
 import argparse
 import json
+import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import ProxyHandler, Request, build_opener
 
 ROOT = Path(__file__).resolve().parent
-SECRET = ROOT.parent / 'agent2' / '.runtime' / 'station-secret.txt'
+SECRET = Path(os.environ.get('AGENT2_STATION_SECRET_FILE')
+              or ROOT.parent / 'agent2' / '.runtime' / 'station-secret.txt')
 AGENT2 = 'http://127.0.0.1:8766'
 OPENER = build_opener(ProxyHandler({}))
 PAGES = {'/': ('index.html', 'text/html; charset=utf-8'), '/app.js': ('app.js', 'text/javascript; charset=utf-8'),

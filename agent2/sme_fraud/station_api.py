@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import hmac
 import json
+import os
 import re
 import secrets
 from pathlib import Path
@@ -17,7 +18,9 @@ from finance_input import AccessScope
 from .import_files import ImportFailure, fail
 from .validation_api import read_json, respond_failure
 
-SECRET_FILE = Path(__file__).resolve().parents[1] / '.runtime' / 'station-secret.txt'
+# Deployments where the code directory is read-only (e.g. the Azure VM image) point this at writable state.
+SECRET_FILE = Path(os.environ.get('AGENT2_STATION_SECRET_FILE')
+                   or Path(__file__).resolve().parents[1] / '.runtime' / 'station-secret.txt')
 ROUTE = re.compile(r'/api/v1/station/(status|run|job)\Z')
 PERMS = frozenset({'data.import', 'model.fit', 'evidence.verify'})
 
@@ -25,7 +28,13 @@ PERMS = frozenset({'data.import', 'model.fit', 'evidence.verify'})
 def station_secret() -> str:
     SECRET_FILE.parent.mkdir(parents=True, exist_ok=True)
     if not SECRET_FILE.is_file():
-        SECRET_FILE.write_text(secrets.token_hex(32), encoding='ascii')
+        try:  # owner-only, and never replace a secret another process has just written
+            fd = os.open(SECRET_FILE, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        except FileExistsError:
+            pass
+        else:
+            with os.fdopen(fd, 'w', encoding='ascii') as stream:
+                stream.write(secrets.token_hex(32))
     return SECRET_FILE.read_text(encoding='ascii').strip()
 
 

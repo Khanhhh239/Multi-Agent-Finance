@@ -1,3 +1,0 @@
-# Additional dependency for PLAN_08; install after requirements-ingestion.lock.
-# Runtime deliberately pinned to the version measured by the money/trace spike.
-zen-engine==0.53.0
