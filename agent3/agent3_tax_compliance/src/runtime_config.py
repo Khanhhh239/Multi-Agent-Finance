@@ -11,9 +11,10 @@ import os
 from pathlib import Path
 
 
-# The executable package lives in agent3/agent3_tax_compliance/src, while the
-# ignored credentials file is kept one level above the package repository.
-ENV_FILE = Path(__file__).resolve().parents[2] / '.env'
+# The executable package lives in agent3/agent3_tax_compliance/src; the project keeps
+# one ignored .env at the repository root (template: .env.example). In the VM image
+# that file does not exist and the variables come from the container environment.
+ENV_FILE = Path(__file__).resolve().parents[3] / '.env'
 
 
 def load_env_file(path: Path = ENV_FILE) -> None:
@@ -30,6 +31,9 @@ def load_env_file(path: Path = ENV_FILE) -> None:
         key, value = line.split('=', 1)
         key, value = key.strip(), value.strip()
         if not key or not key.replace('_', 'a').isalnum() or key[0].isdigit():
+            continue
+        # The shared file also holds Agent 4 keys and VM settings; Agent 3 takes only its own.
+        if not key.startswith('AGENT3_'):
             continue
         if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'"):
             value = value[1:-1]

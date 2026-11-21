@@ -13,7 +13,8 @@
 #>
 param(
     [switch]$NoBrowser,
-    [switch]$StopOnly
+    [switch]$StopOnly,
+    [switch]$SkipHE
 )
 
 $ErrorActionPreference = 'Stop'
@@ -63,11 +64,24 @@ if (-not (Test-Path -LiteralPath $py)) {
     $py = (Get-Command python -ErrorAction Stop).Source
 }
 
-# HE bắt buộc: lần đầu tự sinh khóa, mạch mã hóa, cấu hình và dữ liệu mẫu (scripts/setup_he.py), các lần sau bỏ qua.
-if (-not (Test-Path -LiteralPath '.runtime\he-ready.json')) {
+# Dữ liệu đi kèm file nộp nhưng không nằm trong git (kho luật Agent 3): cài từ assets/ nếu chưa có.
+& $py -X utf8 scripts/install_assets.py
+
+# API key cho Agent 3/4 nằm trong một file .env duy nhất ở thư mục gốc (không đưa lên git).
+# Thiếu thì 2 agent này offline, các agent khác vẫn chạy.
+if (-not (Test-Path -LiteralPath '.env')) {
+    Write-Host "[env] Thiếu file .env ở thư mục gốc: Agent 3 và Agent 4 sẽ offline. Chép file .env được gửi kèm vào thư mục gốc (mẫu: .env.example)." -ForegroundColor Yellow
+}
+
+# HE: lần đầu tự sinh khóa, mạch mã hóa, cấu hình và dữ liệu mẫu (scripts/setup_he.py), các lần sau bỏ qua.
+# Bước này cần WSL (quyền quản trị, có thể phải khởi động lại Windows). Nếu chưa xong, web vẫn chạy
+# không có HE và lần chạy sau sẽ thử lại; dùng -SkipHE để bỏ qua hẳn.
+if (-not $SkipHE -and -not (Test-Path -LiteralPath '.runtime\he-ready.json')) {
     Write-Host "[he] Thiết lập mã hóa đồng cấu (HE) lần đầu, có thể mất 10-20 phút..." -ForegroundColor Cyan
     & $py -X utf8 scripts/setup_he.py
-    if ($LASTEXITCODE -ne 0) { throw "Thiết lập HE thất bại; xem thông báo phía trên." }
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[he] Chưa thiết lập được HE (xem thông báo phía trên). Web vẫn chạy, Agent 2 dùng chế độ không mã hóa." -ForegroundColor Yellow
+    }
 }
 
 Write-Host "[sync] Đồng bộ cấu hình, dữ liệu và mô hình cho Portal + 4 Agent..." -ForegroundColor Cyan

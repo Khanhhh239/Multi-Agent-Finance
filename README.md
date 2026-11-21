@@ -45,7 +45,7 @@ Lệnh `.\run_web.ps1` tự động thực hiện trọn gói:
 | **Tạo / đồng bộ nhanh dữ liệu & mô hình** | `.\create_data.ps1` |
 | **Sinh mới toàn bộ kho dữ liệu 4 năm (MPX10)** | `.\create_data.ps1 -Full` |
 | **Cài đặt môi trường lõi từ đầu** | `.\setup_all.ps1` |
-| **Cấu hình API key cho Agent 3** | `agent3/.env` từ `agent3/.env.example` |
+| **Cấu hình API key cho Agent 3 và Agent 4** | Một tệp `.env` ở thư mục gốc, tạo từ `.env.example` |
 
 ---
 

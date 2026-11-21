@@ -14,7 +14,7 @@ if not exist "%PY%" (
 )
 "%PY%" -c "from src.runtime_config import load_env_file, require_api_keys; load_env_file(); require_api_keys()"
 if errorlevel 1 (
-  echo [Loi] Agent 3 can AGENT3_LLM_API_KEY va AGENT3_EMBED_API_KEY trong agent3\.env.
+  echo [Loi] Agent 3 can AGENT3_LLM_API_KEY va AGENT3_EMBED_API_KEY trong file .env o thu muc goc du an (mau: .env.example).
   pause
   exit /b 1
 )

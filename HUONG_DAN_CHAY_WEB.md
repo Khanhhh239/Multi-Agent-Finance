@@ -4,6 +4,43 @@ Tài liệu này gom toàn bộ thao tác cài đặt, tạo dữ liệu và kh�
 
 ---
 
+## 0. Dành cho Ban tổ chức: chạy từ file mã nguồn đã nộp
+
+**Yêu cầu máy:** Windows 10/11, **Python 3.12 trở lên** (đã thêm vào PATH), kết nối Internet (để cài thư viện Python và gọi API của Agent 3/4), khuyến nghị **16 GB RAM**. Ổ đĩa trống:
+- khoảng **7 GB** ở ổ chứa thư mục dự án (thư viện Python của 4 agent ~2,5 GB, kho dữ liệu Minh Phát ~3,3 GB, khóa và mạch mã hóa HE, gói test);
+- khoảng **4 GB trên ổ C:** cho WSL Ubuntu và môi trường HE (WSL luôn cài vào `C:\Users\<tên>\AppData\Local\wsl`, dù dự án nằm ở ổ khác). Không cần nếu chạy `-SkipHE`;
+- thêm 1–2 GB tạm thời trên ổ C: cho bộ nhớ đệm khi `pip` tải thư viện.
+
+Nên dành tổng cộng khoảng **12 GB**.
+
+1. Giải nén file zip vào một thư mục có đường dẫn ngắn, ví dụ `C:\SoSon`.
+2. Nếu nhóm gửi kèm tệp API key `.env`, chép nó vào **thư mục gốc** (cùng chỗ với `run_web.bat`). Đây là tệp cấu hình duy nhất của dự án. Thiếu tệp này thì Agent 3 và Agent 4 hiển thị "offline", các agent còn lại vẫn chạy.
+3. Nhấp đúp **`run_web.bat`**. Lần đầu, script tự làm tuần tự:
+   - tạo môi trường Python và tải thư viện cho 4 agent (`setup_all.ps1`);
+   - cài kho văn bản luật cho Agent 3 từ `assets\` (đã đóng gói sẵn, không cần tải);
+   - sinh kho dữ liệu doanh nghiệp mô phỏng Minh Phát (MPX10) cho Agent 1–4 từ mã nguồn;
+   - thử thiết lập mã hóa đồng cấu (HE) cho Agent 2. Bước này tự cài WSL Ubuntu nên có thể hiện hộp thoại xin quyền quản trị, hoặc yêu cầu khởi động lại Windows rồi chạy lại `run_web.bat`. Nếu chưa thiết lập được, web vẫn chạy và Agent 2 dùng chế độ không mã hóa:
+     - **vẫn có:** nạp dữ liệu, phân tích 4 nhánh (Luật, Thống kê, Đồ thị, ML), huấn luyện và phê duyệt mô hình, huấn luyện chung mã hóa CKKS qua máy trạm 8890;
+     - **chỉ có khi HE xong:** chấm điểm trên dữ liệu mã hóa 4 nhánh (TFHE), phiếu rà soát, kho nhãn đã xác minh, so sánh phương án và huấn luyện theo lô.
+
+     Muốn bỏ qua hẳn bước này: `.\run_web.ps1 -SkipHE`.
+4. Trình duyệt tự mở **http://127.0.0.1:8800**. Lần đầu mất khoảng **75 phút** (đo trên máy thử: tải thư viện ~12 phút tùy tốc độ mạng, sinh kho dữ liệu ~20 phút, thiết lập HE ~40 phút; với `-SkipHE` còn khoảng 35 phút). Cửa sổ PowerShell in tiến độ liên tục, có lúc vài phút không có dòng mới khi đang biên dịch mạch mã hóa; đừng đóng nó. Các lần sau web bật trong khoảng **40 giây**.
+
+> Các thư mục `.venv`, dữ liệu sinh ra và khóa mã hóa được tạo trên chính máy chạy; file nộp chỉ chứa mã nguồn và kho luật đã nén.
+
+### Dành cho nhóm: tạo file zip nộp
+
+Commit toàn bộ thay đổi, rồi chạy tại thư mục gốc:
+
+```powershell
+python scripts\make_submission.py --include-env   # kèm tệp .env ở thư mục gốc (API key)
+python scripts\make_submission.py                 # không kèm API key
+```
+
+Kết quả nằm ở `dist\SoSon_source.zip`: mã nguồn đã commit (không có `.venv`, `node_modules`, dữ liệu chạy, kho LFS 1.1 GB) cùng `assets\agent3\legal_corpus.sqlite3.gz` lấy từ máy đang có kho luật. Chỉ dùng `--include-env` khi gửi file trực tiếp cho BTC, **không** đưa file có API key lên Git hay nơi công khai.
+
+---
+
 ## 1. Bật Web và cả 4 Agent ngay (1 lệnh duy nhất)
 
 Mở **PowerShell** tại thư mục gốc dự án và chạy:
@@ -24,7 +61,33 @@ Hoặc nhấp đúp trực tiếp vào tệp **`run_web.bat`** trong thư mục 
 
 ### Chế độ API key cho Agent 3 và Agent 4
 
-Portal tự đọc các tệp `.env` bị git bỏ qua tại `agent3/.env` và `agent4/.env` khi khởi động agent. Agent 4 yêu cầu đồng thời `AGENT4_LLM_API_KEY` và `AGENT4_EMBED_API_KEY`, luôn dùng `config/selection.yaml` và không có fallback cục bộ. Agent 3 dùng LLM OpenAI-compatible, embedding API và Cohere reranker theo cấu hình trong `agent3/.env`. Không cần ghi secret vào `portal/config.local.json`.
+Toàn bộ cấu hình nằm trong **một tệp `.env` ở thư mục gốc** (mẫu: `.env.example`, git bỏ qua tệp này). Portal đọc tệp này khi khởi động agent, mỗi agent chỉ nhận các biến có tiền tố của mình (`AGENT3_…`, `AGENT4_…`). Bản deploy Azure VM dùng chính tệp này (`docker compose --env-file ../../.env`). Agent 4 yêu cầu đồng thời `AGENT4_LLM_API_KEY` và `AGENT4_EMBED_API_KEY`, luôn dùng `config/selection.yaml` và không có fallback cục bộ. Agent 3 dùng LLM OpenAI-compatible, embedding API và Cohere reranker theo cấu hình trong `.env`. Không cần ghi secret vào `portal/config.local.json`.
+
+Các biến trong `.env` (giá trị mặc định lấy từ `.env.example`):
+
+| Biến | Bắt buộc | Ý nghĩa / mặc định |
+|---|---|---|
+| `AGENT3_LLM_API_KEY` | Có | Key của nhà cung cấp LLM cho Agent 3 |
+| `AGENT3_EMBED_API_KEY` | Có | Key dịch vụ embedding; với Ollama local thì để giá trị bất kỳ khác rỗng (mẫu: `ollama`) |
+| `AGENT3_RERANK_API_KEY` | Không | Key Cohere reranker; để trống thì bỏ bước rerank |
+| `AGENT3_LLM_PROVIDER` / `AGENT3_LLM_BASE_URL` / `AGENT3_LLM_MODEL` | Không | `openai` / `https://api.groq.com/openai/v1` / `qwen/qwen3.8-27b` |
+| `AGENT3_LLM_ENABLE_THINKING` / `AGENT3_LLM_NUM_CTX` | Không | `0` / `32768` |
+| `AGENT3_EMBED_PROVIDER` / `AGENT3_EMBED_BASE_URL` / `AGENT3_EMBED_MODEL` | Không | `openai` / `http://127.0.0.1:11434/v1` / `bge-m3:567m` (Ollama local: cài từ https://ollama.com rồi `ollama pull bge-m3:567m`). Đổi model thì Agent 3 embed lại toàn bộ kho luật |
+| `AGENT3_RERANK_PROVIDER` / `AGENT3_RERANK_URL` / `AGENT3_RERANK_MODEL` | Không | `cohere` / `https://api.cohere.com/v2/rerank` / `rerank-v5.0-pro` |
+| `AGENT3_ADMIN_PASSWORD` | Nên có | Mật khẩu trang Quản trị Agent 3 (≥ 8 ký tự). Để trống thì người mở trang đầu tiên tự đặt |
+| `AGENT4_LLM_API_KEY` | Có | Key LLM cho Agent 4 (thiếu thì Agent 4 không khởi động) |
+| `AGENT4_EMBED_API_KEY` | Có | Key embedding cho Agent 4; với Ollama local để `ollama` |
+| `AGENT4_EMBED_BASE_URL` / `AGENT4_EMBED_MODEL` / `AGENT4_EMBED_DIMENSIONS` | Không | Ghi đè embedding của Agent 4; mẫu `.env.example`: `http://127.0.0.1:11434/v1` / `bge-m3:567m` / `1024` (bỏ trống thì theo `agent4/config/selection.yaml`: OpenRouter) |
+| `AGENT4_AS_OF` / `AGENT4_LAST_CLOSED_MONTH` | Không | Ngày dữ liệu `2026-10-14` / tháng đã khóa sổ `2026-08` |
+| `AGENT4_DEMO_TOKEN` | Không | Chỉ dùng khi chạy Agent 4 riêng, không qua Portal |
+| `PORTAL_HOST`, `AGENT1_HOST`, `AGENT3_HOST`, `STATION_USER`, `STATION_PASSWORD_HASH`, `MAF_UID`, `MAF_GID` | Không | Chỉ dùng khi deploy Azure VM; chạy local bỏ qua |
+| `AGENT4_LLM_BASE_URL` / `AGENT4_LLM_MODEL` / `AGENT4_LLM_TEMPERATURE` / `AGENT4_LLM_TIMEOUT` | Không (nâng cao) | Ghi đè LLM của Agent 4; mặc định theo `agent4/config/selection.yaml`: `https://api.groq.com/openai/v1` / `qwen/qwen3.8-27b` / `0` / `180` giây |
+| `AGENT3_LLM_TIMEOUT` | Không (nâng cao) | Thời gian chờ LLM của Agent 3, mặc định `180` giây |
+| `AGENT3_LAW_AUTOBUILD` | Không (nâng cao) | `0` để tắt việc Agent 3 tự bổ sung vector cho kho luật khi khởi động (mặc định bật) |
+
+Các biến khác có tiền tố `AGENT3_`/`AGENT4_` trong mã nguồn (cổng, host, token, đường dẫn kho dữ liệu, chế độ cloud/OIDC) do Portal tự gán khi bật agent hoặc chỉ dùng cho bản cloud. Không cần khai báo khi chạy local.
+
+Các thông tin còn lại không nằm trong `.env`, do script tự tạo trên máy chạy: mật khẩu Nạp dữ liệu (đặt ở lần mở đầu tiên, mẫu `SoSon@2026`), khóa mã hóa HE, token nội bộ giữa Portal và các agent, `portal/config.local.json`.
 
 ---
 
@@ -99,7 +162,7 @@ bash setup_demo.sh
    - **Agent 1 — Quản trị Dòng tiền (`#agent1`)**: Xem dữ liệu hóa đơn/sao kê đã đối soát, chạy dự báo dòng tiền 13 tuần và xuất báo cáo Excel.
    - **Agent 2 — Soát xét Giao dịch (`#agent2`)**: Doanh nghiệp `MPX10` (hoặc `C001`, `C002`) tự động đồng bộ theo phiên Portal; chọn snapshot vừa lưu hoặc tải mẫu để chạy phân tích 4 nhánh (Luật, Thống kê, Đồ thị, ML).
    - **Agent 3 — Tuân thủ Thuế GTGT (`#agent3`)**: Tự động mở đúng không gian MST `0999999905`; bấm phân tích để đối chiếu hóa đơn XML với sao kê ngân hàng và hỏi đáp điều khoản luật thuế.
-   - **Agent 4 — Trợ lý CFO & Sổ cái (`#agent4`)**: Bấm câu hỏi gợi ý như *"Doanh thu thuần quý 3 năm 2026 là bao nhiêu?"* (kết quả kho MPX10 đầy đủ: **3.447.235.086.468 đồng**) và mở mục **Kiểm tra nguồn** để đối chiếu chỉ tiêu, kỳ dữ liệu và sổ quản trị/thuế.
+   - **Agent 4 — Trợ lý CFO & Sổ cái (`#agent4`)**: Bấm câu hỏi gợi ý như *"Doanh thu thuần quý 3 năm 2026 là bao nhiêu?"* (kết quả kho MPX10 đầy đủ sinh từ mã nguồn hiện tại: **3.459.561.433.330 đồng**; kho LFS cũ `enterprise-x10-v3-candidate02` cho 3.447.235.086.468 đồng) và mở mục **Kiểm tra nguồn** để đối chiếu chỉ tiêu, kỳ dữ liệu và sổ quản trị/thuế.
 
 ---
 
@@ -130,10 +193,10 @@ Máy trạm gọi backend Agent 2 qua cổng nội bộ 8766 bằng khóa trạm
 
 **1. Phân tích rủi ro (tab Tổng quan)**
 - Nạp gói 9 tệp ở "Nạp dữ liệu" (tệp `07_so_giao_dich_ngan_hang_A2.csv` được giữ đủ cột để chạy luật).
-- Lần đầu: vào tab "Huấn luyện & mô hình", bước 2, bấm chọn **tất cả** tệp trong `DATA_TEST_MAF_SOSON\input-A2-training` rồi "Bắt đầu huấn luyện", sau đó phê duyệt ở bước 3.
+- Lần đầu (bắt buộc, nếu không nút Phân tích báo "Chưa có mô hình AI"): vào tab "Huấn luyện & mô hình", bước 2, bấm chọn **tất cả** tệp trong `DATA_TEST_SAN_SANG\input-A2-training` rồi "Bắt đầu huấn luyện", sau đó phê duyệt ở bước 3. Thư mục gồm 4 tệp lịch sử mô phỏng (07–10/2026) và `A2_huan_luyen_00_MinhPhat_2023-2026.csv` (10.000 giao dịch thật của kho Minh Phát, cùng cột với tệp 07).
 - Về tab "Tổng quan", bấm "Phân tích dữ liệu mới nhất". Điểm gồm luật, thống kê, đồ thị, ML không nhãn; mô hình có nhãn chỉ tham gia khi doanh nghiệp đã đồng bộ mô hình chung.
 
-**2. Đóng góp huấn luyện chung (3 doanh nghiệp)** — làm theo `DATA_TEST_MAF_SOSON\input-A2-dong-gop\00_HUONG_DAN.txt`:
+**2. Đóng góp huấn luyện chung (3 doanh nghiệp)** — làm theo `DATA_TEST_SAN_SANG\input-A2-dong-gop\00_HUONG_DAN.txt`:
 - Mỗi doanh nghiệp (MPX10, C001, C002): tab "Đóng góp huấn luyện" → chọn tệp CSV của mình → "Mã hóa và gửi lên trạm".
   Dữ liệu được mã hóa CKKS bằng khóa riêng của doanh nghiệp (khóa nằm ở `agent2/.runtime/.../he-training-companies/<mã DN>`); trạm chỉ nhận bản mã và nhãn.
 - Mở máy trạm 8890 → thấy các doanh nghiệp "Đã gửi" → "Huấn luyện trên dữ liệu đã mã hóa". Trạm tính gradient trên bản mã, mỗi doanh nghiệp chỉ giải mã tổng gradient của mình; kiểm định trên 10% dữ liệu giữ lại; chỉ cập nhật phiên bản trọng số khi tốt hơn (ngưỡng chọn để recall ≥ 90%).

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import closing
 import json
 import os
 from pathlib import Path
@@ -34,8 +35,10 @@ def _copy_sqlite(source: Path, destination: Path, *, force: bool) -> None:
     os.close(fd)
     temporary = Path(temporary_name)
     try:
-        with sqlite3.connect(source.resolve().as_uri() + "?mode=ro", uri=True) as source_db:
-            with sqlite3.connect(temporary) as target_db:
+        # closing(): a sqlite3 connection's own context manager only commits; on Windows an open
+        # connection keeps the temporary file locked and os.replace() fails.
+        with closing(sqlite3.connect(source.resolve().as_uri() + "?mode=ro", uri=True)) as source_db:
+            with closing(sqlite3.connect(temporary)) as target_db:
                 source_db.backup(target_db)
                 target_db.execute("PRAGMA journal_mode=DELETE")
         if os.name != "nt":

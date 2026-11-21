@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DS = ROOT / 'portal/workspace/datasets/enterprise-x10-v3-full/inputs'
 SV = ROOT / 'agent3/agent3_tax_compliance/demo/DN_Phan_mem_Sao_Viet'
 OUT = ROOT / 'DATA_TEST_SAN_SANG'
-DOWNLOADS_COPY = Path(r'C:\Users\Admin\Downloads\DATA_TEST_MAF_SOSON')
+DOWNLOADS_COPY = Path.home() / 'Downloads' / 'DATA_TEST_MAF_SOSON'
 
 MPX_NAME = 'Công ty Cổ phần Phân phối và Dịch vụ Minh Phát — MÔ PHỎNG'
 MPX_TAX = '0999999905'
@@ -340,7 +340,7 @@ def write_cheatsheet(base: Path) -> None:
      - Agent3_Danh_Sach_MST_Rui_Ro.csv       : Test nạp danh sách MST bỏ địa chỉ kinh doanh tại Quản trị Agent 3
 
 3. CÂU HỎI GỢI Ý CHO AGENT 4 (HỎI ĐÁP SỐ LIỆU CFO)
-   - "Doanh thu thuần quý 3 năm 2026 là bao nhiêu?"  (Đáp án kho MPX10: 3.447.235.086.468 VND)
+   - "Doanh thu thuần quý 3 năm 2026 là bao nhiêu?"  (Đáp án kho MPX10: 3.459.561.433.330 VND)
    - "Lợi nhuận sau thuế tháng 8 năm 2026?"
    - "Công nợ phải thu hiện tại?"
    - "Tiền mặt cuối tháng 8 năm 2026?"
@@ -392,20 +392,40 @@ def verify_pack(pack_dir: Path) -> None:
     print(f'  [A2] contract PASSED: {sum_a2}')
 
 
+def build_agent2_inputs(out: Path) -> None:
+    """Agent 2 files the guide asks for: the training set (tab "Huấn luyện & mô hình") and the labelled
+    contribution files for joint encrypted training (tab "Đóng góp huấn luyện"). Without a training upload the
+    "Phân tích dữ liệu mới nhất" button has no model and answers ANALYZE_MODEL_REQUIRED."""
+    import subprocess
+    train = out / 'input-A2-training'
+    contrib = out / 'input-A2-dong-gop'
+    subprocess.run([sys.executable, str(ROOT / 'scripts/make_a2_training_input.py'), str(train), 'MPX10'], check=True)
+    # Minh Phát's own ledger (10,000 transactions, 2023-2026, same columns as 07_so_giao_dich_ngan_hang_A2.csv).
+    full = DS / 'a2' / 'transactions_full.csv'
+    if full.is_file():
+        shutil.copyfile(full, train / 'A2_huan_luyen_00_MinhPhat_2023-2026.csv')
+    subprocess.run([sys.executable, str(ROOT / 'scripts/make_a2_contribution_input.py'), str(contrib)], check=True)
+
+
 def main() -> int:
     if OUT.exists():
         shutil.rmtree(OUT)
     build_pack_01(OUT / '01_Goi_Chuan_Nap_Chung_4_Agent_MPX10')
     build_pack_02(OUT / '02_Goi_Bo_Sung_Ky_Moi_Test_Nap_Them')
     build_pack_03(OUT / '03_File_Test_Chuyen_Sau_Agent2_Agent3')
+    build_agent2_inputs(OUT)
     write_cheatsheet(OUT)
     if '--verify' in sys.argv:
         verify_pack(OUT / '01_Goi_Chuan_Nap_Chung_4_Agent_MPX10')
 
-    if DOWNLOADS_COPY.exists():
-        shutil.rmtree(DOWNLOADS_COPY)
-    shutil.copytree(OUT, DOWNLOADS_COPY)
-    print(f'[ok] Built {OUT} and mirrored to {DOWNLOADS_COPY}')
+    # Convenience copy in the current user's Downloads; the kit itself is OUT, so skip it when there is no such folder.
+    if DOWNLOADS_COPY.parent.is_dir():
+        if DOWNLOADS_COPY.exists():
+            shutil.rmtree(DOWNLOADS_COPY)
+        shutil.copytree(OUT, DOWNLOADS_COPY)
+        print(f'[ok] Built {OUT} and mirrored to {DOWNLOADS_COPY}')
+    else:
+        print(f'[ok] Built {OUT}')
     return 0
 
 

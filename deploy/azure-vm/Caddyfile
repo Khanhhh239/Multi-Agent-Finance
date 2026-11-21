@@ -10,7 +10,13 @@
 		reverse_proxy maf-demo:8890
 	}
 
+	# Everything else on the Portal host (Portal, Agent 2, Agent 4) needs the shared reviewer login, so strangers
+	# cannot read the demo data, stop agents or spend the API quota. Agent 1 and Agent 3 keep their own hosts
+	# without it because the Portal shows them in iframes; they hold synthetic data only.
 	handle {
+		basic_auth {
+			{$SITE_USER} {$SITE_PASSWORD_HASH}
+		}
 		reverse_proxy maf-demo:8800
 	}
 }

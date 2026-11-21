@@ -4,6 +4,7 @@
 .EXAMPLE
   .\setup_all.ps1
   .\setup_all.ps1 -FullData
+  .\setup_all.ps1 -SkipLawSync   # không crawl lại vbpl.vn khi thiếu kho luật đi kèm
 #>
 param(
     [switch]$FullData,
@@ -33,7 +34,8 @@ if ($hasUv) {
     uv pip install -q -p .venv -r requirements-service.txt
     Pop-Location
     Push-Location agent2
-    uv pip install -q -p .venv/Scripts/python.exe -r requirements.txt cryptography
+    # tenseal: huấn luyện chung mã hóa CKKS chạy ngay trong Agent 2, không cần WSL
+    uv pip install -q -p .venv/Scripts/python.exe -r requirements.txt cryptography tenseal==0.3.18
     Pop-Location
     Push-Location agent4
     uv pip install -q -p .venv -r requirements.txt
@@ -44,18 +46,20 @@ if ($hasUv) {
 } else {
     & agent1\.venv\Scripts\python.exe -m pip install -q -r agent1/requirements-service.txt
     Push-Location agent2
-    & .\.venv\Scripts\python.exe -m pip install -q -r requirements.txt cryptography
+    & .\.venv\Scripts\python.exe -m pip install -q -r requirements.txt cryptography tenseal==0.3.18
     Pop-Location
     & agent4\.venv\Scripts\python.exe -m pip install -q -r agent4/requirements.txt
     & agent4\.venv\Scripts\python.exe -m pip install -q -e agent4 --no-deps
     & agent3\.venv\Scripts\python.exe -m pip install -q -r agent3/agent3_tax_compliance/requirements.txt
 }
 
+Write-Host "[3/4] Chuẩn bị kho luật cho Agent 3..." -ForegroundColor Cyan
+$py3 = (Resolve-Path 'agent3\.venv\Scripts\python.exe').Path
+# Kho luật đi kèm file nộp (assets/agent3/legal_corpus.sqlite3.gz); chỉ tải lại từ vbpl.vn khi không có.
+& $py3 -X utf8 scripts/install_assets.py
 if (-not $SkipLawSync) {
-    Write-Host "[3/4] Chuẩn bị kho luật cho Agent 3..." -ForegroundColor Cyan
-    $py3 = (Resolve-Path 'agent3\.venv\Scripts\python.exe').Path
     Push-Location 'agent3/agent3_tax_compliance'
-    if (-not (Test-Path -LiteralPath 'data/lawbase/lawbase.sqlite')) {
+    if (-not (Test-Path -LiteralPath 'data/lawbase/legal_corpus.sqlite3')) {
         & $py3 -m src.lawbase.cli sync
     }
     Write-Host "  -> Agent 3 dùng embedding và reranker API khi được cấu hình key." -ForegroundColor Gray

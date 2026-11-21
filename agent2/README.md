@@ -22,5 +22,13 @@ Từ thư mục gốc repo:
 
 ## Triển khai lên máy chủ Linux
 
-Nhánh `deploy` chỉ giữ phần chạy thật của Agent 2 (`sme_fraud/`, `experiments/`); bộ kiểm thử và tài liệu nội bộ nằm ở nhánh `main`.
+Nhánh `deploy` chỉ giữ phần chạy thật của Agent 2 (`sme_fraud/`, `experiments/`) cùng công cụ thiết lập HE; bộ kiểm thử, các bản demo/benchmark và tài liệu nội bộ nằm ở nhánh `main`.
+
+| Tệp | Dùng cho |
+|---|---|
+| `requirements-he.txt`, `requirements-he4-linux.txt` | Gói cài vào image Docker (`.he-venv`, gồm TenSEAL và Concrete) |
+| `requirements.txt` | Cài môi trường cục bộ |
+| `config/analysis-bindings.example.json` | Mẫu cấu hình gắn mô hình phân tích |
+| `scripts/sync_portal_live_runtime.py` | Được `scripts/setup_he.py` gọi khi thiết lập HE lần đầu |
+| `examples/full_rules/C001_B1_signal.json` | Được `data_pipeline/build_test_pack.py` chép vào bộ dữ liệu kiểm thử |
 Xem [deploy/azure-vm/README.md](../deploy/azure-vm/README.md).

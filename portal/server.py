@@ -180,19 +180,13 @@ def read_dotenv(path):
     return values
 
 
-def agent_dotenv(aid):
-    """Find the ignored per-agent .env file, including Agent 3's parent folder."""
-    root = agent_root(aid)
-    candidates = (root / '.env', ROOT / aid / '.env', root.parent / '.env')
-    for candidate in candidates:
-        if candidate.is_file():
-            return candidate
-    return None
+PROJECT_DOTENV = ROOT / '.env'   # the single ignored .env for the whole project (template: .env.example)
 
 
 def dotenv_for_agent(aid):
-    path = agent_dotenv(aid)
-    return read_dotenv(path) if path else {}
+    """The agent's own variables (AGENTn_*) from the project .env; other agents' keys and VM settings stay out."""
+    prefix = aid.upper() + '_'
+    return {k: v for k, v in read_dotenv(PROJECT_DOTENV).items() if k.startswith(prefix)}
 
 
 _FILE_IO_LOCK = threading.RLock()
@@ -236,6 +230,8 @@ class AuthError(Exception):
 
 # ----------------------------------------------------------------------------------------------------------- company
 COMPANY_FILE = WORK / 'company.json'
+# MAF_LOCK_COMPANY=1 (set by the Azure VM compose file) keeps the company code and tax code fixed.
+COMPANY_LOCKED = os.environ.get('MAF_LOCK_COMPANY', '').strip() == '1'
 COMPANY_FIELDS = {
     'code': '', 'legal_name': '', 'tax_code': '', 'registered_address': '', 'industry': '',
     'vat_method': 'DEDUCTION', 'filing_period': 'MONTH', 'fiscal_year_end_month': 12,
@@ -357,7 +353,7 @@ def launch_spec(aid, load_dotenv=False):
         if name.startswith(('AGENT1_', 'AGENT2_', 'AGENT3_', 'AGENT4_')) and not name.startswith(own_prefix):
             env.pop(name, None)
     if load_dotenv:
-        # Keep secrets in the ignored per-agent .env file. Explicit process env wins.
+        # Keep secrets in the ignored project .env file. Explicit process env wins.
         for key, value in dotenv_for_agent(aid).items():
             env.setdefault(key, value)
     if aid == 'agent1':
@@ -512,7 +508,9 @@ def _he_runtime(env=None):
         if he4_worker:
             try:from .agent2_he4_runtime import LinuxRuntime,CombinedRuntime
             except ImportError:from agent2_he4_runtime import LinuxRuntime,CombinedRuntime
-            HE_RUNTIME=CombinedRuntime(HE_RUNTIME,LinuxRuntime(he4_worker,settings[1],settings[2],he4,he4_worker.get('python') or settings[0],LOGS))
+            # The preflight runs on this host with the Agent 2 Python (Windows: DPAPI bridge into WSL); only the worker
+            # itself uses he4_worker['python'] inside WSL. Passing the Linux path here broke Agent 2 start on Windows.
+            HE_RUNTIME=CombinedRuntime(HE_RUNTIME,LinuxRuntime(he4_worker,settings[1],settings[2],he4,settings[0],LOGS))
         HE_RUNTIME_SETTINGS=settings
     return HE_RUNTIME
 
@@ -2339,7 +2337,18 @@ class Handler(BaseHTTPRequestHandler):
                     self.need_session()
                 except AuthError:
                     raise AuthError('Hồ sơ đang được bảo vệ. Mở khóa phiên làm việc ở trang Nạp dữ liệu rồi sửa.') from None
-            data, code_changed = save_company(self.json_body())
+            body = self.json_body()
+            if COMPANY_LOCKED:
+                # Public demo: every agent (Agent 4's warehouse in particular) is built for this one company,
+                # so its code and tax code stay fixed; the other profile fields can still be edited.
+                current = company()
+                same_code = str(body.get('code', current['code'])).strip().upper() == str(current['code']).strip().upper()
+                same_tax = re.sub(r'[^0-9]', '', str(body.get('tax_code', current['tax_code']) or '')) == \
+                    re.sub(r'[^0-9]', '', str(current['tax_code'] or ''))
+                if current['code'] and not (same_code and same_tax):
+                    raise ValueError(f'Bản demo dùng cố định doanh nghiệp {current["code"]} (MST {current["tax_code"]}) cho cả 4 agent; '
+                                     'không đổi được mã doanh nghiệp hoặc mã số thuế.')
+            data, code_changed = save_company(body)
             audit('company_saved', dict(code=data['code'], tax_code=data['tax_code']))
             sync = dict(agent3=ensure_agent3_workspace() if health('agent3') else dict(state='offline', message='Agent 3 chưa bật.'))
             if code_changed and PROCS.get('agent1') and PROCS['agent1'].poll() is None:

@@ -1,7 +1,7 @@
 {
   "port": 8800,
   "workspace": "/state/portal",
-  "demo_company": null,
+  "demo_company": {"code": "MPX10", "tax_code": "0999999905"},
   "agents": {
     "agent1": {
       "root": "/app/agent1",

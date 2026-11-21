@@ -75,6 +75,20 @@ def build(dataset: Path, output: Path) -> None:
     sales_xml_items: list[tuple[str, bytes]] = []
     purchase_xml_items: list[tuple[str, bytes]] = []
 
+    # A1 files a payment under the month its invoice was issued, not the month the money arrived (an August
+    # invoice paid in October sits in a1/2026-08), so payments and invoices are looked up across every month.
+    all_invoices: dict[str, dict] = {}
+    payments_by_bank: dict[str, dict] = {}
+    for month_dir in sorted(p for p in (inputs / 'a1').iterdir() if p.is_dir()):
+        if (month_dir / '01_invoices.csv').is_file():
+            for row in csv_rows(month_dir / '01_invoices.csv'):
+                all_invoices.setdefault(row['invoice_id'], row)
+        if (month_dir / '03_payments.csv').is_file():
+            for prow in csv_rows(month_dir / '03_payments.csv'):
+                if prow.get('bank_id'):
+                    payments_by_bank[prow['bank_id']] = prow
+    paid_invoice_ids = {p['invoice_id'] for p in payments_by_bank.values()}
+
     for month in common_months:
         a1_dir = inputs / 'a1' / month
         a3_dir = inputs / 'a3' / month
@@ -82,11 +96,6 @@ def build(dataset: Path, output: Path) -> None:
             continue
         bank_a1 = {row['bank_id']: row for row in csv_rows(a1_dir / '02_bank.csv')}
         invoices_a1 = {row['invoice_id']: row for row in csv_rows(a1_dir / '01_invoices.csv')}
-        payments_by_bank: dict[str, dict] = {}
-        if (a1_dir / '03_payments.csv').is_file():
-            for prow in csv_rows(a1_dir / '03_payments.csv'):
-                if prow.get('bank_id'):
-                    payments_by_bank[prow['bank_id']] = prow
 
         sales_xml_map = all_xml_in_dir(a3_dir, 'sales')
         cand_invoices, cand_bank, cand_sxml = [], [], []
@@ -96,7 +105,7 @@ def build(dataset: Path, output: Path) -> None:
             pay = payments_by_bank.get(bid)
             if not movement or not pay or movement['direction'] != 'in':
                 continue
-            inv = invoices_a1.get(pay['invoice_id'])
+            inv = all_invoices.get(pay['invoice_id'])
             if not inv:
                 continue
             if movement['amount'] != row['Ghi Có'] or movement['date'] != row['Ngày']:
@@ -129,7 +138,7 @@ def build(dataset: Path, output: Path) -> None:
             # Also include up to 2 open receivables so Agent 1 forecasts open AR right away
             paid_ids = {r['invoice_id'] for r in demo_invoices}
             for inv in invoices_a1.values():
-                if inv['invoice_id'] not in paid_ids and inv['invoice_id'] not in {p['invoice_id'] for p in payments_by_bank.values()}:
+                if inv['invoice_id'] not in paid_ids and inv['invoice_id'] not in paid_invoice_ids:
                     demo_invoices.append(inv)
                     if len(demo_invoices) >= 4:
                         break

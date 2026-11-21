@@ -1,20 +1,32 @@
+# All settings come from the single project .env at the repository root (template: ../../.env.example).
+# Run every compose command from deploy/azure-vm with --env-file so ${...} below is filled from that file:
+#   docker compose --env-file ../../.env -f compose.yaml up --build -d
+# The image is built on the team's machine (it carries the local Agent 3 legal corpus) and loaded on the VM,
+# which then starts it with `up -d --no-build`. Step-by-step checklist: TRIEN_KHAI.md.
+
+# Embeddings for Agent 3 (legal search) and Agent 4 (metric selection) come from the ollama service below, not a
+# paid API. The Agent 3 corpus inside the image must be embedded with this same model on the team machine
+# (root .env: AGENT3_EMBED_MODEL), otherwise Agent 3 re-embeds the whole corpus on the VM CPU at first start.
+x-embed-model: &embed_model bge-m3:567m
+
 services:
   maf-demo:
     container_name: maf-demo
+    image: maf-demo:latest
     build:
       context: ../..
       dockerfile: deploy/azure-vm/Dockerfile
     restart: unless-stopped
     stop_grace_period: 30s
     user: "${MAF_UID:-1000}:${MAF_GID:-1000}"
-    env_file: .env
+    env_file: ../../.env
     environment:
       MAF_PORTAL_CONFIG: /app/deploy/azure-vm/portal-config.json
       MAF_PORTAL_BIND_HOST: 0.0.0.0
       MAF_AGENT_INTERNAL_HOST: 127.0.0.1
       MAF_AGENT1_BIND_HOST: 0.0.0.0
       MAF_AGENT3_BIND_HOST: 0.0.0.0
-      MAF_PUBLIC_ORIGIN: https://${PORTAL_HOST}
+      MAF_PUBLIC_ORIGIN: https://${PORTAL_HOST:?run compose with --env-file ../../.env and set PORTAL_HOST}
       MAF_ALLOWED_ORIGINS: https://${PORTAL_HOST}
       MAF_PORTAL_ALLOWED_HOSTS: ${PORTAL_HOST}
       MAF_AGENT1_PUBLIC_URL: https://${AGENT1_HOST}
@@ -28,6 +40,20 @@ services:
       AGENT3_ADMIN_STORE: /state/agent3/admin.json
       AGENT4_DB_PATH: /state/demo/warehouse.duckdb
       AGENT2_STATION_SECRET_FILE: /state/agent2/station-secret.txt
+      # Every agent is built around the one demo company (MPX10); its code and tax code cannot be changed on the site.
+      MAF_LOCK_COMPANY: "1"
+      # Local embeddings (override the root .env). Ollama ignores the key, but both agents require a non-empty one.
+      AGENT3_EMBED_PROVIDER: openai
+      AGENT3_EMBED_BASE_URL: http://ollama:11434/v1
+      AGENT3_EMBED_MODEL: *embed_model
+      AGENT3_EMBED_API_KEY: ollama
+      AGENT4_EMBED_PROVIDER: openai
+      AGENT4_EMBED_BASE_URL: http://ollama:11434/v1
+      AGENT4_EMBED_MODEL: *embed_model
+      AGENT4_EMBED_DIMENSIONS: "1024"
+      AGENT4_EMBED_API_KEY: ollama
+    depends_on:
+      - ollama
     volumes:
       - ./state:/state
     expose:
@@ -35,6 +61,23 @@ services:
       - "8011"
       - "8640"
       - "8890"
+    networks:
+      - edge
+
+  ollama:
+    image: ollama/ollama:0.40.13
+    container_name: maf-demo-ollama
+    restart: unless-stopped
+    # Serve, and pull the embedding model into the ollama_models volume on the first start (about 1.2 GB).
+    # Later starts only re-check the manifest; if the registry cannot be reached the stored copy is used.
+    entrypoint: ["/bin/sh", "-c", "ollama serve & until ollama list >/dev/null 2>&1; do sleep 1; done; ollama pull \"$$EMBED_MODEL\" || true; wait"]
+    environment:
+      EMBED_MODEL: *embed_model
+      OLLAMA_KEEP_ALIVE: "-1"
+    volumes:
+      - ollama_models:/root/.ollama
+    expose:
+      - "11434"
     networks:
       - edge
 
@@ -48,8 +91,10 @@ services:
       PORTAL_HOST: ${PORTAL_HOST}
       AGENT1_HOST: ${AGENT1_HOST}
       AGENT3_HOST: ${AGENT3_HOST}
-      STATION_USER: ${STATION_USER:?set STATION_USER in .env}
-      STATION_PASSWORD_HASH: ${STATION_PASSWORD_HASH:?set STATION_PASSWORD_HASH in .env (caddy hash-password)}
+      STATION_USER: ${STATION_USER:?set STATION_USER in the root .env}
+      STATION_PASSWORD_HASH: ${STATION_PASSWORD_HASH:?set STATION_PASSWORD_HASH in the root .env (caddy hash-password)}
+      SITE_USER: ${SITE_USER:?set SITE_USER in the root .env}
+      SITE_PASSWORD_HASH: ${SITE_PASSWORD_HASH:?set SITE_PASSWORD_HASH in the root .env (caddy hash-password)}
     ports:
       - "80:80"
       - "443:443"
@@ -67,3 +112,4 @@ networks:
 volumes:
   caddy_data:
   caddy_config:
+  ollama_models:

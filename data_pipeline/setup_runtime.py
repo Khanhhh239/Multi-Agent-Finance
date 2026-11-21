@@ -1,7 +1,7 @@
 """Synchronize datasets, Portal configuration, company profile, and Agent 1-4 runtime states.
 
 Usage:
-  python data_pipeline/setup_runtime.py                # Auto: use full dataset if present, else unpack LFS warehouse, sync all configs & Agent 2 models
+  python data_pipeline/setup_runtime.py                # Auto: use full dataset if present, else unpack LFS warehouse, else generate the full dataset; sync configs & Agent 2 models
   python data_pipeline/setup_runtime.py --mode full    # Full: generate complete 4-year MPX10 dataset + exports + demo inputs, then sync all configs & models
 """
 from __future__ import annotations
@@ -10,6 +10,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+import shutil
 import socket
 import subprocess
 import sys
@@ -55,6 +56,30 @@ def unpack_zlib_warehouse(zlib_path: Path, out_duckdb: Path) -> None:
     print(f'[data] Đã giải nén kho DuckDB: {out_duckdb.relative_to(ROOT)} ({out_duckdb.stat().st_size // (1024 * 1024)} MB)', flush=True)
 
 
+GENERATING = '.generating'  # present while a dataset is being built; a leftover one means the run was interrupted
+
+
+def dataset_ready(d: Path) -> bool:
+    return (d / 'warehouse.duckdb').is_file() and not (d / GENERATING).exists()
+
+
+def generate_dataset(py4: str, target: Path, smoke: bool = False) -> None:
+    if (target / GENERATING).exists():
+        print(f'[data] Lần sinh dữ liệu trước bị ngắt; xóa {target.relative_to(ROOT)} và sinh lại.', flush=True)
+        shutil.rmtree(target)
+    label = 'mẫu nhỏ (--smoke)' if smoke else 'Minh Phát MPX10 đầy đủ (vài phút)'
+    print(f'[data] Đang sinh bộ dữ liệu {label} tại {target.relative_to(ROOT)} ...', flush=True)
+    target.mkdir(parents=True, exist_ok=True)
+    (target / GENERATING).write_text('', encoding='utf-8')
+    env = dict(os.environ, PYTHONUTF8='1')
+    gen = [py4, str(ROOT / 'data_pipeline/enterprise.py')] + (['--smoke'] if smoke else []) + ['--out', str(target)]
+    for cmd in (gen,
+                [py4, str(ROOT / 'data_pipeline/export.py'), str(target)],
+                [py4, str(ROOT / 'data_pipeline/validate.py'), str(target)]):
+        subprocess.run(cmd, cwd=ROOT, env=env, check=True)
+    (target / GENERATING).unlink()
+
+
 def ensure_dataset(mode: str) -> Path:
     py4 = find_venv_python('agent4')
     full_dir = DATASETS / 'enterprise-x10-v3-full'
@@ -63,61 +88,76 @@ def ensure_dataset(mode: str) -> Path:
 
     if mode == 'full':
         target = full_dir
-        if (target / 'warehouse.duckdb').is_file():
+        if dataset_ready(target):
             print(f'[data] Đã có sẵn kho đầy đủ: {target.relative_to(ROOT)}', flush=True)
         else:
-            print(f'[data] Đang sinh bộ dữ liệu Minh Phát MPX10 đầy đủ tại {target.relative_to(ROOT)} ...', flush=True)
-            env = dict(os.environ, PYTHONUTF8='1')
-            subprocess.run([py4, str(ROOT / 'data_pipeline/enterprise.py'), '--out', str(target)], cwd=ROOT, env=env, check=True)
-            subprocess.run([py4, str(ROOT / 'data_pipeline/export.py'), str(target)], cwd=ROOT, env=env, check=True)
-            subprocess.run([py4, str(ROOT / 'data_pipeline/validate.py'), str(target)], cwd=ROOT, env=env, check=True)
+            generate_dataset(py4, target)
     else:
-        if (full_dir / 'warehouse.duckdb').is_file():
+        cand_zlib = cand_dir / 'warehouse.duckdb.zlib'
+        if dataset_ready(full_dir):
             target = full_dir
-        elif (cand_dir / 'warehouse.duckdb').is_file():
+        elif dataset_ready(cand_dir):
             target = cand_dir
-        elif (cand_dir / 'warehouse.duckdb.zlib').is_file() and (cand_dir / 'warehouse.duckdb.zlib').stat().st_size > 1024:
-            # Verify it is real binary zlib data, not an unpulled Git LFS pointer
-            head = (cand_dir / 'warehouse.duckdb.zlib').read_bytes()[:64]
-            if not head.startswith(b'version https://git-lfs.github.com'):
-                unpack_zlib_warehouse(cand_dir / 'warehouse.duckdb.zlib', cand_dir / 'warehouse.duckdb')
-                target = cand_dir
-            elif (smoke_dir / 'warehouse.duckdb').is_file():
-                target = smoke_dir
-            else:
-                target = smoke_dir
-                print(f'[data] Sinh nhanh kho dữ liệu mẫu (--smoke) tại {target.relative_to(ROOT)} ...', flush=True)
-                env = dict(os.environ, PYTHONUTF8='1')
-                subprocess.run([py4, str(ROOT / 'data_pipeline/enterprise.py'), '--smoke', '--out', str(target)], cwd=ROOT, env=env, check=True)
-                subprocess.run([py4, str(ROOT / 'data_pipeline/export.py'), str(target)], cwd=ROOT, env=env, check=True)
-                subprocess.run([py4, str(ROOT / 'data_pipeline/validate.py'), str(target)], cwd=ROOT, env=env, check=True)
-        elif (smoke_dir / 'warehouse.duckdb').is_file():
-            target = smoke_dir
+        elif cand_zlib.is_file() and cand_zlib.stat().st_size > 1024 \
+                and not cand_zlib.read_bytes()[:64].startswith(b'version https://git-lfs.github.com'):
+            # Real zlib data (Git LFS pulled), not an unpulled pointer
+            unpack_zlib_warehouse(cand_zlib, cand_dir / 'warehouse.duckdb')
+            target = cand_dir
         else:
-            target = smoke_dir
-            print(f'[data] Sinh nhanh kho dữ liệu mẫu (--smoke) tại {target.relative_to(ROOT)} ...', flush=True)
-            env = dict(os.environ, PYTHONUTF8='1')
-            subprocess.run([py4, str(ROOT / 'data_pipeline/enterprise.py'), '--smoke', '--out', str(target)], cwd=ROOT, env=env, check=True)
-            subprocess.run([py4, str(ROOT / 'data_pipeline/export.py'), str(target)], cwd=ROOT, env=env, check=True)
-            subprocess.run([py4, str(ROOT / 'data_pipeline/validate.py'), str(target)], cwd=ROOT, env=env, check=True)
+            # The 1.1 GB LFS warehouse is absent (e.g. a source-code zip): build the full MPX10 warehouse from code,
+            # so the figures in HUONG_DAN_CHAY_WEB.md match. Fall back to the small smoke set only if that fails.
+            try:
+                generate_dataset(py4, full_dir)
+                target = full_dir
+            except subprocess.CalledProcessError as exc:
+                print(f'[data] CẢNH BÁO: sinh kho đầy đủ thất bại ({exc}); dùng bộ dữ liệu mẫu nhỏ.', flush=True)
+                target = smoke_dir
+                if not dataset_ready(smoke_dir):
+                    generate_dataset(py4, smoke_dir, smoke=True)
 
-    # Ensure demo intake bundle exists from whichever dataset has exported inputs
-    demo_bundle = WORK / 'mpx10-demo-input-full'
-    if not (demo_bundle / '01_invoices.csv').is_file():
-        for src_dir in (target, full_dir, smoke_dir):
-            if (src_dir / 'inputs/a1').is_dir() and (src_dir / 'inputs/a2').is_dir() and (src_dir / 'inputs/a3').is_dir():
-                if demo_bundle.exists():
-                    for f in demo_bundle.iterdir():
-                        if f.is_file():
-                            f.unlink()
-                    demo_bundle.rmdir()
-                subprocess.run(
-                    [py4, str(ROOT / 'data_pipeline/demo_inputs.py'), str(src_dir), str(demo_bundle)],
-                    cwd=ROOT, env=dict(os.environ, PYTHONUTF8='1'), check=False,
-                )
-                break
-
+    ensure_demo_bundle(py4, (target, full_dir, smoke_dir), smoke_dir)
     return target / 'warehouse.duckdb'
+
+
+def ensure_demo_bundle(py4: str, sources: tuple[Path, ...], smoke_dir: Path) -> None:
+    """Build the 4-file intake bundle (portal/workspace/mpx10-demo-input-full) used in HUONG_DAN_CHAY_WEB.md.
+
+    The bundle needs customer receipts that appear in both the A1 and A3 bank statements. The full export's
+    A3 months carry no such receipts, so a dataset that cannot supply them is skipped and, as a last resort,
+    the small smoke dataset (well under a minute to generate) provides the bundle.
+    """
+    demo_bundle = WORK / 'mpx10-demo-input-full'
+    if (demo_bundle / '01_invoices.csv').is_file():
+        return
+
+    def has_inputs(d: Path) -> bool:
+        return dataset_ready(d) and all((d / 'inputs' / a).is_dir() for a in ('a1', 'a2', 'a3'))
+
+    def build_from(d: Path) -> bool:
+        if demo_bundle.exists():
+            shutil.rmtree(demo_bundle)
+        r = subprocess.run([py4, str(ROOT / 'data_pipeline/demo_inputs.py'), str(d), str(demo_bundle)],
+                           cwd=ROOT, env=dict(os.environ, PYTHONUTF8='1'), check=False,
+                           capture_output=True, text=True, encoding='utf-8', errors='replace')
+        if (demo_bundle / '01_invoices.csv').is_file():
+            print(f'[data] Đã tạo gói nạp thử từ {d.relative_to(ROOT)}: {demo_bundle.relative_to(ROOT)}', flush=True)
+            return True
+        reason = (r.stderr or r.stdout).strip().splitlines()[-1:] or ['không rõ lý do']
+        print(f'[data] Không đóng gói nạp thử từ {d.relative_to(ROOT)} ({reason[0]}); thử nguồn khác.', flush=True)
+        return False
+
+    tried = []
+    for d in dict.fromkeys(sources):  # keep order, drop duplicates
+        if has_inputs(d):
+            tried.append(d)
+            if build_from(d):
+                return
+    if smoke_dir not in tried:
+        if not dataset_ready(smoke_dir):
+            generate_dataset(py4, smoke_dir, smoke=True)
+        if build_from(smoke_dir):
+            return
+    print('[data] CẢNH BÁO: chưa tạo được gói nạp thử mpx10-demo-input-full.', flush=True)
 
 
 def sync_portal_files(warehouse_db: Path) -> None:
@@ -298,6 +338,9 @@ if model_path.is_file() and bindings_path.is_file():
         pass
 
 tok = secrets.token_urlsafe(32)
+# A fresh suffix per provisioning run: if an earlier run stopped after committing some snapshots, replaying its
+# idempotency keys would hit IMPORT_COMMITTED; a completed run never gets here (early exit above).
+attempt = secrets.token_hex(4)
 with tempfile.TemporaryDirectory() as tmp:
     policy_path = Path(tmp) / 'policy.json'
     policy = {
@@ -348,7 +391,7 @@ with tempfile.TemporaryDirectory() as tmp:
                             line['credit_vnd'] = int(line['credit_vnd']) * scale
         scope = auth.authorize(header, cid)
         check = lambda c=cid: auth.authorize(header, c)
-        key_base = 'runtime-bootstrap-' + cid.lower() + '-' + fingerprint[:10]
+        key_base = 'runtime-bootstrap-' + cid.lower() + '-' + fingerprint[:10] + '-' + attempt
         draft = snapshots.upload(scope, canonical(src), f'bootstrap-{cid}.json', key_base + '-up', check)
         prev = snapshots.preview(scope, draft['import_id'], draft['revision'], check)
         req = {k: prev[k] for k in ('preview_id', 'source_hash', 'mapping_hash', 'report_hash', 'context_hash')}
@@ -406,6 +449,42 @@ def ensure_agent2_models() -> None:
     )
 
 
+def ensure_agent2_release_runtime() -> None:
+    """Agent 2 without HE: give the investigation queue its release store, as the Azure VM does.
+
+    "Phân tích dữ liệu mới nhất" (model-lifecycle/analyze) needs a release store sealed with a machine-local
+    key; with HE that store is derived from the enterprise HE node. When HE is not set up (no WSL, or
+    run_web.ps1 -SkipHE) the button would answer 503 PIPELINE_NOT_CONFIGURED, so create a key (Windows DPAPI /
+    Linux owner-only file) and point AGENT2_RELEASE_CONFIG at it. Analysis then runs locally, unencrypted.
+    """
+    if (ROOT / '.runtime' / 'he-ready.json').is_file():
+        return
+    cfg_path = ROOT / 'portal/config.local.json'
+    cfg = json.loads(cfg_path.read_text(encoding='utf-8'))
+    env = cfg.setdefault('agents', {}).setdefault('agent2', {}).setdefault('env', {})
+    if env.get('AGENT2_HE_NODE_CONFIG'):
+        return
+    plat = ROOT / 'agent2' / '.runtime' / 'platform'
+    key = plat / 'secrets' / 'node-state.key'
+    release_cfg = plat / 'release-runtime.json'
+    if not key.is_file():
+        key.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run(
+            [find_venv_python('agent2'), '-X', 'utf8', '-B', '-m', 'experiments.he_inference.key_manager',
+             'create', '--output', str(key)],
+            cwd=ROOT / 'agent2', env=dict(os.environ, PYTHONUTF8='1'), check=True, stdout=subprocess.DEVNULL,
+        )
+        print('[agent2] Đã tạo khóa lưu trữ cho hàng đợi điều tra (chế độ không HE).', flush=True)
+    release_cfg.write_text(json.dumps({
+        'version': 'pipeline-release-runtime/1.0.0',
+        'release_db': str((plat / 'pipeline-releases.sqlite3').resolve()),
+        'node_state_key_file': str(key.resolve()),
+    }), encoding='utf-8')
+    if env.get('AGENT2_RELEASE_CONFIG') != str(release_cfg.resolve()):
+        env['AGENT2_RELEASE_CONFIG'] = str(release_cfg.resolve())
+        cfg_path.write_text(json.dumps(cfg, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--mode', choices=('auto', 'fast', 'full'), default='auto')
@@ -414,8 +493,13 @@ def main() -> int:
     warehouse = ensure_dataset(args.mode)
     sync_portal_files(warehouse)
     ensure_agent2_models()
+    ensure_agent2_release_runtime()
     test_pack_script = ROOT / 'data_pipeline/build_test_pack.py'
-    if test_pack_script.is_file() and not (ROOT / 'DATA_TEST_SAN_SANG/01_Goi_Chuan_Nap_Chung_4_Agent_MPX10/01_hoa_don_ban_A1.csv').is_file():
+    pack = ROOT / 'DATA_TEST_SAN_SANG'
+    # Rebuild when the standard pack or the Agent 2 training/contribution folders (added later) are missing.
+    if test_pack_script.is_file() and not ((pack / '01_Goi_Chuan_Nap_Chung_4_Agent_MPX10/01_hoa_don_ban_A1.csv').is_file()
+                                           and (pack / 'input-A2-training').is_dir()
+                                           and (pack / 'input-A2-dong-gop/00_HUONG_DAN.txt').is_file()):
         subprocess.run([sys.executable, str(test_pack_script)], cwd=ROOT, check=False)
     print(f'[ok] Đã đồng bộ cấu hình & dữ liệu. Kho Agent 4: {warehouse.relative_to(ROOT)}', flush=True)
     return 0

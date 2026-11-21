@@ -1,3 +1,7 @@
+# The single project .env (API keys, VM settings). Only .env.example is tracked.
+.env
+.env.*
+!.env.example
 portal/config.local.json
 portal/workspace/
 DATA_TEST_SAN_SANG/
@@ -43,3 +47,7 @@ scratch/
 
 /WrenAI 
 agent4/WrenAI/
+
+# Submission build output and assets shipped beside the source (scripts/make_submission.py)
+/dist/
+/assets/
